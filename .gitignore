@@ -6,3 +6,4 @@ output/
 *.log
 *.iml
 *.csv
+spark-warehouse
