@@ -98,7 +98,10 @@
           <junitxml>.</junitxml>
           <filereports>TestSuiteReport.txt</filereports>
           <!-- Comma separated list of JUnit test class names to execute -->
-          <jUnitClasses>samples.AppTest</jUnitClasses>
+          <jUnitClasses>
+            com.scottlogic.deg.AppTest,
+            com.scottlogic.deg.FileReaderInt
+          </jUnitClasses>
         </configuration>
         <executions>
           <execution>
