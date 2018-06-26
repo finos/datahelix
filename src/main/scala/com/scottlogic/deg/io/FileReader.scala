@@ -1,4 +1,4 @@
-package com.scottlogic.deg.spark.reader
+package com.scottlogic.deg.io
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg
 
-import com.scottlogic.deg.spark.reader.FileReader
+import com.scottlogic.deg.io.FileReader
 import org.apache.spark.sql.SparkSession
 import org.junit.Assert.assertTrue
 import org.junit.{Before, Test}

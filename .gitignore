@@ -7,3 +7,4 @@ output/
 *.iml
 */main/resources/*.csv
 spark-warehouse
+output/

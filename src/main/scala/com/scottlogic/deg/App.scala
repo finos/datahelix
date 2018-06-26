@@ -1,7 +1,7 @@
 package com.scottlogic.deg
 
+import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.profiler.Profiler
-import com.scottlogic.deg.spark.reader.FileReader
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
@@ -17,7 +17,8 @@ trait SparkSessionBuilder {
 object App extends SparkSessionBuilder {
     def main(args : Array[String]) {
         lazy val fileReader = new FileReader(spark)
-        lazy val profiler = new Profiler(args, fileReader)
+        lazy val fileWriter = new FileWriter(spark)
+        lazy val profiler = new Profiler(args, fileReader, fileWriter)
         profiler.profile()
         spark.stop()
     }
