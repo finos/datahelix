@@ -5,5 +5,5 @@ metastore_db/
 output/
 *.log
 *.iml
-*.csv
+*/main/resources/*.csv
 spark-warehouse
