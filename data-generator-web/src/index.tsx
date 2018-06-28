@@ -3,6 +3,6 @@
 
 import Bootstrapper from "./Bootstrapper";
 
-import './index.css';
+import "marx-css/css/marx.css";
 
 new Bootstrapper().start();
