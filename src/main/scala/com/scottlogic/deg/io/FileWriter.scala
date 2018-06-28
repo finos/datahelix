@@ -2,11 +2,15 @@ package com.scottlogic.deg.io
 
 import java.io
 import java.io.{BufferedWriter, File}
+import java.lang.{ClassCastException, Exception}
 
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
-import play.api.libs.json.{Json, JsValue, JsObject, JsArray, JsString}
+import play.api.libs.json._
+
+import scala.util.Try
 
 class FileWriter(spark: SparkSession) {
+    import scala.language.implicitConversions
     def writeJson(name: String, df: DataFrame): Boolean = {
         df.write.mode(SaveMode.Overwrite).json("output/" + name)
         return true
@@ -14,13 +18,18 @@ class FileWriter(spark: SparkSession) {
 
     def writeProfile(name: String, dfs: Array[(String, DataFrame)]): Unit = {
         val json = toProfile(toColumnDistribution(dfs))
-
         val file = new File("test-output.json")
         val bw = new BufferedWriter(new io.FileWriter(file))
         bw.write(Json.stringify(json))
         bw.close()
     }
 
+    def toProfile(columnDistribution: JsValue): JsValue = {
+        Json.obj(
+            "profileName" -> "testProfile",
+            "columnDistributions" -> columnDistribution
+        )
+    }
     def toColumnDistribution(dfs: Array[(String, DataFrame)]) = {
         dfs.foldLeft(JsArray()) {
             distributionJsCombinator
@@ -30,17 +39,16 @@ class FileWriter(spark: SparkSession) {
     def distributionJsCombinator(array: JsArray, next: (String, DataFrame)) = {
         val row = next._2.first()
         val values: Map[String, JsValue] = row.getValuesMap(row.schema.fieldNames)
-            .map(pair => (pair._1, JsString(pair._2)))
-            .asInstanceOf[Map[String, JsValue]]
+            .map(pair => (pair._1, jsValue(pair._2)))
         array.append(JsObject(
             Seq(next._1 -> JsObject(values))
         ))
     }
-
-    def toProfile(columnDistribution: JsValue): JsValue = {
-        Json.obj(
-            "profileName" -> "testProfile",
-            "columnDistributions" -> columnDistribution
-        )
+    
+    def jsValue(value: Any): JsValue = value match {
+        case s: String => JsString(s)
+        case d: Double => JsNumber(d)
+        case i: Int => JsNumber(i)
+        case _ => JsNull
     }
 }
