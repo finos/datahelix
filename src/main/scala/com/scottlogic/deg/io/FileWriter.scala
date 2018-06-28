@@ -2,12 +2,8 @@ package com.scottlogic.deg.io
 
 import java.io
 import java.io.{BufferedWriter, File}
-import java.lang.{ClassCastException, Exception}
-
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import play.api.libs.json._
-
-import scala.util.Try
 
 class FileWriter(spark: SparkSession) {
     import scala.language.implicitConversions
@@ -44,7 +40,7 @@ class FileWriter(spark: SparkSession) {
             Seq(next._1 -> JsObject(values))
         ))
     }
-    
+
     def jsValue(value: Any): JsValue = value match {
         case s: String => JsString(s)
         case d: Double => JsNumber(d)
