@@ -12,7 +12,7 @@ class FileWriter(spark: SparkSession) {
         return true
     }
 
-    def writeProfile(name: String, dfs: Array[(String, DataFrame]): Unit = {
+    def writeProfile(name: String, dfs: Array[(String, DataFrame)]): Unit = {
         val columnDistribution = dfs.foldLeft(JsArray()) {
             (array, next: (String, DataFrame)) => {
                 val row = next._2.first()
