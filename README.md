@@ -25,7 +25,7 @@ Then submit the jar file (requires spark installed)
 
 #### Writing Tests
 Testing uses JUnit as the test runner. ScalaTest can be used to implement
-various specifications such as AAA, BDD, etc.
+various specifications such as AAA, BDD, acceptance, etc.
 
 To run tests, they must be delcared in the pom.xml
 ```
