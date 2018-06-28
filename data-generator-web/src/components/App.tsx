@@ -20,9 +20,9 @@ class App extends React.Component {
 }
 
 const ProfileEditor = () =>
-	<ul>
+	<div style={{marginTop: "5px"}}>
 		<ProfileField name="Stock Description">
-			<StringField />
+			<StringProfileFieldData />
 		</ProfileField>
 		<ProfileField name="Buy Price">
 			<NumericProfileFieldData />
@@ -30,23 +30,34 @@ const ProfileEditor = () =>
 		<ProfileField name="Sell Price">
 			<NumericProfileFieldData />
 		</ProfileField>
-	</ul>
+	</div>
 
 const ProfileField = ({name, children}: any) =>
-	<li style={{overflow: "auto"}}>
+	<div style={{overflow: "auto", marginBottom: "2em"}}>
 		<input type="text" value={name} style={ { float: "left", width: "30%" } } />
-		<div style={{float: "right", width: "68%"}}>
+		<label style={{width: "10%", lineHeight: "13px", textAlign: "center"}}>
+			<span style={{fontSize: "x-small"}}>nullable?</span><br/>
+			<input type="checkbox" />
+		</label>
+		<div style={{float: "right", width: "60%"}}>
 			{ children }
 		</div>
-	</li>
+	</div>
 
 const NumericProfileFieldData = () =>
-	<ul>
+	<>
 		<NumericField name="Minimum Value" />
 		<NumericField name="Maximum Value" />
 		<NumericField name="Standard Deviation" />
 		<NumericField name="Average" />
-	</ul>
+	</>
+
+const StringProfileFieldData = () =>
+	<>
+		<StringField name="Allowable characters" />
+		<NumericField name="Minimum Length" />
+		<NumericField name="Maximum Length" />
+	</>
 
 
 interface IProps
@@ -61,6 +72,11 @@ const NumericField = ({name}: IProps) =>
 		</label>
 	</div>
 
-const StringField = () => <input type="text" />
+const StringField = ({name}: any) =>
+	<div>
+		<label>{name}
+			<input type="string" />
+		</label>
+	</div>
 
 export default App;
