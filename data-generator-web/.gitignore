@@ -19,3 +19,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
