@@ -3,9 +3,8 @@ package com.scottlogic.deg.io
 import java.io
 import java.io.{BufferedWriter, File}
 
-import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
-import play.api.libs.json
-import play.api.libs.json._
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import play.api.libs.json.{Json, JsValue, JsObject, JsArray, JsString}
 
 class FileWriter(spark: SparkSession) {
     def writeJson(name: String, df: DataFrame): Boolean = {
