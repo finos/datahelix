@@ -3,7 +3,9 @@ package com.scottlogic.deg.io
 import java.io
 import java.io.{BufferedWriter, File}
 
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
+import play.api.libs.json
+import play.api.libs.json._
 
 class FileWriter(spark: SparkSession) {
     def writeJson(name: String, df: DataFrame): Boolean = {
@@ -12,16 +14,26 @@ class FileWriter(spark: SparkSession) {
     }
 
     def writeProfile(name: String, dfs: Array[(String, DataFrame)]): Unit = {
-        val columnDistributions: String = dfs.map( columnData => {
-            "{ \"columnName\": \"" + columnData._1 + "\", \"distribution\": " + columnData._2.toJSON.collect.mkString(", ") + "}"
-        }).mkString(", ")
+        val columnDistribution: Array[JsValue] = dfs.map( columnData => {
+            val row = columnData._2.first()
+            val values: Map[String, JsValue] = row.getValuesMap(row.schema.fieldNames)
+                .map(pair => (pair._1, JsString(pair._2)))
+                .asInstanceOf[Map[String, JsValue]]
+            JsObject(
+                Seq(columnData._1 -> JsObject(values))
+            )
+        })
 
-        val jsonString = "{ \"profileName\": \"testProfile\", " +
-            "\"columnDistributions\": [" + columnDistributions + "]" +
-            "}"
+        val json: JsValue = Json.obj(
+            "profileName" -> "testProfile",
+            "columnDistributions" -> JsArray(columnDistribution)
+        )
+
         val file = new File("test-output.json")
         val bw = new BufferedWriter(new io.FileWriter(file))
-        bw.write(jsonString)
+        bw.write(Json.stringify(json))
         bw.close()
+
+
     }
 }
