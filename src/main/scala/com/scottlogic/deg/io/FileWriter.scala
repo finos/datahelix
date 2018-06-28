@@ -12,20 +12,22 @@ class FileWriter(spark: SparkSession) {
         return true
     }
 
-    def writeProfile(name: String, dfs: Array[(String, DataFrame)]): Unit = {
-        val columnDistribution: Array[JsValue] = dfs.map( columnData => {
-            val row = columnData._2.first()
-            val values: Map[String, JsValue] = row.getValuesMap(row.schema.fieldNames)
-                .map(pair => (pair._1, JsString(pair._2)))
-                .asInstanceOf[Map[String, JsValue]]
-            JsObject(
-                Seq(columnData._1 -> JsObject(values))
-            )
-        })
+    def writeProfile(name: String, dfs: Array[(String, DataFrame]): Unit = {
+        val columnDistribution = dfs.foldLeft(JsArray()) {
+            (array, next: (String, DataFrame)) => {
+                val row = next._2.first()
+                val values: Map[String, JsValue] = row.getValuesMap(row.schema.fieldNames)
+                    .map(pair => (pair._1, JsString(pair._2)))
+                    .asInstanceOf[Map[String, JsValue]]
+                array.append(JsObject(
+                    Seq(next._1 -> JsObject(values))
+                ))
+            }
+        }
 
         val json: JsValue = Json.obj(
             "profileName" -> "testProfile",
-            "columnDistributions" -> JsArray(columnDistribution)
+            "columnDistributions" -> columnDistribution
         )
 
         val file = new File("test-output.json")
