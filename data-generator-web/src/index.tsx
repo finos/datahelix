@@ -1,11 +1,8 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+// This is our webpack entry file.
+// It should have minimal logic/knowledge, and just import/invoke other things
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root') as HTMLElement
-);
-registerServiceWorker();
+import Bootstrapper from "./Bootstrapper";
+
+import './index.css';
+
+new Bootstrapper().start();
