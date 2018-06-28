@@ -21,7 +21,7 @@ class FileReaderInt extends {
     }
 
     @Test
-    def readCsv(): Unit = {
+    def readCsv_returns_DF_with_expectedColumns(): Unit = {
         val path = getClass.getClassLoader().getResource("gfx_cleaned.csv").getPath
         val df = fileReader.readCSV(path)
         val expectedColumns = Array("Video Card", "Series", "Chipset", "Memory ()", "Core Clock ()", "Price (£)")
