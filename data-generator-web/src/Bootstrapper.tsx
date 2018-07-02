@@ -1,25 +1,29 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Provider} from "react-redux";
-import {createStore} from "redux";
+import {createStore, StoreEnhancer} from "redux";
 
 import App from './components/App';
 import appReducer from "./redux/reducers/appReducer";
 import {FieldKinds, IAppState} from "./redux/state/IAppState";
 import registerServiceWorker from './registerServiceWorker';
 
+function retrieveReduxDevtoolsMiddleware(): StoreEnhancer | undefined
+{
+	// tslint:disable-next-line:no-string-literal
+	const middlewareCreator: () => StoreEnhancer = (window as any)["__REDUX_DEVTOOLS_EXTENSION__"];
+	return middlewareCreator && middlewareCreator();
+}
+
 export default class Bootstrapper
 {
-	public start()
+	public start(): void
 	{
-		// tslint:disable-next-line:no-string-literal
-		const reduxDevtoolsMiddleware = window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]();
-
 		const defaultState: IAppState = {
 			currentProfile: {
 				fields: [
 					{
-						id: "1",
+						id: "aaaa",
 						name: "description",
 						nullPrevalence: 0,
 						restrictions: {
@@ -27,7 +31,7 @@ export default class Bootstrapper
 						}
 					},
 					{
-						id: "2",
+						id: "bbbb",
 						name: "price",
 						nullPrevalence: 0,
 						restrictions: {
@@ -43,7 +47,7 @@ export default class Bootstrapper
 		const store = createStore(
 			appReducer,
 			defaultState,
-			reduxDevtoolsMiddleware);
+			retrieveReduxDevtoolsMiddleware());
 
 		ReactDOM.render(
 			<Provider store={store}>

@@ -25,6 +25,25 @@ function profileReducer(
 	if (!oldState)
 		return oldState;
 
+	if (Actions.AddBlankField.is(action))
+	{
+		return {
+			fields: [
+				...oldState.fields,
+				{ id: action.fieldId, nullPrevalence: 0 }
+			]
+		};
+	}
+
+	if (Actions.DeleteField.is(action))
+	{
+		return {
+			fields: [
+				...oldState.fields.filter(f => f.id !== action.fieldId)
+			]
+		}
+	}
+
 	if (Actions.ClearCurrentProfile.is(action))
 	{
 		return { fields: [] };

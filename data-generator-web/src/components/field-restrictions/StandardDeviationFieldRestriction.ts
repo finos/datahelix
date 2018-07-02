@@ -27,7 +27,7 @@ function getMapStateToProps(title: string): MapStateToPropsParam<{ title: string
 
 function getMapDispatchToProps<T>(
 	getRestriction: (value: T) => Partial<AnyFieldRestriction>)
-	: MapDispatchToPropsFunction<{onChange: (newValue: T) => void}, {}>
+	: MapDispatchToPropsFunction<{onChange: (newValue: T) => void}, IProps>
 {
 	return (dispatch: Dispatch, ownProps: IProps) =>
 	{

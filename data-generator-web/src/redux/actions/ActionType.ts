@@ -1,36 +1,48 @@
 import { Action } from "redux";
 
-export default abstract class ActionType<TAction, TConstructorParameters = TAction>
+abstract class ActionType<TConstructorParameters, TActionPayload>
 {
 	private readonly typeId: string;
+	private readonly mapInputToAction: (parameters: TConstructorParameters) => TActionPayload;
 
-	protected constructor(typeId: string)
+	protected constructor(
+		typeId: string,
+		mapInputToPayload: (parameters: TConstructorParameters) => TActionPayload)
 	{
 		this.typeId = typeId;
+		this.mapInputToAction = mapInputToPayload;
 	}
 
-	public create(p: TConstructorParameters): TAction & Action
+	public create(p: TConstructorParameters): TActionPayload & Action
 	{
-		const actionProps = this.createPayload(p) as TAction & Action;
+		const actionProps = this.mapInputToAction(p) as TActionPayload & Action;
 
 		actionProps.type = this.typeId;
 
 		return actionProps;
 	}
 
-	public is(action: Action): action is TAction & Action
+	public is(action: Action): action is TActionPayload & Action
 	{
 		return action.type === this.typeId;
 	}
-
-	protected abstract createPayload(p: TConstructorParameters): TAction;
 }
 
 // This version of the above suffices for most cases (where TAction === TConstructorParameters)
-export class SimpleActionType<TAction = {}> extends ActionType<TAction>
+export class SimpleActionType<TActionPayload = {}> extends ActionType<TActionPayload, TActionPayload>
 {
-	constructor(typeId: string) { super(typeId); }
+	constructor(typeId: string)
+	{
+		super(typeId, p => p);
+	}
+}
 
-	// in the simple case, the arguments to the action's constructor ARE the payload
-	protected createPayload(parameters: TAction): TAction { return parameters; }
+export class MappingActionType<TConstructorParameters, TActionPayload> extends ActionType<TConstructorParameters, TActionPayload>
+{
+	constructor(
+		typeId: string,
+		mapParametersToPayload: (parameters: TConstructorParameters) => TActionPayload)
+	{
+		super(typeId, mapParametersToPayload);
+	}
 }

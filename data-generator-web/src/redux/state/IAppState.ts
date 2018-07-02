@@ -14,7 +14,7 @@ export interface IFieldState
 	readonly id: string;
 	readonly name?: string;
 	readonly nullPrevalence: number;
-	readonly restrictions: AnyFieldRestriction;
+	readonly restrictions?: AnyFieldRestriction;
 }
 
 export type AnyFieldRestriction = INumericRestrictions | IStringEnumRestrictions | IStringRestrictions;
