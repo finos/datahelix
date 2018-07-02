@@ -54,7 +54,7 @@ function createStringFieldRestriction(
 		(StringFieldRestriction);
 }
 
-export const StandardDeviationFieldRestriction = createNumericFieldRestriction(
+export const SpecificFieldRestrictions = createNumericFieldRestriction(
 	"Standard Deviation",
 	newValue => ({ kind: FieldKinds.Numeric, stdDev: newValue }));
 
@@ -82,4 +82,3 @@ export const MaximumStringLengthFieldRestriction = createNumericFieldRestriction
 export const AllowableCharactersFieldRestriction = createStringFieldRestriction(
 	"Allowable Characters",
 	newValue => ({ kind: FieldKinds.String, allowableCharacters: newValue }));
-

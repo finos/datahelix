@@ -9,8 +9,8 @@ import {
 	MaximumStringLengthFieldRestriction,
 	MaximumValueFieldRestriction,
 	MeanFieldRestriction, MinimumStringLengthFieldRestriction, MinimumValueFieldRestriction,
-	StandardDeviationFieldRestriction
-} from "./field-restrictions/StandardDeviationFieldRestriction";
+	SpecificFieldRestrictions
+} from "./field-restrictions/SpecificFieldRestrictions";
 import ProfileField from "./ProfileField";
 
 function mapStateToProps(state: IAppState): any
@@ -27,7 +27,7 @@ function mapStateToProps(state: IAppState): any
 			</>}
 			{ f.restrictions && f.restrictions.kind === FieldKinds.Numeric &&
 			<>
-				<StandardDeviationFieldRestriction fieldId={f.id} />
+				<SpecificFieldRestrictions fieldId={f.id} />
 				<MeanFieldRestriction fieldId={f.id} />
 				<MinimumValueFieldRestriction fieldId={f.id} />
 				<MaximumValueFieldRestriction fieldId={f.id} />
