@@ -1,28 +1,18 @@
 import {
 	connect,
-	MapDispatchToPropsFunction,
-	MapStateToPropsParam
+	MapDispatchToPropsFunction
 } from "react-redux";
 import {Dispatch} from "redux";
+import * as React from "react";
 
 import {UpdateField} from "../../redux/actions/Actions";
-import {AnyFieldRestriction, FieldKinds, IAppState} from "../../redux/state/IAppState";
+import {AnyFieldRestriction, FieldKinds} from "../../redux/state/IAppState";
 import NumericFieldRestriction from "./NumericFieldRestriction";
 import StringFieldRestriction from "./StringFieldRestriction";
 
 interface IProps
 {
 	fieldId: string;
-}
-
-function getMapStateToProps(title: string): MapStateToPropsParam<{ title: string }, IProps, IAppState>
-{
-	return () => {
-		// bit funky since the output is static and not a function of redux state - is there a better way to do this?
-		return {
-			title
-		}
-	};
 }
 
 function getMapDispatchToProps<T>(
@@ -45,10 +35,10 @@ function getMapDispatchToProps<T>(
 function createNumericFieldRestriction(
 	title: string,
 	getRestriction: (value: number) => Partial<AnyFieldRestriction>)
-	: any // not sure what the right type is here - some kind of React.Renderable?
+	: React.ComponentClass<IProps>
 {
 	return connect(
-		getMapStateToProps(title),
+		() => ({ title }), // bit funky since the output is static and not a function of redux state - is there a better way to do this?
 		getMapDispatchToProps(getRestriction))
 		(NumericFieldRestriction);
 }
@@ -56,10 +46,10 @@ function createNumericFieldRestriction(
 function createStringFieldRestriction(
 	title: string,
 	getRestriction: (value: string) => Partial<AnyFieldRestriction>)
-	: any // not sure what the right type is here - some kind of React.Renderable?
+	: React.ComponentClass<IProps>
 {
 	return connect(
-		getMapStateToProps(title),
+		() => ({ title }), // bit funky since the output is static and not a function of redux state - is there a better way to do this?
 		getMapDispatchToProps(getRestriction))
 		(StringFieldRestriction);
 }
