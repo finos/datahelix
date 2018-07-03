@@ -1,0 +1,10 @@
+data/
+target/
+.idea/
+metastore_db/
+output/
+*.log
+*.iml
+*/main/resources/*.csv
+spark-warehouse
+output/
