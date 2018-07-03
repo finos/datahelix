@@ -17,20 +17,6 @@
     <spec2.version>4.2.0</spec2.version>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <!-- import pom-only; this gives us a BOM of version recommendations -->
-        <!-- https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies -->
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-parent_${scala.binary.version}</artifactId>
-        <version>${spark.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency> <!-- Scala -->
       <groupId>org.scala-lang</groupId>
@@ -52,11 +38,14 @@
       <artifactId>play-json_${scala.binary.version}</artifactId>
       <version>2.6.9</version>
     </dependency>
-    <!--  -->
-    <!--<dependency>-->
-      <!--<groupId>com.google.guava</groupId>-->
-      <!--<artifactId>guava</artifactId>-->
-    <!--</dependency>-->
+    <dependency>
+      <!-- Fixes scalac warning "org.joda.convert.FromString not found"  -->
+      <!-- I chose the version by checking Spark 2.3.1's Joda (2.9.3) dependencies -->
+      <!-- https://search.maven.org/#artifactdetails%7Cjoda-time%7Cjoda-time%7C2.9.3%7Cjar -->
+      <groupId>org.joda</groupId>
+      <artifactId>joda-convert</artifactId>
+      <version>1.2</version>
+    </dependency>
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
