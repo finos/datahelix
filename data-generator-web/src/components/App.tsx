@@ -3,6 +3,7 @@ import * as React from 'react';
 import Button from "./Button";
 import ClearProfileButton from "./ClearProfileButton";
 import CurrentProfileEditor from './CurrentProfileEditor';
+import ExportProfileButton from "./ExportProfileButton";
 
 class App extends React.Component {
 	public render(): React.ReactNode {
@@ -14,7 +15,7 @@ class App extends React.Component {
 				<div>
 					<ClearProfileButton />
 					<Button title="Load Profile" />
-					<Button title="Export Profile" />
+					<ExportProfileButton />
 					<Button title="Generate Data" />
 				</div>
 				<CurrentProfileEditor />
