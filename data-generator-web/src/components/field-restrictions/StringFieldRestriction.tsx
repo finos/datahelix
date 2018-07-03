@@ -18,7 +18,7 @@ const StringFieldRestriction = ({title, onChange}: IProps) => {
 	return (
 		<Form.Field>
 			<label>{title}</label>
-			<Input fluid onChange={onChangeWithConversion} />
+			<Input fluid={true} onChange={onChangeWithConversion} />
 		</Form.Field>
 	)
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
+import {SyntheticEvent} from "react";
 import {Form, Input} from "semantic-ui-react";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
-import {SyntheticEvent} from "react";
 
 export interface IProps
 {
@@ -20,7 +20,7 @@ const NumericFieldRestriction = ({title, onChange}: IProps) => {
 	return (
 		<Form.Field>
 			<label>{title}</label>
-			<Input fluid type="number" onChange={onChangeWithConversion} />
+			<Input fluid={true} type="number" onChange={onChangeWithConversion} />
 		</Form.Field>
 	)
 }

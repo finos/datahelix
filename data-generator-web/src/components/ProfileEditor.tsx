@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import AddFieldButton from "./AddEmptyFieldButton";
 import {Form, Grid} from "semantic-ui-react";
+import AddEmptyFieldButton from "./AddEmptyFieldButton";
 
 interface IProps
 {
@@ -9,13 +9,13 @@ interface IProps
 }
 
 const ProfileEditor = ({children}: IProps) =>
-	<Form fluid>
-		<Grid columns={3} divided='vertically'>
+	<Form fluid="true">
+		<Grid columns={3} divided="vertically">
 			{ children }
 
 			<Grid.Row>
 				<Grid.Column width={1}>
-					<AddFieldButton />
+					<AddEmptyFieldButton />
 				</Grid.Column>
 			</Grid.Row>
 		</Grid>

@@ -1,9 +1,9 @@
+import * as React from "react";
 import {
 	connect,
 	MapDispatchToPropsFunction
 } from "react-redux";
 import {Dispatch} from "redux";
-import * as React from "react";
 
 import {UpdateField} from "../../redux/actions/Actions";
 import {AnyFieldRestriction, FieldKinds} from "../../redux/state/IAppState";

@@ -5,10 +5,10 @@ import {applyMiddleware, createStore} from "redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import App from './components/App';
+import sideEffectsMiddleware from "./redux/middleware/SideEffectsMiddleware";
 import appReducer from "./redux/reducers/appReducer";
 import {FieldKinds, IAppState} from "./redux/state/IAppState";
 import registerServiceWorker from './registerServiceWorker';
-import sideEffectsMiddleware from "./redux/middleware/SideEffectsMiddleware";
 
 export default class Bootstrapper
 {

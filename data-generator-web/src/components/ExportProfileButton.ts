@@ -1,8 +1,8 @@
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import {ExportProfile} from "../redux/actions/Actions";
 import {Button, ButtonProps} from "semantic-ui-react";
+import {ExportProfile} from "../redux/actions/Actions";
 
 function mapDispatchToProps(dispatch: Dispatch): ButtonProps
 {

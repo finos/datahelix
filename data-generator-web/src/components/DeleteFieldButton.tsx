@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import {DeleteField} from "../redux/actions/Actions";
-import {Button, ButtonProps, Icon} from "semantic-ui-react";
 import * as React from "react";
+import {Button, ButtonProps, Icon} from "semantic-ui-react";
+import {DeleteField} from "../redux/actions/Actions";
 
 interface IProps
 {
@@ -21,6 +21,10 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): ButtonProps
 	};
 }
 
-const WrappedComponent = connect(undefined, mapDispatchToProps)(Button);
+const WrappedComponent = connect(
+	undefined,
+	mapDispatchToProps,
+	(s: ButtonProps, d, _) => ({ ...s, ...d })) // so that ownProps don't get mixed in, as by default
+	(Button);
 
 export default WrappedComponent;
