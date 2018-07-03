@@ -17,8 +17,8 @@ const NumericFieldRestriction = ({title, onChange}: IProps) => {
 
 	return (
 		<div>
-			<label>{title}
-				<input type="numeric" step={0.01} onChange={onChangeWithConversion}/>
+			<label style={{ width: "100%" }}>{title}
+				<input type="number" step={0.01} onChange={onChangeWithConversion}/>
 			</label>
 		</div>
 	);

@@ -15,7 +15,7 @@ const StringFieldRestriction = ({title, onChange}: IProps) => {
 
 	return (
 		<div>
-			<label>{title}
+			<label style={{ width: "100%" }}>{title}
 				<input type="text" onChange={onChangeWithConversion}/>
 			</label>
 		</div>

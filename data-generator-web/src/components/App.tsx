@@ -8,7 +8,7 @@ import ExportProfileButton from "./ExportProfileButton";
 class App extends React.Component {
 	public render(): React.ReactNode {
 		return (
-			<main style={{ border: "1px solid black" }}>
+			<main style={{ border: "1px solid black", maxWidth: "1024px" }}>
 				<header>
 					<h1>Data Generator</h1>
 				</header>
