@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import DeleteFieldButton from "./DeleteFieldButton";
+import {Button, Form, Grid, Icon, Input, List, Segment} from "semantic-ui-react";
 
 interface IProps
 {
@@ -10,19 +11,24 @@ interface IProps
 }
 
 const ProfileField = ({id, name, children}: IProps) =>
-	<div style={{display: "flex", flexDirection: "row", marginBottom: "2em", alignItems: "flex-start"}}>
-		<DeleteFieldButton fieldId={id} />
+	<Grid.Row>
+		<Grid.Column width={1}>
+			<DeleteFieldButton fieldId={id} />
+		</Grid.Column>
 
-		<input type="text" value={name} style={{ flex: "0 1 20%" }} />
+		<Grid.Column width={6}>
+			<Input fluid value={name} placeholder='Field name' />
 
-		<label style={{lineHeight: "13px", textAlign: "center"}}>
-			<span style={{fontSize: "x-small"}}>nullable?</span><br/>
-			<input type="checkbox" />
-		</label>
+			<label style={{lineHeight: "13px", textAlign: "center"}}>
+				<span style={{fontSize: "x-small"}}>nullable?</span><br/>
+				<input type="checkbox" />
+			</label>
+		</Grid.Column>
+		{/*<input type="text" value={name} style={{ flex: "0 1 20%" }} placeholder="Field name" />*/}
 
-		<div style={{ flex: "1" }}>
+		<Grid.Column width={9}>
 			{ children }
-		</div>
-	</div>
+		</Grid.Column>
+	</Grid.Row>
 
 export default ProfileField;

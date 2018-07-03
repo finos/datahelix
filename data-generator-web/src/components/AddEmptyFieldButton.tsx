@@ -1,16 +1,18 @@
+import * as React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import {ClearCurrentProfile} from "../redux/actions/Actions";
-import {Button, ButtonProps} from "semantic-ui-react";
+import {AddBlankField} from "../redux/actions/Actions";
+import {Button, ButtonProps, Icon} from "semantic-ui-react";
 
 function mapDispatchToProps(dispatch: Dispatch): ButtonProps
 {
 	return {
 		onClick: () => {
-			dispatch(ClearCurrentProfile.create({}));
+			dispatch(AddBlankField.create({}));
 		},
-		content: "New Profile"
+		icon: true,
+		content: <Icon name="plus" />
 	};
 }
 

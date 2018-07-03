@@ -1,24 +1,23 @@
 import * as React from 'react';
 
-import Button from "./Button";
 import ClearProfileButton from "./ClearProfileButton";
 import CurrentProfileEditor from './CurrentProfileEditor';
+import ExportProfileButton from "./ExportProfileButton";
+import {Button, Container, Header} from "semantic-ui-react";
 
 class App extends React.Component {
 	public render(): React.ReactNode {
 		return (
-			<main style={{ border: "1px solid black" }}>
-				<header>
-					<h1>Data Generator</h1>
-				</header>
+			<Container>
+				<Header as='h1'>Data Generator</Header>
 				<div>
 					<ClearProfileButton />
-					<Button title="Load Profile" />
-					<Button title="Export Profile" />
-					<Button title="Generate Data" />
+					<Button>Import Profile</Button>
+					<ExportProfileButton />
+					<Button>Generate Data</Button>
 				</div>
 				<CurrentProfileEditor />
-			</main>
+			</Container>
 		);
 	}
 }
