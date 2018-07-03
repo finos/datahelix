@@ -1,19 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Provider} from "react-redux";
-import {createStore, StoreEnhancer} from "redux";
+import {applyMiddleware, createStore} from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import App from './components/App';
 import appReducer from "./redux/reducers/appReducer";
 import {FieldKinds, IAppState} from "./redux/state/IAppState";
 import registerServiceWorker from './registerServiceWorker';
-
-function retrieveReduxDevtoolsMiddleware(): StoreEnhancer | undefined
-{
-	// tslint:disable-next-line:no-string-literal
-	const middlewareCreator: () => StoreEnhancer = (window as any)["__REDUX_DEVTOOLS_EXTENSION__"];
-	return middlewareCreator && middlewareCreator();
-}
+import sideEffectsMiddleware from "./redux/middleware/SideEffectsMiddleware";
 
 export default class Bootstrapper
 {
@@ -47,7 +42,9 @@ export default class Bootstrapper
 		const store = createStore(
 			appReducer,
 			defaultState,
-			retrieveReduxDevtoolsMiddleware());
+			composeWithDevTools(
+				applyMiddleware(
+					sideEffectsMiddleware)));
 
 		ReactDOM.render(
 			<Provider store={store}>

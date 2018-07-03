@@ -2,7 +2,8 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import {DeleteField} from "../redux/actions/Actions";
-import Button, { IProps as ButtonProps } from "./Button";
+import {Button, ButtonProps, Icon} from "semantic-ui-react";
+import * as React from "react";
 
 interface IProps
 {
@@ -15,7 +16,8 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): ButtonProps
 		onClick: () => {
 			dispatch(DeleteField.create({ fieldId: ownProps.fieldId }));
 		},
-		title: "X",
+		icon: true,
+		content: <Icon name="trash" />
 	};
 }
 
