@@ -1,5 +1,7 @@
 import * as React from "react";
-import {ChangeEvent} from "react";
+import {ChangeEvent, SyntheticEvent} from "react";
+import {Form, Input} from "semantic-ui-react";
+import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
 
 export interface IProps
 {
@@ -8,17 +10,16 @@ export interface IProps
 }
 
 const StringFieldRestriction = ({title, onChange}: IProps) => {
-	const onChangeWithConversion =  (e: ChangeEvent<HTMLInputElement>) => {
+	const onChangeWithConversion = (e: SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
 		if (onChange)
-			onChange(e.target.value);
+			onChange(data.value);
 	}
 
 	return (
-		<div>
-			<label style={{ width: "100%" }}>{title}
-				<input type="text" onChange={onChangeWithConversion}/>
-			</label>
-		</div>
+		<Form.Field>
+			<label>{title}</label>
+			<Input fluid onChange={onChangeWithConversion} />
+		</Form.Field>
 	)
 }
 

@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import {ExportProfile} from "../redux/actions/Actions";
-import Button, { IProps as ButtonProps } from "./Button";
+import {Button, ButtonProps} from "semantic-ui-react";
 
 function mapDispatchToProps(dispatch: Dispatch): ButtonProps
 {
@@ -10,7 +10,7 @@ function mapDispatchToProps(dispatch: Dispatch): ButtonProps
 		onClick: () => {
 			dispatch(ExportProfile.create({}));
 		},
-		title: "Export Profile",
+		content: "Export Profile"
 	};
 }
 
