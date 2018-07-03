@@ -124,8 +124,7 @@
           <filereports>TestSuiteReport.txt</filereports>
           <!-- Comma separated list of JUnit test class names to execute -->
           <jUnitClasses>
-            com.scottlogic.deg.AppTest,
-            com.scottlogic.deg.FileReaderInt
+            com.scottlogic.deg.AllSuite
           </jUnitClasses>
         </configuration>
         <executions>
