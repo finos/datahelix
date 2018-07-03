@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import DeleteFieldButton from "./DeleteFieldButton";
-import {Button, Form, Grid, Icon, Input, List, Segment} from "semantic-ui-react";
+import {Button, Checkbox, Form, Grid, Icon, Input, List, Segment} from "semantic-ui-react";
 
 interface IProps
 {
@@ -17,12 +17,12 @@ const ProfileField = ({id, name, children}: IProps) =>
 		</Grid.Column>
 
 		<Grid.Column width={6}>
-			<Input fluid value={name} placeholder='Field name' />
+			<Form.Field>
+				<label>Field Name</label>
+				<Input fluid value={name} placeholder='Field name' />
+			</Form.Field>
 
-			<label style={{lineHeight: "13px", textAlign: "center"}}>
-				<span style={{fontSize: "x-small"}}>nullable?</span><br/>
-				<input type="checkbox" />
-			</label>
+			<Checkbox label='Nullable?' />
 		</Grid.Column>
 		{/*<input type="text" value={name} style={{ flex: "0 1 20%" }} placeholder="Field name" />*/}
 
