@@ -3,6 +3,7 @@ package com.scottlogic.deg.profiler
 import com.scottlogic.deg.dto._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{sum,when}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField}
 
 case class Location(lat: Double, lon: Double)
@@ -12,20 +13,23 @@ trait AbstractSparkToDTOFieldMapper {
 }
 
 class StringSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
-    override def constructDTOField() = StringField(name = field.name)
+    override def constructDTOField() = StringField(name = field.name, nullPrevalence = 0.0d)
 }
 
 class UnknownSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
-    override def constructDTOField() = UnknownField(name = field.name)
+    override def constructDTOField() = UnknownField(name = field.name, nullPrevalence = 0.0d)
 }
 
 class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
     override def constructDTOField():NumericField = {
         val head = df.agg(
-            min(field.name).alias("min"),
-            max(field.name).alias("max"),
-            mean(field.name).alias("mean"),
-            stddev_pop(field.name).alias("stddev_pop")
+            min(field.name).as("min"),
+            max(field.name).as("max"),
+            mean(field.name).as("mean"),
+            stddev_pop(field.name).as("stddev_pop"),
+            sum(col(field.name).isNull.cast(IntegerType))
+                .divide(count(col(field.name)))
+                .as("nullPrevalence")
         ).head()
 
         NumericField(
@@ -33,7 +37,8 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
             meanAvg = head.getAs("mean"),
             stdDev = head.getAs("stddev_pop"),
             min = head.getAs("min"),
-            max = head.getAs("max")
+            max = head.getAs("max"),
+            nullPrevalence = head.getAs("nullPrevalence")
         )
     }
 }

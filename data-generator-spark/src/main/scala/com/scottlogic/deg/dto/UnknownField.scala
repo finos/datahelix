@@ -1,3 +1,6 @@
 package com.scottlogic.deg.dto
 
-case class UnknownField(name:String) extends AbstractField
+case class UnknownField(
+                         name:String,
+                         nullPrevalence:Number
+                       ) extends AbstractField

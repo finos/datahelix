@@ -15,4 +15,5 @@ import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 ))
 trait AbstractField {
   def name: String
+  def nullPrevalence: Number
 }
