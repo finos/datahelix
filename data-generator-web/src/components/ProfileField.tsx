@@ -1,6 +1,6 @@
 import * as React from "react";
+import {Checkbox, Form, Grid, Input} from "semantic-ui-react";
 
-import {Checkbox, Dropdown, Form, Grid, Input} from "semantic-ui-react";
 import {FieldKinds} from "../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
 import {
@@ -12,6 +12,7 @@ import {
 	MinimumValueFieldRestriction,
 	StandardDeviationRestriction
 } from "./field-restrictions/SpecificFieldRestrictions";
+import FieldTypeDropdown from "./FieldTypeDropdown";
 
 interface IProps
 {
@@ -48,14 +49,10 @@ const ProfileField = ({id, name, kind}: IProps) =>
 		<Grid.Column width={3}>
 			<Form.Field>
 				<label>Field Type</label>
-				<Dropdown
+				<FieldTypeDropdown
+					fieldId={id}
 					placeholder="Select..."
-					fluid={true}
-					selection={true}
-					options={[
-						{ text: "Numeric", value: "Numeric" },
-						{ text: "String", value: "String" }
-					]} />
+					fluid={true} />
 			</Form.Field>
 		</Grid.Column>
 

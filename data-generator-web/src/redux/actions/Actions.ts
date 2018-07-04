@@ -1,5 +1,5 @@
 import generateUniqueString from "../../util/generateUniqueString";
-import {IFieldStatePatch} from "../state/IAppState";
+import {FieldKinds, IFieldStatePatch} from "../state/IAppState";
 import {MappingActionType, SimpleActionType} from "./ActionType";
 
 
@@ -11,6 +11,11 @@ export const UpdateField = new SimpleActionType<{
 	fieldId: string,
 	newValues: IFieldStatePatch
 }>("UPDATE_FIELD");
+
+export const ChangeFieldKind = new SimpleActionType<{
+	fieldId: string,
+	newKind: FieldKinds
+}>("CHANGE_FIELD_KIND");
 
 export const DeleteField = new SimpleActionType<{
 	fieldId: string

@@ -49,6 +49,13 @@ function patchFieldState(base: IFieldState, patch: IFieldStatePatch): IFieldStat
 	} as IFieldState;
 }
 
+function modifyField(oldFields: IFieldState[], fieldToModifyId: string, mutateFunc: (f: IFieldState) => IFieldState) {
+	return oldFields.map(f =>
+		f.id !== fieldToModifyId
+			? f
+			: mutateFunc(f))
+}
+
 function profileReducer(
 	oldState: IProfileState | undefined,
 	action: Action)
@@ -74,13 +81,28 @@ function profileReducer(
 		};
 	}
 
+	if (Actions.ChangeFieldKind.is(action))
+	{
+		return {
+			fields: modifyField(
+				oldState.fields,
+				action.fieldId,
+				f => ({
+					...f,
+					restrictions: {
+						kind: action.newKind
+					} as AnyFieldRestriction
+				}))
+		};
+	}
+
 	if (Actions.UpdateField.is(action))
 	{
 		return {
-			fields: oldState.fields.map(f =>
-				f.id !== action.fieldId
-					? f
-					: patchFieldState(f, action.newValues))
+			fields: modifyField(
+				oldState.fields,
+				action.fieldId,
+				f => patchFieldState(f, action.newValues))
 		};
 	}
 
