@@ -35,7 +35,7 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 					{
 						id: "bbbb",
 						name: "price",
-						nullPrevalence: 0,
+						nullPrevalence: 0.2,
 						restrictions: {
 							kind: FieldKinds.Numeric,
 							meanAvg: 1,

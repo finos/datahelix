@@ -14,6 +14,7 @@ import {
 } from "./field-restrictions/SpecificFieldRestrictions";
 import FieldNameInput from "./FieldNameInput";
 import FieldTypeDropdown from "./FieldTypeDropdown";
+import NullPrevalenceSlider from "./NullPrevalenceSlider";
 
 interface IProps
 {
@@ -46,7 +47,10 @@ const ProfileField = ({id, name, kind}: IProps) =>
 				<FieldNameInput fieldId={id} fluid={true} placeholder='Field name' />
 			</Form.Field>
 
-			<Checkbox label='Nullable?' />
+			<Form.Field>
+				<label>Null Prevalence</label>
+				<NullPrevalenceSlider fieldId={id} />
+			</Form.Field>
 		</Grid.Column>
 
 		<Grid.Column width={3}>
