@@ -43,8 +43,8 @@ function patchFieldState(base: IFieldState, patch: IFieldStatePatch): IFieldStat
 {
 	return {
 		id: base.id,
-		name: base.name || patch.name,
-		nullPrevalence: base.nullPrevalence || patch.nullPrevalence,
+		name: patch.name || base.name,
+		nullPrevalence: patch.nullPrevalence || base.nullPrevalence,
 		restrictions: patchRestrictions(base.restrictions, patch.restrictions)
 	} as IFieldState;
 }

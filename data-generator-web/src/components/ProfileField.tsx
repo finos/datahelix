@@ -1,8 +1,9 @@
 import * as React from "react";
-import {Checkbox, Form, Grid, Input} from "semantic-ui-react";
+import {Checkbox, Form, Grid} from "semantic-ui-react";
 
 import {FieldKinds} from "../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
+import FieldNameInput from "./FieldNameInput";
 import {
 	AllowableCharactersFieldRestriction,
 	MaximumStringLengthFieldRestriction,
@@ -40,7 +41,7 @@ const ProfileField = ({id, name, kind}: IProps) =>
 		<Grid.Column width={4}>
 			<Form.Field>
 				<label>Field Name</label>
-				<Input fluid={true} value={name} placeholder='Field name' />
+				<FieldNameInput fieldId={id} fluid={true} placeholder='Field name' />
 			</Form.Field>
 
 			<Checkbox label='Nullable?' />
