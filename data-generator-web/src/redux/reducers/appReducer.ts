@@ -39,12 +39,18 @@ function patchRestrictions(base: AnyFieldRestriction, patch?: AnyFieldRestrictio
 	return { ...base, ...patch } as AnyFieldRestriction;
 }
 
+// originally I used a || b, but that causes unintended results because eg "" is falsy
+function coalesceValues<T>(a: T | undefined, b: T | undefined): T | undefined
+{
+	return a !== undefined ? a : b;
+}
+
 function patchFieldState(base: IFieldState, patch: IFieldStatePatch): IFieldState
 {
 	return {
 		id: base.id,
-		name: patch.name || base.name,
-		nullPrevalence: patch.nullPrevalence || base.nullPrevalence,
+		name: coalesceValues(patch.name, base.name),
+		nullPrevalence: coalesceValues(patch.nullPrevalence, base.nullPrevalence),
 		restrictions: patchRestrictions(base.restrictions, patch.restrictions)
 	} as IFieldState;
 }
