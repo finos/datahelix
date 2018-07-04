@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 @JsonSubTypes(Array(
   new Type(value = classOf[NumericField], name = "numeric"),
   new Type(value = classOf[StringField], name = "string"),
-  new Type(value = classOf[UnknownField], name = "numeric")
+  new Type(value = classOf[UnknownField], name = "unknown")
 ))
 trait AbstractField {
   def name: String

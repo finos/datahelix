@@ -1,17 +1,18 @@
 package com.scottlogic.deg.io
 
+import java.io.File
+
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class FileReader(spark: SparkSession) {
-    def readCSV(filepath: String): DataFrame = {
-        val csv = spark.read.format("csv")
+    def readCSV(file: File): DataFrame = {
+        spark.read.format("csv")
             .option("inferSchema", "true")
             .option("header", "true")
-            .load(filepath)
-        return csv
+            .load(file.getPath)
     }
 
-    def readJson(filepath: String): DataFrame = {
-        return spark.read.json(filepath)
+    def readJson(file: File): DataFrame = {
+        spark.read.json(file.getPath)
     }
 }

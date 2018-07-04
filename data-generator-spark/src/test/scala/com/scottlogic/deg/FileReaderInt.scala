@@ -1,5 +1,7 @@
 package com.scottlogic.deg
 
+import java.io.File
+
 import com.scottlogic.deg.io.FileReader
 import org.apache.spark.sql.SparkSession
 import org.junit.Assert.assertTrue
@@ -22,8 +24,8 @@ class FileReaderInt extends {
 
     @Test
     def readCsv_returns_DF_with_expectedColumns(): Unit = {
-        val path = getClass.getClassLoader().getResource("gfx_cleaned.csv").getPath
-        val df = fileReader.readCSV(path)
+        val path = getClass.getClassLoader.getResource("gfx_cleaned.csv").getPath
+        val df = fileReader.readCSV(new File(path))
         val expectedColumns = Array("Video Card", "Series", "Chipset", "Memory ()", "Core Clock ()", "Price (£)")
         assertTrue(df.columns.length == 6)
     }
