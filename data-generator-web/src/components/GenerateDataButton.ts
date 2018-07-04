@@ -1,21 +1,13 @@
 import {connect} from "react-redux";
-import {Dispatch} from "redux";
-
 import {Button, ButtonProps} from "semantic-ui-react";
-import Actions from "../redux/actions";
 
-function mapDispatchToProps(dispatch: Dispatch): ButtonProps
-{
-	return {
-		onClick: () => {
-			dispatch(Actions.StartGeneratingData.create({}));
-		}
-	};
-}
+import Actions from "../redux/actions";
 
 const WrappedComponent = connect<ButtonProps, ButtonProps, ButtonProps>(
 	undefined,
-	mapDispatchToProps)
-(Button);
+	dispatch => ({
+		onClick: () => dispatch(Actions.StartGeneratingData.create({}))
+	}))
+	(Button);
 
 export default WrappedComponent;

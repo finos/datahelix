@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Checkbox, Form, Grid} from "semantic-ui-react";
+import {Checkbox, Form, Grid, Icon} from "semantic-ui-react";
 
 import {FieldKinds} from "../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
@@ -35,7 +35,9 @@ function withLabel(label: string, component: any): any
 const ProfileField = ({id, name, kind}: IProps) =>
 	<Grid.Row>
 		<Grid.Column width={1}>
-			<DeleteFieldButton fieldId={id} />
+			<DeleteFieldButton fieldId={id} icon={true}>
+				<Icon name="trash" />
+			</DeleteFieldButton>
 		</Grid.Column>
 
 		<Grid.Column width={4}>

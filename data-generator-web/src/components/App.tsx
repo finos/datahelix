@@ -1,6 +1,6 @@
 import * as React from 'react';
-
 import {Container, Divider, Header} from "semantic-ui-react";
+
 import ClearProfileButton from "./ClearProfileButton";
 import CurrentProfileEditor from './CurrentProfileEditor';
 import ExportProfileButton from "./ExportProfileButton";
@@ -14,9 +14,9 @@ class App extends React.Component {
 				<Header as='h1'>Data Generator</Header>
 
 				<div>
-					<ClearProfileButton />
+					<ClearProfileButton content="Clear Profile" />
 					<ImportProfileButton content="Import Profile" />
-					<ExportProfileButton />
+					<ExportProfileButton content="Export Profile" />
 					<GenerateDataButton content="Generate Data" />
 				</div>
 

@@ -1,19 +1,13 @@
 import {connect} from "react-redux";
-import {Dispatch} from "redux";
-
 import {Button, ButtonProps} from "semantic-ui-react";
+
 import {ExportProfile} from "../redux/actions/Actions";
 
-function mapDispatchToProps(dispatch: Dispatch): ButtonProps
-{
-	return {
-		onClick: () => {
-			dispatch(ExportProfile.create({}));
-		},
-		content: "Export Profile"
-	};
-}
-
-const WrappedComponent = connect(undefined, mapDispatchToProps)(Button);
+const WrappedComponent = connect<ButtonProps, ButtonProps, ButtonProps>(
+	undefined,
+	dispatch => ({
+		onClick: () => dispatch(ExportProfile.create({}))
+	}))
+	(Button);
 
 export default WrappedComponent;

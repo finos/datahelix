@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {Form, Grid} from "semantic-ui-react";
+import {Form, Grid, Icon} from "semantic-ui-react";
 import AddEmptyFieldButton from "./AddEmptyFieldButton";
 
 interface IProps
@@ -15,7 +15,9 @@ const ProfileEditor = ({children}: IProps) =>
 
 			<Grid.Row>
 				<Grid.Column width={1}>
-					<AddEmptyFieldButton />
+					<AddEmptyFieldButton icon={true}>
+						<Icon name="plus" />
+					</AddEmptyFieldButton>
 				</Grid.Column>
 			</Grid.Row>
 		</Grid>
