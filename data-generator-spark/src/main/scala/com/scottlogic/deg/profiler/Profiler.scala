@@ -13,11 +13,11 @@ trait AbstractSparkToDTOFieldMapper {
 }
 
 class StringSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
-    override def constructDTOField(): StringField = StringField()
+    override def constructDTOField() = StringField(name = field.name)
 }
 
 class UnknownSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
-    override def constructDTOField(): StringField = StringField()
+    override def constructDTOField() = UnknownField(name = field.name)
 }
 
 class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
@@ -28,7 +28,8 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
         stddev_pop(field.name).alias("stddev_pop")
     ).head()
 
-    override def constructDTOField(): NumericField = NumericField(
+    override def constructDTOField() = NumericField(
+        name = field.name,
         meanAvg = head.getAs("mean"),
         stdDev = head.getAs("stddev_pop"),
         min = head.getAs("min"),

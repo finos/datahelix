@@ -13,4 +13,6 @@ import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
   new Type(value = classOf[StringField], name = "string"),
   new Type(value = classOf[UnknownField], name = "numeric")
 ))
-trait AbstractField
+trait AbstractField {
+  def name: String
+}

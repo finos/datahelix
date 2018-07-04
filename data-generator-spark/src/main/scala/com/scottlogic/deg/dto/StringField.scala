@@ -1,3 +1,3 @@
 package com.scottlogic.deg.dto
 
-case class StringField() extends AbstractField
+case class StringField(name:String) extends AbstractField
