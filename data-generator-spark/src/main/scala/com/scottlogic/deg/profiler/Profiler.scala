@@ -1,7 +1,6 @@
 package com.scottlogic.deg.profiler
 
 import com.scottlogic.deg.dto._
-import com.scottlogic.deg.io.{FileReader, FileWriter}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField}
