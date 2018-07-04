@@ -1,14 +1,15 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import ProfileEditor from "./ProfileEditor";
-
+import {selectCurrentProfileFields} from "../redux/selectors/selectFieldLookup";
 import {IAppState} from "../redux/state/IAppState";
+
+import ProfileEditor from "./ProfileEditor";
 import ProfileField from "./ProfileField";
 
 function mapStateToProps(state: IAppState): any
 {
-	const fields = state.currentProfile ? state.currentProfile.fields : [];
+	const fields = selectCurrentProfileFields(state);
 
 	const children = fields.map(f =>
 		<ProfileField

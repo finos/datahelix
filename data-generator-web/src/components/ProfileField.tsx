@@ -10,7 +10,7 @@ import {
 	MeanFieldRestriction,
 	MinimumStringLengthFieldRestriction,
 	MinimumValueFieldRestriction,
-	SpecificFieldRestrictions
+	StandardDeviationRestriction
 } from "./field-restrictions/SpecificFieldRestrictions";
 
 interface IProps
@@ -18,6 +18,16 @@ interface IProps
 	id: string;
 	name?: string;
 	kind: FieldKinds | null;
+}
+
+function withLabel(label: string, component: any): any
+{
+	return (
+		<Form.Field>
+			<label>{label}</label>
+			{ component }
+		</Form.Field>
+	)
 }
 
 const ProfileField = ({id, name, kind}: IProps) =>
@@ -53,17 +63,31 @@ const ProfileField = ({id, name, kind}: IProps) =>
 			{
 				kind === FieldKinds.String &&
 				<>
-					<AllowableCharactersFieldRestriction fieldId={id}/>
-					<MinimumStringLengthFieldRestriction fieldId={id}/>
-					<MaximumStringLengthFieldRestriction fieldId={id}/>
+					{ withLabel(
+						"Allowable Characters",
+						<AllowableCharactersFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Minimum Length",
+						<MinimumStringLengthFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Maximum Length",
+						<MaximumStringLengthFieldRestriction fieldId={id} />) }
 				</>
 				||
 				kind === FieldKinds.Numeric &&
 				<>
-					<SpecificFieldRestrictions fieldId={id}/>
-					<MeanFieldRestriction fieldId={id}/>
-					<MinimumValueFieldRestriction fieldId={id}/>
-					<MaximumValueFieldRestriction fieldId={id}/>
+					{ withLabel(
+						"Standard Deviation",
+						<StandardDeviationRestriction fieldId={id} />) }
+					{ withLabel(
+						"Mean",
+						<MeanFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Minimum Value",
+						<MinimumValueFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Maximum Value",
+						<MaximumValueFieldRestriction fieldId={id} />) }
 				</>
 				||
 				null

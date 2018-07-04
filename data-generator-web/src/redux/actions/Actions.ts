@@ -1,6 +1,5 @@
-import DeepPartial from "../../util/DeepPartial";
 import generateUniqueString from "../../util/generateUniqueString";
-import {IFieldState} from "../state/IAppState";
+import {IFieldStatePatch} from "../state/IAppState";
 import {MappingActionType, SimpleActionType} from "./ActionType";
 
 
@@ -10,7 +9,7 @@ export const ClearCurrentProfile = new SimpleActionType<{}>(
 
 export const UpdateField = new SimpleActionType<{
 	fieldId: string,
-	newValues: DeepPartial<IFieldState>
+	newValues: IFieldStatePatch
 }>("UPDATE_FIELD");
 
 export const DeleteField = new SimpleActionType<{

@@ -1,7 +1,15 @@
 import {Action} from "redux";
 
 import Actions from "../actions";
-import {IAppState, IProfileState} from "../state/IAppState";
+import {
+	AnyFieldRestriction,
+	AnyFieldRestrictionsPatch,
+	FieldKinds,
+	IAppState,
+	IFieldState,
+	IFieldStatePatch,
+	IProfileState
+} from "../state/IAppState";
 
 
 export default function appReducer(
@@ -17,6 +25,30 @@ export default function appReducer(
 	}
 }
 
+function patchRestrictions(base: AnyFieldRestriction, patch?: AnyFieldRestrictionsPatch): AnyFieldRestriction
+{
+	if (!patch)
+		return base;
+
+	if (base.kind !== patch.kind)
+	{
+		throw new Error("Changing type should be done with a separate action so sensible defaults can establish");
+	}
+
+	// the work to get the typings happy with this is prohibitive, so just cast
+	return { ...base, ...patch } as AnyFieldRestriction;
+}
+
+function patchFieldState(base: IFieldState, patch: IFieldStatePatch): IFieldState
+{
+	return {
+		id: base.id,
+		name: base.name || patch.name,
+		nullPrevalence: base.nullPrevalence || patch.nullPrevalence,
+		restrictions: patchRestrictions(base.restrictions, patch.restrictions)
+	} as IFieldState;
+}
+
 function profileReducer(
 	oldState: IProfileState | undefined,
 	action: Action)
@@ -30,7 +62,7 @@ function profileReducer(
 		return {
 			fields: [
 				...oldState.fields,
-				{ id: action.fieldId, nullPrevalence: 0 }
+				{ id: action.fieldId, nullPrevalence: 0, restrictions: { kind: FieldKinds.Unclassified } }
 			]
 		};
 	}
@@ -38,10 +70,18 @@ function profileReducer(
 	if (Actions.DeleteField.is(action))
 	{
 		return {
-			fields: [
-				...oldState.fields.filter(f => f.id !== action.fieldId)
-			]
-		}
+			fields: oldState.fields.filter(f => f.id !== action.fieldId)
+		};
+	}
+
+	if (Actions.UpdateField.is(action))
+	{
+		return {
+			fields: oldState.fields.map(f =>
+				f.id !== action.fieldId
+					? f
+					: patchFieldState(f, action.newValues))
+		};
 	}
 
 	if (Actions.ClearCurrentProfile.is(action))

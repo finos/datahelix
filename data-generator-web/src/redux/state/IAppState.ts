@@ -14,23 +14,23 @@ export interface IFieldState
 	readonly id: string;
 	readonly name?: string;
 	readonly nullPrevalence: number;
-	readonly restrictions?: AnyFieldRestriction;
+	readonly restrictions: AnyFieldRestriction;
 }
 
-export type AnyFieldRestriction = INumericRestrictions | IStringEnumRestrictions | IStringRestrictions;
+export type AnyFieldRestriction = INumericRestrictions | IStringEnumRestrictions | IStringRestrictions | IUnclassifiedRestrictions;
 
-interface IRestrictions <T extends FieldKinds> {
+export interface IRestrictions <T extends FieldKinds> {
 	readonly kind: T;
 }
 
-interface INumericRestrictions extends IRestrictions<FieldKinds.Numeric>{
+export interface INumericRestrictions extends IRestrictions<FieldKinds.Numeric>{
 	readonly meanAvg?: number;
 	readonly stdDev?: number;
 	readonly minimumValue?: number;
 	readonly maximumValue?: number;
 }
 
-interface IStringEnumRestrictions extends IRestrictions<FieldKinds.Enum> {
+export interface IStringEnumRestrictions extends IRestrictions<FieldKinds.Enum> {
 	readonly enumValues: IEnumValue[];
 }
 
@@ -40,15 +40,33 @@ interface IEnumValue {
 	readonly comment?: string;
 }
 
-interface IStringRestrictions extends IRestrictions<FieldKinds.String> {
+export interface IStringRestrictions extends IRestrictions<FieldKinds.String> {
 	readonly allowableCharacters?: string;
 	readonly minimumLength?: number;
 	readonly maximumLength?: number;
 }
 
+export interface IUnclassifiedRestrictions extends IRestrictions<FieldKinds.Unclassified> {
+}
+
 export enum FieldKinds
 {
+	Unclassified,
 	String,
 	Numeric,
 	Enum
 }
+
+
+// rule: If patches have restrictions, they must have a kind property
+// (we previously defined patches as DeepPartial<IFieldState> but kinds shouldn't really be optional)
+
+export type IFieldStatePatch =
+	Partial<IFieldState> & { restrictions?: AnyFieldRestrictionsPatch }
+
+export type AnyFieldRestrictionsPatch =
+	Partial<AnyFieldRestriction> & Pick<AnyFieldRestriction, "kind">
+
+export type IRestrictionsPatch<U extends FieldKinds, T extends IRestrictions<U>> =
+	Partial<T> & Pick<T, "kind">
+
