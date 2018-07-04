@@ -8,7 +8,8 @@
 	},
 	"rules": {
 		"max-classes-per-file": false,
-		"curly": false
+		"curly": false,
+		"object-literal-sort-keys": false
 	},
 	"defaultSeverity": "warn"
 }
