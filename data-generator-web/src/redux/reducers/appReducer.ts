@@ -81,6 +81,11 @@ function profileReducer(
 		};
 	}
 
+	if (Actions.SetCurrentProfile.is(action))
+	{
+		return action.newProfile;
+	}
+
 	if (Actions.ChangeFieldKind.is(action))
 	{
 		return {

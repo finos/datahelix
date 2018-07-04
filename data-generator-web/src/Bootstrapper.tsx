@@ -15,28 +15,7 @@ export default class Bootstrapper
 	public start(): void
 	{
 		const defaultState: IAppState = {
-			currentProfile: {
-				fields: [
-					{
-						id: "aaaa",
-						name: "description",
-						nullPrevalence: 0,
-						restrictions: {
-							kind: FieldKinds.String
-						}
-					},
-					{
-						id: "bbbb",
-						name: "price",
-						nullPrevalence: 0,
-						restrictions: {
-							kind: FieldKinds.Numeric,
-							meanAvg: 1,
-							stdDev: 1
-						}
-					}
-				]
-			}
+			currentProfile: { fields: [] }
 		};
 
 		const store = createStore(

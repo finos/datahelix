@@ -3,7 +3,6 @@ import {Checkbox, Form, Grid} from "semantic-ui-react";
 
 import {FieldKinds} from "../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
-import FieldNameInput from "./FieldNameInput";
 import {
 	AllowableCharactersFieldRestriction,
 	MaximumStringLengthFieldRestriction,
@@ -13,6 +12,7 @@ import {
 	MinimumValueFieldRestriction,
 	StandardDeviationRestriction
 } from "./field-restrictions/SpecificFieldRestrictions";
+import FieldNameInput from "./FieldNameInput";
 import FieldTypeDropdown from "./FieldTypeDropdown";
 
 interface IProps

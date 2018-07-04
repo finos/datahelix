@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import {Button, Container, Divider, Header} from "semantic-ui-react";
+import {Container, Divider, Header} from "semantic-ui-react";
 import ClearProfileButton from "./ClearProfileButton";
 import CurrentProfileEditor from './CurrentProfileEditor';
 import ExportProfileButton from "./ExportProfileButton";
+import GenerateDataButton from "./GenerateDataButton";
+import ImportProfileButton from "./ImportProfileButton";
 
 class App extends React.Component {
 	public render(): React.ReactNode {
@@ -13,9 +15,9 @@ class App extends React.Component {
 
 				<div>
 					<ClearProfileButton />
-					<Button>Import Profile</Button>
+					<ImportProfileButton content="Import Profile" />
 					<ExportProfileButton />
-					<Button>Generate Data</Button>
+					<GenerateDataButton content="Generate Data" />
 				</div>
 
 				<Divider />
