@@ -27,7 +27,9 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 						nullPrevalence: 0,
 						restrictions: {
 							kind: FieldKinds.String,
-							allowableCharacters: "abcdkz"
+							allowableCharacters: "abcdkz",
+							minimumLength: null,
+							maximumLength: null
 						}
 					},
 					{
@@ -37,7 +39,9 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 						restrictions: {
 							kind: FieldKinds.Numeric,
 							meanAvg: 1,
-							stdDev: 1
+							stdDev: 1,
+							minimumValue: null,
+							maximumValue: 0
 						}
 					}
 				]

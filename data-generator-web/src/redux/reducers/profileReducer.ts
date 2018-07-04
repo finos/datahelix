@@ -1,4 +1,5 @@
 import {Action} from "redux";
+import Actions from "../actions";
 import {
 	AnyFieldRestriction,
 	AnyFieldRestrictionsPatch, FieldKinds,
@@ -6,7 +7,6 @@ import {
 	IFieldStatePatch,
 	IProfileState
 } from "../state/IAppState";
-import Actions from "../actions";
 
 export default function profileReducer(
 	oldState: IProfileState | undefined,
@@ -21,7 +21,12 @@ export default function profileReducer(
 		return {
 			fields: [
 				...oldState.fields,
-				{ id: action.fieldId, nullPrevalence: 0, restrictions: { kind: FieldKinds.Unclassified } }
+				{
+					id: action.fieldId,
+					name: "",
+					nullPrevalence: 0,
+					restrictions: { kind: FieldKinds.Unclassified }
+				}
 			]
 		};
 	}

@@ -4,11 +4,16 @@ import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/
 
 export interface IProps<T>
 {
-	value?: T;
-	onChange?: (newValue: T) => void;
+	value?: T | null;
+	onChange?: (newValue: T | null) => void;
 }
 
 type InputChangeEventHandler = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
+
+function valueOrEmptyString(v: number | string | undefined | null): string | number
+{
+	return v === null || v === undefined ? "" : v;
+}
 
 export class NumericInput extends React.Component<IProps<number>, {}>
 {
@@ -23,15 +28,20 @@ export class NumericInput extends React.Component<IProps<number>, {}>
 			fluid={true}
 			type="number"
 			onChange={this.onChange}
-			value={this.props.value} />
+			value={valueOrEmptyString(this.props.value)} />
 	}
 
 	private readonly onChange: InputChangeEventHandler =
 		(_, data) =>
 		{
-			const parsedValue = parseFloat(data.value);
+			const parsedValue = data.value === ""
+				? null
+				: parseFloat(data.value);
 
-			if (this.props.onChange && !Number.isNaN(parsedValue))
+			if (parsedValue !== null && Number.isNaN(parsedValue))
+				return; // don't accept non-numeric values
+
+			if (this.props.onChange)
 				this.props.onChange(parsedValue);
 		};
 }
@@ -49,7 +59,7 @@ export class StringInput extends React.Component<IProps<string>, {}>
 			fluid={true}
 			type="text"
 			onChange={this.onChange}
-			value={this.props.value} />
+			value={valueOrEmptyString(this.props.value)} />
 	}
 
 	private readonly onChange: InputChangeEventHandler =

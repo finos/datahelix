@@ -23,8 +23,8 @@ function createReduxMappedInput<
 		TRestriction extends IRestrictions<TFieldKind>,
 		TValue extends number | string>(
 	component: ComponentType<IInputProps<TValue>>,
-	getValue: (restriction: TRestriction) => TValue | undefined,
-	getRestrictionPatch: (newValue: TValue) => IRestrictionsPatch<TFieldKind, TRestriction>)
+	getValue: (restriction: TRestriction) => TValue | null,
+	getRestrictionPatch: (newValue: TValue | null) => IRestrictionsPatch<TFieldKind, TRestriction>)
 {
 	return connect<IInputProps<TValue>, IInputProps<TValue>, IProps, IAppState>(
 		(state, ownProps) => {

@@ -12,7 +12,7 @@ export interface IProfileState
 export interface IFieldState
 {
 	readonly id: string;
-	readonly name?: string;
+	readonly name: string;
 	readonly nullPrevalence: number;
 	readonly restrictions: AnyFieldRestriction;
 }
@@ -24,10 +24,10 @@ export interface IRestrictions <T extends FieldKinds> {
 }
 
 export interface INumericRestrictions extends IRestrictions<FieldKinds.Numeric>{
-	readonly meanAvg?: number;
-	readonly stdDev?: number;
-	readonly minimumValue?: number;
-	readonly maximumValue?: number;
+	readonly meanAvg: number | null;
+	readonly stdDev: number | null;
+	readonly minimumValue: number | null;
+	readonly maximumValue: number | null;
 }
 
 export interface IStringEnumRestrictions extends IRestrictions<FieldKinds.Enum> {
@@ -37,13 +37,13 @@ export interface IStringEnumRestrictions extends IRestrictions<FieldKinds.Enum> 
 interface IEnumValue {
 	readonly name: string;
 	readonly prevalence: number;
-	readonly comment?: string;
+	readonly comment: string | null;
 }
 
 export interface IStringRestrictions extends IRestrictions<FieldKinds.String> {
-	readonly allowableCharacters?: string;
-	readonly minimumLength?: number;
-	readonly maximumLength?: number;
+	readonly allowableCharacters: string | null;
+	readonly minimumLength: number | null;
+	readonly maximumLength: number | null;
 }
 
 export interface IUnclassifiedRestrictions extends IRestrictions<FieldKinds.Unclassified> {
