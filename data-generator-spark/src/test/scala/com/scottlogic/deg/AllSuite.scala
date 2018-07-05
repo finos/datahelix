@@ -6,7 +6,9 @@ import org.junit.runners.Suite
 @RunWith(classOf[Suite])
 @Suite.SuiteClasses(Array(
   classOf[AppTest],
-  classOf[FileReaderInt]
+  classOf[FileReaderInt],
+  classOf[JsonTest],
+  classOf[SemanticInferenceTest]
 ))
 class AllSuite {
 
