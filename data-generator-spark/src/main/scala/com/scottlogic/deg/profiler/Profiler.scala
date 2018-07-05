@@ -5,7 +5,7 @@ import com.scottlogic.deg.dto._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{sum, when}
-import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField}
+import org.apache.spark.sql.types._
 
 case class Location(lat: Double, lon: Double)
 
@@ -54,6 +54,21 @@ class UnknownSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
     override def constructDTOField() = UnknownField(name = field.name, nullPrevalence = 0.0d)
 }
 
+class TimestampSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
+    override def constructDTOField(): TemporalField = {
+        dto.TemporalField(
+            name = field.name,
+            nullPrevalence = 0.0d,
+            distribution = NormalDistribution(
+                meanAvg = 1.0d,
+                stdDev = 1.0d,
+                min = 1.0d,
+                max = 1.0d
+            )
+        )
+    }
+}
+
 class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
     override def constructDTOField():NumericField = {
         val head = df.agg(
@@ -85,6 +100,7 @@ class Profiler(df: DataFrame) {
             schemaVersion = "1",
             fields = df.schema.fields.map(field => (field.dataType match {
                 case DoubleType | IntegerType => new NumericSparkToDTOFieldMapper(df, field)
+                case TimestampType => new TimestampSparkToDTOFieldMapper(df, field)
                 case StringType => new StringSparkToDTOFieldMapper(df, field)
                 case _ => new UnknownSparkToDTOFieldMapper(df, field)
             }).constructDTOField()
