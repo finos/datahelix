@@ -1,52 +1,36 @@
+import {saveAs} from "file-saver";
 import {Middleware} from "redux";
 
+import { mostRecentFormat } from "../../profileSchemas";
 import Actions from "../actions";
-import {FieldKinds} from "../state/IAppState";
 
 const sideEffectsMiddleware: Middleware = api => next => action =>
 {
-	if (Actions.ExportProfile.is(action))
-	{
-		alert(
+	if (Actions.ExportProfile.is(action)) {
+		let serialisedProfile: {};
+
+		try {
+			serialisedProfile = mostRecentFormat.serialiseProfile(
+				api.getState().currentProfile);
+		}
+		catch(e)
+		{
+			alert("Failed to create profile file");
+			return;
+		}
+
+		const serialisedProfileAsJson =
 			JSON.stringify(
-				api.getState().currentProfile,
+				serialisedProfile,
 				null,
-				"  "));
+				"  ");
 
-		return;
-	}
+		const blob = new Blob(
+			[ serialisedProfileAsJson ],
+			{ type: "application/json" });
 
-	if (Actions.StartImportProfile.is(action))
-	{
-		next(Actions.SetCurrentProfile.create({
-			newProfile: {
-				fields: [
-					{
-						id: "aaaa",
-						name: "description",
-						nullPrevalence: 0,
-						restrictions: {
-							kind: FieldKinds.String,
-							allowableCharacters: "abcdkz",
-							minimumLength: null,
-							maximumLength: null
-						}
-					},
-					{
-						id: "bbbb",
-						name: "price",
-						nullPrevalence: 0.2,
-						restrictions: {
-							kind: FieldKinds.Numeric,
-							meanAvg: 1,
-							stdDev: 1,
-							minimumValue: null,
-							maximumValue: 0
-						}
-					}
-				]
-			}
-		}));
+		saveAs(blob, "profile.json");
+
 		return;
 	}
 

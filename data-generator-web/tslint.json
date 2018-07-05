@@ -9,7 +9,11 @@
 	"rules": {
 		"max-classes-per-file": false,
 		"curly": false,
-		"object-literal-sort-keys": false
+		"object-literal-sort-keys": false,
+		"no-empty-interface": false,
+		"no-angle-bracket-type-assertion": false,
+		"no-namespace": false,
+		"comment-format": false
 	},
 	"defaultSeverity": "warn"
 }

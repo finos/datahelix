@@ -39,8 +39,5 @@ export const AddBlankField = new MappingActionType<
 	_ => ({ fieldId: generateUniqueString() })
 );
 
-export const StartImportProfile = new SimpleActionType<{}>(
-	"START_IMPORT_PROFILE"); // caught by SideEffectsMiddleware
-
 export const ExportProfile = new SimpleActionType<{}>(
 	"EXPORT_PROFILE"); // caught by SideEffectsMiddleware
