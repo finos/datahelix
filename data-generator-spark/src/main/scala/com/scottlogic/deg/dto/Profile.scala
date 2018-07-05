@@ -1,6 +1,6 @@
 package com.scottlogic.deg.dto
 
 case class Profile(
-  schemaVersion: Integer,
+  schemaVersion: String,
   fields: Iterable[AbstractField]
 )

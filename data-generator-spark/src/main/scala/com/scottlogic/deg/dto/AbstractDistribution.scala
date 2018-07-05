@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
   property = "kind"
 )
 @JsonSubTypes(Array(
-  new Type(value = classOf[StringFieldEnumSpecialization], name = "enum"),
-  new Type(value = classOf[StringFieldTextSpecialization], name = "text"),
-  new Type(value = classOf[StringFieldUnknownSpecialization], name = "unknown")
+  new Type(value = classOf[NormalDistribution], name = "normal"),
+  new Type(value = classOf[SetDistribution], name = "set"),
+  new Type(value = classOf[PerCharacterRandomDistribution], name = "perCharacterRandom")
 ))
-trait StringFieldAbstractSpecialization
+trait AbstractDistribution

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.dto
 
-case class NumericField(
+case class EnumField(
   name:String,
   nullPrevalence:Number,
   distribution: AbstractDistribution

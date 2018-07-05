@@ -1,6 +1,6 @@
 package com.scottlogic.deg.dto
 
-case class StringFieldEnumMember(
+case class SetDistributionMember(
   name: String,
   prevalence: Number
 )

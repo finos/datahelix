@@ -1,7 +1,7 @@
 package com.scottlogic.deg.dto
 
-case class StringField(
+case class TextField(
   name:String,
   nullPrevalence:Number,
-  specialization: StringFieldAbstractSpecialization
+  distribution: AbstractDistribution
 ) extends AbstractField

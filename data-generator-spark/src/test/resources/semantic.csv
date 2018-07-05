@@ -1,0 +1,8 @@
+created_str,updated_epoch,category,rating,quantity,comment
+2018-05-07 12:00:00Z,1530810493369,personal,5,1003,test data
+2018-05-07 12:01:00Z,1530810494369,business,5,536,
+2018-05-07 12:02:00Z,1530810495369,personal,4,532,NULL
+2018-05-07 12:02:00Z,1530810495369,business,1,12,suppose I were to
+2018-05-07 12:02:00Z,1530810495369,business,4,1,
+2018-05-07 12:03:00Z,1530810496369,personal,1,16,markov chain
+2018-05-07 12:03:00Z,1530810497369,personal,1,1000,doki doki literature club
