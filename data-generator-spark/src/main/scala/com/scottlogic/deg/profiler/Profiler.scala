@@ -13,7 +13,35 @@ trait AbstractSparkToDTOFieldMapper {
 }
 
 class StringSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
-    override def constructDTOField() = StringField(name = field.name, nullPrevalence = 0.0d)
+    override def constructDTOField():StringField = {
+        // deterministic mock generator
+        val specialization = field.name.charAt(3).charValue % 3 match {
+            case 0 => StringFieldEnumSpecialization(
+                members = List(
+                    StringFieldEnumMember(
+                        name = "User",
+                        prevalence = 0.2d
+                    ),
+                    StringFieldEnumMember(
+                        name = "Admin",
+                        prevalence = 0.8d
+                    )
+                )
+            )
+            case 1 => StringFieldTextSpecialization(
+                lenMin = 0,
+                lenMax = 10,
+                lenMeanAvg = 5.0d,
+                lenStdDev = 1.0d
+            )
+            case _ => StringFieldUnknownSpecialization()
+        }
+        StringField(
+            name = field.name,
+            nullPrevalence = 0.0d,
+            specialization = specialization
+        )
+    }
 }
 
 class UnknownSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) extends AbstractSparkToDTOFieldMapper {
@@ -45,7 +73,9 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
 
 class Profiler(df: DataFrame) {
     def profile(): Profile = {
-        Profile(fields = df.schema.fields.map(field => (field.dataType match {
+        Profile(
+            schemaVersion = 1,
+            fields = df.schema.fields.map(field => (field.dataType match {
                 case DoubleType | IntegerType => new NumericSparkToDTOFieldMapper(df, field)
                 case StringType => new StringSparkToDTOFieldMapper(df, field)
                 case _ => new UnknownSparkToDTOFieldMapper(df, field)
