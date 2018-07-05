@@ -89,6 +89,12 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
                 stdDev = head.getAs("stddev_pop"),
                 min = head.getAs("min"),
                 max = head.getAs("max")
+            ),
+            format = SprintfNumericFormat(
+                template = field.dataType match {
+                    case DoubleType => "%f"
+                    case IntegerType => "%d"
+                }
             )
         )
     }
