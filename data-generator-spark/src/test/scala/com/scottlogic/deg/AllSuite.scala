@@ -1,15 +1,11 @@
 package com.scottlogic.deg
 
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.platform.suite.api.SelectPackages
 import org.junit.runner.RunWith
-import org.junit.runners.Suite
 
-@RunWith(classOf[Suite])
-@Suite.SuiteClasses(Array(
-  classOf[AppTest],
-  classOf[FileReaderInt],
-  classOf[JsonTest],
-  classOf[SemanticInferenceTest]
-))
+@RunWith(classOf[JUnitPlatform])
+@SelectPackages(Array("com.scottlogic.deg"))
 class AllSuite {
 
 }

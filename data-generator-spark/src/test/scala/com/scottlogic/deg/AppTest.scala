@@ -1,6 +1,6 @@
 package com.scottlogic.deg
 
-import org.junit._
+import org.junit.jupiter.api._
 
 @Test
 class AppTest {
