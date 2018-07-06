@@ -4,7 +4,6 @@ import com.scottlogic.deg.dto
 import com.scottlogic.deg.dto._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.functions.{sum, when}
 import org.apache.spark.sql.types._
 
 case class Location(lat: Double, lon: Double)
@@ -77,7 +76,7 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
             mean(field.name).as("mean"),
             stddev_pop(field.name).as("stddev_pop"),
             sum(col(field.name).isNull.cast(IntegerType))
-                .divide(count(col(field.name)))
+                .divide(count(coalesce(col(field.name),lit(1))))
                 .as("nullPrevalence")
         ).head()
 
@@ -93,6 +92,7 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
             format = SprintfNumericFormat(
                 template = field.dataType match {
                     case DoubleType => "%f"
+                    case LongType => "%l"
                     case IntegerType => "%d"
                 }
             )
@@ -105,7 +105,7 @@ class Profiler(df: DataFrame) {
         Profile(
             schemaVersion = "1",
             fields = df.schema.fields.map(field => (field.dataType match {
-                case DoubleType | IntegerType => new NumericSparkToDTOFieldMapper(df, field)
+                case DoubleType | LongType | IntegerType => new NumericSparkToDTOFieldMapper(df, field)
                 case TimestampType => new TimestampSparkToDTOFieldMapper(df, field)
                 case StringType => new StringSparkToDTOFieldMapper(df, field)
                 case _ => new UnknownSparkToDTOFieldMapper(df, field)
