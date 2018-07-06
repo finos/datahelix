@@ -1,7 +1,6 @@
 package com.scottlogic.deg.analyser.StringAnalyser
 
 import com.scottlogic.deg.SparkSessionBuilder
-import com.scottlogic.deg.analyser.StringAnalyser.NaiveStringAnalyserApp.spark
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
