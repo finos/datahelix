@@ -1,8 +1,7 @@
 package com.scottlogic.deg.dto
 
-case class NumericField(
+case class TemporalField(
   name:String,
   nullPrevalence:Number,
-  distribution: AbstractDistribution,
-  format: AbstractNumericFormat
+  distribution: AbstractDistribution
 ) extends AbstractField
