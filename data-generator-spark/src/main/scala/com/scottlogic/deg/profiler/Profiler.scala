@@ -76,7 +76,7 @@ class NumericSparkToDTOFieldMapper(val df: DataFrame, val field: StructField) ex
             mean(field.name).as("mean"),
             stddev_pop(field.name).as("stddev_pop"),
             sum(col(field.name).isNull.cast(IntegerType))
-                .divide(count(coalesce(col(field.name),lit(1))))
+                .divide(count(lit(1)))
                 .as("nullPrevalence")
         ).head()
 
