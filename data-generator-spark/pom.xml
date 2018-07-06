@@ -38,10 +38,10 @@
       <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
     </dependency>
-    <dependency> <!-- Play JSON -->
-      <groupId>com.typesafe.play</groupId>
-      <artifactId>play-json_${scala.binary.version}</artifactId>
-      <version>2.6.9</version>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.9.6</version>
     </dependency>
     <dependency>
       <!-- Fixes scalac warning "org.joda.convert.FromString not found"  -->
