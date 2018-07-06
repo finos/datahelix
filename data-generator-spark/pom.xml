@@ -15,6 +15,7 @@
     <scala.binary.version>2.11</scala.binary.version>
     <spark.version>2.3.1</spark.version>
     <spec2.version>4.2.0</spec2.version>
+    <dagger.version>2.16</dagger.version>
   </properties>
 
   <dependencies>
@@ -76,6 +77,16 @@
       <artifactId>specs2-junit_${scala.binary.version}</artifactId>
       <version>${spec2.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>4.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>net.codingwell</groupId>
+      <artifactId>scala-guice_${scala.binary.version}</artifactId>
+      <version>4.2.1</version>
     </dependency>
   </dependencies>
 
