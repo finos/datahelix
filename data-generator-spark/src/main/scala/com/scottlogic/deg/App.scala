@@ -3,15 +3,19 @@ package com.scottlogic.deg
 import java.io.File
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.google.inject.Guice
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.profiler.Profiler
+import javax.inject.Inject
+import net.codingwell.scalaguice.InjectorExtensions._
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 case class Params(inputPath: String, outputDir: String)
 
 object App {
+    private val injector = Guice.createInjector(new LiveModule, new SharedModule)
+
     val usage = """
 Usage: java com.scottlogic.deg.App inputFile outputDir
     """
@@ -21,33 +25,25 @@ Usage: java com.scottlogic.deg.App inputFile outputDir
             return
         }
 
-        new DEGApp().run(Params(
+        Logger.getLogger("org").setLevel(Level.ERROR)
+        Logger.getLogger("akka").setLevel(Level.ERROR)
+
+        injector.instance[DEGApp].run(Params(
             inputPath = args(0),
             outputDir = args(1)
         ))
     }
 }
 
-trait SparkSessionBuilder {
-    Logger.getLogger("org").setLevel(Level.ERROR)
-    Logger.getLogger("akka").setLevel(Level.ERROR)
-    protected val spark = SparkSession.builder
-        .appName("Data Engineering Generator")
-        .config("spark.master", "local")
-        .getOrCreate()
-}
-
-class DEGApp extends SparkSessionBuilder {
-    var mapper:ObjectMapper = _
-
+class DEGApp @Inject() (
+  val spark: SparkSession,
+  val mapper: ObjectMapper,
+  val fileReader: FileReader
+) {
     def run(params: Params): Unit = {
-        mapper = new ObjectMapper()
-        mapper.registerModule(DefaultScalaModule)
-
         val inFile = new File(params.inputPath)
         val outFile = new File(params.outputDir, "test-output.json")
 
-        val fileReader = new FileReader(spark)
         val df: DataFrame = fileReader.readCSV(inFile)
 
         val profiler = new Profiler(df)
