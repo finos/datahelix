@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profiler
 
-import com.scottlogic.deg.analyser.field_analyser.UnknownSparkToDTOFieldMapper
+import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
 import com.scottlogic.deg.dto._
@@ -15,7 +15,7 @@ class Profiler(df: DataFrame) {
         Profile(fields = df.schema.fields.map(field => (field.dataType match {
                 case DoubleType | IntegerType => new NaiveNumericAnalyser(df, field)
                 case StringType => new NaiveStringAnalyser(df, field)
-                case _ => new UnknownSparkToDTOFieldMapper(df, field)
+                case _ => new GenericFieldAnalyser(df, field)
             }).constructDTOField()
         ))
     }
