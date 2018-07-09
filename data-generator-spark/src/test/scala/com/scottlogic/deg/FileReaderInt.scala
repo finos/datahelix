@@ -3,30 +3,28 @@ package com.scottlogic.deg
 import java.io.File
 
 import com.scottlogic.deg.io.FileReader
+import javax.inject.Inject
 import org.apache.spark.sql.SparkSession
-import org.junit.Assert.assertTrue
-import org.junit.{Before, Test}
+import org.hamcrest.CoreMatchers.{equalTo, is}
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api._
+
 
 @Test
+@RequiresInjection
 class FileReaderInt extends {
 
-    var spark : SparkSession = _ // var to get spark session before each
-    var fileReader : FileReader = _
-    @Before
-    def before(): Unit = {
-        spark = SparkSession.builder
-            .appName("Data Engineering Generator")
-            .config("spark.master", "local")
-            .getOrCreate()
+    @Inject
+    var spark : SparkSession = _
 
-        fileReader = new FileReader(spark)
-    }
+    @Inject
+    var fileReader : FileReader = _
 
     @Test
-    def readCsv_returns_DF_with_expectedColumns(): Unit = {
+    def readCsv_returns_DF_with_expectedColumns() {
         val path = getClass.getClassLoader.getResource("gfx_cleaned.csv").getPath
         val df = fileReader.readCSV(new File(path))
-        val expectedColumns = Array("Video Card", "Series", "Chipset", "Memory ()", "Core Clock ()", "Price (£)")
-        assertTrue(df.columns.length == 6)
+        assertThat(df.columns, is(equalTo(Array("Video Card", "Series", "Chipset", "Memory", "Core Clock", "Price"))))
     }
+
 }

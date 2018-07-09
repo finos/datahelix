@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 )
 @JsonSubTypes(Array(
   new Type(value = classOf[NumericField], name = "numeric"),
-  new Type(value = classOf[StringField], name = "string"),
+  new Type(value = classOf[TemporalField], name = "temporal"),
+  new Type(value = classOf[TextField], name = "text"),
+  new Type(value = classOf[EnumField], name = "enum"),
   new Type(value = classOf[UnknownField], name = "unknown")
 ))
 trait AbstractField {
