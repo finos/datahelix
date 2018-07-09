@@ -1,8 +1,7 @@
 import { connect } from "react-redux";
 
-import {UpdateField} from "../../redux/actions/Actions";
+import Actions from "../../redux/actions";
 import {
-	AnyFieldRestriction,
 	FieldKinds,
 	IAppState,
 	INumericRestrictions, IRestrictions, IRestrictionsPatch,
@@ -34,7 +33,7 @@ function createReduxMappedInput<
 		},
 		(dispatch, ownProps: IProps) => {
 			return {
-				onChange: newValue => dispatch(UpdateField.create({
+				onChange: newValue => dispatch(Actions.Fields.UpdateField.create({
 					fieldId: ownProps.fieldId,
 					newValues: {
 						restrictions: getRestrictionPatch(newValue)

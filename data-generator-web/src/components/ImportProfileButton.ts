@@ -22,7 +22,7 @@ const WrappedComponent = connect<FileUploadButtonProps, FileUploadButtonProps, B
 				return;
 			}
 
-			dispatch(Actions.SetCurrentProfile.create({newProfile: newProfileState}));
+			dispatch(Actions.Profiles.SetCurrentProfile.create({newProfile: newProfileState}));
 		}
 	}))
 	(FileUploadButton);

@@ -9,12 +9,11 @@ import profileReducer from "./profileReducer";
 export default function appReducer(
 	oldState: IAppState | undefined,
 	action: Action)
-	: IAppState  | undefined
+	: IAppState
 {
-	if (!oldState)
-		return oldState;
-
 	return {
-		currentProfile: profileReducer(oldState.currentProfile, action)
+		currentProfile: profileReducer(
+			oldState ? oldState.currentProfile : undefined,
+			action)
 	}
 }

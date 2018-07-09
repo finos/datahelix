@@ -19,7 +19,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): DropdownProps
 	return {
 		options: [
 			{ text: "Numeric", value: FieldKinds.Numeric },
-			{ text: "String", value: FieldKinds.String }
+			{ text: "String", value: FieldKinds.String },
+			{ text: "Enumeration", value: FieldKinds.Enum }
 		],
 		value: fieldState.restrictions.kind
 	};
@@ -29,7 +30,7 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): DropdownProps
 {
 	return {
 		onChange: (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-			dispatch(Actions.ChangeFieldKind.create({
+			dispatch(Actions.Fields.ChangeFieldKind.create({
 				fieldId: ownProps.fieldId,
 				newKind: data.value === undefined
 					? FieldKinds.Unclassified

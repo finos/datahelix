@@ -1,8 +1,9 @@
 import * as React from "react";
-import {Checkbox, Form, Grid, Icon} from "semantic-ui-react";
+import {Form, Grid, Icon} from "semantic-ui-react";
 
 import {FieldKinds} from "../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
+import EnumRestrictionMemberTable from "./EnumRestrictionMemberTable";
 import {
 	AllowableCharactersFieldRestriction,
 	MaximumStringLengthFieldRestriction,
@@ -93,6 +94,9 @@ const ProfileField = ({id, name, kind}: IProps) =>
 						"Maximum Value",
 						<MaximumValueFieldRestriction fieldId={id} />) }
 				</>
+				||
+				kind === FieldKinds.Enum &&
+					<EnumRestrictionMemberTable fieldId={id} />
 				||
 				null
 			}

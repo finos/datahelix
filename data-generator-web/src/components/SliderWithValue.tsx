@@ -4,7 +4,7 @@ import * as React from "react";
 export interface IProps
 {
 	value?: number;
-	onChange?: (newValue: number | undefined) => void;
+	onChange?: (newValue: number) => void;
 }
 
 export default class SliderWithValue extends React.Component<IProps, {}>

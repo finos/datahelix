@@ -17,27 +17,31 @@ export interface IFieldState
 	readonly restrictions: AnyFieldRestriction;
 }
 
-export type AnyFieldRestriction = INumericRestrictions | IStringEnumRestrictions | IStringRestrictions | IUnclassifiedRestrictions;
+export type AnyFieldRestriction = INumericRestrictions | IEnumRestrictions | IStringRestrictions | IUnclassifiedRestrictions;
 
 export interface IRestrictions <T extends FieldKinds> {
 	readonly kind: T;
 }
 
-export interface INumericRestrictions extends IRestrictions<FieldKinds.Numeric>{
+export interface INormalDistributionRestrictions
+{
 	readonly meanAvg: number | null;
 	readonly stdDev: number | null;
 	readonly minimumValue: number | null;
 	readonly maximumValue: number | null;
 }
 
-export interface IStringEnumRestrictions extends IRestrictions<FieldKinds.Enum> {
+export interface INumericRestrictions extends IRestrictions<FieldKinds.Numeric>, INormalDistributionRestrictions
+{}
+
+export interface IEnumRestrictions extends IRestrictions<FieldKinds.Enum> {
 	readonly enumValues: IEnumValue[];
 }
 
-interface IEnumValue {
+export interface IEnumValue {
+	readonly id: string;
 	readonly name: string;
 	readonly prevalence: number;
-	readonly comment: string | null;
 }
 
 export interface IStringRestrictions extends IRestrictions<FieldKinds.String> {
@@ -54,7 +58,8 @@ export enum FieldKinds
 	Unclassified,
 	String,
 	Numeric,
-	Enum
+	Enum,
+	Temporal
 }
 
 

@@ -6,7 +6,7 @@ import Actions from "../actions";
 
 const sideEffectsMiddleware: Middleware = api => next => action =>
 {
-	if (Actions.ExportProfile.is(action)) {
+	if (Actions.Profiles.ExportProfile.is(action)) {
 		let serialisedProfile: {};
 
 		try {

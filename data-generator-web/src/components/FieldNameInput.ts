@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): InputProps
 {
 	return {
 		onChange: (event, data) => {
-			dispatch(Actions.UpdateField.create({
+			dispatch(Actions.Fields.UpdateField.create({
 				fieldId: ownProps.fieldId,
 				newValues: { name: data.value }
 			}));

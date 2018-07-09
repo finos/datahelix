@@ -1,6 +1,7 @@
 import {
 	AnyFieldRestriction,
 	FieldKinds,
+	IEnumRestrictions,
 	IFieldState,
 	INumericRestrictions,
 	IProfileState,
@@ -15,7 +16,8 @@ export default class ProfileFileFormatV1 implements IProfileFileFormat
 
 	private static readonly fieldKindToSerialisedKind: { [fieldKind: number]: Dtos.AllFieldKinds } = {
 		[FieldKinds.Numeric]: "numeric",
-		[FieldKinds.String]: "text"
+		[FieldKinds.String]: "text",
+		[FieldKinds.Enum]: "enum",
 	};
 
 	public canDeserialiseFrom(rawObject: {}): boolean {
@@ -75,6 +77,17 @@ function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 		}
 	}
 
+	if (field.kind === "enum" && field.distribution.kind === "set")
+	{
+		return <IEnumRestrictions>{
+			kind: FieldKinds.Enum,
+			enumValues: field.distribution.members.map(m => ({
+				name: m.name,
+				prevalence: m.prevalence
+			}))
+		}
+	}
+
 	throw new Error("Can't deserialise distribution");
 }
 
@@ -101,6 +114,17 @@ function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistrib
 		}
 	}
 
+	if (isEnumRestrictions(restriction))
+	{
+		return <Dtos.ISetDistribution> {
+			kind: "set",
+			members: restriction.enumValues.map(entry => ({
+				name: entry.name,
+				prevalence: entry.prevalence
+			}))
+		}
+	}
+
 	throw new Error("Unable to serialise restriction of type: " + restriction.kind);
 }
 
@@ -112,6 +136,10 @@ function isNumericRestrictions(field: AnyFieldRestriction): field is INumericRes
 
 function isStringRestrictions(field: AnyFieldRestriction): field is IStringRestrictions {
 	return field.kind === FieldKinds.String;
+}
+
+function isEnumRestrictions(field: AnyFieldRestriction): field is IEnumRestrictions {
+	return field.kind === FieldKinds.Enum;
 }
 
 namespace Dtos {

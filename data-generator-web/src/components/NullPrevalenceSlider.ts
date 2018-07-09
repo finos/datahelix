@@ -10,7 +10,7 @@ interface IProps
 }
 
 const WrappedComponent =
-	connect<SliderWithValueProps, SliderWithValueProps, IProps>(
+	connect<SliderWithValueProps, SliderWithValueProps, IProps, SliderWithValueProps>(
 		(state, ownProps) => {
 			const field = selectFieldLookup(state)[ownProps.fieldId];
 
@@ -18,7 +18,7 @@ const WrappedComponent =
 		},
 		(dispatch, ownProps: IProps) => {
 			return {
-				onChange: newValue => dispatch(Actions.UpdateField.create({
+				onChange: newValue => dispatch(Actions.Fields.UpdateField.create({
 					fieldId: ownProps.fieldId,
 					newValues: {
 						nullPrevalence: newValue
@@ -26,7 +26,7 @@ const WrappedComponent =
 				}))
 			}
 		},
-		(s, d, ownProps) => ({ ...s, ...d })
+		(s, d) => ({ ...s, ...d })
 	)(SliderWithValue);
 
 export default WrappedComponent;
