@@ -12,8 +12,11 @@ export namespace Profiles {
 	export const ClearCurrentProfile = new SimpleActionType<{}>(
 		"CLEAR_CURRENT_PROFILE");
 
-	export const ExportProfile = new SimpleActionType<{}>(
-		"EXPORT_PROFILE"); // caught by SideEffectsMiddleware
+	export const TriggerImportProfile = new SimpleActionType<{}>(
+		"TRIGGER_IMPORT_PROFILE"); // caught by SideEffectsMiddleware
+
+	export const TriggerExportProfile = new SimpleActionType<{}>(
+		"TRIGGER_EXPORT_PROFILE"); // caught by SideEffectsMiddleware
 }
 
 export namespace Fields {

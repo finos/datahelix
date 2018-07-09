@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
-
 import {Input, InputProps} from "semantic-ui-react";
-import Actions from "../redux/actions";
-import selectFieldLookup from "../redux/selectors/selectFieldLookup";
-import {IAppState} from "../redux/state/IAppState";
+
+import Actions from "../../redux/actions";
+import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
+import {IAppState} from "../../redux/state/IAppState";
 
 interface IProps extends InputProps
 {

@@ -1,15 +1,15 @@
 import { connect } from "react-redux";
 
-import Actions from "../../redux/actions";
+import Actions from "../../../redux/actions/index";
 import {
 	FieldKinds,
 	IAppState,
 	INumericRestrictions, IRestrictions, IRestrictionsPatch,
 	IStringRestrictions
-} from "../../redux/state/IAppState";
+} from "../../../redux/state/IAppState";
 
 import {ComponentType} from "react";
-import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
+import selectFieldLookup from "../../../redux/selectors/selectFieldLookup";
 import {IProps as IInputProps, NumericInput, StringInput} from "./Inputs";
 
 interface IProps

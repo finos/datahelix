@@ -3,9 +3,9 @@ import {Dispatch} from "redux";
 
 import * as React from "react";
 import {Dropdown, DropdownProps} from "semantic-ui-react";
-import Actions from "../redux/actions";
-import selectFieldLookup from "../redux/selectors/selectFieldLookup";
-import {FieldKinds, IAppState} from "../redux/state/IAppState";
+import Actions from "../../redux/actions/index";
+import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
+import {FieldKinds, IAppState} from "../../redux/state/IAppState";
 
 interface IProps extends DropdownProps
 {

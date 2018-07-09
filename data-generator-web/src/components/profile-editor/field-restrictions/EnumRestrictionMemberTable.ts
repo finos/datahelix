@@ -1,8 +1,8 @@
 import {connect} from "react-redux";
 
-import Actions from "../redux/actions";
-import selectFieldLookup from "../redux/selectors/selectFieldLookup";
-import {IEnumRestrictions} from "../redux/state/IAppState";
+import Actions from "../../../redux/actions/index";
+import selectFieldLookup from "../../../redux/selectors/selectFieldLookup";
+import {IEnumRestrictions} from "../../../redux/state/IAppState";
 import EnumMembersTable, { IProps as IEnumMembersTableProps } from "./EnumMembersTable";
 
 interface IProps

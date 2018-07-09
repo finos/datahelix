@@ -56,7 +56,7 @@ export default function fieldsReducer(
 		return modifyEntry(
 			oldState,
 			action.fieldId,
-			f => patchFieldState(f, action.newValues));
+			f => FieldPatching.applyPatch(f, action.newValues));
 	}
 
 	if (
@@ -165,40 +165,38 @@ function rebalanceEnumEntryPrevalences(
 	}));
 }
 
-function patchRestrictions(
-	base: AnyFieldRestriction,
-	patch?: AnyFieldRestrictionsPatch)
-	: AnyFieldRestriction
-{
-	if (!patch)
-		return base;
+namespace FieldPatching {
+	function patchRestrictions(
+		base: AnyFieldRestriction,
+		patch?: AnyFieldRestrictionsPatch)
+		: AnyFieldRestriction {
+		if (!patch)
+			return base;
 
-	if (base.kind !== patch.kind)
-	{
-		throw new Error("Changing type should be done with a separate action so sensible defaults can establish");
+		if (base.kind !== patch.kind) {
+			throw new Error("Changing type should be done with a separate action so sensible defaults can establish");
+		}
+
+		// the work to get the typings happy with this is prohibitive, so just cast
+		return {...base, ...patch} as AnyFieldRestriction;
 	}
 
-	// the work to get the typings happy with this is prohibitive, so just cast
-	return { ...base, ...patch } as AnyFieldRestriction;
-}
+	// originally I used a || b, but that causes unintended results because eg "" is falsy
+	function coalesceValues<T>(a: T | undefined, b: T | undefined): T | undefined {
+		return a !== undefined ? a : b;
+	}
 
-// originally I used a || b, but that causes unintended results because eg "" is falsy
-function coalesceValues<T>(a: T | undefined, b: T | undefined): T | undefined
-{
-	return a !== undefined ? a : b;
-}
-
-function patchFieldState(
-	base: IFieldState,
-	patch: IFieldStatePatch)
-	: IFieldState
-{
-	return {
-		id: base.id,
-		name: coalesceValues(patch.name, base.name),
-		nullPrevalence: coalesceValues(patch.nullPrevalence, base.nullPrevalence),
-		restrictions: patchRestrictions(base.restrictions, patch.restrictions)
-	} as IFieldState;
+	export function applyPatch(
+		base: IFieldState,
+		patch: IFieldStatePatch)
+		: IFieldState {
+		return {
+			id: base.id,
+			name: coalesceValues(patch.name, base.name),
+			nullPrevalence: coalesceValues(patch.nullPrevalence, base.nullPrevalence),
+			restrictions: patchRestrictions(base.restrictions, patch.restrictions)
+		} as IFieldState;
+	}
 }
 
 function modifyEntry<T extends { id: string }>(

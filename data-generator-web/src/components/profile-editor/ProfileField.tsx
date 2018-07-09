@@ -1,9 +1,9 @@
 import * as React from "react";
 import {Form, Grid, Icon} from "semantic-ui-react";
 
-import {FieldKinds} from "../redux/state/IAppState";
+import {FieldKinds} from "../../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
-import EnumRestrictionMemberTable from "./EnumRestrictionMemberTable";
+import EnumRestrictionMemberTable from "./field-restrictions/EnumRestrictionMemberTable";
 import {
 	AllowableCharactersFieldRestriction,
 	MaximumStringLengthFieldRestriction,

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 import {Button, ButtonProps, InputProps} from "semantic-ui-react";
 
-import Actions from "../redux/actions";
+import Actions from "../../redux/actions/index";
 
 interface IProps extends ButtonProps
 {
@@ -14,7 +14,10 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): ButtonProps
 {
 	return {
 		onClick: () => {
-			dispatch(Actions.Fields.DeleteField.create({ fieldId: ownProps.fieldId }));
+			dispatch(
+				Actions.Fields.DeleteField.create({
+					fieldId: ownProps.fieldId
+				}));
 		}
 	};
 }

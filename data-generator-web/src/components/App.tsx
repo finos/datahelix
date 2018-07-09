@@ -1,28 +1,28 @@
 import * as React from 'react';
-import {Container, Divider, Header} from "semantic-ui-react";
+import {
+	Container,
+	Rail,
+	Segment
+} from "semantic-ui-react";
 
-import ClearProfileButton from "./ClearProfileButton";
-import CurrentProfileEditor from './CurrentProfileEditor';
-import ExportProfileButton from "./ExportProfileButton";
-import GenerateDataButton from "./GenerateDataButton";
-import ImportProfileButton from "./ImportProfileButton";
+import SidebarMenu from "./menu/SidebarMenu";
+import CurrentProfileEditor from './profile-editor/CurrentProfileEditor';
 
-class App extends React.Component {
+class App extends React.Component<{}, {}> {
+	constructor(props: {}) {
+		super(props);
+	}
+
 	public render(): React.ReactNode {
 		return (
-			<Container>
-				<Header as='h1'>Data Generator</Header>
+			<Container style={{ marginTop: "1em" }}>
+				<Segment>
+					<Rail position="left">
+						<SidebarMenu />
+					</Rail>
 
-				<div>
-					<ClearProfileButton content="Clear Profile" />
-					<ImportProfileButton content="Import Profile" />
-					<ExportProfileButton content="Export Profile" />
-					<GenerateDataButton content="Generate Data" />
-				</div>
-
-				<Divider />
-
-				<CurrentProfileEditor />
+					<CurrentProfileEditor />
+				</Segment>
 			</Container>
 		);
 	}

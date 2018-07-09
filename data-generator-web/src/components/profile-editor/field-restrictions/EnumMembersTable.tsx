@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Icon, Input, Table} from "semantic-ui-react";
-import SliderWithValue from "./SliderWithValue";
+import SliderWithValue from "../SliderWithValue";
 
 export interface IProps
 {

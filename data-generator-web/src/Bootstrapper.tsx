@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {applyMiddleware, createStore, Store} from "redux";
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from "redux-devtools-extension";
 
-import App from './components/App';
+import App from "./components/App";
 import sideEffectsMiddleware from "./redux/middleware/SideEffectsMiddleware";
 import appReducer from "./redux/reducers/appReducer";
 import {IAppState} from "./redux/state/IAppState";
@@ -29,8 +29,8 @@ export default class Bootstrapper
 			<Provider store={store}>
 				<App />
 			</Provider>,
-			document.getElementById('root') as HTMLElement
-		);
+			document.querySelector("[data-react-root]"));
+
 		registerServiceWorker();
 	}
 }

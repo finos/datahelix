@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 
-import Actions from "../redux/actions";
-import selectFieldLookup from "../redux/selectors/selectFieldLookup";
+import Actions from "../../redux/actions";
+import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
 import SliderWithValue, { IProps as SliderWithValueProps } from "./SliderWithValue";
 
 interface IProps
