@@ -1,10 +1,16 @@
-package com.scottlogic.deg.analyser.StringAnalyser
+package com.scottlogic.deg.analyser.field_analyser.string_analyser
 
+import com.scottlogic.deg.dto.StringField
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.StructField
 
-class NaiveStringAnalyser(spark: SparkSession) extends StringAnalyser {
+class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends StringAnalyser {
+    private val spark = SparkSession.builder.getOrCreate()
     import spark.implicits._
+
+    override def constructDTOField() = StringField(name = field.name, nullPrevalence = 0.0d)
+
     def analyse(df: DataFrame, columnName: String): (DataFrame, DataFrame) = {
         val col = df(columnName)
 
