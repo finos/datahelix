@@ -1,27 +1,16 @@
 import * as React from "react";
-import {Image, Menu, MenuItem, MenuItemProps} from "semantic-ui-react";
+import {Image, Menu, MenuItem} from "semantic-ui-react";
 
 import Actions from "../../redux/actions";
 import dispatchesActionOnClick from "../dispatchesActionOnClick";
 
 import logoUrl from "../../logo.svg";
+import {ActionType} from "../../redux/actions/ActionType";
 
-const ClearProfileMenuItem = dispatchesActionOnClick<MenuItemProps>(
-	() => Actions.Profiles.ClearCurrentProfile.create({}),
-	MenuItem);
-
-const GenerateDataMenuItem = dispatchesActionOnClick<MenuItemProps>(
-	() => Actions.StartGeneratingData.create({}),
-	MenuItem);
-
-const ExportProfileMenuItem = dispatchesActionOnClick<MenuItemProps>(
-	() => Actions.Profiles.TriggerExportProfile.create({}),
-	MenuItem);
-
-const ImportProfileMenuItem = dispatchesActionOnClick<MenuItemProps>(
-	() => Actions.Profiles.TriggerImportProfile.create({}),
-	MenuItem);
-
+function triggersAction(title: string, actionType: ActionType<{}, any>): React.ReactNode {
+	const DecoratedMenuItem = dispatchesActionOnClick(actionType, MenuItem);
+	return <DecoratedMenuItem content={title} />;
+}
 
 const SidebarMenu = () =>
 	(
@@ -30,24 +19,25 @@ const SidebarMenu = () =>
 				<Image src={logoUrl} fluid={true} />
 			</Menu.Item>
 
+			{ triggersAction("New Profile", Actions.Profiles.ClearCurrentProfile) }
+
 			<Menu.Item>
 				File
 				<Menu.Menu>
-					<ClearProfileMenuItem content="New Profile" />
-					<ImportProfileMenuItem content="Import..." />
-					<ExportProfileMenuItem content="Export..." />
+					{ triggersAction("Import...", Actions.Profiles.TriggerImportProfile) }
+					{ triggersAction("Export...", Actions.Profiles.TriggerExportProfile) }
 				</Menu.Menu>
 			</Menu.Item>
 
 			<Menu.Item>
-				Profile
+				Start profiling
 				<Menu.Menu>
-					<Menu.Item>From file</Menu.Item>
-					<Menu.Item>From database</Menu.Item>
+					{ triggersAction("From file", Actions.Profiles.TriggerProfileFromFile)}
+					{ triggersAction("From database", Actions.Profiles.TriggerProfileFromDatabase)}
 				</Menu.Menu>
 			</Menu.Item>
 
-			<GenerateDataMenuItem content="Generate Data" />
+			{ triggersAction("Generate Data", Actions.StartGeneratingData) }
 		</Menu>
 	);
 

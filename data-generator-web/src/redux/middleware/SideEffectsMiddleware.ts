@@ -46,8 +46,7 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 		return;
 	}
 
-	if (Actions.StartGeneratingData.is(action))
-	{
+	if (Actions.StartGeneratingData.is(action) || Actions.Profiles.TriggerProfileFromFile.is(action) || Actions.Profiles.TriggerProfileFromDatabase.is(action)) {
 		alert("Not yet!");
 		return;
 	}

@@ -1,6 +1,6 @@
 import { Action } from "redux";
 
-abstract class ActionType<TConstructorParameters, TActionPayload>
+export abstract class ActionType<TConstructorParameters, TActionPayload>
 {
 	private readonly typeId: string;
 	private readonly mapInputToAction: (parameters: TConstructorParameters) => TActionPayload;
