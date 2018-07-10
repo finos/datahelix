@@ -14,15 +14,15 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
 
         val analysis: (DataFrame, DataFrame) = analyse()
         val dfCharSet: DataFrame = analysis._1
-        val lengthAnalysis = analysis._2.first()
+        val stringAnalysis = analysis._2.first()
 
         dto.TextField(
             name = field.name,
-            nullPrevalence = 0.0d,
+            nullPrevalence = stringAnalysis.getAs("nullPrevalence"),
             distribution = PerCharacterRandomDistribution(
-                lengthAnalysis.getAs("len_min"),
-                lengthAnalysis.getAs("len_max"),
-                lengthAnalysis.getAs("len_avg"),
+                stringAnalysis.getAs("len_min"),
+                stringAnalysis.getAs("len_max"),
+                stringAnalysis.getAs("len_avg"),
                 alphabet = dfCharSet.select("character").collect().mkString
             )
         )
@@ -44,13 +44,14 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
             .toDF("character")
             .distinct()
 
-        val dfLengthAnalysis = df.agg(
+        val dfStringAnalysis = df.agg(
             min(length(col)).as("len_min"),
             max(length(col)).as("len_max"),
             avg(length(col)).as("len_avg"),
-            stddev(length(col)).as("len_stddev")
+            stddev(length(col)).as("len_stddev"),
+            count(field.name).divide(count(lit(1))).as("nullPrevalence")
         ).as(columnName)
 
-        (dfCharSet, dfLengthAnalysis)
+        (dfCharSet, dfStringAnalysis)
     }
 }
