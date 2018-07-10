@@ -12,9 +12,7 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
             max(field.name).as("max"),
             mean(field.name).as("mean"),
             stddev_pop(field.name).as("stddev_pop"),
-            lit(1).minus(count(field.name)
-                .divide(count(lit(1))))
-                .as("nullPrevalence")
+            count(field.name).divide(count(lit(1))).as("nullPrevalence")
         ).head()
 
         NumericField(
