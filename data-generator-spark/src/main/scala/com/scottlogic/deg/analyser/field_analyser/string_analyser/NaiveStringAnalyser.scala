@@ -11,41 +11,25 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
     import spark.implicits._
 
     override def constructDTOField():AbstractField = {
-        // deterministic mock generator
-        field.name.charAt(3).charValue % 3 match {
-            case 0 => EnumField(
-                name = field.name,
-                nullPrevalence = 0.0d,
-                distribution = SetDistribution(
-                    members = List(
-                        SetDistributionMember(
-                            name = "User",
-                            prevalence = 0.2d
-                        ),
-                        SetDistributionMember(
-                            name = "Admin",
-                            prevalence = 0.8d
-                        )
-                    )
-                )
+
+        val analysis: (DataFrame, DataFrame) = analyse()
+        val dfCharSet: DataFrame = analysis._1
+        val lengthAnalysis = analysis._2.first()
+
+        dto.TextField(
+            name = field.name,
+            nullPrevalence = 0.0d,
+            distribution = PerCharacterRandomDistribution(
+                lengthAnalysis.getAs("len_min"),
+                lengthAnalysis.getAs("len_max"),
+                lengthAnalysis.getAs("len_avg"),
+                alphabet = dfCharSet.select("character").collect().mkString
             )
-            case 1 => dto.TextField(
-                name = field.name,
-                nullPrevalence = 0.0d,
-                distribution = PerCharacterRandomDistribution(
-                    lengthMin = 0,
-                    lengthMax = 10,
-                    alphabet = "qwerty"
-                )
-            )
-            case _ => UnknownField(
-                name = field.name,
-                nullPrevalence = 0.0d
-            )
-        }
+        )
     }
 
-    def analyse(df: DataFrame, columnName: String): (DataFrame, DataFrame) = {
+    def analyse(): (DataFrame, DataFrame) = {
+        val columnName = field.name
         val col = df(columnName)
 
         if (col == null) {
@@ -54,7 +38,7 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
 
         // distribute map transformation load among workers rather collecting to driver
         val dfCharSet = df.select(columnName)
-            .map(r => r.getString(0)).collect.toList
+            .map(r => r.getString(0)).collect
             .mkString.toLowerCase
             .toSeq.map(char => char.toString)
             .toDF("character")
