@@ -6,7 +6,7 @@ import {
 } from "semantic-ui-react";
 
 import CurrentProfileQuickJumpMenu from "./menu/CurrentProfileQuickJumpMenu";
-import SidebarMenu from "./menu/SidebarMenu";
+import MainMenu from "./menu/MainMenu";
 import CurrentProfileEditor from './profile-editor/CurrentProfileEditor';
 
 class App extends React.Component<{}, {}> {
@@ -19,7 +19,7 @@ class App extends React.Component<{}, {}> {
 			<Container style={{ marginTop: "1em" }}>
 				<Segment>
 					<Rail position="left">
-						<SidebarMenu />
+						<MainMenu />
 					</Rail>
 
 					<Rail position="right">

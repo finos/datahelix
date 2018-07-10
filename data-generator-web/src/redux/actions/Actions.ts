@@ -1,5 +1,5 @@
 import generateUniqueString from "../../util/generateUniqueString";
-import {FieldKinds, IFieldStatePatch, IProfileState} from "../state/IAppState";
+import {FieldKinds, IFieldStatePatch, IProfileState, ModalIds} from "../state/IAppState";
 import {MappingActionType, SimpleActionType} from "./ActionType";
 
 export namespace Profiles {
@@ -17,12 +17,6 @@ export namespace Profiles {
 
 	export const TriggerExportProfile = new SimpleActionType<{}>(
 		"TRIGGER_EXPORT_PROFILE"); // caught by SideEffectsMiddleware
-
-	export const TriggerProfileFromFile = new SimpleActionType<{}>(
-		"TRIGGER_PROFILE_FROM_FILE"); // caught by SideEffectsMiddleware
-
-	export const TriggerProfileFromDatabase = new SimpleActionType<{}>(
-		"TRIGGER_PROFILE_FROM_DATABASE"); // caught by SideEffectsMiddleware
 }
 
 export namespace Fields {
@@ -68,5 +62,19 @@ export namespace Fields {
 	}
 }
 
+export namespace Modals {
+	export const OpenModal = new SimpleActionType<{ modalId: ModalIds }>(
+		"OPEN_MODAL"); // caught by SideEffectsMiddleware
+
+	export const CloseModal = new SimpleActionType<{}>(
+		"CLOSE_MODAL");
+}
+
 export const StartGeneratingData = new SimpleActionType<{}>(
 	"START_GENERATING_DATA");
+
+export const StartProfilingDataFromFile = new SimpleActionType<{ filePath: string }>(
+	"START_PROFILING_FROM_FILE"); // caught by SideEffectsMiddleware
+
+export const StartProfilingDataFromDatabase = new SimpleActionType<{}>(
+	"START_PROFILING_FROM_DATABASE"); // caught by SideEffectsMiddleware

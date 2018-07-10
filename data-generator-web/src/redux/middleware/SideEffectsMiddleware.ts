@@ -46,7 +46,13 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 		return;
 	}
 
-	if (Actions.StartGeneratingData.is(action) || Actions.Profiles.TriggerProfileFromFile.is(action) || Actions.Profiles.TriggerProfileFromDatabase.is(action)) {
+	if (Actions.StartProfilingDataFromFile.is(action))
+	{
+		alert(`TODO: Import from ${action.filePath}`);
+		return;
+	}
+
+	if (Actions.StartGeneratingData.is(action) || Actions.StartProfilingDataFromDatabase.is(action)) {
 		alert("Not yet!");
 		return;
 	}

@@ -1,7 +1,10 @@
 export interface IAppState
 {
 	readonly currentProfile?: IProfileState;
+	readonly currentModal?: ModalIds;
 }
+
+export type ModalIds = "start_profiling_from_file";
 
 export interface IProfileState
 {
