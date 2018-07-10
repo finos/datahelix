@@ -35,7 +35,7 @@ function withLabel(label: string, component: any): any
 }
 
 const ProfileField = ({id, name, kind}: IProps) =>
-	<Grid.Row>
+	<Grid.Row id={id}>
 		<Grid.Column width={1}>
 			<DeleteFieldButton fieldId={id} icon={true}>
 				<Icon name="trash" />

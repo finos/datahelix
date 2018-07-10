@@ -2,7 +2,8 @@ let currentHiddenFileInputElement: HTMLInputElement | null = null;
 
 export default function(): Promise<File[]>
 {
-	if (currentHiddenFileInputElement) // do we have an element lingering...? not sure when that would happen, but should avoid infinite buildup
+	// do we have an element lingering...? not sure when that would happen, but should avoid infinite buildup
+	if (currentHiddenFileInputElement && currentHiddenFileInputElement.parentNode)
 		document.body.removeChild(currentHiddenFileInputElement);
 
 	return new Promise((resolve, reject) => {

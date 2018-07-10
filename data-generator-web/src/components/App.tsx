@@ -5,6 +5,7 @@ import {
 	Segment
 } from "semantic-ui-react";
 
+import CurrentProfileQuickJumpMenu from "./menu/CurrentProfileQuickJumpMenu";
 import SidebarMenu from "./menu/SidebarMenu";
 import CurrentProfileEditor from './profile-editor/CurrentProfileEditor';
 
@@ -19,6 +20,10 @@ class App extends React.Component<{}, {}> {
 				<Segment>
 					<Rail position="left">
 						<SidebarMenu />
+					</Rail>
+
+					<Rail position="right">
+						<CurrentProfileQuickJumpMenu />
 					</Rail>
 
 					<CurrentProfileEditor />
