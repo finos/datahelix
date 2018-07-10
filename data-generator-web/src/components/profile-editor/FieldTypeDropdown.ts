@@ -20,7 +20,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): DropdownProps
 		options: [
 			{ text: "Numeric", value: FieldKinds.Numeric },
 			{ text: "String", value: FieldKinds.String },
-			{ text: "Enumeration", value: FieldKinds.Enum }
+			{ text: "Enumeration", value: FieldKinds.Enum },
+			{ text: "Temporal", value: FieldKinds.Temporal }
 		],
 		value: fieldState.restrictions.kind
 	};

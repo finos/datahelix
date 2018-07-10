@@ -5,7 +5,7 @@ import {
 	FieldKinds,
 	IAppState,
 	INumericRestrictions, IRestrictions, IRestrictionsPatch,
-	IStringRestrictions
+	IStringRestrictions, ITemporalRestrictions
 } from "../../../redux/state/IAppState";
 
 import {ComponentType} from "react";
@@ -79,3 +79,14 @@ export const AllowableCharactersFieldRestriction = createReduxMappedInput(
 	StringInput,
 	(r: IStringRestrictions) => r.allowableCharacters,
 	v => ({ kind: FieldKinds.String, allowableCharacters: v }));
+
+
+export const TemporalRangeStartFieldRestriction = createReduxMappedInput(
+	StringInput,
+	(r: ITemporalRestrictions) => r.minimum,
+	v => ({ kind: FieldKinds.Temporal, minimum: v }));
+
+export const TemporalRangeEndFieldRestriction = createReduxMappedInput(
+	StringInput,
+	(r: ITemporalRestrictions) => r.maximum,
+	v => ({ kind: FieldKinds.Temporal, maximum: v }));

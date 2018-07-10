@@ -5,7 +5,7 @@ import {
 	IFieldState,
 	INumericRestrictions,
 	IProfileState,
-	IStringRestrictions
+	IStringRestrictions, ITemporalRestrictions
 } from "../redux/state/IAppState";
 import generateUniqueString from "../util/generateUniqueString";
 import IProfileFileFormat from "./IProfileFileFormat";
@@ -18,6 +18,7 @@ export default class ProfileFileFormatV1 implements IProfileFileFormat
 		[FieldKinds.Numeric]: "numeric",
 		[FieldKinds.String]: "text",
 		[FieldKinds.Enum]: "enum",
+		[FieldKinds.Temporal]: "temporal"
 	};
 
 	public canDeserialiseFrom(rawObject: {}): boolean {
@@ -56,8 +57,7 @@ export default class ProfileFileFormatV1 implements IProfileFileFormat
 
 function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 {
-	if (field.kind === "text" && field.distribution.kind === "perCharacterRandom")
-	{
+	if (field.kind === "text" && field.distribution.kind === "perCharacterRandom") {
 		return <IStringRestrictions>{
 			kind: FieldKinds.String,
 			allowableCharacters: field.distribution.alphabet,
@@ -66,8 +66,7 @@ function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 		}
 	}
 
-	if (field.kind === "numeric" && field.distribution.kind === "normal")
-	{
+	if (field.kind === "numeric" && field.distribution.kind === "normal") {
 		return <INumericRestrictions>{
 			kind: FieldKinds.Numeric,
 			meanAvg: field.distribution.meanAvg,
@@ -77,8 +76,7 @@ function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 		}
 	}
 
-	if (field.kind === "enum" && field.distribution.kind === "set")
-	{
+	if (field.kind === "enum" && field.distribution.kind === "set") {
 		return <IEnumRestrictions>{
 			kind: FieldKinds.Enum,
 			enumValues: field.distribution.members.map(m => ({
@@ -88,13 +86,20 @@ function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 		}
 	}
 
+	if (field.kind === "temporal" && field.distribution.kind === "randomDateWithinRange") {
+		return <ITemporalRestrictions>{
+			kind: FieldKinds.Temporal,
+			minimum: field.distribution.min,
+			maximum: field.distribution.max
+		}
+	}
+
 	throw new Error("Can't deserialise distribution");
 }
 
 function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistribution
 {
-	if (isNumericRestrictions(restriction))
-	{
+	if (restriction.kind === FieldKinds.Numeric) {
 		return <Dtos.INormalDistribution> {
 			kind: "normal",
 			meanAvg: restriction.meanAvg,
@@ -104,8 +109,7 @@ function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistrib
 		}
 	}
 
-	if (isStringRestrictions(restriction))
-	{
+	if (restriction.kind === FieldKinds.String) {
 		return <Dtos.IRandomCharactersDistribution> {
 			kind: "perCharacterRandom",
 			alphabet: restriction.allowableCharacters,
@@ -114,8 +118,7 @@ function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistrib
 		}
 	}
 
-	if (isEnumRestrictions(restriction))
-	{
+	if (restriction.kind === FieldKinds.Enum) {
 		return <Dtos.ISetDistribution> {
 			kind: "set",
 			members: restriction.enumValues.map(entry => ({
@@ -125,22 +128,19 @@ function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistrib
 		}
 	}
 
+	if (restriction.kind === FieldKinds.Temporal) {
+		return <Dtos.IRandomDateWithinRangeDistribution> {
+			kind: "randomDateWithinRange",
+			min: restriction.minimum,
+			max: restriction.maximum
+		}
+	}
+
+
 	throw new Error("Unable to serialise restriction of type: " + restriction.kind);
 }
 
 
-
-function isNumericRestrictions(field: AnyFieldRestriction): field is INumericRestrictions {
-	return field.kind === FieldKinds.Numeric;
-}
-
-function isStringRestrictions(field: AnyFieldRestriction): field is IStringRestrictions {
-	return field.kind === FieldKinds.String;
-}
-
-function isEnumRestrictions(field: AnyFieldRestriction): field is IEnumRestrictions {
-	return field.kind === FieldKinds.Enum;
-}
 
 namespace Dtos {
 	export interface IProfile {
@@ -158,7 +158,7 @@ namespace Dtos {
 		//format
 	}
 
-	export type AnyDistribution = INormalDistribution | IRandomCharactersDistribution | ISetDistribution;
+	export type AnyDistribution = INormalDistribution | IRandomCharactersDistribution | ISetDistribution | IRandomDateWithinRangeDistribution;
 
 	export interface INormalDistribution {
 		kind: "normal";
@@ -178,6 +178,12 @@ namespace Dtos {
 	export interface ISetDistribution {
 		kind: "set";
 		members: ISetMember[];
+	}
+
+	export interface IRandomDateWithinRangeDistribution {
+		kind: "randomDateWithinRange";
+		min: string;
+		max: string;
 	}
 
 	export interface ISetMember {

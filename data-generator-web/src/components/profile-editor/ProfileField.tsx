@@ -11,7 +11,9 @@ import {
 	MeanFieldRestriction,
 	MinimumStringLengthFieldRestriction,
 	MinimumValueFieldRestriction,
-	StandardDeviationRestriction
+	StandardDeviationRestriction,
+	TemporalRangeEndFieldRestriction,
+	TemporalRangeStartFieldRestriction
 } from "./field-restrictions/SpecificFieldRestrictions";
 import FieldNameInput from "./FieldNameInput";
 import FieldTypeDropdown from "./FieldTypeDropdown";
@@ -97,6 +99,16 @@ const ProfileField = ({id, name, kind}: IProps) =>
 				||
 				kind === FieldKinds.Enum &&
 					<EnumRestrictionMemberTable fieldId={id} />
+				||
+				kind === FieldKinds.Temporal &&
+				<>
+					{ withLabel(
+						"Minimum Value",
+						<TemporalRangeStartFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Maximum Value",
+						<TemporalRangeEndFieldRestriction fieldId={id} />) }
+				</>
 				||
 				null
 			}
