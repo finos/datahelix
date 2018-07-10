@@ -10,7 +10,11 @@ interface IProps
 
 const ProfileEditor = ({children}: IProps) => (
 	<>
-		<Header dividing={true} style={{marginTop: "0"}} as="h1">Profile</Header>
+		<Header
+			dividing={true}
+			style={{marginTop: "0"}} as="h1">
+			Unnamed profile
+		</Header>
 
 		<Form fluid="true">
 			<Grid columns={3} divided="vertically">
