@@ -45,10 +45,12 @@ export default function fieldsReducer(
 		return modifyEntry(
 			oldState,
 			action.fieldId,
-			f => ({
-				...f,
-				restrictions: fieldKindToDefaultInitialState[action.newKind] || { kind: action.newKind }
-			}));
+			f => f.restrictions.kind === action.newKind
+				? f // no need to do anything - we're already the right kind
+				: {
+					...f,
+					restrictions: fieldKindToDefaultInitialState[action.newKind] || { kind: action.newKind }
+				});
 	}
 
 	if (Actions.Fields.UpdateField.is(action))
