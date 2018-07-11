@@ -1,5 +1,4 @@
 import {Action} from "redux";
-import generateUniqueString from "../../util/generateUniqueString";
 import Actions from "../actions";
 import {
 	AnyFieldRestriction,
@@ -90,7 +89,7 @@ function enumRestrictionsReducer(
 			members: [
 				...oldState.members,
 				{
-					id: generateUniqueString(),
+					id: action.newMemberId,
 					name: "",
 					prevalence: oldState.members.length === 0 ? 1 : 0
 				}

@@ -1,5 +1,16 @@
 import { Action } from "redux";
 
+/**
+ * Encapsulates the type ID and provides methods for creating actions or checking if they are of this type.
+ *
+ * @remarks
+ * We distinguish between:
+ *
+ * # Constructor parameters (ie to the inputs to an action creator)
+ * # Action payloads (ie all the stuff on an action other than the type field)
+ *
+ * In reality, these are usually the same
+ */
 export abstract class ActionType<TConstructorParameters, TActionPayload>
 {
 	private readonly typeId: string;
@@ -28,7 +39,7 @@ export abstract class ActionType<TConstructorParameters, TActionPayload>
 	}
 }
 
-// This version of the above suffices for most cases (where TAction === TConstructorParameters)
+/** The most common action type, where the construction arguments are the same as the action payload */
 export class SimpleActionType<TActionPayload = {}> extends ActionType<TActionPayload, TActionPayload>
 {
 	constructor(typeId: string)
@@ -37,6 +48,7 @@ export class SimpleActionType<TActionPayload = {}> extends ActionType<TActionPay
 	}
 }
 
+/** Takes a func to map between constructor parameters and the action payload - ie, an action creator */
 export class MappingActionType<TConstructorParameters, TActionPayload> extends ActionType<TConstructorParameters, TActionPayload>
 {
 	constructor(

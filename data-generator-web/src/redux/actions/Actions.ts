@@ -52,10 +52,11 @@ export namespace Fields {
 
 	export namespace Enums {
 		/** Add a new blank enum member to specified enum field */
-		export const AppendBlankEnumMember = new SimpleActionType<{
-			fieldId: string
-		}>(
-			"APPEND_BLANK_ENUM_MEMBER");
+		export const AppendBlankEnumMember = new MappingActionType<
+			{ fieldId: string },
+			{ fieldId: string, newMemberId: string }>(
+			"APPEND_BLANK_ENUM_MEMBER",
+			args => ({ fieldId: args.fieldId, newMemberId: generateUniqueString() }));
 
 		/** Change a specific enum member belonging to a specific field */
 		export const ChangeEnumMember = new SimpleActionType<{
