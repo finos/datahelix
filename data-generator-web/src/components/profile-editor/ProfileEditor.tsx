@@ -1,12 +1,15 @@
 import * as React from "react";
+import {Button, Form, Grid, Header, Icon} from "semantic-ui-react";
 
-import {Form, Grid, Header, Icon} from "semantic-ui-react";
-import AddEmptyFieldButton from "./AddEmptyFieldButton";
+import Actions from "../../redux/actions";
+import {dispatchesBasicActionOnClick} from "../dispatchesActionOnClick";
 
 interface IProps
 {
 	children: React.ReactNode[];
 }
+
+const AddEmptyFieldButton = dispatchesBasicActionOnClick(Actions.Fields.AddBlankField, Button);
 
 const ProfileEditor = ({children}: IProps) => (
 	<>
