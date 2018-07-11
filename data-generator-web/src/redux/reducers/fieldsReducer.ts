@@ -103,7 +103,7 @@ function enumRestrictionsReducer(
 			...oldState,
 			members: rebalanceEnumMemberPrevalences(
 				oldState.members.filter(member => member.id !== action.memberId),
-				action.memberId)
+				[])
 		};
 	}
 
@@ -122,7 +122,7 @@ function enumRestrictionsReducer(
 		return {
 			...oldState,
 			members: action.prevalence !== undefined
-				? rebalanceEnumMemberPrevalences(unrebalancedNewValues, action.memberId)
+				? rebalanceEnumMemberPrevalences(unrebalancedNewValues, [ action.memberId ])
 				:  unrebalancedNewValues
 		};
 	}
@@ -132,14 +132,14 @@ function enumRestrictionsReducer(
 
 function rebalanceEnumMemberPrevalences(
 	members: IEnumMember[],
-	invariantMemberId: string) // eg, don't rebalance prevalence on something the user just edited
+	invariantMemberIds: string[]) // eg, don't rebalance prevalence on something the user just edited
 	: IEnumMember[]
 {
 	const prevalanceTotals = members.reduce(
 		(prevTotals, enumMember) => {
 			const newTotals = { ...prevTotals };
 
-			if (enumMember.id === invariantMemberId)
+			if (invariantMemberIds.indexOf(enumMember.id) !== -1)
 				newTotals.invariantTotal += enumMember.prevalence;
 			else
 				newTotals.variantTotal += enumMember.prevalence;
@@ -159,7 +159,7 @@ function rebalanceEnumMemberPrevalences(
 
 	return members.map(e => ({
 		...e,
-		prevalence: e.id === invariantMemberId
+		prevalence: invariantMemberIds.indexOf(e.id) !== -1
 			? e.prevalence
 			: Math.max( // tiny rounding errors can put us below zero, which puts an annoying negative sign on the screen, so clamp to zero
 				e.prevalence + distanceFromBalance * getRebalanceAmount(e.prevalence),
