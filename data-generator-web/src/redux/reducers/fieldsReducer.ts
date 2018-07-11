@@ -122,7 +122,9 @@ function enumRestrictionsReducer(
 		return {
 			...oldState,
 			members: action.prevalence !== undefined
-				? rebalanceEnumMemberPrevalences(unrebalancedNewValues, [ action.memberId ])
+				? rebalanceEnumMemberPrevalences(
+					unrebalancedNewValues,
+					[ action.memberId ])
 				:  unrebalancedNewValues
 		};
 	}
@@ -149,7 +151,7 @@ function rebalanceEnumMemberPrevalences(
 		{ variantTotal: 0, invariantTotal: 0 });
 
 	const distanceFromBalance = 1 - (prevalanceTotals.invariantTotal + prevalanceTotals.variantTotal);
-	if (distanceFromBalance === 1)
+	if (distanceFromBalance === 0)
 		return members;
 
 	const getRebalanceAmount: (n: number) => number =
