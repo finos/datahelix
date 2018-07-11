@@ -24,7 +24,7 @@ const WrappedComponent =
 			const restrictions = field.restrictions as IEnumRestrictions;
 
 			return {
-				members: restrictions.enumValues.map(v =>	({
+				members: restrictions.members.map(v =>	({
 					id: v.id,
 					name: v.name,
 					prevalence: v.prevalence
@@ -33,25 +33,25 @@ const WrappedComponent =
 		(dispatch, ownProps) => {
 			return {
 				onMemberAdd: () => dispatch(
-					Actions.Fields.Enums.CreateBlankEnumEntry.create(
+					Actions.Fields.Enums.AppendBlankEnumMember.create(
 					{
 						fieldId: ownProps.fieldId
 					})),
-				onMemberDelete: (enumEntryId: string) => dispatch(
-					Actions.Fields.Enums.DeleteEnumEntry.create({
+				onMemberDelete: (enumMemberId: string) => dispatch(
+					Actions.Fields.Enums.DeleteEnumMember.create({
 						fieldId: ownProps.fieldId,
-						entryId: enumEntryId
+						memberId: enumMemberId
 					})),
-				onNameChange: (enumEntryId: string, newName: string) => dispatch(
-					Actions.Fields.Enums.ChangeEnumEntry.create({
+				onNameChange: (enumMemberId: string, newName: string) => dispatch(
+					Actions.Fields.Enums.ChangeEnumMember.create({
 						fieldId: ownProps.fieldId,
-						entryId: enumEntryId,
+						memberId: enumMemberId,
 						name: newName
 					})),
-				onPrevalenceChange: (enumEntryId: string, newValue: number) => dispatch(
-					Actions.Fields.Enums.ChangeEnumEntry.create({
+				onPrevalenceChange: (enumMemberId: string, newValue: number) => dispatch(
+					Actions.Fields.Enums.ChangeEnumMember.create({
 						fieldId: ownProps.fieldId,
-						entryId: enumEntryId,
+						memberId: enumMemberId,
 						prevalence: newValue
 					}))
 			}

@@ -5,9 +5,9 @@ import {
 	AnyFieldRestriction,
 	AnyFieldRestrictionsPatch,
 	FieldKinds,
-	IEnumRestrictions, IEnumValue,
+	IEnumMember, IEnumRestrictions,
 	IFieldState,
-	IFieldStatePatch, INumericRestrictions, IStringRestrictions
+	IFieldStatePatch
 } from "../state/IAppState";
 
 export default function fieldsReducer(
@@ -39,10 +39,10 @@ export default function fieldsReducer(
 	if (Actions.Fields.ChangeFieldKind.is(action))
 	{
 		const fieldKindToDefaultInitialState: { [ fieldKinds: number ]: AnyFieldRestriction } = {
-			[FieldKinds.Enum]: <IEnumRestrictions>{ kind: FieldKinds.Enum, enumValues: [] }
+			[FieldKinds.Enum]: <IEnumRestrictions>{ kind: FieldKinds.Enum, members: [] }
 		};
 
-		return modifyEntry(
+		return modifyItemById(
 			oldState,
 			action.fieldId,
 			f => f.restrictions.kind === action.newKind
@@ -55,18 +55,18 @@ export default function fieldsReducer(
 
 	if (Actions.Fields.UpdateField.is(action))
 	{
-		return modifyEntry(
+		return modifyItemById(
 			oldState,
 			action.fieldId,
 			f => FieldPatching.applyPatch(f, action.newValues));
 	}
 
 	if (
-		Actions.Fields.Enums.CreateBlankEnumEntry.is(action) ||
-		Actions.Fields.Enums.DeleteEnumEntry.is(action) ||
-		Actions.Fields.Enums.ChangeEnumEntry.is(action))
+		Actions.Fields.Enums.AppendBlankEnumMember.is(action) ||
+		Actions.Fields.Enums.DeleteEnumMember.is(action) ||
+		Actions.Fields.Enums.ChangeEnumMember.is(action))
 	{
-		return modifyEntry(
+		return modifyItemById(
 			oldState,
 			action.fieldId,
 			f => ({
@@ -84,45 +84,45 @@ function enumRestrictionsReducer(
 	oldState: IEnumRestrictions,
 	action: Action)
 	: IEnumRestrictions {
-	if (Actions.Fields.Enums.CreateBlankEnumEntry.is(action)) {
+	if (Actions.Fields.Enums.AppendBlankEnumMember.is(action)) {
 		return {
 			...oldState,
-			enumValues: [
-				...oldState.enumValues,
+			members: [
+				...oldState.members,
 				{
 					id: generateUniqueString(),
 					name: "",
-					prevalence: oldState.enumValues.length === 0 ? 1 : 0
+					prevalence: oldState.members.length === 0 ? 1 : 0
 				}
 			]
 		};
 	}
 
-	if (Actions.Fields.Enums.DeleteEnumEntry.is(action)) {
+	if (Actions.Fields.Enums.DeleteEnumMember.is(action)) {
 		return {
 			...oldState,
-			enumValues: rebalanceEnumEntryPrevalences(
-				oldState.enumValues.filter(entry => entry.id !== action.entryId),
-				action.entryId)
+			members: rebalanceEnumMemberPrevalences(
+				oldState.members.filter(member => member.id !== action.memberId),
+				action.memberId)
 		};
 	}
 
-	if (Actions.Fields.Enums.ChangeEnumEntry.is(action)) {
-		const unrebalancedNewValues = modifyEntry(
-			oldState.enumValues,
-			action.entryId,
-			entry => ({
-				...entry,
-				prevalence: oldState.enumValues.length > 1
-					? action.prevalence || entry.prevalence
-					: entry.prevalence,
-				name: action.name || entry.name
+	if (Actions.Fields.Enums.ChangeEnumMember.is(action)) {
+		const unrebalancedNewValues = modifyItemById(
+			oldState.members,
+			action.memberId,
+			member => ({
+				...member,
+				prevalence: oldState.members.length > 1
+					? action.prevalence || member.prevalence
+					: member.prevalence,
+				name: action.name || member.name
 			}));
 
 		return {
 			...oldState,
-			enumValues: action.prevalence !== undefined
-				? rebalanceEnumEntryPrevalences(unrebalancedNewValues, action.entryId)
+			members: action.prevalence !== undefined
+				? rebalanceEnumMemberPrevalences(unrebalancedNewValues, action.memberId)
 				:  unrebalancedNewValues
 		};
 	}
@@ -130,19 +130,19 @@ function enumRestrictionsReducer(
 	return oldState;
 }
 
-function rebalanceEnumEntryPrevalences(
-	entries: IEnumValue[],
-	invariantEntryId: string) // eg, don't rebalance prevalence on something the user just edited
-	: IEnumValue[]
+function rebalanceEnumMemberPrevalences(
+	members: IEnumMember[],
+	invariantMemberId: string) // eg, don't rebalance prevalence on something the user just edited
+	: IEnumMember[]
 {
-	const prevalanceTotals = entries.reduce(
-		(prevTotals, enumEntry) => {
+	const prevalanceTotals = members.reduce(
+		(prevTotals, enumMember) => {
 			const newTotals = { ...prevTotals };
 
-			if (enumEntry.id === invariantEntryId)
-				newTotals.invariantTotal += enumEntry.prevalence;
+			if (enumMember.id === invariantMemberId)
+				newTotals.invariantTotal += enumMember.prevalence;
 			else
-				newTotals.variantTotal += enumEntry.prevalence;
+				newTotals.variantTotal += enumMember.prevalence;
 
 			return newTotals;
 		},
@@ -150,16 +150,16 @@ function rebalanceEnumEntryPrevalences(
 
 	const distanceFromBalance = 1 - (prevalanceTotals.invariantTotal + prevalanceTotals.variantTotal);
 	if (distanceFromBalance === 1)
-		return entries;
+		return members;
 
 	const getRebalanceAmount: (n: number) => number =
 		prevalanceTotals.variantTotal === 0
-			? (p: number) => (1 / (entries.length - 1))
+			? (p: number) => (1 / (members.length - 1))
 			: (p: number) => p / prevalanceTotals.variantTotal;
 
-	return entries.map(e => ({
+	return members.map(e => ({
 		...e,
-		prevalence: e.id === invariantEntryId
+		prevalence: e.id === invariantMemberId
 			? e.prevalence
 			: Math.max( // tiny rounding errors can put us below zero, which puts an annoying negative sign on the screen, so clamp to zero
 				e.prevalence + distanceFromBalance * getRebalanceAmount(e.prevalence),
@@ -201,14 +201,14 @@ namespace FieldPatching {
 	}
 }
 
-function modifyEntry<T extends { id: string }>(
+function modifyItemById<T extends { id: string }>(
 	oldEntries: T[],
-	idOfEntryToModify: string,
+	idOfItemToModify: string,
 	mutateFunc: (f: T) => T)
 	: T[]
 {
 	return oldEntries.map(f =>
-		f.id !== idOfEntryToModify
+		f.id !== idOfItemToModify
 			? f
 			: mutateFunc(f))
 }

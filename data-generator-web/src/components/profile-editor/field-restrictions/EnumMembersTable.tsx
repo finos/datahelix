@@ -10,9 +10,9 @@ export interface IProps
 		prevalence: number;
 	}>;
 
-	onNameChange?: (enumEntryId: string, newName: string) => void;
-	onPrevalenceChange?: (enumEntryId: string, newValue: number) => void;
-	onMemberDelete?: (enumEntryId: string) => void;
+	onNameChange?: (enumMemberId: string, newName: string) => void;
+	onPrevalenceChange?: (enumMemberId: string, newValue: number) => void;
+	onMemberDelete?: (enumMemberId: string) => void;
 	onMemberAdd?: () => void;
 }
 
@@ -76,16 +76,16 @@ export default class EnumMembersTable extends React.Component<IProps, {}>
 		)
 	}
 
-	private readonly onNameChange = (entryId: string, newName: string) =>
+	private readonly onNameChange = (memberId: string, newName: string) =>
 	{
 		if (this.props.onNameChange)
-			this.props.onNameChange(entryId, newName);
+			this.props.onNameChange(memberId, newName);
 	}
 
-	private readonly onPrevalenceChange = (entryId: string, newPrevalence: number) =>
+	private readonly onPrevalenceChange = (memberId: string, newPrevalence: number) =>
 	{
 		if (this.props.onPrevalenceChange)
-			this.props.onPrevalenceChange(entryId, newPrevalence);
+			this.props.onPrevalenceChange(memberId, newPrevalence);
 	}
 
 	private readonly onAddButtonClick = () =>
