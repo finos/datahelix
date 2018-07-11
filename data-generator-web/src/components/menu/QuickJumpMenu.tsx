@@ -20,7 +20,7 @@ const QuickJumpMenu = ({fields}: IProps) => {
 				<Menu.Menu>
 					{
 						fields.map(f => (
-							<Menu.Item href={`#${f.id}`}>{f.name}</Menu.Item>
+							<Menu.Item key={f.id} href={`#${f.id}`}>{f.name}</Menu.Item>
 						))
 					}
 				</Menu.Menu>
