@@ -5,11 +5,14 @@ export interface IAppState
 	readonly currentProfile?: IProfileState;
 
 	/** The ID of the modal dialog (if any) that's currently displayed */
-	readonly currentModal?: ModalIds;
+	readonly currentModal?: ModalId;
 }
 
 /** The IDs of all modals known to/managed by Redux */
-export type ModalIds = "start_profiling_from_file";
+export enum ModalId
+{
+	StartProfilingFromFile = "start_profiling_from_file"
+};
 
 export interface IProfileState
 {

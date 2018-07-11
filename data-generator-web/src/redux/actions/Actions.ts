@@ -1,5 +1,5 @@
 import generateUniqueString from "../../util/generateUniqueString";
-import {FieldKinds, IFieldStatePatch, IProfileState, ModalIds} from "../state/IAppState";
+import {FieldKinds, IFieldStatePatch, IProfileState, ModalId} from "../state/IAppState";
 import {MappingActionType, SimpleActionType} from "./ActionType";
 
 export namespace Profiles {
@@ -77,7 +77,7 @@ export namespace Fields {
 
 export namespace Modals {
 	/** Open a specific modal by ID */
-	export const OpenModal = new SimpleActionType<{ modalId: ModalIds }>(
+	export const OpenModal = new SimpleActionType<{ modalId: ModalId }>(
 		"OPEN_MODAL"); // caught by SideEffectsMiddleware
 
 	/** Close whatever modal is currently open */

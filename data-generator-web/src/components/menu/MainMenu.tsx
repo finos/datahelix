@@ -8,6 +8,7 @@ import {dispatchesActionOnClick, dispatchesBasicActionOnClick} from "../dispatch
 import StartProfilingFromFilePathModal from "./StartProfilingFromFilePathModal";
 
 import logoUrl from "../../logo.svg";
+import {ModalId} from "../../redux/state/IAppState";
 
 function triggersAction<TActionParameters>(title: string, actionType: ActionType<{}, any>): React.ReactNode {
 	const DecoratedMenuItem = dispatchesBasicActionOnClick(actionType, MenuItem);
@@ -39,7 +40,7 @@ const MainMenu = () =>
 			<Menu.Item>
 				Start profiling
 				<Menu.Menu>
-					{ triggersActionWithFunc("From file", () => Actions.Modals.OpenModal.create({ modalId: "start_profiling_from_file" }))}
+					{ triggersActionWithFunc("From file", () => Actions.Modals.OpenModal.create({ modalId: ModalId.StartProfilingFromFile }))}
 					<StartProfilingFromFilePathModal />
 
 					{ triggersAction("From database", Actions.StartProfilingDataFromDatabase)}
