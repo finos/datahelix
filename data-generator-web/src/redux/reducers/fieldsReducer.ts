@@ -155,7 +155,7 @@ function rebalanceEnumMemberPrevalences(
 
 	const getRebalanceAmount: (n: number) => number =
 		prevalanceTotals.variantTotal === 0
-			? (p: number) => (1 / (members.length - invariantMemberIds.length))
+			? () => (1 / (members.length - invariantMemberIds.length))
 			: (p: number) => p / prevalanceTotals.variantTotal;
 
 	return members.map(e => ({

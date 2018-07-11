@@ -58,7 +58,7 @@ const sideEffectsMiddleware: Middleware = api => next => action =>
 	}
 
 	return next(action);
-}
+};
 
 async function handleTriggerImport(): Promise<Action>
 {

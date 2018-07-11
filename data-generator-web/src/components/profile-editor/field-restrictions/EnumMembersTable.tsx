@@ -80,13 +80,13 @@ export default class EnumMembersTable extends React.Component<IProps, {}>
 	{
 		if (this.props.onNameChange)
 			this.props.onNameChange(memberId, newName);
-	}
+	};
 
 	private readonly onPrevalenceChange = (memberId: string, newPrevalence: number) =>
 	{
 		if (this.props.onPrevalenceChange)
 			this.props.onPrevalenceChange(memberId, newPrevalence);
-	}
+	};
 
 	private readonly onAddButtonClick = () =>
 	{

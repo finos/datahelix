@@ -12,7 +12,7 @@ export interface IAppState
 export enum ModalId
 {
 	StartProfilingFromFile = "start_profiling_from_file"
-};
+}
 
 export interface IProfileState
 {

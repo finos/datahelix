@@ -49,7 +49,7 @@ export default class extends React.Component<IProps, {}> {
 			return;
 
 		this.props.onSubmit(this.inputRef.current.value);
-	}
+	};
 
 	private readonly onClose = () => {
 		if (!this.props.onClose)

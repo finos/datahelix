@@ -47,7 +47,7 @@ export namespace Fields {
 		{ fieldId: string }>
 	(
 		"ADD_BLANK_FIELD",
-		_ => ({ fieldId: generateUniqueString() })
+		() => ({ fieldId: generateUniqueString() })
 	);
 
 	export namespace Enums {

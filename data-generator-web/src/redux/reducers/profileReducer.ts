@@ -1,12 +1,6 @@
 import {Action} from "redux";
 import Actions from "../actions";
-import {
-	AnyFieldRestriction,
-	AnyFieldRestrictionsPatch, FieldKinds,
-	IFieldState,
-	IFieldStatePatch,
-	IProfileState
-} from "../state/IAppState";
+import { IProfileState } from "../state/IAppState";
 import fieldsReducer from "./fieldsReducer";
 
 export default function profileReducer(

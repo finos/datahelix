@@ -12,7 +12,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 export default class Bootstrapper
 {
-	public start(): void
+	public static start(): void
 	{
 		const defaultState: IAppState = {
 			currentProfile: { fields: [] }

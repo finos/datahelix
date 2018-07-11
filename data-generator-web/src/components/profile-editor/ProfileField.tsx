@@ -36,7 +36,7 @@ function withLabel(label: string, component: any): any
 	)
 }
 
-const ProfileField = ({id, name, kind}: IProps) =>
+const ProfileField = ({id, name, kind}: IProps) => (
 	<Grid.Row id={id}>
 		<Grid.Column width={1}>
 			<DeleteFieldButton fieldId={id} icon={true}>
@@ -114,5 +114,6 @@ const ProfileField = ({id, name, kind}: IProps) =>
 			}
 		</Grid.Column>
 	</Grid.Row>
+);
 
 export default ProfileField;

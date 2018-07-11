@@ -26,7 +26,7 @@ const QuickJumpMenu = ({fields}: IProps) => {
 				</Menu.Menu>
 			</Menu.Item>
 		</Menu>
-	)
-}
+	);
+};
 
 export default QuickJumpMenu;
