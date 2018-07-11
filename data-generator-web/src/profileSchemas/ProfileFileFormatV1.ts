@@ -1,6 +1,6 @@
 import {
 	AnyFieldRestriction,
-	FieldKinds,
+	FieldKinds, IEnumMember,
 	IEnumRestrictions,
 	IFieldState,
 	INumericRestrictions,
@@ -79,7 +79,8 @@ function deserialiseRestriction(field: Dtos.IField): AnyFieldRestriction
 	if (field.kind === "enum" && field.distribution.kind === "set") {
 		return <IEnumRestrictions>{
 			kind: FieldKinds.Enum,
-			members: field.distribution.members.map(m => ({
+			members: field.distribution.members.map<IEnumMember>(m => ({
+				id: generateUniqueString(),
 				name: m.name,
 				prevalence: m.prevalence
 			}))
@@ -121,7 +122,7 @@ function serialiseRestriction(restriction: AnyFieldRestriction): Dtos.AnyDistrib
 	if (restriction.kind === FieldKinds.Enum) {
 		return <Dtos.ISetDistribution> {
 			kind: "set",
-			members: restriction.members.map(member => ({
+			members: restriction.members.map<Dtos.ISetMember>(member => ({
 				name: member.name,
 				prevalence: member.prevalence
 			}))
