@@ -12,7 +12,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 export default class Bootstrapper
 {
-	public static start(): void
+	public static start(
+		rootNode?: HTMLElement,
+		shouldRegisterServiceWorker?: boolean): void
 	{
 		const defaultState: IAppState = {
 			currentProfile: { fields: [] }
@@ -29,8 +31,9 @@ export default class Bootstrapper
 			<Provider store={store}>
 				<App />
 			</Provider>,
-			document.querySelector("[data-react-root]"));
+			rootNode || document.querySelector("[data-react-root]"));
 
-		registerServiceWorker();
+		if (shouldRegisterServiceWorker !== false)
+			registerServiceWorker();
 	}
 }
