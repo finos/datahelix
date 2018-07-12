@@ -5,4 +5,6 @@ import Bootstrapper from "./Bootstrapper";
 
 import "semantic-ui-css/semantic.min.css";
 
-new Bootstrapper().start();
+import "rc-slider/assets/index.css";
+
+Bootstrapper.start();

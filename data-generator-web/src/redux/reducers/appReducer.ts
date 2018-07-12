@@ -1,7 +1,8 @@
 import {Action} from "redux";
 
+import Actions from "../actions";
 import {
-	IAppState
+	IAppState, ModalId
 } from "../state/IAppState";
 import profileReducer from "./profileReducer";
 
@@ -9,12 +10,31 @@ import profileReducer from "./profileReducer";
 export default function appReducer(
 	oldState: IAppState | undefined,
 	action: Action)
-	: IAppState  | undefined
+	: IAppState
 {
-	if (!oldState)
-		return oldState;
-
 	return {
-		currentProfile: profileReducer(oldState.currentProfile, action)
+		currentProfile: profileReducer(
+			oldState ? oldState.currentProfile : undefined,
+			action),
+
+		currentModal: modalReducer(
+			oldState ? oldState.currentModal : undefined,
+			action)
 	}
+}
+
+function modalReducer(
+	oldState: ModalId | undefined,
+	action: Action)
+	: ModalId | undefined
+{
+	if (Actions.Modals.OpenModal.is(action)) {
+		return action.modalId;
+	}
+
+	if (Actions.Modals.CloseModal.is(action)) {
+		return undefined;
+	}
+
+	return oldState;
 }

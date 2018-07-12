@@ -1,8 +1,8 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import {selectCurrentProfileFields} from "../redux/selectors/selectFieldLookup";
-import {IAppState} from "../redux/state/IAppState";
+import {selectCurrentProfileFields} from "../../redux/selectors/selectFieldLookup";
+import {IAppState} from "../../redux/state/IAppState";
 
 import ProfileEditor from "./ProfileEditor";
 import ProfileField from "./ProfileField";

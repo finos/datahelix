@@ -3,9 +3,9 @@ import {Dispatch} from "redux";
 
 import * as React from "react";
 import {Dropdown, DropdownProps} from "semantic-ui-react";
-import Actions from "../redux/actions";
-import selectFieldLookup from "../redux/selectors/selectFieldLookup";
-import {FieldKinds, IAppState} from "../redux/state/IAppState";
+import Actions from "../../redux/actions/index";
+import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
+import {FieldKinds, IAppState} from "../../redux/state/IAppState";
 
 interface IProps extends DropdownProps
 {
@@ -19,7 +19,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): DropdownProps
 	return {
 		options: [
 			{ text: "Numeric", value: FieldKinds.Numeric },
-			{ text: "String", value: FieldKinds.String }
+			{ text: "String", value: FieldKinds.String },
+			{ text: "Enumeration", value: FieldKinds.Enum },
+			{ text: "Temporal", value: FieldKinds.Temporal }
 		],
 		value: fieldState.restrictions.kind
 	};
@@ -29,7 +31,7 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: IProps): DropdownProps
 {
 	return {
 		onChange: (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-			dispatch(Actions.ChangeFieldKind.create({
+			dispatch(Actions.Fields.ChangeFieldKind.create({
 				fieldId: ownProps.fieldId,
 				newKind: data.value === undefined
 					? FieldKinds.Unclassified

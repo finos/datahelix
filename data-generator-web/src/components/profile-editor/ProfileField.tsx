@@ -1,8 +1,9 @@
 import * as React from "react";
-import {Checkbox, Form, Grid, Icon} from "semantic-ui-react";
+import {Form, Grid, Icon} from "semantic-ui-react";
 
-import {FieldKinds} from "../redux/state/IAppState";
+import {FieldKinds} from "../../redux/state/IAppState";
 import DeleteFieldButton from "./DeleteFieldButton";
+import EnumRestrictionMemberTable from "./field-restrictions/EnumRestrictionMemberTable";
 import {
 	AllowableCharactersFieldRestriction,
 	MaximumStringLengthFieldRestriction,
@@ -10,10 +11,13 @@ import {
 	MeanFieldRestriction,
 	MinimumStringLengthFieldRestriction,
 	MinimumValueFieldRestriction,
-	StandardDeviationRestriction
+	StandardDeviationRestriction,
+	TemporalRangeEndFieldRestriction,
+	TemporalRangeStartFieldRestriction
 } from "./field-restrictions/SpecificFieldRestrictions";
 import FieldNameInput from "./FieldNameInput";
 import FieldTypeDropdown from "./FieldTypeDropdown";
+import NullPrevalenceSlider from "./NullPrevalenceSlider";
 
 interface IProps
 {
@@ -32,8 +36,8 @@ function withLabel(label: string, component: any): any
 	)
 }
 
-const ProfileField = ({id, name, kind}: IProps) =>
-	<Grid.Row>
+const ProfileField = ({id, name, kind}: IProps) => (
+	<Grid.Row id={id}>
 		<Grid.Column width={1}>
 			<DeleteFieldButton fieldId={id} icon={true}>
 				<Icon name="trash" />
@@ -46,7 +50,10 @@ const ProfileField = ({id, name, kind}: IProps) =>
 				<FieldNameInput fieldId={id} fluid={true} placeholder='Field name' />
 			</Form.Field>
 
-			<Checkbox label='Nullable?' />
+			<Form.Field>
+				<label>Null Prevalence</label>
+				<NullPrevalenceSlider fieldId={id} />
+			</Form.Field>
 		</Grid.Column>
 
 		<Grid.Column width={3}>
@@ -90,9 +97,23 @@ const ProfileField = ({id, name, kind}: IProps) =>
 						<MaximumValueFieldRestriction fieldId={id} />) }
 				</>
 				||
+				kind === FieldKinds.Enum &&
+					<EnumRestrictionMemberTable fieldId={id} />
+				||
+				kind === FieldKinds.Temporal &&
+				<>
+					{ withLabel(
+						"Minimum Value",
+						<TemporalRangeStartFieldRestriction fieldId={id} />) }
+					{ withLabel(
+						"Maximum Value",
+						<TemporalRangeEndFieldRestriction fieldId={id} />) }
+				</>
+				||
 				null
 			}
 		</Grid.Column>
 	</Grid.Row>
+);
 
 export default ProfileField;

@@ -1,16 +1,15 @@
 import { connect } from "react-redux";
 
-import {UpdateField} from "../../redux/actions/Actions";
+import Actions from "../../../redux/actions/index";
 import {
-	AnyFieldRestriction,
 	FieldKinds,
 	IAppState,
 	INumericRestrictions, IRestrictions, IRestrictionsPatch,
-	IStringRestrictions
-} from "../../redux/state/IAppState";
+	IStringRestrictions, ITemporalRestrictions
+} from "../../../redux/state/IAppState";
 
 import {ComponentType} from "react";
-import selectFieldLookup from "../../redux/selectors/selectFieldLookup";
+import selectFieldLookup from "../../../redux/selectors/selectFieldLookup";
 import {IProps as IInputProps, NumericInput, StringInput} from "./Inputs";
 
 interface IProps
@@ -34,7 +33,7 @@ function createReduxMappedInput<
 		},
 		(dispatch, ownProps: IProps) => {
 			return {
-				onChange: newValue => dispatch(UpdateField.create({
+				onChange: newValue => dispatch(Actions.Fields.UpdateField.create({
 					fieldId: ownProps.fieldId,
 					newValues: {
 						restrictions: getRestrictionPatch(newValue)
@@ -80,3 +79,14 @@ export const AllowableCharactersFieldRestriction = createReduxMappedInput(
 	StringInput,
 	(r: IStringRestrictions) => r.allowableCharacters,
 	v => ({ kind: FieldKinds.String, allowableCharacters: v }));
+
+
+export const TemporalRangeStartFieldRestriction = createReduxMappedInput(
+	StringInput,
+	(r: ITemporalRestrictions) => r.minimum,
+	v => ({ kind: FieldKinds.Temporal, minimum: v }));
+
+export const TemporalRangeEndFieldRestriction = createReduxMappedInput(
+	StringInput,
+	(r: ITemporalRestrictions) => r.maximum,
+	v => ({ kind: FieldKinds.Temporal, maximum: v }));
