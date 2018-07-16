@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Bootstrapper from "../Bootstrapper";
 
-it("bootstraps without crashing", () => {
+it("Should bootstrap without crashing", () => {
 	const rootElement = document.createElement('div');
 
 	Bootstrapper.start(
