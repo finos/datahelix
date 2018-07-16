@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Bootstrapper from "./Bootstrapper";
+import Bootstrapper from "../Bootstrapper";
 
 it("bootstraps without crashing", () => {
 	const rootElement = document.createElement('div');
