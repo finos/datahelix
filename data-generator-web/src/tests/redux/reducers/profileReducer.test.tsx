@@ -24,4 +24,7 @@ describe('Profile reducer', () => {
         let setProfile = Actions.Profiles.SetCurrentProfile.create(filledInState);
         Reducer(profileReducer).withState(filledInState).expect(setProfile).toReturnState(filledInProfileState);
     });
+    it('Should handle other actions by calling fieldsReducer', () => {
+        // TODO: Need to override the dependency in profileReducer
+    });
 });
