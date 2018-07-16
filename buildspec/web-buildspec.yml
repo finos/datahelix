@@ -5,7 +5,7 @@ phases:
     commands:
      - npm install -g yarn
      - cd data-generator-web
-     - yarn install --production=true
+     - yarn install
   build:
     commands:
       - yarn run build
