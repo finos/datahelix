@@ -14,4 +14,3 @@ cache:
   paths:
     - '/usr/local/lib/node_modules/**/*'
     - 'data-generator-web/node_modules/**/*'
-    
