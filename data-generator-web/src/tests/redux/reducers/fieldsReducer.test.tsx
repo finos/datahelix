@@ -21,5 +21,10 @@ describe('Fields reducer', () => {
         let deleteFieldAction = Actions.Fields.DeleteField.create({fieldId : genericFieldState.id});
         Reducer(fieldsReducer).withState([genericFieldState]).expect(deleteFieldAction).toReturnState([]);
     });
-    
+    it('Should handle UPDATE_FIELD ation', () => {
+        let modifiedStateFields = {name : 'Updated name', nullPrevalence: 0.5};
+        let updateFieldAction = Actions.Fields.UpdateField.create({fieldId : genericFieldState.id, newValues : modifiedStateFields});
+        let expectedState = [{ ...genericFieldState, name : modifiedStateFields.name, nullPrevalence: modifiedStateFields.nullPrevalence }];
+        Reducer(fieldsReducer).withState([genericFieldState]).expect(updateFieldAction).toReturnState(expectedState);
+    });
 });
