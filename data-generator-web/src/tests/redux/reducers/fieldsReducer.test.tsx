@@ -17,5 +17,9 @@ describe('Fields reducer', () => {
         let expectedResult =  [genericFieldState, newBlankState];
         Reducer(fieldsReducer).withState([genericFieldState]).expect(addBlankFieldAction).toReturnState(expectedResult);
     });
+    it('Should handle DELETE_FIELD action', () => {
+        let deleteFieldAction = Actions.Fields.DeleteField.create({fieldId : genericFieldState.id});
+        Reducer(fieldsReducer).withState([genericFieldState]).expect(deleteFieldAction).toReturnState([]);
+    });
     
 });
