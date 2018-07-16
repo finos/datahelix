@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:  
+  install:
+    commands:
+     - npm install -g yarn
+     - cd data-generator-web
+     - yarn install
+  build:
+    commands:
+      - yarn run build
+      - aws s3 cp ./build s3://${S3_BUCKET}-${WORKSPACE} --recursive
+cache:
+  paths:
+    - '/usr/local/lib/node_modules/**/*'
+    - 'data-generator-web/node_modules/**/*'
