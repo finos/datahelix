@@ -1,5 +1,4 @@
 import { Action } from "redux";
-import { Reducer } from 'redux-testkit';
 import Actions from "../../../redux/actions";
 import fieldsReducer from '../../../redux/reducers/fieldsReducer';
 import { FieldKinds } from "../../../redux/state/IAppState";
@@ -15,24 +14,49 @@ describe('Fields reducer', () => {
     const allFieldStates = [genericFieldState, enumFieldState, numericFiledState, stringFieldState, temporalFieldState];
 
     it('Should handle undefined state', () => {
+        // Arrange
         const mockAction: Action = { type: 'MOCK_ACTION' };
-        Reducer(fieldsReducer).withState(undefined).expect(mockAction).toReturnState([]);
+
+        // Act
+        const result = fieldsReducer(undefined, mockAction);
+
+        // Assert
+        expect(result).toEqual([]);
     });
+
     it('Should handle ADD_BLANK_FIELD action', () => {
+        // Arrange
         const addBlankFieldAction = Actions.Fields.AddBlankField.create({});
         const newBlankState: IFieldState = { id: "0", name: "", nullPrevalence: 0, restrictions: { kind: FieldKinds.Unclassified } };
         const expectedResult = [genericFieldState, newBlankState];
-        Reducer(fieldsReducer).withState([genericFieldState]).expect(addBlankFieldAction).toReturnState(expectedResult);
+
+        //Act
+        const result = fieldsReducer([genericFieldState], addBlankFieldAction);
+
+        //Assert
+        expect(result).toEqual(expectedResult);
     });
     it('Should handle DELETE_FIELD action', () => {
+        // Arrange
         const deleteFieldAction = Actions.Fields.DeleteField.create({ fieldId: genericFieldState.id });
-        Reducer(fieldsReducer).withState([genericFieldState]).expect(deleteFieldAction).toReturnState([]);
+
+        //Act
+        const result = fieldsReducer([genericFieldState], deleteFieldAction);
+
+        //Assert
+        expect(result).toEqual([]);
     });
     it('Should handle UPDATE_FIELD ation', () => {
+        // Arrange
         const modifiedStateFields = { name: 'Updated name', nullPrevalence: 0.5 };
         const updateFieldAction = Actions.Fields.UpdateField.create({ fieldId: genericFieldState.id, newValues: modifiedStateFields });
         const expectedState = [{ ...genericFieldState, name: modifiedStateFields.name, nullPrevalence: modifiedStateFields.nullPrevalence }];
-        Reducer(fieldsReducer).withState([genericFieldState]).expect(updateFieldAction).toReturnState(expectedState);
+
+        //Act
+        const result = fieldsReducer([genericFieldState], updateFieldAction);
+
+        //Assert
+        expect(result).toEqual(expectedState);
     });
 
     allFieldStates.forEach(originFieldState => {
@@ -40,8 +64,13 @@ describe('Fields reducer', () => {
         allKinds.forEach(destinationKind => {
             const destinationKindName = FieldKinds[destinationKind];
             it(`Should handle CHANGE_FIELD_KIND action from ${originalKindName} to ${destinationKindName}`, () => {
+                // Arrange
                 const changeFieldKindAction = Actions.Fields.ChangeFieldKind.create({ fieldId: genericFieldState.id, newKind: destinationKind });
+
+                //Act
                 const result = fieldsReducer([originFieldState], changeFieldKindAction);
+
+                //Assert
                 expect(result.length).toBe(1);
                 expect(result[0].restrictions.kind).toEqual(destinationKind);
             });
