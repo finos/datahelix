@@ -1,11 +1,8 @@
 import {Action} from "redux";
+import modalReducer from "./modalReducer";
 
-import Actions from "../actions";
-import {
-	IAppState, ModalId
-} from "../state/IAppState";
+import {IAppState} from "../state/IAppState";
 import profileReducer from "./profileReducer";
-
 
 export default function appReducer(
 	oldState: IAppState | undefined,
@@ -23,18 +20,3 @@ export default function appReducer(
 	}
 }
 
-function modalReducer(
-	oldState: ModalId | undefined,
-	action: Action)
-	: ModalId | undefined
-{
-	if (Actions.Modals.OpenModal.is(action)) {
-		return action.modalId;
-	}
-
-	if (Actions.Modals.CloseModal.is(action)) {
-		return undefined;
-	}
-
-	return oldState;
-}
