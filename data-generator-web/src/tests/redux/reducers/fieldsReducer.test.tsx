@@ -1,9 +1,9 @@
 import { Action } from "redux";
+import { Reducer } from 'redux-testkit';
 import Actions from "../../../redux/actions";
 import fieldsReducer from '../../../redux/reducers/fieldsReducer';
-import { FieldKinds, IFieldState } from "../../../redux/state/IAppState";
-import { Reducer } from 'redux-testkit';
-
+import { FieldKinds } from "../../../redux/state/IAppState";
+import { IFieldState } from "../../../redux/state/IAppState";
 
 describe('Fields reducer', () => {
     const genericFieldState: IFieldState = { id: 'generic', name: '', nullPrevalence: 0, restrictions: { kind: FieldKinds.Unclassified } };

@@ -1,9 +1,9 @@
 import { Action } from "redux";
-import Actions from "../../../redux/actions";
-import { FieldKinds, IFieldState, IProfileState } from "../../../redux/state/IAppState";
-import profileReducerBase from '../../../redux/reducers/profileReducerBase';
-import profileReducer from '../../../redux/reducers/profileReducer';
 import { Reducer } from 'redux-testkit';
+import Actions from "../../../redux/actions";
+import profileReducer from '../../../redux/reducers/profileReducer';
+import profileReducerBase from '../../../redux/reducers/profileReducerBase';
+import { FieldKinds, IFieldState, IProfileState } from "../../../redux/state/IAppState";
 
 describe('Profile reducer', () => {
     const emptyState: IProfileState = { fields: [] };

@@ -1,11 +1,11 @@
 import { Action } from "redux";
 import Actions from "../actions";
-import { IProfileState } from "../state/IAppState";
+import { IFieldState, IProfileState } from "../state/IAppState";
 
 export default function profileReducerBase(
 	oldState: IProfileState | undefined,
 	action: Action,
-	fallbackReducer: Function)
+	fallbackReducer: (previousState : IFieldState[], action : Action<any>) => any )
 	: IProfileState {
 	if (!oldState)
 		return { fields: [] };
