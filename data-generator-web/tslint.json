@@ -14,7 +14,8 @@
 		"no-angle-bracket-type-assertion": false,
 		"no-namespace": false,
 		"comment-format": false,
-		"indent": [true, "tabs"]
+		"indent": [true, "tabs"],
+		"prefer-const": true
 	},
 	"defaultSeverity": "warn"
 }
