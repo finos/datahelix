@@ -13,7 +13,8 @@
 		"no-empty-interface": false,
 		"no-angle-bracket-type-assertion": false,
 		"no-namespace": false,
-		"comment-format": false
+		"comment-format": false,
+		"indent": [true, "tabs"]
 	},
 	"defaultSeverity": "warn"
 }
