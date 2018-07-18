@@ -1,27 +1,11 @@
-import {Action} from "redux";
-import Actions from "../actions";
+import { Action } from "redux";
 import { IProfileState } from "../state/IAppState";
 import fieldsReducer from "./fieldsReducer";
+import profileReducerBase from './profileReducerBase'
 
 export default function profileReducer(
 	oldState: IProfileState | undefined,
 	action: Action)
-	: IProfileState
-{
-	if (!oldState)
-		return { fields: [] };
-
-	if (Actions.Profiles.SetCurrentProfile.is(action))
-	{
-		return action.newProfile;
-	}
-
-	if (Actions.Profiles.ClearCurrentProfile.is(action))
-	{
-		return { fields: [] };
-	}
-
-	return {
-		fields: fieldsReducer(oldState.fields, action)
-	};
+	: IProfileState {
+	return profileReducerBase(oldState, action, fieldsReducer);
 }
