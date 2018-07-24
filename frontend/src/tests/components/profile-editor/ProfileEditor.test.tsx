@@ -54,6 +54,8 @@ describe('Profile editor', () => {
 
 		// Assert
 		expect(wrapper.find('form div[id]')).toHaveLength(2);
+		expect(wrapper.find(`input[value="${genericFieldStateA.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value="${genericFieldStateB.name}"]`)).toHaveLength(1);
 	});
 
 	it("Should handle no children", () => {
