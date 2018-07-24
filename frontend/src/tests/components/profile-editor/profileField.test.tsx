@@ -147,4 +147,32 @@ describe('Profile field', () => {
 		expect(wrapper.find(`table input[value="${secondMember.name}"]`)).toHaveLength(1);
 	});
 
+	it("Should display temporal field", () => {
+		// Arrange
+		const minimum = '01/01/2002';
+		const maximum = '02/02/2018';
+		const temporalFieldState: IFieldState = { id: 'temporalA', name: 'First temporal field', nullPrevalence: 0.44, restrictions: { kind: FieldKinds.Temporal, minimum: minimum, maximum: maximum } };
+		const childrenFieldStates : IFieldState[] = [temporalFieldState];
+
+		initialState = {...initialState, currentProfile : {
+			fields : childrenFieldStates
+		}};
+
+		store = mockStore(initialState);
+
+		// Act
+		wrapper = mount(
+			<Provider store={store} >
+				<ProfileField id={temporalFieldState.id} name={temporalFieldState.name} kind={temporalFieldState.restrictions.kind} />
+			</Provider>
+		);
+
+		// Assert
+		expect(wrapper.find('div[id]')).toHaveLength(1);
+		expect(wrapper.find(`input[placeholder="Field name"][value="${temporalFieldState.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`div[aria-valuenow=${temporalFieldState.nullPrevalence}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value="${minimum}"]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value="${maximum}"]`)).toHaveLength(1);
+	});
+
 });
