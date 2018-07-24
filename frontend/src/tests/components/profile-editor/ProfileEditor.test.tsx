@@ -1,16 +1,17 @@
-import * as React from "react";
-import ProfileEditor from '../../../components/profile-editor/ProfileEditor';
-import { configure, mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import * as Enzyme from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
-import configureStore from 'redux-mock-store';
+import * as React from "react";
 import { Provider } from "react-redux";
-import { IFieldState, FieldKinds, IAppState } from "../../../redux/state/IAppState";
+import configureStore from 'redux-mock-store';
+import ProfileEditor from '../../../components/profile-editor/ProfileEditor';
 import ProfileField from "../../../components/profile-editor/ProfileField";
+import { FieldKinds, IAppState, IFieldState } from "../../../redux/state/IAppState";
 
 describe('Profile editor', () => {
 	const mockStore = configureStore();
-	let store : any, wrapper;
+	let store : any;
+	let wrapper;
 	let initialState : IAppState = {};
 	
 	beforeAll(()=>{
