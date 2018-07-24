@@ -52,4 +52,36 @@ describe('Profile field', () => {
 		expect(wrapper.find(`div[aria-valuenow=${genericFieldState.nullPrevalence}]`)).toHaveLength(1);
 	});
 
+	it("Should display numeric field", () => {
+		// Arrange
+		const minimumValue = 1;
+		const maximumValue = 3;
+		const meanAvg = 2;
+		const stdDev = 0.9;
+		const numericFieldState: IFieldState = { id: 'numericA', name: 'First numeric field', nullPrevalence: 0.2, restrictions: { kind: FieldKinds.Numeric, minimumValue : minimumValue, maximumValue : maximumValue, meanAvg : meanAvg, stdDev:stdDev } };
+		const childrenFieldStates : IFieldState[] = [numericFieldState];
+
+		initialState = {...initialState, currentProfile : {
+			fields : childrenFieldStates
+		}};
+
+		store = mockStore(initialState);
+
+		// Act
+		wrapper = mount(
+			<Provider store={store} >
+				<ProfileField id={numericFieldState.id} name={numericFieldState.name} kind={numericFieldState.restrictions.kind} />
+			</Provider>
+		);
+
+		// Assert
+		expect(wrapper.find('div[id]')).toHaveLength(1);
+		expect(wrapper.find(`input[placeholder="Field name"][value="${numericFieldState.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`div[aria-valuenow=${numericFieldState.nullPrevalence}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${minimumValue}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${maximumValue}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${meanAvg}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${stdDev}]`)).toHaveLength(1);
+	});
+
 });
