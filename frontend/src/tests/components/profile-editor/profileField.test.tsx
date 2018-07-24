@@ -5,7 +5,7 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import configureStore from 'redux-mock-store';
 import ProfileField from "../../../components/profile-editor/ProfileField";
-import { FieldKinds, IAppState, IFieldState, IEnumMember } from "../../../redux/state/IAppState";
+import { FieldKinds, IAppState, IEnumMember, IFieldState  } from "../../../redux/state/IAppState";
 
 describe('Profile field', () => {
 	const mockStore = configureStore();
@@ -58,7 +58,7 @@ describe('Profile field', () => {
 		const maximumValue = 3;
 		const meanAvg = 2;
 		const stdDev = 0.9;
-		const numericFieldState: IFieldState = { id: 'numericA', name: 'First numeric field', nullPrevalence: 0.2, restrictions: { kind: FieldKinds.Numeric, minimumValue : minimumValue, maximumValue : maximumValue, meanAvg : meanAvg, stdDev:stdDev } };
+		const numericFieldState: IFieldState = { id: 'numericA', name: 'First numeric field', nullPrevalence: 0.2, restrictions: { kind: FieldKinds.Numeric, minimumValue, maximumValue, meanAvg, stdDev } };
 		const childrenFieldStates : IFieldState[] = [numericFieldState];
 
 		initialState = {...initialState, currentProfile : {
@@ -89,7 +89,7 @@ describe('Profile field', () => {
 		const minimumLength = 1;
 		const maximumLength = 50;
 		const allowableCharacters = "n";
-		const stringFieldState: IFieldState = { id: 'stringA', name: 'First string field', nullPrevalence: 0.1, restrictions: { kind: FieldKinds.String, minimumLength : minimumLength, maximumLength:maximumLength, allowableCharacters:allowableCharacters } };
+		const stringFieldState: IFieldState = { id: 'stringA', name: 'First string field', nullPrevalence: 0.1, restrictions: { kind: FieldKinds.String, minimumLength, maximumLength, allowableCharacters } };
 		const childrenFieldStates : IFieldState[] = [stringFieldState];
 
 		initialState = {...initialState, currentProfile : {
@@ -151,7 +151,7 @@ describe('Profile field', () => {
 		// Arrange
 		const minimum = '01/01/2002';
 		const maximum = '02/02/2018';
-		const temporalFieldState: IFieldState = { id: 'temporalA', name: 'First temporal field', nullPrevalence: 0.44, restrictions: { kind: FieldKinds.Temporal, minimum: minimum, maximum: maximum } };
+		const temporalFieldState: IFieldState = { id: 'temporalA', name: 'First temporal field', nullPrevalence: 0.44, restrictions: { kind: FieldKinds.Temporal, minimum, maximum } };
 		const childrenFieldStates : IFieldState[] = [temporalFieldState];
 
 		initialState = {...initialState, currentProfile : {
