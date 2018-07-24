@@ -5,7 +5,7 @@ import * as React from "react";
 import { Provider } from "react-redux";
 import configureStore from 'redux-mock-store';
 import ProfileField from "../../../components/profile-editor/ProfileField";
-import { FieldKinds, IAppState, IFieldState } from "../../../redux/state/IAppState";
+import { FieldKinds, IAppState, IFieldState, IEnumMember } from "../../../redux/state/IAppState";
 
 describe('Profile field', () => {
 	const mockStore = configureStore();
@@ -112,6 +112,39 @@ describe('Profile field', () => {
 		expect(wrapper.find(`input[value=${minimumLength}]`)).toHaveLength(1);
 		expect(wrapper.find(`input[value=${maximumLength}]`)).toHaveLength(1);
 		expect(wrapper.find(`input[value="${allowableCharacters}"]`)).toHaveLength(1);
+	});
+
+	it("Should display enumeration field", () => {
+		// Arrange
+		const firstMember : IEnumMember = { id:'someValue', name:'someValue', prevalence:0.95 };
+		const secondMember : IEnumMember = { id:'someOtherValue', name:'someOtherValue', prevalence:0.05 };
+		const enumMembers : IEnumMember[] = [ firstMember, secondMember ];
+		const enumerationFieldState: IFieldState = { id: 'enumerationA', name: 'First enumeration field', nullPrevalence: 0.4, restrictions: { kind: FieldKinds.Enum, members: enumMembers } };
+		const childrenFieldStates : IFieldState[] = [enumerationFieldState];
+
+		initialState = {...initialState, currentProfile : {
+			fields : childrenFieldStates
+		}};
+
+		store = mockStore(initialState);
+
+		// Act
+		wrapper = mount(
+			<Provider store={store} >
+				<ProfileField id={enumerationFieldState.id} name={enumerationFieldState.name} kind={enumerationFieldState.restrictions.kind} />
+			</Provider>
+		);
+
+		// Assert
+		expect(wrapper.find('div[id]')).toHaveLength(1);
+		expect(wrapper.find(`input[placeholder="Field name"][value="${enumerationFieldState.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`div[aria-valuenow=${enumerationFieldState.nullPrevalence}]`)).toHaveLength(1);
+		// 3 rows, one being the footer
+		expect(wrapper.find(`tbody tr`)).toHaveLength(3);
+		expect(wrapper.find(`table div[aria-valuenow=${firstMember.prevalence}]`)).toHaveLength(1);
+		expect(wrapper.find(`table input[value="${firstMember.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`table div[aria-valuenow=${secondMember.prevalence}]`)).toHaveLength(1);
+		expect(wrapper.find(`table input[value="${secondMember.name}"]`)).toHaveLength(1);
 	});
 
 });
