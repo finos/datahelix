@@ -84,4 +84,34 @@ describe('Profile field', () => {
 		expect(wrapper.find(`input[value=${stdDev}]`)).toHaveLength(1);
 	});
 
+	it("Should display String field", () => {
+		// Arrange
+		const minimumLength = 1;
+		const maximumLength = 50;
+		const allowableCharacters = "n";
+		const stringFieldState: IFieldState = { id: 'stringA', name: 'First string field', nullPrevalence: 0.1, restrictions: { kind: FieldKinds.String, minimumLength : minimumLength, maximumLength:maximumLength, allowableCharacters:allowableCharacters } };
+		const childrenFieldStates : IFieldState[] = [stringFieldState];
+
+		initialState = {...initialState, currentProfile : {
+			fields : childrenFieldStates
+		}};
+
+		store = mockStore(initialState);
+
+		// Act
+		wrapper = mount(
+			<Provider store={store} >
+				<ProfileField id={stringFieldState.id} name={stringFieldState.name} kind={stringFieldState.restrictions.kind} />
+			</Provider>
+		);
+
+		// Assert
+		expect(wrapper.find('div[id]')).toHaveLength(1);
+		expect(wrapper.find(`input[placeholder="Field name"][value="${stringFieldState.name}"]`)).toHaveLength(1);
+		expect(wrapper.find(`div[aria-valuenow=${stringFieldState.nullPrevalence}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${minimumLength}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value=${maximumLength}]`)).toHaveLength(1);
+		expect(wrapper.find(`input[value="${allowableCharacters}"]`)).toHaveLength(1);
+	});
+
 });
