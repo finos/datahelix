@@ -4,33 +4,54 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.scottlogic.deg.schemas.common.BaseProfile;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
+import com.scottlogic.deg.schemas.v3.V3Profile;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class ProfileDeserialiserTests {
     @Test
-    public void shouldDeserialiseWithoutException() throws IOException {
+    public void shouldDeserialiseV3ProfileWithoutException() throws IOException {
         // Arrange
-        final String json =
-            "{\n" +
-            "  \"schemaVersion\" : \"v2\",\n" +
-            "  \"fields\" : [ {\n" +
-            "    \"name\" : \"price\",\n" +
-            "    \"format\" : null,\n" +
-            "    \"constraints\" : [ {\n" +
-            "      \"type\" : \"NumericRange\",\n" +
-            "      \"min\" : 2,\n" +
-            "      \"max\" : 91\n" +
-            "    } ],\n" +
-            "    \"trends\" : null\n" +
-            "  } ]\n" +
+        final String json = "{" +
+            "  \"schemaVersion\" : \"v3\"," +
+            "  \"fields\": [" +
+            "    { \"name\": \"id\" }," +
+            "    { \"name\": \"time\" }," +
+            "    { \"name\": \"country\" }," +
+            "    { \"name\": \"tariff\" }," +
+            "    { \"name\": \"low_price\" }," +
+            "    { \"name\": \"high_price\" }" +
+            "  ]," +
+            "  \"constraints\": [" +
+            "    { \"field\": \"id\", \"type\": \"isOfType\", \"value\": \"temporal\" }," +
+            "    { \"field\": \"id\", \"type\": \"not isNull\" }," +
+
+            "    { \"field\": \"low_price\", \"type\": \"isOfType\", \"value\": \"numeric\" }," +
+            "    { \"field\": \"low_price\", \"type\": \"not isNull\" }," +
+            "    { \"field\": \"low_price\", \"type\": \"isGreaterThanOrEqual\", \"value\": \"0\" }," +
+
+            "    { \"field\": \"country\", \"type\": \"isInSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }," +
+
+            "    {" +
+            "      \"type\": \"if\"," +
+            "      \"condition\": {" +
+            "        \"type\": \"or\"," +
+            "        \"constraints\": [" +
+            "          { \"field\": \"type\", \"type\": \"isEqualTo\", \"value\": \"USA\" }," +
+            "          { \"field\": \"type\", \"type\": \"isNull\" }" +
+            "        ]" +
+            "      }," +
+            "      \"then\": { \"field\": \"tariff\", \"type\": \"isNull\" }," +
+            "      \"else\": { \"field\": \"tariff\", \"type\": \"not isNull\" }" +
+            "    }" +
+            "  ]" +
             "}";
 
         // Act
-        final BaseProfile profile = new ProfileDeserialiser().deserialise(json);
+        final BaseProfile profile = new ProfileDeserialiser().deserialise(json, V3Profile.SchemaVersion);
 
         // Assert
-        assertEquals("v2", profile.schemaVersion);
+        assertEquals("v3", profile.schemaVersion);
     }
 }
