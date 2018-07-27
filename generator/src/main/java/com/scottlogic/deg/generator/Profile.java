@@ -1,13 +1,14 @@
 package com.scottlogic.deg.generator;
 
-import java.util.List;
+import java.util.Collection;
 
 public class Profile
 {
-    public final List<Field> fields;
+    public final Collection<Field> fields;
+    public final Collection<Rule> rules;
 
-    public Profile(List<Field> fields)
-    {
+    public Profile(Collection<Field> fields, Collection<Rule> rules) {
         this.fields = fields;
+        this.rules = rules;
     }
 }
