@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
-import com.scottlogic.deg.schemas.v3.V3Profile;
+import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,10 +17,10 @@ public class ProfileReader {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, Charset.forName("UTF-8"));
 
-        V3Profile profileDto = (V3Profile) new ProfileDeserialiser()
+        V3ProfileDTO profileDto = (V3ProfileDTO) new ProfileDeserialiser()
             .deserialise(
                 profileJson,
-                V3Profile.SchemaVersion);
+                V3ProfileDTO.SchemaVersion);
 
         return new Profile(
             profileDto.fields.stream()

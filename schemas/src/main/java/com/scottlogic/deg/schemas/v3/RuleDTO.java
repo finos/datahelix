@@ -7,9 +7,9 @@ import java.util.Collection;
 
 @JsonDeserialize(using = RuleDeserializer.class)
 @JsonSerialize(using = RuleSerializer.class)
-public class Rule {
+public class RuleDTO {
     public String description;
-    public Collection<Constraint> constraints;
+    public Collection<ConstraintDTO> constraints;
 
-    public Rule() {}
+    public RuleDTO() {}
 }

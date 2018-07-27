@@ -4,13 +4,13 @@ import com.scottlogic.deg.schemas.common.BaseProfile;
 
 import java.util.Collection;
 
-public class V3Profile extends BaseProfile {
+public class V3ProfileDTO extends BaseProfile {
     public static final String SchemaVersion = "v3";
 
-    public Collection<Field> fields;
-    public Collection<Rule> rules;
+    public Collection<FieldDTO> fields;
+    public Collection<RuleDTO> rules;
 
-    public V3Profile() {
+    public V3ProfileDTO() {
         super(SchemaVersion);
     }
 }

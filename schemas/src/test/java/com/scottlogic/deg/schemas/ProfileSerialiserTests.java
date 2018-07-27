@@ -1,10 +1,10 @@
 package com.scottlogic.deg.schemas;
 
 import com.scottlogic.deg.schemas.common.ProfileSerialiser;
-import com.scottlogic.deg.schemas.v3.Constraint;
-import com.scottlogic.deg.schemas.v3.Field;
-import com.scottlogic.deg.schemas.v3.Rule;
-import com.scottlogic.deg.schemas.v3.V3Profile;
+import com.scottlogic.deg.schemas.v3.ConstraintDTO;
+import com.scottlogic.deg.schemas.v3.FieldDTO;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class ProfileSerialiserTests {
     @Test
     public void shouldSerialiseExampleProfile() throws IOException {
         // Arrange
-        final V3Profile profile = new V3Profile();
+        final V3ProfileDTO profile = new V3ProfileDTO();
         profile.fields = Arrays.asList(
             createField(f -> f.name = "typecode"),
             createField(f -> f.name = "price"));
@@ -138,16 +138,16 @@ public class ProfileSerialiserTests {
         Assert.assertThat(actualJson, Is.is(expectedJson));
     }
 
-    private static Field createField(Consumer<Field> setupField) {
-        Field newField = new Field();
+    private static FieldDTO createField(Consumer<FieldDTO> setupField) {
+        FieldDTO newField = new FieldDTO();
         setupField.accept(newField);
         return newField;
     }
 
-    private static Rule createRule(
+    private static RuleDTO createRule(
         String description,
-        Constraint... constraints) {
-        Rule newRule = new Rule();
+        ConstraintDTO... constraints) {
+        RuleDTO newRule = new RuleDTO();
 
         newRule.description = description;
         newRule.constraints = Arrays.asList(constraints);
@@ -155,14 +155,14 @@ public class ProfileSerialiserTests {
         return newRule;
     }
 
-    private static Constraint createConstraint(Consumer<Constraint> setupConstraint) {
-        Constraint newConstraint = new Constraint();
+    private static ConstraintDTO createConstraint(Consumer<ConstraintDTO> setupConstraint) {
+        ConstraintDTO newConstraint = new ConstraintDTO();
         setupConstraint.accept(newConstraint);
         return newConstraint;
     }
 
-    private static Rule createConstraintAsRule(Consumer<Constraint> setupConstraint) {
-        Constraint newConstraint = createConstraint(setupConstraint);
+    private static RuleDTO createConstraintAsRule(Consumer<ConstraintDTO> setupConstraint) {
+        ConstraintDTO newConstraint = createConstraint(setupConstraint);
 
         return createRule(null, newConstraint);
     }

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.schemas.v3;
 
-public class Field {
+public class FieldDTO {
     public String name;
 
-    public Field() {}
+    public FieldDTO() {}
 }

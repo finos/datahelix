@@ -6,16 +6,16 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
-public class RuleSerializer extends JsonSerializer<Rule> {
+public class RuleSerializer extends JsonSerializer<RuleDTO> {
     @Override
     public void serialize(
-        Rule rule,
+        RuleDTO rule,
         JsonGenerator jsonGenerator,
         SerializerProvider serializerProvider)
         throws IOException {
 
         if (rule.description == null) {
-            for (Constraint constraint : rule.constraints)
+            for (ConstraintDTO constraint : rule.constraints)
             {
                 jsonGenerator.writeObject(constraint);
             }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-public class Constraint {
+public class ConstraintDTO {
     public String type;
 
     // the DTO is very permissive, because validation isn't its job.
@@ -20,15 +20,15 @@ public class Constraint {
     public Collection<Object> values;
 
     /** a set of subconstraints - used in or/and */
-    public Collection<Constraint> constraints;
+    public Collection<ConstraintDTO> constraints;
 
     /** used in condition - should always co-occur with 'then' */
-    public Constraint condition;
+    public ConstraintDTO condition;
 
     /** the constraint to apply if 'condition' is true */
-    public Constraint then;
+    public ConstraintDTO then;
 
     /** the constraint to apply if 'condition' is false */
     @JsonProperty("else")
-    public Constraint elseCondition;
+    public ConstraintDTO elseCondition;
 }
