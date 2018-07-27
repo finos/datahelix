@@ -3,6 +3,7 @@ package com.scottlogic.deg.schemas;
 import com.scottlogic.deg.schemas.common.ProfileSerialiser;
 import com.scottlogic.deg.schemas.v3.Constraint;
 import com.scottlogic.deg.schemas.v3.Field;
+import com.scottlogic.deg.schemas.v3.Rule;
 import com.scottlogic.deg.schemas.v3.V3Profile;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
@@ -21,13 +22,13 @@ public class ProfileSerialiserTests {
             createField(f -> f.name = "typecode"),
             createField(f -> f.name = "price"));
 
-        profile.constraints = Arrays.asList(
-            createConstraint(c -> {
+        profile.rules = Arrays.asList(
+            createConstraintAsRule(c -> {
                 c.field = "typecode";
                 c.type = "ifOfType";
                 c.value = "string";
             }),
-            createConstraint(c -> {
+            createConstraintAsRule(c -> {
                 c.type = "if";
                 c.condition = createConstraint(condition -> {
                     condition.type = "or";
@@ -62,7 +63,7 @@ public class ProfileSerialiserTests {
             "  }, {\n" +
             "    \"name\" : \"price\"\n" +
             "  } ],\n" +
-            "  \"constraints\" : [ {\n" +
+            "  \"rules\" : [ {\n" +
             "    \"type\" : \"ifOfType\",\n" +
             "    \"field\" : \"typecode\",\n" +
             "    \"value\" : \"string\",\n" +
@@ -137,17 +138,32 @@ public class ProfileSerialiserTests {
         Assert.assertThat(actualJson, Is.is(expectedJson));
     }
 
-    private static Field createField(Consumer<Field> setupField)
-    {
+    private static Field createField(Consumer<Field> setupField) {
         Field newField = new Field();
         setupField.accept(newField);
         return newField;
     }
 
-    private static Constraint createConstraint(Consumer<Constraint> setupConstraint)
-    {
+    private static Rule createRule(
+        String description,
+        Constraint... constraints) {
+        Rule newRule = new Rule();
+
+        newRule.description = description;
+        newRule.constraints = Arrays.asList(constraints);
+
+        return newRule;
+    }
+
+    private static Constraint createConstraint(Consumer<Constraint> setupConstraint) {
         Constraint newConstraint = new Constraint();
         setupConstraint.accept(newConstraint);
         return newConstraint;
+    }
+
+    private static Rule createConstraintAsRule(Consumer<Constraint> setupConstraint) {
+        Constraint newConstraint = createConstraint(setupConstraint);
+
+        return createRule(null, newConstraint);
     }
 }

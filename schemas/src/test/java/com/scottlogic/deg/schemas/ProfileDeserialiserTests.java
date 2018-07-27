@@ -23,7 +23,7 @@ public class ProfileDeserialiserTests {
             "    { \"name\": \"low_price\" }," +
             "    { \"name\": \"high_price\" }" +
             "  ]," +
-            "  \"constraints\": [" +
+            "  \"rules\": [" +
             "    { \"field\": \"id\", \"type\": \"isOfType\", \"value\": \"temporal\" }," +
             "    { \"field\": \"id\", \"type\": \"not isNull\" }," +
 
