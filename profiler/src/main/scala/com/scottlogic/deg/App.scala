@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.profiler.Profiler
-import com.scottlogic.deg.schemas.v2.V2Profile
 import javax.inject.Inject
 import net.codingwell.scalaguice.InjectorExtensions._
 import org.apache.log4j.{Level, Logger}
