@@ -4,7 +4,7 @@ public class NotConstraint implements IConstraint
 {
     public final IConstraint negatedConstraint;
 
-    NotConstraint(IConstraint negatedConstraint) {
+    public NotConstraint(IConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 }
