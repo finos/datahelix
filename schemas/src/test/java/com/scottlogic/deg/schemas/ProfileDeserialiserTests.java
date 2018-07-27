@@ -31,7 +31,12 @@ public class ProfileDeserialiserTests {
             "    { \"field\": \"low_price\", \"type\": \"not isNull\" }," +
             "    { \"field\": \"low_price\", \"type\": \"isGreaterThanOrEqual\", \"value\": \"0\" }," +
 
-            "    { \"field\": \"country\", \"type\": \"isInSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }," +
+            "    {" +
+            "      \"rule\": \"Some rule\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"country\", \"type\": \"isInSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
+            "      ]" +
+            "    }," +
 
             "    {" +
             "      \"type\": \"if\"," +
