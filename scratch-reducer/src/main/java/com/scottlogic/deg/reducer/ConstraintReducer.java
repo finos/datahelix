@@ -2,6 +2,7 @@ package com.scottlogic.deg.reducer;
 
 import com.scottlogic.deg.constraint.IConstraint;
 import com.scottlogic.deg.input.Field;
+import com.scottlogic.deg.restriction.IFieldRestriction;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class ConstraintReducer {
                 .collect(Collectors.toList());
     }
 
-    public IFieldRestriction getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
+    private IFieldRestriction getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
         IFieldRestriction fieldRestriction = null;
         for (IConstraint constraint : constraints) {
             if (fieldRestriction == null) {

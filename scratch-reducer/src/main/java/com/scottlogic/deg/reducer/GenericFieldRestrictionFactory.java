@@ -5,18 +5,17 @@ import com.scottlogic.deg.input.Field;
 import com.scottlogic.deg.restriction.IFieldRestriction;
 import com.scottlogic.deg.restriction.StringFieldRestriction;
 
-public class FieldRestrictionFactory {
-    private final ConstraintTypeClassifier constraintTypeClassifier = new ConstraintTypeClassifier();
+public class GenericFieldRestrictionFactory {
+    private final GenericConstraintTypeClassifier genericConstraintTypeClassifier = new GenericConstraintTypeClassifier();
     private final NumericFieldRestrictionFactory numericFieldRestrictionFactory = new NumericFieldRestrictionFactory();
-    private final GenericFieldRestrictionFactory genericFieldRestrictionFactory = new GenericFieldRestrictionFactory();
 
     public IFieldRestriction getForConstraint(Field field, IConstraint constraint) {
-        final var constraintType = constraintTypeClassifier.classify(constraint);
+        final var constraintType = genericConstraintTypeClassifier.classify(constraint);
         switch(constraintType) {
+            case String:
+                return new StringFieldRestriction(field);
             case Numeric:
                 return numericFieldRestrictionFactory.getForConstraint(field, constraint);
-            case Generic:
-                return genericFieldRestrictionFactory.getForConstraint(field, constraint);
             default:
                 throw new IllegalStateException();
         }
