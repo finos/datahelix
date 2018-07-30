@@ -15,41 +15,41 @@ public class AtomicConstraintReaderLookup
     static {
         typeCodeToSpecificReader = new HashMap<>();
 
-        add("isEqualTo",
+        add("equalTo",
             (dto, fields) ->
                 new IsEqualToConstantConstraint(
                     fields.byId(dto.field),
                     dto.value));
 
-        add("isInSet",
+        add("inSet",
             (dto, fields) ->
                 new IsInSetConstraint(
                     fields.byId(dto.field),
                     new HashSet<>(dto.values)));
 
-        add("matchesRegex",
+        add("matchingRegex",
             (dto, fields) ->
                 new MatchesRegexConstraint(
                     fields.byId(dto.field),
                     Pattern.compile((String) dto.value)));
 
-        add("isGreaterThan",
+        add("greaterThan",
             (dto, fields) ->
                 new IsGreaterThanConstantConstraint(
                     fields.byId(dto.field),
                     (Number)dto.value));
 
-        add("isGreaterThanOrEqualTo",
+        add("greaterThanOrEqualTo",
             (dto, fields) ->
                 new IsGreaterThanOrEqualToConstantConstraint(
                     fields.byId(dto.field),
                     (Number)dto.value));
 
-        add("isNull",
+        add("null",
             (dto, fields) ->
                 new IsNullConstraint(fields.byId(dto.field)));
 
-        add("isOfType",
+        add("ofType",
             (dto, fields) ->
             {
                 final IsOfTypeConstraint.Types type;

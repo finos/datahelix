@@ -16,8 +16,12 @@ class MainConstraintReader implements IConstraintReader {
         FieldLookup fields)
         throws InvalidProfileException {
 
-        if (dto.type != null) {
-            IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.type);
+        if (dto.is != null) {
+            IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
+
+            if (subReader == null) {
+                throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
+            }
 
             return subReader.apply(dto, fields);
         }

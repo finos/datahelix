@@ -17,6 +17,7 @@ public class ProfileDeserialiserTests {
             "  \"schemaVersion\" : \"v3\"," +
             "  \"fields\": [" +
             "    { \"name\": \"id\" }," +
+            "    { \"name\": \"type\" }," +
             "    { \"name\": \"time\" }," +
             "    { \"name\": \"country\" }," +
             "    { \"name\": \"tariff\" }," +
@@ -24,29 +25,29 @@ public class ProfileDeserialiserTests {
             "    { \"name\": \"high_price\" }" +
             "  ]," +
             "  \"rules\": [" +
-            "    { \"field\": \"id\", \"type\": \"isOfType\", \"value\": \"temporal\" }," +
-            "    { \"not\": { \"field\": \"id\", \"type\": \"not isNull\" } }," +
+            "    { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"temporal\" }," +
+            "    { \"not\": { \"field\": \"id\", \"is\": \"null\" } }," +
 
-            "    { \"field\": \"low_price\", \"type\": \"isOfType\", \"value\": \"numeric\" }," +
-            "    { \"field\": \"low_price\", \"type\": \"not isNull\" }," +
-            "    { \"field\": \"low_price\", \"type\": \"isGreaterThanOrEqual\", \"value\": \"0\" }," +
+            "    { \"field\": \"low_price\", \"is\": \"ofType\", \"value\": \"numeric\" }," +
+            "    { \"not\": { \"field\": \"low_price\", \"is\": \"null\" } }," +
+            "    { \"field\": \"low_price\", \"is\": \"greaterThanOrEqual\", \"value\": \"0\" }," +
 
             "    {" +
             "      \"rule\": \"Some rule\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"country\", \"type\": \"isInSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
+            "        { \"field\": \"country\", \"is\": \"inSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
             "      ]" +
             "    }," +
 
             "    {" +
             "      \"if\": {" +
             "        \"anyOf\": [" +
-            "          { \"field\": \"type\", \"type\": \"isEqualTo\", \"value\": \"USA\" }," +
-            "          { \"field\": \"type\", \"type\": \"isNull\" }" +
+            "          { \"field\": \"type\", \"is\": \"equalTo\", \"value\": \"USA\" }," +
+            "          { \"field\": \"type\", \"is\": \"null\" }" +
             "        ]" +
             "      }," +
-            "      \"then\": { \"field\": \"tariff\", \"type\": \"isNull\" }," +
-            "      \"else\": { \"field\": \"tariff\", \"type\": \"not isNull\" }" +
+            "      \"then\": { \"field\": \"tariff\", \"is\": \"null\" }," +
+            "      \"else\": { \"not\": { \"field\": \"tariff\", \"is\": \"null\" } }" +
             "    }" +
             "  ]" +
             "}";

@@ -33,33 +33,31 @@ Example:
             "rule": "id is a non-nullable string",
             "constraints":
             [
-                { "field": "id", "type": "isOfType", "value": "string" },
-		        { "field": "id", "type": "not isNull" }
+                { "field": "id", "is": "ofType", "value": "string" },
+		        { "not": { "field": "id", "is": "null" } }
             ]
         },
 
         {
             "rule": "low_price is a non-nullable positive integer",
             "constraints": [
-                { "field": "low_price", "type": "isOfType", "value": "numeric" },
-                { "field": "low_price", "type": "not isNull" },
-                { "field": "low_price", "type": "isGreaterThanOrEqual", "value": 0 }
+                { "field": "low_price", "is": "ofType", "value": "numeric" },
+                { "not": { "field": "low_price", "is": "null" } },
+                { "field": "low_price", "is": "greaterThanOrEqual", "value": 0 }
 			]
 		},
 
-		{ "field": "country", "type": "isInSet", "values": [ "USA", "GB", "FRANCE" ] },
+		{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] },
 
 		{
-			"type": "conditional",
-			"if_": {
-				"type": "or",
-				"constraints": [
-					{ "field": "type", "type": "isEqualTo", "value": "USA" },
-					{ "field": "type", "type": "isNull" }
+			"if": {
+				"anyOf": [
+					{ "field": "type", "is": "equalTo", "value": "USA" },
+					{ "field": "type", "is": "null" }
 				]
 			},
-			"then": { "field": "tariff", "type": "isNull" },
-			"else": { "field": "tariff", "type": "not isNull" }
+			"then": { "field": "tariff", "is": "null" },
+			"else": { "not": { "field": "tariff", "is": "null" } }
 		}
 	]
 }

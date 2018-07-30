@@ -26,7 +26,7 @@ public class ProfileSerialiserTests {
         profile.rules = Arrays.asList(
             createConstraintAsRule(c -> {
                 c.field = "typecode";
-                c.type = "isOfType";
+                c.is = "ofType";
                 c.value = "string";
             }),
             createConstraintAsRule(c -> {
@@ -35,23 +35,23 @@ public class ProfileSerialiserTests {
                         createConstraint(cNot -> {
                             cNot.not = createConstraint(c1 -> {
                                 c1.field = "typecode";
-                                c1.type = "isNull";
+                                c1.is = "null";
                             });
                         }),
                         createConstraint(c1 -> {
                             c1.field = "typecode";
-                            c1.type = "isEqualTo";
+                            c1.is = "equalTo";
                             c1.value = "type_001";
                         }));
                 });
                 c.then = createConstraint(then -> {
                     then.field = "price";
-                    then.type = "isGreaterThanOrEqualTo";
+                    then.is = "greaterThanOrEqualTo";
                     then.value = 42.1;
                 });
                 c.else_ = createConstraint(elseCondition -> {
                     elseCondition.field = "price";
-                    elseCondition.type = "isLessThan";
+                    elseCondition.is = "lessThan";
                     elseCondition.value = 42.1;
                 });
             }));
@@ -69,26 +69,18 @@ public class ProfileSerialiserTests {
                     "\"rules\" : [" +
                     "   {" +
                     "       \"field\" : \"typecode\"," +
-                    "       \"type\" : \"isOfType\"," +
+                    "       \"is\" : \"ofType\"," +
                     "       \"value\" : \"string\"" +
                     "   }," +
                     "   {" +
                     "       \"if\" : {" +
                     "           \"anyOf\" : [" +
-                    "               { \"not\": { \"field\" : \"typecode\", \"type\" : \"isNull\" } }," +
-                    "               { \"field\": \"typecode\", \"type\": \"isEqualTo\", \"value\" : \"type_001\" }" +
+                    "               { \"not\": { \"field\" : \"typecode\", \"is\" : \"null\" } }," +
+                    "               { \"field\": \"typecode\", \"is\": \"equalTo\", \"value\" : \"type_001\" }" +
                     "           ]" +
                     "       }," +
-                    "       \"then\" : {" +
-                    "           \"field\" : \"price\"," +
-                    "           \"type\" : \"isGreaterThanOrEqualTo\"," +
-                    "           \"value\" : 42.1" +
-                    "       }," +
-                    "       \"else\" : {" +
-                    "           \"field\" : \"price\"," +
-                    "           \"type\" : \"isLessThan\"," +
-                    "           \"value\" : 42.1" +
-                    "       }" +
+                    "       \"then\" : { \"field\": \"price\", \"is\": \"greaterThanOrEqualTo\", \"value\" : 42.1 }," +
+                    "       \"else\" : { \"field\" : \"price\", \"is\" : \"lessThan\", \"value\" : 42.1 }" +
                     "   }" +
                     "]" +
                 "}"); // normalise the line endings for comparison;
