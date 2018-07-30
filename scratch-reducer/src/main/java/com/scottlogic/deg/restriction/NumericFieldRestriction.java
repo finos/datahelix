@@ -9,9 +9,9 @@ public class NumericFieldRestriction<T extends Number> implements IFieldRestrict
     private final Field field;
     private final Class<T> typeToken;
 
-    public T min;
-    public T max;
-    public Set<T> among;
+    private T min;
+    private T max;
+    private Set<T> among;
 
     public NumericFieldRestriction(Field field, Class<T> typeToken) {
         this.field = field;

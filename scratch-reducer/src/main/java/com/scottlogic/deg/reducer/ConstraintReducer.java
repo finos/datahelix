@@ -15,6 +15,7 @@ public class ConstraintReducer {
     private final FieldRestrictionFactory fieldRestrictionFactory = new FieldRestrictionFactory();
     private final RestrictionApplierFactory restrictionApplierFactory = new RestrictionApplierFactory();
 
+    // TODO: return RowSpec
     public List<IFieldRestriction> getReducedConstraints(Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldConstraints = StreamSupport
                 .stream(constraints.spliterator(), false)
@@ -24,6 +25,11 @@ public class ConstraintReducer {
                 .collect(Collectors.toList());
     }
 
+    // TODO: rename FieldRestriction to FieldSpec
+    // TODO: move nullness, set membership onto FieldSpec
+    // TODO: kill subclasses of IConstraint; use only concrete Constraint, with NumericProperties structure, etc
+    // TODO: numerics need not be excessively typed
+    // TODO: merge rowspecs (or at least put in format that's easy to merge)
     private IFieldRestriction getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
         IFieldRestriction fieldRestriction = null;
         IRestrictionApplier restrictionApplier = null;
