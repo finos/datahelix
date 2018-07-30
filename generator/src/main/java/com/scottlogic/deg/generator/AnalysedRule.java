@@ -1,13 +1,18 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.IConstraintTreeNode;
+import com.scottlogic.deg.generator.constraints.IConstraint;
 
-public class AnalysedRule {
+import java.util.Collection;
+
+public class AnalysedRule extends RuleOption {
     public final String description;
-    public final IConstraintTreeNode constraintRoot;
 
-    public AnalysedRule(String description, IConstraintTreeNode constraintRoot) {
+    public AnalysedRule(String description, Collection<IConstraint> atomicConstraints, Collection<RuleDecision> decisions) {
+        super(atomicConstraints, decisions);
         this.description = description;
-        this.constraintRoot = constraintRoot;
+    }
+
+    public AnalysedRule(String description, RuleOption orig) {
+        this(description, orig.atomicConstraints, orig.decisions);
     }
 }

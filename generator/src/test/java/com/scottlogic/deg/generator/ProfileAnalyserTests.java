@@ -1,11 +1,12 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.*;
-import org.hamcrest.collection.IsIn;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.regex.Pattern;
 
 public class ProfileAnalyserTests {
     @Test
@@ -37,298 +38,336 @@ public class ProfileAnalyserTests {
     }
 
     @Test
-    public void shouldReturnTreeWithRootNodeOnly_IfProfileContainsOneAtomicConstraint() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsEqualToConstantConstraint constraint = new IsEqualToConstantConstraint(field, "0");
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint);
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
+        inputConstraints.add(constraint0);
+        inputConstraints.add(constraint1);
+        inputConstraints.add(constraint2);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
+
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
+        Assert.assertNotNull(testOutput.getAnalysedRules());
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getChildNodes());
-        Assert.assertEquals(0, outputRule.constraintRoot.getChildNodes().size());
+        Assert.assertNotNull(outputRule.decisions);
+        Assert.assertEquals(0, outputRule.decisions.size());
     }
 
     @Test
-    public void shouldReturnTreeWithIsEqualToConstraintInRootNodeAtomicConstraintsCollection() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithAllConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsEqualToConstantConstraint constraint = new IsEqualToConstantConstraint(field, "0");
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint);
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
+        inputConstraints.add(constraint0);
+        inputConstraints.add(constraint1);
+        inputConstraints.add(constraint2);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
+
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
-
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot.getAtomicConstraints());
-        Assert.assertEquals(1, outputRule.constraintRoot.getAtomicConstraints().size());
-        Assert.assertEquals(constraint, outputRule.constraintRoot.getAtomicConstraints().iterator().next());
+        Assert.assertEquals(inputConstraints.size(), outputRule.atomicConstraints.size());
+        for (IConstraint constraint : inputConstraints) {
+            Assert.assertTrue(outputRule.atomicConstraints.contains(constraint));
+        }
     }
 
     @Test
-    public void shouldReturnTreeWithIsGreaterThanConstraintInRootNodeAtomicConstraintsCollection() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint = new IsGreaterThanConstantConstraint(field, 0);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint);
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
+        inputConstraints.add(andConstraint0);
+        inputConstraints.add(constraint2);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
+
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
+        Assert.assertNotNull(testOutput.getAnalysedRules());
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot.getAtomicConstraints());
-        Assert.assertEquals(1, outputRule.constraintRoot.getAtomicConstraints().size());
-        Assert.assertEquals(constraint, outputRule.constraintRoot.getAtomicConstraints().iterator().next());
+        Assert.assertNotNull(outputRule.decisions);
+        Assert.assertEquals(0, outputRule.decisions.size());
     }
 
     @Test
-    public void shouldReturnTreeWithRootNodeOnly_IfRuleConsistsSolelyOfAtomicConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(constraint2);
-        constraintList.add(constraint3);
-
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
+        inputConstraints.add(andConstraint0);
+        inputConstraints.add(constraint2);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
+
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
+        Assert.assertNotNull(testOutput.getAnalysedRules());
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getChildNodes());
-        Assert.assertEquals(0, outputRule.constraintRoot.getChildNodes().size());
+        Assert.assertEquals(3, outputRule.atomicConstraints.size());
+        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint0));
+        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint1));
+        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint2));
     }
 
     @Test
-    public void shouldReturnTreeWithAtomicConstraintsInRootNode_IfRuleConsistsSolelyOfAtomicConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(constraint2);
-        constraintList.add(constraint3);
-
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
+        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        subConstraints = new ArrayList<>();
+        subConstraints.add(constraint2);
+        subConstraints.add(constraint3);
+        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
+        inputConstraints.add(orConstraint0);
+        inputConstraints.add(orConstraint1);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getAtomicConstraints());
-        ArrayList<IConstraint> atomicConstraints = new ArrayList<>(outputRule.constraintRoot.getAtomicConstraints());
-        Assert.assertEquals(3, atomicConstraints.size());
-        Assert.assertTrue(atomicConstraints.contains(constraint1));
-        Assert.assertTrue(atomicConstraints.contains(constraint2));
-        Assert.assertTrue(atomicConstraints.contains(constraint3));
+        Assert.assertEquals(inputConstraints.size(), outputRule.decisions.size());
     }
 
+    // checks (A OR B) AND (C OR D)
     @Test
-    public void shouldReturnTreeWithRootNodeOnly_IfRuleConsistsSolelyOfAtomicConstraintsAndAndConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        ArrayList<IConstraint> subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint2);
-        subConstraintList.add(constraint3);
-        AndConstraint andConstraint = new AndConstraint(subConstraintList);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(andConstraint);
-
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
+        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        subConstraints = new ArrayList<>();
+        subConstraints.add(constraint2);
+        subConstraints.add(constraint3);
+        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
+        inputConstraints.add(orConstraint0);
+        inputConstraints.add(orConstraint1);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getChildNodes());
-        Assert.assertEquals(0, outputRule.constraintRoot.getChildNodes().size());
+        Assert.assertEquals(0, outputRule.atomicConstraints.size());
     }
 
+    // checks (A OR B) AND (C OR D)
     @Test
-    public void shouldReturnTreeWithAtomicConstraintsInRootNode_IfRuleConsistsSolelyOfAtomicConstraintsAndAndConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        ArrayList<IConstraint> subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint2);
-        subConstraintList.add(constraint3);
-        AndConstraint andConstraint = new AndConstraint(subConstraintList);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(andConstraint);
-
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
+        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        subConstraints = new ArrayList<>();
+        subConstraints.add(constraint2);
+        subConstraints.add(constraint3);
+        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
+        inputConstraints.add(orConstraint0);
+        inputConstraints.add(orConstraint1);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getAtomicConstraints());
-        ArrayList<IConstraint> atomicConstraints = new ArrayList<>(outputRule.constraintRoot.getAtomicConstraints());
-        Assert.assertEquals(3, atomicConstraints.size());
-        Assert.assertTrue(atomicConstraints.contains(constraint1));
-        Assert.assertTrue(atomicConstraints.contains(constraint2));
-        Assert.assertTrue(atomicConstraints.contains(constraint3));
+        Iterator<RuleDecision> decisionIterator = outputRule.decisions.iterator();
+        RuleDecision decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.options.size());
+        Iterator<RuleOption> optionIterator = decision.options.iterator();
+        RuleOption option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint0);
+        option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint1);
+        decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.options.size());
+        optionIterator = decision.options.iterator();
+        option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint2);
+        option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint3);
     }
 
+    // Checks (A OR (B AND C)) AND (D OR E)
     @Test
-    public void shouldReturnTreeWithRootNodeOnly_IfRuleConsistsSolelyOfAtomicConstraintsAndNestedAndConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        IsGreaterThanConstantConstraint constraint4 = new IsGreaterThanConstantConstraint(field, 7);
-        ArrayList<IConstraint> subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint2);
-        subConstraintList.add(constraint3);
-        AndConstraint andConstraint1 = new AndConstraint(subConstraintList);
-        subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint1);
-        subConstraintList.add(constraint4);
-        AndConstraint andConstraint2 = new AndConstraint(subConstraintList);
-        subConstraintList = new ArrayList<>();
-        subConstraintList.add(andConstraint1);
-        subConstraintList.add(andConstraint2);
-        AndConstraint andConstraint0 = new AndConstraint(subConstraintList);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(andConstraint0);
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsGreaterThanConstantConstraint constraint4 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5);
+        ArrayList<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint4);
+        subConstraints.add(constraint1);
+        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
+        subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(andConstraint0);
+        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
+        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        subConstraints = new ArrayList<>();
+        subConstraints.add(constraint2);
+        subConstraints.add(constraint3);
+        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
+        inputConstraints.add(orConstraint0);
+        inputConstraints.add(orConstraint1);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getChildNodes());
-        Assert.assertEquals(0, outputRule.constraintRoot.getChildNodes().size());
+        Iterator<RuleDecision> decisionIterator = outputRule.decisions.iterator();
+        RuleDecision decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.options.size());
+        Iterator<RuleOption> optionIterator = decision.options.iterator();
+        RuleOption option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint0);
+        option = optionIterator.next();
+        Assert.assertEquals(0, option.decisions.size());
+        Assert.assertEquals(2, option.atomicConstraints.size());
+        Assert.assertTrue(option.atomicConstraints.contains(constraint4));
+        Assert.assertTrue(option.atomicConstraints.contains(constraint1));
+        decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.options.size());
+        optionIterator = decision.options.iterator();
+        option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint2);
+        option = optionIterator.next();
+        assertOptionContainsSingleConstraint(option, constraint3);
     }
 
+    // Checks IF (A) THEN B ELSE C
     @Test
-    public void shouldReturnTreeWitAtomicConstraintsInRootNode_IfRuleConsistsSolelyOfAtomicConstraintsAndNestedAndConstraints() {
-        Field field = new Field("test");
+    public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        IsGreaterThanConstantConstraint constraint4 = new IsGreaterThanConstantConstraint(field, 7);
-        ArrayList<IConstraint> subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint2);
-        subConstraintList.add(constraint3);
-        AndConstraint andConstraint1 = new AndConstraint(subConstraintList);
-        subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint1);
-        subConstraintList.add(constraint4);
-        AndConstraint andConstraint2 = new AndConstraint(subConstraintList);
-        subConstraintList = new ArrayList<>();
-        subConstraintList.add(andConstraint1);
-        subConstraintList.add(andConstraint2);
-        AndConstraint andConstraint0 = new AndConstraint(subConstraintList);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(andConstraint0);
-        Rule rule = new Rule("test", constraintList);
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
+        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraint0, constraint1, constraint2);
+        inputConstraints.add(conditionalConstraint);
+        Rule testRule = new Rule("test", inputConstraints);
         ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
+        ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
         ProfileAnalyser testObject = new ProfileAnalyser();
 
         IAnalysedProfile testOutput = testObject.analyse(testInput);
 
         AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot);
-        Assert.assertNotNull(outputRule.constraintRoot.getAtomicConstraints());
-        ArrayList<IConstraint> atomicConstraints = new ArrayList<>(outputRule.constraintRoot.getAtomicConstraints());
-        Assert.assertEquals(4, atomicConstraints.size());
-        Assert.assertTrue(atomicConstraints.contains(constraint1));
-        Assert.assertTrue(atomicConstraints.contains(constraint2));
-        Assert.assertTrue(atomicConstraints.contains(constraint3));
-        Assert.assertTrue(atomicConstraints.contains(constraint4));
+        Assert.assertEquals(0, outputRule.atomicConstraints.size());
+        Assert.assertEquals(1, outputRule.decisions.size());
+        RuleDecision decision = outputRule.decisions.iterator().next();
+        Assert.assertEquals(2, decision.options.size());
+        Iterator<RuleOption> iterator = decision.options.iterator();
+        RuleOption option = iterator.next();
+        Assert.assertTrue(option.atomicConstraints.contains(constraint0));
+        Assert.assertTrue(option.atomicConstraints.contains(constraint1));
+        option = iterator.next();
+        Assert.assertTrue(option.atomicConstraints.contains(constraint2));
+        IConstraint constraint = option.atomicConstraints.iterator().next();
+        Assert.assertTrue(constraint instanceof NotConstraint);
+        Assert.assertEquals(constraint0, ((NotConstraint)constraint).negatedConstraint);
     }
 
-    @Test
-    public void shouldReturnTreeWithOneChildNode_IfRuleContainsOneOrConstraint() {
-        Field field = new Field("test");
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(field);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(field, 0);
-        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field, 5);
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(field, 8);
-        ArrayList<IConstraint> subConstraintList = new ArrayList<>();
-        subConstraintList.add(constraint2);
-        subConstraintList.add(constraint3);
-        OrConstraint orConstraint1 = new OrConstraint(subConstraintList);
-        ArrayList<IConstraint> constraintList = new ArrayList<>();
-        constraintList.add(constraint1);
-        constraintList.add(orConstraint1);
-        Rule rule = new Rule("test", constraintList);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(rule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
-
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
-
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.constraintRoot.getChildNodes());
-        Assert.assertEquals(2, outputRule.constraintRoot.getChildNodes().size());
-        Assert.assertEquals(0, outputRule.constraintRoot.getChildNodes().iterator().next().getChildNodes().size());
+    private void assertOptionContainsSingleConstraint(RuleOption option, IConstraint constraint) {
+        Assert.assertEquals(0, option.decisions.size());
+        Assert.assertEquals(1, option.atomicConstraints.size());
+        Assert.assertTrue(option.atomicConstraints.contains(constraint));
     }
 }

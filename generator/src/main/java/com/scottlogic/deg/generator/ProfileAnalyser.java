@@ -4,8 +4,6 @@ import com.scottlogic.deg.generator.constraints.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProfileAnalyser implements IProfileAnalyser {
     @Override
@@ -18,105 +16,92 @@ public class ProfileAnalyser implements IProfileAnalyser {
     }
 
     private AnalysedRule analyseRule(Rule rule) {
-        IConstraintTreeNode root = getNodeForConstraintCollection(rule.constraints);
-        root = flattenTree(root);
-        return new AnalysedRule(rule.description, root);
+        return new AnalysedRule(rule.description, getRuleOptionForConstraintCollection(rule.constraints));
     }
 
     private boolean isConstraintAtomic(IConstraint constraint) {
-        if (constraint instanceof AndConstraint ||
-                constraint instanceof OrConstraint ||
-                constraint instanceof ConditionalConstraint) {
+        if (constraint instanceof AndConstraint || isConstraintDecisionPoint(constraint)) {
             return false;
         }
         return true;
     }
 
-    private IConstraintTreeNode getNodeForConstraint(IConstraint constraint) {
+    private boolean isConstraintDecisionPoint(IConstraint constraint) {
+        return (constraint instanceof OrConstraint || constraint instanceof ConditionalConstraint);
+    }
+
+    private RuleOption getRuleOptionForConstraint(IConstraint constraint) {
         if (isConstraintAtomic(constraint)) {
-            return new ConstraintTreeNode(constraint);
+            return new RuleOption(constraint);
         }
-        if (constraint instanceof AndConstraint) {
-            return getNodeForAndConstraint((AndConstraint)constraint);
+        if (isConstraintDecisionPoint(constraint)) {
+            return new RuleOption(getRuleDecisionForConstraint(constraint));
         }
-        if (constraint instanceof OrConstraint) {
-            return getNodeForOrConstraint((OrConstraint)constraint);
+        else { // is AndConstraint
+            return getRuleOptionForAndConstraint((AndConstraint)constraint);
         }
-        if (constraint instanceof ConditionalConstraint) {
-            return getNodeForConditionalConstraint((ConditionalConstraint)constraint);
-        }
-
-        // never reached
-        return null;
     }
 
-    private IConstraintTreeNode getNodeForTwoConstraints(IConstraint constraintA, IConstraint constraintB) {
-        return getNodeForConstraint(constraintA).merge(getNodeForConstraint(constraintB));
+    private RuleOption getRuleOptionForTwoConstraints(IConstraint constraintA, IConstraint constraintB) {
+        return getRuleOptionForConstraint(constraintA).merge(getRuleOptionForConstraint(constraintB));
     }
 
-    private IConstraintTreeNode getNodeForAndConstraint(AndConstraint constraint) {
-        return getNodeForConstraintCollection(constraint.subConstraints);
-    }
-
-    private IConstraintTreeNode getNodeForConstraintCollection(Collection<IConstraint> constraintCollection) {
-        Collection<IConstraintTreeNode> nodeTips = new ArrayList<>();
-        ConstraintTreeNode node = new ConstraintTreeNode();
-        nodeTips.add(node);
+    private RuleOption getRuleOptionForConstraintCollection(Collection<IConstraint> constraintCollection) {
+        ArrayList<IConstraint> atomicConstraints = new ArrayList<>();
+        ArrayList<RuleDecision> decisions = new ArrayList<>();
+        ArrayList<RuleOption> mergeableOptions = new ArrayList<>();
         for (IConstraint subConstraint : constraintCollection) {
             if (isConstraintAtomic(subConstraint)) {
-                node.addAtomicConstraint(subConstraint);
+                atomicConstraints.add(subConstraint);
             }
-            else {
-                IConstraintTreeNode newChild = getNodeForConstraint(subConstraint);
-                addChildConstraintToAllNodes(newChild, nodeTips);
-                if (newChild.getChildNodes().size() > 0) {
-                    nodeTips = newChild.getChildNodes();
-                }
-                else {
-                    nodeTips = new ArrayList<>();
-                    nodeTips.add(newChild);
-                }
+            else if (isConstraintDecisionPoint(subConstraint)) {
+                decisions.add(getRuleDecisionForConstraint(subConstraint));
+            }
+            else { // is AndConstraint
+                mergeableOptions.add(getRuleOptionForAndConstraint((AndConstraint)subConstraint));
             }
         }
-        return node;
-    }
-
-    private void addChildConstraintToAllNodes(IConstraintTreeNode child, Collection<IConstraintTreeNode> nodes) {
-        for (IConstraintTreeNode node : nodes) {
-            node.addChild(child);
+        RuleOption option = new RuleOption(atomicConstraints, decisions);
+        for (RuleOption toMerge : mergeableOptions) {
+            option.merge(toMerge);
         }
+
+        return option;
     }
 
-    private IConstraintTreeNode getNodeForOrConstraint(OrConstraint constraint) {
-        ConstraintTreeNode node = new ConstraintTreeNode();
+
+    private RuleDecision getRuleDecisionForConstraint(IConstraint constraint) {
+        if (constraint instanceof OrConstraint) {
+            return getRuleDecisionForOrConstraint((OrConstraint)constraint);
+        }
+        if (constraint instanceof ConditionalConstraint) {
+            return getRuleDecisionForConditionalConstraint((ConditionalConstraint)constraint);
+        }
+        throw new IllegalStateException("This code should never be reached.");
+    }
+
+    private RuleOption getRuleOptionForAndConstraint(AndConstraint constraint) {
+        return getRuleOptionForConstraintCollection(constraint.subConstraints);
+    }
+
+    private RuleDecision getRuleDecisionForOrConstraint(OrConstraint constraint) {
+        ArrayList<RuleOption> options = new ArrayList<>();
         for (IConstraint subConstraint : constraint.subConstraints) {
-            node.addChild(getNodeForConstraint(subConstraint));
+            options.add(getRuleOptionForConstraint(subConstraint));
         }
-        return node;
+        return new RuleDecision(options);
     }
 
-    private IConstraintTreeNode getNodeForConditionalConstraint(ConditionalConstraint constraint) {
-        IConstraintTreeNode nodeBranchWhen = getNodeForTwoConstraints(constraint.condition, constraint.whenConditionIsTrue);
-        IConstraintTreeNode nodeBranchWhenNot;
+    private RuleDecision getRuleDecisionForConditionalConstraint(ConditionalConstraint constraint) {
+        RuleOption branchWhen = getRuleOptionForTwoConstraints(constraint.condition, constraint.whenConditionIsTrue);
+        RuleOption branchWhenNot;
         NotConstraint negatedCondition = new NotConstraint(constraint.condition);
         if (constraint.whenConditionIsFalse == null) {
-            nodeBranchWhenNot = getNodeForConstraint(negatedCondition);
+            branchWhenNot = getRuleOptionForConstraint(negatedCondition);
         }
         else {
-            nodeBranchWhenNot = getNodeForTwoConstraints(negatedCondition, constraint.whenConditionIsFalse);
+            branchWhenNot = getRuleOptionForTwoConstraints(negatedCondition, constraint.whenConditionIsFalse);
         }
-        return new ConstraintTreeNode(nodeBranchWhen, nodeBranchWhenNot);
-    }
-
-    private IConstraintTreeNode flattenTree(IConstraintTreeNode root) {
-        for (IConstraintTreeNode node : root.getChildNodes()) {
-            flattenTree(node);
-        }
-        if (root.getChildNodes().size() == 1) {
-            IConstraintTreeNode onlyChild = root.getChildNodes().get(0);
-            root.getChildNodes().remove(0);
-            root.merge(onlyChild);
-        }
-        return root;
+        return new RuleDecision(branchWhen, branchWhenNot);
     }
 }
