@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.NotConstraint;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -138,6 +139,37 @@ public class ProfileReaderTests {
                         c -> Assert.assertThat(
                             c.requiredType,
                             equalTo(IsOfTypeConstraint.Types.String))));
+            });
+    }
+
+    @Test
+    public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
+        // Arrange
+        ProfileReader objectUnderTest = new ProfileReader();
+        String profileJson =
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"not\": { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+            "    ]" +
+            "}";
+
+        // Act
+        Profile actualResult =  objectUnderTest.read(profileJson);
+
+        // Assert
+        expectMany(actualResult.rules,
+            rule -> {
+                expectMany(rule.constraints,
+                    constraint -> expectTyped(
+                        constraint,
+                        NotConstraint.class,
+                        c -> {
+                            Assert.assertThat(
+                                c.negatedConstraint,
+                                instanceOf(IsOfTypeConstraint.class));
+                        }));
             });
     }
 

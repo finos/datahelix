@@ -27,7 +27,7 @@ class MainConstraintReader implements IConstraintReader {
         }
 
         if (dto.not != null) {
-            return new NotConstraint(this.apply(dto, fields));
+            return new NotConstraint(this.apply(dto.not, fields));
         }
 
         if (dto.allOf != null) {
