@@ -6,7 +6,7 @@ public class AndConstraint implements IConstraint
 {
     public final Collection<IConstraint> subConstraints;
 
-    AndConstraint(Collection<IConstraint> subConstraints)
+    public AndConstraint(Collection<IConstraint> subConstraints)
     {
         this.subConstraints = subConstraints;
     }
