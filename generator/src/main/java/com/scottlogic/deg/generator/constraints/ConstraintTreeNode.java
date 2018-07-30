@@ -36,12 +36,12 @@ public class ConstraintTreeNode implements IConstraintTreeNode {
 
     @Override
     public Collection<IConstraint> getAtomicConstraints() {
-        return new ArrayList<>(atomicConstraints);
+        return atomicConstraints;
     }
 
     @Override
     public List<IConstraintTreeNode> getChildNodes() {
-        return new ArrayList<>(childNodes);
+        return childNodes;
     }
 
     @Override

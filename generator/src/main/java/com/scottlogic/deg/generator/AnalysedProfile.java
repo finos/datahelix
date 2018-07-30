@@ -1,19 +1,22 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.IConstraintTreeNode;
-
 import java.util.Collection;
 
 public class AnalysedProfile implements IAnalysedProfile {
     private Collection<Field> fields;
-    private IConstraintTreeNode treeRoot;
+    private Collection<AnalysedRule> rules;
+
+    public AnalysedProfile(Collection<Field> fields, Collection<AnalysedRule> rules) {
+        this.fields = fields;
+        this.rules = rules;
+    }
 
     @Override
     public Collection<Field> getFields() {
         return fields;
     }
 
-    public IConstraintTreeNode getConstraintTreeRoot() {
-        return treeRoot;
+    public Collection<AnalysedRule> getAnalysedRules() {
+        return rules;
     }
 }

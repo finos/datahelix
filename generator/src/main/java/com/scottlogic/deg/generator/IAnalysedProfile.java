@@ -8,5 +8,5 @@ public interface IAnalysedProfile {
 
     Collection<Field> getFields();
 
-    IConstraintTreeNode getConstraintTreeRoot();
+    Collection<AnalysedRule> getAnalysedRules();
 }

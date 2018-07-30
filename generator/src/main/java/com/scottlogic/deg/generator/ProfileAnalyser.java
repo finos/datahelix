@@ -10,7 +10,17 @@ import java.util.stream.Collectors;
 public class ProfileAnalyser implements IProfileAnalyser {
     @Override
     public IAnalysedProfile analyse(Profile profile) {
-        return null;
+        ArrayList<AnalysedRule> analysedRules = new ArrayList<>();
+        for (Rule rule : profile.rules) {
+            analysedRules.add(analyseRule(rule));
+        }
+        return new AnalysedProfile(new ArrayList<>(profile.fields), analysedRules);
+    }
+
+    private AnalysedRule analyseRule(Rule rule) {
+        IConstraintTreeNode root = getNodeForConstraintCollection(rule.constraints);
+        root = flattenTree(root);
+        return new AnalysedRule(rule.description, root);
     }
 
     private boolean isConstraintAtomic(IConstraint constraint) {
@@ -20,11 +30,6 @@ public class ProfileAnalyser implements IProfileAnalyser {
             return false;
         }
         return true;
-    }
-
-    private IConstraintTreeNode getNodeForRuleCollection(Collection<Rule> rule) {
-        List<IConstraint> allConstraints = rule.stream().flatMap(r -> r.constraints.stream()).collect(Collectors.toList());
-        return getNodeForAndConstraint(allConstraints);
     }
 
     private IConstraintTreeNode getNodeForConstraint(IConstraint constraint) {
@@ -50,10 +55,10 @@ public class ProfileAnalyser implements IProfileAnalyser {
     }
 
     private IConstraintTreeNode getNodeForAndConstraint(AndConstraint constraint) {
-        return getNodeForAndConstraint(constraint.subConstraints);
+        return getNodeForConstraintCollection(constraint.subConstraints);
     }
 
-    private IConstraintTreeNode getNodeForAndConstraint(Collection<IConstraint> constraintCollection) {
+    private IConstraintTreeNode getNodeForConstraintCollection(Collection<IConstraint> constraintCollection) {
         Collection<IConstraintTreeNode> nodeTips = new ArrayList<>();
         ConstraintTreeNode node = new ConstraintTreeNode();
         nodeTips.add(node);
@@ -64,7 +69,13 @@ public class ProfileAnalyser implements IProfileAnalyser {
             else {
                 IConstraintTreeNode newChild = getNodeForConstraint(subConstraint);
                 addChildConstraintToAllNodes(newChild, nodeTips);
-                nodeTips = newChild.getChildNodes();
+                if (newChild.getChildNodes().size() > 0) {
+                    nodeTips = newChild.getChildNodes();
+                }
+                else {
+                    nodeTips = new ArrayList<>();
+                    nodeTips.add(newChild);
+                }
             }
         }
         return node;
@@ -98,13 +109,13 @@ public class ProfileAnalyser implements IProfileAnalyser {
     }
 
     private IConstraintTreeNode flattenTree(IConstraintTreeNode root) {
+        for (IConstraintTreeNode node : root.getChildNodes()) {
+            flattenTree(node);
+        }
         if (root.getChildNodes().size() == 1) {
             IConstraintTreeNode onlyChild = root.getChildNodes().get(0);
             root.getChildNodes().remove(0);
             root.merge(onlyChild);
-        }
-        for (IConstraintTreeNode node : root.getChildNodes()) {
-            flattenTree(node);
         }
         return root;
     }
