@@ -18,6 +18,6 @@ public class ConstraintTypeClassifier {
         if (!typeMapping.containsKey(constraint.getClass())) {
             return ConstraintType.Generic;
         }
-        return typeMapping.get(constraint);
+        return typeMapping.get(constraint.getClass());
     }
 }

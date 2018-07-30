@@ -3,7 +3,6 @@ package com.scottlogic.deg.reducer;
 import com.scottlogic.deg.constraint.IConstraint;
 import com.scottlogic.deg.input.Field;
 import com.scottlogic.deg.restriction.IFieldRestriction;
-import com.scottlogic.deg.restriction.StringFieldRestriction;
 
 public class FieldRestrictionFactory {
     private final ConstraintTypeClassifier constraintTypeClassifier = new ConstraintTypeClassifier();

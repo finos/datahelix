@@ -8,7 +8,7 @@ public class NumericLimitConstConstraint<T extends Number> implements IConstrain
     private final LimitType limitType;
     private final Class<T> typeToken;
 
-    enum LimitType { Min, Max }
+    public enum LimitType { Min, Max }
 
     public NumericLimitConstConstraint(Field field, T limit, LimitType limitType, Class<T> typeToken) {
         this.field = field;
@@ -19,5 +19,18 @@ public class NumericLimitConstConstraint<T extends Number> implements IConstrain
 
     public Field getField() { return field; }
 
+    public T getLimit() {
+        return limit;
+    }
+
+    public LimitType getLimitType() {
+        return limitType;
+    }
+
+    @Override
     public Class<T> getTypeToken() { return typeToken; }
+
+    @Override
+    public Class<T> getNumericTypeToken() { return typeToken; }
+
 }

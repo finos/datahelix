@@ -12,9 +12,9 @@ public class NumericFieldRestrictionFactory {
         final var constraintType = numericConstraintTypeClassifier.classify(constraint);
         switch(constraintType) {
             case Integer:
-                return new NumericFieldRestriction<Integer>(field);
+                return new NumericFieldRestriction<Integer>(field, Integer.class);
             case Double:
-                return new NumericFieldRestriction<Double>(field);
+                return new NumericFieldRestriction<Double>(field, Double.class);
             default:
                 throw new IllegalStateException();
         }

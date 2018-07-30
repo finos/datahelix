@@ -12,4 +12,12 @@ public class StringFieldRestriction implements IFieldRestriction {
     }
 
     public Set<String> among;
+
+    public Set<String> getAmong() {
+        return among;
+    }
+
+    public void setAmong(Set<String> among) {
+        this.among = among;
+    }
 }

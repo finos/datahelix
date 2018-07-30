@@ -1,7 +1,6 @@
 package com.scottlogic.deg.reducer;
 
 import com.scottlogic.deg.constraint.IConstraint;
-import com.scottlogic.deg.constraint.IHasNumericTypeToken;
 import com.scottlogic.deg.constraint.IHasTypeToken;
 
 import java.util.Map;
@@ -12,7 +11,7 @@ public class GenericConstraintTypeClassifier {
     );
 
     public GenericConstraintType classify(IConstraint constraint) {
-        if (!(constraint instanceof IHasNumericTypeToken)) {
+        if (!(constraint instanceof IHasTypeToken)) {
             throw new IllegalStateException();
         }
         final var hasTypeToken = (IHasTypeToken<?>) constraint;
