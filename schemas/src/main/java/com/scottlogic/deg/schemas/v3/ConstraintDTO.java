@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Collection;
 
-@JsonPropertyOrder({ "type", "field", "value", "if", "then", "else" })
+@JsonPropertyOrder({ "field", "type", "value", "if", "then", "else" })
 public class ConstraintDTO {
     public String type;
 
@@ -20,6 +20,9 @@ public class ConstraintDTO {
 
     /** a set of values - eg, used in isInSet */
     public Collection<Object> values;
+
+    /** a constraint to negate - this property should only appear alone */
+    public ConstraintDTO not;
 
     /** a set of subconstraints - used in or/and */
     public Collection<ConstraintDTO> anyOf;

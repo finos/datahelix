@@ -32,9 +32,11 @@ public class ProfileSerialiserTests {
             createConstraintAsRule(c -> {
                 c.if_ = createConstraint(condition -> {
                     condition.anyOf = Arrays.asList(
-                        createConstraint(c1 -> {
-                            c1.field = "typecode";
-                            c1.type = "not isNull";
+                        createConstraint(cNot -> {
+                            cNot.not = createConstraint(c1 -> {
+                                c1.field = "typecode";
+                                c1.type = "isNull";
+                            });
                         }),
                         createConstraint(c1 -> {
                             c1.field = "typecode";
@@ -66,32 +68,25 @@ public class ProfileSerialiserTests {
                     "]," +
                     "\"rules\" : [" +
                     "   {" +
-                    "       \"type\" : \"isOfType\"," +
                     "       \"field\" : \"typecode\"," +
+                    "       \"type\" : \"isOfType\"," +
                     "       \"value\" : \"string\"" +
                     "   }," +
                     "   {" +
                     "       \"if\" : {" +
                     "           \"anyOf\" : [" +
-                    "               {" +
-                    "                   \"type\" : \"not isNull\"," +
-                    "                   \"field\" : \"typecode\"" +
-                    "               }," +
-                    "               {" +
-                    "                   \"type\" : \"isEqualTo\"," +
-                    "                   \"field\" : \"typecode\"," +
-                    "                   \"value\" : \"type_001\"" +
-                    "               }" +
+                    "               { \"not\": { \"field\" : \"typecode\", \"type\" : \"isNull\" } }," +
+                    "               { \"field\": \"typecode\", \"type\": \"isEqualTo\", \"value\" : \"type_001\" }" +
                     "           ]" +
                     "       }," +
                     "       \"then\" : {" +
-                    "           \"type\" : \"isGreaterThanOrEqualTo\"," +
                     "           \"field\" : \"price\"," +
+                    "           \"type\" : \"isGreaterThanOrEqualTo\"," +
                     "           \"value\" : 42.1" +
                     "       }," +
                     "       \"else\" : {" +
-                    "           \"type\" : \"isLessThan\"," +
                     "           \"field\" : \"price\"," +
+                    "           \"type\" : \"isLessThan\"," +
                     "           \"value\" : 42.1" +
                     "       }" +
                     "   }" +

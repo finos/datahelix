@@ -17,7 +17,13 @@ class MainConstraintReader implements IConstraintReader {
         throws InvalidProfileException {
 
         if (dto.type != null) {
-            return this.readAtomic(dto, fields);
+            IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.type);
+
+            return subReader.apply(dto, fields);
+        }
+
+        if (dto.not != null) {
+            return new NotConstraint(this.apply(dto, fields));
         }
 
         if (dto.allOf != null) {
@@ -52,42 +58,5 @@ class MainConstraintReader implements IConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
-    }
-
-    private IConstraint readAtomic(
-        ConstraintDTO dto,
-        FieldLookup fields)
-        throws InvalidProfileException {
-
-        String[] splitConstraintType = dto.type.split("\\s+");
-
-        final String typeCode;
-        final boolean isNegated;
-
-        if (splitConstraintType.length > 2) {
-            throw new InvalidProfileException("Constraint type " + dto.type + " is not valid");
-        }
-
-        if (splitConstraintType.length == 1) {
-            typeCode = splitConstraintType[0];
-            isNegated = false;
-        }
-        else {
-            typeCode = splitConstraintType[1];
-
-            if (!splitConstraintType[0].equals("not"))
-                throw new InvalidProfileException("Constraint type " + dto.type + " is not valid");
-
-            isNegated = true;
-        }
-
-        IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(typeCode);
-
-        IConstraint baseConstraint = subReader.apply(dto, fields);
-
-        if (isNegated)
-            return new NotConstraint(baseConstraint);
-        else
-            return baseConstraint;
     }
 }

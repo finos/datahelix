@@ -25,7 +25,7 @@ public class ProfileDeserialiserTests {
             "  ]," +
             "  \"rules\": [" +
             "    { \"field\": \"id\", \"type\": \"isOfType\", \"value\": \"temporal\" }," +
-            "    { \"field\": \"id\", \"type\": \"not isNull\" }," +
+            "    { \"not\": { \"field\": \"id\", \"type\": \"not isNull\" } }," +
 
             "    { \"field\": \"low_price\", \"type\": \"isOfType\", \"value\": \"numeric\" }," +
             "    { \"field\": \"low_price\", \"type\": \"not isNull\" }," +
