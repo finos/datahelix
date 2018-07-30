@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ProfileSerialiserTests {
     @Test
@@ -25,14 +26,12 @@ public class ProfileSerialiserTests {
         profile.rules = Arrays.asList(
             createConstraintAsRule(c -> {
                 c.field = "typecode";
-                c.type = "ifOfType";
+                c.type = "isOfType";
                 c.value = "string";
             }),
             createConstraintAsRule(c -> {
-                c.type = "if";
-                c.condition = createConstraint(condition -> {
-                    condition.type = "or";
-                    condition.constraints = Arrays.asList(
+                c.if_ = createConstraint(condition -> {
+                    condition.anyOf = Arrays.asList(
                         createConstraint(c1 -> {
                             c1.field = "typecode";
                             c1.type = "not isNull";
@@ -48,91 +47,61 @@ public class ProfileSerialiserTests {
                     then.type = "isGreaterThanOrEqualTo";
                     then.value = 42.1;
                 });
-                c.elseCondition = createConstraint(elseCondition -> {
+                c.else_ = createConstraint(elseCondition -> {
                     elseCondition.field = "price";
                     elseCondition.type = "isLessThan";
                     elseCondition.value = 42.1;
                 });
             }));
 
+        Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
+
         final String expectedJson =
-            "{\n" +
-            "  \"schemaVersion\" : \"v3\",\n" +
-            "  \"fields\" : [ {\n" +
-            "    \"name\" : \"typecode\"\n" +
-            "  }, {\n" +
-            "    \"name\" : \"price\"\n" +
-            "  } ],\n" +
-            "  \"rules\" : [ {\n" +
-            "    \"type\" : \"ifOfType\",\n" +
-            "    \"field\" : \"typecode\",\n" +
-            "    \"value\" : \"string\",\n" +
-            "    \"values\" : null,\n" +
-            "    \"constraints\" : null,\n" +
-            "    \"condition\" : null,\n" +
-            "    \"then\" : null,\n" +
-            "    \"else\" : null\n" +
-            "  }, {\n" +
-            "    \"type\" : \"if\",\n" +
-            "    \"field\" : null,\n" +
-            "    \"value\" : null,\n" +
-            "    \"values\" : null,\n" +
-            "    \"constraints\" : null,\n" +
-            "    \"condition\" : {\n" +
-            "      \"type\" : \"or\",\n" +
-            "      \"field\" : null,\n" +
-            "      \"value\" : null,\n" +
-            "      \"values\" : null,\n" +
-            "      \"constraints\" : [ {\n" +
-            "        \"type\" : \"not isNull\",\n" +
-            "        \"field\" : \"typecode\",\n" +
-            "        \"value\" : null,\n" +
-            "        \"values\" : null,\n" +
-            "        \"constraints\" : null,\n" +
-            "        \"condition\" : null,\n" +
-            "        \"then\" : null,\n" +
-            "        \"else\" : null\n" +
-            "      }, {\n" +
-            "        \"type\" : \"isEqualTo\",\n" +
-            "        \"field\" : \"typecode\",\n" +
-            "        \"value\" : \"type_001\",\n" +
-            "        \"values\" : null,\n" +
-            "        \"constraints\" : null,\n" +
-            "        \"condition\" : null,\n" +
-            "        \"then\" : null,\n" +
-            "        \"else\" : null\n" +
-            "      } ],\n" +
-            "      \"condition\" : null,\n" +
-            "      \"then\" : null,\n" +
-            "      \"else\" : null\n" +
-            "    },\n" +
-            "    \"then\" : {\n" +
-            "      \"type\" : \"isGreaterThanOrEqualTo\",\n" +
-            "      \"field\" : \"price\",\n" +
-            "      \"value\" : 42.1,\n" +
-            "      \"values\" : null,\n" +
-            "      \"constraints\" : null,\n" +
-            "      \"condition\" : null,\n" +
-            "      \"then\" : null,\n" +
-            "      \"else\" : null\n" +
-            "    },\n" +
-            "    \"else\" : {\n" +
-            "      \"type\" : \"isLessThan\",\n" +
-            "      \"field\" : \"price\",\n" +
-            "      \"value\" : 42.1,\n" +
-            "      \"values\" : null,\n" +
-            "      \"constraints\" : null,\n" +
-            "      \"condition\" : null,\n" +
-            "      \"then\" : null,\n" +
-            "      \"else\" : null\n" +
-            "    }\n" +
-            "  } ]\n" +
-            "}";
+            normalise.apply(
+                "{" +
+                    "\"schemaVersion\" : \"v3\"," +
+                    "\"fields\" : [" +
+                    "   { \"name\" : \"typecode\" }," +
+                    "   { \"name\" : \"price\" }" +
+                    "]," +
+                    "\"rules\" : [" +
+                    "   {" +
+                    "       \"type\" : \"isOfType\"," +
+                    "       \"field\" : \"typecode\"," +
+                    "       \"value\" : \"string\"" +
+                    "   }," +
+                    "   {" +
+                    "       \"if\" : {" +
+                    "           \"anyOf\" : [" +
+                    "               {" +
+                    "                   \"type\" : \"not isNull\"," +
+                    "                   \"field\" : \"typecode\"" +
+                    "               }," +
+                    "               {" +
+                    "                   \"type\" : \"isEqualTo\"," +
+                    "                   \"field\" : \"typecode\"," +
+                    "                   \"value\" : \"type_001\"" +
+                    "               }" +
+                    "           ]" +
+                    "       }," +
+                    "       \"then\" : {" +
+                    "           \"type\" : \"isGreaterThanOrEqualTo\"," +
+                    "           \"field\" : \"price\"," +
+                    "           \"value\" : 42.1" +
+                    "       }," +
+                    "       \"else\" : {" +
+                    "           \"type\" : \"isLessThan\"," +
+                    "           \"field\" : \"price\"," +
+                    "           \"value\" : 42.1" +
+                    "       }" +
+                    "   }" +
+                    "]" +
+                "}"); // normalise the line endings for comparison;
 
         // Act
-        final String actualJson = new ProfileSerialiser()
-            .serialise(profile)
-            .replace("\r\n", "\n"); // normalise the line endings for comparison
+        final String actualJson = normalise.apply(
+                new ProfileSerialiser()
+                    .serialise(profile));
 
         // Assert
         Assert.assertThat(actualJson, Is.is(expectedJson));

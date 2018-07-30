@@ -39,10 +39,8 @@ public class ProfileDeserialiserTests {
             "    }," +
 
             "    {" +
-            "      \"type\": \"if\"," +
-            "      \"condition\": {" +
-            "        \"type\": \"or\"," +
-            "        \"constraints\": [" +
+            "      \"if\": {" +
+            "        \"anyOf\": [" +
             "          { \"field\": \"type\", \"type\": \"isEqualTo\", \"value\": \"USA\" }," +
             "          { \"field\": \"type\", \"type\": \"isNull\" }" +
             "        ]" +

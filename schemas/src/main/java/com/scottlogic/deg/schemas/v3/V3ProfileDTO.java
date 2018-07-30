@@ -43,7 +43,7 @@ Example:
             "constraints": [
                 { "field": "low_price", "type": "isOfType", "value": "numeric" },
                 { "field": "low_price", "type": "not isNull" },
-                { "field": "low_price", "type": "isGreaterThanOrEqual", "value": "0" }
+                { "field": "low_price", "type": "isGreaterThanOrEqual", "value": 0 }
 			]
 		},
 
@@ -51,7 +51,7 @@ Example:
 
 		{
 			"type": "conditional",
-			"condition": {
+			"if_": {
 				"type": "or",
 				"constraints": [
 					{ "field": "type", "type": "isEqualTo", "value": "USA" },
