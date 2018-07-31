@@ -3,7 +3,7 @@ package com.scottlogic.deg.restriction;
 public class RestrictionApplierFactory {
     final FieldRestrictionClassifier fieldRestrictionClassifier = new FieldRestrictionClassifier();
 
-    public IRestrictionApplier getRestrictionApplier(IFieldRestriction fieldRestriction) {
+    public IRestrictionApplier getRestrictionApplier(FieldSpec fieldRestriction) {
         final var restrictionType = fieldRestrictionClassifier.classify(fieldRestriction);
         switch (restrictionType) {
             case Numeric:

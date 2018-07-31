@@ -2,13 +2,13 @@ package com.scottlogic.deg.reducer;
 
 import com.scottlogic.deg.constraint.IConstraint;
 import com.scottlogic.deg.input.Field;
-import com.scottlogic.deg.restriction.IFieldRestriction;
+import com.scottlogic.deg.restriction.FieldSpec;
 import com.scottlogic.deg.restriction.NumericFieldRestriction;
 
 public class NumericFieldRestrictionFactory {
     private final NumericConstraintTypeClassifier numericConstraintTypeClassifier = new NumericConstraintTypeClassifier();
 
-    public IFieldRestriction getForConstraint(Field field, IConstraint constraint) {
+    public FieldSpec getForConstraint(Field field, IConstraint constraint) {
         final var constraintType = numericConstraintTypeClassifier.classify(constraint);
         switch(constraintType) {
             case Integer:

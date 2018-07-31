@@ -6,7 +6,7 @@ import com.scottlogic.deg.constraint.TypeConstraint;
 
 public class StringRestrictionApplier implements IRestrictionApplier {
     @Override
-    public void apply(IFieldRestriction restriction, IConstraint constraint) {
+    public void apply(FieldSpec restriction, IConstraint constraint) {
         if (!(restriction instanceof StringFieldRestriction)) {
             throw new IllegalStateException();
         }

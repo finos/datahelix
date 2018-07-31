@@ -6,7 +6,7 @@ import com.scottlogic.deg.constraint.NumericLimitConstConstraint;
 
 public class NumericRestrictionApplier implements IRestrictionApplier {
     @Override
-    public void apply(IFieldRestriction restriction, IConstraint constraint) {
+    public void apply(FieldSpec restriction, IConstraint constraint) {
         if (!(restriction instanceof NumericFieldRestriction)) {
             throw new IllegalStateException();
         }

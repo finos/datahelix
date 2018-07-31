@@ -4,7 +4,7 @@ import com.scottlogic.deg.input.Field;
 
 import java.util.Set;
 
-public class StringFieldRestriction implements IFieldRestriction {
+public class StringFieldRestriction implements FieldSpec {
     private final Field field;
 
     public StringFieldRestriction(Field field) {

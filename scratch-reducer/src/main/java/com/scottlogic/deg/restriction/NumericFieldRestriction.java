@@ -5,7 +5,7 @@ import com.scottlogic.deg.input.Field;
 
 import java.util.Set;
 
-public class NumericFieldRestriction<T extends Number> implements IFieldRestriction, IHasNumericTypeToken {
+public class NumericFieldRestriction<T extends Number> implements FieldSpec, IHasNumericTypeToken {
     private final Field field;
     private final Class<T> typeToken;
 

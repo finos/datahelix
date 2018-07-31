@@ -2,9 +2,10 @@ package com.scottlogic.deg.reducer;
 
 import com.scottlogic.deg.constraint.IConstraint;
 import com.scottlogic.deg.input.Field;
-import com.scottlogic.deg.restriction.IFieldRestriction;
+import com.scottlogic.deg.restriction.FieldSpec;
 import com.scottlogic.deg.restriction.IRestrictionApplier;
 import com.scottlogic.deg.restriction.RestrictionApplierFactory;
+import com.scottlogic.deg.restriction.RowSpec;
 
 import java.util.List;
 import java.util.Map;
@@ -15,23 +16,19 @@ public class ConstraintReducer {
     private final FieldRestrictionFactory fieldRestrictionFactory = new FieldRestrictionFactory();
     private final RestrictionApplierFactory restrictionApplierFactory = new RestrictionApplierFactory();
 
-    // TODO: return RowSpec
-    public List<IFieldRestriction> getReducedConstraints(Iterable<IConstraint> constraints) {
+    public RowSpec getReducedConstraints(Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldConstraints = StreamSupport
                 .stream(constraints.spliterator(), false)
                 .collect(Collectors.groupingBy(IConstraint::getField));
-        return fieldConstraints.entrySet().stream()
+        final List<FieldSpec> fieldSpecs = fieldConstraints.entrySet().stream()
                 .map(x -> getReducedConstraints(x.getKey(), x.getValue()))
                 .collect(Collectors.toList());
+        return new RowSpec(fieldSpecs);
     }
 
-    // TODO: rename FieldRestriction to FieldSpec
-    // TODO: move nullness, set membership onto FieldSpec
-    // TODO: kill subclasses of IConstraint; use only concrete Constraint, with NumericProperties structure, etc
-    // TODO: numerics need not be excessively typed
     // TODO: merge rowspecs (or at least put in format that's easy to merge)
-    private IFieldRestriction getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
-        IFieldRestriction fieldRestriction = null;
+    private FieldSpec getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
+        FieldSpec fieldRestriction = null;
         IRestrictionApplier restrictionApplier = null;
         for (IConstraint constraint : constraints) {
             if (fieldRestriction == null) {

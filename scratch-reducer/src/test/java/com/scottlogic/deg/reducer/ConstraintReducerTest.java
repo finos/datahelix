@@ -6,10 +6,13 @@ import com.scottlogic.deg.constraint.NumericLimitConstConstraint;
 import com.scottlogic.deg.constraint.TypeConstraint;
 import com.scottlogic.deg.input.Field;
 import com.scottlogic.deg.restriction.NumericFieldRestriction;
+import com.scottlogic.deg.restriction.RowSpec;
 import com.scottlogic.deg.restriction.StringFieldRestriction;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,19 +24,19 @@ public class ConstraintReducerTest {
 
     @Test
     public void test() {
-        var quantity = new Field("quantity");
-        var country = new Field("country");
-        var city = new Field("city");
+        final Field quantity = new Field("quantity");
+        final Field country = new Field("country");
+        final Field city = new Field("city");
 
-        var countryAmong = Set.of("UK", "US");
+        final Set<String> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 
-        final Iterable<IConstraint> constraints = List.of(
+        final List<IConstraint> constraints = Arrays.asList(
                 new NumericLimitConstConstraint<>(quantity, 0, NumericLimitConstConstraint.LimitType.Min, Integer.class),
                 new NumericLimitConstConstraint<>(quantity, 10, NumericLimitConstConstraint.LimitType.Max, Integer.class),
                 new AmongConstraint<>(country, countryAmong, String.class),
                 new TypeConstraint<>(city, String.class)
         );
-        final var reducedConstraints = constraintReducer.getReducedConstraints(constraints);
+        final RowSpec reducedConstraints = constraintReducer.getReducedConstraints(constraints);
 
         final var quantityRestriction = new NumericFieldRestriction<>(quantity, Integer.class);
         quantityRestriction.setMin(0);
@@ -50,7 +53,7 @@ public class ConstraintReducerTest {
 //                cityRestriction
 //        );
         assertThat(
-                reducedConstraints,
+                reducedConstraints.getFieldSpecs(),
                 containsInAnyOrder(
                         Matchers.samePropertyValuesAs(quantityRestriction),
                         Matchers.samePropertyValuesAs(countryRestriction),
