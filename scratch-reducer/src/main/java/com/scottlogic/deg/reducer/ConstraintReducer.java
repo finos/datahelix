@@ -26,7 +26,6 @@ public class ConstraintReducer {
         return new RowSpec(fieldSpecs);
     }
 
-    // TODO: merge rowspecs (or at least put in format that's easy to merge)
     private FieldSpec getReducedConstraints(Field field, Iterable<IConstraint> constraints) {
         FieldSpec fieldRestriction = null;
         IRestrictionApplier restrictionApplier = null;

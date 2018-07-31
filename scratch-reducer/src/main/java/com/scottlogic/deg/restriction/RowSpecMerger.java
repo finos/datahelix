@@ -15,7 +15,7 @@ public class RowSpecMerger {
 
     public RowSpec merge(RowSpec left, RowSpec right) {
         final Map<String, List<FieldSpec>> leftByName = getFieldsIndexedByName(left);
-        final Map<String, List<FieldSpec>> rightByName = getFieldsIndexedByName(left);
+        final Map<String, List<FieldSpec>> rightByName = getFieldsIndexedByName(right);
 
         final Map<String, List<FieldSpec>> fieldNameToFields =
                 Stream.concat(leftByName.entrySet().stream(), rightByName.entrySet().stream())

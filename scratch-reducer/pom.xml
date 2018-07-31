@@ -22,6 +22,18 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.scottlogic.deg</groupId>
+            <artifactId>generator</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dk.brics.automaton</groupId>
+            <artifactId>automaton</artifactId>
+            <version>1.11-8</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -1,10 +1,5 @@
 package com.scottlogic.deg.restriction;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
@@ -12,11 +7,15 @@ import java.util.stream.Stream;
 public class FieldSpecMerger {
     private final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
     private final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
+    private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
+    private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
 
     public FieldSpec merge(FieldSpec left, FieldSpec right) {
         final FieldSpec merged = new FieldSpec(getMergedName(left.getName(), right.getName()));
         merged.setSetRestrictions(setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions()));
         merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()));
+        merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(), right.getStringRestrictions()));
+        merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
         return merged;
     }
 

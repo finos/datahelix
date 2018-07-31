@@ -6,8 +6,8 @@ package com.scottlogic.deg.restriction;
 public class FieldSpec {
     private final String name;
 
-    private SetRestrictions setRestrictions;
-    private NumericRestrictions numericRestrictions;
+    private SetRestrictions setRestrictions = new SetRestrictions();
+    private NumericRestrictions numericRestrictions = new NumericRestrictions();
     private StringRestrictions stringRestrictions = new StringRestrictions();
     private NullRestrictions nullRestrictions = new NullRestrictions();
 
