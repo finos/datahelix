@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class ProfileAnalyser implements IProfileAnalyser {
+public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     @Override
-    public IAnalysedProfile analyse(Profile profile) {
-        ArrayList<AnalysedRule> analysedRules = new ArrayList<>();
+    public IDecisionTreeProfile analyse(Profile profile) {
+        ArrayList<RuleDecisionTree> ruleDecisionTrees = new ArrayList<>();
         for (Rule rule : profile.rules) {
-            analysedRules.add(analyseRule(rule));
+            ruleDecisionTrees.add(analyseRule(rule));
         }
-        return new AnalysedProfile(new ArrayList<>(profile.fields), analysedRules);
+        return new AnalysedProfile(new ArrayList<>(profile.fields), ruleDecisionTrees);
     }
 
-    private AnalysedRule analyseRule(Rule rule) {
-        return new AnalysedRule(rule.description, getRuleOptionForConstraintCollection(rule.constraints));
+    private RuleDecisionTree analyseRule(Rule rule) {
+        return new RuleDecisionTree(rule.description, getRuleOptionForConstraintCollection(rule.constraints));
     }
 
     private boolean isConstraintAtomic(IConstraint constraint) {
@@ -58,13 +58,13 @@ public class ProfileAnalyser implements IProfileAnalyser {
         if (nc.negatedConstraint instanceof AndConstraint) {
             return new OrConstraint(((AndConstraint)nc.negatedConstraint).subConstraints
                     .stream()
-                    .map(c -> new NotConstraint(c))
+                    .map(NotConstraint::new)
                     .collect(Collectors.toList()));
         }
         if (nc.negatedConstraint instanceof OrConstraint) {
             return new AndConstraint(((OrConstraint)nc.negatedConstraint).subConstraints
                     .stream()
-                    .map(c -> new NotConstraint(c))
+                    .map(NotConstraint::new)
                     .collect(Collectors.toList()));
         }
         // This is a bit of a weird concept but provided for completeness.
@@ -85,7 +85,7 @@ public class ProfileAnalyser implements IProfileAnalyser {
 
     private RuleOption getRuleOptionForConstraintCollection(Collection<IConstraint> constraintCollection) {
         ArrayList<IConstraint> atomicConstraints = new ArrayList<>();
-        ArrayList<RuleDecision> decisions = new ArrayList<>();
+        ArrayList<IRuleDecision> decisions = new ArrayList<>();
         ArrayList<RuleOption> mergeableOptions = new ArrayList<>();
         for (IConstraint subConstraint : constraintCollection) {
             subConstraint = unwrapNotConstraint(subConstraint);

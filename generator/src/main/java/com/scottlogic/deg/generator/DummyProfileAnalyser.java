@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator;
 
-public class DummyProfileAnalyser implements IProfileAnalyser {
+public class DummyProfileAnalyser implements IDecisionTreeGenerator {
     @Override
-    public IAnalysedProfile analyse(Profile profile) {
+    public IDecisionTreeProfile analyse(Profile profile) {
         return null;
     }
 }

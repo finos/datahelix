@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 public class App
 {
-    private static final IProfileAnalyser profileAnalyser = new DummyProfileAnalyser();
+    private static final IDecisionTreeGenerator profileAnalyser = new DummyProfileAnalyser();
     private static final IDataGenerator dataGenerator = new DummyDataGenerator();
 
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class App
             return;
         }
 
-        final IAnalysedProfile analysedProfile = profileAnalyser.analyse(profile);
+        final IDecisionTreeProfile analysedProfile = profileAnalyser.analyse(profile);
         final TestCaseGenerationResult generationResult = dataGenerator.generateData(profile, analysedProfile);
 
         try {

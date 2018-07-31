@@ -9,15 +9,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ProfileAnalyserTests {
+public class DecisionTreeGeneratorTests {
     @Test
     public void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        Assert.assertEquals(0, testOutput.getAnalysedRules().size());
+        Assert.assertEquals(0, testOutput.getDecisionTrees().size());
     }
 
     @Test
@@ -27,9 +27,9 @@ public class ProfileAnalyserTests {
         inputFieldList.add(new Field("two"));
         inputFieldList.add(new Field("three"));
         Profile testInput = new Profile(inputFieldList, new ArrayList<>());
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
         Assert.assertEquals(inputFieldList.size(), testOutput.getFields().size());
         ArrayList<Field> fields = new ArrayList<>(testOutput.getFields());
@@ -56,14 +56,14 @@ public class ProfileAnalyserTests {
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
 
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        Assert.assertNotNull(testOutput.getAnalysedRules());
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.decisions);
-        Assert.assertEquals(0, outputRule.decisions.size());
+        Assert.assertNotNull(testOutput.getDecisionTrees());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertNotNull(outputRule.getRootOption().getDecisions());
+        Assert.assertEquals(0, outputRule.getRootOption().getDecisions().size());
     }
 
     @Test
@@ -84,13 +84,13 @@ public class ProfileAnalyserTests {
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
 
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(inputConstraints.size(), outputRule.atomicConstraints.size());
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(inputConstraints.size(), outputRule.getRootOption().getAtomicConstraints().size());
         for (IConstraint constraint : inputConstraints) {
-            Assert.assertTrue(outputRule.atomicConstraints.contains(constraint));
+            Assert.assertTrue(outputRule.getRootOption().getAtomicConstraints().contains(constraint));
         }
     }
 
@@ -115,14 +115,14 @@ public class ProfileAnalyserTests {
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
 
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        Assert.assertNotNull(testOutput.getAnalysedRules());
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertNotNull(outputRule.decisions);
-        Assert.assertEquals(0, outputRule.decisions.size());
+        Assert.assertNotNull(testOutput.getDecisionTrees());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertNotNull(outputRule.getRootOption().getDecisions());
+        Assert.assertEquals(0, outputRule.getRootOption().getDecisions().size());
     }
 
     @Test
@@ -146,16 +146,16 @@ public class ProfileAnalyserTests {
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
 
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        Assert.assertNotNull(testOutput.getAnalysedRules());
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(3, outputRule.atomicConstraints.size());
-        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint0));
-        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint1));
-        Assert.assertTrue(outputRule.atomicConstraints.contains(constraint2));
+        Assert.assertNotNull(testOutput.getDecisionTrees());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(3, outputRule.getRootOption().getAtomicConstraints().size());
+        Assert.assertTrue(outputRule.getRootOption().getAtomicConstraints().contains(constraint0));
+        Assert.assertTrue(outputRule.getRootOption().getAtomicConstraints().contains(constraint1));
+        Assert.assertTrue(outputRule.getRootOption().getAtomicConstraints().contains(constraint2));
     }
 
     @Test
@@ -183,12 +183,12 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(inputConstraints.size(), outputRule.decisions.size());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(inputConstraints.size(), outputRule.getRootOption().getDecisions().size());
     }
 
     // checks (A OR B) AND (C OR D)
@@ -217,12 +217,12 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(0, outputRule.atomicConstraints.size());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(0, outputRule.getRootOption().getAtomicConstraints().size());
     }
 
     // checks (A OR B) AND (C OR D)
@@ -251,22 +251,22 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Iterator<RuleDecision> decisionIterator = outputRule.decisions.iterator();
-        RuleDecision decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.options.size());
-        Iterator<RuleOption> optionIterator = decision.options.iterator();
-        RuleOption option = optionIterator.next();
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Iterator<IRuleDecision> decisionIterator = outputRule.getRootOption().getDecisions().iterator();
+        IRuleDecision decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.getOptions().size());
+        Iterator<IRuleOption> optionIterator = decision.getOptions().iterator();
+        IRuleOption option = optionIterator.next();
         assertOptionContainsSingleConstraint(option, constraint0);
         option = optionIterator.next();
         assertOptionContainsSingleConstraint(option, constraint1);
         decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.options.size());
-        optionIterator = decision.options.iterator();
+        Assert.assertEquals(2, decision.getOptions().size());
+        optionIterator = decision.getOptions().iterator();
         option = optionIterator.next();
         assertOptionContainsSingleConstraint(option, constraint2);
         option = optionIterator.next();
@@ -304,25 +304,25 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Iterator<RuleDecision> decisionIterator = outputRule.decisions.iterator();
-        RuleDecision decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.options.size());
-        Iterator<RuleOption> optionIterator = decision.options.iterator();
-        RuleOption option = optionIterator.next();
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Iterator<IRuleDecision> decisionIterator = outputRule.getRootOption().getDecisions().iterator();
+        IRuleDecision decision = decisionIterator.next();
+        Assert.assertEquals(2, decision.getOptions().size());
+        Iterator<IRuleOption> optionIterator = decision.getOptions().iterator();
+        IRuleOption option = optionIterator.next();
         assertOptionContainsSingleConstraint(option, constraint0);
         option = optionIterator.next();
-        Assert.assertEquals(0, option.decisions.size());
-        Assert.assertEquals(2, option.atomicConstraints.size());
-        Assert.assertTrue(option.atomicConstraints.contains(constraint4));
-        Assert.assertTrue(option.atomicConstraints.contains(constraint1));
+        Assert.assertEquals(0, option.getDecisions().size());
+        Assert.assertEquals(2, option.getAtomicConstraints().size());
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint4));
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint1));
         decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.options.size());
-        optionIterator = decision.options.iterator();
+        Assert.assertEquals(2, decision.getOptions().size());
+        optionIterator = decision.getOptions().iterator();
         option = optionIterator.next();
         assertOptionContainsSingleConstraint(option, constraint2);
         option = optionIterator.next();
@@ -346,22 +346,22 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(0, outputRule.atomicConstraints.size());
-        Assert.assertEquals(1, outputRule.decisions.size());
-        RuleDecision decision = outputRule.decisions.iterator().next();
-        Assert.assertEquals(2, decision.options.size());
-        Iterator<RuleOption> iterator = decision.options.iterator();
-        RuleOption option = iterator.next();
-        Assert.assertTrue(option.atomicConstraints.contains(constraint0));
-        Assert.assertTrue(option.atomicConstraints.contains(constraint1));
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(0, outputRule.getRootOption().getAtomicConstraints().size());
+        Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
+        IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
+        Assert.assertEquals(2, decision.getOptions().size());
+        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
+        IRuleOption option = iterator.next();
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint0));
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint1));
         option = iterator.next();
-        Assert.assertTrue(option.atomicConstraints.contains(constraint2));
-        IConstraint constraint = option.atomicConstraints.iterator().next();
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint2));
+        IConstraint constraint = option.getAtomicConstraints().iterator().next();
         Assert.assertTrue(constraint instanceof NotConstraint);
         Assert.assertEquals(constraint0, ((NotConstraint)constraint).negatedConstraint);
     }
@@ -387,37 +387,37 @@ public class ProfileAnalyserTests {
         ArrayList<Rule> ruleList = new ArrayList<>();
         ruleList.add(testRule);
         Profile testInput = new Profile(inputFieldList, ruleList);
-        ProfileAnalyser testObject = new ProfileAnalyser();
+        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        IAnalysedProfile testOutput = testObject.analyse(testInput);
+        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
-        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
-        Assert.assertEquals(0, outputRule.atomicConstraints.size());
-        Assert.assertEquals(1, outputRule.decisions.size());
+        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertEquals(0, outputRule.getRootOption().getAtomicConstraints().size());
+        Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
         // First decision level
-        RuleDecision decision = outputRule.decisions.iterator().next();
-        Assert.assertEquals(2, decision.options.size());
-        Iterator<RuleOption> iterator = decision.options.iterator();
+        IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
+        Assert.assertEquals(2, decision.getOptions().size());
+        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
         // First option: C AND (A OR B)
-        RuleOption option = iterator.next();
-        Assert.assertEquals(1, option.atomicConstraints.size());
-        Assert.assertTrue(option.atomicConstraints.contains(constraint2));
-        Assert.assertEquals(1, option.decisions.size());
-        RuleDecision decision2 = option.decisions.iterator().next();
-        Assert.assertEquals(2, decision2.options.size());
-        Iterator<RuleOption> iterator2 = decision2.options.iterator();
-        RuleOption option2 = iterator2.next();
-        Assert.assertEquals(1, option2.atomicConstraints.size());
-        Assert.assertTrue(option2.atomicConstraints.contains(constraint0));
-        Assert.assertEquals(0, option2.decisions.size());
+        IRuleOption option = iterator.next();
+        Assert.assertEquals(1, option.getAtomicConstraints().size());
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint2));
+        Assert.assertEquals(1, option.getDecisions().size());
+        IRuleDecision decision2 = option.getDecisions().iterator().next();
+        Assert.assertEquals(2, decision2.getOptions().size());
+        Iterator<IRuleOption> iterator2 = decision2.getOptions().iterator();
+        IRuleOption option2 = iterator2.next();
+        Assert.assertEquals(1, option2.getAtomicConstraints().size());
+        Assert.assertTrue(option2.getAtomicConstraints().contains(constraint0));
+        Assert.assertEquals(0, option2.getDecisions().size());
         option2 = iterator2.next();
-        Assert.assertEquals(1, option2.atomicConstraints.size());
-        Assert.assertTrue(option2.atomicConstraints.contains(constraint1));
-        Assert.assertEquals(0, option2.decisions.size());
+        Assert.assertEquals(1, option2.getAtomicConstraints().size());
+        Assert.assertTrue(option2.getAtomicConstraints().contains(constraint1));
+        Assert.assertEquals(0, option2.getDecisions().size());
         // Second option: ¬(A OR B) = ¬A AND ¬B
         option = iterator.next();
-        Assert.assertEquals(2, option.atomicConstraints.size());
-        Iterator<IConstraint> constraintIterator = option.atomicConstraints.iterator();
+        Assert.assertEquals(2, option.getAtomicConstraints().size());
+        Iterator<IConstraint> constraintIterator = option.getAtomicConstraints().iterator();
         IConstraint constraint = constraintIterator.next();
         Assert.assertTrue(constraint instanceof NotConstraint);
         Assert.assertEquals(constraint0, ((NotConstraint)constraint).negatedConstraint);
@@ -426,9 +426,9 @@ public class ProfileAnalyserTests {
         Assert.assertEquals(constraint1, ((NotConstraint)constraint).negatedConstraint);
     }
 
-    private void assertOptionContainsSingleConstraint(RuleOption option, IConstraint constraint) {
-        Assert.assertEquals(0, option.decisions.size());
-        Assert.assertEquals(1, option.atomicConstraints.size());
-        Assert.assertTrue(option.atomicConstraints.contains(constraint));
+    private void assertOptionContainsSingleConstraint(IRuleOption option, IConstraint constraint) {
+        Assert.assertEquals(0, option.getDecisions().size());
+        Assert.assertEquals(1, option.getAtomicConstraints().size());
+        Assert.assertTrue(option.getAtomicConstraints().contains(constraint));
     }
 }
