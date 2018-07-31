@@ -1,5 +1,6 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.constraints.*;
 
 import java.util.ArrayList;

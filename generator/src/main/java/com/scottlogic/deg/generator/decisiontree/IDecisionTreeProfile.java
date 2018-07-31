@@ -1,4 +1,6 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.decisiontree;
+
+import com.scottlogic.deg.generator.Field;
 
 import java.util.Collection;
 

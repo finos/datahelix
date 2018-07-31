@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;

@@ -1,5 +1,8 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.decisiontree;
 
 class RuleDecisionTree implements IRuleDecisionTree {
     private final String description;
