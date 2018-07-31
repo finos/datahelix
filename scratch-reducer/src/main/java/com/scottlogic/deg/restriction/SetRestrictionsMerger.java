@@ -11,11 +11,7 @@ import java.util.stream.Stream;
  */
 public class SetRestrictionsMerger {
     public SetRestrictions merge(SetRestrictions left, SetRestrictions right) {
-        if (!left.getTypeToken().isAssignableFrom(right.getTypeToken())) {
-            throw new IllegalStateException();
-        }
-
-        final SetRestrictions merged = new SetRestrictions(left.getTypeToken());
+        final SetRestrictions merged = new SetRestrictions();
         merged.whitelist = getMergedSet(left.whitelist, right.whitelist);
         merged.blacklist = getMergedSet(left.blacklist, right.blacklist);
 

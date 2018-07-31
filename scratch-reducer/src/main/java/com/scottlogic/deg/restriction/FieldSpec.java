@@ -7,7 +7,7 @@ public class FieldSpec {
     private final String name;
 
     private SetRestrictions setRestrictions;
-    private NumericRestrictions<?> numericRestrictions;
+    private NumericRestrictions numericRestrictions;
     private StringRestrictions stringRestrictions = new StringRestrictions();
     private NullRestrictions nullRestrictions = new NullRestrictions();
 
@@ -23,7 +23,7 @@ public class FieldSpec {
         return setRestrictions;
     }
 
-    public NumericRestrictions<?> getNumericRestrictions() {
+    public NumericRestrictions getNumericRestrictions() {
         return numericRestrictions;
     }
 
@@ -39,7 +39,7 @@ public class FieldSpec {
         this.setRestrictions = setRestrictions;
     }
 
-    public void setNumericRestrictions(NumericRestrictions<?> numericRestrictions) {
+    public void setNumericRestrictions(NumericRestrictions numericRestrictions) {
         this.numericRestrictions = numericRestrictions;
     }
 
