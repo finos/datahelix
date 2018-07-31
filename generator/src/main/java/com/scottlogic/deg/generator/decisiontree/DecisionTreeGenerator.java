@@ -70,10 +70,16 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         }
         // This is a bit of a weird concept but provided for completeness.
         if (nc.negatedConstraint instanceof ConditionalConstraint) {
-            ConditionalConstraint conditionalConstraint = (ConditionalConstraint)constraint;
+            ConditionalConstraint conditionalConstraint = (ConditionalConstraint)nc.negatedConstraint;
             IConstraint unwrappedCondition = unwrapNotConstraint(conditionalConstraint.condition);
-            return unwrappedCondition.and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue)))
-                    .or(unwrappedCondition.or(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
+            IConstraint firstBranch =
+                    unwrappedCondition.and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue)));
+            if (conditionalConstraint.whenConditionIsFalse != null) {
+                return firstBranch.or(
+                        unwrapNotConstraint(new NotConstraint(unwrappedCondition))
+                                .and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
+            }
+            return firstBranch;
         }
 
         // This method cannot unwrap all possible kinds of NotConstraint.
@@ -108,7 +114,6 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return option;
     }
 
-
     private RuleDecision getRuleDecisionForConstraint(IConstraint constraint) {
         if (constraint instanceof OrConstraint) {
             return getRuleDecisionForOrConstraint((OrConstraint)constraint);
@@ -124,9 +129,15 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     private RuleDecision getRuleDecisionForOrConstraint(OrConstraint constraint) {
-        ArrayList<RuleOption> options = new ArrayList<>();
+        ArrayList<IRuleOption> options = new ArrayList<>();
         for (IConstraint subConstraint : constraint.subConstraints) {
-            options.add(getRuleOptionForConstraint(subConstraint));
+            if (subConstraint instanceof OrConstraint) {
+                RuleDecision toMerge = getRuleDecisionForOrConstraint((OrConstraint)subConstraint);
+                options.addAll(toMerge.getOptions());
+            }
+            else {
+                options.add(getRuleOptionForConstraint(subConstraint));
+            }
         }
         return new RuleDecision(options);
     }
