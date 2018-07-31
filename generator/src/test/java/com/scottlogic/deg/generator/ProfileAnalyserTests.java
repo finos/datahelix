@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class ProfileAnalyserTests {
@@ -363,6 +364,66 @@ public class ProfileAnalyserTests {
         IConstraint constraint = option.atomicConstraints.iterator().next();
         Assert.assertTrue(constraint instanceof NotConstraint);
         Assert.assertEquals(constraint0, ((NotConstraint)constraint).negatedConstraint);
+    }
+
+    // Checks IF (A OR B) THEN C
+    @Test
+    public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
+        ArrayList<Field> inputFieldList = new ArrayList<>();
+        inputFieldList.add(new Field("one"));
+        inputFieldList.add(new Field("two"));
+        inputFieldList.add(new Field("three"));
+        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 10);
+        IsGreaterThanConstantConstraint constraint2 = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
+        List<IConstraint> subConstraints = new ArrayList<>();
+        subConstraints.add(constraint0);
+        subConstraints.add(constraint1);
+        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(orConstraint0, constraint2);
+        inputConstraints.add(conditionalConstraint);
+        Rule testRule = new Rule("test", inputConstraints);
+        ArrayList<Rule> ruleList = new ArrayList<>();
+        ruleList.add(testRule);
+        Profile testInput = new Profile(inputFieldList, ruleList);
+        ProfileAnalyser testObject = new ProfileAnalyser();
+
+        IAnalysedProfile testOutput = testObject.analyse(testInput);
+
+        AnalysedRule outputRule = testOutput.getAnalysedRules().iterator().next();
+        Assert.assertEquals(0, outputRule.atomicConstraints.size());
+        Assert.assertEquals(1, outputRule.decisions.size());
+        // First decision level
+        RuleDecision decision = outputRule.decisions.iterator().next();
+        Assert.assertEquals(2, decision.options.size());
+        Iterator<RuleOption> iterator = decision.options.iterator();
+        // First option: C AND (A OR B)
+        RuleOption option = iterator.next();
+        Assert.assertEquals(1, option.atomicConstraints.size());
+        Assert.assertTrue(option.atomicConstraints.contains(constraint2));
+        Assert.assertEquals(1, option.decisions.size());
+        RuleDecision decision2 = option.decisions.iterator().next();
+        Assert.assertEquals(2, decision2.options.size());
+        Iterator<RuleOption> iterator2 = decision2.options.iterator();
+        RuleOption option2 = iterator2.next();
+        Assert.assertEquals(1, option2.atomicConstraints.size());
+        Assert.assertTrue(option2.atomicConstraints.contains(constraint0));
+        Assert.assertEquals(0, option2.decisions.size());
+        option2 = iterator2.next();
+        Assert.assertEquals(1, option2.atomicConstraints.size());
+        Assert.assertTrue(option2.atomicConstraints.contains(constraint1));
+        Assert.assertEquals(0, option2.decisions.size());
+        // Second option: ¬(A OR B) = ¬A AND ¬B
+        option = iterator.next();
+        Assert.assertEquals(2, option.atomicConstraints.size());
+        Iterator<IConstraint> constraintIterator = option.atomicConstraints.iterator();
+        IConstraint constraint = constraintIterator.next();
+        Assert.assertTrue(constraint instanceof NotConstraint);
+        Assert.assertEquals(constraint0, ((NotConstraint)constraint).negatedConstraint);
+        constraint = constraintIterator.next();
+        Assert.assertTrue(constraint instanceof NotConstraint);
+        Assert.assertEquals(constraint1, ((NotConstraint)constraint).negatedConstraint);
     }
 
     private void assertOptionContainsSingleConstraint(RuleOption option, IConstraint constraint) {

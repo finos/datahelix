@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.constraints.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class ProfileAnalyser implements IProfileAnalyser {
     @Override
@@ -20,6 +21,9 @@ public class ProfileAnalyser implements IProfileAnalyser {
     }
 
     private boolean isConstraintAtomic(IConstraint constraint) {
+        if (constraint instanceof NotConstraint) {
+            return isConstraintAtomic(((NotConstraint)constraint).negatedConstraint);
+        }
         if (constraint instanceof AndConstraint || isConstraintDecisionPoint(constraint)) {
             return false;
         }
@@ -31,6 +35,7 @@ public class ProfileAnalyser implements IProfileAnalyser {
     }
 
     private RuleOption getRuleOptionForConstraint(IConstraint constraint) {
+        constraint = unwrapNotConstraint(constraint);
         if (isConstraintAtomic(constraint)) {
             return new RuleOption(constraint);
         }
@@ -42,6 +47,41 @@ public class ProfileAnalyser implements IProfileAnalyser {
         }
     }
 
+    private IConstraint unwrapNotConstraint(IConstraint constraint) {
+        if (!(constraint instanceof NotConstraint)) {
+            return constraint;
+        }
+        NotConstraint nc = (NotConstraint)constraint;
+        if (nc.negatedConstraint instanceof NotConstraint) {
+            return unwrapNotConstraint(((NotConstraint)nc.negatedConstraint).negatedConstraint);
+        }
+        if (nc.negatedConstraint instanceof AndConstraint) {
+            return new OrConstraint(((AndConstraint)nc.negatedConstraint).subConstraints
+                    .stream()
+                    .map(c -> new NotConstraint(c))
+                    .collect(Collectors.toList()));
+        }
+        if (nc.negatedConstraint instanceof OrConstraint) {
+            return new AndConstraint(((OrConstraint)nc.negatedConstraint).subConstraints
+                    .stream()
+                    .map(c -> new NotConstraint(c))
+                    .collect(Collectors.toList()));
+        }
+        // This is a bit of a weird concept but provided for completeness.
+        if (nc.negatedConstraint instanceof ConditionalConstraint) {
+            ConditionalConstraint conditionalConstraint = (ConditionalConstraint)constraint;
+            IConstraint unwrappedCondition = unwrapNotConstraint(conditionalConstraint.condition);
+            return new OrConstraint(
+                    new AndConstraint(unwrappedCondition,
+                            unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue))),
+                    new OrConstraint(unwrappedCondition,
+                            unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
+        }
+
+        // This method cannot unwrap all possible kinds of NotConstraint.
+        return constraint;
+    }
+
     private RuleOption getRuleOptionForTwoConstraints(IConstraint constraintA, IConstraint constraintB) {
         return getRuleOptionForConstraint(constraintA).merge(getRuleOptionForConstraint(constraintB));
     }
@@ -51,6 +91,7 @@ public class ProfileAnalyser implements IProfileAnalyser {
         ArrayList<RuleDecision> decisions = new ArrayList<>();
         ArrayList<RuleOption> mergeableOptions = new ArrayList<>();
         for (IConstraint subConstraint : constraintCollection) {
+            subConstraint = unwrapNotConstraint(subConstraint);
             if (isConstraintAtomic(subConstraint)) {
                 atomicConstraints.add(subConstraint);
             }
