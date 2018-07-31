@@ -71,11 +71,8 @@ public class ProfileAnalyser implements IProfileAnalyser {
         if (nc.negatedConstraint instanceof ConditionalConstraint) {
             ConditionalConstraint conditionalConstraint = (ConditionalConstraint)constraint;
             IConstraint unwrappedCondition = unwrapNotConstraint(conditionalConstraint.condition);
-            return new OrConstraint(
-                    new AndConstraint(unwrappedCondition,
-                            unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue))),
-                    new OrConstraint(unwrappedCondition,
-                            unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
+            return unwrappedCondition.and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue)))
+                    .or(unwrappedCondition.or(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
         }
 
         // This method cannot unwrap all possible kinds of NotConstraint.
