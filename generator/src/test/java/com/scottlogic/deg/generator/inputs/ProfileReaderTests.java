@@ -1,11 +1,14 @@
 package com.scottlogic.deg.generator.inputs;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.constraints.NotConstraint;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Before;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -15,162 +18,36 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class ProfileReaderTests {
-    @Test
-    public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"f1\" } ]," +
-            "    \"rules\": []" +
-            "}";
+    private String json;
+    private Profile profile;
 
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.fields,
-            field -> Assert.assertThat(
-                field.name,
-                equalTo("f1")));
+    @Before
+    public void Setup()
+    {
+        this.json = null;
+        this.profile = null;
     }
 
-    @Test
-    public void shouldDeserialiseMultipleFields() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"f1\" }, { \"name\": \"f2\" } ]," +
-            "    \"rules\": []" +
-            "}";
-
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.fields,
-            field -> Assert.assertThat(
-                field.name,
-                equalTo("f1")),
-            field -> Assert.assertThat(
-                field.name,
-                equalTo("f2")));
+    private void givenJson(String json)
+    {
+        this.json = json;
     }
 
-    @Test
-    public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        { \"field\": \"id\", \"is\": \"null\" }" +
-            "    ]" +
-            "}";
+    private Profile getResultingProfile() throws IOException, InvalidProfileException {
+        if (this.profile == null) {
+            ProfileReader objectUnderTest = new ProfileReader();
+            this.profile = objectUnderTest.read(this.json);
+        }
 
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.rules,
-            rule -> Assert.assertThat(
-                rule.description,
-                equalTo("Unnamed rule")));
+        return this.profile;
     }
 
-    @Test
-    public void shouldReadNameOfNamedRules() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        {" +
-            "           \"rule\": \"Too rule for school\"," +
-            "           \"constraints\": [" +
-            "               { \"field\": \"id\", \"is\": \"null\" }" +
-            "           ]" +
-            "        }" +
-            "    ]" +
-            "}";
-
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.rules,
-            rule -> Assert.assertThat(
-                rule.description,
-                equalTo("Too rule for school")));
+    private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException, InvalidProfileException {
+        expectMany(this.getResultingProfile().rules, ruleAssertions);
     }
 
-    @Test
-    public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" }" +
-            "    ]" +
-            "}";
-
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.rules,
-            rule -> {
-                Assert.assertThat(rule.description, equalTo("Unnamed rule"));
-
-                expectMany(rule.constraints,
-                    constraint -> expectTyped(
-                        constraint,
-                        IsOfTypeConstraint.class,
-                        c -> Assert.assertThat(
-                            c.requiredType,
-                            equalTo(IsOfTypeConstraint.Types.String))));
-            });
-    }
-
-    @Test
-    public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
-        // Arrange
-        ProfileReader objectUnderTest = new ProfileReader();
-        String profileJson =
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        { \"not\": { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" } }" +
-            "    ]" +
-            "}";
-
-        // Act
-        Profile actualResult =  objectUnderTest.read(profileJson);
-
-        // Assert
-        expectMany(actualResult.rules,
-            rule -> {
-                expectMany(rule.constraints,
-                    constraint -> expectTyped(
-                        constraint,
-                        NotConstraint.class,
-                        c -> {
-                            Assert.assertThat(
-                                c.negatedConstraint,
-                                instanceOf(IsOfTypeConstraint.class));
-                        }));
-            });
+    private void expectFields(Consumer<Field>... fieldAssertions) throws IOException, InvalidProfileException {
+        expectMany(this.getResultingProfile().fields, fieldAssertions);
     }
 
     private <T> void expectMany(
@@ -194,5 +71,128 @@ public class ProfileReaderTests {
         Assert.assertThat(constraint, instanceOf(classRef));
 
         assertFunc.accept((T)constraint);
+    }
+
+    @Test
+    public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
+        // Arrange
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"not\": { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            rule -> {
+                expectMany(rule.constraints,
+                    constraint -> expectTyped(
+                        constraint,
+                        NotConstraint.class,
+                        c -> {
+                            Assert.assertThat(
+                                c.negatedConstraint,
+                                instanceOf(IsOfTypeConstraint.class));
+                        }));
+            });
+    }
+
+    @Test
+    public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"f1\" } ]," +
+            "    \"rules\": []" +
+            "}");
+
+        expectFields(
+            field -> Assert.assertThat(
+                field.name,
+                equalTo("f1")));
+    }
+
+    @Test
+    public void shouldDeserialiseMultipleFields() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"f1\" }, { \"name\": \"f2\" } ]," +
+            "    \"rules\": []" +
+            "}");
+
+        expectFields(
+            field -> Assert.assertThat(
+                field.name,
+                equalTo("f1")),
+            field -> Assert.assertThat(
+                field.name,
+                equalTo("f2")));
+    }
+
+    @Test
+    public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"id\", \"is\": \"null\" }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            rule -> Assert.assertThat(
+                rule.description,
+                equalTo("Unnamed rule")));
+    }
+
+    @Test
+    public void shouldReadNameOfNamedRules() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        {" +
+            "           \"rule\": \"Too rule for school\"," +
+            "           \"constraints\": [" +
+            "               { \"field\": \"id\", \"is\": \"null\" }" +
+            "           ]" +
+            "        }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            rule -> Assert.assertThat(
+                rule.description,
+                equalTo("Too rule for school")));
+    }
+
+    @Test
+    public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            rule -> {
+                Assert.assertThat(rule.description, equalTo("Unnamed rule"));
+
+                expectMany(rule.constraints,
+                    constraint -> expectTyped(
+                        constraint,
+                        IsOfTypeConstraint.class,
+                        c -> Assert.assertThat(
+                            c.requiredType,
+                            equalTo(IsOfTypeConstraint.Types.String))));
+            });
     }
 }
