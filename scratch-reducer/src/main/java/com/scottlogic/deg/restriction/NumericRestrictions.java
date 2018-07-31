@@ -1,6 +1,6 @@
 package com.scottlogic.deg.restriction;
 
-public class NumericRestrictions<T extends Number> {
+public class NumericRestrictions<T extends Number & Comparable<T>> {
     private final Class<T> typeToken;
 
     public T min;
@@ -12,5 +12,9 @@ public class NumericRestrictions<T extends Number> {
 
     public Class<T> getTypeToken() {
         return typeToken;
+    }
+
+    public NumericRestrictions<T> constructReified() {
+        return new NumericRestrictions<>(typeToken);
     }
 }

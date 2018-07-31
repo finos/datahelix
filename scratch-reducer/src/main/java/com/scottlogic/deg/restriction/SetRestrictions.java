@@ -3,17 +3,17 @@ package com.scottlogic.deg.restriction;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SetRestrictions<T> {
-    private final Class<T> typeToken;
+public class SetRestrictions {
+    private final Class<?> typeToken;
 
-    public Set<T> whitelist;
-    public Set<T> blacklist;
+    public Set<?> whitelist;
+    public Set<?> blacklist;
 
-    public SetRestrictions(Class<T> typeToken) {
+    public SetRestrictions(Class<?> typeToken) {
         this.typeToken = typeToken;
     }
 
-    public Class<T> getTypeToken() {
+    public Class<?> getTypeToken() {
         return typeToken;
     }
 
@@ -21,14 +21,14 @@ public class SetRestrictions<T> {
      * reconcile whitelist and blacklist of set membership
      * @return whitelist without blacklist
      */
-    public Set<T> getReconciledWhitelist() {
+    public Set<?> getReconciledWhitelist() {
         if (whitelist == null) {
             return null;
         }
         if (blacklist == null) {
             return whitelist;
         }
-        final Set<T> among = new HashSet<>(whitelist);
+        final Set<?> among = new HashSet<>(whitelist);
         among.removeAll(blacklist);
         return among;
     }
