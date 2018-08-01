@@ -1,11 +1,16 @@
 package com.scottlogic.deg.restriction;
 
+import com.scottlogic.deg.AutomatonFactory;
 import com.scottlogic.deg.generator.constraints.*;
+import dk.brics.automaton.Automaton;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
+    private final AutomatonFactory automatonFactory = new AutomatonFactory();
+
     public FieldSpec construct(String name, IConstraint constraint) {
         final FieldSpec fieldSpec = new FieldSpec(name);
         apply(fieldSpec, constraint, false);
@@ -23,6 +28,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (IsGreaterThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
+        } else if (constraint instanceof MatchesRegexConstraint) {
+            apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -69,6 +76,16 @@ public class FieldSpecFactory {
                     false
             );
         }
+    }
+
+    private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
+        final Automaton nominalAutomaton = automatonFactory.fromPattern(constraint.regex);
+        final Automaton automaton = negate
+                ? nominalAutomaton.complement()
+                : nominalAutomaton;
+
+        final StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        stringRestrictions.automaton = automaton;
     }
 
     private BigDecimal numberToBigDecimal(Number number) {
