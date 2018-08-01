@@ -15,10 +15,6 @@ class FieldSpecFulfiller implements Iterable<Object> {
         this.strategy = strategy;
     }
 
-    FieldSpec getSpec() {
-        return spec;
-    }
-
     @Override
     public Iterator<Object> iterator() {
         if (spec.getNullRestrictions() != null &&
@@ -34,7 +30,8 @@ class FieldSpecFulfiller implements Iterable<Object> {
                 return new SingleObjectIterator(whitelist.iterator().next());
             }
         }
-        if (spec.getNumericRestrictions() != null && spec.getStringRestrictions() == null) {
+        if (spec.getNumericRestrictions() != null &&
+                (spec.getNumericRestrictions().min != null || spec.getNumericRestrictions().max != null)) {
             return new NumericIterator(spec.getNumericRestrictions(), getBlacklist());
         }
         return new FieldSpecFulfilmentIterator(spec);

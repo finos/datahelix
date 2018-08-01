@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.generation.tmpReducerOutput.FieldSpec;
 
 import java.util.Iterator;
 
-class FieldSpecFulfilmentIterator implements Iterator<Object> {
+class FieldSpecFulfilmentIterator implements IFieldSpecIterator {
     private final FieldSpec spec;
 
     FieldSpecFulfilmentIterator(FieldSpec spec) {
@@ -19,5 +19,10 @@ class FieldSpecFulfilmentIterator implements Iterator<Object> {
     @Override
     public Object next() {
         return null;
+    }
+
+    @Override
+    public boolean isInfinite() {
+        return false;
     }
 }

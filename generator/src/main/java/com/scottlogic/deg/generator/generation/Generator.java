@@ -64,7 +64,7 @@ public class Generator implements IGenerator {
                 return true;
             indices[pos] = 0;
             pos--;
-        } while (pos > 0);
+        } while (pos >= 0);
         return false;
     }
 }
