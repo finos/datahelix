@@ -1,9 +1,11 @@
 package com.scottlogic.deg.reducer;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
-import com.scottlogic.deg.restriction.*;
+import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.restriction.FieldSpec;
+import com.scottlogic.deg.restriction.FieldSpecFactory;
+import com.scottlogic.deg.restriction.FieldSpecMerger;
+import com.scottlogic.deg.restriction.RowSpec;
 
 import java.util.List;
 import java.util.Map;

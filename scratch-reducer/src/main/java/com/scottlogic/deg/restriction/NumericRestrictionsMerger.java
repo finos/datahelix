@@ -2,11 +2,6 @@ package com.scottlogic.deg.restriction;
 
 import com.scottlogic.deg.restriction.NumericRestrictions.NumericLimit;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
-
 /**
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
