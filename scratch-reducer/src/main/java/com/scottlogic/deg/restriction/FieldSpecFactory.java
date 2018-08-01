@@ -1,6 +1,5 @@
 package com.scottlogic.deg.restriction;
 
-import com.scottlogic.deg.constraint.AmongConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.NotConstraint;
