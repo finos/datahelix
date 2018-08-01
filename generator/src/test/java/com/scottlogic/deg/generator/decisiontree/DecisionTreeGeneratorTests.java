@@ -7,10 +7,7 @@ import com.scottlogic.deg.generator.constraints.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class DecisionTreeGeneratorTests {
@@ -26,10 +23,7 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedProfileWithCorrectFields() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         Profile testInput = new Profile(inputFieldList, new ArrayList<>());
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -44,21 +38,12 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDescription() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        inputConstraints.add(constraint0);
-        inputConstraints.add(constraint1);
-        inputConstraints.add(constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -69,21 +54,12 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        inputConstraints.add(constraint0);
-        inputConstraints.add(constraint1);
-        inputConstraints.add(constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -97,21 +73,13 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithAllConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        inputConstraints.add(constraint0);
-        inputConstraints.add(constraint1);
-        inputConstraints.add(constraint2);
+        List<IConstraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
         Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -125,24 +93,13 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraint0);
-        subConstraints.add(constraint1);
-        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
+        AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        inputConstraints.add(andConstraint0);
-        inputConstraints.add(constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -156,24 +113,13 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraint0);
-        subConstraints.add(constraint1);
-        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
+        AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        inputConstraints.add(andConstraint0);
-        inputConstraints.add(constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
@@ -189,63 +135,35 @@ public class DecisionTreeGeneratorTests {
 
     @Test
     public void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraint0);
-        subConstraints.add(constraint1);
-        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
         IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
         IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
-        subConstraints = new ArrayList<>();
-        subConstraints.add(constraint2);
-        subConstraints.add(constraint3);
-        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
-        inputConstraints.add(orConstraint0);
-        inputConstraints.add(orConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
+        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
         IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Assert.assertEquals(inputConstraints.size(), outputRule.getRootOption().getDecisions().size());
+        Assert.assertEquals(2, outputRule.getRootOption().getDecisions().size());
     }
 
     // checks (A OR B) AND (C OR D)
     @Test
     public void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraintA);
-        subConstraints.add(constraintB);
-        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
-        subConstraints = new ArrayList<>();
-        subConstraints.add(constraintC);
-        subConstraints.add(constraintD);
-        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
-        inputConstraints.add(orConstraint0);
-        inputConstraints.add(orConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
+        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -257,124 +175,74 @@ public class DecisionTreeGeneratorTests {
     // checks (A OR B) AND (C OR D)
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraintA);
-        subConstraints.add(constraintB);
-        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
-        subConstraints = new ArrayList<>();
-        subConstraints.add(constraintC);
-        subConstraints.add(constraintD);
-        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
-        inputConstraints.add(orConstraint0);
-        inputConstraints.add(orConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
+        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
         IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Iterator<IRuleDecision> decisionIterator = outputRule.getRootOption().getDecisions().iterator();
-        IRuleDecision decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> optionIterator = decision.getOptions().iterator();
-        IRuleOption option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintA);
-        option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintB);
-        decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.getOptions().size());
-        optionIterator = decision.getOptions().iterator();
-        option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintC);
-        option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintD);
+        List<IRuleDecision> decisions = new ArrayList<>(outputRule.getRootOption().getDecisions());
+        Assert.assertEquals(2, decisions.get(0).getOptions().size());
+        List<IRuleOption> options = new ArrayList<>(decisions.get(0).getOptions());
+        assertOptionContainsSingleConstraint(options.get(0), constraintA);
+        assertOptionContainsSingleConstraint(options.get(1), constraintB);
+        Assert.assertEquals(2, decisions.get(1).getOptions().size());
+        options = new ArrayList<>(decisions.get(1).getOptions());
+        assertOptionContainsSingleConstraint(options.get(0), constraintC);
+        assertOptionContainsSingleConstraint(options.get(1), constraintD);
     }
 
     // Checks (A OR (B AND C)) AND (D OR E)
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5);
-        ArrayList<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraintC);
-        subConstraints.add(constraintB);
-        AndConstraint andConstraint0 = new AndConstraint(subConstraints);
-        subConstraints = new ArrayList<>();
-        subConstraints.add(constraintA);
-        subConstraints.add(andConstraint0);
-        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
+        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
         IsEqualToConstantConstraint constraintE = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
-        subConstraints = new ArrayList<>();
-        subConstraints.add(constraintD);
-        subConstraints.add(constraintE);
-        OrConstraint orConstraint1 = new OrConstraint(subConstraints);
-        inputConstraints.add(orConstraint0);
-        inputConstraints.add(orConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
+        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
 
         IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Iterator<IRuleDecision> decisionIterator = outputRule.getRootOption().getDecisions().iterator();
-        IRuleDecision decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> optionIterator = decision.getOptions().iterator();
-        IRuleOption option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintA);
-        option = optionIterator.next();
-        Assert.assertEquals(0, option.getDecisions().size());
-        Assert.assertEquals(2, option.getAtomicConstraints().size());
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintC));
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintB));
-        decision = decisionIterator.next();
-        Assert.assertEquals(2, decision.getOptions().size());
-        optionIterator = decision.getOptions().iterator();
-        option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintD);
-        option = optionIterator.next();
-        assertOptionContainsSingleConstraint(option, constraintE);
+        List<IRuleDecision> decisions = new ArrayList<>(outputRule.getRootOption().getDecisions());
+        Assert.assertEquals(2, decisions.get(0).getOptions().size());
+        List<IRuleOption> options = new ArrayList<>(decisions.get(0).getOptions());
+        assertOptionContainsSingleConstraint(options.get(0), constraintA);
+        Assert.assertEquals(0, options.get(1).getDecisions().size());
+        Assert.assertEquals(2, options.get(1).getAtomicConstraints().size());
+        Assert.assertTrue(options.get(1).getAtomicConstraints().contains(constraintC));
+        Assert.assertTrue(options.get(1).getAtomicConstraints().contains(constraintB));
+        Assert.assertEquals(2, decisions.get(1).getOptions().size());
+        options = new ArrayList<>(decisions.get(1).getOptions());
+        assertOptionContainsSingleConstraint(options.get(0), constraintD);
+        assertOptionContainsSingleConstraint(options.get(1), constraintE);
     }
 
     // Checks IF (A) THEN B ELSE C
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        inputConstraints.add(conditionalConstraint);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -384,13 +252,11 @@ public class DecisionTreeGeneratorTests {
         Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
         IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
         Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
-        IRuleOption option = iterator.next();
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintA));
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintB));
-        option = iterator.next();
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintC));
-        IConstraint constraint = option.getAtomicConstraints().iterator().next();
+        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
+        Assert.assertTrue(options.get(0).getAtomicConstraints().contains(constraintA));
+        Assert.assertTrue(options.get(0).getAtomicConstraints().contains(constraintB));
+        Assert.assertTrue(options.get(1).getAtomicConstraints().contains(constraintC));
+        IConstraint constraint = options.get(1).getAtomicConstraints().iterator().next();
         Assert.assertTrue(constraint instanceof NotConstraint);
         Assert.assertEquals(constraintA, ((NotConstraint)constraint).negatedConstraint);
     }
@@ -398,24 +264,14 @@ public class DecisionTreeGeneratorTests {
     // Checks IF (A OR B) THEN C
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
-        List<IConstraint> subConstraints = new ArrayList<>();
-        subConstraints.add(constraintA);
-        subConstraints.add(constraintB);
-        OrConstraint orConstraint0 = new OrConstraint(subConstraints);
+        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(orConstraint0, constraintC);
-        inputConstraints.add(conditionalConstraint);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -426,53 +282,40 @@ public class DecisionTreeGeneratorTests {
         // First decision level
         IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
         Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
+        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
         // First option: C AND (A OR B)
-        IRuleOption option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintC));
-        Assert.assertEquals(1, option.getDecisions().size());
-        IRuleDecision decision2 = option.getDecisions().iterator().next();
+        Assert.assertEquals(1, options.get(0).getAtomicConstraints().size());
+        Assert.assertTrue(options.get(0).getAtomicConstraints().contains(constraintC));
+        Assert.assertEquals(1, options.get(0).getDecisions().size());
+        IRuleDecision decision2 = options.get(0).getDecisions().iterator().next();
         Assert.assertEquals(2, decision2.getOptions().size());
-        Iterator<IRuleOption> iterator2 = decision2.getOptions().iterator();
-        IRuleOption option2 = iterator2.next();
-        Assert.assertEquals(1, option2.getAtomicConstraints().size());
-        Assert.assertTrue(option2.getAtomicConstraints().contains(constraintA));
-        Assert.assertEquals(0, option2.getDecisions().size());
-        option2 = iterator2.next();
-        Assert.assertEquals(1, option2.getAtomicConstraints().size());
-        Assert.assertTrue(option2.getAtomicConstraints().contains(constraintB));
-        Assert.assertEquals(0, option2.getDecisions().size());
+        List<IRuleOption> optionsNested = new ArrayList<>(decision2.getOptions());
+        Assert.assertEquals(1, optionsNested.get(0).getAtomicConstraints().size());
+        Assert.assertTrue(optionsNested.get(0).getAtomicConstraints().contains(constraintA));
+        Assert.assertEquals(0, optionsNested.get(0).getDecisions().size());
+        Assert.assertEquals(1, optionsNested.get(1).getAtomicConstraints().size());
+        Assert.assertTrue(optionsNested.get(1).getAtomicConstraints().contains(constraintB));
+        Assert.assertEquals(0, optionsNested.get(1).getDecisions().size());
         // Second option: ¬(A OR B) = ¬A AND ¬B
-        option = iterator.next();
-        Assert.assertEquals(2, option.getAtomicConstraints().size());
-        Iterator<IConstraint> constraintIterator = option.getAtomicConstraints().iterator();
-        IConstraint constraint = constraintIterator.next();
-        Assert.assertTrue(constraint instanceof NotConstraint);
-        Assert.assertEquals(constraintA, ((NotConstraint)constraint).negatedConstraint);
-        constraint = constraintIterator.next();
-        Assert.assertTrue(constraint instanceof NotConstraint);
-        Assert.assertEquals(constraintB, ((NotConstraint)constraint).negatedConstraint);
+        Assert.assertEquals(2, options.get(1).getAtomicConstraints().size());
+        List<IConstraint> constraints = new ArrayList<>(options.get(1).getAtomicConstraints());
+        Assert.assertTrue(constraints.get(0) instanceof NotConstraint);
+        Assert.assertEquals(constraintA, ((NotConstraint)constraints.get(0)).negatedConstraint);
+        Assert.assertTrue(constraints.get(1) instanceof NotConstraint);
+        Assert.assertEquals(constraintB, ((NotConstraint)constraints.get(1)).negatedConstraint);
     }
 
     // NOT (IF A THEN B ELSE C) - edge case
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         NotConstraint notConstraint = new NotConstraint(conditionalConstraint);
-        inputConstraints.add(notConstraint);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -483,46 +326,33 @@ public class DecisionTreeGeneratorTests {
         Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
         IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
         Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
+        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
         // First option should be A AND (NOT B)
-        IRuleOption option = iterator.next();
-        Assert.assertEquals(2, option.getAtomicConstraints().size());
-        Iterator<IConstraint> constraintIterator = option.getAtomicConstraints().iterator();
-        IConstraint testConstraint = constraintIterator.next();
-        Assert.assertEquals(constraintA, testConstraint);
-        testConstraint = constraintIterator.next();
-        Assert.assertTrue(testConstraint instanceof NotConstraint);
-        Assert.assertEquals(constraintB, ((NotConstraint)testConstraint).negatedConstraint);
+        Assert.assertEquals(2, options.get(0).getAtomicConstraints().size());
+        List<IConstraint> constraints = new ArrayList<>(options.get(0).getAtomicConstraints());
+        Assert.assertEquals(constraintA, constraints.get(0));
+        Assert.assertTrue(constraints.get(1) instanceof NotConstraint);
+        Assert.assertEquals(constraintB, ((NotConstraint)constraints.get(1)).negatedConstraint);
         // Second option should be (NOT A) AND (NOT C)
-        option = iterator.next();
-        Assert.assertEquals(2, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        constraintIterator = option.getAtomicConstraints().iterator();
-        testConstraint = constraintIterator.next();
-        Assert.assertTrue(testConstraint instanceof NotConstraint);
-        Assert.assertEquals(constraintA, ((NotConstraint)testConstraint).negatedConstraint);
-        testConstraint = constraintIterator.next();
-        Assert.assertTrue(testConstraint instanceof NotConstraint);
-        Assert.assertEquals(constraintC, ((NotConstraint)testConstraint).negatedConstraint);
+        Assert.assertEquals(2, options.get(1).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(1).getDecisions().size());
+        constraints = new ArrayList<>(options.get(1).getAtomicConstraints());
+        Assert.assertTrue(constraints.get(0) instanceof NotConstraint);
+        Assert.assertEquals(constraintA, ((NotConstraint)constraints.get(0)).negatedConstraint);
+        Assert.assertTrue(constraints.get(1) instanceof NotConstraint);
+        Assert.assertEquals(constraintC, ((NotConstraint)constraints.get(1)).negatedConstraint);
     }
 
     // NOT (IF A THEN B) - other edge case
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintWithoutElseClauseIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB);
         NotConstraint notConstraint = new NotConstraint(conditionalConstraint);
-        inputConstraints.add(notConstraint);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -542,19 +372,12 @@ public class DecisionTreeGeneratorTests {
     // NOT (NOT A)
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         NotConstraint notConstraint0 = new NotConstraint(constraintA);
         NotConstraint notConstraint1 = new NotConstraint(notConstraint0);
-        inputConstraints.add(notConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -569,19 +392,12 @@ public class DecisionTreeGeneratorTests {
     // NOT (A AND B)
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
         NotConstraint notConstraint = new NotConstraint(new AndConstraint(Arrays.asList(constraintA, constraintB)));
-        inputConstraints.add(notConstraint);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -592,17 +408,15 @@ public class DecisionTreeGeneratorTests {
         Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
         IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
         Assert.assertEquals(2, decision.getOptions().size());
-        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
-        IRuleOption option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        IConstraint testConstraint = option.getAtomicConstraints().iterator().next();
+        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
+        Assert.assertEquals(1, options.get(0).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(0).getDecisions().size());
+        IConstraint testConstraint = options.get(0).getAtomicConstraints().iterator().next();
         Assert.assertTrue(testConstraint instanceof NotConstraint);
         Assert.assertEquals(constraintA, ((NotConstraint)testConstraint).negatedConstraint);
-        option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        testConstraint = option.getAtomicConstraints().iterator().next();
+        Assert.assertEquals(1, options.get(1).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(1).getDecisions().size());
+        testConstraint = options.get(1).getAtomicConstraints().iterator().next();
         Assert.assertTrue(testConstraint instanceof NotConstraint);
         Assert.assertEquals(constraintB, ((NotConstraint)testConstraint).negatedConstraint);
     }
@@ -610,21 +424,14 @@ public class DecisionTreeGeneratorTests {
     // (A OR B) OR C
     @Test
     public void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        ArrayList<Field> inputFieldList = new ArrayList<>();
-        inputFieldList.add(new Field("one"));
-        inputFieldList.add(new Field("two"));
-        inputFieldList.add(new Field("three"));
-        ArrayList<IConstraint> inputConstraints = new ArrayList<>();
+        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(orConstraint0, constraintC));
-        inputConstraints.add(orConstraint1);
-        Rule testRule = new Rule("test", inputConstraints);
-        ArrayList<Rule> ruleList = new ArrayList<>();
-        ruleList.add(testRule);
-        Profile testInput = new Profile(inputFieldList, ruleList);
+        Rule testRule = new Rule("test", Collections.singletonList(orConstraint1));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
@@ -635,19 +442,16 @@ public class DecisionTreeGeneratorTests {
         Assert.assertEquals(1, outputRule.getRootOption().getDecisions().size());
         IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
         Assert.assertEquals(3, decision.getOptions().size());
-        Iterator<IRuleOption> iterator = decision.getOptions().iterator();
-        IRuleOption option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintA));
-        option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintB));
-        option = iterator.next();
-        Assert.assertEquals(1, option.getAtomicConstraints().size());
-        Assert.assertEquals(0, option.getDecisions().size());
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraintC));
+        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
+        Assert.assertEquals(1, options.get(0).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(0).getDecisions().size());
+        Assert.assertTrue(options.get(0).getAtomicConstraints().contains(constraintA));
+        Assert.assertEquals(1, options.get(1).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(1).getDecisions().size());
+        Assert.assertTrue(options.get(1).getAtomicConstraints().contains(constraintB));
+        Assert.assertEquals(1, options.get(2).getAtomicConstraints().size());
+        Assert.assertEquals(0, options.get(2).getDecisions().size());
+        Assert.assertTrue(options.get(2).getAtomicConstraints().contains(constraintC));
     }
 
     private void assertOptionContainsSingleConstraint(IRuleOption option, IConstraint constraint) {
