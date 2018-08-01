@@ -42,11 +42,11 @@ public class ConstraintReducerTest {
         final NumericRestrictions quantityNumericRestriction = new NumericRestrictions();
         quantityNumericRestriction.min = new NumericLimit(
                 BigDecimal.valueOf(0),
-                true
+                false
         );
         quantityNumericRestriction.max = new NumericLimit(
                 BigDecimal.valueOf(5),
-                false
+                true
         );
         quantitySpec.setNumericRestrictions(quantityNumericRestriction);
 
