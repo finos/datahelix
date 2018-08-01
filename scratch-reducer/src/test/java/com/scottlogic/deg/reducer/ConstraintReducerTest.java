@@ -1,16 +1,13 @@
 package com.scottlogic.deg.reducer;
 
-import com.scottlogic.deg.constraint.AmongConstraint;
-import com.scottlogic.deg.constraint.IConstraint;
-import com.scottlogic.deg.constraint.NumericLimitConstConstraint;
-import com.scottlogic.deg.constraint.TypeConstraint;
-import com.scottlogic.deg.input.Field;
-import com.scottlogic.deg.restriction.NumericFieldRestriction;
-import com.scottlogic.deg.restriction.RowSpec;
-import com.scottlogic.deg.restriction.StringFieldRestriction;
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.restriction.*;
+import com.scottlogic.deg.restriction.NumericRestrictions.NumericLimit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,36 +25,44 @@ public class ConstraintReducerTest {
         final Field country = new Field("country");
         final Field city = new Field("city");
 
-        final Set<String> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
+        final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 
         final List<IConstraint> constraints = Arrays.asList(
-                new NumericLimitConstConstraint<>(quantity, 0, NumericLimitConstConstraint.LimitType.Min, Integer.class),
-                new NumericLimitConstConstraint<>(quantity, 10, NumericLimitConstConstraint.LimitType.Max, Integer.class),
-                new AmongConstraint<>(country, countryAmong, String.class),
-                new TypeConstraint<>(city, String.class)
+                new IsGreaterThanConstantConstraint(quantity, 0),
+                new NotConstraint(new IsGreaterThanConstantConstraint(quantity, 5)),
+                new IsInSetConstraint(country, countryAmong),
+                new IsOfTypeConstraint(city, IsOfTypeConstraint.Types.String)
         );
         final RowSpec reducedConstraints = constraintReducer.getReducedConstraints(constraints);
 
-        final var quantityRestriction = new NumericFieldRestriction<>(quantity, Integer.class);
-        quantityRestriction.setMin(0);
-        quantityRestriction.setMax(10);
+        final FieldSpec quantitySpec = new FieldSpec(quantity.name);
+        final FieldSpec countrySpec = new FieldSpec(country.name);
+        final FieldSpec citySpec = new FieldSpec(city.name);
 
-        final var countryRestriction = new StringFieldRestriction(country);
-        countryRestriction.setAmong(countryAmong);
+        final NumericRestrictions quantityNumericRestriction = new NumericRestrictions();
+        quantityNumericRestriction.min = new NumericLimit(
+                BigDecimal.valueOf(0),
+                true
+        );
+        quantityNumericRestriction.max = new NumericLimit(
+                BigDecimal.valueOf(5),
+                false
+        );
+        quantitySpec.setNumericRestrictions(quantityNumericRestriction);
 
-        final var cityRestriction = new StringFieldRestriction(city);
+        final SetRestrictions countrySetRestriction = new SetRestrictions();
+        countrySetRestriction.whitelist = countryAmong;
+        countrySpec.setSetRestrictions(countrySetRestriction);
 
-//        final var expectation = List.of(
-//                quantityRestriction,
-//                countryRestriction,
-//                cityRestriction
-//        );
+        final TypeRestrictions cityTypeRestriction = new TypeRestrictions();
+        citySpec.setTypeRestrictions(cityTypeRestriction);
+
         assertThat(
                 reducedConstraints.getFieldSpecs(),
                 containsInAnyOrder(
-                        Matchers.samePropertyValuesAs(quantityRestriction),
-                        Matchers.samePropertyValuesAs(countryRestriction),
-                        Matchers.samePropertyValuesAs(cityRestriction)
+                        Matchers.samePropertyValuesAs(quantitySpec),
+                        Matchers.samePropertyValuesAs(countrySpec),
+                        Matchers.samePropertyValuesAs(citySpec)
                 )
         );
     }

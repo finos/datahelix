@@ -15,6 +15,8 @@ public class ConstraintFieldSniffer {
             return detectField(((NotConstraint) constraint).negatedConstraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
             return ((IsEqualToConstantConstraint) constraint).field;
+        } else if (constraint instanceof IsGreaterThanConstantConstraint) {
+            return ((IsGreaterThanConstantConstraint) constraint).field;
         } else if (constraint instanceof IsInSetConstraint) {
             return ((IsInSetConstraint) constraint).field;
         } else if (constraint instanceof IsNullConstraint) {
