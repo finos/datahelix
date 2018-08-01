@@ -21,10 +21,13 @@ public class App
         final Profile profile;
 
         try {
-            profile = new ProfileReader().reader(Paths.get(profileFilePath));
+            profile = new ProfileReader().read(Paths.get(profileFilePath));
         }
         catch(Exception e) {
             System.err.println("Failed to read file!");
+            System.err.println(e.toString());
+            for (StackTraceElement ste : e.getStackTrace())
+                System.err.println(ste.toString());
             return;
         }
 
