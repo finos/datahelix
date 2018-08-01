@@ -9,6 +9,7 @@ public class FieldSpecMerger {
     private final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
     private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
     private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
+    private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
 
     public FieldSpec merge(FieldSpec left, FieldSpec right) {
         final FieldSpec merged = new FieldSpec(getMergedName(left.getName(), right.getName()));
@@ -16,6 +17,7 @@ public class FieldSpecMerger {
         merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()));
         merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(), right.getStringRestrictions()));
         merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
+        merged.setTypeRestrictions(typeRestrictionsMerger.merge(left.getTypeRestrictions(), right.getTypeRestrictions()));
         return merged;
     }
 

@@ -6,7 +6,6 @@ import dk.brics.automaton.Automaton;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
     private final AutomatonFactory automatonFactory = new AutomatonFactory();
@@ -30,6 +29,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
+        } else if (constraint instanceof IsOfTypeConstraint) {
+            apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -62,6 +63,14 @@ public class FieldSpecFactory {
                 : NullRestrictions.Nullness.MustBeNull;
     }
 
+    private void apply(FieldSpec fieldSpec, IsOfTypeConstraint constraint, boolean negate) {
+        final TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
+        if (negate) {
+            throw new UnsupportedOperationException();
+        }
+        typeRestrictions.type = constraint.requiredType;
+    }
+
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
         final NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
         final BigDecimal limit = numberToBigDecimal(constraint.referenceValue);
@@ -79,12 +88,11 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
+        final StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
         final Automaton nominalAutomaton = automatonFactory.fromPattern(constraint.regex);
         final Automaton automaton = negate
                 ? nominalAutomaton.complement()
                 : nominalAutomaton;
-
-        final StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
         stringRestrictions.automaton = automaton;
     }
 

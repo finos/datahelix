@@ -10,6 +10,7 @@ public class FieldSpec {
     private NumericRestrictions numericRestrictions = new NumericRestrictions();
     private StringRestrictions stringRestrictions = new StringRestrictions();
     private NullRestrictions nullRestrictions = new NullRestrictions();
+    private TypeRestrictions typeRestrictions = new TypeRestrictions();
 
     public FieldSpec(String name) {
         this.name = name;
@@ -45,6 +46,14 @@ public class FieldSpec {
 
     public void setStringRestrictions(StringRestrictions stringRestrictions) {
         this.stringRestrictions = stringRestrictions;
+    }
+
+    public TypeRestrictions getTypeRestrictions() {
+        return typeRestrictions;
+    }
+
+    public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
+        this.typeRestrictions = typeRestrictions;
     }
 
     public void setNullRestrictions(NullRestrictions nullRestrictions) {
