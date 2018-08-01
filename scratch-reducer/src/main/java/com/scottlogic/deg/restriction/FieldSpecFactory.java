@@ -2,6 +2,7 @@ package com.scottlogic.deg.restriction;
 
 import com.scottlogic.deg.generator.constraints.*;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 public class FieldSpecFactory {
@@ -17,20 +18,25 @@ public class FieldSpecFactory {
         } else if (constraint instanceof IsInSetConstraint) {
             apply(fieldSpec, (IsInSetConstraint) constraint, negate);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
-            final IsEqualToConstantConstraint castConstraint = (IsEqualToConstantConstraint) constraint;
-            apply(
-                    fieldSpec,
-                    new IsInSetConstraint(
-                            castConstraint.field,
-                            Collections.singleton(castConstraint.requiredValue)
-                    ),
-                    negate
-            );
+            apply(fieldSpec, (IsEqualToConstantConstraint) constraint, negate);
+        } else if (constraint instanceof IsGreaterThanConstantConstraint) {
+            apply(fieldSpec, (IsGreaterThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
+    }
+
+    private void apply(FieldSpec fieldSpec, IsEqualToConstantConstraint constraint, boolean negate) {
+        apply(
+                fieldSpec,
+                new IsInSetConstraint(
+                        constraint.field,
+                        Collections.singleton(constraint.requiredValue)
+                ),
+                negate
+        );
     }
 
     private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
@@ -47,5 +53,35 @@ public class FieldSpecFactory {
         nullRestrictions.nullness = negate
                 ? NullRestrictions.Nullness.MustNotBeNull
                 : NullRestrictions.Nullness.MustBeNull;
+    }
+
+    private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
+        final NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
+        final BigDecimal limit = numberToBigDecimal(constraint.referenceValue);
+        if (negate) {
+            numericRestrictions.max = new NumericRestrictions.NumericLimit(
+                    limit,
+                    true
+            );
+        } else {
+            numericRestrictions.min = new NumericRestrictions.NumericLimit(
+                    limit,
+                    false
+            );
+        }
+    }
+
+    private BigDecimal numberToBigDecimal(Number number) {
+        if (number instanceof Long) {
+            return BigDecimal.valueOf(number.longValue());
+        } else if (number instanceof Integer) {
+            return BigDecimal.valueOf(number.intValue());
+        } else if (number instanceof Double) {
+            return BigDecimal.valueOf(number.doubleValue());
+        } else if (number instanceof Float) {
+            return BigDecimal.valueOf(number.floatValue());
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 }
