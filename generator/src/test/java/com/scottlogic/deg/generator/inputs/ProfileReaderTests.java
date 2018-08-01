@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class ProfileReaderTests {
     private String json;
@@ -261,6 +263,37 @@ public class ProfileReaderTests {
                         Assert.assertThat(
                             c.whenConditionIsFalse,
                             instanceOf(IsGreaterThanConstantConstraint.class));
+                    })));
+    }
+
+    @Test
+    public void shouldDeserialiseIfConstraintWithoutElse() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [{" +
+                "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
+                "    }]" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    ConditionalConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.condition,
+                            instanceOf(IsOfTypeConstraint.class));
+
+                        Assert.assertThat(
+                            c.whenConditionIsTrue,
+                            instanceOf(IsEqualToConstantConstraint.class));
+
+                        Assert.assertThat(
+                            c.whenConditionIsFalse,
+                            nullValue());
                     })));
     }
 }

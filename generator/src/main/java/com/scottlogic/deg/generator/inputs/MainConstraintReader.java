@@ -56,9 +56,11 @@ class MainConstraintReader implements IConstraintReader {
                 this.apply(
                     dto.then,
                     fields),
-                this.apply(
-                    dto.else_,
-                    fields));
+                dto.else_ != null
+                    ? this.apply(
+                        dto.else_,
+                        fields)
+                    : null);
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
