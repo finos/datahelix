@@ -14,5 +14,13 @@ public class NumericRestrictions {
             this.limit = limit;
             this.inclusive = inclusive;
         }
+
+        public BigDecimal getLimit() {
+            return limit;
+        }
+
+        public boolean isInclusive() {
+            return inclusive;
+        }
     }
 }
