@@ -1,7 +1,7 @@
-package com.scottlogic.deg.restriction;
+package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.AutomatonFactory;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.reducer.AutomatonFactory;
 import dk.brics.automaton.Automaton;
 
 import java.math.BigDecimal;

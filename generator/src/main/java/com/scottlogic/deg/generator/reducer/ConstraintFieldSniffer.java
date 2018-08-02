@@ -1,7 +1,8 @@
-package com.scottlogic.deg.reducer;
+package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.reducer.ConstraintAndFieldTuple;
 
 public class ConstraintFieldSniffer {
 

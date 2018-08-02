@@ -2,8 +2,9 @@ package com.scottlogic.deg.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.restriction.*;
-import com.scottlogic.deg.restriction.NumericRestrictions.NumericLimit;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions.NumericLimit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 

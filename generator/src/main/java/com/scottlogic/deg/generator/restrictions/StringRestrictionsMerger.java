@@ -1,5 +1,6 @@
-package com.scottlogic.deg.restriction;
+package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import dk.brics.automaton.Automaton;
 
 /**

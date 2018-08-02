@@ -1,4 +1,4 @@
-package com.scottlogic.deg;
+package com.scottlogic.deg.generator.reducer;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;

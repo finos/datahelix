@@ -1,4 +1,4 @@
-package com.scottlogic.deg.restriction;
+package com.scottlogic.deg.generator.restrictions;
 
 import java.math.BigDecimal;
 

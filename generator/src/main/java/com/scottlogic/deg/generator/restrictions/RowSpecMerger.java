@@ -1,4 +1,8 @@
-package com.scottlogic.deg.restriction;
+package com.scottlogic.deg.generator.restrictions;
+
+import com.scottlogic.deg.generator.restrictions.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.List;
 import java.util.Map;
