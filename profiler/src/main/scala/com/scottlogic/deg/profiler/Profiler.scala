@@ -1,12 +1,10 @@
 package com.scottlogic.deg.profiler
 
-import java.util
-
 import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
 import com.scottlogic.deg.analyser.field_analyser.timestamp_analyser.NaiveTimestampAnalyser
-import com.scottlogic.deg.schemas.v3.{FieldDTO, RuleDTO, V3ProfileDTO}
+import com.scottlogic.deg.schemas.v3.{FieldDTO, V3ProfileDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
 
