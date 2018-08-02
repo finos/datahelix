@@ -2,7 +2,7 @@ package com.scottlogic.deg.analyser.field_analyser.string_analyser
 
 import java.util
 
-import com.scottlogic.deg.schemas.v3.{ConstraintDTO, RuleDTO}
+import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder, RuleDTO}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
@@ -21,31 +21,26 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
     val fieldName = field.name;
     val allFieldConstraints = new util.ArrayList[ConstraintDTO]();
 
-    val fieldTypeConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def is = "ofType";
-      def value = "string";
-    };
+    val fieldTypeConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendIs("ofType")
+      .appendValue("string")
+    .Build();
 
-    val regexConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def is = "matchesRegex";
-      def value = s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}";
-    };
+    val regexConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendIs("matchesRegex")
+      .appendValue(s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}")
+      .Build();
 
     allFieldConstraints.add(fieldTypeConstraint);
     allFieldConstraints.add(regexConstraint);
-
-    val ruleDTO = new RuleDTO {
-      def constraints = allFieldConstraints;
-      def description = s"String field ${fieldName} rule";
-    };
 
     // stringAnalysis.getAs("len_avg") not used anymore
 
     // alphabet = dfCharSet.select("character").collect().mkString not used for now
 
-    return ruleDTO;
+    return new RuleDTO(s"String field ${fieldName} rule", allFieldConstraints);
   }
 
   def analyse(): (DataFrame, DataFrame) = {

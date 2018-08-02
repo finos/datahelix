@@ -5,10 +5,5 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructField
 
 class GenericFieldAnalyser(val df: DataFrame, val field: StructField) extends FieldAnalyser {
-  override def constructDTOField() = {
-    val inputField = field.name;
-    new RuleDTO {
-      def field = inputField
-    };
-  }
+  override def constructDTOField() = {new RuleDTO()}
 }

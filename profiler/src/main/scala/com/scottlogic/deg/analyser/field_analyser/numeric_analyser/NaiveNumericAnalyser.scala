@@ -2,7 +2,7 @@ package com.scottlogic.deg.analyser.field_analyser.numeric_analyser
 
 import java.util
 
-import com.scottlogic.deg.schemas.v3.{ConstraintDTO, RuleDTO}
+import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder, RuleDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StructField}
 import org.apache.spark.sql.functions.{max, min, _}
@@ -21,47 +21,46 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
     val fieldName = inputField.name;
     val allFieldConstraints = new util.ArrayList[ConstraintDTO]();
 
-    val fieldTypeConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def is = "ofType";
-      def value = "number";
-    };
+    val fieldTypeConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendIs("ofType")
+      .appendValue("number")
+      .Build();
 
-    val minLengthConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def is = "greaterThanOrEqual";
-      def value = head.getAs("min");
-    };
+    val minLengthConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendIs("greaterThanOrEqual")
+      .appendValue(head.getAs("min"))
+      .Build();
 
-    val maxLengthConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def not = new ConstraintDTO {
-        def field = fieldName;
-        def is = "greaterThan";
-        def value = head.getAs("max");
-      };
-    };
+    val maxLengthConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendNot(
+        ConstraintDTOBuilder.instance()
+        .appendField(fieldName)
+        .appendIs("greaterThan")
+        .appendValue(head.getAs("max"))
+        .Build()
+      )
+      .Build();
 
-    val regexConstraint = new ConstraintDTO {
-      def field = fieldName;
-      def is = "matchesRegex";
-      def value = inputField.dataType match {
-        case DoubleType => "%f"
-        case LongType => "%l"
-        case IntegerType => "%d"
-      };
-    };
+    val regexConstraint = ConstraintDTOBuilder.instance()
+      .appendField(fieldName)
+      .appendIs("matchesRegex")
+      .appendValue(
+        inputField.dataType match {
+          case DoubleType => "%f"
+          case LongType => "%l"
+          case IntegerType => "%d"
+        }
+      )
+      .Build();
 
     allFieldConstraints.add(fieldTypeConstraint);
     allFieldConstraints.add(minLengthConstraint);
     allFieldConstraints.add(maxLengthConstraint);
     allFieldConstraints.add(regexConstraint);
 
-    val ruleDTO = new RuleDTO {
-      def constraints = allFieldConstraints;
-      def description = s"Numeric field ${fieldName} rule";
-    };
-
-    return ruleDTO;
+    return new RuleDTO(s"Numeric field ${fieldName} rule", allFieldConstraints);
   }
 }
