@@ -2,16 +2,15 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.reducer.ConstraintAndFieldTuple;
 
-public class ConstraintFieldSniffer {
+class ConstraintFieldSniffer {
 
-    public ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
+    ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
         final Field field = detectField(constraint);
         return new ConstraintAndFieldTuple(constraint, field);
     }
 
-    public Field detectField(IConstraint constraint) {
+    Field detectField(IConstraint constraint) {
         if (constraint instanceof NotConstraint) {
             return detectField(((NotConstraint) constraint).negatedConstraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {

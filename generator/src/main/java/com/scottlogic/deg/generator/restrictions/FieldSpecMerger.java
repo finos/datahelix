@@ -1,10 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-
 /**
- * For a given combination of choices over the decision tree
- * Details every column's atomic constraints
+ * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
     private final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
@@ -14,19 +11,12 @@ public class FieldSpecMerger {
     private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
 
     public FieldSpec merge(FieldSpec left, FieldSpec right) {
-        final FieldSpec merged = new FieldSpec(getMergedName(left.getName(), right.getName()));
+        final FieldSpec merged = new FieldSpec();
         merged.setSetRestrictions(setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions()));
         merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()));
         merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(), right.getStringRestrictions()));
         merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
         merged.setTypeRestrictions(typeRestrictionsMerger.merge(left.getTypeRestrictions(), right.getTypeRestrictions()));
         return merged;
-    }
-
-    private String getMergedName(String left, String right) {
-        if (!left.equals(right)) {
-            throw new IllegalStateException();
-        }
-        return left;
     }
 }

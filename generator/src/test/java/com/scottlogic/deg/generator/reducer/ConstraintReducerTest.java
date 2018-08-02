@@ -10,65 +10,58 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class ConstraintReducerTest {
-    private final ConstraintReducer constraintReducer = new ConstraintReducer();
-
     @Test
-    public void test() {
-        final Field quantity = new Field("quantity");
-        final Field country = new Field("country");
-        final Field city = new Field("city");
+    public void shouldProduceCorrectFieldSpecsForExample() {
+        // ARRANGE
+        final Field quantityField = new Field("quantity");
+        final Field countryField = new Field("country");
+        final Field cityField = new Field("city");
+
+        List<Field> fieldList = Arrays.asList(quantityField, countryField, cityField);
 
         final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 
         final List<IConstraint> constraints = Arrays.asList(
-                new IsGreaterThanConstantConstraint(quantity, 0),
-                new NotConstraint(new IsGreaterThanConstantConstraint(quantity, 5)),
-                new IsInSetConstraint(country, countryAmong),
-                new IsOfTypeConstraint(city, IsOfTypeConstraint.Types.String)
-        );
+                new IsGreaterThanConstantConstraint(quantityField, 0),
+                new NotConstraint(new IsGreaterThanConstantConstraint(quantityField, 5)),
+                new IsInSetConstraint(countryField, countryAmong),
+                new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.String));
 
+        // ACT
+        final RowSpec reducedConstraints = new ConstraintReducer().reduceConstraintsToRowSpec(
+            fieldList,
+            constraints);
 
+        // ASSERT
+        FieldSpec quantityFieldSpec = reducedConstraints.getSpecForField(quantityField);
+        Assert.assertNull(quantityFieldSpec.getSetRestrictions());
+        Assert.assertNull(quantityFieldSpec.getStringRestrictions());
+        Assert.assertNull(quantityFieldSpec.getNullRestrictions());
+        Assert.assertNull(quantityFieldSpec.getTypeRestrictions());
+        Assert.assertNotNull(quantityFieldSpec.getNumericRestrictions());
+        Assert.assertEquals(BigDecimal.ZERO, quantityFieldSpec.getNumericRestrictions().min.getLimit());
+        Assert.assertFalse(quantityFieldSpec.getNumericRestrictions().min.isInclusive());
+        Assert.assertEquals(BigDecimal.valueOf(5), quantityFieldSpec.getNumericRestrictions().max.getLimit());
+        Assert.assertTrue(quantityFieldSpec.getNumericRestrictions().max.isInclusive());
 
-        final RowSpec reducedConstraints = constraintReducer.getReducedConstraints(constraints);
+        FieldSpec countryFieldSpec = reducedConstraints.getSpecForField(countryField);
+        Assert.assertNull(countryFieldSpec.getStringRestrictions());
+        Assert.assertNull(countryFieldSpec.getNullRestrictions());
+        Assert.assertNull(countryFieldSpec.getTypeRestrictions());
+        Assert.assertNull(countryFieldSpec.getNumericRestrictions());
+        Assert.assertNotNull(countryFieldSpec.getSetRestrictions());
+        Assert.assertNull(countryFieldSpec.getSetRestrictions().blacklist);
+        Assert.assertNotNull(countryFieldSpec.getSetRestrictions().whitelist);
+        Assert.assertEquals(2, countryFieldSpec.getSetRestrictions().whitelist.size());
+        Assert.assertTrue(countryFieldSpec.getSetRestrictions().whitelist.contains("UK"));
+        Assert.assertTrue(countryFieldSpec.getSetRestrictions().whitelist.contains("US"));
 
-
-
-        ArrayList<String> seenFields = new ArrayList<>();
-        for (FieldSpec fieldSpec : reducedConstraints.getFieldSpecs()) {
-            Assert.assertTrue(Arrays.asList("quantity", "country", "city").contains(fieldSpec.getName()));
-            Assert.assertFalse(seenFields.contains(fieldSpec.getName()));
-            seenFields.add(fieldSpec.getName());
-            if (fieldSpec.getName().equals("quantity")) {
-                Assert.assertNull(fieldSpec.getSetRestrictions());
-                Assert.assertNull(fieldSpec.getStringRestrictions());
-                Assert.assertNull(fieldSpec.getNullRestrictions());
-                Assert.assertNull(fieldSpec.getTypeRestrictions());
-                Assert.assertNotNull(fieldSpec.getNumericRestrictions());
-                Assert.assertEquals(BigDecimal.ZERO, fieldSpec.getNumericRestrictions().min.getLimit());
-                Assert.assertFalse(fieldSpec.getNumericRestrictions().min.isInclusive());
-                Assert.assertEquals(BigDecimal.valueOf(5), fieldSpec.getNumericRestrictions().max.getLimit());
-                Assert.assertTrue(fieldSpec.getNumericRestrictions().max.isInclusive());
-            }
-            else if (fieldSpec.getName().equals("country")) {
-                Assert.assertNull(fieldSpec.getStringRestrictions());
-                Assert.assertNull(fieldSpec.getNullRestrictions());
-                Assert.assertNull(fieldSpec.getTypeRestrictions());
-                Assert.assertNull(fieldSpec.getNumericRestrictions());
-                Assert.assertNotNull(fieldSpec.getSetRestrictions());
-                Assert.assertNull(fieldSpec.getSetRestrictions().blacklist);
-                Assert.assertNotNull(fieldSpec.getSetRestrictions().whitelist);
-                Assert.assertEquals(2, fieldSpec.getSetRestrictions().whitelist.size());
-                Assert.assertTrue(fieldSpec.getSetRestrictions().whitelist.contains("UK"));
-                Assert.assertTrue(fieldSpec.getSetRestrictions().whitelist.contains("US"));
-            }
-            else if (fieldSpec.getName().equals("city")) {
-                Assert.assertNull(fieldSpec.getSetRestrictions());
-                Assert.assertNull(fieldSpec.getStringRestrictions());
-                Assert.assertNull(fieldSpec.getNullRestrictions());
-                Assert.assertNull(fieldSpec.getNumericRestrictions());
-                Assert.assertNotNull(fieldSpec.getTypeRestrictions());
-                Assert.assertEquals(IsOfTypeConstraint.Types.String, fieldSpec.getTypeRestrictions().type);
-            }
-        }
+        FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
+        Assert.assertNull(cityFieldSpec.getSetRestrictions());
+        Assert.assertNull(cityFieldSpec.getStringRestrictions());
+        Assert.assertNull(cityFieldSpec.getNullRestrictions());
+        Assert.assertNull(cityFieldSpec.getNumericRestrictions());
+        Assert.assertNotNull(cityFieldSpec.getTypeRestrictions());
+        Assert.assertEquals(IsOfTypeConstraint.Types.String, cityFieldSpec.getTypeRestrictions().type);
     }
 }

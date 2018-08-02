@@ -10,8 +10,8 @@ import java.util.Collections;
 public class FieldSpecFactory {
     private final AutomatonFactory automatonFactory = new AutomatonFactory();
 
-    public FieldSpec construct(String name, IConstraint constraint) {
-        final FieldSpec fieldSpec = new FieldSpec(name);
+    public FieldSpec construct(IConstraint constraint) {
+        final FieldSpec fieldSpec = new FieldSpec();
         apply(fieldSpec, constraint, false);
         return fieldSpec;
     }
