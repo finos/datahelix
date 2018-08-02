@@ -2,6 +2,7 @@ package com.scottlogic.deg
 
 import java.io.File
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
 import com.scottlogic.deg.io.{FileReader, FileWriter}
@@ -51,9 +52,12 @@ class DEGApp @Inject()(
     val profiler = new Profiler(df)
     val profile = profiler.profile()
 
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
     val marshalled: String = mapper
       .writerWithDefaultPrettyPrinter()
       .writeValueAsString(profile)
+
     val fileWriter = new FileWriter()
     fileWriter.write(outFile, marshalled)
 
