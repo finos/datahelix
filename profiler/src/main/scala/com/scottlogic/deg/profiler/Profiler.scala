@@ -1,5 +1,7 @@
 package com.scottlogic.deg.profiler
 
+import java.util
+
 import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
@@ -7,7 +9,8 @@ import com.scottlogic.deg.analyser.field_analyser.timestamp_analyser.NaiveTimest
 import com.scottlogic.deg.schemas.v3.{FieldDTO, RuleDTO, V3ProfileDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
-import collection.JavaConverters.asJavaCollectionConverter
+
+import collection.JavaConverters._
 
 case class Location(lat: Double, lon: Double)
 
@@ -22,8 +25,8 @@ class Profiler(df: DataFrame) {
     }).constructDTOField());
 
     val profile = new V3ProfileDTO();
-    profile.fields = asJavaCollectionConverter[FieldDTO](fieldArray).asJavaCollection;
-    profile.rules = asJavaCollectionConverter[RuleDTO](ruleArray).asJavaCollection;
+    profile.fields = asJavaCollectionConverter(fieldArray).asJavaCollection;
+    profile.rules = asJavaCollectionConverter(ruleArray).asJavaCollection;
 
     return profile;
   }
