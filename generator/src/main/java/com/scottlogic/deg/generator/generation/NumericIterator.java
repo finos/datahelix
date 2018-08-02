@@ -19,6 +19,7 @@ class NumericIterator implements IFieldSpecIterator {
      private Strategy strategy;
      private BigDecimal nextValue;
      private boolean hasNext = true;
+     private BigDecimal stepSize;
 
      NumericIterator(NumericRestrictions restrictions, Set<Object> blacklist) {
          this.restrictions = restrictions;
@@ -56,19 +57,31 @@ class NumericIterator implements IFieldSpecIterator {
          if (restrictions.min == null) {
              if (restrictions.max == null) {
                  strategy = Strategy.OutFromMiddle;
+                 stepSize = BigDecimal.ONE;
              }
              else {
                  strategy = Strategy.DownFromMax;
+                 stepSize = BigDecimal.ONE;
              }
          }
          else {
              if (restrictions.max == null) {
                  strategy = Strategy.UpFromMin;
+                 stepSize = BigDecimal.ONE;
              }
              else {
                  strategy = Strategy.MinToMax;
+                 stepSize = decideStepSize(restrictions.min.getLimit(), restrictions.max.getLimit());
              }
          }
+     }
+
+     private BigDecimal decideStepSize(BigDecimal min, BigDecimal max) {
+         BigDecimal diff = max.subtract(min).abs();
+         if (diff.compareTo(BigDecimal.TEN) > 0) {
+             return BigDecimal.ONE;
+         }
+         return diff.divide(BigDecimal.valueOf(100));
      }
 
      private void setInitialValue() {
@@ -80,12 +93,12 @@ class NumericIterator implements IFieldSpecIterator {
              case MinToMax:
                  nextValue = restrictions.min.getInclusive() ?
                          restrictions.min.getLimit() :
-                         restrictions.min.getLimit().add(BigDecimal.ONE);
+                         restrictions.min.getLimit().add(stepSize);
                  break;
              case DownFromMax:
                  nextValue = restrictions.max.getInclusive() ?
                          restrictions.max.getLimit() :
-                         restrictions.max.getLimit().subtract(BigDecimal.ONE);
+                         restrictions.max.getLimit().subtract(stepSize);
                  break;
          }
      }
@@ -104,14 +117,14 @@ class NumericIterator implements IFieldSpecIterator {
                  }
                  return true;
              case DownFromMax:
-                 nextValue = nextValue.subtract(BigDecimal.ONE);
+                 nextValue = nextValue.subtract(stepSize);
                  return true;
              case OutFromMiddle:
                  if (nextValue.compareTo(BigDecimal.ZERO) > 0) {
                      nextValue = BigDecimal.ZERO.subtract(nextValue);
                  }
                  else {
-                     nextValue = nextValue.abs().add(BigDecimal.ONE);
+                     nextValue = nextValue.abs().add(stepSize);
                  }
                  return true;
          }

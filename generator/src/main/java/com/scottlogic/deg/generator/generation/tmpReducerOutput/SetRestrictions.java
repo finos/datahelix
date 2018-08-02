@@ -11,7 +11,7 @@ public class SetRestrictions {
      * reconcile whitelist and blacklist of set membership
      * @return whitelist without blacklist
      */
-    public Set<Object> getReconciledWhitelist() {
+    public Set<?> getReconciledWhitelist() {
         if (whitelist == null) {
             return null;
         }

@@ -40,6 +40,10 @@ public class Generator implements IGenerator {
         for (int i = 0; i < rowData.size(); ++i) {
             indices[i] = 0;
             maxima[i] = rowData.get(i).size();
+
+            // if any fields have zero possible values, we cannot generate a valid row.
+            if (maxima[i] == 0)
+                return output;
         }
         do {
             output.add(generateRowFrom(rowData, indices));

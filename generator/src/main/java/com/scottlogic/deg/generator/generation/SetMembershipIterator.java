@@ -3,9 +3,9 @@ package com.scottlogic.deg.generator.generation;
 import java.util.Iterator;
 
 class SetMembershipIterator implements IFieldSpecIterator {
-    private Iterator<Object> forwardedIterator;
+    private Iterator<?> forwardedIterator;
 
-    SetMembershipIterator(Iterator<Object> whitelistIterator) {
+    SetMembershipIterator(Iterator<?> whitelistIterator) {
         this.forwardedIterator = whitelistIterator;
     }
 

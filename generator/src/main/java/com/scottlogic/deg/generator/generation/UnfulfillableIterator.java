@@ -1,14 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.FieldSpec;
-
-class FieldSpecFulfilmentIterator implements IFieldSpecIterator {
-    private final FieldSpec spec;
-
-    FieldSpecFulfilmentIterator(FieldSpec spec) {
-        this.spec = spec;
-    }
-
+public class UnfulfillableIterator implements IFieldSpecIterator {
     @Override
     public boolean hasNext() {
         return false;

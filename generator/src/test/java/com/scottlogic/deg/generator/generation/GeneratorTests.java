@@ -2,13 +2,14 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.tmpReducerOutput.*;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
-import junit.framework.TestCase;
+
+import dk.brics.automaton.Automaton;
+import dk.brics.automaton.RegExp;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.zip.ZipEntry;
 
 public class GeneratorTests {
     @Test
@@ -336,6 +337,27 @@ public class GeneratorTests {
     }
 
     @Test
+    public void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithBoundsOverSmallRange() {
+        RowSpec rowSpec = new RowSpec(
+                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test",
+                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(0.6), false),
+                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(0.7), false))));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(1, testOutput.size());
+        TestCaseDataRow testRow = testOutput.iterator().next();
+        Assert.assertNotNull(testRow);
+        Assert.assertEquals(1, testRow.values.size());
+        Object testField = testRow.values.iterator().next();
+        Assert.assertTrue(testField instanceof BigDecimal);
+        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.valueOf(0.6)) > 0);
+        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.valueOf(0.7)) < 0);
+    }
+
+    @Test
     public void shouldReturnSingleRowWithCorrectContents_IfInputHasTwoSetFieldsAndStrategyIsMinimal() {
         List<String> validValues0 = Arrays.asList("Somerset", "Gloucestershire", "Kent");
         List<String> validValues1 = Arrays.asList("Porthmadog", "Llandudno");
@@ -390,6 +412,89 @@ public class GeneratorTests {
         }
     }
 
+    @Test
+    public void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithoutWildcards() {
+        String matchValue = "Prince";
+        RowSpec rowSpec = new RowSpec(Arrays.asList(getFieldSpecThatMatchesRegex("test", matchValue, null)));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(1, testOutput.size());
+        TestCaseDataRow testRow = testOutput.iterator().next();
+        Assert.assertNotNull(testRow);
+        Assert.assertEquals(1, testRow.values.size());
+        Assert.assertEquals(matchValue, testRow.values.iterator().next());
+    }
+
+    @Test
+    public void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithBoundedWildcards() {
+        String matchValueStart = "Prince";
+        String matchValue = matchValueStart + ".{0,10}";
+        RowSpec rowSpec = new RowSpec(Arrays.asList(getFieldSpecThatMatchesRegex("test", matchValue, null)));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(1, testOutput.size());
+        TestCaseDataRow testRow = testOutput.iterator().next();
+        Assert.assertNotNull(testRow);
+        Assert.assertEquals(1, testRow.values.size());
+        Assert.assertTrue(((String)testRow.values.iterator().next()).startsWith(matchValueStart));
+    }
+
+    @Test
+    public void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithUnboundedWildcards() {
+        String matchValueStart = "Prince";
+        String matchValue = matchValueStart + ".+";
+        RowSpec rowSpec = new RowSpec(Arrays.asList(getFieldSpecThatMatchesRegex("test", matchValue, null)));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(1, testOutput.size());
+        TestCaseDataRow testRow = testOutput.iterator().next();
+        Assert.assertNotNull(testRow);
+        Assert.assertEquals(1, testRow.values.size());
+        Assert.assertTrue(((String)testRow.values.iterator().next()).startsWith(matchValueStart));
+    }
+
+    @Test
+    public void shouldReturnNoRows_IfInputHasSingleStringFieldWithRegexAndBlacklistMatchingAllPossibleValues() {
+        String matchValue = "Prince";
+        RowSpec rowSpec = new RowSpec(Arrays.asList(getFieldSpecThatMatchesRegex("test", matchValue,
+                Arrays.asList(matchValue))));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(0, testOutput.size());
+    }
+
+    @Test
+    public void shouldReturnSingleRowWithNonBlacklistedValue_IfInputHasSingleStringFieldWithRegexAndBlacklist() {
+        String matchPattern = "[ab]{2}";
+        List<String> illegalValues = Arrays.asList("aa");
+        RowSpec rowSpec = new RowSpec(Arrays.asList(
+                getFieldSpecThatMatchesRegex("test", matchPattern, illegalValues)));
+        Generator testObject = new Generator();
+
+        Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
+
+        Assert.assertNotNull(testOutput);
+        Assert.assertEquals(1, testOutput.size());
+        TestCaseDataRow testRow = testOutput.iterator().next();
+        Assert.assertNotNull(testRow);
+        Assert.assertEquals(1, testRow.values.size());
+        List<String> legalValues = Arrays.asList("ab", "ba", "bb");
+        String value = (String)testRow.values.iterator().next();
+        Assert.assertTrue(legalValues.contains(value));
+    }
+
     private FieldSpec getFieldSpecThatMustBeNull(String name)
     {
         FieldSpec fieldSpec = new FieldSpec(name);
@@ -419,6 +524,21 @@ public class GeneratorTests {
         restrictions.min = min;
         restrictions.max = max;
         fieldSpec.setNumericRestrictions(restrictions);
+        return fieldSpec;
+    }
+
+    // this method does not work with backslashed character classes like \d, hence "simplePattern".
+    private FieldSpec getFieldSpecThatMatchesRegex(String name, String simplePattern, Collection<String> blacklist) {
+        FieldSpec fieldSpec = new FieldSpec(name);
+        Automaton automaton = new RegExp(simplePattern).toAutomaton();
+        StringRestrictions restrictions = new StringRestrictions();
+        restrictions.automaton = automaton;
+        fieldSpec.setStringRestrictions(restrictions);
+        if (blacklist != null) {
+            SetRestrictions setRestrictions = new SetRestrictions();
+            setRestrictions.blacklist = new HashSet<>(blacklist);
+            fieldSpec.setSetRestrictions(setRestrictions);
+        }
         return fieldSpec;
     }
 }
