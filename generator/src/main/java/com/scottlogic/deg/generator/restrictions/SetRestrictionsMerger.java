@@ -12,6 +12,13 @@ import java.util.stream.Stream;
  */
 public class SetRestrictionsMerger {
     public SetRestrictions merge(SetRestrictions left, SetRestrictions right) {
+        if (left == null && right == null)
+            return null;
+        if (left == null)
+            return right;
+        if (left == null)
+            return left;
+
         final SetRestrictions merged = new SetRestrictions();
         merged.whitelist = getMergedSet(left.whitelist, right.whitelist);
         merged.blacklist = getMergedSet(left.blacklist, right.blacklist);

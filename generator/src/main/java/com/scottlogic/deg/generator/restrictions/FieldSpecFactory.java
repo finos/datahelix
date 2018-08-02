@@ -48,7 +48,11 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
-        final SetRestrictions setRestrictions = fieldSpec.getSetRestrictions();
+        SetRestrictions setRestrictions = fieldSpec.getSetRestrictions();
+        if (setRestrictions == null) {
+            setRestrictions = new SetRestrictions();
+            fieldSpec.setSetRestrictions(setRestrictions);
+        }
         if (negate) {
             setRestrictions.blacklist = constraint.legalValues;
         } else {
@@ -57,14 +61,22 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsNullConstraint constraint, boolean negate) {
-        final NullRestrictions nullRestrictions = fieldSpec.getNullRestrictions();
+        NullRestrictions nullRestrictions = fieldSpec.getNullRestrictions();
+        if (nullRestrictions == null) {
+            nullRestrictions = new NullRestrictions();
+            fieldSpec.setNullRestrictions(nullRestrictions);
+        }
         nullRestrictions.nullness = negate
                 ? NullRestrictions.Nullness.MustNotBeNull
                 : NullRestrictions.Nullness.MustBeNull;
     }
 
     private void apply(FieldSpec fieldSpec, IsOfTypeConstraint constraint, boolean negate) {
-        final TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
+        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
+        if (typeRestrictions == null) {
+            typeRestrictions = new TypeRestrictions();
+            fieldSpec.setTypeRestrictions(typeRestrictions);
+        }
         if (negate) {
             throw new UnsupportedOperationException();
         }
@@ -72,7 +84,11 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
-        final NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
+        NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
+        if (numericRestrictions == null) {
+            numericRestrictions = new NumericRestrictions();
+            fieldSpec.setNumericRestrictions(numericRestrictions);
+        }
         final BigDecimal limit = numberToBigDecimal(constraint.referenceValue);
         if (negate) {
             numericRestrictions.max = new NumericRestrictions.NumericLimit(
@@ -88,7 +104,11 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
-        final StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        if (stringRestrictions == null) {
+            stringRestrictions = new StringRestrictions();
+            fieldSpec.setStringRestrictions(stringRestrictions);
+        }
         final Automaton nominalAutomaton = automatonFactory.fromPattern(constraint.regex);
         final Automaton automaton = negate
                 ? nominalAutomaton.complement()

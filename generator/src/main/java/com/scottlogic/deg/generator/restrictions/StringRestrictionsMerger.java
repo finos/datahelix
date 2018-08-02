@@ -9,6 +9,13 @@ import dk.brics.automaton.Automaton;
  */
 public class StringRestrictionsMerger {
     public StringRestrictions merge(StringRestrictions left, StringRestrictions right) {
+        if (left == null && right == null)
+            return null;
+        if (left == null)
+            return right;
+        if (right == null)
+            return left;
+
         final StringRestrictions merged = new StringRestrictions();
         merged.automaton = getMergedAutomaton(left.automaton, right.automaton);
 

@@ -6,11 +6,11 @@ package com.scottlogic.deg.generator.restrictions;
 public class FieldSpec {
     private final String name;
 
-    private SetRestrictions setRestrictions = new SetRestrictions();
-    private NumericRestrictions numericRestrictions = new NumericRestrictions();
-    private StringRestrictions stringRestrictions = new StringRestrictions();
-    private NullRestrictions nullRestrictions = new NullRestrictions();
-    private TypeRestrictions typeRestrictions = new TypeRestrictions();
+    private SetRestrictions setRestrictions;
+    private NumericRestrictions numericRestrictions;
+    private StringRestrictions stringRestrictions;
+    private NullRestrictions nullRestrictions;
+    private TypeRestrictions typeRestrictions;
 
     public FieldSpec(String name) {
         this.name = name;

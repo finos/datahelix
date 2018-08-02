@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions.NumericLimit;
 
 /**
@@ -13,6 +12,13 @@ public class NumericRestrictionsMerger {
     }
 
     public NumericRestrictions merge(NumericRestrictions left, NumericRestrictions right) {
+        if (left == null && right == null)
+            return null;
+        if (left == null)
+            return right;
+        if (right == null)
+            return left;
+
         final NumericRestrictions merged = new NumericRestrictions();
 
         merged.min = getMergedLimitStructure(MergeLimit.Min, left.min, right.min);
@@ -32,38 +38,19 @@ public class NumericRestrictionsMerger {
             return left;
         }
 
-        if (left.isInclusive() != right.isInclusive()) {
-            throw new UnsupportedOperationException("Currently we don't support merging numeric limits that disagree on inclusivity");
-        }
-
-        return new NumericLimit(
-                getMergedLimit(mergeLimit, left.getLimit(), right.getLimit()),
-                left.isInclusive()
-        );
-    }
-
-    private <T extends Number & Comparable<T>> T getMergedLimit(MergeLimit mergeLimit, T left, T right) {
-        if (left == null && right == null) {
-            return null;
-        }
-        if (left == null) {
-            return right;
-        }
-        if (right == null) {
-            return left;
-        }
-
+        if (left.getLimit().compareTo(right.getLimit()) == 0)
+            return new NumericLimit(left.getLimit(), left.isInclusive() && right.isInclusive());
         switch(mergeLimit) {
             case Min:
-                if (left.compareTo(right) > 0) return right;
-                break;
+                if (left.getLimit().compareTo(right.getLimit()) > 0)
+                    return left;
+                return right;
             case Max:
-                if (left.compareTo(right) < 0) return right;
-                break;
+                if (left.getLimit().compareTo(right.getLimit()) < 0)
+                    return left;
+                return right;
             default:
                 throw new UnsupportedOperationException();
         }
-
-        return left;
     }
 }

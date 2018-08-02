@@ -8,8 +8,11 @@ import com.scottlogic.deg.generator.restrictions.NullRestrictions;
  */
 public class NullRestrictionsMerger {
     public NullRestrictions merge(NullRestrictions left, NullRestrictions right) {
+        if (left == null && right == null)
+            return null;
+
         final NullRestrictions merged = new NullRestrictions();
-        merged.nullness = getMergedNullness(left.nullness, right.nullness);
+        merged.nullness = getMergedNullness(getNullness(left), getNullness(right));
 
         return merged;
     }
@@ -30,5 +33,9 @@ public class NullRestrictionsMerger {
         }
 
         throw new UnsupportedOperationException();
+    }
+
+    private NullRestrictions.Nullness getNullness(NullRestrictions restrictions) {
+        return restrictions != null ? restrictions.nullness : null;
     }
 }
