@@ -29,7 +29,7 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
 
     val regexConstraint = new ConstraintDTO {
       def field = fieldName;
-      def is = "regexPattern";
+      def is = "matchesRegex";
       def value = s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}";
     };
 

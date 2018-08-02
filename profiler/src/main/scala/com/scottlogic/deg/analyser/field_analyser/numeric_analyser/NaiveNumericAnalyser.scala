@@ -44,7 +44,7 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val regexConstraint = new ConstraintDTO {
       def field = fieldName;
-      def is = "regexPattern";
+      def is = "matchesRegex";
       def value = inputField.dataType match {
         case DoubleType => "%f"
         case LongType => "%l"
