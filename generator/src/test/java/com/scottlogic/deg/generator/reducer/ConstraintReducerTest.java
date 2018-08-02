@@ -1,8 +1,7 @@
-package com.scottlogic.deg.reducer;
+package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions.NumericLimit;
 import org.hamcrest.Matchers;
