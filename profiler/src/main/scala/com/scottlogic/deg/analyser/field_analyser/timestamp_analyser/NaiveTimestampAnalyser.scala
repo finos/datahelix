@@ -1,21 +1,28 @@
 package com.scottlogic.deg.analyser.field_analyser.timestamp_analyser
 
-import com.scottlogic.deg.dto
-import com.scottlogic.deg.dto.{NormalDistribution, TemporalField}
+import java.util
+
+import com.scottlogic.deg.schemas.v3.{ConstraintDTO, RuleDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructField
 
 class NaiveTimestampAnalyser(val df: DataFrame, val field: StructField) extends TimestampAnalyser {
-    override def constructDTOField(): TemporalField = {
-        dto.TemporalField(
-            name = field.name,
-            nullPrevalence = 0.0d,
-            distribution = NormalDistribution(
-                meanAvg = 1.0d,
-                stdDev = 1.0d,
-                min = 1.0d,
-                max = 1.0d
-            )
-        )
+    override def constructDTOField(): RuleDTO = {
+
+        val inputField = field.name;
+
+        val fieldTypeConstraint = new ConstraintDTO {
+            def field = inputField;
+            def is = "ofType";
+            def value = "temporal";
+        };
+
+        val allConstraints = new util.ArrayList[ConstraintDTO]();
+        allConstraints.add(fieldTypeConstraint);
+
+        return new RuleDTO {
+            def field = inputField;
+            def constraints = allConstraints;
+        };
     }
 }
