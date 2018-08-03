@@ -1,46 +1,46 @@
 package com.scottlogic.deg.analyser.field_analyser.string_analyser
 
-import java.util
-
-import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder, RuleDTO}
+import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
+
+import scala.collection.mutable.ListBuffer
 
 class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends StringAnalyser {
   private val spark = SparkSession.builder.getOrCreate()
 
   import spark.implicits._
 
-  override def constructDTOField(): RuleDTO = {
+  override def constructField(): Rule = {
 
     val analysis: (DataFrame, DataFrame) = analyse()
     val dfCharSet: DataFrame = analysis._1
     val stringAnalysis = analysis._2.first()
 
     val fieldName = field.name;
-    val allFieldConstraints = new util.ArrayList[ConstraintDTO]();
+    val allFieldConstraints = ListBuffer[Constraint]();
 
-    val fieldTypeConstraint = ConstraintDTOBuilder.instance()
+    val fieldTypeConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendIs("ofType")
       .appendValue("string")
-    .Build();
+    .Build;
 
-    val regexConstraint = ConstraintDTOBuilder.instance()
+    val regexConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendIs("matchesRegex")
       .appendValue(s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}")
-      .Build();
+      .Build;
 
-    allFieldConstraints.add(fieldTypeConstraint);
-    allFieldConstraints.add(regexConstraint);
+    allFieldConstraints += fieldTypeConstraint;
+    allFieldConstraints += regexConstraint;
 
     // stringAnalysis.getAs("len_avg") not used anymore
 
     // alphabet = dfCharSet.select("character").collect().mkString not used for now
 
-    return new RuleDTO(s"String field ${fieldName} rule", allFieldConstraints);
+    return new Rule(s"String field ${fieldName} rule", allFieldConstraints.toList);
   }
 
   def analyse(): (DataFrame, DataFrame) = {

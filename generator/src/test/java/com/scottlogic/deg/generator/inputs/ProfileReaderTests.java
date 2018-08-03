@@ -242,7 +242,7 @@ public class ProfileReaderTests {
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [{" +
             "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-            "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
+            "        \"then_\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
             "        \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
             "    }]" +
             "}");
@@ -274,7 +274,7 @@ public class ProfileReaderTests {
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [{" +
                 "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
+                "        \"then_\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
                 "    }]" +
                 "}");
 

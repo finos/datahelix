@@ -2,13 +2,16 @@ package com.scottlogic.deg.analyser.field_analyser.numeric_analyser
 
 import java.util
 
+import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
 import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder, RuleDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StructField}
 import org.apache.spark.sql.functions.{max, min, _}
 
+import scala.collection.mutable.ListBuffer
+
 class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends NumericAnalyser {
-  override def constructDTOField(): RuleDTO = {
+  override def constructField(): Rule = {
     val head = df.agg(
       min(field.name).as("min"),
       max(field.name).as("max"),
@@ -19,32 +22,32 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val inputField = field;
     val fieldName = inputField.name;
-    val allFieldConstraints = new util.ArrayList[ConstraintDTO]();
+    val allFieldConstraints = ListBuffer[Constraint]();
 
-    val fieldTypeConstraint = ConstraintDTOBuilder.instance()
+    val fieldTypeConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendIs("ofType")
       .appendValue("number")
-      .Build();
+      .Build;
 
-    val minLengthConstraint = ConstraintDTOBuilder.instance()
+    val minLengthConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendIs("greaterThanOrEqual")
       .appendValue(head.getAs("min"))
-      .Build();
+      .Build;
 
-    val maxLengthConstraint = ConstraintDTOBuilder.instance()
+    val maxLengthConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendNot(
-        ConstraintDTOBuilder.instance()
+        ConstraintBuilder.instance
         .appendField(fieldName)
         .appendIs("greaterThan")
         .appendValue(head.getAs("max"))
-        .Build()
+        .Build
       )
-      .Build();
+      .Build;
 
-    val regexConstraint = ConstraintDTOBuilder.instance()
+    val regexConstraint = ConstraintBuilder.instance
       .appendField(fieldName)
       .appendIs("matchesRegex")
       .appendValue(
@@ -54,13 +57,13 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
           case IntegerType => "%d"
         }
       )
-      .Build();
+      .Build;
 
-    allFieldConstraints.add(fieldTypeConstraint);
-    allFieldConstraints.add(minLengthConstraint);
-    allFieldConstraints.add(maxLengthConstraint);
-    allFieldConstraints.add(regexConstraint);
+    allFieldConstraints += fieldTypeConstraint;
+    allFieldConstraints += minLengthConstraint;
+    allFieldConstraints += maxLengthConstraint;
+    allFieldConstraints += regexConstraint;
 
-    return new RuleDTO(s"Numeric field ${fieldName} rule", allFieldConstraints);
+    return new Rule(s"Numeric field ${fieldName} rule", allFieldConstraints.toList);
   }
 }

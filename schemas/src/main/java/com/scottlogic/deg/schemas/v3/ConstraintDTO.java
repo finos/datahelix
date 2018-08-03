@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Collection;
 
-@JsonPropertyOrder({ "field", "is", "value", "if", "then", "else" })
+@JsonPropertyOrder({ "field", "is", "value", "if", "then_", "else" })
 public class ConstraintDTO {
     public String is;
 
@@ -30,12 +30,13 @@ public class ConstraintDTO {
     /** a set of subconstraints - used in or/and */
     public Collection<ConstraintDTO> allOf;
 
-    /** used in condition - should always co-occur with 'then' */
+    /** used in condition - should always co-occur with 'then_' */
     @JsonProperty("if")
     public ConstraintDTO if_;
 
     /** the constraint to apply if 'if_' is true */
-    public ConstraintDTO then;
+    @JsonProperty("then")
+    public ConstraintDTO then_;
 
     /** the constraint to apply if 'if_' is false */
     @JsonProperty("else")

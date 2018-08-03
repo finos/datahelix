@@ -44,7 +44,7 @@ public class ProfileSerialiserTests {
                             c1.value = "type_001";
                         }));
                 });
-                c.then = createConstraint(then -> {
+                c.then_ = createConstraint(then -> {
                     then.field = "price";
                     then.is = "greaterThanOrEqualTo";
                     then.value = 42.1;
@@ -79,7 +79,7 @@ public class ProfileSerialiserTests {
                     "               { \"field\": \"typecode\", \"is\": \"equalTo\", \"value\" : \"type_001\" }" +
                     "           ]" +
                     "       }," +
-                    "       \"then\" : { \"field\": \"price\", \"is\": \"greaterThanOrEqualTo\", \"value\" : 42.1 }," +
+                    "       \"then_\" : { \"field\": \"price\", \"is\": \"greaterThanOrEqualTo\", \"value\" : 42.1 }," +
                     "       \"else\" : { \"field\" : \"price\", \"is\" : \"lessThan\", \"value\" : 42.1 }" +
                     "   }" +
                     "]" +

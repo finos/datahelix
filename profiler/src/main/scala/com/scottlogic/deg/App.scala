@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
 import com.scottlogic.deg.io.{FileReader, FileWriter}
+import com.scottlogic.deg.mappers.ProfileDTOMapper
 import com.scottlogic.deg.profiler.Profiler
 import javax.inject.Inject
 import net.codingwell.scalaguice.InjectorExtensions._
@@ -51,12 +52,13 @@ class DEGApp @Inject()(
 
     val profiler = new Profiler(df)
     val profile = profiler.profile()
+    val profileDTO = ProfileDTOMapper.Map(profile);
 
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     val marshalled: String = mapper
       .writerWithDefaultPrettyPrinter()
-      .writeValueAsString(profile)
+      .writeValueAsString(profileDTO)
 
     val fileWriter = new FileWriter()
     fileWriter.write(outFile, marshalled)
