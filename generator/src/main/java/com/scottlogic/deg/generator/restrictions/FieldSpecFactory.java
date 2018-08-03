@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.reducer.AutomatonFactory;
 import dk.brics.automaton.Automaton;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 public class FieldSpecFactory {
@@ -25,6 +26,20 @@ public class FieldSpecFactory {
             apply(fieldSpec, (IsEqualToConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             apply(fieldSpec, (IsGreaterThanConstantConstraint) constraint, negate);
+        } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
+            apply(fieldSpec, (IsGreaterThanOrEqualToConstantConstraint) constraint, negate);
+        } else if (constraint instanceof IsLessThanConstantConstraint) {
+            apply(fieldSpec, (IsLessThanConstantConstraint) constraint, negate);
+        } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
+            apply(fieldSpec, (IsLessThanOrEqualToConstantConstraint) constraint, negate);
+        } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
+            apply(fieldSpec, (IsAfterConstantDateTimeConstraint) constraint, negate);
+        } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
+            apply(fieldSpec, (IsAfterOrEqualToConstantDateTimeConstraint) constraint, negate);
+        } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
+            apply(fieldSpec, (IsBeforeConstantDateTimeConstraint) constraint, negate);
+        } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
+            apply(fieldSpec, (IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
@@ -84,22 +99,102 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
+        applyGreaterThanConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsGreaterThanOrEqualToConstantConstraint constraint, boolean negate) {
+        applyGreaterThanConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    }
+
+    private void applyGreaterThanConstraint(FieldSpec fieldSpec, Number limitValue, boolean inclusive, boolean negate) {
         NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
         if (numericRestrictions == null) {
             numericRestrictions = new NumericRestrictions();
             fieldSpec.setNumericRestrictions(numericRestrictions);
         }
-        final BigDecimal limit = numberToBigDecimal(constraint.referenceValue);
+        final BigDecimal limit = numberToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions.max = new NumericRestrictions.NumericLimit(
                     limit,
-                    true
+                    !inclusive
             );
         } else {
             numericRestrictions.min = new NumericRestrictions.NumericLimit(
                     limit,
-                    false
+                    inclusive
             );
+        }
+    }
+
+    private void apply(FieldSpec fieldSpec, IsLessThanConstantConstraint constraint, boolean negate) {
+        applyLessThanConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsLessThanOrEqualToConstantConstraint constraint, boolean negate) {
+        applyLessThanConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    }
+
+    private void applyLessThanConstraint(FieldSpec fieldSpec, Number limitValue, boolean inclusive, boolean negate) {
+        NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
+        if (numericRestrictions == null) {
+            numericRestrictions = new NumericRestrictions();
+            fieldSpec.setNumericRestrictions(numericRestrictions);
+        }
+        final BigDecimal limit = numberToBigDecimal(limitValue);
+        if (negate) {
+            numericRestrictions.min = new NumericRestrictions.NumericLimit(
+                    limit,
+                    !inclusive
+            );
+        } else {
+            numericRestrictions.max = new NumericRestrictions.NumericLimit(
+                    limit,
+                    inclusive
+            );
+        }
+    }
+
+    private void apply(FieldSpec fieldSpec, IsAfterConstantDateTimeConstraint constraint, boolean negate) {
+        applyIsAfterConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsAfterOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
+        applyIsAfterConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    }
+
+    private void applyIsAfterConstraint(FieldSpec fieldSpec, LocalDateTime limit, boolean inclusive, boolean negate) {
+        DateTimeRestrictions dateTimeRestrictions = fieldSpec.getDateTimeRestrictions();
+        if (dateTimeRestrictions == null) {
+            dateTimeRestrictions = new DateTimeRestrictions();
+            fieldSpec.setDateTimeRestrictions(dateTimeRestrictions);
+        }
+        if (negate) {
+            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+        }
+        else {
+            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
+        }
+    }
+
+    private void apply(FieldSpec fieldSpec, IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
+        applyIsBeforeConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsBeforeOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
+        applyIsBeforeConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    }
+
+    private void applyIsBeforeConstraint(FieldSpec fieldSpec, LocalDateTime limit, boolean inclusive, boolean negate) {
+        DateTimeRestrictions dateTimeRestrictions = fieldSpec.getDateTimeRestrictions();
+        if (dateTimeRestrictions == null) {
+            dateTimeRestrictions = new DateTimeRestrictions();
+            fieldSpec.setDateTimeRestrictions(dateTimeRestrictions);
+        }
+        if (negate) {
+            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+        }
+        else {
+            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
 

@@ -17,6 +17,20 @@ class ConstraintFieldSniffer {
             return ((IsEqualToConstantConstraint) constraint).field;
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             return ((IsGreaterThanConstantConstraint) constraint).field;
+        } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
+            return ((IsGreaterThanOrEqualToConstantConstraint) constraint).field;
+        } else if (constraint instanceof IsLessThanConstantConstraint) {
+            return ((IsLessThanConstantConstraint) constraint).field;
+        } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
+            return ((IsLessThanOrEqualToConstantConstraint) constraint).field;
+        } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
+            return ((IsAfterConstantDateTimeConstraint)constraint).field;
+        } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
+            return ((IsAfterOrEqualToConstantDateTimeConstraint)constraint).field;
+        } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
+            return ((IsBeforeConstantDateTimeConstraint)constraint).field;
+        } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
+            return ((IsBeforeOrEqualToConstantDateTimeConstraint)constraint).field;
         } else if (constraint instanceof IsInSetConstraint) {
             return ((IsInSetConstraint) constraint).field;
         } else if (constraint instanceof IsNullConstraint) {
