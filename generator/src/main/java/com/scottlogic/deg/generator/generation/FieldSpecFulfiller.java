@@ -1,13 +1,14 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.FieldSpec;
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.NullRestrictions;
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ class FieldSpecFulfiller implements Iterable<Object> {
 
     private Set<Object> getBlacklist() {
         if (spec.getSetRestrictions() != null)
-            return spec.getSetRestrictions().blacklist;
+            return new HashSet<>(spec.getSetRestrictions().blacklist);
         return null;
     }
 

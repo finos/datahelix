@@ -32,23 +32,23 @@ public class FieldSpec {
         return typeRestrictions;
     }
 
-    void setSetRestrictions(SetRestrictions setRestrictions) {
+    public void setSetRestrictions(SetRestrictions setRestrictions) {
         this.setRestrictions = setRestrictions;
     }
 
-    void setNumericRestrictions(NumericRestrictions numericRestrictions) {
+    public void setNumericRestrictions(NumericRestrictions numericRestrictions) {
         this.numericRestrictions = numericRestrictions;
     }
 
-    void setStringRestrictions(StringRestrictions stringRestrictions) {
+    public void setStringRestrictions(StringRestrictions stringRestrictions) {
         this.stringRestrictions = stringRestrictions;
     }
 
-    void setTypeRestrictions(TypeRestrictions typeRestrictions) {
+    public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
         this.typeRestrictions = typeRestrictions;
     }
 
-    void setNullRestrictions(NullRestrictions nullRestrictions) {
+    public void setNullRestrictions(NullRestrictions nullRestrictions) {
         this.nullRestrictions = nullRestrictions;
     }
 }

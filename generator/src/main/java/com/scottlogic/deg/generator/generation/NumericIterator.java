@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -91,12 +91,12 @@ class NumericIterator implements IFieldSpecIterator {
                  break;
              case UpFromMin:
              case MinToMax:
-                 nextValue = restrictions.min.getInclusive() ?
+                 nextValue = restrictions.min.isInclusive() ?
                          restrictions.min.getLimit() :
                          restrictions.min.getLimit().add(stepSize);
                  break;
              case DownFromMax:
-                 nextValue = restrictions.max.getInclusive() ?
+                 nextValue = restrictions.max.isInclusive() ?
                          restrictions.max.getLimit() :
                          restrictions.max.getLimit().subtract(stepSize);
                  break;
@@ -112,7 +112,7 @@ class NumericIterator implements IFieldSpecIterator {
              case MinToMax:
                  nextValue = nextValue.add(BigDecimal.ONE);
                  if ((nextValue.compareTo(restrictions.max.getLimit()) > 0) ||
-                         (!restrictions.max.getInclusive() && nextValue.compareTo(restrictions.max.getLimit()) == 0)) {
+                         (!restrictions.max.isInclusive() && nextValue.compareTo(restrictions.max.getLimit()) == 0)) {
                      return false;
                  }
                  return true;

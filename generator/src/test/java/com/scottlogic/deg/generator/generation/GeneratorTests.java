@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.*;
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
 
+import com.scottlogic.deg.generator.restrictions.*;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import org.junit.Assert;
@@ -15,7 +17,9 @@ import java.util.regex.Pattern;
 class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithSingleNullObject_IfInputHasSingleFieldWhichMustBeNull() {
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(getFieldSpecThatMustBeNull("test0")));
+        Field field = new Field("test0");
+        ProfileFields fields = new ProfileFields(Collections.singletonList(field));
+        RowSpec rowSpec = new RowSpec(fields, makeMap(field, getFieldSpecThatMustBeNull()));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -31,13 +35,14 @@ class GeneratorTests {
 
     @Test
     void shouldReturnMultipleNullObjects_IfInputHasMultipleFieldsWhichMustBeNull() {
-        ArrayList<FieldSpec> specs = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
+        ArrayList<FieldSpec> fieldSpecs = new ArrayList<>();
         int fieldCount = 5;
         for (int i = 0; i < fieldCount; ++i) {
-            specs.add(getFieldSpecThatMustBeNull(Integer.toString(i)));
+            fields.add(new Field(Integer.toString(i)));
+            fieldSpecs.add(getFieldSpecThatMustBeNull());
         }
-        RowSpec rowSpec = new RowSpec(specs);
-
+        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, fieldSpecs));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -56,8 +61,9 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToSingleMemberSetAndStrategyIsMinimal() {
         Set<String> validValues = new HashSet<>(Collections.singletonList("legal"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test1", validValues, null)));
+        Field field = new Field("test1");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec, GenerationStrategy.Minimal);
@@ -75,8 +81,9 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToSingleMemberSetAndStrategyIsExhaustive() {
         Set<String> validValues = new HashSet<>(Collections.singletonList("legal"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test2", validValues, null)));
+        Field field = new Field("test2");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -94,8 +101,9 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToMultipleMemberSetAndStrategyIsMinimal() {
         Set<String> validValues = new HashSet<>(Arrays.asList("Somerset", "Gloucestershire", "Gwynedd", "Lothian"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test3", validValues, null)));
+        Field field = new Field("test3");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec, GenerationStrategy.Minimal);
@@ -113,8 +121,9 @@ class GeneratorTests {
     @Test
     void shouldReturnMultipleRowsWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToMultipleMemberSetAndStrategyIsExhaustive() {
         Set<String> validValues = new HashSet<>(Arrays.asList("Somerset", "Gloucestershire", "Gwynedd", "Lothian"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test4", validValues, null)));
+        Field field = new Field("test4");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -138,8 +147,9 @@ class GeneratorTests {
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToMultipleMemberSetWithBlacklistAndStrategyIsMinimal() {
         Set<String> validValues = new HashSet<>(Arrays.asList("Somerset", "Gloucestershire", "Gwynedd", "Lothian"));
         Set<String> invalidValues = new HashSet<>(Arrays.asList("Gloucestershire", "Lothian", "Kent"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test5", validValues, invalidValues)));
+        Field field = new Field("test5");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, invalidValues)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec, GenerationStrategy.Minimal);
@@ -159,8 +169,9 @@ class GeneratorTests {
     void shouldReturnMultipleRowsWithCorrectContents_IfInputHasSingleFieldWhichMustBelongToMultipleMemberSetWithBlacklistAndStrategyIsExhaustive() {
         Set<String> validValues = new HashSet<>(Arrays.asList("Somerset", "Gloucestershire", "Gwynedd", "Lothian"));
         Set<String> invalidValues = new HashSet<>(Arrays.asList("Gloucestershire", "Lothian", "Kent"));
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMustBelongToSetOfString("test6", validValues, invalidValues)));
+        Field field = new Field("test6");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, invalidValues)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -183,8 +194,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithInclusiveMinBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test7",
+        Field field = new Field("test7");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, true), null)));
         Generator testObject = new Generator();
 
@@ -202,8 +214,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithExclusiveMinBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test8",
+        Field field = new Field("test8");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, false), null)));
         Generator testObject = new Generator();
 
@@ -221,8 +234,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithInclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test9", null,
+        Field field = new Field("test9");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(null,
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, true))));
         Generator testObject = new Generator();
 
@@ -240,8 +254,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithExclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test10", null,
+        Field field = new Field("test10");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(null,
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, false))));
         Generator testObject = new Generator();
 
@@ -259,8 +274,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithInclusiveMinBoundAndInclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test11",
+        Field field = new Field("test11");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, true),
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), true))));
         Generator testObject = new Generator();
@@ -279,8 +295,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithInclusiveMinBoundAndExclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test12",
+        Field field = new Field("test12");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, true),
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), false))));
         Generator testObject = new Generator();
@@ -299,8 +316,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithExclusiveMinBoundAndInclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test13",
+        Field field = new Field("test13");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, false),
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), true))));
         Generator testObject = new Generator();
@@ -319,8 +337,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithExclusiveMinBoundAndExclusiveMaxBound() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test14",
+        Field field = new Field("test14");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.TEN, false),
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), false))));
         Generator testObject = new Generator();
@@ -339,8 +358,9 @@ class GeneratorTests {
 
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleNumericFieldWithBoundsOverSmallRange() {
-        RowSpec rowSpec = new RowSpec(
-                Collections.singletonList(getFieldSpecThatMustMeetNumericCriteria("test15",
+        Field field = new Field("test14");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMustMeetNumericCriteria(
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(0.6), false),
                         new NumericRestrictions.NumericLimit(BigDecimal.valueOf(0.7), false))));
         Generator testObject = new Generator();
@@ -362,9 +382,11 @@ class GeneratorTests {
     void shouldReturnSingleRowWithCorrectContents_IfInputHasTwoSetFieldsAndStrategyIsMinimal() {
         List<String> validValues0 = Arrays.asList("Somerset", "Gloucestershire", "Kent");
         List<String> validValues1 = Arrays.asList("Porthmadog", "Llandudno");
-        RowSpec rowSpec = new RowSpec(Arrays.asList(
-                getFieldSpecThatMustBelongToSetOfString("counties", new HashSet<>(validValues0), null),
-                getFieldSpecThatMustBelongToSetOfString("towns", new HashSet<>(validValues1), null)));
+        List<Field> fields = Arrays.asList(new Field("counties"), new Field("towns"));
+        List<FieldSpec> specs = Arrays.asList(
+                getFieldSpecThatMustBelongToSetOfString(new HashSet<>(validValues0), null),
+                getFieldSpecThatMustBelongToSetOfString(new HashSet<>(validValues1), null));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, specs));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec, GenerationStrategy.Minimal);
@@ -391,9 +413,11 @@ class GeneratorTests {
                 allPossibleCombinations.add(valuei + "/" + valuej);
             }
         }
-        RowSpec rowSpec = new RowSpec(Arrays.asList(
-                getFieldSpecThatMustBelongToSetOfString("counties", new HashSet<>(validValues0), null),
-                getFieldSpecThatMustBelongToSetOfString("towns", new HashSet<>(validValues1), null)));
+        List<Field> fields = Arrays.asList(new Field("counties"), new Field("towns"));
+        List<FieldSpec> specs = Arrays.asList(
+                getFieldSpecThatMustBelongToSetOfString(new HashSet<>(validValues0), null),
+                getFieldSpecThatMustBelongToSetOfString(new HashSet<>(validValues1), null));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, specs));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -420,8 +444,9 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithoutWildcards() {
         String matchValue = "Prince";
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMatchesRegex("test16", matchValue, null)));
+        Field field = new Field("test16");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -438,8 +463,9 @@ class GeneratorTests {
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithBoundedWildcards() {
         String matchValueStart = "Prince";
         String matchValue = matchValueStart + ".{0,10}";
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMatchesRegex("test17", matchValue, null)));
+        Field field = new Field("test17");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -456,8 +482,9 @@ class GeneratorTests {
     void shouldReturnSingleRowWithCorrectContents_IfInputHasSingleStringFieldWithRegexWithUnboundedWildcards() {
         String matchValueStart = "Prince";
         String matchValue = matchValueStart + ".+";
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMatchesRegex("test18", matchValue, null)));
+        Field field = new Field("test18");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -473,8 +500,9 @@ class GeneratorTests {
     @Test
     void shouldReturnNoRows_IfInputHasSingleStringFieldWithRegexAndBlacklistMatchingAllPossibleValues() {
         String matchValue = "Prince";
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(getFieldSpecThatMatchesRegex("test19", matchValue,
-                Collections.singletonList(matchValue))));
+        Field field = new Field("test19");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, Collections.singletonList(matchValue))));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -487,8 +515,9 @@ class GeneratorTests {
     void shouldReturnSingleRowWithNonBlacklistedValue_IfInputHasSingleStringFieldWithRegexAndBlacklist() {
         String matchPattern = "[ab]{2}";
         List<String> illegalValues = Collections.singletonList("aa");
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(
-                getFieldSpecThatMatchesRegex("test20", matchPattern, illegalValues)));
+        Field field = new Field("test20");
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)),
+                makeMap(field, getFieldSpecThatMatchesRegex(matchPattern, illegalValues)));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -506,11 +535,10 @@ class GeneratorTests {
     @Test
     void shouldReturnNoRows_IfInputHasSingleFieldWithNumericMinRestrictionAndNonNumericRegex() {
         String matchPattern = "Prince";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test21", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.min = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test21");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(getFieldSpecThatMatchesRegex(matchPattern, null),
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true), null);
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -522,11 +550,11 @@ class GeneratorTests {
     @Test
     void shouldReturnNoRows_IfInputHasSingleFieldWithNumericMaxRestrictionAndNonNumericRegex() {
         String matchPattern = "Prince";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test22", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.max = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test22");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(
+                getFieldSpecThatMatchesRegex(matchPattern, null), null,
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -538,12 +566,12 @@ class GeneratorTests {
     @Test
     void shouldReturnNoRows_IfInputHasSingleFieldWithNumericRangeRestrictionAndNonNumericRegex() {
         String matchPattern = "Prince";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test23", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.max = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        numericRestriction.min = new NumericRestrictions.NumericLimit(BigDecimal.ZERO, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test23");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(
+                getFieldSpecThatMatchesRegex(matchPattern, null),
+                new NumericRestrictions.NumericLimit(BigDecimal.ZERO, true),
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -555,11 +583,11 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectData_IfInputHasSingleFieldWithNumericMinRestrictionAndSuitableRegex() {
         String matchPattern = "[1-9][0-9]*\\.[0-9]{2}";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test24", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.min = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test24");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(
+                getFieldSpecThatMatchesRegex(matchPattern, null),
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true), null);
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -577,11 +605,11 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectData_IfInputHasSingleFieldWithNumericMaxRestrictionAndSuitableRegex() {
         String matchPattern = "[1-9][0-9]*\\.[0-9]{2}";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test25", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.max = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test25");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(
+                getFieldSpecThatMatchesRegex(matchPattern, null), null,
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -599,12 +627,12 @@ class GeneratorTests {
     @Test
     void shouldReturnSingleRowWithCorrectData_IfInputHasSingleFieldWithNumericRangeRestrictionAndSuitableRegex() {
         String matchPattern = "[1-9][0-9]*\\.[0-9]{2}";
-        FieldSpec spec = getFieldSpecThatMatchesRegex("test25", matchPattern, null);
-        NumericRestrictions numericRestriction = new NumericRestrictions();
-        numericRestriction.max = new NumericRestrictions.NumericLimit(BigDecimal.TEN, true);
-        numericRestriction.min = new NumericRestrictions.NumericLimit(BigDecimal.ZERO, true);
-        spec.setNumericRestrictions(numericRestriction);
-        RowSpec rowSpec = new RowSpec(Collections.singletonList(spec));
+        Field field = new Field("test25");
+        FieldSpec spec = getFieldSpecThatMustMeetNumericCriteria(
+                getFieldSpecThatMatchesRegex(matchPattern, null),
+                new NumericRestrictions.NumericLimit(BigDecimal.ZERO, true),
+                new NumericRestrictions.NumericLimit(BigDecimal.TEN, true));
+        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
         Generator testObject = new Generator();
 
         Collection<TestCaseDataRow> testOutput = testObject.generateData(rowSpec);
@@ -621,17 +649,36 @@ class GeneratorTests {
         Assert.assertTrue(d >= 0);
     }
 
-    private FieldSpec getFieldSpecThatMustBeNull(String name)
+    private Map<Field, FieldSpec> makeMap(Field field, FieldSpec fieldSpec) {
+        HashMap<Field, FieldSpec> map = new HashMap<>();
+        map.put(field, fieldSpec);
+        return map;
+    }
+
+    private Map<Field, FieldSpec> makeMap(List<Field> fields, List<FieldSpec> fieldSpecs) {
+        HashMap<Field, FieldSpec> map = new HashMap<>();
+        for (int i = 0; i < fields.size() && i < fieldSpecs.size(); ++i) {
+            map.put(fields.get(i), fieldSpecs.get(i));
+        }
+        return map;
+    }
+
+    private FieldSpec getFieldSpecThatMustBeNull(FieldSpec fieldSpec)
     {
-        FieldSpec fieldSpec = new FieldSpec(name);
         NullRestrictions nullRestrictions = new NullRestrictions();
         nullRestrictions.nullness = NullRestrictions.Nullness.MustBeNull;
         fieldSpec.setNullRestrictions(nullRestrictions);
         return fieldSpec;
     }
 
-    private FieldSpec getFieldSpecThatMustBelongToSetOfString(String name, Set<String> members, Set<String> notMembers) {
-        FieldSpec fieldSpec = new FieldSpec(name);
+    private FieldSpec getFieldSpecThatMustBeNull() {
+        return getFieldSpecThatMustBeNull(new FieldSpec());
+    }
+
+    private FieldSpec getFieldSpecThatMustBelongToSetOfString(
+            FieldSpec fieldSpec,
+            Set<String> members,
+            Set<String> notMembers) {
         SetRestrictions restrictions = new SetRestrictions();
         restrictions.whitelist = new HashSet<>(members);
         if (notMembers != null) {
@@ -641,11 +688,14 @@ class GeneratorTests {
         return fieldSpec;
     }
 
+    private FieldSpec getFieldSpecThatMustBelongToSetOfString(Set<String> members, Set<String> notMembers) {
+        return getFieldSpecThatMustBelongToSetOfString(new FieldSpec(), members, notMembers);
+    }
+
     private FieldSpec getFieldSpecThatMustMeetNumericCriteria(
-            String name,
+            FieldSpec fieldSpec,
             NumericRestrictions.NumericLimit min,
             NumericRestrictions.NumericLimit max) {
-        FieldSpec fieldSpec = new FieldSpec(name);
         NumericRestrictions restrictions = new NumericRestrictions();
         restrictions.min = min;
         restrictions.max = max;
@@ -653,9 +703,14 @@ class GeneratorTests {
         return fieldSpec;
     }
 
+    private FieldSpec getFieldSpecThatMustMeetNumericCriteria(
+            NumericRestrictions.NumericLimit min,
+            NumericRestrictions.NumericLimit max) {
+        return getFieldSpecThatMustMeetNumericCriteria(new FieldSpec(), min, max);
+    }
+
     // this method does not work with backslashed character classes like \d, hence "simplePattern".
-    private FieldSpec getFieldSpecThatMatchesRegex(String name, String simplePattern, Collection<String> blacklist) {
-        FieldSpec fieldSpec = new FieldSpec(name);
+    private FieldSpec getFieldSpecThatMatchesRegex(FieldSpec fieldSpec, String simplePattern, Collection<String> blacklist) {
         Automaton automaton = new RegExp(simplePattern).toAutomaton();
         StringRestrictions restrictions = new StringRestrictions();
         restrictions.automaton = automaton;
@@ -666,5 +721,9 @@ class GeneratorTests {
             fieldSpec.setSetRestrictions(setRestrictions);
         }
         return fieldSpec;
+    }
+
+    private FieldSpec getFieldSpecThatMatchesRegex(String simplePattern, Collection<String> blacklist) {
+        return getFieldSpecThatMatchesRegex(new FieldSpec(), simplePattern, blacklist);
     }
 }

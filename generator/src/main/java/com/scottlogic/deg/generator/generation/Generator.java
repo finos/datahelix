@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.FieldSpec;
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.RowSpec;
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
+import com.scottlogic.deg.generator.restrictions.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +19,8 @@ public class Generator implements IGenerator {
     public Collection<TestCaseDataRow> generateData(RowSpec spec, GenerationStrategy strategy) {
         // Populate rowData with all of the possible values for each field.
         List<List<Object>> rowData = new ArrayList<>();
-        for (FieldSpec fieldSpec : spec.getFieldSpecs()) {
+        for (Field field : spec.getFields()) {
+            FieldSpec fieldSpec = spec.getSpecForField(field);
             FieldSpecFulfiller fulfiller = new FieldSpecFulfiller(fieldSpec, strategy);
             List<Object> fieldPossibilities = new ArrayList<>();
             IFieldSpecIterator fulfilmentIterator = (IFieldSpecIterator)fulfiller.iterator();

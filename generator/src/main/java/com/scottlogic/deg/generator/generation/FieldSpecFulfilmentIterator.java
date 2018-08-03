@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.tmpReducerOutput.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.FieldSpec;
 
 class FieldSpecFulfilmentIterator implements IFieldSpecIterator {
     private final FieldSpec spec;
