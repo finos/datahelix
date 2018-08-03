@@ -46,7 +46,7 @@ public class ProfileDeserialiserTests {
             "          { \"field\": \"type\", \"is\": \"null\" }" +
             "        ]" +
             "      }," +
-            "      \"then_\": { \"field\": \"tariff\", \"is\": \"null\" }," +
+            "      \"then\": { \"field\": \"tariff\", \"is\": \"null\" }," +
             "      \"else\": { \"not\": { \"field\": \"tariff\", \"is\": \"null\" } }" +
             "    }" +
             "  ]" +

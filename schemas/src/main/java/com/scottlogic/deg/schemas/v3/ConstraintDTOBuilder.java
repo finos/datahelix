@@ -59,7 +59,7 @@ public class ConstraintDTOBuilder {
     }
 
     public ConstraintDTOBuilder appendThen (ConstraintDTO constraint){
-        this.constraintDTO.then_ = constraint;
+        this.constraintDTO.then = constraint;
         return this;
     }
 

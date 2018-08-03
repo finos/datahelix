@@ -54,7 +54,7 @@ class MainConstraintReader implements IConstraintReader {
                     dto.if_,
                     fields),
                 this.apply(
-                    dto.then_,
+                    dto.then,
                     fields),
                 dto.else_ != null
                     ? this.apply(
