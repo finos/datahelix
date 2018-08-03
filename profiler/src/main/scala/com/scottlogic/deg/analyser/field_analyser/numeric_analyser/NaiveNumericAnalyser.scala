@@ -1,9 +1,6 @@
 package com.scottlogic.deg.analyser.field_analyser.numeric_analyser
 
-import java.util
-
 import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
-import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder, RuleDTO}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StructField}
 import org.apache.spark.sql.functions.{max, min, _}
