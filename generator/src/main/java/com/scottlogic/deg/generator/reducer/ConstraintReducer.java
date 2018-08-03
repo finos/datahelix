@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
@@ -18,7 +19,7 @@ public class ConstraintReducer {
     private final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
-    public RowSpec reduceConstraintsToRowSpec(List<Field> fields, Iterable<IConstraint> constraints) {
+    public RowSpec reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
             .map(constraintFieldSniffer::generateTuple)

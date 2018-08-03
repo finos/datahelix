@@ -1,16 +1,16 @@
 package com.scottlogic.deg.generator.inputs;
 
+import com.scottlogic.deg.generator.AssertUtils;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -70,17 +70,18 @@ public class ProfileReaderTests {
         expectMany(this.getResultingProfile().fields, fieldAssertions);
     }
 
+    /**
+     * Given a set I1, I2, I3... and some consumers A1, A2, A3..., run A1(I1), A2(I2), A3(I3)...
+     * This lets us make assertions about each entry in a sequence
+     * */
     private <T> void expectMany(
-        Collection<T> assertionTargets,
+        Iterable<T> assertionTargets,
         Consumer<T>... perItemAssertions) {
-        Assert.assertThat(
-            assertionTargets.size(),
-            equalTo(perItemAssertions.length));
 
-        int i = 0;
-        for (T item : assertionTargets) {
-            perItemAssertions[i++].accept(item);
-        }
+        AssertUtils.pairwiseAssert(
+            assertionTargets,
+            Arrays.asList(perItemAssertions), // because arrays aren't iterable?
+            (assertionTarget, asserter) -> asserter.accept(assertionTarget));
     }
 
     @Test

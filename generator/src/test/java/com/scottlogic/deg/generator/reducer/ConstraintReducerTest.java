@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
@@ -17,7 +18,8 @@ public class ConstraintReducerTest {
         final Field countryField = new Field("country");
         final Field cityField = new Field("city");
 
-        List<Field> fieldList = Arrays.asList(quantityField, countryField, cityField);
+        ProfileFields fieldList = new ProfileFields(
+            Arrays.asList(quantityField, countryField, cityField));
 
         final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 

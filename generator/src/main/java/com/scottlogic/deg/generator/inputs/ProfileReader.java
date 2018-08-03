@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfileReader {
@@ -28,7 +29,7 @@ public class ProfileReader {
                 profileJson,
                 V3ProfileDTO.SchemaVersion);
 
-        Collection<Field> fields = profileDto.fields.stream()
+        List<Field> fields = profileDto.fields.stream()
             .map(fDto -> new Field(fDto.name))
             .collect(Collectors.toList());
 
