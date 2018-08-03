@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 
 import java.util.Collection;
 
 public interface IDecisionTreeProfile {
 
-    Collection<Field> getFields();
+    ProfileFields getFields();
 
     Collection<IRuleDecisionTree> getDecisionTrees();
 }

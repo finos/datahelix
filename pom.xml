@@ -14,6 +14,7 @@
         <module>schemas</module>
         <module>profiler</module>
         <module>generator</module>
+        <module>scratch-reducer</module>
     </modules>
 
     <properties>

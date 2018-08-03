@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import org.junit.Assert;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
+import static org.hamcrest.CoreMatchers.sameInstance;
 
 public class DecisionTreeGeneratorTests {
     @Test
@@ -28,12 +32,12 @@ public class DecisionTreeGeneratorTests {
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
         IDecisionTreeProfile testOutput = testObject.analyse(testInput);
+        ProfileFields actualFields = testOutput.getFields();
 
-        Assert.assertEquals(inputFieldList.size(), testOutput.getFields().size());
-        ArrayList<Field> fields = new ArrayList<>(testOutput.getFields());
-        for (int i = 0; i < inputFieldList.size(); ++i) {
-            Assert.assertEquals(inputFieldList.get(i).name, fields.get(i).name);
-        }
+        pairwiseAssert(
+            actualFields,
+            inputFieldList,
+            (actual, expected) -> Assert.assertThat(actual, sameInstance(expected)));
     }
 
     @Test
