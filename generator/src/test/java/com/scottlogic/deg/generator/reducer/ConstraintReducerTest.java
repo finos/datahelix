@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ConstraintReducerTest {
     @Test
@@ -84,6 +85,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getTypeRestrictions());
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().max);
@@ -108,6 +110,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getTypeRestrictions());
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().min);
@@ -132,6 +135,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getTypeRestrictions());
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().max);
@@ -156,6 +160,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getTypeRestrictions());
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().min);
@@ -181,6 +186,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().min);
         Assert.assertNotNull(outputSpec.getNumericRestrictions().max);
@@ -204,6 +210,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getTypeRestrictions());
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().max);
@@ -229,6 +236,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().min);
         Assert.assertNotNull(outputSpec.getNumericRestrictions().max);
@@ -253,6 +261,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getNumericRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions().max);
         Assert.assertNotNull(outputSpec.getNumericRestrictions().min);
@@ -278,6 +287,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().max);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().min);
@@ -291,7 +301,7 @@ public class ConstraintReducerTest {
         final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
-                new NotConstraint(new IsAfterConstantDateTimeConstraint(field, testTimestamp)));
+                new IsAfterConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = new ConstraintReducer();
 
         RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -303,6 +313,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().min);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().max);
@@ -328,6 +339,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().max);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().min);
@@ -341,7 +353,7 @@ public class ConstraintReducerTest {
         final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
-                new NotConstraint(new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp)));
+                new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = new ConstraintReducer();
 
         RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -353,6 +365,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().min);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().max);
@@ -378,6 +391,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().min);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().max);
@@ -391,7 +405,7 @@ public class ConstraintReducerTest {
         final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
-                new NotConstraint(new IsBeforeConstantDateTimeConstraint(field, testTimestamp)));
+                new IsBeforeConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = new ConstraintReducer();
 
         RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -403,6 +417,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().max);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().min);
@@ -428,6 +443,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().min);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().max);
@@ -441,7 +457,7 @@ public class ConstraintReducerTest {
         final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
-                new NotConstraint(new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp)));
+                new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = new ConstraintReducer();
 
         RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -453,6 +469,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNull(outputSpec.getDateTimeRestrictions().max);
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().min);
@@ -480,6 +497,7 @@ public class ConstraintReducerTest {
         Assert.assertNull(outputSpec.getSetRestrictions());
         Assert.assertNull(outputSpec.getNullRestrictions());
         Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getStringRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions());
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().min);
         Assert.assertEquals(startTimestamp, outputSpec.getDateTimeRestrictions().min.getLimit());
@@ -487,5 +505,28 @@ public class ConstraintReducerTest {
         Assert.assertNotNull(outputSpec.getDateTimeRestrictions().max);
         Assert.assertEquals(endTimestamp, outputSpec.getDateTimeRestrictions().max.getLimit());
         Assert.assertFalse(outputSpec.getDateTimeRestrictions().max.isInclusive());
+    }
+
+    @Test
+    void shouldReduceMatchesRegexConstraint() {
+        final Field field = new Field("test0");
+        String pattern = ".*\\..*";
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+        List<IConstraint> constraints = Collections.singletonList(
+                new MatchesRegexConstraint(field, Pattern.compile(pattern)));
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        Assert.assertNotNull(testOutput);
+        FieldSpec outputSpec = testOutput.getSpecForField(field);
+        Assert.assertNotNull(outputSpec);
+        Assert.assertNull(outputSpec.getTypeRestrictions());
+        Assert.assertNull(outputSpec.getSetRestrictions());
+        Assert.assertNull(outputSpec.getNullRestrictions());
+        Assert.assertNull(outputSpec.getNumericRestrictions());
+        Assert.assertNull(outputSpec.getDateTimeRestrictions());
+        Assert.assertNotNull(outputSpec.getStringRestrictions());
+        Assert.assertNotNull(outputSpec.getStringRestrictions().automaton);
     }
 }
