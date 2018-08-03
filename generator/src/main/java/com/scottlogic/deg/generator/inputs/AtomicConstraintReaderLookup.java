@@ -18,36 +18,36 @@ public class AtomicConstraintReaderLookup
         add("equalTo",
             (dto, fields) ->
                 new IsEqualToConstantConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     dto.value));
 
         add("inSet",
             (dto, fields) ->
                 new IsInSetConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     new HashSet<>(dto.values)));
 
         add("matchingRegex",
             (dto, fields) ->
                 new MatchesRegexConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     Pattern.compile((String) dto.value)));
 
         add("greaterThan",
             (dto, fields) ->
                 new IsGreaterThanConstantConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     (Number)dto.value));
 
         add("greaterThanOrEqualTo",
             (dto, fields) ->
                 new IsGreaterThanOrEqualToConstantConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     (Number)dto.value));
 
         add("null",
             (dto, fields) ->
-                new IsNullConstraint(fields.byId(dto.field)));
+                new IsNullConstraint(fields.getByName(dto.field)));
 
         add("ofType",
             (dto, fields) ->
@@ -71,7 +71,7 @@ public class AtomicConstraintReaderLookup
                 }
 
                 return new IsOfTypeConstraint(
-                    fields.byId(dto.field),
+                    fields.getByName(dto.field),
                     type);
             });
     }
