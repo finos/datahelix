@@ -1,6 +1,6 @@
 package com.scottlogic.deg.analyser.field_analyser.numeric_analyser
 
-import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
+import com.scottlogic.deg.models._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StructField}
 import org.apache.spark.sql.functions.{max, min, _}
@@ -19,42 +19,21 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val inputField = field;
     val fieldName = inputField.name;
-    val allFieldConstraints = ListBuffer[Constraint]();
+    val allFieldConstraints = ListBuffer[IConstraint]();
 
-    val fieldTypeConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendIs("ofType")
-      .appendValue("number")
-      .Build;
+    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"number");
 
-    val minLengthConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendIs("greaterThanOrEqual")
-      .appendValue(head.getAs("min"))
-      .Build;
+    val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min").toString);
 
-    val maxLengthConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendNot(
-        ConstraintBuilder.instance
-        .appendField(fieldName)
-        .appendIs("greaterThan")
-        .appendValue(head.getAs("max"))
-        .Build
-      )
-      .Build;
+    val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max").toString);
 
-    val regexConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendIs("matchesRegex")
-      .appendValue(
-        inputField.dataType match {
-          case DoubleType => "%f"
-          case LongType => "%l"
-          case IntegerType => "%d"
-        }
-      )
-      .Build;
+    val regexExp = inputField.dataType match {
+      case DoubleType => "%f"
+      case LongType => "%l"
+      case IntegerType => "%d"
+    };
+
+    val regexConstraint = new MatchesRegexConstraint(fieldName, regexExp);
 
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += minLengthConstraint;

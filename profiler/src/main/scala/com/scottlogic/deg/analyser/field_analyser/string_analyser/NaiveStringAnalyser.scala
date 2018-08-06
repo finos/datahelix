@@ -1,6 +1,6 @@
 package com.scottlogic.deg.analyser.field_analyser.string_analyser
 
-import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
+import com.scottlogic.deg.models._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
@@ -19,19 +19,11 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
     val stringAnalysis = analysis._2.first()
 
     val fieldName = field.name;
-    val allFieldConstraints = ListBuffer[Constraint]();
+    val allFieldConstraints = ListBuffer[IConstraint]();
 
-    val fieldTypeConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendIs("ofType")
-      .appendValue("string")
-    .Build;
+    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName, "string");
 
-    val regexConstraint = ConstraintBuilder.instance
-      .appendField(fieldName)
-      .appendIs("matchesRegex")
-      .appendValue(s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}")
-      .Build;
+    val regexConstraint = new MatchesRegexConstraint(fieldName, s".{${stringAnalysis.getAs("len_min")},${stringAnalysis.getAs("len_max")}}");
 
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += regexConstraint;

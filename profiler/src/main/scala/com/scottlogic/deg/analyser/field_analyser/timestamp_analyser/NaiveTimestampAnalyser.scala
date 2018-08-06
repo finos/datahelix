@@ -1,6 +1,6 @@
 package com.scottlogic.deg.analyser.field_analyser.timestamp_analyser
 
-import com.scottlogic.deg.models.{Constraint, ConstraintBuilder, Rule}
+import com.scottlogic.deg.models._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructField
 
@@ -11,13 +11,9 @@ class NaiveTimestampAnalyser(val df: DataFrame, val field: StructField) extends 
 
         val inputField = field.name;
 
-        val fieldTypeConstraint = ConstraintBuilder.instance
-          .appendField(inputField)
-          .appendIs("ofType")
-          .appendValue("temporal")
-          .Build;
+        val fieldTypeConstraint = new IsOfTypeConstraint(inputField,"temporal");
 
-        val allConstraints = ListBuffer[Constraint]();
+        val allConstraints = ListBuffer[IConstraint]();
         allConstraints += fieldTypeConstraint;
 
         return new Rule(inputField, allConstraints.toList);
