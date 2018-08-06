@@ -21,16 +21,16 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
     val fieldName = inputField.name;
     val allFieldConstraints = ListBuffer[IConstraint]();
 
-    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"number");
+    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"numeric");
 
     val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min").toString);
 
     val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max").toString);
 
     val regexExp = inputField.dataType match {
-      case DoubleType => "%f"
-      case LongType => "%l"
-      case IntegerType => "%d"
+      case DoubleType => "^\\d+(\\.\\d+)?$"
+      case LongType => "^\\d+(\\.\\d+)?$"
+      case IntegerType => "^\\d$"
     };
 
     val regexConstraint = new MatchesRegexConstraint(fieldName, regexExp);

@@ -14,7 +14,7 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     if(original.isInstanceOf[IsOfTypeConstraint]){
       val instance = original.asInstanceOf[IsOfTypeConstraint];
       return builder.appendField(instance.FieldName)
-          .appendIs(instance.Is)
+          .appendIs("ofType")
           .appendValue(instance.Value)
           .Build;
     }
@@ -22,7 +22,7 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     if(original.isInstanceOf[IsGreaterThanOrEqualToConstantConstraint]){
       val instance = original.asInstanceOf[IsGreaterThanOrEqualToConstantConstraint];
       return builder.appendField(instance.FieldName)
-        .appendIs(instance.Is)
+        .appendIs("greaterThanOrEqual")
         .appendValue(instance.Value)
         .Build;
     }
@@ -30,7 +30,7 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     if(original.isInstanceOf[IsLowerThanConstraint]){
       val instance = original.asInstanceOf[IsLowerThanConstraint];
       return builder.appendField(instance.FieldName)
-        .appendIs(instance.Is)
+        .appendIs("lowerThan")
         .appendValue(instance.Value)
         .Build;
     }
@@ -38,7 +38,7 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     if(original.isInstanceOf[MatchesRegexConstraint]){
       val instance = original.asInstanceOf[MatchesRegexConstraint];
       return builder.appendField(instance.FieldName)
-        .appendIs(instance.Is)
+        .appendIs("matchesRegex")
         .appendValue(instance.Value)
         .Build;
     }
