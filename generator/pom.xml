@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.scottlogic.deg</groupId>
             <artifactId>schemas</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- Regular expression handling -->
