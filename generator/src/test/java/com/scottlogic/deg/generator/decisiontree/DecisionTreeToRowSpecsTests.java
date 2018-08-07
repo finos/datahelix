@@ -10,6 +10,9 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -24,6 +27,7 @@ public class DecisionTreeToRowSpecsTests {
     public void test() {
         final IDecisionTreeProfile dTree = dTreeGenerator.analyse(makeProfile());
         final Iterable<RowSpec> rowSpecs = dTreeWalker.walk(dTree);
+        Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }
 
     private Profile makeProfile() {
