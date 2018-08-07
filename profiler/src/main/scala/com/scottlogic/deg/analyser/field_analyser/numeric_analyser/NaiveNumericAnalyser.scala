@@ -27,18 +27,11 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max").toString);
 
-    val regexExp = inputField.dataType match {
-      case DoubleType => "^\\d+(\\.\\d+)?$"
-      case LongType => "^\\d+(\\.\\d+)?$"
-      case IntegerType => "^\\d$"
-    };
-
-    val regexConstraint = new MatchesRegexConstraint(fieldName, regexExp);
-
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += minLengthConstraint;
     allFieldConstraints += maxLengthConstraint;
-    allFieldConstraints += regexConstraint;
+    if (inputField.dataType == IntegerType)
+      allFieldConstraints += new HasDecimalPlacesConstraint(fieldName,0);
 
     return new Rule(s"Numeric field ${fieldName} rule", allFieldConstraints.toList);
   }
