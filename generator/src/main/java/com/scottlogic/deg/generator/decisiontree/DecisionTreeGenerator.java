@@ -14,7 +14,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         for (Rule rule : profile.rules) {
             ruleDecisionTrees.add(analyseRule(rule));
         }
-        return new DecisionTreeProfile(new ArrayList<>(profile.fields), ruleDecisionTrees);
+        return new DecisionTreeProfile(profile.fields, ruleDecisionTrees);
     }
 
     private RuleDecisionTree analyseRule(Rule rule) {

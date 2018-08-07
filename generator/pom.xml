@@ -32,6 +32,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Regular expression handling -->
+        <dependency>
+            <groupId>dk.brics.automaton</groupId>
+            <artifactId>automaton</artifactId>
+            <version>1.11-8</version>
+        </dependency>
+
         <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
