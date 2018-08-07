@@ -1,7 +1,7 @@
 package com.scottlogic.deg.analyser.field_analyser
 
-import com.scottlogic.deg.dto.AbstractField
+import com.scottlogic.deg.models.Rule
 
 trait FieldAnalyser extends {
-    def constructDTOField():AbstractField
+    def constructField():Rule
 }
