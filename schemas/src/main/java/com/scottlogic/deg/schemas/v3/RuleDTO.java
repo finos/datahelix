@@ -12,4 +12,9 @@ public class RuleDTO {
     public Collection<ConstraintDTO> constraints;
 
     public RuleDTO() {}
+
+    public RuleDTO(String description, Collection<ConstraintDTO> constraints){
+        this.description = description;
+        this.constraints = constraints;
+    }
 }
