@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Objects;
+
 /**
  * Details a column's atomic constraints
  */
@@ -57,5 +59,18 @@ public class FieldSpec {
 
     void setDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         this.dateTimeRestrictions = dateTimeRestrictions;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "%s | %s | %s | %s | %s | %s",
+                Objects.toString(setRestrictions, "-"),
+                Objects.toString(numericRestrictions, "-"),
+                Objects.toString(stringRestrictions, "-"),
+                Objects.toString(nullRestrictions, "-"),
+                Objects.toString(typeRestrictions, "-"),
+                Objects.toString(dateTimeRestrictions, "-")
+        );
     }
 }
