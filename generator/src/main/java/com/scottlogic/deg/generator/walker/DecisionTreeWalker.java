@@ -53,6 +53,10 @@ public class DecisionTreeWalker {
                     ruleOption.getAtomicConstraints()
             );
 
+            if (ruleOption.getDecisions().isEmpty()) {
+                return Stream.of(nominalRowSpec);
+            }
+
             return ruleOption
                     .getDecisions()
                     .stream()
