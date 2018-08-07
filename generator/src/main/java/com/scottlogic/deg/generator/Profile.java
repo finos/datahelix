@@ -9,7 +9,11 @@ public class Profile
     public final Collection<Rule> rules;
 
     public Profile(List<Field> fields, Collection<Rule> rules) {
-        this.fields = new ProfileFields(fields);
+        this(new ProfileFields(fields), rules);
+    }
+
+    public Profile(ProfileFields fields, Collection<Rule> rules) {
+        this.fields = fields;
         this.rules = rules;
     }
 }

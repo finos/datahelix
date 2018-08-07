@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
 import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
@@ -12,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfileReader {
@@ -29,11 +29,10 @@ public class ProfileReader {
                 profileJson,
                 V3ProfileDTO.SchemaVersion);
 
-        List<Field> fields = profileDto.fields.stream()
-            .map(fDto -> new Field(fDto.name))
-            .collect(Collectors.toList());
-
-        FieldLookup fieldLookup = new FieldLookup(fields);
+        ProfileFields profileFields = new ProfileFields(
+            profileDto.fields.stream()
+                .map(fDto -> new Field(fDto.name))
+                .collect(Collectors.toList()));
 
         IConstraintReader constraintReader = new MainConstraintReader();
 
@@ -47,9 +46,9 @@ public class ProfileReader {
                     r.constraints,
                     dto -> constraintReader.apply(
                         dto,
-                        fieldLookup))));
+                        profileFields))));
 
-        return new Profile(fields, rules);
+        return new Profile(profileFields, rules);
     }
 
     //* Because Java sucks at handling exceptions during stream operations */

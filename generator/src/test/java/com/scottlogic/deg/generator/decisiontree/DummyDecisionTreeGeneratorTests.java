@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.Profile;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +16,7 @@ public class DummyDecisionTreeGeneratorTests {
 
         IDecisionTreeProfile testOutput = testObject.analyse(profile);
 
-        Assert.assertNull(testOutput);
+        Assert.assertThat("DummyDecisionTreeGenerator.analyse() always returns null", testOutput,
+                Is.is(IsNull.nullValue()));
     }
 }

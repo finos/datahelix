@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ProfileFields implements Iterable<Field>
-{
+public class ProfileFields implements Iterable<Field> {
     private final List<Field> fields;
 
     public ProfileFields(List<Field> fields) {

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
@@ -13,7 +14,7 @@ class MainConstraintReader implements IConstraintReader {
     @Override
     public IConstraint apply(
         ConstraintDTO dto,
-        FieldLookup fields)
+        ProfileFields fields)
         throws InvalidProfileException {
 
         if (dto.is != null) {
