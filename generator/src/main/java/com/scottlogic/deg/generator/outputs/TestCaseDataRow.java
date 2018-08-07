@@ -1,14 +1,14 @@
 package com.scottlogic.deg.generator.outputs;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class TestCaseDataRow {
-    public final Collection<Object> values;
+    public final List<Object> values;
 
-    public TestCaseDataRow(Collection<Object> values) {
-        this.values = Collections.unmodifiableCollection(values);
+    public TestCaseDataRow(List<Object> values) {
+        this.values = Collections.unmodifiableList(values);
     }
     public TestCaseDataRow(Object... values) {
         this(Arrays.asList(values));

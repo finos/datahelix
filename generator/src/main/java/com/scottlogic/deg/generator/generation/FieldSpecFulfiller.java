@@ -12,17 +12,20 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-class FieldSpecFulfiller implements Iterable<Object> {
-    private final FieldSpec spec;
-    private final GenerationStrategy strategy;
 
-    FieldSpecFulfiller(FieldSpec spec, GenerationStrategy strategy) {
+interface IDataPointSource {
+    Iterator<Object> iterator(GenerationConfig config);
+}
+
+class FieldSpecFulfiller implements IDataPointSource {
+    private final FieldSpec spec;
+
+    FieldSpecFulfiller(FieldSpec spec) {
         this.spec = spec;
-        this.strategy = strategy;
     }
 
     @Override
-    public Iterator<Object> iterator() {
+    public Iterator<Object> iterator(GenerationConfig config) {
         if (spec.getNullRestrictions() != null &&
                 spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull)
             return new NullFulfilmentIterator();
@@ -30,9 +33,9 @@ class FieldSpecFulfiller implements Iterable<Object> {
         if (spec.getSetRestrictions() != null) {
             Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
             if (whitelist != null) {
-                if (strategy == GenerationStrategy.Exhaustive)
-                    return new SetMembershipIterator(whitelist.iterator());
-                return new SingleObjectIterator(whitelist.iterator().next());
+                return config.shouldEnumerateSetsExhaustively()
+                    ? new SetMembershipIterator(whitelist.iterator())
+                    : new SingleObjectIterator(whitelist.iterator().next());
             }
         }
 
