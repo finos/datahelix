@@ -1,9 +1,11 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
-class FieldSpecDataBagSource implements IDataBagSource
+public class FieldSpecDataBagSource implements IDataBagSource
 {
     private final FieldSpecFulfiller fulfiller;
     private final Field field;

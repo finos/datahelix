@@ -18,10 +18,10 @@ interface IDataPointSource {
     Iterator<Object> iterator(GenerationConfig config);
 }
 
-class FieldSpecFulfiller implements IDataPointSource {
+public class FieldSpecFulfiller implements IDataPointSource {
     private final FieldSpec spec;
 
-    FieldSpecFulfiller(FieldSpec spec) {
+    public FieldSpecFulfiller(FieldSpec spec) {
         this.spec = spec;
     }
 

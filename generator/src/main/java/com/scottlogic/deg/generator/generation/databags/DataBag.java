@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.Field;
 

@@ -1,14 +1,14 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-class CombiningDataBagSource implements IDataBagSource {
+public class MultiplexingDataBagSource implements IDataBagSource {
     private final List<IDataBagSource> subGenerators;
 
-    CombiningDataBagSource(List<IDataBagSource> subGenerators) {
+    public MultiplexingDataBagSource(List<IDataBagSource> subGenerators) {
         this.subGenerators = subGenerators;
     }
 
