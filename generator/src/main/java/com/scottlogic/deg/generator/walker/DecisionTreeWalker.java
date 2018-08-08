@@ -54,15 +54,31 @@ public class DecisionTreeWalker {
 //            return walk(ruleDecisionTree.getRootOption());
 //        }
 
-        private Stream<RowSpec> walk(IRuleOption ruleOption) {
+        private Stream<RowSpec> walk(IRuleOption ruleOption, RowSpec accumulatedSpec) {
             final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     ruleOption.getAtomicConstraints()
             );
 
+            final RowSpec mergedRowSpec = RowSpec.merge(
+                    fieldSpecMerger,
+                    nominalRowSpec,
+                    accumulatedSpec
+            );
+
             if (ruleOption.getDecisions().isEmpty()) {
-                return Stream.of(nominalRowSpec);
+                System.out.printf("reached leaf %s\n", mergedRowSpec.toString());
+                return Stream.of(mergedRowSpec);
             }
+
+            return ruleOption
+                    .getDecisions()
+                    .stream()
+                    .flatMap(decision -> walk(decision, mergedRowSpec));
+
+//            if (ruleOption.getDecisions().isEmpty()) {
+//                return Stream.of(mergedRowSpec);
+//            }
 
 //            final Set<IRuleDecision> decisionsNotYetTaken = new HashSet<>(ruleOption.getDecisions());
 //
@@ -74,30 +90,30 @@ public class DecisionTreeWalker {
 //                    .collect(Collectors.toMap(Function.identity(), field -> new FieldSpec()));
 
 //            Stream<RowSpec> cartesianProductsSoFar = Stream.of(new RowSpec(profileFields, fieldToFieldSpec));
-            Stream<RowSpec> cartesianProductsSoFar = Stream.of(nominalRowSpec);
 //            Stream<RowSpec> cartesianProductsSoFar = Stream.empty();
-            // !A, A
-            for (IRuleDecision decision : ruleOption.getDecisions()) {
-
-//                if (cartesianProductsSoFar.is)
-
-                // !B, B
-
-                cartesianProductsSoFar = cartesianProductsSoFar
-                        .flatMap(
-                                rowSpecFromExistingProducts -> walk(decision, rowSpecFromExistingProducts)
-                                        .map(
-                                                rowSpecFromThisDecision -> RowSpec.merge(
-                                                        fieldSpecMerger,
-                                                        rowSpecFromExistingProducts,
-                                                        rowSpecFromThisDecision
-                                        )
-                                )
-                        );
-
-            }
-
-            return cartesianProductsSoFar;
+//            Stream<RowSpec> cartesianProductsSoFar = Stream.of(mergedRowSpec);
+//            // !A, A
+//            for (IRuleDecision decision : ruleOption.getDecisions()) {
+//
+////                if (cartesianProductsSoFar.is)
+//
+//                // !B, B
+//
+//                cartesianProductsSoFar = cartesianProductsSoFar
+//                        .flatMap(
+//                                aRowSpecFromCartesianProductsSoFar -> walk(decision, aRowSpecFromCartesianProductsSoFar)
+//                                        .map(
+//                                                aRowSpecFromCurrentDecision -> RowSpec.merge(
+//                                                        fieldSpecMerger,
+//                                                        aRowSpecFromCartesianProductsSoFar,
+//                                                        aRowSpecFromCurrentDecision
+//                                        )
+//                                )
+//                        );
+//
+//            }
+//
+//            return cartesianProductsSoFar;
 
 
 //            final List<RowSpec> rowSpecs = new ArrayList<>();
@@ -128,11 +144,64 @@ public class DecisionTreeWalker {
         }
 
         private Stream<RowSpec> walk(IRuleDecision decision, RowSpec accumulatedSpec) {
-            return decision
-                    .getOptions()
+//            return decision
+//                    .getOptions()
+//                    .stream()
+//                    .flatMap(this::walk)
+//                    .map(x -> RowSpec.merge(fieldSpecMerger, accumulatedSpec, x));
+
+            //            return decision
+//                    .getOptions()
+//                    .stream()
+//                    .flatMap(this::walk)
+//                    .map(x -> RowSpec.merge(fieldSpecMerger, accumulatedSpec, x));
+
+//            final RowSpec identityRowSpec = getIdentityRowSpec();
+
+//            Stream<RowSpec> cartesianProductsSoFar = Stream.of(identityRowSpec);
+//            Stream<RowSpec> cartesianProductsSoFar = Stream.of(accumulatedSpec);
+
+//            final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
+//                    profileFields,
+//                    ruleOption.getAtomicConstraints()
+//            );
+
+//            final String uuid = UUID.randomUUID().toString().substring(0, 3);
+
+            return decision.getOptions()
                     .stream()
-                    .flatMap(this::walk)
-                    .map(x -> RowSpec.merge(fieldSpecMerger, accumulatedSpec, x));
+                    .reduce(
+                            Stream.of(accumulatedSpec),
+                            (acc, option) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(option, aRowSpecFromCartesianProductsSoFar)),
+                            (acc1, acc2) -> Stream.concat(acc1, acc2)
+                    );
+
+            /*
+            System.out.printf("START walk decision %s\n", uuid);
+            for (IRuleOption option : decision.getOptions()) {
+                cartesianProductsSoFar = cartesianProductsSoFar
+                        .peek((rowSpec -> System.out.printf("RS %s\n", rowSpec.toString())))
+                        .flatMap(
+                                aRowSpecFromCartesianProductsSoFar -> walk(option, aRowSpecFromCartesianProductsSoFar)
+//                                        .map(
+//                                                aRowSpecFromCurrentOption -> RowSpec.merge(
+//                                                        fieldSpecMerger,
+//                                                        aRowSpecFromCartesianProductsSoFar,
+//                                                        aRowSpecFromCurrentOption
+//                                                )
+//                                        )
+                        );
+            }
+            System.out.printf("END   walk decision %s\n", uuid);
+
+            return cartesianProductsSoFar;
+
+//            if (ruleOption.getDecisions().isEmpty()) {
+//                return Stream.of(nominalRowSpec);
+//            }
+//
+//            Stream<RowSpec> cartesianProductsSoFar = Stream.of(nominalRowSpec);
+*/
         }
     }
 }
