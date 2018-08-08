@@ -31,7 +31,9 @@ public class DecisionTreeToRowSpecsTests {
                     ),
                     fieldSpecMerger
             ),
-            fieldSpecMerger
+            new RowSpecMerger(
+                    fieldSpecMerger
+            )
     );
     private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
 

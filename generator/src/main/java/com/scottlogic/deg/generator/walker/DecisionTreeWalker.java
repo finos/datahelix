@@ -8,8 +8,8 @@ import com.scottlogic.deg.generator.decisiontree.IRuleDecisionTree;
 import com.scottlogic.deg.generator.decisiontree.IRuleOption;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -18,14 +18,14 @@ import java.util.stream.Stream;
 
 public class DecisionTreeWalker {
     private final ConstraintReducer constraintReducer;
-    private final FieldSpecMerger fieldSpecMerger;
+    private final RowSpecMerger rowSpecMerger;
 
     public DecisionTreeWalker(
             ConstraintReducer constraintReducer,
-            FieldSpecMerger fieldSpecMerger
+            RowSpecMerger rowSpecMerger
     ) {
         this.constraintReducer = constraintReducer;
-        this.fieldSpecMerger = fieldSpecMerger;
+        this.rowSpecMerger = rowSpecMerger;
     }
 
     public Stream<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
@@ -53,11 +53,12 @@ public class DecisionTreeWalker {
                     option.getAtomicConstraints()
             );
 
-            final RowSpec mergedRowSpec = RowSpec.merge(
-                    fieldSpecMerger,
-                    nominalRowSpec,
-                    accumulatedSpec
-            );
+            final RowSpec mergedRowSpec = rowSpecMerger.merge(
+                    Stream.of(
+                            nominalRowSpec,
+                            accumulatedSpec
+                    )
+            ).get();
 
             if (option.getDecisions().isEmpty()) {
                 return Stream.of(mergedRowSpec);

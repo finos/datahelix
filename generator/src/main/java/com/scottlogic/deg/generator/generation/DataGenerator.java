@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
@@ -21,14 +22,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataGenerator implements IDataGenerator {
-    private final FieldSpecMerger fieldSpecMerger;
+    private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
 
     public DataGenerator(
-            FieldSpecMerger fieldSpecMerger,
+            RowSpecMerger rowSpecMerger,
             ConstraintReducer constraintReducer
     ) {
-        this.fieldSpecMerger = fieldSpecMerger;
+        this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
     }
 
@@ -39,7 +40,7 @@ public class DataGenerator implements IDataGenerator {
 
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,
-                fieldSpecMerger);
+                rowSpecMerger);
 
         List<RowSpec> rowSpecs = walker.walk(analysedProfile).collect(Collectors.toList());
 
