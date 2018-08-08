@@ -6,9 +6,10 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
+import com.scottlogic.deg.generator.reducer.AutomatonFactory;
+import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -20,11 +21,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DecisionTreeToRowSpecsTests {
-    final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(new ConstraintReducer(), new FieldSpecMerger());
-    final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
+    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+    private final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(
+            new ConstraintReducer(
+                    new FieldSpecFactory(
+                            new AutomatonFactory()
+                    ),
+                    fieldSpecMerger
+            ),
+            fieldSpecMerger
+    );
+    private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
 
     @Test
     public void test() {

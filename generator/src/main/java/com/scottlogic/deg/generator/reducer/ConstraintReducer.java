@@ -15,8 +15,16 @@ import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
     private final ConstraintFieldSniffer constraintFieldSniffer = new ConstraintFieldSniffer();
-    private final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+    private final FieldSpecFactory fieldSpecFactory;
+    private final FieldSpecMerger fieldSpecMerger;
+
+    public ConstraintReducer(
+            FieldSpecFactory fieldSpecFactory,
+            FieldSpecMerger fieldSpecMerger
+    ) {
+        this.fieldSpecFactory = fieldSpecFactory;
+        this.fieldSpecMerger = fieldSpecMerger;
+    }
 
     public RowSpec reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport

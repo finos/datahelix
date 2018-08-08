@@ -2,13 +2,16 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.IRuleDecision;
+import com.scottlogic.deg.generator.decisiontree.IRuleDecisionTree;
+import com.scottlogic.deg.generator.decisiontree.IRuleOption;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
-import java.util.*;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 
 public class FieldSpecFactory {
-    private final AutomatonFactory automatonFactory = new AutomatonFactory();
+    private final AutomatonFactory automatonFactory;
+
+    public FieldSpecFactory(AutomatonFactory automatonFactory) {
+        this.automatonFactory = automatonFactory;
+    }
 
     public FieldSpec construct(IConstraint constraint) {
         final FieldSpec fieldSpec = new FieldSpec();
