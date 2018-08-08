@@ -18,18 +18,21 @@ public class DataBag {
         this.fieldToValue = fieldToValue;
     }
 
-    public Object get(Field field)
-    {
+    public Object get(Field field) {
+        if (!this.fieldToValue.containsKey(field))
+            throw new IllegalStateException("Databag has no value stored for " + field);
+
         return this.fieldToValue.get(field);
     }
 
-    public void set(Field field, Object value)
-    {
+    public void set(Field field, Object value) {
+        if (this.fieldToValue.containsKey(field))
+            throw new IllegalArgumentException("Databag already contains a value for " + field);
+
         this.fieldToValue.put(field, value);
     }
 
-    public static DataBag merge(DataBag... bags)
-    {
+    public static DataBag merge(DataBag... bags) {
         Map<Field, Object> newMap =
             Arrays.stream(bags)
                 .map(r -> r.fieldToValue.entrySet().stream())

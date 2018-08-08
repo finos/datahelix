@@ -33,7 +33,15 @@ public class ConcatenatingIterable<T> implements Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return !this.underlyingIterators.isEmpty() && this.underlyingIterators.peek().hasNext();
+            while (!this.underlyingIterators.isEmpty())
+            {
+                if (this.underlyingIterators.peek().hasNext())
+                    return true;
+
+                this.underlyingIterators.remove();
+            }
+
+            return false;
         }
 
         @Override
