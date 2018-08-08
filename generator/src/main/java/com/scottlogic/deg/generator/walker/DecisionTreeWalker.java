@@ -27,18 +27,7 @@ public class DecisionTreeWalker {
 
     public Iterable<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(decisionTreeProfile.getFields());
-        return helper.walk(
-                new RuleOption(
-                        Collections.emptyList(),
-                        decisionTreeProfile
-                                .getDecisionTrees()
-                                .stream()
-                                .map(IRuleDecisionTree::getRootOption)
-                                .map(Arrays::asList)
-                                .map(RuleDecision::new)
-                                .collect(Collectors.toList())
-                )
-        )
+        return helper.walk(decisionTreeProfile)
                 .collect(Collectors.toList());
     }
 
@@ -56,9 +45,9 @@ public class DecisionTreeWalker {
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
 
-        private Stream<RowSpec> walk(IRuleOption option) {
-            return walk(option, getIdentityRowSpec());
-        }
+//        private Stream<RowSpec> walk(IRuleOption option) {
+//            return walk(option, getIdentityRowSpec());
+//        }
 
         private Stream<RowSpec> walk(IRuleOption option, RowSpec accumulatedSpec) {
             final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
@@ -72,13 +61,13 @@ public class DecisionTreeWalker {
                     accumulatedSpec
             );
 
+            if (option.getDecisions().isEmpty()) {
+                return Stream.of(mergedRowSpec);
+            }
+
             return option.getDecisions()
                     .stream()
-                    .reduce(
-                            Stream.of(mergedRowSpec),
-                            (acc, decision) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decision, aRowSpecFromCartesianProductsSoFar)),
-                            Stream::concat
-                    );
+                    .flatMap(decision -> walk(decision, mergedRowSpec));
         }
 
         private Stream<RowSpec> walk(IRuleDecision decision, RowSpec accumulatedSpec) {
@@ -86,6 +75,32 @@ public class DecisionTreeWalker {
                     .getOptions()
                     .stream()
                     .flatMap(option -> walk(option, accumulatedSpec));
+        }
+
+        public Stream<RowSpec> walk(IRuleDecisionTree decisionTree, RowSpec accumulatedSpec) {
+            return walk(decisionTree.getRootOption(), accumulatedSpec);
+        }
+
+        public Stream<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
+            return decisionTreeProfile.getDecisionTrees()
+                    .stream()
+                    .reduce(
+                            Stream.of(getIdentityRowSpec()),
+                            (acc, decisionTree) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
+                            Stream::concat
+                    );
+
+//            new RuleOption(
+//                    Collections.emptyList(),
+//                    decisionTreeProfile
+//                            .getDecisionTrees()
+//                            .stream()
+//                            .map(IRuleDecisionTree::getRootOption)
+//                            .map(Arrays::asList)
+//                            .map(RuleDecision::new)
+//                            .collect(Collectors.toList())
+//            )
+
         }
     }
 }
