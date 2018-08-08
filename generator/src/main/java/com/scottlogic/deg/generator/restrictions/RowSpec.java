@@ -54,4 +54,9 @@ public class RowSpec {
 
         return new RowSpec(fields, fieldToFieldSpec);
     }
+
+    @Override
+    public String toString() {
+        return Objects.toString(fieldToFieldSpec);
+    }
 }
