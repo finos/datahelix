@@ -8,9 +8,8 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -30,22 +29,24 @@ public class ConstraintReducer {
                         ConstraintAndFieldTuple::getConstraint,
                         Collectors.toList())));
 
-        Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        for (Field field : fields) {
-            fieldToFieldSpec.put(
-                field,
-                this.reduceConstraintsToFieldSpec(
-                    fieldToConstraints.get(field)));
-        }
+        final Map<Field, FieldSpec> fieldToFieldSpec = fields.stream()
+                .collect(
+                        Collectors.toMap(
+                                Function.identity(),
+                                (field) ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))
+                        )
+                );
 
         return new RowSpec(fields, fieldToFieldSpec);
     }
 
     private FieldSpec reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
+        if (constraints == null) {
+            return new FieldSpec();
+        }
         return StreamSupport
             .stream(constraints.spliterator(), false)
             .map(fieldSpecFactory::construct)
-            .reduce(fieldSpecMerger::merge)
-            .orElseThrow(() -> new IllegalStateException(""));
+            .reduce(new FieldSpec(), fieldSpecMerger::merge);
     }
 }

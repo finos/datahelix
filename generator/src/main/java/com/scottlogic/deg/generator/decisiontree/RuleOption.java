@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import java.util.ArrayList;
 import java.util.Collection;
 
-class RuleOption implements IRuleOption {
+public class RuleOption implements IRuleOption {
     private final Collection<IConstraint> atomicConstraints;
     private final Collection<IRuleDecision> decisions;
 
-    RuleOption(Collection<IConstraint> atomicConstraints, Collection<IRuleDecision> decisions) {
+    public RuleOption(Collection<IConstraint> atomicConstraints, Collection<IRuleDecision> decisions) {
         this.atomicConstraints =  new ArrayList<>(atomicConstraints);
         this.decisions = new ArrayList<>(decisions);
     }
