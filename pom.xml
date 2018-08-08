@@ -25,7 +25,6 @@
         <junit.version>4.12</junit.version>
         <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <junit.vintage.version>${junit.version}.0</junit.vintage.version>
-        <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <junit.platform.version>1.0.0</junit.platform.version>
         <jackson.version>2.9.6</jackson.version>
     </properties>
