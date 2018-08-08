@@ -45,10 +45,6 @@ public class DecisionTreeWalker {
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
 
-//        private Stream<RowSpec> walk(IRuleOption option) {
-//            return walk(option, getIdentityRowSpec());
-//        }
-
         private Stream<RowSpec> walk(IRuleOption option, RowSpec accumulatedSpec) {
             final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
@@ -89,17 +85,6 @@ public class DecisionTreeWalker {
                             (acc, decisionTree) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
                             Stream::concat
                     );
-
-//            new RuleOption(
-//                    Collections.emptyList(),
-//                    decisionTreeProfile
-//                            .getDecisionTrees()
-//                            .stream()
-//                            .map(IRuleDecisionTree::getRootOption)
-//                            .map(Arrays::asList)
-//                            .map(RuleDecision::new)
-//                            .collect(Collectors.toList())
-//            )
 
         }
     }
