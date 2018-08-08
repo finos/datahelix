@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 
@@ -26,6 +27,15 @@ class FieldSpecFulfiller implements IDataPointSource {
 
     @Override
     public Iterator<Object> iterator(GenerationConfig config) {
+        IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
+
+        if (internalIterator.isInfinite() && config.shouldChooseFiniteSampling())
+            return new LimitingIteratorDecorator<>(internalIterator, 1);
+
+        return internalIterator;
+    }
+
+    private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         if (spec.getNullRestrictions() != null &&
                 spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull)
             return new NullFulfilmentIterator();
@@ -60,7 +70,8 @@ class FieldSpecFulfiller implements IDataPointSource {
             return simplifyStringIterator(iterator);
         }
 
-        return new FieldSpecFulfilmentIterator(spec);
+        // no restrictions, just output some random bits of data
+        return new SpecificDataPointsIterator(null, "string", 123, true);
     }
 
     private Set<Object> getBlacklist() {
@@ -69,7 +80,7 @@ class FieldSpecFulfiller implements IDataPointSource {
         return null;
     }
 
-    private Iterator<Object> simplifyStringIterator(StringIterator stringIterator) {
+    private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
         if (stringIterator.hasNext())
             return new SingleObjectIterator(stringIterator.next());
         return new UnfulfillableIterator();
@@ -117,3 +128,4 @@ class FieldSpecFulfiller implements IDataPointSource {
                 .concatenate(getNumericDecimalAutomaton());
     }
 }
+
