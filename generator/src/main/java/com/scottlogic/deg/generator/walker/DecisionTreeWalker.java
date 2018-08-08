@@ -25,10 +25,9 @@ public class DecisionTreeWalker {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Iterable<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
+    public Stream<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(decisionTreeProfile.getFields());
-        return helper.walk(decisionTreeProfile)
-                .collect(Collectors.toList());
+        return helper.walk(decisionTreeProfile);
     }
 
     private class DecisionTreeWalkerHelper {

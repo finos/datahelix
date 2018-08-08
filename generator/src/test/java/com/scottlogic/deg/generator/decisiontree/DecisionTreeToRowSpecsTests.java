@@ -18,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DecisionTreeToRowSpecsTests {
     final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(new ConstraintReducer(), new FieldSpecMerger());
@@ -26,7 +29,8 @@ public class DecisionTreeToRowSpecsTests {
     @Test
     public void test() {
         final IDecisionTreeProfile dTree = dTreeGenerator.analyse(makeProfile());
-        final Iterable<RowSpec> rowSpecs = dTreeWalker.walk(dTree);
+        final List<RowSpec> rowSpecs = dTreeWalker.walk(dTree)
+                .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }
 
