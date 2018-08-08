@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
@@ -128,4 +129,3 @@ public class FieldSpecFulfiller implements IDataPointSource {
                 .concatenate(getNumericDecimalAutomaton());
     }
 }
-

@@ -1,10 +1,10 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
-class SingleObjectIterator implements IFieldSpecIterator {
+public class SingleObjectIterator implements IFieldSpecIterator {
     private boolean notCalled = true;
     private Object theObject;
 
-    SingleObjectIterator(Object theObject) {
+    public SingleObjectIterator(Object theObject) {
         this.theObject = theObject;
     }
 

@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
@@ -6,7 +6,7 @@ import dk.brics.automaton.Transition;
 
 import java.util.*;
 
-class StringIterator implements IFieldSpecIterator {
+public class StringIterator implements IFieldSpecIterator {
     private Random random = new Random(0);
     private Automaton automaton;
     private Node rootNode;
@@ -16,7 +16,7 @@ class StringIterator implements IFieldSpecIterator {
     private String nextMatchValue;
     private boolean hasNext;
 
-    StringIterator(Automaton automaton, Set<Object> blacklist) {
+    public StringIterator(Automaton automaton, Set<Object> blacklist) {
         if (blacklist != null && blacklist.size() > 0) {
             Automaton blacklistAutomaton = getBlacklistAutomaton(blacklist);
             this.automaton = automaton.intersection(blacklistAutomaton);

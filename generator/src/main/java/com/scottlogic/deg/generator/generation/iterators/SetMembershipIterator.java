@@ -1,11 +1,11 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
 import java.util.Iterator;
 
-class SetMembershipIterator implements IFieldSpecIterator {
+public class SetMembershipIterator implements IFieldSpecIterator {
     private Iterator<?> forwardedIterator;
 
-    SetMembershipIterator(Iterator<?> whitelistIterator) {
+    public SetMembershipIterator(Iterator<?> whitelistIterator) {
         this.forwardedIterator = whitelistIterator;
     }
 

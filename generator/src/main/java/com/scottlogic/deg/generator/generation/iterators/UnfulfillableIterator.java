@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
 public class UnfulfillableIterator implements IFieldSpecIterator {
     @Override

@@ -1,8 +1,6 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
-import java.util.Iterator;
-
-class NullFulfilmentIterator implements IFieldSpecIterator {
+public class NullFulfilmentIterator implements IFieldSpecIterator {
     private boolean notCalled = true;
 
     @Override

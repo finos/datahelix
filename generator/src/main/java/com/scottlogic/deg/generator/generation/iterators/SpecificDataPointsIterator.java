@@ -1,12 +1,12 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-class SpecificDataPointsIterator implements IFieldSpecIterator {
+public class SpecificDataPointsIterator implements IFieldSpecIterator {
     private Queue<Object> values;
 
-    SpecificDataPointsIterator(Object... values) {
+    public SpecificDataPointsIterator(Object... values) {
         this.values = new LinkedList<>();
         for (Object v : values)
             this.values.add(v);

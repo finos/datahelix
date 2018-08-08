@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.iterators;
 
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-class NumericIterator implements IFieldSpecIterator {
+public class NumericIterator implements IFieldSpecIterator {
      private enum Strategy {
          UpFromMin,
          DownFromMax,
@@ -21,7 +21,7 @@ class NumericIterator implements IFieldSpecIterator {
      private boolean hasNext = true;
      private BigDecimal stepSize;
 
-     NumericIterator(NumericRestrictions restrictions, Set<Object> blacklist) {
+     public NumericIterator(NumericRestrictions restrictions, Set<Object> blacklist) {
          this.restrictions = restrictions;
          chooseStrategy();
          if (blacklist != null) {
