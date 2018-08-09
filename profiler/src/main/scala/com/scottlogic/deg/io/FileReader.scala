@@ -10,7 +10,8 @@ class FileReader @Inject()(
 ) {
     def readCSV(file: File): DataFrame = {
         spark.read.format("csv")
-            .option("inferSchema", "true")
+          // Do not infer Schema
+          // .option("inferSchema", "true")
             .option("header", "true")
             .load(file.getPath)
     }
