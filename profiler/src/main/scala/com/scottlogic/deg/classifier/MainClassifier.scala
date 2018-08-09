@@ -1,5 +1,7 @@
 package com.scottlogic.deg.classifier
 
+import com.scottlogic.deg.classifier.simple_classifier._
+
 import scala.collection.mutable.ListBuffer
 
 object MainClassifier extends Classifier {

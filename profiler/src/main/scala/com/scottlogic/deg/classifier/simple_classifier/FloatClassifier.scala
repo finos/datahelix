@@ -1,4 +1,6 @@
-package com.scottlogic.deg.classifier
+package com.scottlogic.deg.classifier.simple_classifier
+
+import com.scottlogic.deg.classifier.{Classifier, FloatType, SemanticType}
 
 object FloatClassifier extends Classifier {
   private val containsCharacterRegex = "[a-zA-Z]+"
