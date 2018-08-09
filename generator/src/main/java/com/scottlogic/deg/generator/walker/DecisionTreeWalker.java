@@ -51,7 +51,7 @@ public class DecisionTreeWalker {
             final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
-            );
+            ).get();
 
             final RowSpec mergedRowSpec = rowSpecMerger.merge(
                     Stream.of(

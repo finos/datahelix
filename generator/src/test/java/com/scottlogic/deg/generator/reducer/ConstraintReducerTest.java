@@ -44,7 +44,7 @@ class ConstraintReducerTest {
         // ACT
         final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
             fieldList,
-            constraints);
+            constraints).get();
 
         // ASSERT
         FieldSpec quantityFieldSpec = reducedConstraints.getSpecForField(quantityField);
@@ -118,7 +118,7 @@ class ConstraintReducerTest {
                 new IsGreaterThanConstantConstraint(field, 5));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -153,7 +153,7 @@ class ConstraintReducerTest {
                 new IsGreaterThanConstantConstraint(field, 5)));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -188,7 +188,7 @@ class ConstraintReducerTest {
                 new IsGreaterThanOrEqualToConstantConstraint(field, 5));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -223,7 +223,7 @@ class ConstraintReducerTest {
                 new IsGreaterThanOrEqualToConstantConstraint(field, 5)));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -258,7 +258,7 @@ class ConstraintReducerTest {
                 new IsLessThanConstantConstraint(field, 5));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -293,7 +293,7 @@ class ConstraintReducerTest {
                 new IsLessThanConstantConstraint(field, 5)));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -328,7 +328,7 @@ class ConstraintReducerTest {
                 new IsLessThanOrEqualToConstantConstraint(field, 5));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -363,7 +363,7 @@ class ConstraintReducerTest {
                 new IsLessThanOrEqualToConstantConstraint(field, 5)));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -399,7 +399,7 @@ class ConstraintReducerTest {
                 new IsAfterConstantDateTimeConstraint(field, testTimestamp));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -435,7 +435,7 @@ class ConstraintReducerTest {
                 new IsAfterConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -471,7 +471,7 @@ class ConstraintReducerTest {
                 new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -507,7 +507,7 @@ class ConstraintReducerTest {
                 new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -543,7 +543,7 @@ class ConstraintReducerTest {
                 new IsBeforeConstantDateTimeConstraint(field, testTimestamp));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -579,7 +579,7 @@ class ConstraintReducerTest {
                 new IsBeforeConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -615,7 +615,7 @@ class ConstraintReducerTest {
                 new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -651,7 +651,7 @@ class ConstraintReducerTest {
                 new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -689,7 +689,7 @@ class ConstraintReducerTest {
                 new IsBeforeConstantDateTimeConstraint(field, endTimestamp));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -729,7 +729,7 @@ class ConstraintReducerTest {
                 new MatchesRegexConstraint(field, Pattern.compile(pattern)));
         ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);

@@ -26,7 +26,7 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public RowSpec reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
             .map(constraintFieldSniffer::generateTuple)
@@ -37,24 +37,50 @@ public class ConstraintReducer {
                         ConstraintAndFieldTuple::getConstraint,
                         Collectors.toList())));
 
-        final Map<Field, FieldSpec> fieldToFieldSpec = fields.stream()
+        final Map<Field, Optional<FieldSpec>> fieldToFieldSpec = fields.stream()
                 .collect(
                         Collectors.toMap(
                                 Function.identity(),
-                                (field) ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))
+                                field ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))
                         )
                 );
 
-        return new RowSpec(fields, fieldToFieldSpec);
+        final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
+                .filter(map -> map.values().stream().allMatch(Optional::isPresent))
+                .map(map -> map
+                        .entrySet()
+                        .stream()
+                        .collect(
+                                Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        entry -> entry.getValue().get()
+                                )
+                        )
+                );
+
+        return optionalMap.map(
+                map -> new RowSpec(
+                        fields,
+                        map
+                )
+        );
     }
 
-    private FieldSpec reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
+    private Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
         if (constraints == null) {
-            return new FieldSpec();
+            return Optional.of(new FieldSpec());
         }
         return StreamSupport
             .stream(constraints.spliterator(), false)
             .map(fieldSpecFactory::construct)
-            .reduce(new FieldSpec(), fieldSpecMerger::merge);
+            .reduce(
+                    Optional.<FieldSpec>empty(),
+                    (optAcc, next) -> optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
+                    (optAcc1, optAcc2) -> optAcc1.flatMap(
+                            acc1 -> optAcc2.flatMap(
+                                    acc2 -> fieldSpecMerger.merge(acc1, acc2)
+                            )
+                    )
+            );
     }
 }

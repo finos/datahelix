@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * Details every column's atomic constraints
  */
 public class SetRestrictionsMerger {
-    public SetRestrictions merge(SetRestrictions left, SetRestrictions right) {
+    public SetRestrictions merge(SetRestrictions left, SetRestrictions right) throws UnmergeableRestrictionException {
         if (left == null && right == null)
             return null;
         if (left == null)

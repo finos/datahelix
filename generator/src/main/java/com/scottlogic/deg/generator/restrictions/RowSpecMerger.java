@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RowSpecMerger {
@@ -11,7 +12,9 @@ public class RowSpecMerger {
     }
 
     public Optional<RowSpec> merge(Stream<RowSpec> rowSpecs) {
-        // TODO
-        return Optional.empty();
+        return RowSpec.merge(
+                fieldSpecMerger,
+                rowSpecs.collect(Collectors.toList())
+        );
     }
 }
