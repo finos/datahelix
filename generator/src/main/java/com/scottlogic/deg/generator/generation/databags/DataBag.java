@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DataBag {
     private final Map<Field, Object> fieldToValue;
@@ -33,14 +32,13 @@ public class DataBag {
     }
 
     public static DataBag merge(DataBag... bags) {
-        Map<Field, Object> newMap =
-            Arrays.stream(bags)
-                .map(r -> r.fieldToValue.entrySet().stream())
-                .flatMap(entrySetStream -> entrySetStream)
-                .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    Map.Entry::getValue));
+        Map<Field, Object> newFieldToValue = new HashMap<>();
 
-        return new DataBag(newMap);
+        Arrays.stream(bags)
+            .map(r -> r.fieldToValue.entrySet().stream())
+            .flatMap(entrySetStream -> entrySetStream)
+            .forEach(entry -> newFieldToValue.put(entry.getKey(), entry.getValue()));
+
+        return new DataBag(newFieldToValue);
     }
 }

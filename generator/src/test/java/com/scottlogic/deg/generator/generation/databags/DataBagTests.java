@@ -78,7 +78,7 @@ class DataBagTests {
     }
 
     @Test
-    void mergedShouldThrowIfDataBagsOverlap() {
+    void mergeShouldThrowIfDataBagsOverlap() {
         // ARRANGE
         Field idField = new Field("id");
         Field priceField = new Field("price");
@@ -94,5 +94,23 @@ class DataBagTests {
         Assertions.assertThrows(
             IllegalStateException.class,
             () -> DataBag.merge(dataBag1, dataBag2));
+    }
+
+    // because a previous implementation, using Collectors.toBag, failed on these inputs
+    @Test
+    void mergeShouldHandleNullValues() {
+        // ARRANGE
+        Field idField = new Field("id");
+
+        DataBag dataBag1 = new DataBag();
+        DataBag dataBag2 = new DataBag();
+        dataBag2.set(idField, null);
+
+        // ACT / ASSERT
+        DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
+
+        Assert.assertThat(
+            mergedDataBag.get(idField),
+            equalTo(null));
     }
 }
