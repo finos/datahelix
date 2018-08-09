@@ -1,15 +1,16 @@
 package com.scottlogic.deg.generator.utils;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class ConcatenatingIterable<T> implements Iterable<T> {
     private final List<Iterable<T>> underlyingIterables;
 
     public ConcatenatingIterable(List<Iterable<T>> underlyingIterables) {
         this.underlyingIterables = underlyingIterables;
+    }
+
+    public ConcatenatingIterable(Iterable<T>... underlyingIterables) {
+        this.underlyingIterables = Arrays.asList(underlyingIterables);
     }
 
     @Override

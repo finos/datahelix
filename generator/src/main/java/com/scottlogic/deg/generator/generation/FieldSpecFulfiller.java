@@ -3,13 +3,10 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
-import dk.brics.automaton.Automaton;
-import dk.brics.automaton.RegExp;
+import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,23 +27,31 @@ public class FieldSpecFulfiller implements IDataPointSource {
     public Iterator<Object> iterator(GenerationConfig config) {
         IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
 
-        if (internalIterator.isInfinite() && config.shouldChooseFiniteSampling())
-            return new LimitingIteratorDecorator<>(internalIterator, 1);
+        Iterator<Object> potentiallyLimitedIterator =
+            internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
+            ? // the field's infinite and we're configured to sample from infinite sequences
+                new LimitingIteratorDecorator<>(internalIterator, 1)
+            : internalIterator;
 
-        return internalIterator;
+        return this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
+            ? // the field could be null; output one at the start of the sequence and filter any out from later
+                new ValuePrependingIterator<>(
+                    new FilteringIterator<>(potentiallyLimitedIterator, null), null)
+            : potentiallyLimitedIterator;
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         if (spec.getNullRestrictions() != null &&
-                spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull)
-            return new NullFulfilmentIterator();
+                spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
+            return new SpecificDataPointsIterator(null);
+        }
 
         if (spec.getSetRestrictions() != null) {
             Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
             if (whitelist != null) {
                 return config.shouldEnumerateSetsExhaustively()
                     ? new SetMembershipIterator(whitelist.iterator())
-                    : new SingleObjectIterator(whitelist.iterator().next());
+                    : new SpecificDataPointsIterator(whitelist.iterator().next());
             }
         }
 
@@ -63,7 +68,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
         }
 
         // no restrictions, just output some random bits of data
-        return new SpecificDataPointsIterator(null, "string", 123, true);
+        return new SpecificDataPointsIterator("string", 123, true);
     }
 
     private Set<Object> getBlacklist() {
@@ -74,7 +79,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
 
     private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
         if (stringIterator.hasNext())
-            return new SingleObjectIterator(stringIterator.next());
+            return new SpecificDataPointsIterator(stringIterator.next());
         return new UnfulfillableIterator();
     }
 }
