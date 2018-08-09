@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy {
 
@@ -28,11 +29,13 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
     }
 
     class InternalIterator implements Iterator<DataBag> {
-        private int indexOfSequenceToVary;
+        private Integer indexOfSequenceToVary;
 
         private final DataBag[] baselines;
         private final List<Iterable<DataBag>> dataRowSequences;
         private final List<Iterator<DataBag>> sequenceIterators;
+
+        private final boolean isEmpty;
 
         InternalIterator(List<Iterable<DataBag>> dataRowSequences) {
             this.baselines = new DataBag[dataRowSequences.size()];
@@ -44,38 +47,48 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
             this.indexOfSequenceToVary = 0;
 
             this.dataRowSequences = dataRowSequences;
-        }
 
-        private DataBag getBaseline(int seqIndex) {
-            if (baselines[seqIndex] != null)
-                return baselines[seqIndex];
+            for (int i = 0; i < sequenceIterators.size(); i++) {
+                if (!sequenceIterators.get(i).hasNext()) {
+                    this.isEmpty = true;
+                    return;
+                }
 
-            DataBag baseline = sequenceIterators.get(seqIndex).next();
+                this.baselines[i] = sequenceIterators.get(i).next();
+            }
 
-            baselines[seqIndex] = baseline;
-
-            return baseline;
+            this.isEmpty = false;
         }
 
         @Override
         public boolean hasNext() {
+            if (this.isEmpty)
+                return false;
+
             // kind of inefficient
-            return sequenceIterators.stream().anyMatch(Iterator::hasNext);
+            return this.sequenceIterators.stream().anyMatch(Iterator::hasNext);
         }
 
         @Override
         public DataBag next() {
-            return IntStream.range(0, dataRowSequences.size())
+            if (this.indexOfSequenceToVary == null) {
+                this.indexOfSequenceToVary = 0;
+
+                return Stream.of(this.baselines)
+                    .reduce(new DataBag(), (db1, db2) -> DataBag.merge(db1, db2));
+            }
+
+            return IntStream.range(0, this.dataRowSequences.size())
                 .mapToObj(seqIndex -> {
-                    if (seqIndex != indexOfSequenceToVary) {
-                        return this.getBaseline(seqIndex);
+                    if (seqIndex != this.indexOfSequenceToVary) {
+                        return this.baselines[seqIndex];
                     }
                     else {
-                        if (!sequenceIterators.get(seqIndex).hasNext()) {
+                        if (!this.sequenceIterators.get(seqIndex).hasNext()) {
                             this.indexOfSequenceToVary++;
-                            return this.getBaseline(seqIndex);
+                            return this.baselines[seqIndex];
                         }
-                        return sequenceIterators.get(seqIndex).next();
+                        return this.sequenceIterators.get(seqIndex).next();
                     }
                 })
                 .reduce(new DataBag(), (db1, db2) -> DataBag.merge(db1, db2));
