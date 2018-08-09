@@ -15,7 +15,7 @@ public class ProfileFields implements Iterable<Field> {
         return this.fields.stream()
             .filter(f -> f.name.equals(fieldName))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException("Profile fields do not contain " + fieldName));
     }
 
     public int size() {
