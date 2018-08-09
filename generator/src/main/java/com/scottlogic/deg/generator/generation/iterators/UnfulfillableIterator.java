@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.generation.iterators;
 
+import javax.naming.OperationNotSupportedException;
+
 public class UnfulfillableIterator implements IFieldSpecIterator {
     @Override
     public boolean hasNext() {
@@ -8,7 +10,7 @@ public class UnfulfillableIterator implements IFieldSpecIterator {
 
     @Override
     public Object next() {
-        return null;
+        throw new IllegalStateException();
     }
 
     @Override
