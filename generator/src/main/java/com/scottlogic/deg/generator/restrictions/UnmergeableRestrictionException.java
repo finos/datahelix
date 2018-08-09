@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-public class UnmergeableRestrictionException extends Exception {
+public class UnmergeableRestrictionException extends RuntimeException {
     public UnmergeableRestrictionException () {
         super();
     }
