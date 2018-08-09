@@ -19,10 +19,6 @@ public class FieldSpecDataBagSource implements IDataBagSource
     public Iterable<DataBag> generate(GenerationConfig generationConfig) {
         return new ProjectingIterable<>(
             () -> this.fulfiller.iterator(generationConfig),
-            value -> {
-                DataBag newRowFragment = new DataBag();
-                newRowFragment.set(this.field, value);
-                return newRowFragment;
-            });
+            value -> DataBag.startBuilding().set(this.field, value).build());
     }
 }

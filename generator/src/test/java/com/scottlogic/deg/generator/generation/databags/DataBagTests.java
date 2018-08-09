@@ -13,10 +13,8 @@ class DataBagTests {
         // ARRANGE
         Field idField = new Field("id");
 
-        DataBag objectUnderTest = new DataBag();
-
         // ACT
-        objectUnderTest.set(idField, 3);
+        DataBag objectUnderTest = DataBag.startBuilding().set(idField, 3).build();
 
         // ASSERT
         Assert.assertThat(
@@ -29,14 +27,13 @@ class DataBagTests {
         // ARRANGE
         Field idField = new Field("id");
 
-        DataBag objectUnderTest = new DataBag();
-
-        objectUnderTest.set(idField, 3);
-
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> objectUnderTest.set(idField, 4));
+            () -> DataBag.startBuilding()
+                .set(idField, 3)
+                .set(idField, 3)
+                .build());
     }
 
     @Test
@@ -44,7 +41,7 @@ class DataBagTests {
         // ARRANGE
         Field idField = new Field("id");
 
-        DataBag objectUnderTest = new DataBag();
+        DataBag objectUnderTest = DataBag.empty;
 
         // ACT / ASSERT
         Assertions.assertThrows(
@@ -58,11 +55,8 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = new DataBag();
-        dataBag1.set(idField, 3);
-
-        DataBag dataBag2 = new DataBag();
-        dataBag2.set(priceField, 4);
+        DataBag dataBag1 = DataBag.startBuilding().set(idField, 3).build();
+        DataBag dataBag2 = DataBag.startBuilding().set(priceField, 4).build();
 
         // ACT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
@@ -83,16 +77,18 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = new DataBag();
-        dataBag1.set(idField, "foo");
+        DataBag dataBag1 = DataBag.startBuilding()
+            .set(idField, "foo")
+            .build();
 
-        DataBag dataBag2 = new DataBag();
-        dataBag2.set(idField, "foo");
-        dataBag2.set(priceField, 4);
+        DataBag dataBag2 = DataBag.startBuilding()
+            .set(idField, "foo")
+            .set(priceField, 4)
+            .build();
 
         // ACT / ASSERT
         Assertions.assertThrows(
-            IllegalStateException.class,
+            IllegalArgumentException.class,
             () -> DataBag.merge(dataBag1, dataBag2));
     }
 
@@ -102,9 +98,8 @@ class DataBagTests {
         // ARRANGE
         Field idField = new Field("id");
 
-        DataBag dataBag1 = new DataBag();
-        DataBag dataBag2 = new DataBag();
-        dataBag2.set(idField, null);
+        DataBag dataBag1 = DataBag.empty;
+        DataBag dataBag2 = DataBag.startBuilding().set(idField, null).build();
 
         // ACT / ASSERT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);

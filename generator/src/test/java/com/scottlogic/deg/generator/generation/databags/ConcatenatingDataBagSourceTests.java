@@ -16,9 +16,9 @@ class ConcatenatingDataBagSourceTests {
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
         // ARRANGE
-        DataBag dataBag1 = new DataBag();
-        DataBag dataBag2 = new DataBag();
-        DataBag dataBag3 = new DataBag();
+        DataBag dataBag1 = DataBag.startBuilding().build();
+        DataBag dataBag2 = DataBag.startBuilding().build();
+        DataBag dataBag3 = DataBag.startBuilding().build();
 
         IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
         IDataBagSource dataBagSource2 = new DummyDataBagSource(dataBag3);
@@ -48,7 +48,7 @@ class ConcatenatingDataBagSourceTests {
     @Test
     void whenOnePopulatedSourceIsProvided() {
         // ARRANGE
-        DataBag dataBag1 = new DataBag();
+        DataBag dataBag1 = DataBag.startBuilding().build();
 
         IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1);
 
@@ -74,9 +74,9 @@ class ConcatenatingDataBagSourceTests {
     @Test
     void whenMiddleSourceIsEmpty() {
         // ARRANGE
-        DataBag dataBag1 = new DataBag();
-        DataBag dataBag2 = new DataBag();
-        DataBag dataBag3 = new DataBag();
+        DataBag dataBag1 = DataBag.startBuilding().build();
+        DataBag dataBag2 = DataBag.startBuilding().build();
+        DataBag dataBag3 = DataBag.startBuilding().build();
 
         IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
         IDataBagSource dataBagSource2 = new DummyDataBagSource();

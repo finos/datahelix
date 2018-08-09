@@ -73,7 +73,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
                 this.indexOfSequenceToVary = 0;
 
                 return this.baselinesForInputSequences.stream()
-                    .reduce(new DataBag(), (db1, db2) -> DataBag.merge(db1, db2));
+                    .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
             }
 
             return IntStream.range(0, this.inputSequencesIterators.size())
@@ -89,7 +89,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
                         return this.inputSequencesIterators.get(seqIndex).next();
                     }
                 })
-                .reduce(new DataBag(), (db1, db2) -> DataBag.merge(db1, db2));
+                .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
         }
     }
 }
