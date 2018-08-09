@@ -44,7 +44,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
                 .map(Iterable::iterator)
                 .collect(Collectors.toList());
 
-            this.indexOfSequenceToVary = 0;
+            this.indexOfSequenceToVary = null;
 
             this.dataRowSequences = dataRowSequences;
 
@@ -64,6 +64,9 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
         public boolean hasNext() {
             if (this.isEmpty)
                 return false;
+
+            if (this.indexOfSequenceToVary == null)
+                return true; // because this means we haven't output a baselines row yet. I know this code is awful, I'll definitely fix it -MH
 
             // kind of inefficient
             return this.sequenceIterators.stream().anyMatch(Iterator::hasNext);
