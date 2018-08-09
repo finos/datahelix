@@ -42,8 +42,8 @@ public class RowSpec {
             FieldSpecMerger fieldSpecMerger,
             Collection<RowSpec> rowSpecs
     ) {
-        if (!rowSpecs.isEmpty()) {
-            return Optional.empty();
+        if (rowSpecs.isEmpty()) {
+            throw new UnsupportedOperationException();
         }
 
         final ProfileFields fields = rowSpecs.iterator().next().fields;

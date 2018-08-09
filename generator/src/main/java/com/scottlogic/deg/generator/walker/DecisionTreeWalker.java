@@ -11,7 +11,9 @@ import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,17 +50,27 @@ public class DecisionTreeWalker {
         }
 
         private Stream<RowSpec> walk(IRuleOption option, RowSpec accumulatedSpec) {
-            final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
+            final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
-            ).get();
+            );
 
-            final RowSpec mergedRowSpec = rowSpecMerger.merge(
-                    Stream.of(
-                            nominalRowSpec,
+            if (!nominalRowSpec.isPresent()) {
+                return Stream.empty();
+            }
+
+            final Optional<RowSpec> mergedRowSpecOpt = rowSpecMerger.merge(
+                    Arrays.asList(
+                            nominalRowSpec.get(),
                             accumulatedSpec
                     )
-            ).get();
+            );
+
+            if (!mergedRowSpecOpt.isPresent()) {
+                return Stream.empty();
+            }
+
+            final RowSpec mergedRowSpec = mergedRowSpecOpt.get();
 
             if (option.getDecisions().isEmpty()) {
                 return Stream.of(mergedRowSpec);
