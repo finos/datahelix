@@ -2,7 +2,7 @@ package com.scottlogic.deg.classifier
 
 object FloatClassifier extends Classifier {
   private val containsCharacterRegex = "[a-zA-Z]+"
-  private val containsNumbersRegex = "\\d";
+  private val containsNumbersRegex = "\\d+";
   private val containsNumbersWithSeparator = "^\\d*[\\.,]?\\d+$"
 
   override def classify(input: String): Seq[SemanticType] = {
