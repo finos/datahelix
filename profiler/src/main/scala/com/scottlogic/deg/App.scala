@@ -5,6 +5,7 @@ import java.io.File
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
+import com.scottlogic.deg.classifier.DataFrameClassifier
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.mappers.ProfileDTOMapper
 import com.scottlogic.deg.profiler.Profiler
@@ -49,6 +50,9 @@ class DEGApp @Inject()(
     val outFile = new File(params.outputDir, "test-output.json")
 
     val df: DataFrame = fileReader.readCSV(inFile)
+
+    val dataFrameClassifier = new DataFrameClassifier(df);
+    val classification = dataFrameClassifier.getAnalysis()
 
     val profiler = new Profiler(df)
     val profile = profiler.profile()
