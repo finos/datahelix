@@ -41,11 +41,12 @@ public class FieldSpecFulfiller implements IDataPointSource {
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
-        if (spec.getNullRestrictions() != null &&
-                spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
+        // if *always* null, output a sequence just containing null
+        if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
             return new SpecificDataPointsIterator(null);
         }
 
+        // if there's a whitelist, we can just output that
         if (spec.getSetRestrictions() != null) {
             Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
             if (whitelist != null) {
@@ -55,19 +56,18 @@ public class FieldSpecFulfiller implements IDataPointSource {
             }
         }
 
-        if (spec.getNumericRestrictions() != null &&
-                (spec.getNumericRestrictions().min != null || spec.getNumericRestrictions().max != null) &&
-                (spec.getStringRestrictions() == null || spec.getStringRestrictions().automaton == null))
+        // if there're reasonably populated numeric restrictions, output within range
+        if (spec.getNumericRestrictions() != null && (spec.getNumericRestrictions().min != null || spec.getNumericRestrictions().max != null)) {
             return new NumericIterator(spec.getNumericRestrictions(), getBlacklist());
+        }
 
-        if (spec.getStringRestrictions() != null && spec.getStringRestrictions().automaton != null &&
-                (spec.getNumericRestrictions() == null ||
-                        (spec.getNumericRestrictions().max == null && spec.getNumericRestrictions().min == null))) {
+        // if there're reasonably populated string restrictions, output from automaton
+        if (spec.getStringRestrictions() != null && spec.getStringRestrictions().automaton != null) {
             StringIterator stringIterator = new StringIterator(spec.getStringRestrictions().automaton, getBlacklist());
             return simplifyStringIterator(stringIterator);
         }
 
-        // no restrictions, just output some random bits of data
+        // there were no restrictions - just output some random bits of data
         return new SpecificDataPointsIterator("string", 123, true);
     }
 
@@ -80,6 +80,6 @@ public class FieldSpecFulfiller implements IDataPointSource {
     private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
         if (stringIterator.hasNext())
             return new SpecificDataPointsIterator(stringIterator.next());
-        return new UnfulfillableIterator();
+        return SpecificDataPointsIterator.createEmpty();
     }
 }

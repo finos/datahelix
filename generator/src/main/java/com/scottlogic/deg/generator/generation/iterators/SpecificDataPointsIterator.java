@@ -4,6 +4,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class SpecificDataPointsIterator implements IFieldSpecIterator {
+    public static IFieldSpecIterator createEmpty() {
+        return new SpecificDataPointsIterator();
+    }
+
     private Queue<Object> values;
 
     public SpecificDataPointsIterator(Object... values) {
