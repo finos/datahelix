@@ -5,7 +5,7 @@ import java.io.File
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
-import com.scottlogic.deg.classifier.DataFrameClassifier
+import com.scottlogic.deg.classifier.{DataFrameClassifier, StringType}
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.mappers.ProfileDTOMapper
 import com.scottlogic.deg.profiler.Profiler
@@ -54,12 +54,14 @@ class DEGApp @Inject()(
     val dataFrameClassifier = new DataFrameClassifier(df);
     val classification = dataFrameClassifier.getAnalysis()
 
+
     Console.println("Results")
     Console.println("--")
     classification.foreach(c => {
       Console.print(s"Field ${c.fieldName} -> ")
+      val total = c.typeDetectionCount(StringType).toFloat
       c.typeDetectionCount.keys.foreach(k => {
-        Console.println(s"${k} (${c.typeDetectionCount(k).toString} occurrences). ")
+        Console.println(f"${k} (${c.typeDetectionCount(k) / total * 100.00}%.2f%%). ")
       })
       Console.println("--")
     })
