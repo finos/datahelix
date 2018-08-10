@@ -54,6 +54,17 @@ class DEGApp @Inject()(
     val dataFrameClassifier = new DataFrameClassifier(df);
     val classification = dataFrameClassifier.getAnalysis()
 
+    Console.println("Results")
+    Console.println("--")
+    classification.foreach(c => {
+      Console.print(s"Field ${c.fieldName} -> ")
+      c.typeDetectionCount.keys.foreach(k => {
+        Console.println(s"${k} (${c.typeDetectionCount(k).toString} occurrences). ")
+      })
+      Console.println("--")
+    })
+
+
     val profiler = new Profiler(df)
     val profile = profiler.profile()
     val profileDTO = ProfileDTOMapper.Map(profile);
