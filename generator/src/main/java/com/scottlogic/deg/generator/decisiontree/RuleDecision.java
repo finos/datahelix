@@ -3,10 +3,10 @@ package com.scottlogic.deg.generator.decisiontree;
 import java.util.ArrayList;
 import java.util.Collection;
 
-class RuleDecision implements IRuleDecision {
+public class RuleDecision implements IRuleDecision {
     private final Collection<? extends IRuleOption> options;
 
-    RuleDecision(Collection<? extends IRuleOption> options) {
+    public RuleDecision(Collection<? extends IRuleOption> options) {
         this.options = options;
     }
 

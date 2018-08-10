@@ -16,17 +16,17 @@ public class SetRestrictionsMerger {
             return null;
         if (left == null)
             return right;
-        if (left == null)
+        if (right == null)
             return left;
 
         final SetRestrictions merged = new SetRestrictions();
-        merged.whitelist = getMergedSet(left.whitelist, right.whitelist);
-        merged.blacklist = getMergedSet(left.blacklist, right.blacklist);
+        merged.whitelist = getMergedSet(left.whitelist, right.whitelist, this::intersection);
+        merged.blacklist = getMergedSet(left.blacklist, right.blacklist, this::union);
 
         return merged;
     }
 
-    private Set<?> getMergedSet(Set<?> left, Set<?> right) {
+    private <T> Set<?> getMergedSet(Set<?> left, Set<?> right, SetMerger setMerger) {
         if (left == null && right == null) {
             return null;
         }
@@ -36,6 +36,25 @@ public class SetRestrictionsMerger {
         if (right == null) {
             return new HashSet<>(left);
         }
+
+        return setMerger.apply(left, right);
+    }
+
+    private Set<?> union(Set<?> left, Set<?> right) {
         return Stream.concat(left.stream(), right.stream()).collect(HashSet::new, HashSet::add, HashSet::addAll);
+    }
+
+    private Set<?> intersection(Set<?> left, Set<?> right) {
+        final Set<?> intersection = new HashSet<>(left);
+        intersection.retainAll(right);
+        return intersection;
+    }
+
+    /**
+     * A strategy used to make a set become more constraining
+     */
+    @FunctionalInterface
+    interface SetMerger {
+        Set<?> apply(Set<?> left, Set<?> right);
     }
 }
