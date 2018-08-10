@@ -14,6 +14,7 @@ class DataFrameClassifier(df: DataFrame) {
         .mapValues(_.size)
         .collectAsMap()
 
+      // TODO: Check if there is a better way to trigger Enum identification
       if(typeList.keys.size == 1 && (typeList.contains(StringType) || typeList.contains(IntegerType))){
         val multiValueTypes = MainClassifier.classifyMany(df.rdd.map(row => row.getAs[String](field.name)))
         multiValueTypes.foreach(semanticType => {
