@@ -7,6 +7,7 @@ import dk.brics.automaton.Automaton;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
     private final AutomatonFactory automatonFactory = new AutomatonFactory();
@@ -46,6 +47,12 @@ public class FieldSpecFactory {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+        } else if (constraint instanceof StringHasLengthConstraint) {
+            apply(fieldSpec, (StringHasLengthConstraint) constraint, negate);
+        } else if (constraint instanceof IsStringLongerThanConstraint) {
+            apply(fieldSpec, (IsStringLongerThanConstraint) constraint, negate);
+        } else if (constraint instanceof IsStringShorterThanConstraint) {
+            apply(fieldSpec, (IsStringShorterThanConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -170,8 +177,7 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
@@ -192,8 +198,7 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
@@ -210,6 +215,67 @@ public class FieldSpecFactory {
                 : nominalAutomaton;
         stringRestrictions.automaton = automaton;
     }
+
+    private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
+        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        if (stringRestrictions == null) {
+            stringRestrictions = new StringRestrictions();
+            fieldSpec.setStringRestrictions(stringRestrictions);
+        }
+        final Pattern regex = Pattern.compile(".*{" + constraint.referenceValue + "}");
+
+        Automaton automaton = automatonFactory.fromPattern(regex);
+
+        if (negate) {
+            automaton = automaton.complement();
+        }
+
+        stringRestrictions.automaton = stringRestrictions.automaton == null ?
+                automaton :
+                stringRestrictions.automaton.intersection(automaton);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsStringShorterThanConstraint constraint, boolean negate) {
+        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        if (stringRestrictions == null) {
+            stringRestrictions = new StringRestrictions();
+            fieldSpec.setStringRestrictions(stringRestrictions);
+        }
+
+        final Pattern regex = Pattern.compile(".*{0," + (constraint.referenceValue.intValue()-1) + "}");
+
+        Automaton automaton = automatonFactory.fromPattern(regex);
+
+        if (negate) {
+            automaton = automaton.complement();
+        }
+
+        stringRestrictions.automaton = stringRestrictions.automaton == null ?
+                automaton :
+                stringRestrictions.automaton.intersection(automaton);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsStringLongerThanConstraint constraint, boolean negate) {
+        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        if (stringRestrictions == null) {
+            stringRestrictions = new StringRestrictions();
+            fieldSpec.setStringRestrictions(stringRestrictions);
+        }
+
+        final Pattern regex = Pattern.compile(".*{" + (constraint.referenceValue.intValue()+1) + ",}");
+
+        Automaton automaton = automatonFactory.fromPattern(regex);
+
+        if (negate) {
+            automaton = automaton.complement();
+        }
+
+        stringRestrictions.automaton = stringRestrictions.automaton == null ?
+                automaton :
+                stringRestrictions.automaton.intersection(automaton);
+    }
+
+
 
     private BigDecimal numberToBigDecimal(Number number) {
         if (number instanceof Long) {
