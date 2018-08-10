@@ -18,7 +18,7 @@ class DataFrameClassifier(df: DataFrame) {
       if(typeList.keys.size == 1 && (typeList.contains(StringType) || typeList.contains(IntegerType))){
         val multiValueTypes = MainClassifier.classifyMany(df.rdd.map(row => row.getAs[String](field.name)))
         multiValueTypes.foreach(semanticType => {
-          typeList = typeList + (semanticType -> Int.MaxValue)
+          typeList = typeList + (semanticType -> df.rdd.count().toInt)
         });
       }
 
