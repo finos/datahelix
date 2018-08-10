@@ -9,8 +9,13 @@ public class FieldSpecMerger {
     private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
     private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
+    private final SemanticConflictDetector semanticConflictDetector = new SemanticConflictDetector();
 
     public FieldSpec merge(FieldSpec left, FieldSpec right) {
+        if (semanticConflictDetector.detectSemanticConflict(left, right)) {
+            // TODO: need branch `satisfiability` to be able to throw an exception here
+        }
+
         final FieldSpec merged = new FieldSpec();
         merged.setSetRestrictions(setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions()));
         merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(),

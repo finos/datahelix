@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 class TypeConstraintFieldSpecStrategyFactory {
     @FunctionalInterface
-    public interface TypeConstraintFieldSpecStrategy extends Consumer<FieldSpec> {}
+    interface TypeConstraintFieldSpecStrategy extends Consumer<FieldSpec> {}
 
     private enum TypeConstraintFieldSpecStrategies implements TypeConstraintFieldSpecStrategy {
         numericStrategy(
@@ -52,7 +52,7 @@ class TypeConstraintFieldSpecStrategyFactory {
         strategies.put(IsOfTypeConstraint.Types.Temporal, TypeConstraintFieldSpecStrategies.temporalStrategy);
     }
 
-    public static TypeConstraintFieldSpecStrategy getStrategy(IsOfTypeConstraint constraint) {
+    static TypeConstraintFieldSpecStrategy getStrategy(IsOfTypeConstraint constraint) {
         if (constraint.requiredType == null) {
             throw new IllegalStateException();
         }
