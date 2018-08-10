@@ -1,23 +1,30 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.decisiontree.DummyDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
 
 import java.nio.file.Paths;
 
-public class App
-{
-    private static final IDecisionTreeGenerator profileAnalyser = new DummyDecisionTreeGenerator();
-    private static final IDataGenerator dataGenerator = new DummyDataGenerator();
-
+public class App {
     public static void main(String[] args) {
         final String profileFilePath = args[0];
         final String directoryFilePath = args[1];
 
+        new GenerationEngine().generateTestCases(profileFilePath, directoryFilePath);
+    }
+}
+
+class GenerationEngine {
+    private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+    private final IDataGenerator dataGenerator = new DataGenerator();
+
+    void generateTestCases(String profileFilePath, String directoryFilePath) {
         final Profile profile;
 
         try {
@@ -31,8 +38,9 @@ public class App
             return;
         }
 
-        final IDecisionTreeProfile analysedProfile = profileAnalyser.analyse(profile);
-        final TestCaseGenerationResult generationResult = dataGenerator.generateData(profile, analysedProfile);
+        final IDecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
+
+        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile);
 
         try {
             new TestCaseGenerationResultWriter().writeToDirectory(

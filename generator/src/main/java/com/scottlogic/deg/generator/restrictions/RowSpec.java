@@ -22,6 +22,10 @@ public class RowSpec {
         this.fieldToFieldSpec = fieldToFieldSpec;
     }
 
+    public ProfileFields getFields() {
+        return fields;
+    }
+
     public FieldSpec getSpecForField(Field field) {
         FieldSpec ownFieldSpec = this.fieldToFieldSpec.get(field);
 
@@ -49,5 +53,10 @@ public class RowSpec {
         }
 
         return new RowSpec(fields, fieldToFieldSpec);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toString(fieldToFieldSpec);
     }
 }

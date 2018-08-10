@@ -118,7 +118,7 @@ public class ProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
-            "        { \"field\": \"id\", \"is\": \"null\" }" +
+            "        { \"field\": \"foo\", \"is\": \"null\" }" +
             "    ]" +
             "}");
 
@@ -136,7 +136,7 @@ public class ProfileReaderTests {
             "        {" +
             "           \"rule\": \"Too rule for school\"," +
             "           \"constraints\": [" +
-            "               { \"field\": \"id\", \"is\": \"null\" }" +
+            "               { \"field\": \"foo\", \"is\": \"null\" }" +
             "           ]" +
             "        }" +
             "    ]" +
@@ -153,7 +153,7 @@ public class ProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
-            "        { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" }" +
+            "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
             "    ]" +
             "}");
 
@@ -174,7 +174,7 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
-                "        { \"not\": { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+                "        { \"not\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" } }" +
                 "    ]" +
                 "}");
 
