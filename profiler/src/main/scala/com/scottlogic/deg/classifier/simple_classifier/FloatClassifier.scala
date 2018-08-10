@@ -4,7 +4,7 @@ import com.scottlogic.deg.classifier.{Classifier, FloatType, SemanticType}
 
 object FloatClassifier extends Classifier {
   private val containsCharacterRegex = "[a-zA-Z]+"
-  private val containsNumbersWithSeparator = "^[-]?\\d*[\\.,]?\\d+$"
+  private val containsNumbersWithSeparator = "^[-]?\\d*[\\.,]\\d+$"
 
   override def classify(input: String): Seq[SemanticType] = {
     if(input == null || input == ""){

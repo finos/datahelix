@@ -13,3 +13,4 @@ case object TimeStampType extends SemanticType
 case object RICType extends SemanticType
 case object SEDOLType extends SemanticType
 case object ISINType extends SemanticType
+case object EnumType extends SemanticType
