@@ -26,7 +26,11 @@ public class AutomatonFactory {
         final String regexStr = pattern.pattern();
         final String requotedStr = requote(regexStr);
         final RegExp bricsRegExp = createRegExp(requotedStr);
-        return bricsRegExp.toAutomaton();
+
+        Automaton generatedAutomaton = bricsRegExp.toAutomaton();
+        generatedAutomaton.expandSingleton();
+
+        return generatedAutomaton;
     }
 
     /**

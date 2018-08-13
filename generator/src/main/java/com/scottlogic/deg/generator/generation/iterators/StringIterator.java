@@ -17,6 +17,7 @@ public class StringIterator implements IFieldSpecIterator {
     private boolean hasNext;
 
     public StringIterator(Automaton automaton, Set<Object> blacklist) {
+
         if (blacklist != null && blacklist.size() > 0) {
             Automaton blacklistAutomaton = getBlacklistAutomaton(blacklist);
             this.automaton = automaton.intersection(blacklistAutomaton);
@@ -69,6 +70,12 @@ public class StringIterator implements IFieldSpecIterator {
 
     private void setNextMatchValue() {
         if (!randomResults) {
+
+            if(nextMatchIdx > rootNode.matchedStringIdx){
+                hasNext = false;
+                return;
+            }
+
             nextMatchValue = getOrderedString(nextMatchIdx);
             if (nextMatchValue.equals("") && nextMatchIdx > 1) {
                 hasNext = false;
