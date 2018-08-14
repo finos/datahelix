@@ -9,11 +9,21 @@ import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AtomicConstraintTests {
@@ -33,10 +43,58 @@ public class AtomicConstraintTests {
         profileFields = new ProfileFields(fields);
     }
 
+    private static Stream<Arguments> testProvider() {
+
+        ConstraintDTO stringValueDto = new ConstraintDTO();
+        stringValueDto.field = "test";
+        stringValueDto.is = AtomicConstraintType.ISEQUALTOCONSTANT.toString();
+        stringValueDto.value = "value";
+
+        ConstraintDTO numberValueDto = new ConstraintDTO();
+        numberValueDto.field = "test";
+        numberValueDto.value = 10;
+
+        ConstraintDTO dateValueDto = new ConstraintDTO();
+        dateValueDto.field = "test";
+        dateValueDto.value = "2020-01-01";
+
+        ConstraintDTO multipleValuesDto = new ConstraintDTO();
+        multipleValuesDto.field = "test";
+        multipleValuesDto.values = Arrays.asList("A", "B");
+
+        ConstraintDTO typeValueDto = new ConstraintDTO();
+        typeValueDto.field = "test";
+        typeValueDto.value = "string";
+
+        ConstraintDTO notValueDto = new ConstraintDTO();
+        notValueDto.field = "test";
+        notValueDto.not = stringValueDto;
+
+        return Stream.of(
+                Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, stringValueDto, IsEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISINSET, multipleValuesDto, IsInSetConstraint.class),
+                Arguments.of(AtomicConstraintType.ISNULL, stringValueDto, IsNullConstraint.class),
+                Arguments.of(AtomicConstraintType.ISOFTYPE, typeValueDto, IsOfTypeConstraint.class),
+                Arguments.of(AtomicConstraintType.MATCHESREGEX, stringValueDto, MatchesRegexConstraint.class),
+                Arguments.of(AtomicConstraintType.NOT, notValueDto, NotConstraint.class),
+                Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto, StringHasLengthConstraint.class),
+                Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, numberValueDto, IsStringLongerThanConstraint.class),
+                Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, numberValueDto, IsStringShorterThanConstraint.class),
+                Arguments.of(AtomicConstraintType.ISGREATERTHANCONSTANT, numberValueDto, IsGreaterThanConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT, numberValueDto, IsGreaterThanOrEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISLESSTHANCONSTANT, numberValueDto, IsLessThanConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT, numberValueDto, IsLessThanOrEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISAFTERCONSTANTDATETIME, dateValueDto, IsAfterConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME, dateValueDto, IsAfterOrEqualToConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME, dateValueDto, IsBeforeOrEqualToConstantDateTimeConstraint.class));
+    }
+
     @Test
     public void shouldRecogniseAllAtomicConstraints() {
 
-        List missingConstraints = new ArrayList<String>();
+        List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
             IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
@@ -49,181 +107,29 @@ public class AtomicConstraintTests {
         String message = "No constraint reader is associated with the following constraints: " +
                 String.join(", ", missingConstraints);
 
-        Assert.assertTrue(
+        Assert.assertThat(
                 message,
-                missingConstraints.isEmpty());
+                missingConstraints,
+                hasSize(0));
 
     }
 
-    private void readField(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType){
+    @DisplayName("Should return correct constraint type")
+    @ParameterizedTest(name = "{0} should return {1}")
+    @MethodSource("testProvider")
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType){
         IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
             IConstraint constraint = reader.apply(dto, profileFields);
-            Assert.assertTrue("Expected " + constraintType.getName() +" but got " + constraint.getClass().getName(),
-                    constraintType.isInstance(constraint));
+
+            Assert.assertThat("Expected " + constraintType.getName() +" but got " + constraint.getClass().getName(),
+                    constraint,
+                    instanceOf(constraintType));
+
         } catch (InvalidProfileException ex) {
             Assert.fail(ex.getMessage());
         }
-    }
-
-    @Test
-    public void shouldReadEqualToConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "value";
-
-        readField(AtomicConstraintType.ISEQUALTOCONSTANT, dto, IsEqualToConstantConstraint.class);
-    }
-
-    @Test
-    public void shouldReadInSetConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-
-        dto.field = "test";
-        dto.values = new ArrayList<>();
-        dto.values.add("Lorem");
-        dto.values.add("Ipsum");
-
-        readField(AtomicConstraintType.ISINSET, dto, IsInSetConstraint.class);
-    }
-
-    @Test
-    public void shouldReadNullConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "value";
-
-        readField(AtomicConstraintType.ISNULL, dto, IsNullConstraint.class);
-    }
-
-    @Test
-    public void shouldReadOfTypeConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "string";
-
-        readField(AtomicConstraintType.ISOFTYPE, dto, IsOfTypeConstraint.class);
-    }
-
-    @Test
-    public void shouldReadMatchesRegexConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "string";
-
-        readField(AtomicConstraintType.MATCHESREGEX, dto, MatchesRegexConstraint.class);
-    }
-
-    @Test
-    public void shouldReadNotConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.not = new ConstraintDTO();
-        dto.not.field = "test";
-        dto.not.is = "equalTo";
-        dto.not.field = "lorem";
-
-        readField(AtomicConstraintType.NOT, dto, NotConstraint.class);
-    }
-
-    @Test
-    public void shouldReadHasLengthConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.HASLENGTH, dto, StringHasLengthConstraint.class);
-    }
-
-    @Test
-    public void shouldReadLongerThanConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.ISSTRINGLONGERTHAN, dto, IsStringLongerThanConstraint.class);
-    }
-
-    @Test
-    public void shouldReadShorterThanConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 10;
-
-        readField(AtomicConstraintType.ISSTRINGSHORTERTHAN, dto, IsStringShorterThanConstraint.class);
-    }
-
-    @Test
-    public void shouldReadGreaterThanConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.ISGREATERTHANCONSTANT, dto, IsGreaterThanConstantConstraint.class);
-    }
-
-    @Test
-    public void shouldReadGreaterThanOrEqualToConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT, dto, IsGreaterThanOrEqualToConstantConstraint.class);
-    }
-
-    @Test
-    public void shouldReadLessThanConstantConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.ISLESSTHANCONSTANT, dto, IsLessThanConstantConstraint.class);
-    }
-
-    @Test
-    public void shouldReadLessThanOrEqualToConstantConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = 1;
-
-        readField(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT, dto, IsLessThanOrEqualToConstantConstraint.class);
-    }
-
-    @Test
-    public void shouldReadAfterConstantDateTimeConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "2018-01-01";
-
-        readField(AtomicConstraintType.ISAFTERCONSTANTDATETIME, dto, IsAfterConstantDateTimeConstraint.class);
-    }
-
-    @Test
-    public void shouldReadAfterOrEqualToConstantDateTimeConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "2018-01-01";
-
-        readField(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME, dto, IsAfterOrEqualToConstantDateTimeConstraint.class);
-    }
-
-    @Test
-    public void shouldReadBeforeConstantDateTimeConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "2018-01-01";
-
-        readField(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dto, IsBeforeConstantDateTimeConstraint.class);
-    }
-
-    @Test
-    public void shouldReadBeforeOrEqualToConstantDateTimeConstraint() {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = "test";
-        dto.value = "2018-01-01";
-
-        readField(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME, dto, IsBeforeOrEqualToConstantDateTimeConstraint.class);
     }
 
 }

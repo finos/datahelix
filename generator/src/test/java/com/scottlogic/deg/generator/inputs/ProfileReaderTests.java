@@ -181,7 +181,7 @@ public class ProfileReaderTests {
                 ruleWithConstraints(
                         typedConstraint(
                                 StringHasLengthConstraint.class,
-                                c -> Assert.assertTrue(c.referenceValue.equals(5)))));
+                                c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
     }
 
     @Test

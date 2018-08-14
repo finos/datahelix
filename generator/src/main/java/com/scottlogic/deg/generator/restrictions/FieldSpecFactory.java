@@ -217,54 +217,28 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions == null) {
-            stringRestrictions = new StringRestrictions();
-            fieldSpec.setStringRestrictions(stringRestrictions);
-        }
-        final Pattern regex = Pattern.compile(".*{" + constraint.referenceValue + "}");
-
-        Automaton automaton = automatonFactory.fromPattern(regex);
-
-        if (negate) {
-            automaton = automaton.complement();
-        }
-
-        stringRestrictions.automaton = stringRestrictions.automaton == null ?
-                automaton :
-                stringRestrictions.automaton.intersection(automaton);
+        final Pattern regex = Pattern.compile(String.format(".*{%s}", constraint.referenceValue));
+        applyPattern(fieldSpec, regex, negate);
     }
 
     private void apply(FieldSpec fieldSpec, IsStringShorterThanConstraint constraint, boolean negate) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions == null) {
-            stringRestrictions = new StringRestrictions();
-            fieldSpec.setStringRestrictions(stringRestrictions);
-        }
-
-        final Pattern regex = Pattern.compile(".*{0," + (constraint.referenceValue.intValue()-1) + "}");
-
-        Automaton automaton = automatonFactory.fromPattern(regex);
-
-        if (negate) {
-            automaton = automaton.complement();
-        }
-
-        stringRestrictions.automaton = stringRestrictions.automaton == null ?
-                automaton :
-                stringRestrictions.automaton.intersection(automaton);
+        final Pattern regex = Pattern.compile(String.format(".*{0,%d}", constraint.referenceValue + 1));
+        applyPattern(fieldSpec, regex, negate);
     }
 
     private void apply(FieldSpec fieldSpec, IsStringLongerThanConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".*{%d,}", constraint.referenceValue + 1));
+        applyPattern(fieldSpec, regex, negate);
+    }
+
+    private void applyPattern(FieldSpec fieldSpec, Pattern pattern, boolean negate) {
         StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
         if (stringRestrictions == null) {
             stringRestrictions = new StringRestrictions();
             fieldSpec.setStringRestrictions(stringRestrictions);
         }
 
-        final Pattern regex = Pattern.compile(".*{" + (constraint.referenceValue.intValue()+1) + ",}");
-
-        Automaton automaton = automatonFactory.fromPattern(regex);
+        Automaton automaton = automatonFactory.fromPattern(pattern);
 
         if (negate) {
             automaton = automaton.complement();
@@ -274,8 +248,6 @@ public class FieldSpecFactory {
                 automaton :
                 stringRestrictions.automaton.intersection(automaton);
     }
-
-
 
     private BigDecimal numberToBigDecimal(Number number) {
         if (number instanceof Long) {

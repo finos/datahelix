@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.Matchers.contains;
 
 class DecisionTreeGeneratorTests {
     @Test
@@ -548,6 +549,6 @@ class DecisionTreeGeneratorTests {
                 Is.is(1));
         Assert.assertThat("Option's atomic constraint is the given constraint",
                 option.getAtomicConstraints().contains(constraint), Is.is(true));
-        Assert.assertTrue(option.getAtomicConstraints().contains(constraint));
+        Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 }

@@ -113,22 +113,31 @@ public class AtomicConstraintReaderLookup {
 
         // String constraints
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
-                (dto, fields) ->
-                        new IsStringLongerThanConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields) -> {
+
+                    int length = ((Number) dto.value).intValue();
+                    return new IsStringLongerThanConstraint(
+                            fields.getByName(dto.field),
+                            length);
+                });
 
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
-                (dto, fields) ->
-                        new IsStringShorterThanConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields) -> {
+
+                    int length = ((Number) dto.value).intValue();
+                    return new IsStringShorterThanConstraint(
+                            fields.getByName(dto.field),
+                            length);
+                });
 
         add(AtomicConstraintType.HASLENGTH.toString(),
-                (dto, fields) ->
-                        new StringHasLengthConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields) -> {
+
+                    int length = ((Number) dto.value).intValue();
+                    return new StringHasLengthConstraint(
+                            fields.getByName(dto.field),
+                            length);
+                });
 
         add(AtomicConstraintType.NOT.toString(),
                 (dto, fields) -> {
