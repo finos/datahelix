@@ -7,10 +7,6 @@ object RICClassifier extends Classifier {
 
   override def classify(input: String): Seq[SemanticType] = {
     // TODO: Classifier logic
-    if(input == null || input == ""){
-      return List[SemanticType]()
-    }
-
     if(input.length < 3){
       return List[SemanticType]()
     }

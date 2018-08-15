@@ -6,10 +6,6 @@ object SEDOLClassifier extends Classifier {
   private val sedolRegex = "[B-Db-dF-Hf-hJ-Nj-nP-Tp-tV-Xv-xYyZz\\d]{6}\\d";
 
   override def classify(input: String): Seq[SemanticType] = {
-    if(input == null || input == ""){
-      return List[SemanticType]()
-    }
-
     if(input.length != 7){
       return List[SemanticType]()
     }

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.classifier
 
 sealed trait SemanticType
+case object NullType extends SemanticType
 case object StringType extends SemanticType
 case object EmailType extends SemanticType
 case object NameType extends SemanticType
