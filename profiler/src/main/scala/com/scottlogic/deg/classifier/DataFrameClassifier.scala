@@ -27,7 +27,7 @@ class DataFrameClassifier(df: DataFrame) {
     })
   }
 
-  def convertData(analysis : Seq[ClassifiedField]) : StructType = {
+  def generateNewSchema(analysis : Seq[ClassifiedField]) : StructType = {
     val fields = analysis.map(f => {
       // TODO: Logic for deciding which of all the types is best
       val detectionCount = f.typeDetectionCount

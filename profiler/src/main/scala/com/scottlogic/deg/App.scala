@@ -66,9 +66,11 @@ class DEGApp @Inject()(
       Console.println("--")
     })
 
-    val newSchema = dataFrameClassifier.convertData(classification)
+    // Converting back to SQL schema for now, in order to be able to use Spark's SQL functionality on the data.
+    val newSchema = dataFrameClassifier.generateNewSchema(classification)
     val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
 
+    // TODO: Profiler should take our analysis as a parameter
     val profiler = new Profiler(newDataFrame)
     val profile = profiler.profile()
     val profileDTO = ProfileDTOMapper.Map(profile);
