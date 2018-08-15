@@ -1,6 +1,8 @@
 package com.scottlogic.deg.classifier
 
+import com.scottlogic.deg.mappers.SqlTypeMapper
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types.{StructField, StructType}
 
 class DataFrameClassifier(df: DataFrame) {
 
@@ -25,4 +27,19 @@ class DataFrameClassifier(df: DataFrame) {
       ClassifiedField(field.name, typeList)
     })
   }
+
+  def convertData(analysis : Seq[ClassifiedField]) : StructType = {
+    val fields = analysis.map(f => {
+      // TODO: Logic for deciding which of all the types is best
+      val detectionCount = f.typeDetectionCount
+      val detectedTypes = detectionCount.keys.toList
+      val isNull = detectedTypes.count(e => e == NullType) > 0
+      if(isNull){
+        detectionCount-NullType
+      }
+      StructField(f.fieldName, SqlTypeMapper.Map(detectionCount.last._1), true); //TODO: Replace true with "isNull"
+    })
+    StructType(fields)
+  }
+
 }

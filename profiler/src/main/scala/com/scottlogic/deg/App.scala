@@ -66,8 +66,10 @@ class DEGApp @Inject()(
       Console.println("--")
     })
 
+    val newSchema = dataFrameClassifier.convertData(classification)
+    val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
 
-    val profiler = new Profiler(df)
+    val profiler = new Profiler(newDataFrame)
     val profile = profiler.profile()
     val profileDTO = ProfileDTOMapper.Map(profile);
 
