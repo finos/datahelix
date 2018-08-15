@@ -39,3 +39,22 @@ We can use `😧(X)` to generate ways to violate constraint X.
 ```
 
 Currently our plan is to ignore the "bonus" solution to the violation of `AND()`, because tests are more useful if they change fewer things.
+
+### If, If/else
+
+```
+  IF (Country == US)
+    City IN ['Boston', 'Super Boston']
+AND
+    Currency = USD
+  IFELSE(Country == US)
+    International = "true"
+```
+
+Keep the precondition true, but violate the consequences.
+
+```
+😧(IF(A, B)) = IF(A, 😧(B))
+😧(IFELSE(A, B, C)) = IFELSE(A, 😧(B), C)
+                    = IFELSE(A, B, 😧(C))
+```
