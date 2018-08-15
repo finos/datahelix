@@ -10,8 +10,7 @@ class DataFrameClassifier(df: DataFrame) {
     df.schema.fields.map(field => {
       var typeList = df.rdd.flatMap(row => {
         val fieldValue = row.getAs[String](field.name)
-        val fieldValueCleansed = if (fieldValue == null) "" else fieldValue
-        MainClassifier.classify(fieldValueCleansed)
+        MainClassifier.classify(fieldValue)
       }).groupBy(identity)
         .mapValues(_.size)
         .collectAsMap()

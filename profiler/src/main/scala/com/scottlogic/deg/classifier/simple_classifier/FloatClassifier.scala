@@ -7,19 +7,13 @@ object FloatClassifier extends Classifier {
   private val containsNumbersWithSeparator = "^[-]?\\d*[\\.,]\\d+$"
 
   override def classify(input: String): Seq[SemanticType] = {
-    if(input == null || input == ""){
-      return List[SemanticType]()
+    if (input.matches(containsCharacterRegex)) {
+      Seq[SemanticType]()
+    } else if (input.matches(containsNumbersWithSeparator)) {
+      //TODO: Improve logic ( thousand separator, etc )
+      Seq[SemanticType](FloatType)
+    } else {
+      Seq[SemanticType]()
     }
-
-    if(input.matches(containsCharacterRegex)){
-      return List[SemanticType]()
-    }
-
-    //TODO: Improve logic ( thousand separator, etc )
-    if(input.matches(containsNumbersWithSeparator)){
-      return List[SemanticType](FloatType)
-    }
-
-    return List[SemanticType]()
   }
 }

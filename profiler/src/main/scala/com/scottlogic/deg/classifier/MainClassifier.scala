@@ -9,12 +9,11 @@ object MainClassifier extends Classifier {
   private val classifiers : List[Classifier] = List[Classifier](CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, IntegerClassifier, NameClassifier, RICClassifier, ISINClassifier, SEDOLClassifier, StringClassifier, TimeStampClassifier)
 
   override def classify(input: String): Seq[SemanticType] = {
-    if(input == null || input == ""){
-      return List[SemanticType]()
+    if (input == null) {
+      List[SemanticType](NullType)
+    } else {
+      classifiers.flatMap(_.classify(input))
     }
-    val results : ListBuffer[SemanticType] = ListBuffer[SemanticType]()
-    classifiers.foreach(classifier => results.appendAll(classifier.classify(input)))
-    return results.toList
   }
 
   // TODO: Move this somewhere else, it is useful only for Enums
