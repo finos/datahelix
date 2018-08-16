@@ -1,6 +1,6 @@
 package com.scottlogic.deg
 
-import com.scottlogic.deg.classifier.{MainClassifier, NullType}
+import com.scottlogic.deg.classifier.{IntegerType, MainClassifier, NullType, StringType}
 import org.junit.jupiter.api.Assertions._
 import org.junit.jupiter.api._
 
@@ -9,7 +9,27 @@ class Classifier {
   @Test
   def classifyNullTest(): Unit = {
     val types = MainClassifier.classify(null)
-    assertEquals(1, types.size)
-    assertTrue(types.contains(NullType))
+    assertEquals(Set(NullType), types)
+  }
+
+  @Test
+  def classifyStringsTest(): Unit = {
+    val values = List("", "foo", "bar", "Hello, World!", "\n\n\ttext_goes_here\t\t")
+
+    values.foreach(value => {
+      val types = MainClassifier.classify(value)
+      assertTrue(types.contains(StringType))
+    })
+  }
+
+  @Test
+  def classifyIntegersTest(): Unit = {
+    val values = List("0", "1", "2", "10", "9268342", "-0", "-8762", "42")
+
+    values.foreach(value => {
+      val types = MainClassifier.classify(value)
+      assertTrue(types.contains(StringType))
+      assertTrue(types.contains(IntegerType))
+    })
   }
 }
