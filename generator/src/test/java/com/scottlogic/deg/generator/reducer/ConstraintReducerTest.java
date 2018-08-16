@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.restrictions.*;
+import dk.brics.automaton.Automaton;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -719,6 +720,97 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new MatchesRegexConstraint(field, Pattern.compile(pattern)));
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+        FieldSpec outputSpec = testOutput.getSpecForField(field);
+        Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+                Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have an automaton",
+                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+    }
+
+    @Test
+    void shouldReduceStringHasLengthConstraint() {
+        final Field field = new Field("test0");
+
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+        List<IConstraint> constraints = Collections.singletonList(
+                new StringHasLengthConstraint(field, 5)
+        );
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+        FieldSpec outputSpec = testOutput.getSpecForField(field);
+        Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+                Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have an automaton",
+                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+    }
+
+    void shouldReduceStringLongerThanConstraint() {
+        final Field field = new Field("test0");
+
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+        List<IConstraint> constraints = Collections.singletonList(
+                new IsStringLongerThanConstraint(field, 5)
+        );
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+        FieldSpec outputSpec = testOutput.getSpecForField(field);
+        Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+                Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have an automaton",
+                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+    }
+
+    void shouldReduceStringShorterThanConstraint() {
+        final Field field = new Field("test0");
+
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+        List<IConstraint> constraints = Collections.singletonList(
+                new IsStringShorterThanConstraint(field, 5)
+        );
         ConstraintReducer testObject = new ConstraintReducer();
 
         RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
