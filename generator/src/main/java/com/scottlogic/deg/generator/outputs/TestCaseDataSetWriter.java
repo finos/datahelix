@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
-public class TestCaseDataSetWriter {
+public class TestCaseDataSetWriter implements IDataSetWriter {
 
+    @Override
     public String write(
-        Profile profile,
-        TestCaseDataSet dataset,
-        Path directoryPath,
-        String filenameWithoutExtension) throws IOException {
+            Profile profile,
+            TestCaseDataSet dataset,
+            Path directoryPath,
+            String filenameWithoutExtension) throws IOException {
 
         String filename = filenameWithoutExtension + ".csv";
         Path fileAbsolutePath = directoryPath.resolve(filename);

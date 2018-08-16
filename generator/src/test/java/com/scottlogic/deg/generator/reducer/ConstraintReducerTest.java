@@ -7,8 +7,10 @@ import com.scottlogic.deg.generator.restrictions.*;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.OperationNotSupportedException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -740,5 +742,57 @@ class ConstraintReducerTest {
                 Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec string restrictions have an automaton",
                 outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+    }
+
+    @Test
+    void shouldReduceSingleFormatConstraint() {
+        final Field field = new Field("test0");
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+
+        List<IConstraint> constraints = Arrays.asList(
+                new FormatConstraint(field,"Hello '$1'")
+        );
+
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+        FieldSpec outputSpec = testOutput.getSpecForField(field);
+        Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+                Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec format restrictions has a value",
+                outputSpec.getFormatRestrictions(), Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec format restrictions has a value",
+                outputSpec.getFormatRestrictions().formatString, Is.is("Hello '$1'"));
+    }
+
+    @Test
+    void shouldNotReduceMultipleFormatConstraint() {
+        final Field field = new Field("test0");
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+
+        List<IConstraint> constraints = Arrays.asList(
+                new FormatConstraint(field, "Lorem '$1'"),
+                new FormatConstraint(field, "Ipsum '$1'")
+        );
+
+        ConstraintReducer testObject = new ConstraintReducer();
+
+        Assertions.assertThrows(
+                UnsupportedOperationException.class,
+                () -> testObject.reduceConstraintsToRowSpec(profileFields, constraints));
+
     }
 }

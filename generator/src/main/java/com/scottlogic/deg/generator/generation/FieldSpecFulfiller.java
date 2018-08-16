@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
+import com.scottlogic.deg.generator.utils.FormattingIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
@@ -27,23 +28,29 @@ public class FieldSpecFulfiller implements IDataPointSource {
     public Iterator<Object> iterator(GenerationConfig config) {
         IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
 
-        Iterator<Object> potentiallyLimitedIterator =
+        Iterator<Object> iterator =
             internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
             ? // the field's infinite and we're configured to sample from infinite sequences
                 new LimitingIteratorDecorator<>(internalIterator, 1)
             : internalIterator;
 
-        return this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
+        iterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
             ? // the field could be null; output one at the start of the sequence and filter any out from later
                 new ValuePrependingIterator<>(
-                    new FilteringIterator<>(potentiallyLimitedIterator, null), null)
-            : potentiallyLimitedIterator;
+                    new FilteringIterator<>(iterator, null), null)
+            : iterator;
+
+        iterator = this.spec.getFormatRestrictions() != null
+                ? new FormattingIterator<>(iterator, this.spec.getFormatRestrictions().formatString)
+                : iterator;
+
+        return iterator;
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         // if *always* null, output a sequence just containing null
         if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator(null);
+            return new SpecificDataPointsIterator((Object)null);
         }
 
         // if there's a whitelist, we can just output that
@@ -78,8 +85,10 @@ public class FieldSpecFulfiller implements IDataPointSource {
     }
 
     private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
-        if (stringIterator.hasNext())
-            return new SpecificDataPointsIterator(stringIterator.next());
-        return SpecificDataPointsIterator.createEmpty();
+        return stringIterator;
+
+//        if (stringIterator.hasNext())
+//            return new SpecificDataPointsIterator(stringIterator.next());
+//        return SpecificDataPointsIterator.createEmpty();
     }
 }

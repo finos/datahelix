@@ -35,7 +35,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
                     return Collections.emptyIterator();
                 }
 
-                baselines.set(i, sequenceIterators.get(i).next());
+                baselines.add(i, sequenceIterators.get(i).next());
             }
 
             return new InternalIterator(sequenceIterators, baselines);

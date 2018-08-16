@@ -22,14 +22,12 @@ public class ProfileReaderTests {
     private Profile profile;
 
     @Before
-    public void Setup()
-    {
+    public void Setup() {
         this.json = null;
         this.profile = null;
     }
 
-    private void givenJson(String json)
-    {
+    private void givenJson(String json) {
         this.json = json;
     }
 
@@ -58,7 +56,7 @@ public class ProfileReaderTests {
         return constraint -> {
             Assert.assertThat(constraint, instanceOf(constraintType));
 
-            asserter.accept((T)constraint);
+            asserter.accept((T) constraint);
         };
     }
 
@@ -73,228 +71,248 @@ public class ProfileReaderTests {
     /**
      * Given a set I1, I2, I3... and some consumers A1, A2, A3..., run A1(I1), A2(I2), A3(I3)...
      * This lets us make assertions about each entry in a sequence
-     * */
+     */
     private <T> void expectMany(
-        Iterable<T> assertionTargets,
-        Consumer<T>... perItemAssertions) {
+            Iterable<T> assertionTargets,
+            Consumer<T>... perItemAssertions) {
 
         AssertUtils.pairwiseAssert(
-            assertionTargets,
-            Arrays.asList(perItemAssertions), // because arrays aren't iterable?
-            (assertionTarget, asserter) -> asserter.accept(assertionTarget));
+                assertionTargets,
+                Arrays.asList(perItemAssertions), // because arrays aren't iterable?
+                (assertionTarget, asserter) -> asserter.accept(assertionTarget));
     }
 
     @Test
     public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"f1\" } ]," +
-            "    \"rules\": []" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"f1\" } ]," +
+                        "    \"rules\": []" +
+                        "}");
 
         expectFields(
-            fieldWithName("f1"));
+                fieldWithName("f1"));
     }
 
     @Test
     public void shouldDeserialiseMultipleFields() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"f1\" }, { \"name\": \"f2\" } ]," +
-            "    \"rules\": []" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"f1\" }, { \"name\": \"f2\" } ]," +
+                        "    \"rules\": []" +
+                        "}");
 
         expectFields(
-            fieldWithName("f1"),
-            fieldWithName("f2"));
+                fieldWithName("f1"),
+                fieldWithName("f2"));
     }
 
     @Test
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        { \"field\": \"foo\", \"is\": \"null\" }" +
-            "    ]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "    ]" +
+                        "}");
 
         expectRules(
-            ruleWithDescription("Unnamed rule"));
+                ruleWithDescription("Unnamed rule"));
     }
 
     @Test
     public void shouldReadNameOfNamedRules() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        {" +
-            "           \"rule\": \"Too rule for school\"," +
-            "           \"constraints\": [" +
-            "               { \"field\": \"foo\", \"is\": \"null\" }" +
-            "           ]" +
-            "        }" +
-            "    ]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        {" +
+                        "           \"rule\": \"Too rule for school\"," +
+                        "           \"constraints\": [" +
+                        "               { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "           ]" +
+                        "        }" +
+                        "    ]" +
+                        "}");
 
         expectRules(
-            ruleWithDescription("Too rule for school"));
+                ruleWithDescription("Too rule for school"));
     }
 
     @Test
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [" +
-            "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
-            "    ]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
+                        "    ]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    IsOfTypeConstraint.class,
-                    c -> Assert.assertThat(
-                        c.requiredType,
-                        equalTo(IsOfTypeConstraint.Types.String)))));
+                ruleWithConstraints(
+                        typedConstraint(
+                                IsOfTypeConstraint.class,
+                                c -> Assert.assertThat(
+                                        c.requiredType,
+                                        equalTo(IsOfTypeConstraint.Types.String)))));
+    }
+
+    @Test
+    public void shouldDeserialiseFormatConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        { \"field\": \"foo\", \"format\": \"%.5s\" }" +
+                        "    ]" +
+                        "}");
+
+        expectRules(
+                ruleWithConstraints(
+                        typedConstraint(
+                                FormatConstraint.class,
+                                c -> Assert.assertThat(
+                                        c.format,
+                                        equalTo("%.5s")))));
     }
 
     @Test
     public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
         // Arrange
         givenJson(
-            "{" +
-                "    \"schemaVersion\": \"v3\"," +
-                "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                "    \"rules\": [" +
-                "        { \"not\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" } }" +
-                "    ]" +
-                "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        { \"not\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+                        "    ]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    NotConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsOfTypeConstraint.class));
-                    })));
+                ruleWithConstraints(
+                        typedConstraint(
+                                NotConstraint.class,
+                                c -> {
+                                    Assert.assertThat(
+                                            c.negatedConstraint,
+                                            instanceOf(IsOfTypeConstraint.class));
+                                })));
     }
 
     @Test
     public void shouldDeserialiseOrConstraint() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [{" +
-            "        \"anyOf\": [" +
-            "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-            "          { \"field\": \"foo\", \"is\": \"null\" }" +
-            "        ]" +
-            "    }]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [{" +
+                        "        \"anyOf\": [" +
+                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "        ]" +
+                        "    }]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    OrConstraint.class,
-                    c -> Assert.assertThat(
-                        c.subConstraints.size(),
-                        equalTo(2)))));
+                ruleWithConstraints(
+                        typedConstraint(
+                                OrConstraint.class,
+                                c -> Assert.assertThat(
+                                        c.subConstraints.size(),
+                                        equalTo(2)))));
     }
 
     @Test
     public void shouldDeserialiseAndConstraint() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [{" +
-            "        \"allOf\": [" +
-            "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-            "          { \"field\": \"foo\", \"is\": \"null\" }" +
-            "        ]" +
-            "    }]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [{" +
+                        "        \"allOf\": [" +
+                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "        ]" +
+                        "    }]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    AndConstraint.class,
-                    c -> Assert.assertThat(
-                        c.subConstraints.size(),
-                        equalTo(2)))));
+                ruleWithConstraints(
+                        typedConstraint(
+                                AndConstraint.class,
+                                c -> Assert.assertThat(
+                                        c.subConstraints.size(),
+                                        equalTo(2)))));
     }
 
     @Test
     public void shouldDeserialiseIfConstraint() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-            "    \"schemaVersion\": \"v3\"," +
-            "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [{" +
-            "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-            "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
-            "        \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
-            "    }]" +
-            "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [{" +
+                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
+                        "        \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
+                        "    }]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    ConditionalConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.condition,
-                            instanceOf(IsOfTypeConstraint.class));
+                ruleWithConstraints(
+                        typedConstraint(
+                                ConditionalConstraint.class,
+                                c -> {
+                                    Assert.assertThat(
+                                            c.condition,
+                                            instanceOf(IsOfTypeConstraint.class));
 
-                        Assert.assertThat(
-                            c.whenConditionIsTrue,
-                            instanceOf(IsEqualToConstantConstraint.class));
+                                    Assert.assertThat(
+                                            c.whenConditionIsTrue,
+                                            instanceOf(IsEqualToConstantConstraint.class));
 
-                        Assert.assertThat(
-                            c.whenConditionIsFalse,
-                            instanceOf(IsGreaterThanConstantConstraint.class));
-                    })));
+                                    Assert.assertThat(
+                                            c.whenConditionIsFalse,
+                                            instanceOf(IsGreaterThanConstantConstraint.class));
+                                })));
     }
 
     @Test
     public void shouldDeserialiseIfConstraintWithoutElse() throws IOException, InvalidProfileException {
         givenJson(
-            "{" +
-                "    \"schemaVersion\": \"v3\"," +
-                "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                "    \"rules\": [{" +
-                "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
-                "    }]" +
-                "}");
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [{" +
+                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
+                        "    }]" +
+                        "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    ConditionalConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.condition,
-                            instanceOf(IsOfTypeConstraint.class));
+                ruleWithConstraints(
+                        typedConstraint(
+                                ConditionalConstraint.class,
+                                c -> {
+                                    Assert.assertThat(
+                                            c.condition,
+                                            instanceOf(IsOfTypeConstraint.class));
 
-                        Assert.assertThat(
-                            c.whenConditionIsTrue,
-                            instanceOf(IsEqualToConstantConstraint.class));
+                                    Assert.assertThat(
+                                            c.whenConditionIsTrue,
+                                            instanceOf(IsEqualToConstantConstraint.class));
 
-                        Assert.assertThat(
-                            c.whenConditionIsFalse,
-                            nullValue());
-                    })));
+                                    Assert.assertThat(
+                                            c.whenConditionIsFalse,
+                                            nullValue());
+                                })));
     }
 }

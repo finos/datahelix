@@ -46,6 +46,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+        } else if (constraint instanceof FormatConstraint) {
+            apply(fieldSpec, (FormatConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -170,8 +172,7 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
@@ -192,8 +193,7 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
@@ -209,6 +209,16 @@ public class FieldSpecFactory {
                 ? nominalAutomaton.complement()
                 : nominalAutomaton;
         stringRestrictions.automaton = automaton;
+    }
+
+    private void apply(FieldSpec fieldSpec, FormatConstraint constraint, boolean negate) {
+        FormatRestrictions formatRestrictions = fieldSpec.getFormatRestrictions();
+        if (formatRestrictions == null) {
+            formatRestrictions = new FormatRestrictions();
+            fieldSpec.setFormatRestrictions(formatRestrictions);
+        }
+
+        formatRestrictions.formatString = constraint.format;
     }
 
     private BigDecimal numberToBigDecimal(Number number) {

@@ -39,6 +39,8 @@ class ConstraintFieldSniffer {
             return ((IsOfTypeConstraint) constraint).field;
         } else if (constraint instanceof MatchesRegexConstraint) {
             return ((MatchesRegexConstraint) constraint).field;
+        } else if (constraint instanceof FormatConstraint) {
+            return ((FormatConstraint) constraint).field;
         } else {
             throw new UnsupportedOperationException();
         }

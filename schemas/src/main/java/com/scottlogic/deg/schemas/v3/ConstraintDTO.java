@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Collection;
 
-@JsonPropertyOrder({ "field", "is", "value", "if", "then", "else" })
+@JsonPropertyOrder({ "field", "is", "value", "if", "then", "else", "format" })
 public class ConstraintDTO {
-    public String is;
-
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
+
+    public String is;
 
     /** the ID of the field this constraint constrains, if relevant */
     public String field;
@@ -40,4 +40,7 @@ public class ConstraintDTO {
     /** the constraint to apply if 'if_' is false */
     @JsonProperty("else")
     public ConstraintDTO else_;
+
+    @JsonProperty("format")
+    public String format;
 }

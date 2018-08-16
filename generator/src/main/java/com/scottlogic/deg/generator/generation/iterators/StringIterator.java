@@ -81,7 +81,7 @@ public class StringIterator implements IFieldSpecIterator {
 
     private String getOrderedString(int indexOrder) {
         String result = buildStringFromNode(rootNode, indexOrder);
-        result = result.substring(1, result.length() - 1);
+//        result = result.substring(1, result.length() - 1);
         return result;
     }
 

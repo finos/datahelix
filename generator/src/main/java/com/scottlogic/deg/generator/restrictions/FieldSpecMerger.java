@@ -10,6 +10,7 @@ public class FieldSpecMerger {
     private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
     private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
+    private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
 
     public FieldSpec merge(FieldSpec left, FieldSpec right) {
         final FieldSpec merged = new FieldSpec();
@@ -22,6 +23,7 @@ public class FieldSpecMerger {
         merged.setTypeRestrictions(typeRestrictionsMerger.merge(left.getTypeRestrictions(), right.getTypeRestrictions()));
         merged.setDateTimeRestrictions(dateTimeRestrictionsMerger.merge(left.getDateTimeRestrictions(),
                 right.getDateTimeRestrictions()));
+        merged.setFormatRestrictions(formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
         return merged;
     }
 }
