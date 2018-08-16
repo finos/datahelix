@@ -55,13 +55,14 @@ class DEGApp @Inject()(
     val classification = dataFrameClassifier.getAnalysis()
 
 
+    // Present the result to users. Displaying results with more than 50% of detection, and sorted by ranking.
     Console.println("Results")
     Console.println("--")
     classification.foreach(c => {
       Console.print(s"Field ${c.fieldName} -> ")
       val total = c.typeDetectionCount(StringType).toFloat
-      c.typeDetectionCount.keys.foreach(k => {
-        Console.println(f"${k} (${c.typeDetectionCount(k) / total * 100.00}%.2f%%). ")
+      c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._2, t._2 / total)).foreach(t => {
+        Console.println(f"${t._1} (${t._2 / total * 100.00}%.2f%%). ")
       })
       Console.println("--")
     })
