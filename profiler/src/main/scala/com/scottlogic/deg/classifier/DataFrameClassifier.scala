@@ -29,14 +29,12 @@ class DataFrameClassifier(df: DataFrame) {
 
   def generateNewSchema(analysis : Seq[ClassifiedField]) : StructType = {
     val fields = analysis.map(f => {
-      // TODO: Logic for deciding which of all the types is best
       val detectionCount = f.typeDetectionCount
       val detectedTypes = detectionCount.keys.toList
-      val isNull = detectedTypes.count(e => e == NullType) > 0
-      if(isNull){
-        detectionCount-NullType
-      }
-      StructField(f.fieldName, SqlTypeMapper.Map(detectionCount.last._1), true); //TODO: Replace true with "isNull"
+      val isNull = detectedTypes.count(e => e == NullType) >= 0
+      val totalCount = detectionCount.toArray.maxBy(t => t._2)._2
+      val sortedDetectionCount = f.typeDetectionCount.toArray.sortBy(t => t._1.rank)
+      StructField(f.fieldName, SqlTypeMapper.Map(sortedDetectionCount.last._1), isNull)
     })
     StructType(fields)
   }

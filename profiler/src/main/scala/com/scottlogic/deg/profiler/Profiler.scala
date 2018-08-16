@@ -15,7 +15,7 @@ class Profiler(df: DataFrame) {
     val fieldArray = df.schema.fields.map(field => new Field(field.name));
     // TODO: Use our SemanticTypes
     val ruleArray = df.schema.fields.map(field => (field.dataType match {
-      case DoubleType | LongType | IntegerType => new NaiveNumericAnalyser(df, field)
+      case DoubleType | FloatType | LongType | IntegerType => new NaiveNumericAnalyser(df, field)
       case TimestampType => new NaiveTimestampAnalyser(df, field)
       case StringType => new NaiveStringAnalyser(df, field)
       case _ => new GenericFieldAnalyser(df, field)
