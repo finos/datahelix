@@ -5,7 +5,7 @@ import java.io.File
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
-import com.scottlogic.deg.classifier.{DataFrameClassifier, StringType}
+import com.scottlogic.deg.classifier.{DataFrameClassifier, SemanticTypeField, StringType}
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.mappers.ProfileDTOMapper
 import com.scottlogic.deg.profiler.Profiler
@@ -55,24 +55,31 @@ class DEGApp @Inject()(
     val classification = dataFrameClassifier.getAnalysis()
 
 
-    // Present the result to users. Displaying results with more than 50% of detection, and sorted by ranking.
+    // Present the result to users. Displaying results with more than 50% of value matches, sorted by ranking.
     Console.println("Results")
     Console.println("--")
     classification.foreach(c => {
       Console.print(s"Field ${c.fieldName} -> ")
       val total = c.typeDetectionCount(StringType).toFloat
-      c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._2, t._2 / total)).foreach(t => {
+      c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._1.rank, t._2 / total)).reverse.foreach(t => {
         Console.println(f"${t._1} (${t._2 / total * 100.00}%.2f%%). ")
       })
       Console.println("--")
     })
 
-    // Converting back to SQL schema for now, in order to be able to use Spark's SQL functionality on the data.
+    // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage
+    // Converting back to SQL schema in order to be able to use Spark's SQL functionality on the data.
     val newSchema = dataFrameClassifier.generateNewSchema(classification)
     val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
 
-    // TODO: Profiler should take our analysis as a parameter
-    val profiler = new Profiler(newDataFrame)
+    // TODO: Delete this variable after we have gotten user input with specific types.
+    val userInput = classification.map(c => {
+      val total = c.typeDetectionCount(StringType).toFloat
+      val mostRelevantType = c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).maxBy(t => (t._1.rank, t._2 / total))._1
+      SemanticTypeField(c.fieldName, mostRelevantType)
+    });
+
+    val profiler = new Profiler(newDataFrame, userInput)
     val profile = profiler.profile()
     val profileDTO = ProfileDTOMapper.Map(profile);
 
