@@ -24,13 +24,13 @@ class ConstraintFieldSniffer {
         } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
             return ((IsLessThanOrEqualToConstantConstraint) constraint).field;
         } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
-            return ((IsAfterConstantDateTimeConstraint)constraint).field;
+            return ((IsAfterConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
-            return ((IsAfterOrEqualToConstantDateTimeConstraint)constraint).field;
+            return ((IsAfterOrEqualToConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
-            return ((IsBeforeConstantDateTimeConstraint)constraint).field;
+            return ((IsBeforeConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
-            return ((IsBeforeOrEqualToConstantDateTimeConstraint)constraint).field;
+            return ((IsBeforeOrEqualToConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsInSetConstraint) {
             return ((IsInSetConstraint) constraint).field;
         } else if (constraint instanceof IsNullConstraint) {
@@ -41,6 +41,12 @@ class ConstraintFieldSniffer {
             return ((MatchesRegexConstraint) constraint).field;
         } else if (constraint instanceof FormatConstraint) {
             return ((FormatConstraint) constraint).field;
+        } else if (constraint instanceof StringHasLengthConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
+        } else if (constraint instanceof IsStringLongerThanConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
+        } else if (constraint instanceof IsStringShorterThanConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
         } else {
             throw new UnsupportedOperationException();
         }
