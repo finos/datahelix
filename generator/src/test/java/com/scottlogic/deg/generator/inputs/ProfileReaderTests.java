@@ -167,6 +167,24 @@ public class ProfileReaderTests {
     }
 
     @Test
+    public void shouldDeserialiseIsOfLengthConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+                "{" +
+                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"rules\": [" +
+                        "        { \"field\": \"id\", \"is\": \"hasLength\", \"value\": 5 }" +
+                        "    ]" +
+                        "}");
+
+        expectRules(
+                ruleWithConstraints(
+                        typedConstraint(
+                                StringHasLengthConstraint.class,
+                                c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
+    }
+
+    @Test
     public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
         // Arrange
         givenJson(
