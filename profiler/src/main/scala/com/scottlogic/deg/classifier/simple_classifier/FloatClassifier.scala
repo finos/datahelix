@@ -6,14 +6,14 @@ object FloatClassifier extends Classifier {
   private val containsCharacterRegex = "[a-zA-Z]+"
   private val containsNumbersWithSeparator = "^[-]?\\d*[\\.,]\\d+$"
 
-  override def classify(input: String): Seq[SemanticType] = {
+  override def classify(input: String): Set[SemanticType] = {
     if (input.matches(containsCharacterRegex)) {
-      Seq[SemanticType]()
+      Set()
     } else if (input.matches(containsNumbersWithSeparator)) {
       //TODO: Improve logic ( thousand separator, etc )
-      Seq[SemanticType](FloatType)
+      Set(FloatType)
     } else {
-      Seq[SemanticType]()
+      Set()
     }
   }
 }

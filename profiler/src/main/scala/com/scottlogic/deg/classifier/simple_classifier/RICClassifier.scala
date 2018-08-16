@@ -5,12 +5,12 @@ import com.scottlogic.deg.classifier.{Classifier, RICType, SemanticType}
 object RICClassifier extends Classifier {
   private val ricRegex = "^[A-Z]{1,4}\\.[A-Z]{1,2}$"
 
-  override def classify(input: String): Seq[SemanticType] = {
+  override def classify(input: String): Set[SemanticType] = {
     // TODO: Classifier logic
     if (input.toUpperCase.matches(ricRegex)) {
-      List[SemanticType](RICType)
+      Set(RICType)
     } else {
-      Seq[SemanticType]()
+      Set()
     }
   }
 }

@@ -5,11 +5,11 @@ import com.scottlogic.deg.classifier.{Classifier, IntegerType, SemanticType}
 object IntegerClassifier extends Classifier {
   private val integerRegex : String = "^[-]?\\d+$"
 
-  override def classify(input: String): Seq[SemanticType] = {
+  override def classify(input: String): Set[SemanticType] = {
     if (input.matches(integerRegex)) {
-      Seq[SemanticType](IntegerType)
+      Set(IntegerType)
     } else {
-      Seq[SemanticType]()
+      Set()
     }
   }
 }
