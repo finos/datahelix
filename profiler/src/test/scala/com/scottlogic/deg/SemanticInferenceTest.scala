@@ -2,6 +2,7 @@ package com.scottlogic.deg
 
 import java.io.File
 
+import com.scottlogic.deg.classifier.SemanticTypeField
 import com.scottlogic.deg.io.FileReader
 import com.scottlogic.deg.profiler.Profiler
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class SemanticInferenceTest {
   def inferTypesTest() {
     val path = getClass.getClassLoader.getResource("semantic.csv").getPath
     val df = fileReader.readCSV(new File(path))
-    val profiler = new Profiler(df, null)
+    val profiler = new Profiler(df, List[SemanticTypeField]())
     val profile = profiler.profile()
     assertEquals(profile.Fields.size, 6)
   }

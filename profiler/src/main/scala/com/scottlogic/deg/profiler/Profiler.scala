@@ -12,7 +12,7 @@ class Profiler(df: DataFrame, fieldClassification: Seq[SemanticTypeField]) {
   def profile(): Profile = {
     val fieldArray = df.schema.fields.map(field => new Field(field.name));
     val ruleArray = df.schema.fields.map(field => {
-      val semanticType = fieldClassification.filter(f => f.fieldName == field.name).last.semanticType
+      val semanticType = if (fieldClassification == null || fieldClassification.length == 0) StringType else fieldClassification.filter(f => f.fieldName == field.name).last.semanticType
       (semanticType match {
       case DoubleType | FloatType | IntegerType => new NaiveNumericAnalyser(df, field)
       case TimeStampType => new NaiveTimestampAnalyser(df, field)
