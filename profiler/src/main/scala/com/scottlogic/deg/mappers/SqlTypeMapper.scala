@@ -19,6 +19,7 @@ object SqlTypeMapper extends IMapper[SemanticType, DataType] {
       case SEDOLType => SQLStringType;
       case ISINType => SQLStringType;
       case EnumType => SQLStringType;
+      case NullType => SQLStringType;
     }
   }
 }
