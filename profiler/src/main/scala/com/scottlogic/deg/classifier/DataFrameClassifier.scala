@@ -8,23 +8,26 @@ object DataFrameClassifier {
 
   def analyse(df: DataFrame): Seq[ClassifiedField] = {
     df.schema.fields.map(field => {
-      var typeList = df.rdd.flatMap(row => {
+      val fieldValues = df.rdd.map(_.getAs[String](field.name)).collect()
+      val extraTypes: Set[SemanticType] = if (suggestEnum(fieldValues)) Set(EnumType) else Set()
+
+      val types = df.rdd.flatMap(row => {
         val fieldValue = row.getAs[String](field.name)
-        Classifiers.classify(fieldValue)
+        Classifiers.classify(fieldValue).union(extraTypes)
       }).groupBy(identity)
         .mapValues(_.size)
         .collectAsMap()
 
-      // TODO: Check if there is a better way to trigger Enum identification
-      if(typeList.keys.size == 1 && (typeList.contains(StringType) || typeList.contains(IntegerType))){
-        val multiValueTypes = Classifiers.classifyMany(df.rdd.map(row => row.getAs[String](field.name)))
-        multiValueTypes.foreach(semanticType => {
-          typeList = typeList + (semanticType -> df.rdd.count().toInt)
-        });
-      }
-
-      ClassifiedField(field.name, typeList)
+      ClassifiedField(field.name, types)
     })
+  }
+
+  /*
+   * Suggest that a field is an enumerated type if there are less than the threshold ratio of unique values
+   */
+  def suggestEnum(field: Array[String]): Boolean = {
+    val ratioThreshold = 0.02
+    (field.distinct.length.toDouble / field.length.toDouble) <= ratioThreshold
   }
 
   def generateNewSchema(analysis : Seq[ClassifiedField]) : StructType = {

@@ -16,19 +16,4 @@ object Classifiers {
       classifiers.flatMap(_.classify(input)).toSet
     }
   }
-
-  // TODO: Move this somewhere else, it is useful only for Enums
-  def classifyMany(input: RDD[String]) : Set[SemanticType] = {
-    val minimumValuesToEvaluate = 20
-    if(input.count() < minimumValuesToEvaluate){
-      return Set()
-    }
-    val groupedValues = input.groupBy(identity).mapValues(_.size).collectAsMap()
-    val enumMaxSize = 10
-    val enumMinSize = 1
-    if(groupedValues.keys.size < enumMaxSize && groupedValues.keys.size > enumMinSize){
-      return Set(EnumType)
-    }
-    return Set()
-  }
 }
