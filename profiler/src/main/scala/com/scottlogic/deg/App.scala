@@ -55,8 +55,8 @@ class DEGApp @Inject()(
 
     // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage.
     // Converting back to SQL schema in order to be able to use Spark's SQL functionality on the data.
-    val newSchema = DataFrameClassifier.generateNewSchema(classification)
-    val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
+    val detectedSchema = DataFrameClassifier.detectSchema(classification)
+    val typedData = fileReader.readCSVWithSchema(inFile, detectedSchema)
 
     // TODO: Delete this variable after we have gotten user input with specific types.
     val userInput = classification.map(c => {
@@ -65,11 +65,11 @@ class DEGApp @Inject()(
       SemanticTypeField(c.name, mostRelevantType)
     })
 
-    val profiler = new Profiler(newDataFrame, userInput)
+    val profiler = new Profiler(typedData, userInput)
     val profile = profiler.profile()
-    val profileDTO = ProfileDTOMapper.Map(profile);
+    val profileDTO = ProfileDTOMapper.Map(profile)
 
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
     val marshalled: String = mapper
       .writerWithDefaultPrettyPrinter()
