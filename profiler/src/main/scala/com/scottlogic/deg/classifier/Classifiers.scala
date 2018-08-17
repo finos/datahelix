@@ -6,7 +6,7 @@ import org.apache.spark.rdd.RDD
 object Classifiers {
   val classifiers: List[Classifier] = List(
     CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, IntegerClassifier, NameClassifier,
-    RICClassifier, ISINClassifier, SEDOLClassifier, StringClassifier, TimeStampClassifier
+    RicClassifier, IsinClassifier, SedolClassifier, StringClassifier, TimeStampClassifier
   )
 
   def classify(input: String): Set[SemanticType] = {
