@@ -20,6 +20,6 @@ class SemanticInferenceTest {
     val path = getClass.getClassLoader.getResource("semantic.csv").getPath
     val df = fileReader.readCSV(new File(path))
     val profile = Profiler.profile(df, List[SemanticTypeField]())
-    assertEquals(profile.Fields.size, 6)
+    assertEquals(profile.fields.size, 6)
   }
 }

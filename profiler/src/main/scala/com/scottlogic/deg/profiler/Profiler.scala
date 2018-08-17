@@ -10,9 +10,9 @@ import org.apache.spark.sql.DataFrame
 
 object Profiler {
   def profile(df: DataFrame, fieldClassification: Seq[SemanticTypeField]): Profile = {
-    val fieldArray = df.schema.fields.map(field => new Field(field.name))
+    val fields = df.schema.fields.map(field => new Field(field.name))
 
-    val ruleArray = df.schema.fields.map(field => {
+    val rules = df.schema.fields.map(field => {
       val semanticType = if (fieldClassification == null || fieldClassification.isEmpty) {
         StringType
       } else {
@@ -27,10 +27,6 @@ object Profiler {
       }).constructField()
     })
 
-    val profile = new Profile()
-    profile.Fields = fieldArray.toList
-    profile.Rules = ruleArray.toList
-
-    profile
+    new Profile(fields, rules)
   }
 }
