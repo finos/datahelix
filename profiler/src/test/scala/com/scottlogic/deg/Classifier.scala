@@ -195,7 +195,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = ISINClassifier.classify(v)
+      val types = IsinClassifier.classify(v)
       // Assert
       assertEquals(1,types.size)
       assertTrue(types.contains(ISINType))
@@ -209,7 +209,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = ISINClassifier.classify(v)
+      val types = IsinClassifier.classify(v)
       // Assert
       assertEquals(0,types.size)
     })
@@ -234,7 +234,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = RICClassifier.classify(v)
+      val types = RicClassifier.classify(v)
       // Assert
       assertEquals(1, types.size)
       assertTrue(types.contains(RICType))
@@ -248,7 +248,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = RICClassifier.classify(v)
+      val types = RicClassifier.classify(v)
       // Assert
       assertEquals(0, types.size)
     })
@@ -261,7 +261,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = SEDOLClassifier.classify(v)
+      val types = SedolClassifier.classify(v)
       // Assert
       assertEquals(1, types.size)
       assertTrue(types.contains(SEDOLType))
@@ -275,7 +275,7 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = SEDOLClassifier.classify(v)
+      val types = SedolClassifier.classify(v)
       // Assert
       assertEquals(0, types.size)
     })
