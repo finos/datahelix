@@ -4,9 +4,9 @@ import com.scottlogic.deg.mappers.SqlTypeMapper
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{StructField, StructType}
 
-class DataFrameClassifier(df: DataFrame) {
+object DataFrameClassifier {
 
-  def getAnalysis(): Seq[ClassifiedField] = {
+  def analyse(df: DataFrame): Seq[ClassifiedField] = {
     df.schema.fields.map(field => {
       var typeList = df.rdd.flatMap(row => {
         val fieldValue = row.getAs[String](field.name)

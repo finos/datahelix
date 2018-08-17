@@ -12,7 +12,7 @@ import com.scottlogic.deg.profiler.Profiler
 import javax.inject.Inject
 import net.codingwell.scalaguice.InjectorExtensions._
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 case class Params(inputPath: String, outputDir: String)
 
@@ -49,11 +49,8 @@ class DEGApp @Inject()(
     val inFile = new File(params.inputPath)
     val outFile = new File(params.outputDir, "test-output.json")
 
-    val df: DataFrame = fileReader.readCSV(inFile)
-
-    val dataFrameClassifier = new DataFrameClassifier(df);
-    val classification = dataFrameClassifier.getAnalysis()
-
+    val df = fileReader.readCSV(inFile)
+    val classification = DataFrameClassifier.analyse(df)
 
     // Present the result to users. Displaying results with more than 50% of value matches, sorted by ranking.
     Console.println("Results")
@@ -69,7 +66,7 @@ class DEGApp @Inject()(
 
     // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage.
     // Converting back to SQL schema in order to be able to use Spark's SQL functionality on the data.
-    val newSchema = dataFrameClassifier.generateNewSchema(classification)
+    val newSchema = DataFrameClassifier.generateNewSchema(classification)
     val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
 
     // TODO: Delete this variable after we have gotten user input with specific types.
