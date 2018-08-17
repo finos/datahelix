@@ -15,9 +15,9 @@ object SqlTypeMapper extends IMapper[SemanticType, DataType] {
       case DoubleType => SQLDoubleType;
       case FloatType => SQLFloatType;
       case TimeStampType => SQLTimeStampType;
-      case RICType => SQLStringType;
-      case SEDOLType => SQLStringType;
-      case ISINType => SQLStringType;
+      case RicType => SQLStringType;
+      case SedolType => SQLStringType;
+      case IsinType => SQLStringType;
       case EnumType => SQLStringType;
       case NullType => SQLStringType;
     }

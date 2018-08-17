@@ -183,7 +183,7 @@ class Classifier {
   }
 
   @Test
-  def givenValidISIN_whenClassify_thenISINTypeIsReturned(): Unit = {
+  def givenValidIsin_whenClassify_thenIsinTypeIsReturned(): Unit = {
     // Arrange
     val values = List("CA1234567891", "CCABCDEFGHI4", "CA12345ABCD4")
 
@@ -191,12 +191,12 @@ class Classifier {
       // Act
       val result = IsinClassifier.classify(v)
       // Assert
-      assertEquals(ISINType, result.get)
+      assertEquals(IsinType, result.get)
     })
   }
 
   @Test
-  def givenInvalidISIN_whenClassify_thenISINTypeIsNotReturned(): Unit = {
+  def givenInvalidIsin_whenClassify_thenIsinTypeIsNotReturned(): Unit = {
     // Arrange
     val values = List("CA12345678", "ZZ1234567891", "CA123456789F")
 
@@ -209,7 +209,7 @@ class Classifier {
   }
 
   @Test
-  def ValidName_whenClassify_thenNameTypeReturned(): Unit = {
+  def givenValidName_whenClassify_thenNameTypeReturned(): Unit = {
     //TODO: Write name logic first
     assertTrue(true)
   }
@@ -221,7 +221,7 @@ class Classifier {
   }
 
   @Test
-  def givenValidRICC_whenClassify_thenRICCTypeIsReturned(): Unit = {
+  def givenValidRic_whenClassify_thenRicCTypeIsReturned(): Unit = {
     // Arrange
     val values = List("ABCD.AB", "DEFZ.AZ")
 
@@ -229,12 +229,12 @@ class Classifier {
       // Act
       val result = RicClassifier.classify(v)
       // Assert
-      assertEquals(RICType, result.get)
+      assertEquals(RicType, result.get)
     })
   }
 
   @Test
-  def givenInvalidRICC_whenClassify_thenRICCTypeIsNotReturned(): Unit = {
+  def givenInvalidRic_whenClassify_thenRicCTypeIsNotReturned(): Unit = {
     // Arrange
     val values = List("AB.ABCD", "12345.AZ")
 
@@ -247,7 +247,7 @@ class Classifier {
   }
 
   @Test
-  def givenValidSEDOL_whenClassify_thenSEDOLTypeIsReturned(): Unit = {
+  def givenValidSedol_whenClassify_thenSedolTypeIsReturned(): Unit = {
     // Arrange
     val values = List("7980591", "BcBcB67")
 
@@ -255,12 +255,12 @@ class Classifier {
       // Act
       val result = SedolClassifier.classify(v)
       // Assert
-      assertEquals(SEDOLType, result.get)
+      assertEquals(SedolType, result.get)
     })
   }
 
   @Test
-  def givenInvalidSEDOL_whenClassify_thenSEDOLTypeIsNotReturned(): Unit = {
+  def givenInvalidSedol_whenClassify_thenSedolTypeIsNotReturned(): Unit = {
     // Arrange
     val values = List("1234", "123456A")
 
