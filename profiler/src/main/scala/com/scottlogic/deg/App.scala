@@ -67,7 +67,7 @@ class DEGApp @Inject()(
       Console.println("--")
     })
 
-    // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage
+    // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage.
     // Converting back to SQL schema in order to be able to use Spark's SQL functionality on the data.
     val newSchema = dataFrameClassifier.generateNewSchema(classification)
     val newDataFrame = fileReader.readCSVWithSchema(inFile,newSchema)
@@ -77,7 +77,7 @@ class DEGApp @Inject()(
       val total = c.typeDetectionCount(StringType).toFloat
       val mostRelevantType = c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).maxBy(t => (t._1.rank, t._2 / total))._1
       SemanticTypeField(c.fieldName, mostRelevantType)
-    });
+    })
 
     val profiler = new Profiler(newDataFrame, userInput)
     val profile = profiler.profile()
