@@ -10,10 +10,9 @@ class Classifier {
   @Test
   def givenNullValue_whenClassify_thenNullTypeIsReturned(): Unit = {
     // Act
-    val types = Classifiers.classify(null)
+    val result = Classifiers.classify(null)
     // Assert
-    assertEquals(1, types.size)
-    assertEquals(Set(NullType), types)
+    assertEquals(Set(NullType), result)
   }
 
   @Test
@@ -23,10 +22,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val types = StringClassifier.classify(value)
+      val result = StringClassifier.classify(value)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(StringType))
+      assertEquals(StringType, result.get)
     })
   }
 
@@ -37,10 +35,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val types = IntegerClassifier.classify(value)
+      val result = IntegerClassifier.classify(value)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(IntegerType))
+      assertEquals(IntegerType, result.get)
     })
   }
 
@@ -51,9 +48,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val types = IntegerClassifier.classify(value)
+      val result = IntegerClassifier.classify(value)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -64,10 +61,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val types = CountryCodeClassifier.classify(value)
+      val result = CountryCodeClassifier.classify(value)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(CountryCodeType))
+      assertEquals(CountryCodeType, result.get)
     })
   }
 
@@ -78,9 +74,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val types = CountryCodeClassifier.classify(value)
+      val result = CountryCodeClassifier.classify(value)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -91,10 +87,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = CurrencyClassifier.classify(v)
+      val result = CurrencyClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(CurrencyType))
+      assertEquals(CurrencyType, result.get)
     })
   }
 
@@ -105,9 +100,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = CurrencyClassifier.classify(v)
+      val result = CurrencyClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -130,10 +125,10 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = EmailClassifier.classify(v)
+      val result = EmailClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(EmailType))
+      assertEquals(1, result.size)
+      assertEquals(EmailType, result.get)
     })
   }
 
@@ -155,9 +150,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = EmailClassifier.classify(v)
+      val result = EmailClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -168,10 +163,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = FloatClassifier.classify(v)
+      val result = FloatClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(FloatType))
+      assertEquals(FloatType, result.get)
     })
   }
 
@@ -182,9 +176,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = FloatClassifier.classify(v)
+      val result = FloatClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -195,10 +189,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = IsinClassifier.classify(v)
+      val result = IsinClassifier.classify(v)
       // Assert
-      assertEquals(1,types.size)
-      assertTrue(types.contains(ISINType))
+      assertEquals(ISINType, result.get)
     })
   }
 
@@ -209,9 +202,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = IsinClassifier.classify(v)
+      val result = IsinClassifier.classify(v)
       // Assert
-      assertEquals(0,types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -234,10 +227,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = RicClassifier.classify(v)
+      val result = RicClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(RICType))
+      assertEquals(RICType, result.get)
     })
   }
 
@@ -248,9 +240,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = RicClassifier.classify(v)
+      val result = RicClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -261,10 +253,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = SedolClassifier.classify(v)
+      val result = SedolClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(SEDOLType))
+      assertEquals(SEDOLType, result.get)
     })
   }
 
@@ -275,9 +266,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = SedolClassifier.classify(v)
+      val result = SedolClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 
@@ -288,10 +279,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-     val types =  TimeStampClassifier.classify(v)
+     val result =  TimeStampClassifier.classify(v)
       // Assert
-      assertEquals(1, types.size)
-      assertTrue(types.contains(TimeStampType))
+      assertEquals(TimeStampType, result.get)
     })
   }
 
@@ -302,9 +292,9 @@ class Classifier {
 
     values.foreach(v => {
       // Act
-      val types = TimeStampClassifier.classify(v)
+      val result = TimeStampClassifier.classify(v)
       // Assert
-      assertEquals(0, types.size)
+      assertEquals(None, result)
     })
   }
 }
