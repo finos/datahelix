@@ -65,8 +65,7 @@ class DEGApp @Inject()(
       SemanticTypeField(c.name, mostRelevantType)
     })
 
-    val profiler = new Profiler(typedData, userInput)
-    val profile = profiler.profile()
+    val profile = Profiler.profile(typedData, userInput)
     val profileDTO = ProfileDTOMapper.Map(profile)
 
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)

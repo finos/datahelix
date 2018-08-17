@@ -19,8 +19,7 @@ class SemanticInferenceTest {
   def givenCSVFile_whenProfile_thenFieldsHaveBeenInferred() {
     val path = getClass.getClassLoader.getResource("semantic.csv").getPath
     val df = fileReader.readCSV(new File(path))
-    val profiler = new Profiler(df, List[SemanticTypeField]())
-    val profile = profiler.profile()
+    val profile = Profiler.profile(df, List[SemanticTypeField]())
     assertEquals(profile.Fields.size, 6)
   }
 }
