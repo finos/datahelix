@@ -2,27 +2,32 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.IRuleDecision;
+import com.scottlogic.deg.generator.decisiontree.IRuleDecisionTree;
+import com.scottlogic.deg.generator.decisiontree.IRuleOption;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeWalker {
     private final ConstraintReducer constraintReducer;
-    private final FieldSpecMerger fieldSpecMerger;
+    private final RowSpecMerger rowSpecMerger;
 
     public DecisionTreeWalker(
             ConstraintReducer constraintReducer,
-            FieldSpecMerger fieldSpecMerger
+            RowSpecMerger rowSpecMerger
     ) {
         this.constraintReducer = constraintReducer;
-        this.fieldSpecMerger = fieldSpecMerger;
+        this.rowSpecMerger = rowSpecMerger;
     }
 
     public Stream<RowSpec> walk(IDecisionTreeProfile decisionTreeProfile) {
@@ -45,16 +50,27 @@ public class DecisionTreeWalker {
         }
 
         private Stream<RowSpec> walk(IRuleOption option, RowSpec accumulatedSpec) {
-            final RowSpec nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
+            final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
             );
 
-            final RowSpec mergedRowSpec = RowSpec.merge(
-                    fieldSpecMerger,
-                    nominalRowSpec,
-                    accumulatedSpec
+            if (!nominalRowSpec.isPresent()) {
+                return Stream.empty();
+            }
+
+            final Optional<RowSpec> mergedRowSpecOpt = rowSpecMerger.merge(
+                    Arrays.asList(
+                            nominalRowSpec.get(),
+                            accumulatedSpec
+                    )
             );
+
+            if (!mergedRowSpecOpt.isPresent()) {
+                return Stream.empty();
+            }
+
+            final RowSpec mergedRowSpec = mergedRowSpecOpt.get();
 
             if (option.getDecisions().isEmpty()) {
                 return Stream.of(mergedRowSpec);
