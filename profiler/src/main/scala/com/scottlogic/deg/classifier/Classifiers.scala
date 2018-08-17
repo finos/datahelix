@@ -3,12 +3,13 @@ package com.scottlogic.deg.classifier
 import com.scottlogic.deg.classifier.simple_classifier._
 import org.apache.spark.rdd.RDD
 
-import scala.collection.mutable.ListBuffer
+object Classifiers {
+  val classifiers: List[Classifier] = List(
+    CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, IntegerClassifier, NameClassifier,
+    RICClassifier, ISINClassifier, SEDOLClassifier, StringClassifier, TimeStampClassifier
+  )
 
-object MainClassifier extends Classifier {
-  private val classifiers : List[Classifier] = List[Classifier](CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, IntegerClassifier, NameClassifier, RICClassifier, ISINClassifier, SEDOLClassifier, StringClassifier, TimeStampClassifier)
-
-  override def classify(input: String): Set[SemanticType] = {
+  def classify(input: String): Set[SemanticType] = {
     if (input == null) {
       Set(NullType)
     } else {

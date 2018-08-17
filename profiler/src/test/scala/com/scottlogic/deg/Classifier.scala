@@ -10,7 +10,7 @@ class Classifier {
   @Test
   def givenNullValue_whenClassify_thenNullTypeIsReturned(): Unit = {
     // Act
-    val types = MainClassifier.classify(null)
+    val types = Classifiers.classify(null)
     // Assert
     assertEquals(1, types.size)
     assertEquals(Set(NullType), types)

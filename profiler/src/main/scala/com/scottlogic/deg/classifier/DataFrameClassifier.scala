@@ -10,14 +10,14 @@ class DataFrameClassifier(df: DataFrame) {
     df.schema.fields.map(field => {
       var typeList = df.rdd.flatMap(row => {
         val fieldValue = row.getAs[String](field.name)
-        MainClassifier.classify(fieldValue)
+        Classifiers.classify(fieldValue)
       }).groupBy(identity)
         .mapValues(_.size)
         .collectAsMap()
 
       // TODO: Check if there is a better way to trigger Enum identification
       if(typeList.keys.size == 1 && (typeList.contains(StringType) || typeList.contains(IntegerType))){
-        val multiValueTypes = MainClassifier.classifyMany(df.rdd.map(row => row.getAs[String](field.name)))
+        val multiValueTypes = Classifiers.classifyMany(df.rdd.map(row => row.getAs[String](field.name)))
         multiValueTypes.foreach(semanticType => {
           typeList = typeList + (semanticType -> df.rdd.count().toInt)
         });
