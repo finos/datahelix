@@ -4,14 +4,15 @@ import com.scottlogic.deg.classifier.{Classifier, SemanticType, TimeStampType}
 
 object TimeStampClassifier extends Classifier {
   private val dateFormats : List[String] = List[String]("^\\d{4}[-/]\\d{2}[-/]\\d{2}.*$", "^\\d{2}[-/]\\d{2}[-/]\\d{4}.*$")
+  override val semanticType: SemanticType = TimeStampType
 
-  override def classify(input: String): Set[SemanticType] = {
+  override def matches(input: String): Boolean = {
     for (dateFormat <- dateFormats){
       if(input.matches(dateFormat)){
-        return Set(TimeStampType)
+        return true
       }
     }
 
-    Set()
+    false
   }
 }

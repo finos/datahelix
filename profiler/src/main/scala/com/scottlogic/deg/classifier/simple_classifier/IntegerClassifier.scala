@@ -4,12 +4,6 @@ import com.scottlogic.deg.classifier.{Classifier, IntegerType, SemanticType}
 
 object IntegerClassifier extends Classifier {
   private val integerRegex : String = "^[-]?\\d+$"
-
-  override def classify(input: String): Set[SemanticType] = {
-    if (input.matches(integerRegex)) {
-      Set(IntegerType)
-    } else {
-      Set()
-    }
-  }
+  override val semanticType: SemanticType = IntegerType
+  override def matches(input: String): Boolean = input.matches(integerRegex)
 }
