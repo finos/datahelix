@@ -1,4 +1,6 @@
-package com.scottlogic.deg.classifier
+package com.scottlogic.deg.classifier.simple_classifier
+
+import com.scottlogic.deg.classifier.SemanticType
 
 trait Classifier {
   val semanticType: SemanticType
