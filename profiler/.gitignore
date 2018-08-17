@@ -8,3 +8,4 @@ output/
 */main/resources/*.csv
 spark-warehouse
 output/
+test-output.json
