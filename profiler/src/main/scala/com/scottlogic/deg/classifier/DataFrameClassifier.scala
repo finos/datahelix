@@ -33,6 +33,7 @@ object DataFrameClassifier {
   def detectSchema(analysis: Seq[ClassifiedField]): StructType = {
     StructType(
       analysis.map(f => {
+        // TODO: Filter out types with less than 50% match ratio before maxBy
         val mostPreciseType = f.typeDetectionCount.toArray.maxBy(t => t._1.rank)._1
         val nullable = f.typeDetectionCount.keySet.contains(NullType)
         StructField(f.name, SqlTypeMapper.Map(mostPreciseType), nullable)
