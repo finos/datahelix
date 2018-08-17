@@ -62,7 +62,7 @@ class DEGApp @Inject()(
     val userInput = classification.map(c => {
       val total = c.typeDetectionCount(StringType).toFloat
       val mostRelevantType = c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).maxBy(t => (t._1.rank, t._2 / total))._1
-      SemanticTypeField(c.fieldName, mostRelevantType)
+      SemanticTypeField(c.name, mostRelevantType)
     })
 
     val profiler = new Profiler(newDataFrame, userInput)
@@ -83,15 +83,17 @@ class DEGApp @Inject()(
 
   // Present the result to users. Displaying results with more than 50% of value matches, sorted by ranking.
   def printClassification(classification: Seq[ClassifiedField]): Unit = {
-    Console.println("Results")
-    Console.println("--")
-    classification.foreach(c => {
-      Console.print(s"Field ${c.fieldName} -> ")
-      val total = c.typeDetectionCount(StringType).toFloat
-      c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._1.rank, t._2 / total)).reverse.foreach(t => {
-        Console.println(f"${t._1} (${t._2 / total * 100.00}%.2f%%). ")
+    println("Field classification results:")
+
+    classification.foreach(field => {
+      println(field.name)
+      val total = field.typeDetectionCount(StringType).toFloat
+
+      field.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._1.rank, t._2 / total)).reverse.foreach(t => {
+        println(f"\t${t._1} ${t._2 / total * 100.00}%.2f%%")
       })
-      Console.println("--")
+
+      println
     })
   }
 }

@@ -34,7 +34,7 @@ object DataFrameClassifier {
       val isNull = detectedTypes.count(e => e == NullType) >= 0
       val totalCount = detectionCount.toArray.maxBy(t => t._2)._2
       val sortedDetectionCount = f.typeDetectionCount.toArray.sortBy(t => t._1.rank)
-      StructField(f.fieldName, SqlTypeMapper.Map(sortedDetectionCount.last._1), isNull)
+      StructField(f.name, SqlTypeMapper.Map(sortedDetectionCount.last._1), isNull)
     })
     StructType(fields)
   }
