@@ -759,9 +759,9 @@ class ConstraintReducerTest {
         List<IConstraint> constraints = Collections.singletonList(
                 new StringHasLengthConstraint(field, 5)
         );
-        ConstraintReducer testObject = new ConstraintReducer();
+        ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -789,9 +789,9 @@ class ConstraintReducerTest {
         List<IConstraint> constraints = Collections.singletonList(
                 new IsStringLongerThanConstraint(field, 5)
         );
-        ConstraintReducer testObject = new ConstraintReducer();
+        ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -819,9 +819,9 @@ class ConstraintReducerTest {
         List<IConstraint> constraints = Collections.singletonList(
                 new IsStringShorterThanConstraint(field, 5)
         );
-        ConstraintReducer testObject = new ConstraintReducer();
+        ConstraintReducer testObject = constraintReducer;
 
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
