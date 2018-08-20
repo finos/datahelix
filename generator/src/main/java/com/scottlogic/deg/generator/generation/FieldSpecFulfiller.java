@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         // if *always* null, output a sequence just containing null
         if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator(null);
+            return new SpecificDataPointsIterator(Collections.singleton(null));
         }
 
         // if there's a whitelist, we can just output that
