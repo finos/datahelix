@@ -740,33 +740,33 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
+        Assert.assertThat("Fieldspec string restrictions has regex",
                 outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
     }
 
-    @Test
-    void shouldReduceMatchesRegexWithSingletonConstraint() {
-        final Field field = new Field("test0");
-
-        String infinitePattern = ".*";
-        String singletonPattern = "thisisatest";
-
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-        List<IConstraint> constraints = Arrays.asList(
-                new MatchesRegexConstraint(field, Pattern.compile(infinitePattern)),
-                new MatchesRegexConstraint(field, Pattern.compile(singletonPattern)));
-        ConstraintReducer testObject = new ConstraintReducer();
-
-        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
-
-        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
-        FieldSpec outputSpec = testOutput.getSpecForField(field);
-
-        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
-                Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
-        Assert.assertTrue("Fieldspec string restrictions automaton has nodes",
-                outputSpec.getStringRestrictions().automaton.getNumberOfStates() > 1);
-    }
+//    @Test
+//    void shouldReduceMatchesRegexWithSingletonConstraint() {
+//        final Field field = new Field("test0");
+//
+//        String infinitePattern = ".*";
+//        String singletonPattern = "thisisatest";
+//
+//        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+//        List<IConstraint> constraints = Arrays.asList(
+//                new MatchesRegexConstraint(field, Pattern.compile(infinitePattern)),
+//                new MatchesRegexConstraint(field, Pattern.compile(singletonPattern)));
+//        ConstraintReducer testObject = new ConstraintReducer();
+//
+//        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+//
+//        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+//        FieldSpec outputSpec = testOutput.getSpecForField(field);
+//
+//        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+//                Is.is(IsNull.notNullValue()));
+//        Assert.assertThat("Fieldspec string restrictions have an automaton",
+//                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+//        Assert.assertTrue("Fieldspec string restrictions automaton has nodes",
+//                outputSpec.getStringRestrictions().automaton.getNumberOfStates() > 1);
+//    }
 }

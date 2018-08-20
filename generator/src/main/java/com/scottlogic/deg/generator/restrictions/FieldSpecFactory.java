@@ -1,15 +1,15 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.reducer.AutomatonFactory;
-import dk.brics.automaton.Automaton;
+import com.scottlogic.deg.generator.utils.IStringGenerator;
+import com.scottlogic.deg.generator.utils.StringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
 public class FieldSpecFactory {
-    private final AutomatonFactory automatonFactory = new AutomatonFactory();
+
 
     public FieldSpec construct(IConstraint constraint) {
         final FieldSpec fieldSpec = new FieldSpec();
@@ -204,11 +204,13 @@ public class FieldSpecFactory {
             stringRestrictions = new StringRestrictions();
             fieldSpec.setStringRestrictions(stringRestrictions);
         }
-        final Automaton nominalAutomaton = automatonFactory.fromPattern(constraint.regex);
-        final Automaton automaton = negate
+        final IStringGenerator nominalAutomaton = new StringGenerator(constraint.regex.toString());
+        final IStringGenerator automaton = negate
                 ? nominalAutomaton.complement()
                 : nominalAutomaton;
+
         stringRestrictions.automaton = automaton;
+
     }
 
     private BigDecimal numberToBigDecimal(Number number) {
