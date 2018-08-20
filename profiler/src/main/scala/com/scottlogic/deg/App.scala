@@ -88,7 +88,7 @@ class DEGApp @Inject()(
       println(field.name)
       val total = field.typeDetectionCount(StringType).toFloat
 
-      field.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).sortBy(t => (t._1.rank, t._2 / total)).reverse.foreach(t => {
+      field.typeDetectionCount.toSeq.sortBy(_._2).reverse.foreach(t => {
         println(f"\t${t._1} ${t._2 / total * 100.00}%.2f%%")
       })
 
