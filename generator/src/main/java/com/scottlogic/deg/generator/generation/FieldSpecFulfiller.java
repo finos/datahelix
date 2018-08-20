@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 
 interface IDataPointSource {
-    Iterator<Object> iterator(GenerationConfig config);
+    Iterator<DataBagValue> iterator(GenerationConfig config);
 }
 
 public class FieldSpecFulfiller implements IDataPointSource {
@@ -25,32 +26,30 @@ public class FieldSpecFulfiller implements IDataPointSource {
     }
 
     @Override
-    public Iterator<Object> iterator(GenerationConfig config) {
+    public Iterator<DataBagValue> iterator(GenerationConfig config) {
         IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
 
         Iterator<Object> iterator =
-            internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
-            ? // the field's infinite and we're configured to sample from infinite sequences
-                new LimitingIteratorDecorator<>(internalIterator, 1)
-            : internalIterator;
+                internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
+                        ? // the field's infinite and we're configured to sample from infinite sequences
+                        new LimitingIteratorDecorator<>(internalIterator, 1)
+                        : internalIterator;
 
         iterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
-            ? // the field could be null; output one at the start of the sequence and filter any out from later
+                ? // the field could be null; output one at the start of the sequence and filter any out from later
                 new ValuePrependingIterator<>(
-                    new FilteringIterator<>(iterator, null), null)
-            : iterator;
-
-        iterator = this.spec.getFormatRestrictions() != null
-                ? new FormattingIterator<>(iterator, this.spec.getFormatRestrictions().formatString)
+                        new FilteringIterator<>(iterator, null), null)
                 : iterator;
 
-        return iterator;
+        return (Iterator<DataBagValue>) new FormattingIterator(
+                iterator,
+                this.spec.getFormatRestrictions() != null ? this.spec.getFormatRestrictions().formatString : null);
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         // if *always* null, output a sequence just containing null
         if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator((Object)null);
+            return new SpecificDataPointsIterator((Object) null);
         }
 
         // if there's a whitelist, we can just output that
@@ -58,8 +57,8 @@ public class FieldSpecFulfiller implements IDataPointSource {
             Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
             if (whitelist != null) {
                 return config.shouldEnumerateSetsExhaustively()
-                    ? new SetMembershipIterator(whitelist.iterator())
-                    : new SpecificDataPointsIterator(whitelist.iterator().next());
+                        ? new SetMembershipIterator(whitelist.iterator())
+                        : new SpecificDataPointsIterator(whitelist.iterator().next());
             }
         }
 

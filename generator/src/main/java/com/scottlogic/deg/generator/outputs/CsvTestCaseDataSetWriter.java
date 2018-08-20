@@ -7,8 +7,9 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
-public class TestCaseDataSetWriter implements IDataSetWriter {
+public class CsvTestCaseDataSetWriter implements IDataSetWriter {
 
     @Override
     public String write(
@@ -30,8 +31,11 @@ public class TestCaseDataSetWriter implements IDataSetWriter {
                 .print(fileAbsolutePath, Charset.forName("UTF-8"));
 
         try {
-            for (TestCaseDataRow row : dataset.enumerateRows()) {
-                writer.printRecord(row.values);
+            for (TestCaseDataRow row : dataset) {
+                writer.printRecord(row.values.stream().map(x -> {
+
+                    return x.format != null ? String.format(x.format, x.value) : x.value;
+                }).collect(Collectors.toList()));
             }
         }
         finally {

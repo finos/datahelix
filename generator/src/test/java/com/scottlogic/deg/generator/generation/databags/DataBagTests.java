@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -14,11 +15,11 @@ class DataBagTests {
         Field idField = new Field("id");
 
         // ACT
-        DataBag objectUnderTest = DataBag.startBuilding().set(idField, 3).build();
+        DataBag objectUnderTest = DataBag.startBuilding().set(idField, new DataBagValue(3)).build();
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.get(idField),
+            objectUnderTest.get(idField).value,
             equalTo(3));
     }
 
@@ -31,8 +32,8 @@ class DataBagTests {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> DataBag.startBuilding()
-                .set(idField, 3)
-                .set(idField, 3)
+                .set(idField, new DataBagValue(3))
+                .set(idField, new DataBagValue(3))
                 .build());
     }
 
@@ -55,19 +56,19 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding().set(idField, 3).build();
-        DataBag dataBag2 = DataBag.startBuilding().set(priceField, 4).build();
+        DataBag dataBag1 = DataBag.startBuilding().set(idField, new DataBagValue(3)).build();
+        DataBag dataBag2 = DataBag.startBuilding().set(priceField, new DataBagValue(4)).build();
 
         // ACT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.get(idField),
+            mergedDataBag.get(idField).value,
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.get(priceField),
+            mergedDataBag.get(priceField).value,
             equalTo(4));
     }
 
@@ -78,12 +79,12 @@ class DataBagTests {
         Field priceField = new Field("price");
 
         DataBag dataBag1 = DataBag.startBuilding()
-            .set(idField, "foo")
+            .set(idField, new DataBagValue("foo"))
             .build();
 
         DataBag dataBag2 = DataBag.startBuilding()
-            .set(idField, "foo")
-            .set(priceField, 4)
+            .set(idField, new DataBagValue("foo"))
+            .set(priceField, new DataBagValue(4))
             .build();
 
         // ACT / ASSERT

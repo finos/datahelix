@@ -17,7 +17,7 @@ public class TestCaseGenerationResultWriter {
     private final IDataSetWriter datasetWriter;
 
     public TestCaseGenerationResultWriter() {
-        this.datasetWriter = new JsonTestCaseDataWriter();
+        this.datasetWriter = new CsvTestCaseDataSetWriter();
         this.manifestWriter = new ManifestWriter();
     }
 

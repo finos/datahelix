@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 
@@ -15,8 +16,9 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 
-public class JsonTestCaseDataWriter implements IDataSetWriter {
+public class JsonTestCaseDataSetWriter implements IDataSetWriter {
 
     ObjectMapper mapper = new ObjectMapper();
     SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -29,14 +31,22 @@ public class JsonTestCaseDataWriter implements IDataSetWriter {
 
         ArrayNode arrayNode = mapper.createArrayNode();
 
-        String[] fieldNames = profile.fields.stream().map(x -> x.name).toArray(String[]::new);
-
-        for (TestCaseDataRow row : dataset.enumerateRows()) {
+        for (TestCaseDataRow row : dataset) {
             ObjectNode rowNode = mapper.createObjectNode();
 
-            int i = 0;
-            for (Object value : row.values) {
-                String fieldName = fieldNames[i];
+            Iterator<DataBagValue> dataBagIterator = row.values.iterator();
+            Iterator<Field> fieldNameIterator = profile.fields.iterator();
+
+            while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
+
+                String fieldName = fieldNameIterator.next().name;
+                DataBagValue dataBagValue = dataBagIterator.next();
+
+                Object value = dataBagValue.value;
+
+                if(dataBagValue.format != null){
+                    value = String.format(dataBagValue.format, value);
+                }
 
                 if (value == null) {
                     rowNode.put(fieldName, (String) null);
@@ -50,7 +60,6 @@ public class JsonTestCaseDataWriter implements IDataSetWriter {
                     rowNode.put(fieldName, value.toString());
                 }
 
-                i++;
             }
 
             arrayNode.add(rowNode);
