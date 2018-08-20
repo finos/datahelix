@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.decisiontree;
 
 class RuleDecisionTree implements IRuleDecisionTree {
     private final String description;
-    private final RuleOption root;
+    private final IRuleOption root;
 
-    RuleDecisionTree(String description, RuleOption root) {
+    RuleDecisionTree(String description, IRuleOption root) {
         this.description = description;
         this.root = root;
     }

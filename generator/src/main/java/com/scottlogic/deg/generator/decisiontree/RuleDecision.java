@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class RuleDecision implements IRuleDecision {
@@ -10,11 +11,8 @@ public class RuleDecision implements IRuleDecision {
         this.options = options;
     }
 
-    RuleDecision(IRuleOption optionA, IRuleOption optionB) {
-        ArrayList<IRuleOption> options = new ArrayList<>();
-        options.add(optionA);
-        options.add(optionB);
-        this.options = options;
+    public RuleDecision(IRuleOption... options) {
+        this.options = Arrays.asList(options);
     }
 
     @Override

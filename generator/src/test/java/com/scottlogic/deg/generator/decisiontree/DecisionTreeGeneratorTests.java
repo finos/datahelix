@@ -5,20 +5,119 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
-import static org.hamcrest.CoreMatchers.containsString;
+import static com.scottlogic.deg.generator.AssertingMatcher.matchesAssertions;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 
 class DecisionTreeGeneratorTests {
+    private final Field fieldA = new Field("A");
+    private final Field fieldB = new Field("B");
+    private final Field fieldC = new Field("C");
+
+    private final List<Rule> rules = new ArrayList<>();
+    private IDecisionTreeProfile actualOutput = null;
+
+    private void beforeEach() {
+        rules.clear();
+        actualOutput = null;
+    }
+
+    private void givenRule(IConstraint... constraints) {
+        this.rules.add(new Rule("", Arrays.asList(constraints)));
+    }
+
+    private IDecisionTreeProfile getActualOutput() {
+        if (this.actualOutput == null) {
+            Profile testInput = new Profile(
+                new ProfileFields(
+                    Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
+                this.rules);
+
+            DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+
+            this.actualOutput = testObject.analyse(testInput);
+        }
+
+        return this.actualOutput;
+    }
+
+    private IRuleOption getResultingRootOption() {
+        return this.getActualOutput().getDecisionTrees().iterator().next()
+            .getRootOption();
+    }
+
+    private Matcher<IConstraint> sameNegation(IConstraint expected) {
+        return matchesAssertions(
+            "Both constraints negate the same constraint instance",
+            (actual, subAssert) -> {
+                subAssert.assertThat(actual, instanceOf(NotConstraint.class));
+                subAssert.assertThat(expected, instanceOf(NotConstraint.class));
+                subAssert.assertThat(
+                    ((NotConstraint) actual).negatedConstraint,
+                    sameInstance(((NotConstraint)expected).negatedConstraint));
+            });
+    }
+
+    private Matcher<IRuleOption> isEquivalentTo(IRuleOption expected) {
+        return matchesAssertions(
+            "matching option node",
+            (actual, asserter) -> {
+                asserter.assertThat( // Should have same number of atomic constraints
+                    actual.getAtomicConstraints().size(),
+                    equalTo(expected.getAtomicConstraints().size()));
+
+                asserter.assertThat( // Should have same atomic constraints
+                    actual.getAtomicConstraints(),
+                    containsInAnyOrder(
+                        expected.getAtomicConstraints().stream()
+                            .map(c -> anyOf(sameInstance(c), sameNegation(c)))
+                            .collect(Collectors.toList())));
+
+                asserter.assertThat( // Should have same number of decisions
+                    actual.getDecisions().size(),
+                    equalTo(expected.getDecisions().size()));
+
+                asserter.assertThat( // Should have same decisions
+                    actual.getDecisions(),
+                    containsInAnyOrder(
+                        expected.getDecisions().stream()
+                            .map(this::isEquivalentTo)
+                            .collect(Collectors.toList())));
+            });
+    }
+
+    private Matcher<IRuleDecision> isEquivalentTo(IRuleDecision expected) {
+        return matchesAssertions(
+            "matching decision node",
+            (actual, asserter) -> {
+                asserter.assertThat( // Should have same number of options
+                    actual.getOptions().size(),
+                    equalTo(expected.getOptions().size()));
+
+                asserter.assertThat( // Should have same options
+                    actual.getOptions(),
+                    containsInAnyOrder(
+                        expected.getOptions().stream()
+                            .map(this::isEquivalentTo)
+                            .collect(Collectors.toList())));
+            });
+    }
+
+
     @Test
     void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
@@ -300,61 +399,33 @@ class DecisionTreeGeneratorTests {
     // Checks IF (A OR B) THEN C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
-        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(orConstraint0, constraintC);
-        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        IConstraint aEquals10 = new IsEqualToConstantConstraint(fieldA, 10);
+        IConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10);
+        IConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
-        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
+        givenRule(
+            new ConditionalConstraint(
+                aEquals10.or(aGreaterThan10),
+                bGreaterThan20));
 
-        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-                outputRule.getRootOption().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-                outputRule.getRootOption().getDecisions().size(), Is.is(1));
-        // First decision level
-        IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
-        Assert.assertThat("First decision has two options", decision.getOptions().size(), Is.is(2));
-        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
-        // First option: C AND (A OR B)
-        Assert.assertThat("First option of first decision has one atomic constraint",
-                options.get(0).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Atomic constraint of first option of first decision is constraint C",
-                options.get(0).getAtomicConstraints().contains(constraintC), Is.is(true));
-        Assert.assertThat("First option of first decision has one subdecision",
-                options.get(0).getDecisions().size(), Is.is(1));
-        IRuleDecision decision2 = options.get(0).getDecisions().iterator().next();
-        Assert.assertThat("Subdecision has two options", decision2.getOptions().size(), Is.is(2));
-        List<IRuleOption> optionsNested = new ArrayList<>(decision2.getOptions());
-        Assert.assertThat("First option of subdecision has one atomic constraint",
-                optionsNested.get(0).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Atomic constraint of first option of subdecision is constraint A",
-                optionsNested.get(0).getAtomicConstraints().contains(constraintA), Is.is(true));
-        Assert.assertThat("First option of subdecision has no further subdecisions",
-                optionsNested.get(0).getDecisions().size(), Is.is(0));
-        Assert.assertThat("Second option of subdecision has one atomic constraint",
-                optionsNested.get(1).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Atomic constraint of second option of subdecision is constraint B",
-                optionsNested.get(1).getAtomicConstraints().contains(constraintB), Is.is(true));
-        Assert.assertThat("Second option of subdecision has no further subdecisions",
-                optionsNested.get(1).getDecisions().size(), Is.is(0));
-        // Second option: ¬(A OR B) = ¬A AND ¬B
-        Assert.assertThat("Second option of first decision has two atomic constraints",
-                options.get(1).getAtomicConstraints().size(), Is.is(2));
-        List<IConstraint> constraints = new ArrayList<>(options.get(1).getAtomicConstraints());
-        Assert.assertThat("First atomic constraint of second option of first decision is a NOT constraint",
-                constraints.get(0) instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Second atomic constraint of second option of first decision is a NOT constraint",
-                constraints.get(1) instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("First atomic constraint of second option of first decision is negated constraint A",
-                ((NotConstraint)constraints.get(0)).negatedConstraint, Is.is(constraintA));
-        Assert.assertThat("Second atomic constraint of second option of first decision is negated constraint B",
-                ((NotConstraint)constraints.get(1)).negatedConstraint, Is.is(constraintB));
+        Assert.assertThat(
+            getResultingRootOption(),
+            isEquivalentTo(
+                new RuleOption(
+                    Collections.emptyList(),
+                    Arrays.asList(
+                        new RuleDecision(
+                            /* OPTION 1: AND(C, OR(A, B))  */
+                            new RuleOption(
+                                Arrays.asList(bGreaterThan20),
+                                Collections.singleton(
+                                    new RuleDecision(
+                                        new RuleOption(aEquals10),
+                                        new RuleOption(aGreaterThan10)))),
+                            /* OPTION 2: AND(¬A, ¬B)  */
+                            new RuleOption(
+                                new NotConstraint(aEquals10),
+                                new NotConstraint(aGreaterThan10)))))));
     }
 
     // NOT (IF A THEN B ELSE C) - edge case
@@ -408,32 +479,22 @@ class DecisionTreeGeneratorTests {
     // NOT (IF A THEN B) - other edge case
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintWithoutElseClauseIsPresent() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
-        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB);
-        NotConstraint notConstraint = new NotConstraint(conditionalConstraint);
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        // ¬(A -> B)
+        // is equivalent to
+        // A ^ ¬B
 
-        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
+        IConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
+        IConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
-        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        // No decisions; only A AND (NOT B) constraints.
-        Assert.assertThat("Decision tree root has two atomic constraints",
-                outputRule.getRootOption().getAtomicConstraints().size(), Is.is(2));
-        Assert.assertThat("Decision tree root has no decisions", outputRule.getRootOption().getDecisions().size(),
-                Is.is(0));
-        Iterator<IConstraint> constraintIterator = outputRule.getRootOption().getAtomicConstraints().iterator();
-        IConstraint testConstraint = constraintIterator.next();
-        Assert.assertThat("First atomic constraint is constraint A", testConstraint, Is.is(constraintA));
-        Assert.assertEquals(constraintA, testConstraint);
-        testConstraint = constraintIterator.next();
-        Assert.assertThat("Second atomic constraint is a NOT constraint", testConstraint instanceof NotConstraint,
-                Is.is(true));
-        Assert.assertThat("Second atomic constraint is NOT(constraint B)",
-                ((NotConstraint)testConstraint).negatedConstraint, Is.is(constraintB));
+        IConstraint inputRule = new NotConstraint(new ConditionalConstraint(aEqualTo10, bGreaterThan20));
+
+        RuleOption expectedOutput = new RuleOption(
+            aEqualTo10,
+            bGreaterThan20.isFalse());
+
+        givenRule(inputRule);
+
+        Assert.assertThat(getResultingRootOption(), isEquivalentTo(expectedOutput));
     }
 
     // NOT (NOT A)
@@ -502,45 +563,25 @@ class DecisionTreeGeneratorTests {
     // (A OR B) OR C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
-        OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(orConstraint0, constraintC));
-        Rule testRule = new Rule("test", Collections.singletonList(orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        IConstraint constraintA = new IsEqualToConstantConstraint(fieldA, 10);
+        IConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20);
+        IConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10);
 
-        IDecisionTreeProfile testOutput = testObject.analyse(testInput);
+        givenRule(
+            new OrConstraint(
+                new OrConstraint(constraintA, constraintB),
+                constraintC));
 
-        IRuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        // Result should be 1 decision with 3 options
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-                outputRule.getRootOption().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-                outputRule.getRootOption().getDecisions().size(), Is.is(1));
-        IRuleDecision decision = outputRule.getRootOption().getDecisions().iterator().next();
-        Assert.assertThat("Decision contains three options", decision.getOptions().size(), Is.is(3));
-        List<IRuleOption> options = new ArrayList<>(decision.getOptions());
-        Assert.assertThat("First option contains one atomic constraint",
-                options.get(0).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("First option contains no subdecisions", options.get(0).getDecisions().size(),
-                Is.is(0));
-        Assert.assertThat("Atomic constraint of first option is constraint A",
-                options.get(0).getAtomicConstraints().contains(constraintA), Is.is(true));
-        Assert.assertThat("Second option contains one atomic constraint",
-                options.get(1).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Second option contains no subdecisions", options.get(1).getDecisions().size(),
-                Is.is(0));
-        Assert.assertThat("Atomic constraint of second option is constraint B",
-                options.get(1).getAtomicConstraints().contains(constraintB), Is.is(true));
-        Assert.assertThat("Third option contains one atomic constraint",
-                options.get(2).getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Third option contains no subdecisions", options.get(2).getDecisions().size(),
-                Is.is(0));
-        Assert.assertThat("Atomic constraint of third option is constraint C",
-                options.get(2).getAtomicConstraints().contains(constraintC), Is.is(true));
+        Assert.assertThat(
+            getResultingRootOption(),
+            isEquivalentTo(
+                new RuleOption(
+                    Collections.emptyList(),
+                    Arrays.asList(
+                        new RuleDecision(
+                            new RuleOption(constraintA),
+                            new RuleOption(constraintB),
+                            new RuleOption(constraintC))))));
     }
 
     private void assertOptionContainsSingleConstraint(IRuleOption option, IConstraint constraint) {
@@ -552,3 +593,4 @@ class DecisionTreeGeneratorTests {
         Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 }
+
