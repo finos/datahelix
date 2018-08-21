@@ -1,21 +1,19 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-class RuleDecisionTree implements IRuleDecisionTree {
+public class RuleDecisionTree {
     private final String description;
-    private final IRuleOption root;
+    private final RuleOption root;
 
-    RuleDecisionTree(String description, IRuleOption root) {
+    RuleDecisionTree(String description, RuleOption root) {
         this.description = description;
         this.root = root;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
-    public IRuleOption getRootOption() {
+    public RuleOption getRootOption() {
         return root;
     }
 }

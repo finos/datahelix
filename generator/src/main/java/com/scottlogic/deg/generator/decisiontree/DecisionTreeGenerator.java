@@ -11,7 +11,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     @Override
-    public IDecisionTreeProfile analyse(Profile profile) {
+    public DecisionTreeProfile analyse(Profile profile) {
         return new DecisionTreeProfile(
             profile.fields,
             profile.rules.stream()
@@ -137,13 +137,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     class DecisionTreeSimplifier {
-        public IRuleDecisionTree simplify(IRuleDecisionTree originalTree) {
+        public RuleDecisionTree simplify(RuleDecisionTree originalTree) {
             return new RuleDecisionTree(
                 originalTree.getDescription(),
                 simplify(originalTree.getRootOption()));
         }
 
-        private IRuleOption simplify(IRuleOption option) {
+        private RuleOption simplify(RuleOption option) {
             if (option.getDecisions().isEmpty())
                 return option;
 
@@ -154,11 +154,11 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                     .collect(Collectors.toList()));
         }
 
-        private IRuleDecision simplify(IRuleDecision decision) {
-            List<IRuleOption> newOptions = new ArrayList<>();
+        private RuleDecision simplify(RuleDecision decision) {
+            List<RuleOption> newOptions = new ArrayList<>();
 
-            for (IRuleOption existingOption : decision.getOptions()) {
-                IRuleOption simplifiedOption = simplify(existingOption);
+            for (RuleOption existingOption : decision.getOptions()) {
+                RuleOption simplifiedOption = simplify(existingOption);
 
                 // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
                 // this helps simplify the sorts of trees that come from eg A OR (B OR C)

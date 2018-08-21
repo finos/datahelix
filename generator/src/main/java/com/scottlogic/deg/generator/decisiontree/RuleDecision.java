@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class RuleDecision implements IRuleDecision {
-    private final Collection<? extends IRuleOption> options;
+public class RuleDecision {
+    private final Collection<? extends RuleOption> options;
 
-    public RuleDecision(Collection<? extends IRuleOption> options) {
+    public RuleDecision(Collection<? extends RuleOption> options) {
         this.options = options;
     }
 
-    public RuleDecision(IRuleOption... options) {
+    public RuleDecision(RuleOption... options) {
         this.options = Arrays.asList(options);
     }
 
-    @Override
-    public Collection<IRuleOption> getOptions() {
+    public Collection<RuleOption> getOptions() {
         return new ArrayList<>(options);
     }
 }

@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class RuleOption implements IRuleOption {
+public class RuleOption {
     public static RuleOption merge(Iterator<RuleOption> optionsIterator) {
         Collection<IConstraint> atomicConstraints = new ArrayList<>();
-        Collection<IRuleDecision> decisions = new ArrayList<>();
+        Collection<RuleDecision> decisions = new ArrayList<>();
 
         while (optionsIterator.hasNext()) {
             RuleOption option = optionsIterator.next();
@@ -23,14 +23,14 @@ public class RuleOption implements IRuleOption {
     }
 
     private final Collection<IConstraint> atomicConstraints;
-    private final Collection<IRuleDecision> decisions;
+    private final Collection<RuleDecision> decisions;
 
-    public RuleOption(Collection<IConstraint> atomicConstraints, Collection<IRuleDecision> decisions) {
+    RuleOption(Collection<IConstraint> atomicConstraints, Collection<RuleDecision> decisions) {
         this.atomicConstraints =  new ArrayList<>(atomicConstraints);
         this.decisions = new ArrayList<>(decisions);
     }
 
-    public RuleOption(IConstraint... atomicConstraints) {
+    RuleOption(IConstraint... atomicConstraints) {
         this(
             Arrays.asList(atomicConstraints),
             new ArrayList<>());
@@ -42,19 +42,11 @@ public class RuleOption implements IRuleOption {
         atomicConstraints.add(singleAtomicConstraint);
     }
 
-    RuleOption(IRuleDecision singleDecision) {
-        atomicConstraints = new ArrayList<>();
-        decisions = new ArrayList<>();
-        decisions.add(singleDecision);
-    }
-
-    @Override
     public Collection<IConstraint> getAtomicConstraints() {
         return new ArrayList<>(atomicConstraints);
     }
 
-    @Override
-    public Collection<IRuleDecision> getDecisions() {
+    public Collection<RuleDecision> getDecisions() {
         return new ArrayList<>(decisions);
     }
 

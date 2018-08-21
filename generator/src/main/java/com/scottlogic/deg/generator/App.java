@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -50,7 +50,7 @@ class GenerationEngine {
             return;
         }
 
-        final IDecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
+        final DecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
 
         final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile);
 
