@@ -55,9 +55,11 @@ class DecisionTreeGeneratorTests {
         return this.actualOutput;
     }
 
-    private ConstraintNode getResultingRootOption() {
-        return this.getActualOutput().getDecisionTrees().iterator().next()
+    private void treeRootShouldMatch(ConstraintNode expected) {
+        ConstraintNode actual = this.getActualOutput().getDecisionTrees().iterator().next()
             .getRootNode();
+
+        Assert.assertThat(actual, isEquivalentTo(expected));
     }
 
     private Matcher<IConstraint> sameNegation(IConstraint expected) {
@@ -66,6 +68,11 @@ class DecisionTreeGeneratorTests {
             (actual, subAssert) -> {
                 subAssert.assertThat(actual, instanceOf(NotConstraint.class));
                 subAssert.assertThat(expected, instanceOf(NotConstraint.class));
+
+                // this method doesn't stop when an assertion fails, so we need to do this check to stop invalid casts below
+                if (!(actual instanceof NotConstraint && expected instanceof NotConstraint))
+                    return;
+
                 subAssert.assertThat(
                     ((NotConstraint) actual).negatedConstraint,
                     sameInstance(((NotConstraint)expected).negatedConstraint));
@@ -116,6 +123,8 @@ class DecisionTreeGeneratorTests {
                             .collect(Collectors.toList())));
             });
     }
+
+
 
 
     @Test
@@ -408,24 +417,22 @@ class DecisionTreeGeneratorTests {
                 aEquals10.or(aGreaterThan10),
                 bGreaterThan20));
 
-        Assert.assertThat(
-            getResultingRootOption(),
-            isEquivalentTo(
-                new ConstraintNode(
-                    Collections.emptyList(),
-                    Arrays.asList(
-                        new DecisionNode(
-                            /* OPTION 1: AND(C, OR(A, B))  */
-                            new ConstraintNode(
-                                Arrays.asList(bGreaterThan20),
-                                Collections.singleton(
-                                    new DecisionNode(
-                                        new ConstraintNode(aEquals10),
-                                        new ConstraintNode(aGreaterThan10)))),
-                            /* OPTION 2: AND(¬A, ¬B)  */
-                            new ConstraintNode(
-                                new NotConstraint(aEquals10),
-                                new NotConstraint(aGreaterThan10)))))));
+        treeRootShouldMatch(
+            new ConstraintNode(
+                Collections.emptyList(),
+                Arrays.asList(
+                    new DecisionNode(
+                        /* OPTION 1: AND(C, OR(A, B))  */
+                        new ConstraintNode(
+                            Arrays.asList(bGreaterThan20),
+                            Collections.singleton(
+                                new DecisionNode(
+                                    new ConstraintNode(aEquals10),
+                                    new ConstraintNode(aGreaterThan10)))),
+                        /* OPTION 2: AND(¬A, ¬B)  */
+                        new ConstraintNode(
+                            new NotConstraint(aEquals10),
+                            new NotConstraint(aGreaterThan10))))));
     }
 
     // NOT (IF A THEN B ELSE C) - edge case
@@ -486,78 +493,46 @@ class DecisionTreeGeneratorTests {
         IConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
         IConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
-        IConstraint inputRule = new NotConstraint(new ConditionalConstraint(aEqualTo10, bGreaterThan20));
+        givenRule(
+            new NotConstraint(
+                new ConditionalConstraint(aEqualTo10, bGreaterThan20)));
 
-        ConstraintNode expectedOutput = new ConstraintNode(
-            aEqualTo10,
-            bGreaterThan20.isFalse());
-
-        givenRule(inputRule);
-
-        Assert.assertThat(getResultingRootOption(), isEquivalentTo(expectedOutput));
+        treeRootShouldMatch(
+            new ConstraintNode(
+                aEqualTo10,
+                bGreaterThan20.isFalse()));
     }
 
     // NOT (NOT A)
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        NotConstraint notConstraint0 = new NotConstraint(constraintA);
-        NotConstraint notConstraint1 = new NotConstraint(notConstraint0);
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        IConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        givenRule(
+            new NotConstraint(
+                new NotConstraint(aEqualTo10)));
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        // Result should just be A.
-        Assert.assertThat("Decision tree root contains one atomic constraint",
-                outputRule.getRootNode().getAtomicConstraints().size(), Is.is(1));
-        Assert.assertThat("Decision tree root contains no decisions",
-                outputRule.getRootNode().getDecisions().size(), Is.is(0));
-        Assert.assertThat("Atomic constraint of decision tree root is constraint A",
-                outputRule.getRootNode().getAtomicConstraints().contains(constraintA), Is.is(true));
+        treeRootShouldMatch(
+            new ConstraintNode(aEqualTo10));
     }
 
     // NOT (A AND B)
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
-        NotConstraint notConstraint = new NotConstraint(new AndConstraint(Arrays.asList(constraintA, constraintB)));
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        IConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
+        IConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        givenRule(
+            new NotConstraint(
+                new AndConstraint(
+                    aEqualTo10,
+                    bGreaterThan20)));
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        // Result should be (NOT A) OR (NOT B)
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-                outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-                outputRule.getRootNode().getDecisions().size(), Is.is(1));
-        DecisionNode decision = outputRule.getRootNode().getDecisions().iterator().next();
-        Assert.assertThat("Decision has two options", decision.getOptions().size(), Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decision.getOptions());
-        Assert.assertThat("First option has one atomic constraint", options.get(0).getAtomicConstraints().size(),
-                Is.is(1));
-        Assert.assertThat("First option has no subdecisions", options.get(0).getDecisions().size(), Is.is(0));
-        IConstraint testConstraint = options.get(0).getAtomicConstraints().iterator().next();
-        Assert.assertThat("Atomic constraint of first option is a NOT constraint",
-                testConstraint instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Atomic constraint of first option is NOT(Constraint A)",
-                ((NotConstraint)testConstraint).negatedConstraint, Is.is(constraintA));
-        Assert.assertThat("Second option has one atomic constraint", options.get(1).getAtomicConstraints().size(),
-                Is.is(1));
-        Assert.assertThat("Second option has no subdecisions", options.get(1).getDecisions().size(), Is.is(0));
-        testConstraint = options.get(1).getAtomicConstraints().iterator().next();
-        Assert.assertThat("Atomic constraint of second option is a NOT constraint",
-                testConstraint instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Atomic constraint of second option is NOT(Constraint B)",
-                ((NotConstraint)testConstraint).negatedConstraint, Is.is(constraintB));
+        treeRootShouldMatch(
+            new ConstraintNode(
+                new DecisionNode(
+                    new ConstraintNode(aEqualTo10.isFalse()),
+                    new ConstraintNode(bGreaterThan20.isFalse()))));
     }
 
     // (A OR B) OR C
@@ -572,16 +547,14 @@ class DecisionTreeGeneratorTests {
                 new OrConstraint(constraintA, constraintB),
                 constraintC));
 
-        Assert.assertThat(
-            getResultingRootOption(),
-            isEquivalentTo(
-                new ConstraintNode(
-                    Collections.emptyList(),
-                    Arrays.asList(
-                        new DecisionNode(
-                            new ConstraintNode(constraintA),
-                            new ConstraintNode(constraintB),
-                            new ConstraintNode(constraintC))))));
+        treeRootShouldMatch(
+            new ConstraintNode(
+                Collections.emptyList(),
+                Arrays.asList(
+                    new DecisionNode(
+                        new ConstraintNode(constraintA),
+                        new ConstraintNode(constraintB),
+                        new ConstraintNode(constraintC)))));
     }
 
     private void assertOptionContainsSingleConstraint(ConstraintNode option, IConstraint constraint) {
@@ -592,5 +565,97 @@ class DecisionTreeGeneratorTests {
                 option.getAtomicConstraints().contains(constraint), Is.is(true));
         Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
-}
 
+    @Test
+    void whenViolatingPositiveAtomic() {
+        IConstraint baseConstraint = new IsNullConstraint(fieldA);
+
+        givenRule(
+            new ViolateConstraint(
+                baseConstraint));
+
+        treeRootShouldMatch(
+            new ConstraintNode(
+                new NotConstraint(baseConstraint)));
+    }
+
+    @Test
+    void whenViolatingNegativeAtomic() {
+        IConstraint baseConstraint = new IsNullConstraint(fieldA);
+
+        givenRule(
+            new ViolateConstraint(
+                new NotConstraint(
+                    baseConstraint)));
+
+        treeRootShouldMatch(
+            new ConstraintNode(
+                baseConstraint));
+    }
+
+    @Test
+    void whenViolatingOrConstraint() {
+        IConstraint aIsNull = new IsNullConstraint(fieldA);
+        IConstraint bEquals2 = new IsEqualToConstantConstraint(fieldB, 2);
+
+        givenRule(
+            new ViolateConstraint(
+                new OrConstraint(aIsNull, bEquals2)));
+
+        treeRootShouldMatch(
+            new ConstraintNode(
+                new NotConstraint(aIsNull),
+                new NotConstraint(bEquals2)));
+    }
+
+    @Test
+    void whenViolatingAndConstraint() {
+        IConstraint aIsNull = new IsNullConstraint(fieldA);
+        IConstraint bEquals2 = new IsEqualToConstantConstraint(fieldB, 2);
+        IConstraint cGreaterThan0 = new IsGreaterThanConstantConstraint(fieldC, 0);
+
+        givenRule(
+            new ViolateConstraint(
+                new AndConstraint(aIsNull, bEquals2, cGreaterThan0)));
+
+        treeRootShouldMatch(
+            new ConstraintNode(
+                new DecisionNode(
+                    new ConstraintNode(
+                        new NotConstraint(aIsNull),
+                        bEquals2,
+                        cGreaterThan0),
+                    new ConstraintNode(
+                        aIsNull,
+                        new NotConstraint(bEquals2),
+                        cGreaterThan0),
+                    new ConstraintNode(
+                        aIsNull,
+                        bEquals2,
+                        new NotConstraint(cGreaterThan0)))));
+    }
+
+    @Test
+    void whenViolatingIfConstraint() {
+        IConstraint aIsNull = new IsNullConstraint(fieldA);
+        IConstraint bEquals2 = new IsEqualToConstantConstraint(fieldB, 2);
+        IConstraint cGreaterThan0 = new IsGreaterThanConstantConstraint(fieldC, 0);
+
+        givenRule(
+            new ViolateConstraint(
+                new ConditionalConstraint(
+                    aIsNull,
+                    bEquals2,
+                    cGreaterThan0)));
+
+        treeRootShouldMatch(
+            new ConstraintNode(
+                new DecisionNode(
+                    new ConstraintNode(
+                        aIsNull,
+                        bEquals2.isFalse()),
+                    new ConstraintNode(
+                        aIsNull.isFalse(),
+                        cGreaterThan0.isFalse()))));
+    }
+}
