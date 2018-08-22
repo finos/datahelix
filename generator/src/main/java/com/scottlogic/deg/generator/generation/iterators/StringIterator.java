@@ -2,26 +2,25 @@ package com.scottlogic.deg.generator.generation.iterators;
 
 import com.scottlogic.deg.generator.utils.IStringGenerator;
 import com.scottlogic.deg.generator.utils.StringGenerator;
-import dk.brics.automaton.Automaton;
 
 import java.util.*;
 
 public class StringIterator implements IFieldSpecIterator {
 
-    IStringGenerator automaton;
+    IStringGenerator stringGenerator;
     Iterator<String> iterator;
 
-    public StringIterator(IStringGenerator automaton, Set<Object> blacklist) {
+    public StringIterator(IStringGenerator stringGenerator, Set<Object> blacklist) {
 
         if (blacklist != null && blacklist.size() > 0) {
-            StringGenerator blacklistAutomaton = new StringGenerator(getBlacklistAutomaton(blacklist));
+            StringGenerator blacklistGenerator = StringGenerator.createFromBlacklist(blacklist);
 
-            this.automaton = automaton.intersect(blacklistAutomaton);
+            this.stringGenerator = stringGenerator.intersect(blacklistGenerator);
         } else {
-            this.automaton = automaton;
+            this.stringGenerator = stringGenerator;
         }
 
-        this.iterator = this.automaton.generateAllValues();
+        this.iterator = this.stringGenerator.generateAllValues();
     }
 
     @Override
@@ -34,18 +33,9 @@ public class StringIterator implements IFieldSpecIterator {
         return this.iterator.next();
     }
 
-    private Automaton getBlacklistAutomaton(Set<Object> blacklist) {
-        String[] blacklistStrings = new String[blacklist.size()];
-        int i = 0;
-        for (Object obj : blacklist) {
-            blacklistStrings[i] = obj.toString();
-        }
-        return Automaton.makeStringUnion(blacklistStrings).complement();
-    }
-
     @Override
     public boolean isInfinite() {
-        return !automaton.IsFinite();
+        return !stringGenerator.IsFinite();
     }
 
 

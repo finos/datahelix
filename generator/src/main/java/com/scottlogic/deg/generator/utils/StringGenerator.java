@@ -13,7 +13,22 @@ public class StringGenerator implements IStringGenerator {
 
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
-    private Random random = new Random(0);
+    public static StringGenerator createFromBlacklist(Set<Object> blacklist) {
+        return StringGenerator.createFromBlacklist(blacklist, new RandomGenerator());
+    }
+
+    public static StringGenerator createFromBlacklist(Set<Object> blacklist, IRandomGenerator random) {
+        String[] blacklistStrings = new String[blacklist.size()];
+        int i = 0;
+        for (Object obj : blacklist) {
+            blacklistStrings[i] = obj.toString();
+        }
+        Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
+
+        return new StringGenerator(automaton, random);
+    }
+
+    private IRandomGenerator random;
     private Automaton automaton;
     private Node rootNode;
     private boolean isRootNodeBuilt;
@@ -29,7 +44,7 @@ public class StringGenerator implements IStringGenerator {
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
 
-    public StringGenerator(String regexStr) {
+    public StringGenerator(String regexStr, IRandomGenerator random) {
         final String requotedStr = escapeCharacters(regexStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
 
@@ -37,23 +52,30 @@ public class StringGenerator implements IStringGenerator {
         generatedAutomaton.expandSingleton();
 
         this.automaton = generatedAutomaton;
+        this.random = random;
     }
 
-    public StringGenerator(Automaton automaton) {
+    public StringGenerator(String regexStr) {
+
+        this(regexStr, new RandomGenerator());
+    }
+
+    private StringGenerator(Automaton automaton, IRandomGenerator random) {
         this.automaton = automaton;
+        this.random = random;
     }
 
     @Override
-    public IStringGenerator intersect(IStringGenerator stringAutomaton) {
-        Automaton b = ((StringGenerator) stringAutomaton).automaton;
+    public IStringGenerator intersect(IStringGenerator stringGenerator) {
+        Automaton b = ((StringGenerator) stringGenerator).automaton;
         Automaton merged = automaton.intersection(b);
 
-        return new StringGenerator(merged);
+        return new StringGenerator(merged, this.random);
     }
 
     @Override
     public IStringGenerator complement() {
-        return new StringGenerator(this.automaton.clone().complement());
+        return new StringGenerator(this.automaton.clone().complement(), this.random);
     }
 
     @Override
@@ -68,9 +90,9 @@ public class StringGenerator implements IStringGenerator {
 
     @Override
     public Iterator<String> generateAllValues() {
-       return this.IsFinite()
-               ? new StringGenerator.FiniteStringAutomatonIterator(this)
-               : new StringGenerator.InfiniteStringAutomatonIterator(this);
+        return this.IsFinite()
+                ? new StringGenerator.FiniteStringAutomatonIterator(this)
+                : new StringGenerator.InfiniteStringAutomatonIterator(this);
     }
 
     @Override
@@ -83,12 +105,13 @@ public class StringGenerator implements IStringGenerator {
         return generateRandomStringInternal("", automaton.getInitialState(), 1, maxChars);
     }
 
+    @Override
     public String getMatchedString(int indexOrder) {
         buildRootNode();
         if (indexOrder == 0)
             indexOrder = 1;
 
-        if(indexOrder > rootNode.matchedStringIdx){
+        if (indexOrder > rootNode.matchedStringIdx) {
             return null;
         }
         String result = buildStringFromNode(rootNode, indexOrder);
@@ -98,7 +121,7 @@ public class StringGenerator implements IStringGenerator {
 
     @Override
     public long getValueCount() {
-        if(!this.IsFinite()){
+        if (!this.IsFinite()) {
             throw new UnsupportedOperationException("Cannot count matches for a non-finite expression.");
         }
 
@@ -307,12 +330,12 @@ public class StringGenerator implements IStringGenerator {
         }
     }
 
-    private class FiniteStringAutomatonIterator implements Iterator<String>{
+    private class FiniteStringAutomatonIterator implements Iterator<String> {
 
         private final StringGenerator stringGenerator;
         private int currentIndex;
 
-        public FiniteStringAutomatonIterator (StringGenerator stringGenerator) {
+        FiniteStringAutomatonIterator(StringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
             currentIndex = 0;
         }
@@ -325,16 +348,16 @@ public class StringGenerator implements IStringGenerator {
 
         @Override
         public String next() {
-            currentIndex ++; // starts at 1
+            currentIndex++; // starts at 1
             return stringGenerator.getMatchedString(currentIndex);
         }
     }
 
-    private class InfiniteStringAutomatonIterator implements Iterator<String>{
+    private class InfiniteStringAutomatonIterator implements Iterator<String> {
 
         private final StringGenerator stringGenerator;
 
-        public InfiniteStringAutomatonIterator (StringGenerator stringGenerator) {
+        InfiniteStringAutomatonIterator(StringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
         }
 

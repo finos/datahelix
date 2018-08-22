@@ -15,10 +15,10 @@ public class StringRestrictionsMerger {
         if (right == null)
             return left;
 
-        IStringGenerator mergedAutomaton = left.automaton.intersect(right.automaton);
+        IStringGenerator mergedStringBuilder = left.stringGenerator.intersect(right.stringGenerator);
 
         StringRestrictions newRestrictions = new StringRestrictions();
-        newRestrictions.automaton = mergedAutomaton;
+        newRestrictions.stringGenerator = mergedStringBuilder;
 
         return newRestrictions;
     }

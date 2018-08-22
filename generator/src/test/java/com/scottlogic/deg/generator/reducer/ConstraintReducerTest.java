@@ -3,9 +3,7 @@ package com.scottlogic.deg.generator.reducer;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.generation.iterators.StringIterator;
 import com.scottlogic.deg.generator.restrictions.*;
-import dk.brics.automaton.Automaton;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -741,7 +739,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec string restrictions has regex",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
     }
 
 //    @Test
@@ -764,9 +762,9 @@ class ConstraintReducerTest {
 //
 //        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
 //                Is.is(IsNull.notNullValue()));
-//        Assert.assertThat("Fieldspec string restrictions have an automaton",
-//                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
-//        Assert.assertTrue("Fieldspec string restrictions automaton has nodes",
-//                outputSpec.getStringRestrictions().automaton.getNumberOfStates() > 1);
+//        Assert.assertThat("Fieldspec string restrictions have an stringGenerator",
+//                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
+//        Assert.assertTrue("Fieldspec string restrictions stringGenerator has nodes",
+//                outputSpec.getStringRestrictions().stringGenerator.getNumberOfStates() > 1);
 //    }
 }

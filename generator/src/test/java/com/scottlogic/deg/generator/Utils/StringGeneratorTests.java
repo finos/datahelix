@@ -24,21 +24,21 @@ public class StringGeneratorTests {
     @Test
     void shouldGenerateStringsInLexicographicalOrder() {
 
-        IStringGenerator generator = new StringGenerator("aa(bb|cc)d?");
+        IStringGenerator generator = new StringGenerator("aa(bb|cc)d?", new TestRandomGenerator());
 
-        Assert.assertThat(((StringGenerator) generator).getValueCount(), Is.is(4L));
+        Assert.assertThat(generator.getValueCount(), Is.is(4L));
 
         Assert.assertThat(generator.IsFinite(), Is.is(true));
-        Assert.assertThat(((StringGenerator) generator).getMatchedString(1), Is.is("aabb"));
-        Assert.assertThat(((StringGenerator) generator).getMatchedString(2), Is.is("aabbd"));
-        Assert.assertThat(((StringGenerator) generator).getMatchedString(3), Is.is("aacc"));
-        Assert.assertThat(((StringGenerator) generator).getMatchedString(4), Is.is("aaccd"));
+        Assert.assertThat(generator.getMatchedString(1), Is.is("aabb"));
+        Assert.assertThat(generator.getMatchedString(2), Is.is("aabbd"));
+        Assert.assertThat(generator.getMatchedString(3), Is.is("aacc"));
+        Assert.assertThat(generator.getMatchedString(4), Is.is("aaccd"));
     }
 
     @Test
     void shouldCorrectlyIterateFiniteResults() {
 
-        IStringGenerator generator = new StringGenerator("xyz(xyz)?xyz");
+        IStringGenerator generator = new StringGenerator("xyz(xyz)?xyz", new TestRandomGenerator());
 
         List<String> actual = new ArrayList<>();
         generator.generateAllValues().forEachRemaining(actual::add);
@@ -49,8 +49,8 @@ public class StringGeneratorTests {
     @Test
     void shouldCorrectlyReplaceCharacterGroups() {
 
-        IStringGenerator generator = new StringGenerator("\\d");
-        String actual = ((StringGenerator) generator).getMatchedString(1);
+        IStringGenerator generator = new StringGenerator("\\d", new TestRandomGenerator());
+        String actual = generator.getMatchedString(1);
 
         Assert.assertThat(actual, Is.is("0"));
 
@@ -59,7 +59,7 @@ public class StringGeneratorTests {
     @Test
     void shouldCorrectlyIterateInfiniteResults() {
 
-        IStringGenerator generator = new StringGenerator("[a]+");
+        IStringGenerator generator = new StringGenerator("[a]+", new TestRandomGenerator());
 
         Iterator<String> iterator = generator.generateAllValues();
 
@@ -74,7 +74,7 @@ public class StringGeneratorTests {
 
     @Test
     void shouldExpandSingletons() {
-        IStringGenerator generator = new StringGenerator("THIS_IS_A_SINGLETON");
+        IStringGenerator generator = new StringGenerator("THIS_IS_A_SINGLETON", new TestRandomGenerator());
         Assert.assertThat(generator.canProduceValues(), Is.is(true));
         Assert.assertThat(generator.getValueCount(), Is.is(1L));
     }
@@ -82,8 +82,8 @@ public class StringGeneratorTests {
     @Test
     void shouldProduceIntersection() {
 
-        IStringGenerator infiniteGenerator = new StringGenerator("[a-z]+");
-        IStringGenerator rangeGenerator = new StringGenerator("(a|b){1,10}");
+        IStringGenerator infiniteGenerator = new StringGenerator("[a-z]+", new TestRandomGenerator());
+        IStringGenerator rangeGenerator = new StringGenerator("(a|b){1,10}", new TestRandomGenerator());
 
         IStringGenerator actual = infiniteGenerator.intersect(rangeGenerator);
 
@@ -99,7 +99,7 @@ public class StringGeneratorTests {
     @Test
     void shouldProduceCompliment() {
 
-        IStringGenerator limitedRangeGenerator = new StringGenerator("[a-m]");
+        IStringGenerator limitedRangeGenerator = new StringGenerator("[a-m]", new TestRandomGenerator());
         IStringGenerator complimentedGenerator = limitedRangeGenerator.complement();
 
         Assert.assertThat(complimentedGenerator.IsFinite(), Is.is(false));
@@ -113,7 +113,7 @@ public class StringGeneratorTests {
 
     @Test
     void shouldThrowWhenCountingNonFinite() {
-        IStringGenerator infiniteGenerator = new StringGenerator(".*");
+        IStringGenerator infiniteGenerator = new StringGenerator(".*", new TestRandomGenerator());
 
         assertThrows(UnsupportedOperationException.class, () -> infiniteGenerator.getValueCount());
     }

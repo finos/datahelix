@@ -204,12 +204,12 @@ public class FieldSpecFactory {
             stringRestrictions = new StringRestrictions();
             fieldSpec.setStringRestrictions(stringRestrictions);
         }
-        final IStringGenerator nominalAutomaton = new StringGenerator(constraint.regex.toString());
-        final IStringGenerator automaton = negate
-                ? nominalAutomaton.complement()
-                : nominalAutomaton;
+        IStringGenerator nominalStringGenerator = new StringGenerator(constraint.regex.toString());
+        nominalStringGenerator = negate
+                ? nominalStringGenerator.complement()
+                : nominalStringGenerator;
 
-        stringRestrictions.automaton = automaton;
+        stringRestrictions.stringGenerator = nominalStringGenerator;
 
     }
 

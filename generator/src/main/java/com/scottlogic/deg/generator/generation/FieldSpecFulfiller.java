@@ -44,7 +44,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         // if *always* null, output a sequence just containing null
         if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator(null);
+            return new SpecificDataPointsIterator((Object) null);
         }
 
         // if there's a whitelist, we can just output that
@@ -62,10 +62,10 @@ public class FieldSpecFulfiller implements IDataPointSource {
             return new NumericIterator(spec.getNumericRestrictions(), getBlacklist());
         }
 
-        // if there're reasonably populated string restrictions, output from automaton
+        // if there're reasonably populated string restrictions, output from stringGenerator
         StringRestrictions stringRestrictions = spec.getStringRestrictions();
-        if (stringRestrictions != null && (stringRestrictions.automaton != null)) {
-            StringIterator stringIterator = new StringIterator(stringRestrictions.automaton, getBlacklist());
+        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
+            StringIterator stringIterator = new StringIterator(stringRestrictions.stringGenerator, getBlacklist());
             return stringIterator; //simplifyStringIterator(stringIterator);
         }
 
