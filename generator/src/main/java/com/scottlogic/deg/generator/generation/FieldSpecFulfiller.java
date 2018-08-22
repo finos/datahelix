@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
-import com.scottlogic.deg.generator.utils.FormattingIterator;
+import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
@@ -41,7 +41,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
                         new FilteringIterator<>(iterator, null), null)
                 : iterator;
 
-        return (Iterator<DataBagValue>) new FormattingIterator(
+        return (Iterator<DataBagValue>) new DataBagValueIterator(
                 iterator,
                 this.spec.getFormatRestrictions() != null ? this.spec.getFormatRestrictions().formatString : null);
     }
