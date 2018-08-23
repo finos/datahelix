@@ -7,10 +7,9 @@ import com.scottlogic.deg.generator.utils.StringGenerator;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
-
-
     public FieldSpec construct(IConstraint constraint) {
         final FieldSpec fieldSpec = new FieldSpec();
         apply(fieldSpec, constraint, false);
@@ -46,6 +45,12 @@ public class FieldSpecFactory {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+        } else if (constraint instanceof StringHasLengthConstraint) {
+            apply(fieldSpec, (StringHasLengthConstraint) constraint, negate);
+        } else if (constraint instanceof IsStringLongerThanConstraint) {
+            apply(fieldSpec, (IsStringLongerThanConstraint) constraint, negate);
+        } else if (constraint instanceof IsStringShorterThanConstraint) {
+            apply(fieldSpec, (IsStringShorterThanConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -170,8 +175,7 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
@@ -192,25 +196,40 @@ public class FieldSpecFactory {
         }
         if (negate) {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
-        }
-        else {
+        } else {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
     }
 
     private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions == null) {
-            stringRestrictions = new StringRestrictions();
-            fieldSpec.setStringRestrictions(stringRestrictions);
-        }
-        IStringGenerator nominalStringGenerator = new StringGenerator(constraint.regex.toString());
+        applyPattern(fieldSpec, constraint.regex, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".*{%s}", constraint.referenceValue));
+        applyPattern(fieldSpec, regex, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsStringShorterThanConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".*{0,%d}", constraint.referenceValue + 1));
+        applyPattern(fieldSpec, regex, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, IsStringLongerThanConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".*{%d,}", constraint.referenceValue + 1));
+        applyPattern(fieldSpec, regex, negate);
+    }
+
+    private void applyPattern(FieldSpec fieldSpec, Pattern pattern, boolean negate) {
+        StringRestrictions stringRestrictions = new StringRestrictions();
+        fieldSpec.setStringRestrictions(stringRestrictions);
+
+        IStringGenerator nominalStringGenerator = new StringGenerator(pattern.toString());
         nominalStringGenerator = negate
-                ? nominalStringGenerator.complement()
-                : nominalStringGenerator;
+            ? nominalStringGenerator.complement()
+            : nominalStringGenerator;
 
         stringRestrictions.stringGenerator = nominalStringGenerator;
-
     }
 
     private BigDecimal numberToBigDecimal(Number number) {

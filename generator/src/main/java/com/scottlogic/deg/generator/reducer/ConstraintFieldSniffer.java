@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.reducer;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
 
-class ConstraintFieldSniffer {
+public class ConstraintFieldSniffer {
 
     ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
         final Field field = detectField(constraint);
@@ -24,13 +24,13 @@ class ConstraintFieldSniffer {
         } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
             return ((IsLessThanOrEqualToConstantConstraint) constraint).field;
         } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
-            return ((IsAfterConstantDateTimeConstraint)constraint).field;
+            return ((IsAfterConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
-            return ((IsAfterOrEqualToConstantDateTimeConstraint)constraint).field;
+            return ((IsAfterOrEqualToConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
-            return ((IsBeforeConstantDateTimeConstraint)constraint).field;
+            return ((IsBeforeConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
-            return ((IsBeforeOrEqualToConstantDateTimeConstraint)constraint).field;
+            return ((IsBeforeOrEqualToConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsInSetConstraint) {
             return ((IsInSetConstraint) constraint).field;
         } else if (constraint instanceof IsNullConstraint) {
@@ -39,6 +39,12 @@ class ConstraintFieldSniffer {
             return ((IsOfTypeConstraint) constraint).field;
         } else if (constraint instanceof MatchesRegexConstraint) {
             return ((MatchesRegexConstraint) constraint).field;
+        } else if (constraint instanceof StringHasLengthConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
+        } else if (constraint instanceof IsStringLongerThanConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
+        } else if (constraint instanceof IsStringShorterThanConstraint) {
+            return ((StringHasLengthConstraint) constraint).field;
         } else {
             throw new UnsupportedOperationException();
         }
