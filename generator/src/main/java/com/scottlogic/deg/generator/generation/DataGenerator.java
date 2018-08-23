@@ -43,7 +43,7 @@ public class DataGenerator implements IDataGenerator {
             allDataBagSource.generate(GenerationConfig.exhaustivePresets),
             dataBag -> new TestCaseDataRow(
                 profile.fields.stream()
-                    .map(dataBag::get)
+                    .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
         return new TestCaseGenerationResult(

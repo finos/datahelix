@@ -15,11 +15,11 @@ class DataBagTests {
         Field idField = new Field("id");
 
         // ACT
-        DataBag objectUnderTest = DataBag.startBuilding().set(idField, new DataBagValue(3)).build();
+        DataBag objectUnderTest = DataBag.startBuilding().set(idField, 3).build();
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.get(idField).value,
+            objectUnderTest.getValue(idField),
             equalTo(3));
     }
 
@@ -32,8 +32,8 @@ class DataBagTests {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> DataBag.startBuilding()
-                .set(idField, new DataBagValue(3))
-                .set(idField, new DataBagValue(3))
+                .set(idField, 3)
+                .set(idField, 3)
                 .build());
     }
 
@@ -47,7 +47,7 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> objectUnderTest.get(idField));
+            () -> objectUnderTest.getValueAndFormat(idField));
     }
 
     @Test
@@ -64,11 +64,11 @@ class DataBagTests {
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.get(idField).value,
+            mergedDataBag.getValue(idField),
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.get(priceField).value,
+            mergedDataBag.getValue(priceField),
             equalTo(4));
     }
 
@@ -79,34 +79,17 @@ class DataBagTests {
         Field priceField = new Field("price");
 
         DataBag dataBag1 = DataBag.startBuilding()
-            .set(idField, new DataBagValue("foo"))
+            .set(idField, "foo")
             .build();
 
         DataBag dataBag2 = DataBag.startBuilding()
-            .set(idField, new DataBagValue("foo"))
-            .set(priceField, new DataBagValue(4))
+            .set(idField, "foo")
+            .set(priceField, 4)
             .build();
 
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> DataBag.merge(dataBag1, dataBag2));
-    }
-
-    // because a previous implementation, using Collectors.toBag, failed on these inputs
-    @Test
-    void mergeShouldHandleNullValues() {
-        // ARRANGE
-        Field idField = new Field("id");
-
-        DataBag dataBag1 = DataBag.empty;
-        DataBag dataBag2 = DataBag.startBuilding().set(idField, null).build();
-
-        // ACT / ASSERT
-        DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
-
-        Assert.assertThat(
-            mergedDataBag.get(idField),
-            equalTo(null));
     }
 }

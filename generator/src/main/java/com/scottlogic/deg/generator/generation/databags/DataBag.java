@@ -18,7 +18,14 @@ public class DataBag {
         this.fieldToValue = fieldToValue;
     }
 
-    public DataBagValue get(Field field) {
+    public Object getValue(Field field) {
+        if (!this.fieldToValue.containsKey(field))
+            throw new IllegalStateException("Databag has no value stored for " + field);
+
+        return this.fieldToValue.get(field).value;
+    }
+
+    public DataBagValue getValueAndFormat(Field field) {
         if (!this.fieldToValue.containsKey(field))
             throw new IllegalStateException("Databag has no value stored for " + field);
 
@@ -55,6 +62,10 @@ public class DataBag {
             this.fieldToValue.put(field, value);
 
             return this;
+        }
+
+        public DataBagBuilder set(Field field, Object value) {
+            return this.set(field, new DataBagValue(value));
         }
 
         public DataBag build() {

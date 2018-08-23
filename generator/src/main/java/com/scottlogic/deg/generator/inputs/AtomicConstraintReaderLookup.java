@@ -15,6 +15,12 @@ public class AtomicConstraintReaderLookup {
     static {
         typeCodeToSpecificReader = new HashMap<>();
 
+        add(AtomicConstraintType.FORMATTEDAS.toString(),
+                (dto, fields) ->
+                        new FormatConstraint(
+                            fields.getByName(dto.field),
+                            (String) dto.value));
+
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields) ->
                         new IsEqualToConstantConstraint(

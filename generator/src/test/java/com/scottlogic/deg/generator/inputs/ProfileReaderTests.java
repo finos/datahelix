@@ -171,7 +171,7 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
-                        "        { \"field\": \"foo\", \"format\": \"%.5s\" }" +
+                        "        { \"field\": \"foo\", \"is\": \"formattedAs\", \"value\": \"%.5s\" }" +
                         "    ]" +
                         "}");
 

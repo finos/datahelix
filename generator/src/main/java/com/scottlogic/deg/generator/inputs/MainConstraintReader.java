@@ -64,10 +64,6 @@ class MainConstraintReader implements IConstraintReader {
                     : null);
         }
 
-        if(dto.format != null) {
-            return new FormatConstraint(fields.getByName(dto.field), dto.format);
-        }
-
         throw new InvalidProfileException("Couldn't interpret constraint");
     }
 }

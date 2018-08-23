@@ -397,9 +397,9 @@
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(2, testRow.values.size());
 //        ArrayList<Object> values = new ArrayList<>(testRow.values);
-//        String v = (String)values.get(0);
+//        String v = (String)values.getValueAndFormat(0);
 //        Assert.assertTrue(validValues0.contains(v));
-//        v = (String)values.get(1);
+//        v = (String)values.getValueAndFormat(1);
 //        Assert.assertTrue(validValues1.contains(v));
 //    }
 //
@@ -430,11 +430,11 @@
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(2, testRow.values.size());
 //            ArrayList<Object> values = new ArrayList<>(testRow.values);
-//            String v = (String)values.get(0);
+//            String v = (String)values.getValueAndFormat(0);
 //            Assert.assertTrue(validValues0.contains(v));
-//            v = (String)values.get(1);
+//            v = (String)values.getValueAndFormat(1);
 //            Assert.assertTrue(validValues1.contains(v));
-//            String combination = values.get(0) + "/" + values.get(1);
+//            String combination = values.getValueAndFormat(0) + "/" + values.getValueAndFormat(1);
 //            Assert.assertTrue(allPossibleCombinations.contains(combination));
 //            Assert.assertFalse(seenCombinations.contains(combination));
 //            seenCombinations.add(combination);
@@ -658,7 +658,7 @@
 //    private Map<Field, FieldSpec> makeMap(List<Field> fields, List<FieldSpec> fieldSpecs) {
 //        HashMap<Field, FieldSpec> map = new HashMap<>();
 //        for (int i = 0; i < fields.size() && i < fieldSpecs.size(); ++i) {
-//            map.put(fields.get(i), fieldSpecs.get(i));
+//            map.put(fields.getValueAndFormat(i), fieldSpecs.getValueAndFormat(i));
 //        }
 //        return map;
 //    }

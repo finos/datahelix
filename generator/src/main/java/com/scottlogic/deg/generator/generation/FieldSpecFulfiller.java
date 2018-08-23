@@ -29,21 +29,23 @@ public class FieldSpecFulfiller implements IDataPointSource {
     public Iterator<DataBagValue> iterator(GenerationConfig config) {
         IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
 
-        Iterator<Object> iterator =
+        Iterator<Object> valuesIterator =
                 internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
                         ? // the field's infinite and we're configured to sample from infinite sequences
                         new LimitingIteratorDecorator<>(internalIterator, 1)
                         : internalIterator;
 
-        iterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
+        valuesIterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
                 ? // the field could be null; output one at the start of the sequence and filter any out from later
                 new ValuePrependingIterator<>(
-                        new FilteringIterator<>(iterator, null), null)
-                : iterator;
+                        new FilteringIterator<>(valuesIterator, null), null)
+                : valuesIterator;
 
-        return (Iterator<DataBagValue>) new DataBagValueIterator(
-                iterator,
-                this.spec.getFormatRestrictions() != null ? this.spec.getFormatRestrictions().formatString : null);
+        return new DataBagValueIterator(
+                valuesIterator,
+                this.spec.getFormatRestrictions() != null
+                    ? this.spec.getFormatRestrictions().formatString
+                    : null);
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
@@ -84,10 +86,8 @@ public class FieldSpecFulfiller implements IDataPointSource {
     }
 
     private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
-        return stringIterator;
-
-//        if (stringIterator.hasNext())
-//            return new SpecificDataPointsIterator(stringIterator.next());
-//        return SpecificDataPointsIterator.createEmpty();
+        if (stringIterator.hasNext())
+            return new SpecificDataPointsIterator(stringIterator.next());
+        return SpecificDataPointsIterator.createEmpty();
     }
 }
