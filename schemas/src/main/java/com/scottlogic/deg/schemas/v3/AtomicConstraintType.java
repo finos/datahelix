@@ -6,7 +6,6 @@ public enum AtomicConstraintType {
     ISINSET("inSet"),
     ISNULL("null"),
     ISOFTYPE("ofType"),
-    NOT("not"),
 
     MATCHESREGEX("matchingRegex"),
     FORMATTEDAS("formattedAs"),
@@ -19,14 +18,14 @@ public enum AtomicConstraintType {
     // Numeric
     ISGREATERTHANCONSTANT("greaterThan"),
     ISGREATERTHANOREQUALTOCONSTANT("greaterThanOrEqualTo"),
-    ISLESSTHANCONSTANT("lessThanConstant"),
-    ISLESSTHANOREQUALTOCONSTANT("lessThanOrEqualToConstant"),
+    ISLESSTHANCONSTANT("lessThan"),
+    ISLESSTHANOREQUALTOCONSTANT("lessThanOrEqualTo"),
 
     // Temporal
-    ISAFTERCONSTANTDATETIME("afterConstantDateTime"),
-    ISAFTEROREQUALTOCONSTANTDATETIME("afterOrEqualToConstantDateTime"),
-    ISBEFORECONSTANTDATETIME("beforeConstantDateTime"),
-    ISBEFOREOREQUALTOCONSTANTDATETIME("beforeOrEqualToConstantDateTime");
+    ISAFTERCONSTANTDATETIME("after"),
+    ISAFTEROREQUALTOCONSTANTDATETIME("afterOrAt"),
+    ISBEFORECONSTANTDATETIME("before"),
+    ISBEFOREOREQUALTOCONSTANTDATETIME("beforeOrAt");
 
     private final String text;
 

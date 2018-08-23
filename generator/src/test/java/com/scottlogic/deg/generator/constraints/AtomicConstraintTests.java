@@ -76,7 +76,7 @@ public class AtomicConstraintTests {
                 Arguments.of(AtomicConstraintType.ISNULL, stringValueDto, IsNullConstraint.class),
                 Arguments.of(AtomicConstraintType.ISOFTYPE, typeValueDto, IsOfTypeConstraint.class),
                 Arguments.of(AtomicConstraintType.MATCHESREGEX, stringValueDto, MatchesRegexConstraint.class),
-                Arguments.of(AtomicConstraintType.NOT, notValueDto, NotConstraint.class),
+                Arguments.of(AtomicConstraintType.FORMATTEDAS, stringValueDto, FormatConstraint.class),
                 Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto, StringHasLengthConstraint.class),
                 Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, numberValueDto, IsStringLongerThanConstraint.class),
                 Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, numberValueDto, IsStringShorterThanConstraint.class),

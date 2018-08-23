@@ -144,14 +144,6 @@ public class AtomicConstraintReaderLookup {
                             fields.getByName(dto.field),
                             length);
                 });
-
-        add(AtomicConstraintType.NOT.toString(),
-                (dto, fields) -> {
-                    IConstraintReader notConstraint = typeCodeToSpecificReader.get(dto.not.is);
-                    IConstraint childConstraint = notConstraint.apply(dto, fields);
-                    return new NotConstraint(childConstraint);
-                });
-
     }
 
     private static void add(String typeCode, IConstraintReader func) {
