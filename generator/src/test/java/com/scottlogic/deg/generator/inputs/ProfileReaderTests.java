@@ -171,7 +171,7 @@ public class ProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
-                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                        "    \"fields\": [ { \"name\": \"id\" } ]," +
                         "    \"rules\": [" +
                         "        { \"field\": \"id\", \"is\": \"hasLength\", \"value\": 5 }" +
                         "    ]" +

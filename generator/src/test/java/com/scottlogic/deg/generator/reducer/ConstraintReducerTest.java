@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static org.hamcrest.Matchers.notNullValue;
+
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-            new FieldSpecFactory(
-                    new AutomatonFactory()
-            ),
+            new FieldSpecFactory(),
             new FieldSpecMerger()
     );
 
@@ -747,8 +747,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
     }
 
     @Test
@@ -778,8 +778,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have aa string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     void shouldReduceStringLongerThanConstraint() {
@@ -808,8 +808,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     void shouldReduceStringShorterThanConstraint() {
@@ -838,8 +838,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions has regex",
-                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions has a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
 //    @Test

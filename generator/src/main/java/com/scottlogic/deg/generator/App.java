@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
-import com.scottlogic.deg.generator.reducer.AutomatonFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -31,9 +30,7 @@ class GenerationEngine {
     private final IDataGenerator dataGenerator = new DataGenerator(
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(
-                    new FieldSpecFactory(
-                            new AutomatonFactory()
-                    ),
+                    new FieldSpecFactory(),
                     fieldSpecMerger));
 
     void generateTestCases(String profileFilePath, String directoryFilePath) {
