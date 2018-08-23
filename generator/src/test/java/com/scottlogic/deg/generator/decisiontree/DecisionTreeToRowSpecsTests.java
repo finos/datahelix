@@ -6,10 +6,11 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
-import com.scottlogic.deg.generator.reducer.AutomatonFactory;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -26,9 +27,7 @@ public class DecisionTreeToRowSpecsTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(
             new ConstraintReducer(
-                    new FieldSpecFactory(
-                            new AutomatonFactory()
-                    ),
+                    new FieldSpecFactory(),
                     fieldSpecMerger
             ),
             new RowSpecMerger(

@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.reducer.AutomatonFactory;
-import dk.brics.automaton.Automaton;
+import com.scottlogic.deg.generator.utils.IStringGenerator;
+import com.scottlogic.deg.generator.utils.StringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,12 +10,6 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
-    private final AutomatonFactory automatonFactory;
-
-    public FieldSpecFactory(AutomatonFactory automatonFactory) {
-        this.automatonFactory = automatonFactory;
-    }
-
     public FieldSpec construct(IConstraint constraint) {
         final FieldSpec fieldSpec = new FieldSpec();
         apply(fieldSpec, constraint, false);
@@ -208,16 +202,7 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions == null) {
-            stringRestrictions = new StringRestrictions();
-            fieldSpec.setStringRestrictions(stringRestrictions);
-        }
-        final Automaton nominalAutomaton = automatonFactory.fromPattern(constraint.regex);
-        final Automaton automaton = negate
-                ? nominalAutomaton.complement()
-                : nominalAutomaton;
-        stringRestrictions.automaton = automaton;
+        applyPattern(fieldSpec, constraint.regex, negate);
     }
 
     private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
@@ -236,21 +221,15 @@ public class FieldSpecFactory {
     }
 
     private void applyPattern(FieldSpec fieldSpec, Pattern pattern, boolean negate) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions == null) {
-            stringRestrictions = new StringRestrictions();
-            fieldSpec.setStringRestrictions(stringRestrictions);
-        }
+        StringRestrictions stringRestrictions = new StringRestrictions();
+        fieldSpec.setStringRestrictions(stringRestrictions);
 
-        Automaton automaton = automatonFactory.fromPattern(pattern);
+        IStringGenerator nominalStringGenerator = new StringGenerator(pattern.toString());
+        nominalStringGenerator = negate
+            ? nominalStringGenerator.complement()
+            : nominalStringGenerator;
 
-        if (negate) {
-            automaton = automaton.complement();
-        }
-
-        stringRestrictions.automaton = stringRestrictions.automaton == null ?
-                automaton :
-                stringRestrictions.automaton.intersection(automaton);
+        stringRestrictions.stringGenerator = nominalStringGenerator;
     }
 
     private BigDecimal numberToBigDecimal(Number number) {

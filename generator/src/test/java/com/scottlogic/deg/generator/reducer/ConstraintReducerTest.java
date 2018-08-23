@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static org.hamcrest.Matchers.notNullValue;
+
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-            new FieldSpecFactory(
-                    new AutomatonFactory()
-            ),
+            new FieldSpecFactory(),
             new FieldSpecMerger()
     );
 
@@ -32,7 +32,7 @@ class ConstraintReducerTest {
         final Field cityField = new Field("city");
 
         ProfileFields fieldList = new ProfileFields(
-            Arrays.asList(quantityField, countryField, cityField));
+                Arrays.asList(quantityField, countryField, cityField));
 
         final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 
@@ -394,7 +394,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsAfterConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsAfterConstantDateTimeConstraint(field, testTimestamp));
@@ -430,7 +430,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsAfterConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsAfterConstantDateTimeConstraint(field, testTimestamp).isFalse());
@@ -466,7 +466,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsAfterOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp));
@@ -502,7 +502,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsAfterOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
@@ -538,7 +538,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsBeforeConstantDateTimeConstraint(field, testTimestamp));
@@ -574,7 +574,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsBeforeConstantDateTimeConstraint(field, testTimestamp).isFalse());
@@ -610,7 +610,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsBeforeOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp));
@@ -646,7 +646,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsBeforeorEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23,25,16);
+        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Collections.singletonList(
                 new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp).isFalse());
@@ -682,7 +682,7 @@ class ConstraintReducerTest {
     @Test
     void shouldMergeAndReduceIsAfterConstantDateTimeConstraintWithIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime startTimestamp = LocalDateTime.of(2013, 11, 19, 10,43,12);
+        final LocalDateTime startTimestamp = LocalDateTime.of(2013, 11, 19, 10, 43, 12);
         final LocalDateTime endTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 8);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Arrays.asList(
@@ -747,8 +747,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
     }
 
     @Test
@@ -778,8 +778,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have aa string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     void shouldReduceStringLongerThanConstraint() {
@@ -808,8 +808,8 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions have a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     void shouldReduceStringShorterThanConstraint() {
@@ -838,7 +838,33 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
                 Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an automaton",
-                outputSpec.getStringRestrictions().automaton, Is.is(IsNull.notNullValue()));
+        Assert.assertThat("Fieldspec string restrictions has a string generator",
+                outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
+
+//    @Test
+//    void shouldReduceMatchesRegexWithSingletonConstraint() {
+//        final Field field = new Field("test0");
+//
+//        String infinitePattern = ".*";
+//        String singletonPattern = "thisisatest";
+//
+//        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+//        List<IConstraint> constraints = Arrays.asList(
+//                new MatchesRegexConstraint(field, Pattern.compile(infinitePattern)),
+//                new MatchesRegexConstraint(field, Pattern.compile(singletonPattern)));
+//        ConstraintReducer testObject = new ConstraintReducer();
+//
+//        RowSpec testOutput = testObject.reduceConstraintsToRowSpec(profileFields, constraints);
+//
+//        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
+//        FieldSpec outputSpec = testOutput.getSpecForField(field);
+//
+//        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
+//                Is.is(IsNull.notNullValue()));
+//        Assert.assertThat("Fieldspec string restrictions have an stringGenerator",
+//                outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
+//        Assert.assertTrue("Fieldspec string restrictions stringGenerator has nodes",
+//                outputSpec.getStringRestrictions().stringGenerator.getNumberOfStates() > 1);
+//    }
 }

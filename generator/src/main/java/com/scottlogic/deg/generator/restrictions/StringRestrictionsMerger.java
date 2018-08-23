@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import dk.brics.automaton.Automaton;
+import com.scottlogic.deg.generator.utils.IStringGenerator;
 
 /**
  * For a given combination of choices over the decision tree
@@ -16,22 +15,11 @@ public class StringRestrictionsMerger {
         if (right == null)
             return left;
 
-        final StringRestrictions merged = new StringRestrictions();
-        merged.automaton = getMergedAutomaton(left.automaton, right.automaton);
+        IStringGenerator mergedStringBuilder = left.stringGenerator.intersect(right.stringGenerator);
 
-        return merged;
-    }
+        StringRestrictions newRestrictions = new StringRestrictions();
+        newRestrictions.stringGenerator = mergedStringBuilder;
 
-    private Automaton getMergedAutomaton(Automaton left, Automaton right) {
-        if (left == null && right == null) {
-            return null;
-        }
-        if (left == null) {
-            return right;
-        }
-        if (right == null) {
-            return left;
-        }
-        return left.intersection(right);
+        return newRestrictions;
     }
 }

@@ -5,8 +5,6 @@
 //import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
 //
 //import com.scottlogic.deg.generator.restrictions.*;
-//import dk.brics.automaton.Automaton;
-//import dk.brics.automaton.RegExp;
 //import org.junit.Assert;
 //import org.junit.jupiter.api.Test;
 //
@@ -26,10 +24,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertNull(testField);
 //    }
 //
@@ -49,7 +47,7 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(5, testRow.values.size());
 //        List<Object> values = new ArrayList<>(testRow.values);
@@ -70,10 +68,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof String);
 //        Assert.assertEquals("legal", testField);
 //    }
@@ -90,10 +88,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof String);
 //        Assert.assertEquals("legal", testField);
 //    }
@@ -110,10 +108,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof String);
 //        Assert.assertTrue(validValues.contains(testField));
 //    }
@@ -135,7 +133,7 @@
 //        for (TestCaseDataRow testRow : testRows) {
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(1, testRow.values.size());
-//            Object testField = testRow.values.iterator().next();
+//            Object testField = testRow.values.iterator().nextInt();
 //            Assert.assertTrue(testField instanceof String);
 //            Assert.assertTrue(validValues.contains(testField));
 //            Assert.assertFalse(seenValues.stream().anyMatch(v -> v.equals(testField)));
@@ -156,10 +154,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof String);
 //        Assert.assertTrue(validValues.contains(testField));
 //        Assert.assertFalse(invalidValues.contains(testField));
@@ -183,7 +181,7 @@
 //        for (TestCaseDataRow testRow : testRows) {
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(1, testRow.values.size());
-//            Object testField = testRow.values.iterator().next();
+//            Object testField = testRow.values.iterator().nextInt();
 //            Assert.assertTrue(testField instanceof String);
 //            Assert.assertTrue(validValues.contains(testField));
 //            Assert.assertFalse(invalidValues.contains(testField));
@@ -204,10 +202,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertEquals(BigDecimal.TEN, testField);
 //    }
@@ -224,10 +222,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.TEN) > 0);
 //    }
@@ -244,10 +242,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertEquals(BigDecimal.TEN, testField);
 //    }
@@ -264,10 +262,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.TEN) < 0);
 //    }
@@ -285,10 +283,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertEquals(BigDecimal.TEN, testField);
 //    }
@@ -306,10 +304,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertEquals(BigDecimal.TEN, testField);
 //    }
@@ -327,10 +325,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.TEN) > 0);
 //    }
@@ -348,10 +346,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.TEN) > 0);
 //    }
@@ -369,10 +367,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Object testField = testRow.values.iterator().next();
+//        Object testField = testRow.values.iterator().nextInt();
 //        Assert.assertTrue(testField instanceof BigDecimal);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.valueOf(0.6)) > 0);
 //        Assert.assertTrue(((BigDecimal)testField).compareTo(BigDecimal.valueOf(0.7)) < 0);
@@ -393,7 +391,7 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(2, testRow.values.size());
 //        ArrayList<Object> values = new ArrayList<>(testRow.values);
@@ -453,10 +451,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Assert.assertEquals(matchValue, testRow.values.iterator().next());
+//        Assert.assertEquals(matchValue, testRow.values.iterator().nextInt());
 //    }
 //
 //    @Test
@@ -472,10 +470,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Assert.assertTrue(((String)testRow.values.iterator().next()).startsWith(matchValueStart));
+//        Assert.assertTrue(((String)testRow.values.iterator().nextInt()).startsWith(matchValueStart));
 //    }
 //
 //    @Test
@@ -491,10 +489,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        Assert.assertTrue(((String)testRow.values.iterator().next()).startsWith(matchValueStart));
+//        Assert.assertTrue(((String)testRow.values.iterator().nextInt()).startsWith(matchValueStart));
 //    }
 //
 //    @Test
@@ -524,11 +522,11 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        List<String> legalValues = Arrays.asList("ab", "ba", "bb");
-//        String value = (String)testRow.values.iterator().next();
+//        String value = (String)testRow.values.iterator().nextInt();
 //        Assert.assertTrue(legalValues.contains(value));
 //    }
 //
@@ -594,10 +592,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        String testValue = (String)testRow.values.iterator().next();
+//        String testValue = (String)testRow.values.iterator().nextInt();
 //        Assert.assertTrue(Pattern.compile(matchPattern).matcher(testValue).matches());
 //        Assert.assertTrue(Double.parseDouble(testValue) >= 10);
 //    }
@@ -616,10 +614,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        String testValue = (String)testRow.values.iterator().next();
+//        String testValue = (String)testRow.values.iterator().nextInt();
 //        Assert.assertTrue(Pattern.compile(matchPattern).matcher(testValue).matches());
 //        Assert.assertTrue(Double.parseDouble(testValue) <= 10);
 //    }
@@ -639,10 +637,10 @@
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        TestCaseDataRow testRow = testOutput.iterator().next();
+//        TestCaseDataRow testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
-//        String testValue = (String)testRow.values.iterator().next();
+//        String testValue = (String)testRow.values.iterator().nextInt();
 //        Assert.assertTrue(Pattern.compile(matchPattern).matcher(testValue).matches());
 //        double d = Double.parseDouble(testValue);
 //        Assert.assertTrue(d <= 10);
@@ -711,9 +709,9 @@
 //
 //    // this method does not work with backslashed character classes like \d, hence "simplePattern".
 //    private FieldSpec getFieldSpecThatMatchesRegex(FieldSpec fieldSpec, String simplePattern, Collection<String> blacklist) {
-//        Automaton automaton = new RegExp(simplePattern).toAutomaton();
+//        Automaton stringGenerator = new RegExp(simplePattern).toAutomaton();
 //        StringRestrictions restrictions = new StringRestrictions();
-//        restrictions.automaton = automaton;
+//        restrictions.stringGenerator = stringGenerator;
 //        fieldSpec.setStringRestrictions(restrictions);
 //        if (blacklist != null) {
 //            SetRestrictions setRestrictions = new SetRestrictions();
