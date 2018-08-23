@@ -4,11 +4,13 @@ import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -51,7 +53,7 @@ public class FieldSpecFulfiller implements IDataPointSource {
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
         // if *always* null, output a sequence just containing null
         if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator((Object) null);
+            return new SpecificDataPointsIterator(Collections.singleton(null)); // if we use just 'null', Java interprets it as an array (because parameter type is Object...)
         }
 
         // if there's a whitelist, we can just output that
@@ -69,10 +71,11 @@ public class FieldSpecFulfiller implements IDataPointSource {
             return new NumericIterator(spec.getNumericRestrictions(), getBlacklist());
         }
 
-        // if there're reasonably populated string restrictions, output from automaton
-        if (spec.getStringRestrictions() != null && spec.getStringRestrictions().automaton != null) {
-            StringIterator stringIterator = new StringIterator(spec.getStringRestrictions().automaton, getBlacklist());
-            return simplifyStringIterator(stringIterator);
+        // if there're reasonably populated string restrictions, output from stringGenerator
+        StringRestrictions stringRestrictions = spec.getStringRestrictions();
+        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
+            StringIterator stringIterator = new StringIterator(stringRestrictions.stringGenerator, getBlacklist());
+            return stringIterator; //simplifyStringIterator(stringIterator);
         }
 
         // there were no restrictions - just output some random bits of data

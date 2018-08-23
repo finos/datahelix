@@ -17,25 +17,27 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
     }
 
     class InternalIterable implements Iterable<DataBag> {
-        private final List<Iterable<DataBag>> dataRowSequences;
+        private final List<Iterable<DataBag>> dataBagSequences;
 
-        InternalIterable(List<Iterable<DataBag>> dataRowSequences) {
-            this.dataRowSequences = dataRowSequences;
+        InternalIterable(List<Iterable<DataBag>> dataBagSequences) {
+            this.dataBagSequences = dataBagSequences;
         }
 
         @Override
         public Iterator<DataBag> iterator() {
-            List<Iterator<DataBag>> sequenceIterators = dataRowSequences.stream()
+            List<Iterator<DataBag>> sequenceIterators = this.dataBagSequences.stream()
                 .map(Iterable::iterator)
                 .collect(Collectors.toList());
 
-            List<DataBag> baselines = new ArrayList<>(dataRowSequences.size());
-            for (int i = 0; i < sequenceIterators.size(); i++) {
-                if (!sequenceIterators.get(i).hasNext()) {
+            List<DataBag> baselines = new ArrayList<>(sequenceIterators.size());
+            for (Iterator<DataBag> sequenceIterator : sequenceIterators)
+            {
+                if (!sequenceIterator.hasNext()) {
+                    // one of our sequences has no items, so this combination strategy can't output any values
                     return Collections.emptyIterator();
                 }
 
-                baselines.add(i, sequenceIterators.get(i).next());
+                baselines.add(sequenceIterator.next());
             }
 
             return new InternalIterator(sequenceIterators, baselines);
@@ -48,7 +50,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
 
         private Integer indexOfSequenceToVary;
 
-        public InternalIterator(
+        InternalIterator(
             List<Iterator<DataBag>> inputSequencesIterators,
             List<DataBag> baselinesForInputSequences) {
 

@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.reducer;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.*;
 
-class ConstraintFieldSniffer {
+public class ConstraintFieldSniffer {
 
     ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
         final Field field = detectField(constraint);

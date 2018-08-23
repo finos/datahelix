@@ -21,7 +21,17 @@ public class SetRestrictionsMerger {
 
         final SetRestrictions merged = new SetRestrictions();
         merged.whitelist = getMergedSet(left.whitelist, right.whitelist, this::intersection);
+        if (merged.whitelist != null && merged.whitelist.isEmpty()) {
+            throw new UnmergeableRestrictionException("Empty whitelist is impossible to satisfy");
+        }
+
         merged.blacklist = getMergedSet(left.blacklist, right.blacklist, this::union);
+        if (
+                merged.whitelist != null
+                        && merged.blacklist != null
+                        && !intersection(merged.blacklist, merged.whitelist).isEmpty()) {
+            throw new UnmergeableRestrictionException("Whitelist for whom some members exist in blacklist is not always satisfiable");
+        }
 
         return merged;
     }
