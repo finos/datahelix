@@ -45,6 +45,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+        } else if (constraint instanceof FormatConstraint) {
+            apply(fieldSpec, (FormatConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
             apply(fieldSpec, (StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
@@ -203,6 +205,16 @@ public class FieldSpecFactory {
 
     private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
         applyPattern(fieldSpec, constraint.regex, negate);
+    }
+
+    private void apply(FieldSpec fieldSpec, FormatConstraint constraint, boolean negate) {
+        FormatRestrictions formatRestrictions = fieldSpec.getFormatRestrictions();
+        if (formatRestrictions == null) {
+            formatRestrictions = new FormatRestrictions();
+            fieldSpec.setFormatRestrictions(formatRestrictions);
+        }
+
+        formatRestrictions.formatString = constraint.format;
     }
 
     private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {

@@ -39,12 +39,14 @@ public class ConstraintFieldSniffer {
             return ((IsOfTypeConstraint) constraint).field;
         } else if (constraint instanceof MatchesRegexConstraint) {
             return ((MatchesRegexConstraint) constraint).field;
+        } else if (constraint instanceof FormatConstraint) {
+            return ((FormatConstraint) constraint).field;
         } else if (constraint instanceof StringHasLengthConstraint) {
             return ((StringHasLengthConstraint) constraint).field;
         } else if (constraint instanceof IsStringLongerThanConstraint) {
-            return ((StringHasLengthConstraint) constraint).field;
+            return ((IsStringLongerThanConstraint) constraint).field;
         } else if (constraint instanceof IsStringShorterThanConstraint) {
-            return ((StringHasLengthConstraint) constraint).field;
+            return ((IsStringShorterThanConstraint) constraint).field;
         } else {
             throw new UnsupportedOperationException();
         }

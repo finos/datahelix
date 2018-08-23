@@ -14,6 +14,7 @@ public class FieldSpec {
     private NullRestrictions nullRestrictions;
     private TypeRestrictions typeRestrictions;
     private DateTimeRestrictions dateTimeRestrictions;
+    private FormatRestrictions formatRestrictions;
 
     public SetRestrictions getSetRestrictions() {
         return setRestrictions;
@@ -72,5 +73,13 @@ public class FieldSpec {
                 Objects.toString(typeRestrictions, "-"),
                 Objects.toString(dateTimeRestrictions, "-")
         );
+    }
+
+    public FormatRestrictions getFormatRestrictions() {
+        return formatRestrictions;
+    }
+
+    public void setFormatRestrictions(FormatRestrictions formatRestrictions) {
+        this.formatRestrictions = formatRestrictions;
     }
 }

@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs;
 
 import java.util.*;
 
-public class TestCaseDataSet {
+public class TestCaseDataSet implements Iterable<TestCaseDataRow> {
     public final String violation;
     private final List<TestCaseDataRow> rows;
 
@@ -20,8 +20,8 @@ public class TestCaseDataSet {
         this.violation = violation;
     }
 
-    public Iterable<TestCaseDataRow> enumerateRows()
-    {
-        return this.rows;
+    @Override
+    public Iterator<TestCaseDataRow> iterator() {
+        return this.rows.iterator();
     }
 }
