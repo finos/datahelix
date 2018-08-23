@@ -8,6 +8,10 @@ import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.nio.file.Paths;
 
@@ -22,7 +26,12 @@ public class App {
 
 class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final IDataGenerator dataGenerator = new DataGenerator();
+    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+    private final IDataGenerator dataGenerator = new DataGenerator(
+            new RowSpecMerger(fieldSpecMerger),
+            new ConstraintReducer(
+                    new FieldSpecFactory(),
+                    fieldSpecMerger));
 
     void generateTestCases(String profileFilePath, String directoryFilePath) {
         final Profile profile;

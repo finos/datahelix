@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 /**
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
@@ -12,21 +14,39 @@ public class FieldSpecMerger {
 
     private final IFieldSpecSatisfiabilityChecker satisfiabilityChecker = new ConflictingTypesSatisfiabilityChecker();
 
-    public FieldSpec merge(FieldSpec left, FieldSpec right) {
+    /**
+     * Null parameters are permitted, and are synonymous with an empty FieldSpec
+     *
+     * Returning an empty Optional conveys that the fields were unmergeable.
+     */
+    public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
+        if (left == null && right == null) {
+            return Optional.of(new FieldSpec());
+        }
+        if (left == null) {
+            return Optional.of(right);
+        }
+        if (right == null) {
+            return Optional.of(left);
+        }
         final FieldSpec merged = new FieldSpec();
-        merged.setSetRestrictions(setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions()));
-        merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(),
-                right.getNumericRestrictions()));
-        merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(),
-                right.getStringRestrictions()));
-        merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
-        merged.setDateTimeRestrictions(dateTimeRestrictionsMerger.merge(left.getDateTimeRestrictions(),
-                right.getDateTimeRestrictions()));
-
-        if (!satisfiabilityChecker.isSatisfiable(merged)) {
-            // throw a satisfiability exception
+        try {
+            merged.setSetRestrictions(setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions()));
+            merged.setNumericRestrictions(numericRestrictionsMerger.merge(left.getNumericRestrictions(),
+                    right.getNumericRestrictions()));
+            merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(),
+                    right.getStringRestrictions()));
+            merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
+            merged.setDateTimeRestrictions(dateTimeRestrictionsMerger.merge(left.getDateTimeRestrictions(),
+                    right.getDateTimeRestrictions()));
+        } catch (UnmergeableRestrictionException e) {
+            return Optional.empty();
         }
 
-        return merged;
+        if (!satisfiabilityChecker.isSatisfiable(merged)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(merged);
     }
 }
