@@ -91,8 +91,23 @@ public class FieldSpecFactory {
         if (negate) {
             throw new UnsupportedOperationException();
         }
-        final TypeConstraintFieldSpecStrategy strategy = TypeConstraintFieldSpecStrategyFactory.getStrategy(constraint);
-        strategy.accept(fieldSpec);
+
+        switch (constraint.requiredType) {
+            case String:
+                if (fieldSpec.getStringRestrictions() == null)
+                    fieldSpec.setStringRestrictions(new StringRestrictions());
+                break;
+            case Numeric:
+                if (fieldSpec.getNumericRestrictions() == null)
+                    fieldSpec.setNumericRestrictions(new NumericRestrictions());
+                break;
+            case Temporal:
+                if (fieldSpec.getDateTimeRestrictions() == null)
+                    fieldSpec.setDateTimeRestrictions(new DateTimeRestrictions());
+                break;
+            default:
+                throw new UnsupportedOperationException("Can't create restrictions for specified data type");
+        }
     }
 
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
