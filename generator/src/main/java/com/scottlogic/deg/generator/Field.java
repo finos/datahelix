@@ -1,16 +1,29 @@
 package com.scottlogic.deg.generator;
 
-import java.util.List;
+import java.util.Objects;
 
-public class Field
-{
+public class Field {
     public final String name;
-    public final String type;
-    public final List<IConstraint> constraints;
 
-    public Field(String name, String type, List<IConstraint> constraints) {
+    public Field(String name) {
         this.name = name;
-        this.type = type;
-        this.constraints = constraints;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Field field = (Field) o;
+        return Objects.equals(name, field.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

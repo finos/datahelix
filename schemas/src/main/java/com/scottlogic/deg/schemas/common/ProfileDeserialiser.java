@@ -5,9 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 public class ProfileDeserialiser {
-    public BaseProfile deserialise(String json) throws IOException {
+    public BaseProfile deserialise(String json, String desiredSchemaType) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
-        return mapper.readerFor(BaseProfile.class).readValue(json);
+        BaseProfile baseProfile = mapper.readerFor(BaseProfile.class).readValue(json);
+
+        if (!baseProfile.schemaVersion.equals(desiredSchemaType))
+            throw new IOException();
+
+        return baseProfile;
     }
 }
