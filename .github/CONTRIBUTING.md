@@ -45,45 +45,13 @@ To make review of PRs easier, please:
 ## Commit and PR Messages
 
 * **Reference issues, wiki pages, and pull requests liberally!**
-* Use the present tense ("Add feature" not "Added feature")
-* Use the imperative mood ("Move button left..." not "Moves button left...")
-* Limit the first line to 72 characters or less
-* Please start the commit message with one or more applicable emoji:
+* We follow six of the seven rules of Chris Beams's style guide (https://chris.beams.io/posts/git-commit/)
 
-| Emoji | Raw Emoji Code | Description |
-|:---:|:---:|---|
-| :tada: | `:tada:` | **initial** commit |
-| :construction: | `:construction:` | **WIP** (Work In Progress) commits |
-| :ambulance: | `:ambulance:` | when fixing a **bug** |
-| :bug: | `:bug:` | when **identifying a bug**, via an inline comment (please use the `@FIXME` tag in the comment) |
-| :new: | `:new:` | when introducing **new** features |
-| :art: | `:art:` | when improving the **format** / structure of the code |
-| :pencil: | `:pencil:` | when **performing minor changes / fixing** the code or language |
-| :ballot_box_with_check: | `:ballot_box_with_check:` | when completing a task |
-| :arrow_up: | `:arrow_up:` | when upgrading **dependencies** |
-| :arrow_down: | `:arrow_down:` | when downgrading **dependencies** |
-| :racehorse: | `:racehorse:` | when improving **performance** |
-| :fire: | `:fire:` | when **removing code** or files |
-| :speaker: | `:speaker:` | when adding **logging** |
-| :mute: | `:mute:` | when reducing **logging** |
-| :books: | `:books:` | when writing **docs** |
-| :bookmark: | `:bookmark:` | when adding a **tag** |
-| :gem: | `:gem:` | new **release** |
-| :zap: | `:zap:` | when introducing **backward incompatible** changes or **removing functionality** |
-| :bulb: | `:bulb:` | new **idea** identified in the code, via an inline comment (please use the `@IDEA` tag in the comment) |
-| :snowflake: | `:snowflake:` | changing **configuration** |
-| :lipstick: | `:lipstick:` | when improving **UI** / cosmetic |
-| :umbrella: | `:umbrella:` | when adding **tests** |
-| :green_heart: | `:green_heart:` | when fixing the **CI** build |
-| :lock: | `:lock:` | when dealing with **security** |
-| :shirt: | `:shirt:` | when removing **linter** / strict / deprecation / reflection warnings |
-| :fast_forward: | `:fast_forward:` | when **forward-porting features** from an older version/branch |
-| :rewind: | `:rewind:` | when **backporting features** from a newer version/branch |
-| :wheelchair: | `:wheelchair:` | when improving **accessibility** |
-| :globe_with_meridians: | `:globe_with_meridians:` | when dealing with **globalisation** / internationalisation |
-| :rocket: | `:rocket:` | anything related to deployments / **DevOps** |
-| :non-potable_water: | `:non-potable_water:` | when plugging memory leaks
-| :penguin: | `:penguin:` | when fixing something on **Linux** |
-| :apple: | `:apple:` | when fixing something on **Mac OS** |
-| :checkered_flag: | `:checkered_flag:` | when fixing something on **Windows** |
-| :handbag: | `:handbag:` | when a commit contains multiple unrelated changes that don't fit into any one category (but please try not to do this!) |
+
+1. Separate subject from body with a blank line
+2. Limit the subject line to 50 characters
+3. Capitalize the subject line
+4. Do not end the subject line with a period
+5. Use the imperative mood in the subject line
+6. (Not followed) ~~Wrap the body at 72 characters~~
+7. Use the body to explain _what_ and _why_ vs. _how_
