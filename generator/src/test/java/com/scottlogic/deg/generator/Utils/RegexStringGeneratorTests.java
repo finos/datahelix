@@ -1,17 +1,9 @@
 package com.scottlogic.deg.generator.Utils;
 
 import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.StringGenerator;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 import org.hamcrest.core.Is;
-
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.not;
-
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -19,16 +11,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class StringGeneratorTests {
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class RegexStringGeneratorTests {
 
     @Test
     void shouldGenerateStringsInLexicographicalOrder() {
 
-        IStringGenerator generator = new StringGenerator("aa(bb|cc)d?", new TestRandomGenerator());
+        IStringGenerator generator = new RegexStringGenerator(
+            "aa(bb|cc)d?",
+            new JavaUtilRandomNumberGenerator(0));
 
         Assert.assertThat(generator.getValueCount(), Is.is(4L));
 
         Assert.assertThat(generator.IsFinite(), Is.is(true));
+
         Assert.assertThat(generator.getMatchedString(1), Is.is("aabb"));
         Assert.assertThat(generator.getMatchedString(2), Is.is("aabbd"));
         Assert.assertThat(generator.getMatchedString(3), Is.is("aacc"));
@@ -38,7 +40,9 @@ public class StringGeneratorTests {
     @Test
     void shouldCorrectlyIterateFiniteResults() {
 
-        IStringGenerator generator = new StringGenerator("xyz(xyz)?xyz", new TestRandomGenerator());
+        IStringGenerator generator = new RegexStringGenerator(
+            "xyz(xyz)?xyz",
+            new JavaUtilRandomNumberGenerator(0));
 
         List<String> actual = new ArrayList<>();
         generator.generateAllValues().forEachRemaining(actual::add);
@@ -49,7 +53,9 @@ public class StringGeneratorTests {
     @Test
     void shouldCorrectlyReplaceCharacterGroups() {
 
-        IStringGenerator generator = new StringGenerator("\\d", new TestRandomGenerator());
+        IStringGenerator generator = new RegexStringGenerator(
+            "\\d",
+            new JavaUtilRandomNumberGenerator(0));
         String actual = generator.getMatchedString(1);
 
         Assert.assertThat(actual, Is.is("0"));
@@ -59,7 +65,9 @@ public class StringGeneratorTests {
     @Test
     void shouldCorrectlyIterateInfiniteResults() {
 
-        IStringGenerator generator = new StringGenerator("[a]+", new TestRandomGenerator());
+        IStringGenerator generator = new RegexStringGenerator(
+            "[a]+",
+            new JavaUtilRandomNumberGenerator(0));
 
         Iterator<String> iterator = generator.generateAllValues();
 
@@ -74,7 +82,9 @@ public class StringGeneratorTests {
 
     @Test
     void shouldExpandSingletons() {
-        IStringGenerator generator = new StringGenerator("THIS_IS_A_SINGLETON", new TestRandomGenerator());
+        IStringGenerator generator = new RegexStringGenerator(
+            "THIS_IS_A_SINGLETON",
+            new JavaUtilRandomNumberGenerator(0));
         Assert.assertThat(generator.canProduceValues(), Is.is(true));
         Assert.assertThat(generator.getValueCount(), Is.is(1L));
     }
@@ -82,8 +92,13 @@ public class StringGeneratorTests {
     @Test
     void shouldProduceIntersection() {
 
-        IStringGenerator infiniteGenerator = new StringGenerator("[a-z]+", new TestRandomGenerator());
-        IStringGenerator rangeGenerator = new StringGenerator("(a|b){1,10}", new TestRandomGenerator());
+        IStringGenerator infiniteGenerator = new RegexStringGenerator(
+            "[a-z]+",
+            new JavaUtilRandomNumberGenerator(0));
+
+        IStringGenerator rangeGenerator = new RegexStringGenerator(
+            "(a|b){1,10}",
+            new JavaUtilRandomNumberGenerator(0));
 
         IStringGenerator actual = infiniteGenerator.intersect(rangeGenerator);
 
@@ -99,7 +114,9 @@ public class StringGeneratorTests {
     @Test
     void shouldProduceCompliment() {
 
-        IStringGenerator limitedRangeGenerator = new StringGenerator("[a-m]", new TestRandomGenerator());
+        IStringGenerator limitedRangeGenerator = new RegexStringGenerator(
+            "[a-m]",
+            new JavaUtilRandomNumberGenerator(0));
         IStringGenerator complimentedGenerator = limitedRangeGenerator.complement();
 
         Assert.assertThat(complimentedGenerator.IsFinite(), Is.is(false));
@@ -113,7 +130,9 @@ public class StringGeneratorTests {
 
     @Test
     void shouldThrowWhenCountingNonFinite() {
-        IStringGenerator infiniteGenerator = new StringGenerator(".*", new TestRandomGenerator());
+        IStringGenerator infiniteGenerator = new RegexStringGenerator(
+            ".*",
+            new JavaUtilRandomNumberGenerator(0));
 
         assertThrows(UnsupportedOperationException.class, () -> infiniteGenerator.getValueCount());
     }

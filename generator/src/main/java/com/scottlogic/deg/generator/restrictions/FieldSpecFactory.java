@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.StringGenerator;
+import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -236,7 +236,7 @@ public class FieldSpecFactory {
         StringRestrictions stringRestrictions = new StringRestrictions();
         fieldSpec.setStringRestrictions(stringRestrictions);
 
-        IStringGenerator nominalStringGenerator = new StringGenerator(pattern.toString());
+        IStringGenerator nominalStringGenerator = new RegexStringGenerator(pattern.toString());
         nominalStringGenerator = negate
             ? nominalStringGenerator.complement()
             : nominalStringGenerator;
