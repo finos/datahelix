@@ -33,8 +33,13 @@ public class CsvTestCaseDataSetWriter implements IDataSetWriter {
         try {
             for (TestCaseDataRow row : dataset) {
                 writer.printRecord(row.values.stream().map(x -> {
+                    if (x.value == null)
+                        return null;
 
-                    return x.format != null ? String.format(x.format, x.value) : x.value;
+                    if (x.format == null)
+                        return x.value;
+
+                    return String.format(x.format, x.value);
                 }).collect(Collectors.toList()));
             }
         }
