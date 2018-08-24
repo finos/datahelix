@@ -15,6 +15,12 @@ public class AtomicConstraintReaderLookup {
     static {
         typeCodeToSpecificReader = new HashMap<>();
 
+        add(AtomicConstraintType.FORMATTEDAS.toString(),
+                (dto, fields) ->
+                        new FormatConstraint(
+                            fields.getByName(dto.field),
+                            (String) dto.value));
+
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields) ->
                         new IsEqualToConstantConstraint(
@@ -138,14 +144,6 @@ public class AtomicConstraintReaderLookup {
                             fields.getByName(dto.field),
                             length);
                 });
-
-        add(AtomicConstraintType.NOT.toString(),
-                (dto, fields) -> {
-                    IConstraintReader notConstraint = typeCodeToSpecificReader.get(dto.not.is);
-                    IConstraint childConstraint = notConstraint.apply(dto, fields);
-                    return new NotConstraint(childConstraint);
-                });
-
     }
 
     private static void add(String typeCode, IConstraintReader func) {

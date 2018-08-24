@@ -10,7 +10,6 @@ public interface IStringGenerator {
     boolean IsFinite();
     boolean canProduceValues();
     long getValueCount();
-    String getMatchedString(int indexOrder);
 
     Iterator<String> generateAllValues();
 

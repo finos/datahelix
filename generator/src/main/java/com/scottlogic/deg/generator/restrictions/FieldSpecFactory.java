@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.StringGenerator;
+import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,6 +45,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+        } else if (constraint instanceof FormatConstraint) {
+            apply(fieldSpec, (FormatConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
             apply(fieldSpec, (StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
@@ -205,6 +207,16 @@ public class FieldSpecFactory {
         applyPattern(fieldSpec, constraint.regex, negate);
     }
 
+    private void apply(FieldSpec fieldSpec, FormatConstraint constraint, boolean negate) {
+        FormatRestrictions formatRestrictions = fieldSpec.getFormatRestrictions();
+        if (formatRestrictions == null) {
+            formatRestrictions = new FormatRestrictions();
+            fieldSpec.setFormatRestrictions(formatRestrictions);
+        }
+
+        formatRestrictions.formatString = constraint.format;
+    }
+
     private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
         final Pattern regex = Pattern.compile(String.format(".*{%s}", constraint.referenceValue));
         applyPattern(fieldSpec, regex, negate);
@@ -224,7 +236,7 @@ public class FieldSpecFactory {
         StringRestrictions stringRestrictions = new StringRestrictions();
         fieldSpec.setStringRestrictions(stringRestrictions);
 
-        IStringGenerator nominalStringGenerator = new StringGenerator(pattern.toString());
+        IStringGenerator nominalStringGenerator = new RegexStringGenerator(pattern.toString());
         nominalStringGenerator = negate
             ? nominalStringGenerator.complement()
             : nominalStringGenerator;

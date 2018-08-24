@@ -9,15 +9,15 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringGenerator implements IStringGenerator {
+public class RegexStringGenerator implements IStringGenerator {
 
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
-    public static StringGenerator createFromBlacklist(Set<Object> blacklist) {
-        return StringGenerator.createFromBlacklist(blacklist, new RandomGenerator());
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
+        return RegexStringGenerator.createFromBlacklist(blacklist, new JavaUtilRandomNumberGenerator());
     }
 
-    public static StringGenerator createFromBlacklist(Set<Object> blacklist, IRandomGenerator random) {
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, IRandomNumberGenerator random) {
         String[] blacklistStrings = new String[blacklist.size()];
         int i = 0;
         for (Object obj : blacklist) {
@@ -25,10 +25,10 @@ public class StringGenerator implements IStringGenerator {
         }
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
-        return new StringGenerator(automaton, random);
+        return new RegexStringGenerator(automaton, random);
     }
 
-    private IRandomGenerator random;
+    private IRandomNumberGenerator random;
     private Automaton automaton;
     private Node rootNode;
     private boolean isRootNodeBuilt;
@@ -44,7 +44,7 @@ public class StringGenerator implements IStringGenerator {
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
 
-    public StringGenerator(String regexStr, IRandomGenerator random) {
+    public RegexStringGenerator(String regexStr, IRandomNumberGenerator random) {
         final String requotedStr = escapeCharacters(regexStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
 
@@ -55,27 +55,27 @@ public class StringGenerator implements IStringGenerator {
         this.random = random;
     }
 
-    public StringGenerator(String regexStr) {
+    public RegexStringGenerator(String regexStr) {
 
-        this(regexStr, new RandomGenerator());
+        this(regexStr, new JavaUtilRandomNumberGenerator());
     }
 
-    private StringGenerator(Automaton automaton, IRandomGenerator random) {
+    private RegexStringGenerator(Automaton automaton, IRandomNumberGenerator random) {
         this.automaton = automaton;
         this.random = random;
     }
 
     @Override
     public IStringGenerator intersect(IStringGenerator stringGenerator) {
-        Automaton b = ((StringGenerator) stringGenerator).automaton;
+        Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
         Automaton merged = automaton.intersection(b);
 
-        return new StringGenerator(merged, this.random);
+        return new RegexStringGenerator(merged, this.random);
     }
 
     @Override
     public IStringGenerator complement() {
-        return new StringGenerator(this.automaton.clone().complement(), this.random);
+        return new RegexStringGenerator(this.automaton.clone().complement(), this.random);
     }
 
     @Override
@@ -91,8 +91,8 @@ public class StringGenerator implements IStringGenerator {
     @Override
     public Iterator<String> generateAllValues() {
         return this.IsFinite()
-                ? new StringGenerator.FiniteStringAutomatonIterator(this)
-                : new StringGenerator.InfiniteStringAutomatonIterator(this);
+                ? new RegexStringGenerator.FiniteStringAutomatonIterator(this)
+                : new RegexStringGenerator.InfiniteStringAutomatonIterator(this);
     }
 
     @Override
@@ -105,8 +105,7 @@ public class StringGenerator implements IStringGenerator {
         return generateRandomStringInternal("", automaton.getInitialState(), 1, maxChars);
     }
 
-    @Override
-    public String getMatchedString(int indexOrder) {
+    private String getMatchedString(int indexOrder) {
         buildRootNode();
         if (indexOrder == 0)
             indexOrder = 1;
@@ -200,7 +199,7 @@ public class StringGenerator implements IStringGenerator {
         return transitions.size() == 0;
     }
 
-    private String buildStringFromNode(StringGenerator.Node node, int indexOrder) {
+    private String buildStringFromNode(RegexStringGenerator.Node node, int indexOrder) {
         String result = "";
         long passedStringNbr = 0;
         long step = node.getMatchedStringIdx() / node.getNbrChar();
@@ -216,7 +215,7 @@ public class StringGenerator implements IStringGenerator {
         long passedStringNbrInChildNode = 0;
         if (result.length() == 0)
             passedStringNbrInChildNode = passedStringNbr;
-        for (StringGenerator.Node childN : node.getNextNodes()) {
+        for (RegexStringGenerator.Node childN : node.getNextNodes()) {
             passedStringNbrInChildNode += childN.getMatchedStringIdx();
             if (passedStringNbrInChildNode >= indexOrder) {
                 passedStringNbrInChildNode -= childN.getMatchedStringIdx();
@@ -236,33 +235,33 @@ public class StringGenerator implements IStringGenerator {
             return;
         isRootNodeBuilt = true;
 
-        rootNode = new StringGenerator.Node();
-        List<StringGenerator.Node> nextNodes = prepareTransactionNodes(automaton.getInitialState());
+        rootNode = new RegexStringGenerator.Node();
+        List<RegexStringGenerator.Node> nextNodes = prepareTransactionNodes(automaton.getInitialState());
         rootNode.setNextNodes(nextNodes);
         rootNode.updateMatchedStringIdx();
     }
 
-    private List<StringGenerator.Node> prepareTransactionNodes(State state) {
+    private List<RegexStringGenerator.Node> prepareTransactionNodes(State state) {
 
-        List<StringGenerator.Node> transactionNodes = new ArrayList<>();
+        List<RegexStringGenerator.Node> transactionNodes = new ArrayList<>();
         if (preparedTransactionNode == Integer.MAX_VALUE / 2) {
             return transactionNodes;
         }
         ++preparedTransactionNode;
 
         if (state.isAccept()) {
-            StringGenerator.Node acceptedNode = new StringGenerator.Node();
+            RegexStringGenerator.Node acceptedNode = new RegexStringGenerator.Node();
             acceptedNode.setNbrChar(1);
             transactionNodes.add(acceptedNode);
         }
         List<Transition> transitions = state.getSortedTransitions(true);
         for (Transition transition : transitions) {
-            StringGenerator.Node trsNode = new StringGenerator.Node();
+            RegexStringGenerator.Node trsNode = new RegexStringGenerator.Node();
             int nbrChar = transition.getMax() - transition.getMin() + 1;
             trsNode.setNbrChar(nbrChar);
             trsNode.setMaxChar(transition.getMax());
             trsNode.setMinChar(transition.getMin());
-            List<StringGenerator.Node> nextNodes = prepareTransactionNodes(transition.getDest());
+            List<RegexStringGenerator.Node> nextNodes = prepareTransactionNodes(transition.getDest());
             trsNode.setNextNodes(nextNodes);
             transactionNodes.add(trsNode);
         }
@@ -271,7 +270,7 @@ public class StringGenerator implements IStringGenerator {
 
     private class Node {
         private int nbrChar = 1;
-        private List<StringGenerator.Node> nextNodes = new ArrayList<>();
+        private List<RegexStringGenerator.Node> nextNodes = new ArrayList<>();
         private boolean isNbrMatchedStringUpdated;
         private long matchedStringIdx = 0;
         private char minChar;
@@ -285,11 +284,11 @@ public class StringGenerator implements IStringGenerator {
             this.nbrChar = nbrChar;
         }
 
-        List<StringGenerator.Node> getNextNodes() {
+        List<RegexStringGenerator.Node> getNextNodes() {
             return nextNodes;
         }
 
-        void setNextNodes(List<StringGenerator.Node> nextNodes) {
+        void setNextNodes(List<RegexStringGenerator.Node> nextNodes) {
             this.nextNodes = nextNodes;
         }
 
@@ -300,7 +299,7 @@ public class StringGenerator implements IStringGenerator {
             if (nextNodes.size() == 0) {
                 matchedStringIdx = nbrChar;
             } else {
-                for (StringGenerator.Node childNode : nextNodes) {
+                for (RegexStringGenerator.Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
                     matchedStringIdx += nbrChar * childNbrChar;
@@ -332,10 +331,10 @@ public class StringGenerator implements IStringGenerator {
 
     private class FiniteStringAutomatonIterator implements Iterator<String> {
 
-        private final StringGenerator stringGenerator;
+        private final RegexStringGenerator stringGenerator;
         private int currentIndex;
 
-        FiniteStringAutomatonIterator(StringGenerator stringGenerator) {
+        FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
             currentIndex = 0;
         }
@@ -355,9 +354,9 @@ public class StringGenerator implements IStringGenerator {
 
     private class InfiniteStringAutomatonIterator implements Iterator<String> {
 
-        private final StringGenerator stringGenerator;
+        private final RegexStringGenerator stringGenerator;
 
-        InfiniteStringAutomatonIterator(StringGenerator stringGenerator) {
+        InfiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
         }
 

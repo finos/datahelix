@@ -14,10 +14,10 @@ import java.util.List;
 
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
-    private final TestCaseDataSetWriter datasetWriter;
+    private final IDataSetWriter datasetWriter;
 
     public TestCaseGenerationResultWriter() {
-        this.datasetWriter = new TestCaseDataSetWriter();
+        this.datasetWriter = new CsvTestCaseDataSetWriter();
         this.manifestWriter = new ManifestWriter();
     }
 

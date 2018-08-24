@@ -2,12 +2,15 @@ package com.scottlogic.deg.generator.utils;
 
 import java.util.Random;
 
-public class RandomGenerator implements IRandomGenerator {
-
+public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
     private final Random random;
 
-    public RandomGenerator(){
-        random = new Random(System.currentTimeMillis());
+    public JavaUtilRandomNumberGenerator(){
+        random = new Random();
+    }
+
+    public JavaUtilRandomNumberGenerator(long seed){
+        random = new Random(seed);
     }
 
     @Override
@@ -20,4 +23,3 @@ public class RandomGenerator implements IRandomGenerator {
         return random.nextInt(bound);
     }
 }
-

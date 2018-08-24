@@ -1,10 +1,12 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.generation.iterators.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
+import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
 import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
 
@@ -15,7 +17,7 @@ import java.util.Set;
 
 
 interface IDataPointSource {
-    Iterator<Object> iterator(GenerationConfig config);
+    Iterator<DataBagValue> iterator(GenerationConfig config);
 }
 
 public class FieldSpecFulfiller implements IDataPointSource {
@@ -26,20 +28,26 @@ public class FieldSpecFulfiller implements IDataPointSource {
     }
 
     @Override
-    public Iterator<Object> iterator(GenerationConfig config) {
+    public Iterator<DataBagValue> iterator(GenerationConfig config) {
         IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
 
-        Iterator<Object> potentiallyLimitedIterator =
+        Iterator<Object> valuesIterator =
                 internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
                         ? // the field's infinite and we're configured to sample from infinite sequences
                         new LimitingIteratorDecorator<>(internalIterator, 1)
                         : internalIterator;
 
-        return this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
+        valuesIterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
                 ? // the field could be null; output one at the start of the sequence and filter any out from later
                 new ValuePrependingIterator<>(
-                        new FilteringIterator<>(potentiallyLimitedIterator, null), null)
-                : potentiallyLimitedIterator;
+                        new FilteringIterator<>(valuesIterator, null), null)
+                : valuesIterator;
+
+        return new DataBagValueIterator(
+                valuesIterator,
+                this.spec.getFormatRestrictions() != null
+                    ? this.spec.getFormatRestrictions().formatString
+                    : null);
     }
 
     private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,7 @@ class DataBagTests {
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.get(idField),
+            objectUnderTest.getValue(idField),
             equalTo(3));
     }
 
@@ -46,7 +47,7 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> objectUnderTest.get(idField));
+            () -> objectUnderTest.getValueAndFormat(idField));
     }
 
     @Test
@@ -55,19 +56,19 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding().set(idField, 3).build();
-        DataBag dataBag2 = DataBag.startBuilding().set(priceField, 4).build();
+        DataBag dataBag1 = DataBag.startBuilding().set(idField, new DataBagValue(3)).build();
+        DataBag dataBag2 = DataBag.startBuilding().set(priceField, new DataBagValue(4)).build();
 
         // ACT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.get(idField),
+            mergedDataBag.getValue(idField),
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.get(priceField),
+            mergedDataBag.getValue(priceField),
             equalTo(4));
     }
 
@@ -90,22 +91,5 @@ class DataBagTests {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> DataBag.merge(dataBag1, dataBag2));
-    }
-
-    // because a previous implementation, using Collectors.toBag, failed on these inputs
-    @Test
-    void mergeShouldHandleNullValues() {
-        // ARRANGE
-        Field idField = new Field("id");
-
-        DataBag dataBag1 = DataBag.empty;
-        DataBag dataBag2 = DataBag.startBuilding().set(idField, null).build();
-
-        // ACT / ASSERT
-        DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
-
-        Assert.assertThat(
-            mergedDataBag.get(idField),
-            equalTo(null));
     }
 }

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.iterators;
 
 import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.StringGenerator;
+import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class StringIterator implements IFieldSpecIterator {
     public StringIterator(IStringGenerator stringGenerator, Set<Object> blacklist) {
 
         if (blacklist != null && blacklist.size() > 0) {
-            StringGenerator blacklistGenerator = StringGenerator.createFromBlacklist(blacklist);
+            RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
             this.stringGenerator = stringGenerator.intersect(blacklistGenerator);
         } else {

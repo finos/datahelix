@@ -7,10 +7,10 @@ import java.util.Collection;
 
 @JsonPropertyOrder({ "field", "is", "value", "if", "then", "else" })
 public class ConstraintDTO {
-    public String is;
-
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
+
+    public String is;
 
     /** the ID of the field this constraint constrains, if relevant */
     public String field;
