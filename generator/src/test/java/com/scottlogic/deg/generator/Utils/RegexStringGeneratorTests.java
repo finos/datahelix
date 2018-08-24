@@ -5,61 +5,46 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RegexStringGeneratorTests {
-
     @Test
     void shouldGenerateStringsInLexicographicalOrder() {
+        givenRegex("aa(bb|cc)d?");
 
-        IStringGenerator generator = new RegexStringGenerator(
-            "aa(bb|cc)d?",
-            new JavaUtilRandomNumberGenerator(0));
-
-        Assert.assertThat(generator.getValueCount(), Is.is(4L));
-
-        Assert.assertThat(generator.IsFinite(), Is.is(true));
-
-        Assert.assertThat(generator.getMatchedString(1), Is.is("aabb"));
-        Assert.assertThat(generator.getMatchedString(2), Is.is("aabbd"));
-        Assert.assertThat(generator.getMatchedString(3), Is.is("aacc"));
-        Assert.assertThat(generator.getMatchedString(4), Is.is("aaccd"));
+        expectOrderedResults(
+            "aabb",
+            "aabbd",
+            "aacc",
+            "aaccd");
     }
 
     @Test
     void shouldCorrectlyIterateFiniteResults() {
+        givenRegex("xyz(xyz)?xyz");
 
-        IStringGenerator generator = new RegexStringGenerator(
-            "xyz(xyz)?xyz",
-            new JavaUtilRandomNumberGenerator(0));
-
-        List<String> actual = new ArrayList<>();
-        generator.generateAllValues().forEachRemaining(actual::add);
-
-        Assert.assertThat(actual, contains("xyzxyz", "xyzxyzxyz"));
+        expectOrderedResults("xyzxyz", "xyzxyzxyz");
     }
 
     @Test
     void shouldCorrectlyReplaceCharacterGroups() {
+        givenRegex("\\d");
 
-        IStringGenerator generator = new RegexStringGenerator(
-            "\\d",
-            new JavaUtilRandomNumberGenerator(0));
-        String actual = generator.getMatchedString(1);
-
-        Assert.assertThat(actual, Is.is("0"));
-
+        expectFirstResult("0");
     }
 
     @Test
@@ -112,7 +97,7 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldProduceCompliment() {
+    void shouldProduceComplement() {
 
         IStringGenerator limitedRangeGenerator = new RegexStringGenerator(
             "[a-m]",
@@ -135,5 +120,59 @@ public class RegexStringGeneratorTests {
             new JavaUtilRandomNumberGenerator(0));
 
         assertThrows(UnsupportedOperationException.class, () -> infiniteGenerator.getValueCount());
+    }
+
+
+
+    private final List<String> regexes = new ArrayList<>();
+
+    private void givenRegex(String regex) {
+        this.regexes.add(regex);
+    }
+
+    @BeforeEach
+    private void beforeEach() {
+        this.regexes.clear();
+    }
+
+    private IStringGenerator constructGenerator() {
+        IStringGenerator generator = null;
+        for (String regex : regexes){
+            RegexStringGenerator correspondingGenerator = new RegexStringGenerator(
+                regex,
+                new JavaUtilRandomNumberGenerator(0));
+
+            if (generator == null)
+                generator = correspondingGenerator;
+            else
+                generator = generator.intersect(correspondingGenerator);
+        }
+
+        return generator;
+    }
+
+    private void expectOrderedResults(String... expectedValues) {
+        IStringGenerator generator = constructGenerator();
+
+        List<String> generatedValues = new ArrayList<>();
+        Iterator<String> iterator = generator.generateAllValues();
+
+        while (iterator.hasNext()) {
+            generatedValues.add(iterator.next());
+        }
+
+        Assert.assertThat(
+            generatedValues,
+            equalTo(Arrays.asList(expectedValues)));
+    }
+
+    private void expectFirstResult(String expectedValue) {
+        IStringGenerator generator = constructGenerator();
+
+        String actualValue = generator.generateAllValues().next();
+
+        Assert.assertThat(
+            actualValue,
+            equalTo(expectedValue));
     }
 }

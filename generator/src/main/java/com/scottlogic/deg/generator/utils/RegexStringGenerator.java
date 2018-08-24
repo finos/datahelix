@@ -105,8 +105,7 @@ public class RegexStringGenerator implements IStringGenerator {
         return generateRandomStringInternal("", automaton.getInitialState(), 1, maxChars);
     }
 
-    @Override
-    public String getMatchedString(int indexOrder) {
+    private String getMatchedString(int indexOrder) {
         buildRootNode();
         if (indexOrder == 0)
             indexOrder = 1;
