@@ -121,12 +121,12 @@ public class FieldSpecFactory {
         }
         final BigDecimal limit = numberToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.max = new NumericRestrictions.NumericLimit(
+            numericRestrictions.max = new NumericLimit<>(
                     limit,
                     !inclusive
             );
         } else {
-            numericRestrictions.min = new NumericRestrictions.NumericLimit(
+            numericRestrictions.min = new NumericLimit<>(
                     limit,
                     inclusive
             );
@@ -149,12 +149,12 @@ public class FieldSpecFactory {
         }
         final BigDecimal limit = numberToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.min = new NumericRestrictions.NumericLimit(
+            numericRestrictions.min = new NumericLimit<>(
                     limit,
                     !inclusive
             );
         } else {
-            numericRestrictions.max = new NumericRestrictions.NumericLimit(
+            numericRestrictions.max = new NumericLimit<>(
                     limit,
                     inclusive
             );

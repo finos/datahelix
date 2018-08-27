@@ -16,9 +16,7 @@ public class RowSpecDataBagSource {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldDataBagSources.add(
-                new FieldSpecDataBagSource(
-                    field,
-                    new FieldSpecFulfiller(fieldSpec)));
+                new FieldSpecFulfiller(field, fieldSpec));
         }
 
         return new MultiplexingDataBagSource(fieldDataBagSources);

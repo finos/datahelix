@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.utils;
 
 import java.util.Iterator;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ProjectingIterable<TFrom, TTo> implements Iterable<TTo>
 {

@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexStringGenerator implements IStringGenerator {
-
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
     public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
@@ -25,10 +24,9 @@ public class RegexStringGenerator implements IStringGenerator {
         }
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
-        return new RegexStringGenerator(automaton, random);
+        return new RegexStringGenerator(automaton);
     }
 
-    private IRandomNumberGenerator random;
     private Automaton automaton;
     private Node rootNode;
     private boolean isRootNodeBuilt;
@@ -44,7 +42,7 @@ public class RegexStringGenerator implements IStringGenerator {
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
 
-    public RegexStringGenerator(String regexStr, IRandomNumberGenerator random) {
+    public RegexStringGenerator(String regexStr) {
         final String requotedStr = escapeCharacters(regexStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
 
@@ -52,17 +50,10 @@ public class RegexStringGenerator implements IStringGenerator {
         generatedAutomaton.expandSingleton();
 
         this.automaton = generatedAutomaton;
-        this.random = random;
     }
 
-    public RegexStringGenerator(String regexStr) {
-
-        this(regexStr, new JavaUtilRandomNumberGenerator());
-    }
-
-    private RegexStringGenerator(Automaton automaton, IRandomNumberGenerator random) {
+    private RegexStringGenerator(Automaton automaton) {
         this.automaton = automaton;
-        this.random = random;
     }
 
     @Override
@@ -70,45 +61,44 @@ public class RegexStringGenerator implements IStringGenerator {
         Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
         Automaton merged = automaton.intersection(b);
 
-        return new RegexStringGenerator(merged, this.random);
+        return new RegexStringGenerator(merged);
     }
 
     @Override
     public IStringGenerator complement() {
-        return new RegexStringGenerator(this.automaton.clone().complement(), this.random);
+        return new RegexStringGenerator(this.automaton.clone().complement());
     }
 
     @Override
-    public boolean IsFinite() {
+    public boolean isFinite() {
         return automaton.isFinite();
     }
 
     @Override
-    public boolean canProduceValues() {
-        return automaton.getNumberOfStates() > 0;
+    public Iterable<String> generateAllValues() {
+        if (this.isFinite())
+            return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
+
+        // TODO: Assess whether we can do better here. Is it unacceptable to just generate indefinitely?
+        // We used to generate randomly, but that violates a reasonable expectation that values returned by this method should be unique
+        throw new UnsupportedOperationException("Can't generate all strings for a non-finite regex");
     }
 
     @Override
-    public Iterator<String> generateAllValues() {
-        return this.IsFinite()
-                ? new RegexStringGenerator.FiniteStringAutomatonIterator(this)
-                : new RegexStringGenerator.InfiniteStringAutomatonIterator(this);
-    }
-
-    @Override
-    public String generateRandomValue() {
-        return generateRandomStringInternal("", automaton.getInitialState(), 1, Integer.MAX_VALUE);
-    }
-
-    @Override
-    public String generateRandomValue(int maxChars) {
-        return generateRandomStringInternal("", automaton.getInitialState(), 1, maxChars);
+    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+        return () -> new SupplierBasedIterator<>(
+            () -> generateRandomStringInternal(
+                "",
+                automaton.getInitialState(),
+                1,
+                Integer.MAX_VALUE,
+                randomNumberGenerator));
     }
 
     private String getMatchedString(int indexOrder) {
         buildRootNode();
-        if (indexOrder == 0)
-            indexOrder = 1;
+        if (indexOrder < 1)
+            throw new IllegalArgumentException("indexOrder must be >= 1");
 
         if (indexOrder > rootNode.matchedStringIdx) {
             return null;
@@ -120,7 +110,7 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public long getValueCount() {
-        if (!this.IsFinite()) {
+        if (!this.isFinite()) {
             throw new UnsupportedOperationException("Cannot count matches for a non-finite expression.");
         }
 
@@ -151,7 +141,13 @@ public class RegexStringGenerator implements IStringGenerator {
         return new RegExp(finalRegex);
     }
 
-    private String generateRandomStringInternal(String strMatch, State state, int minLength, int maxLength) {
+    private String generateRandomStringInternal(
+        String strMatch,
+        State state,
+        int minLength,
+        int maxLength,
+        IRandomNumberGenerator random) {
+
         List<Transition> transitions = state.getSortedTransitions(false);
         Set<Integer> selectedTransitions = new HashSet<>();
         String result = strMatch;
@@ -161,7 +157,7 @@ public class RegexStringGenerator implements IStringGenerator {
                      && (resultLength < minLength || resultLength > maxLength);
              resultLength = result.length()) {
 
-            if (randomPrepared(strMatch, state, minLength, maxLength, transitions)) {
+            if (randomPrepared(strMatch, state, minLength, maxLength, transitions, random)) {
                 return strMatch;
             }
 
@@ -173,7 +169,7 @@ public class RegexStringGenerator implements IStringGenerator {
                 int diff = randomTransition.getMax() - randomTransition.getMin() + 1;
                 int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
                 char randomChar = (char) (randomOffset + randomTransition.getMin());
-                result = generateRandomStringInternal(strMatch + randomChar, randomTransition.getDest(), minLength, maxLength);
+                result = generateRandomStringInternal(strMatch + randomChar, randomTransition.getDest(), minLength, maxLength, random);
             }
         }
 
@@ -185,7 +181,8 @@ public class RegexStringGenerator implements IStringGenerator {
             State state,
             int minLength,
             int maxLength,
-            List<Transition> transitions) {
+            List<Transition> transitions,
+            IRandomNumberGenerator random) {
 
         if (state.isAccept()) {
             if (strMatch.length() == maxLength) {
@@ -349,25 +346,6 @@ public class RegexStringGenerator implements IStringGenerator {
         public String next() {
             currentIndex++; // starts at 1
             return stringGenerator.getMatchedString(currentIndex);
-        }
-    }
-
-    private class InfiniteStringAutomatonIterator implements Iterator<String> {
-
-        private final RegexStringGenerator stringGenerator;
-
-        InfiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
-            this.stringGenerator = stringGenerator;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return true;
-        }
-
-        @Override
-        public String next() {
-            return stringGenerator.generateRandomValue();
         }
     }
 }

@@ -3,24 +3,6 @@ package com.scottlogic.deg.generator.restrictions;
 import java.math.BigDecimal;
 
 public class NumericRestrictions {
-    public NumericLimit min;
-    public NumericLimit max;
-
-    public static class NumericLimit {
-        private final BigDecimal limit;
-        private final boolean inclusive;
-
-        public NumericLimit(BigDecimal limit, boolean inclusive) {
-            this.limit = limit;
-            this.inclusive = inclusive;
-        }
-
-        public BigDecimal getLimit() {
-            return limit;
-        }
-
-        public boolean isInclusive() {
-            return inclusive;
-        }
-    }
+    public NumericLimit<BigDecimal> min;
+    public NumericLimit<BigDecimal> max;
 }
