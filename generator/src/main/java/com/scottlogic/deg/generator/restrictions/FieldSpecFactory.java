@@ -94,15 +94,26 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsOfTypeConstraint constraint, boolean negate) {
-        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
-        if (typeRestrictions == null) {
-            typeRestrictions = new TypeRestrictions();
-            fieldSpec.setTypeRestrictions(typeRestrictions);
-        }
         if (negate) {
             throw new UnsupportedOperationException();
         }
-        typeRestrictions.type = constraint.requiredType;
+
+        switch (constraint.requiredType) {
+            case String:
+                if (fieldSpec.getStringRestrictions() == null)
+                    fieldSpec.setStringRestrictions(new StringRestrictions());
+                break;
+            case Numeric:
+                if (fieldSpec.getNumericRestrictions() == null)
+                    fieldSpec.setNumericRestrictions(new NumericRestrictions());
+                break;
+            case Temporal:
+                if (fieldSpec.getDateTimeRestrictions() == null)
+                    fieldSpec.setDateTimeRestrictions(new DateTimeRestrictions());
+                break;
+            default:
+                throw new UnsupportedOperationException("Can't create restrictions for specified data type");
+        }
     }
 
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {

@@ -12,7 +12,6 @@ public class FieldSpec {
     private NumericRestrictions numericRestrictions;
     private StringRestrictions stringRestrictions;
     private NullRestrictions nullRestrictions;
-    private TypeRestrictions typeRestrictions;
     private DateTimeRestrictions dateTimeRestrictions;
     private FormatRestrictions formatRestrictions;
 
@@ -32,10 +31,6 @@ public class FieldSpec {
         return nullRestrictions;
     }
 
-    public TypeRestrictions getTypeRestrictions() {
-        return typeRestrictions;
-    }
-
     public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
 
     public void setSetRestrictions(SetRestrictions setRestrictions) {
@@ -48,10 +43,6 @@ public class FieldSpec {
 
     public void setStringRestrictions(StringRestrictions stringRestrictions) {
         this.stringRestrictions = stringRestrictions;
-    }
-
-    public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
-        this.typeRestrictions = typeRestrictions;
     }
 
     public void setNullRestrictions(NullRestrictions nullRestrictions) {
@@ -70,7 +61,6 @@ public class FieldSpec {
                 Objects.toString(numericRestrictions, "-"),
                 Objects.toString(stringRestrictions, "-"),
                 Objects.toString(nullRestrictions, "-"),
-                Objects.toString(typeRestrictions, "-"),
                 Objects.toString(dateTimeRestrictions, "-")
         );
     }

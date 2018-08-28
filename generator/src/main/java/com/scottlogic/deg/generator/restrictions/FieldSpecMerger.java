@@ -10,9 +10,10 @@ public class FieldSpecMerger {
     private final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
     private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
     private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
-    private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
     private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
+
+    private final IFieldSpecSatisfiabilityChecker satisfiabilityChecker = new ConflictingTypesSatisfiabilityChecker();
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -37,13 +38,17 @@ public class FieldSpecMerger {
             merged.setStringRestrictions(stringRestrictionsMerger.merge(left.getStringRestrictions(),
                     right.getStringRestrictions()));
             merged.setNullRestrictions(nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
-            merged.setTypeRestrictions(typeRestrictionsMerger.merge(left.getTypeRestrictions(), right.getTypeRestrictions()));
             merged.setDateTimeRestrictions(dateTimeRestrictionsMerger.merge(left.getDateTimeRestrictions(),
                     right.getDateTimeRestrictions()));
             merged.setFormatRestrictions(formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
         } catch (UnmergeableRestrictionException e) {
             return Optional.empty();
         }
+
+        if (!satisfiabilityChecker.isSatisfiable(merged)) {
+            return Optional.empty();
+        }
+
         return Optional.of(merged);
     }
 }
