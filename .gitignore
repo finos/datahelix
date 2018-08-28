@@ -3,3 +3,10 @@
 node_modules/
 *.iml
 *.orig
+
+# Eclipse files
+**/*.cache-main
+**/*.cache-tests
+**/*.classpath
+**/*.project
+**/*.settings

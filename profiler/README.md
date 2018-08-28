@@ -46,7 +46,7 @@ Install [Oracle JDK 8 SE](http://www.oracle.com/technetwork/java/javase/download
 In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
 Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
 
-### IDE
+### IntelliJ IDE
 
 Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all features of Ultimate (improves framework support and polyglot).
 
@@ -62,13 +62,13 @@ Set Project language level to 8.
 Open the "Maven Projects" Tool Window, and double-click _Lifecycle > compile_.  
 This is only necessary when your Maven dependencies change. Otherwise prefer the IDE's built-in Build.
 
-#### Plugins
+##### Plugins
 
 _File > Settings_
 
 Ensure you have the Scala plugin installed.
 
-#### Recommended IntelliJ settings
+##### Recommended IntelliJ settings
 
 _File > Settings_
 
@@ -77,7 +77,7 @@ This gives you faster builds.
 
 Search "Show tool window bars". Ensure this is _checked_.
 
-## Run
+##### Run
 
 In IntelliJ, navigate to `App.scala`.
 
@@ -88,7 +88,7 @@ Click this and choose "Debug 'App'".
 
 Edit the Run Configuration...
 
-### Arguments
+#### Arguments
 
 In Program Arguments, specify the path to a csv for analysis.
 
@@ -98,7 +98,7 @@ For now, I run it upon `gfx_cleaned.csv` (found in test/resources):
 "C:\git\data-engineering-generator\data-generator-spark\src\test\resources\gfx_cleaned.csv"
 ```
 
-### VM Options
+#### VM Options
 
 Our runtime dynamically links to hadoop.dll (native code, via JNI).  
 Specify the folder in which hadoop.dll lives:
@@ -107,9 +107,47 @@ Specify the folder in which hadoop.dll lives:
 -Djava.library.path="C:\hadoop-2.7.6\bin"
 ```
 
-### Environment
+#### Environment
 
 You can specify `HADOOP_HOME` and `SPARK_HOME` here (or just rely on your Windows environment variables).
+
+### Eclipse IDE
+
+#### Setup
+
+Get the [scala-ide](http://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-win32.win32.x86_64.zip)
+version of Eclipse.
+
+Extract the archive, launch Eclipse and choose your workspace location.
+
+Import the project as a Maven project.
+
+When importing is complete some errors relating to Scala versions will be shown.
+To fix this:
+
+- Right-click the *profiler* project in the Package Explorer view and click
+    *Properties*
+ - Select *Scala Compiler*, tick *Use Project Settings*, then select *Latest
+    2.11 bundle*
+ - Click *Apply and Close*
+
+After the project has been rebuilt the errors should be gone.
+
+#### Run
+
+The appropriate run configuration is stored in the repository and so can be run
+straight away:
+
+- In the top toolbar, click the arrow next to the green start button
+- Click *Profiler*
+
+To change the arguments the Profiler is run with, edit the run configuration:
+
+- In the top toolbar, click the arrow next to the green start button
+- Click *Run Configurations* > *Scala Application* > *Profiler*
+- Click the *Arguments* tab
+
+Don't accidentally commit your changes to the run configuration.
 
 ## Submitting a Spark job
 

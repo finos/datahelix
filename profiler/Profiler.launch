@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="scala.application">
+<listAttribute key="StepOutExcludePkgsOrClasses"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/profiler/src/main/scala/com/scottlogic/deg/App.scala"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.scottlogic.deg.App"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="src/test/resources/gfx_cleaned.csv ."/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="profiler"/>
+</launchConfiguration>
