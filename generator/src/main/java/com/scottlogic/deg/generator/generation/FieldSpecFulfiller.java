@@ -1,96 +1,134 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValue;
-import com.scottlogic.deg.generator.generation.iterators.*;
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import com.scottlogic.deg.generator.utils.FilteringIterator;
-import com.scottlogic.deg.generator.utils.DataBagValueIterator;
-import com.scottlogic.deg.generator.utils.LimitingIteratorDecorator;
-import com.scottlogic.deg.generator.utils.ValuePrependingIterator;
+import com.scottlogic.deg.generator.utils.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-
-interface IDataPointSource {
-    Iterator<DataBagValue> iterator(GenerationConfig config);
-}
-
-public class FieldSpecFulfiller implements IDataPointSource {
+public class FieldSpecFulfiller implements IDataBagSource {
+    private final Field field;
     private final FieldSpec spec;
 
-    public FieldSpecFulfiller(FieldSpec spec) {
+    public FieldSpecFulfiller(Field field, FieldSpec spec) {
+        this.field = field;
         this.spec = spec;
     }
 
     @Override
-    public Iterator<DataBagValue> iterator(GenerationConfig config) {
-        IFieldSpecIterator internalIterator = getSpecialisedInternalIterator(config);
+    public Iterable<DataBag> generate(GenerationConfig generationConfig) {
+        List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
-        Iterator<Object> valuesIterator =
-                internalIterator.isInfinite() && config.shouldChooseFiniteSampling()
-                        ? // the field's infinite and we're configured to sample from infinite sequences
-                        new LimitingIteratorDecorator<>(internalIterator, 1)
-                        : internalIterator;
+        if (generationConfig.shouldChooseFiniteSampling()) {
+            fieldValueSources = fieldValueSources.stream()
+                .map(fvs -> new LimitingFieldValueSource(fvs, 3, 8))
+                .collect(Collectors.toList());
+        }
 
-        valuesIterator = this.spec.getNullRestrictions() == null || this.spec.getNullRestrictions().nullness == null
-                ? // the field could be null; output one at the start of the sequence and filter any out from later
-                new ValuePrependingIterator<>(
-                        new FilteringIterator<>(valuesIterator, null), null)
-                : valuesIterator;
+        IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        return new DataBagValueIterator(
-                valuesIterator,
-                this.spec.getFormatRestrictions() != null
-                    ? this.spec.getFormatRestrictions().formatString
-                    : null);
+        return new ProjectingIterable<>(
+            combinedFieldValueSource.generateAllValues(),
+            value ->
+            {
+                DataBagValue dataBagValue = new DataBagValue(
+                    value,
+                    this.spec.getFormatRestrictions() != null
+                        ? this.spec.getFormatRestrictions().formatString
+                        : null);
+
+                return DataBag.startBuilding()
+                    .set(
+                        this.field,
+                        dataBagValue)
+                    .build();
+            });
     }
 
-    private IFieldSpecIterator getSpecialisedInternalIterator(GenerationConfig config) {
-        // if *always* null, output a sequence just containing null
-        if (spec.getNullRestrictions() != null && spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
-            return new SpecificDataPointsIterator(Collections.singleton(null)); // if we use just 'null', Java interprets it as an array (because parameter type is Object...)
-        }
+    private List<IFieldValueSource> getAllApplicableValueSources() {
+        List<IFieldValueSource> validSources = new ArrayList<>();
+
+        // check nullability...
+        if (determineNullabilityAndDecideWhetherToHalt(validSources))
+            return validSources;
 
         // if there's a whitelist, we can just output that
         if (spec.getSetRestrictions() != null) {
             Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
             if (whitelist != null) {
-                return config.shouldEnumerateSetsExhaustively()
-                        ? new SetMembershipIterator(whitelist.iterator())
-                        : new SpecificDataPointsIterator(whitelist.iterator().next());
+                return Collections.singletonList(
+                    new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
             }
         }
 
         // if there're reasonably populated numeric restrictions, output within range
-        if (spec.getNumericRestrictions() != null && (spec.getNumericRestrictions().min != null || spec.getNumericRestrictions().max != null)) {
-            return new NumericIterator(spec.getNumericRestrictions(), getBlacklist());
+        if (spec.getNumericRestrictions() != null) {
+            validSources.add(
+                new IntegerFieldValueSource(
+                    spec.getNumericRestrictions().min,
+                    spec.getNumericRestrictions().max,
+                    getBlacklist()));
+
+            return validSources;
         }
 
         // if there're reasonably populated string restrictions, output from stringGenerator
         StringRestrictions stringRestrictions = spec.getStringRestrictions();
         if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
-            StringIterator stringIterator = new StringIterator(stringRestrictions.stringGenerator, getBlacklist());
-            return stringIterator; //simplifyStringIterator(stringIterator);
+            Set<Object> blacklist = getBlacklist();
+
+            final IStringGenerator generator;
+            if (blacklist.size() > 0) {
+                RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+
+                generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
+            } else {
+                generator = stringRestrictions.stringGenerator;
+            }
+
+            validSources.add(generator.asFieldValueSource());
+
+            return validSources;
         }
 
-        // there were no restrictions - just output some random bits of data
-        return new SpecificDataPointsIterator("string", 123, true);
+        // there were no typed restrictions - just output some random bits of data
+        validSources.add(
+            CannedValuesFieldValueSource.of(
+                "string", 123, true));
+
+        return validSources;
+    }
+
+    private boolean determineNullabilityAndDecideWhetherToHalt(List<IFieldValueSource> fieldValueSources) {
+        IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+
+        if (spec.getNullRestrictions() != null) {
+            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
+                // if *always* null, add a null-only source and signal that no other sources are needed
+                fieldValueSources.add(nullOnlySource);
+                return true;
+            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustNotBeNull) {
+                // if *never* null, add nothing and signal that source generation should continue
+                return false;
+            }
+        }
+
+        // if none of the above, the field is nullable
+        fieldValueSources.add(nullOnlySource);
+        return false;
     }
 
     private Set<Object> getBlacklist() {
-        if (spec.getSetRestrictions() != null)
-            return new HashSet<>(spec.getSetRestrictions().blacklist);
-        return null;
-    }
+        if (spec.getSetRestrictions() == null)
+            return Collections.emptySet();
 
-    private IFieldSpecIterator simplifyStringIterator(StringIterator stringIterator) {
-        if (stringIterator.hasNext())
-            return new SpecificDataPointsIterator(stringIterator.next());
-        return SpecificDataPointsIterator.createEmpty();
+        return new HashSet<>(spec.getSetRestrictions().blacklist);
     }
 }

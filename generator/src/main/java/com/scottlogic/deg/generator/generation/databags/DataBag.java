@@ -48,7 +48,7 @@ public class DataBag {
         return new DataBag(newFieldToValue);
     }
 
-    static class DataBagBuilder {
+    public static class DataBagBuilder {
         private final Map<Field, DataBagValue> fieldToValue;
 
         private DataBagBuilder() {

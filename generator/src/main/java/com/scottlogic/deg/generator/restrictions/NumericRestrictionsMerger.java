@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions.NumericLimit;
+import java.math.BigDecimal;
 
 /**
  * For a given combination of choices over the decision tree
@@ -27,7 +27,7 @@ public class NumericRestrictionsMerger {
         return merged;
     }
 
-    private NumericLimit getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit left, NumericLimit right) {
+    private NumericLimit<BigDecimal> getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit<BigDecimal> left, NumericLimit<BigDecimal> right) {
         if (left == null && right == null) {
             return null;
         }
@@ -39,7 +39,9 @@ public class NumericRestrictionsMerger {
         }
 
         if (left.getLimit().compareTo(right.getLimit()) == 0)
-            return new NumericLimit(left.getLimit(), left.isInclusive() && right.isInclusive());
+            return new NumericLimit<>(
+                left.getLimit(),
+                left.isInclusive() && right.isInclusive());
         switch(mergeLimit) {
             case Min:
                 if (left.getLimit().compareTo(right.getLimit()) > 0)
