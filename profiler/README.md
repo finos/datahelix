@@ -4,7 +4,7 @@
 
 ### Scala
 
-[Download Scala 2.11.12](https://www.scala-lang.org/download/2.11.12.html)
+[Download Scala 2.11.12](https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.msi)
 
 Spark does not support Scala 2.12.X yet. So you will need to set up Scala 2.11.12 in your environment.
 
