@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class RuleDecision {
-    private final Collection<? extends RuleOption> options;
+public final class DecisionNode {
+    private final Collection<ConstraintNode> options;
 
-    public RuleDecision(Collection<? extends RuleOption> options) {
+    public DecisionNode(Collection<ConstraintNode> options) {
         this.options = options;
     }
 
-    public RuleDecision(RuleOption... options) {
+    public DecisionNode(ConstraintNode... options) {
         this.options = Arrays.asList(options);
     }
 
-    public Collection<RuleOption> getOptions() {
+    public Collection<ConstraintNode> getOptions() {
         return new ArrayList<>(options);
     }
 }

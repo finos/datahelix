@@ -20,15 +20,15 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 .collect(Collectors.toList()));
     }
 
-    private RuleOption convertRule(Rule rule) {
-        Iterator<RuleOption> rootOptionNodeFragments = rule.constraints.stream()
+    private ConstraintNode convertRule(Rule rule) {
+        Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
             .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
-        return RuleOption.merge(rootOptionNodeFragments);
+        return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
-    private Collection<RuleOption> convertConstraint(IConstraint constraint) {
+    private Collection<ConstraintNode> convertConstraint(IConstraint constraint) {
         if (constraint instanceof NotConstraint) {
             IConstraint negatedConstraint = ((NotConstraint) constraint).negatedConstraint;
 
@@ -75,10 +75,10 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                         : positiveNegation);
             }
             else {
-                return asOptionNodeList(constraint);
+                return asConstraintNodeList(constraint);
             }
         }
-        // AND(X, Y, Z) becomes a flattened list of option nodes
+        // AND(X, Y, Z) becomes a flattened list of constraint nodes
         else if (constraint instanceof AndConstraint) {
             Collection<IConstraint> subConstraints = ((AndConstraint) constraint).subConstraints;
 
@@ -90,18 +90,18 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         else if (constraint instanceof OrConstraint) {
             Collection<IConstraint> subConstraints = ((OrConstraint) constraint).subConstraints;
 
-            RuleDecision decisionPoint = new RuleDecision(
+            DecisionNode decisionPoint = new DecisionNode(
                 subConstraints.stream()
-                    .map(c -> RuleOption.merge(convertConstraint(c).stream().iterator()))
+                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
 
-            return asOptionNodeList(decisionPoint);
+            return asConstraintNodeList(decisionPoint);
         }
         else if (constraint instanceof ConditionalConstraint) {
             return convertConstraint(reduceConditionalConstraint(constraint));
         }
         else {
-            return asOptionNodeList(constraint);
+            return asConstraintNodeList(constraint);
         }
     }
 
@@ -118,20 +118,20 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 : ifConstraint.isFalse());
     }
 
-    private static Collection<RuleOption> asOptionNodeList(Collection<IConstraint> constraints) {
+    private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
         return Collections.singleton(
-            new RuleOption(
+            new ConstraintNode(
                 constraints,
                 Collections.emptyList()));
     }
 
-    private static Collection<RuleOption> asOptionNodeList(IConstraint constraint) {
-        return asOptionNodeList(Collections.singleton(constraint));
+    private static Collection<ConstraintNode> asConstraintNodeList(IConstraint constraint) {
+        return asConstraintNodeList(Collections.singleton(constraint));
     }
 
-    private static Collection<RuleOption> asOptionNodeList(RuleDecision decision) {
+    private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
         return Collections.singleton(
-            new RuleOption(
+            new ConstraintNode(
                 Collections.emptyList(),
                 Collections.singleton(decision)));
     }
@@ -140,40 +140,40 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         public RuleDecisionTree simplify(RuleDecisionTree originalTree) {
             return new RuleDecisionTree(
                 originalTree.getDescription(),
-                simplify(originalTree.getRootOption()));
+                simplify(originalTree.getRootNode()));
         }
 
-        private RuleOption simplify(RuleOption option) {
-            if (option.getDecisions().isEmpty())
-                return option;
+        private ConstraintNode simplify(ConstraintNode node) {
+            if (node.getDecisions().isEmpty())
+                return node;
 
-            return new RuleOption(
-                option.getAtomicConstraints(),
-                option.getDecisions().stream()
+            return new ConstraintNode(
+                node.getAtomicConstraints(),
+                node.getDecisions().stream()
                     .map(this::simplify)
                     .collect(Collectors.toList()));
         }
 
-        private RuleDecision simplify(RuleDecision decision) {
-            List<RuleOption> newOptions = new ArrayList<>();
+        private DecisionNode simplify(DecisionNode decision) {
+            List<ConstraintNode> newNodes = new ArrayList<>();
 
-            for (RuleOption existingOption : decision.getOptions()) {
-                RuleOption simplifiedOption = simplify(existingOption);
+            for (ConstraintNode existingOption : decision.getOptions()) {
+                ConstraintNode simplifiedNode = simplify(existingOption);
 
                 // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
                 // this helps simplify the sorts of trees that come from eg A OR (B OR C)
-                if (simplifiedOption.getAtomicConstraints().isEmpty() && simplifiedOption.getDecisions().size() == 1) {
-                    newOptions.addAll(
-                        simplifiedOption.getDecisions()
+                if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getDecisions().size() == 1) {
+                    newNodes.addAll(
+                        simplifiedNode.getDecisions()
                             .iterator().next() //get only member
                             .getOptions());
                 }
                 else {
-                    newOptions.add(simplifiedOption);
+                    newNodes.add(simplifiedNode);
                 }
             }
 
-            return new RuleDecision(newOptions);
+            return new DecisionNode(newNodes);
         }
     }
 }

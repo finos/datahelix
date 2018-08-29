@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.decisiontree;
 
 public class RuleDecisionTree {
     private final String description;
-    private final RuleOption root;
+    private final ConstraintNode root;
 
-    RuleDecisionTree(String description, RuleOption root) {
+    RuleDecisionTree(String description, ConstraintNode root) {
         this.description = description;
         this.root = root;
     }
@@ -13,7 +13,7 @@ public class RuleDecisionTree {
         return description;
     }
 
-    public RuleOption getRootOption() {
+    public ConstraintNode getRootNode() {
         return root;
     }
 }

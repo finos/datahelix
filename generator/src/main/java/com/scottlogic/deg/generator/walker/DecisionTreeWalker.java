@@ -3,9 +3,9 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
-import com.scottlogic.deg.generator.decisiontree.RuleDecision;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
-import com.scottlogic.deg.generator.decisiontree.RuleOption;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
@@ -49,7 +49,7 @@ public class DecisionTreeWalker {
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
 
-        private Stream<RowSpec> walk(RuleOption option, RowSpec accumulatedSpec) {
+        private Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
             final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
@@ -81,7 +81,7 @@ public class DecisionTreeWalker {
                     .flatMap(decision -> walk(decision, mergedRowSpec));
         }
 
-        private Stream<RowSpec> walk(RuleDecision decision, RowSpec accumulatedSpec) {
+        private Stream<RowSpec> walk(DecisionNode decision, RowSpec accumulatedSpec) {
             return decision
                     .getOptions()
                     .stream()
@@ -89,7 +89,7 @@ public class DecisionTreeWalker {
         }
 
         public Stream<RowSpec> walk(RuleDecisionTree decisionTree, RowSpec accumulatedSpec) {
-            return walk(decisionTree.getRootOption(), accumulatedSpec);
+            return walk(decisionTree.getRootNode(), accumulatedSpec);
         }
 
         public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
