@@ -72,13 +72,13 @@ Now click on `File -> Project structure` on the main menu
 
 Select `Global libraries` from the left hand side of the settings window.
 
-If you can't see `scala-sdk-2.11.8` in there, you will need to add it by clicking on the `+` button at the top of the window (`New global library`) and then selecting `Scala SDK`.
+If you can't see `scala-sdk-2.11.12` in there, you will need to add it by clicking on the `+` button at the top of the window (`New global library`) and then selecting `Scala SDK`.
 
 Now select `Modules` from the left hand side of the project structure window.
 
 Select the `profiler` module.
 
-Make sure `scala-sdk-2.11.8` has been added to the profiler's module list and other Scala SDK versions have been removed from it.
+Make sure `scala-sdk-2.11.12` has been added to the profiler's module list and other Scala SDK versions have been removed from it.
 
 ##### Plugins
 
