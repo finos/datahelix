@@ -5,13 +5,14 @@ import java.io.File
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Guice
+import com.scottlogic.deg.classifier.{ClassifiedField, DataFrameClassifier, SemanticTypeField, StringType}
 import com.scottlogic.deg.io.{FileReader, FileWriter}
 import com.scottlogic.deg.mappers.ProfileDTOMapper
 import com.scottlogic.deg.profiler.Profiler
 import javax.inject.Inject
 import net.codingwell.scalaguice.InjectorExtensions._
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 case class Params(inputPath: String, outputDir: String)
 
@@ -48,13 +49,26 @@ class DEGApp @Inject()(
     val inFile = new File(params.inputPath)
     val outFile = new File(params.outputDir, "test-output.json")
 
-    val df: DataFrame = fileReader.readCSV(inFile)
+    val df = fileReader.readCSV(inFile)
+    val classification = DataFrameClassifier.analyse(df)
+    printClassification(classification)
 
-    val profiler = new Profiler(df)
-    val profile = profiler.profile()
-    val profileDTO = ProfileDTOMapper.Map(profile);
+    // TODO: At this point user should be able to confirm which fields are of which type. The user input would replace classification at this stage.
+    // Converting back to SQL schema in order to be able to use Spark's SQL functionality on the data.
+    val detectedSchema = DataFrameClassifier.detectSchema(classification)
+    val typedData = fileReader.readCSVWithSchema(inFile, detectedSchema)
 
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    // TODO: Delete this variable after we have gotten user input with specific types.
+    val userInput = classification.map(c => {
+      val total = c.typeDetectionCount(StringType).toFloat
+      val mostRelevantType = c.typeDetectionCount.toArray.filter(t => t._2 / total > 0.5).maxBy(t => (t._1.rank, t._2 / total))._1
+      SemanticTypeField(c.name, mostRelevantType)
+    })
+
+    val profile = Profiler.profile(typedData, userInput)
+    val profileDTO = ProfileDTOMapper.Map(profile)
+
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
     val marshalled: String = mapper
       .writerWithDefaultPrettyPrinter()
@@ -64,5 +78,21 @@ class DEGApp @Inject()(
     fileWriter.write(outFile, marshalled)
 
     spark.stop()
+  }
+
+  // Present the result to users. Displaying results with more than 50% of value matches, sorted by ranking.
+  def printClassification(classification: Seq[ClassifiedField]): Unit = {
+    println("Field classification results:")
+
+    classification.foreach(field => {
+      println(field.name)
+      val total = field.typeDetectionCount(StringType).toFloat
+
+      field.typeDetectionCount.toSeq.sortBy(_._2).reverse.foreach(t => {
+        println(f"\t${t._1} ${t._2 / total * 100.00}%.2f%%")
+      })
+
+      println
+    })
   }
 }
