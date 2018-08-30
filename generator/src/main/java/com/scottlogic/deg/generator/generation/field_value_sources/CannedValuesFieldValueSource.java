@@ -28,6 +28,11 @@ public class CannedValuesFieldValueSource implements IFieldValueSource {
     }
 
     @Override
+    public Iterable<Object> generateBoundaryValues() {
+        return values;
+    }
+
+    @Override
     public Iterable<Object> generateAllValues() {
         return values;
     }

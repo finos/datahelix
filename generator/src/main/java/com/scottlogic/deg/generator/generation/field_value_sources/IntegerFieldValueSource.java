@@ -87,6 +87,19 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     }
 
     @Override
+    public Iterable<Object> generateBoundaryValues() {
+        return () -> new UpCastingIterator<>(
+                new FilteringIterator<>(
+                        IntStream
+                                .range(
+                                        inclusiveLower,
+                                        exclusiveUpper)
+                                .filter(i -> !blacklist.contains(i))
+                                .iterator(),
+                        i -> !blacklist.contains(i)));
+    }
+
+    @Override
     public Iterable<Object> generateAllValues() {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(

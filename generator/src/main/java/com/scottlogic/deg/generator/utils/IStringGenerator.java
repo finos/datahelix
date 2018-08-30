@@ -9,6 +9,8 @@ public interface IStringGenerator {
     boolean isFinite();
     long getValueCount();
 
+    Iterable<String> generateBoundaryValues();
+
     Iterable<String> generateAllValues();
 
     Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
@@ -33,6 +35,12 @@ public interface IStringGenerator {
         @Override
         public long getValueCount() {
             return underlyingGenerator.getValueCount();
+        }
+
+        @Override
+        public Iterable<Object> generateBoundaryValues() {
+            return () -> new UpCastingIterator<>(
+                    underlyingGenerator.generateBoundaryValues().iterator());
         }
 
         @Override

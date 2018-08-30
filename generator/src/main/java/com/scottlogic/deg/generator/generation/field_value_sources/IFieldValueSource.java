@@ -6,6 +6,8 @@ public interface IFieldValueSource {
     boolean isFinite();
     long getValueCount();
 
+    Iterable<Object> generateBoundaryValues();
+
     Iterable<Object> generateAllValues();
 
     Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);

@@ -75,6 +75,11 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
+    public Iterable<String> generateBoundaryValues() {
+        return generateAllValues();
+    }
+
+    @Override
     public Iterable<String> generateAllValues() {
         if (this.isFinite())
             return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
