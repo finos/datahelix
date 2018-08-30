@@ -11,7 +11,7 @@ public enum AtomicConstraintType {
     FORMATTEDAS("formattedAs"),
 
     // String
-    HASLENGTH("hasLength"),
+    HASLENGTH("ofLength"),
     ISSTRINGLONGERTHAN("longerThan"),
     ISSTRINGSHORTERTHAN("shorterThan"),
 
