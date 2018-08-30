@@ -6,8 +6,10 @@ import com.scottlogic.deg.generator.utils.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class IntegerFieldValueSource implements IFieldValueSource {
     private final Integer inclusiveLower;
@@ -73,6 +75,20 @@ public class IntegerFieldValueSource implements IFieldValueSource {
             : upperLimitAsInteger.getLimit();
     }
 
+    private static Integer incrementWhile(Integer i, Predicate<Integer> predicate) {
+        while(predicate.test(i))
+            i++;
+
+        return i;
+    }
+
+    private static Integer decrementWhile(Integer i, Predicate<Integer> predicate) {
+        while(predicate.test(i))
+            i--;
+
+        return i;
+    }
+
     @Override
     public boolean isFinite() {
         return true;
@@ -89,14 +105,11 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     @Override
     public Iterable<Object> generateBoundaryValues() {
         return () -> new UpCastingIterator<>(
-                new FilteringIterator<>(
-                        IntStream
-                                .range(
-                                        inclusiveLower,
-                                        exclusiveUpper)
-                                .filter(i -> !blacklist.contains(i))
-                                .iterator(),
-                        i -> !blacklist.contains(i)));
+            Stream.of(
+                    incrementWhile(inclusiveLower, x -> blacklist.contains(x)),
+                    decrementWhile(exclusiveUpper - 1, x -> blacklist.contains(x)))
+                .iterator()
+            );
     }
 
     @Override
