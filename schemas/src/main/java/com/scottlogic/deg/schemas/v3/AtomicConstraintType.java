@@ -9,6 +9,7 @@ public enum AtomicConstraintType {
 
     MATCHESREGEX("matchingRegex"),
     FORMATTEDAS("formattedAs"),
+    AVALID("aValid"),
 
     // String
     HASLENGTH("hasLength"),

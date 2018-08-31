@@ -5,8 +5,8 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
 import com.scottlogic.deg.generator.inputs.IConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -16,14 +16,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AtomicConstraintTests {

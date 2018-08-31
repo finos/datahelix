@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.utils.IStringGenerator;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.time.LocalDate;
@@ -11,8 +12,11 @@ import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
     private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
+    private static final Map<String, IStringGenerator> standardNameToStringGenerator;
 
     static {
+        standardNameToStringGenerator = new HashMap<>();
+
         typeCodeToSpecificReader = new HashMap<>();
 
         add(AtomicConstraintType.FORMATTEDAS.toString(),
@@ -38,6 +42,12 @@ public class AtomicConstraintReaderLookup {
                         new MatchesRegexConstraint(
                                 fields.getByName(dto.field),
                                 Pattern.compile((String) dto.value)));
+
+        add(AtomicConstraintType.AVALID.toString(),
+          (dto, fields) -> new MatchesStandardConstraint(
+            fields.getByName(dto.field),
+            standardNameToStringGenerator.get((String) dto.value)
+          ));
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),
                 (dto, fields) ->
