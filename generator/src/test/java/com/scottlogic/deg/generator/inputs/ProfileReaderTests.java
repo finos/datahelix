@@ -191,7 +191,7 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"id\" } ]," +
                         "    \"rules\": [" +
-                        "        { \"field\": \"id\", \"is\": \"hasLength\", \"value\": 5 }" +
+                        "        { \"field\": \"id\", \"is\": \"ofLength\", \"value\": 5 }" +
                         "    ]" +
                         "}");
 
