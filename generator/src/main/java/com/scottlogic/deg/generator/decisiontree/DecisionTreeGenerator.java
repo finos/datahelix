@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 
@@ -12,21 +11,14 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     @Override
-    public DecisionTreeProfile analyse(Profile profile) {
-        return new DecisionTreeProfile(
-            profile.fields,
-            profile.rules.stream()
-                .map(r -> new RuleDecisionTree(r.description, convertRule(r)))
-                .map(decisionTreeSimplifier::simplify)
-                .collect(Collectors.toList()));
-    }
-
-    private ConstraintNode convertRule(Rule rule) {
+    public DecisionTree generateTreeFor(Rule rule) {
         Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
             .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
-        return ConstraintNode.merge(rootConstraintNodeFragments);
+        ConstraintNode rootNode = ConstraintNode.merge(rootConstraintNodeFragments);
+
+        return this.decisionTreeSimplifier.simplify(new DecisionTree(rootNode));
     }
 
     private Collection<ConstraintNode> convertConstraint(IConstraint constraintToConvert) {
@@ -204,9 +196,8 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     class DecisionTreeSimplifier {
-        public RuleDecisionTree simplify(RuleDecisionTree originalTree) {
-            return new RuleDecisionTree(
-                originalTree.getDescription(),
+        DecisionTree simplify(DecisionTree originalTree) {
+            return new DecisionTree(
                 simplify(originalTree.getRootNode()));
         }
 

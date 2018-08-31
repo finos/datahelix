@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
@@ -30,8 +30,8 @@ public class DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(decisionTreeProfile.getFields());
+    public Stream<RowSpec> walk(ProfileDecisionTreeCollection decisionTreeProfile, ProfileFields fields) {
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(fields);
         return helper.walk(decisionTreeProfile);
     }
 
@@ -88,16 +88,18 @@ public class DecisionTreeWalker {
                     .flatMap(option -> walk(option, accumulatedSpec));
         }
 
-        public Stream<RowSpec> walk(RuleDecisionTree decisionTree, RowSpec accumulatedSpec) {
+        Stream<RowSpec> walk(DecisionTree decisionTree, RowSpec accumulatedSpec) {
             return walk(decisionTree.getRootNode(), accumulatedSpec);
         }
 
-        public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
+        Stream<RowSpec> walk(ProfileDecisionTreeCollection decisionTreeProfile) {
             return decisionTreeProfile.getDecisionTrees()
                     .stream()
                     .reduce(
                             Stream.of(getIdentityRowSpec()),
-                            (acc, decisionTree) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
+                            (acc, decisionTree) -> acc.flatMap(
+                                aRowSpecFromCartesianProductsSoFar ->
+                                    walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
                             Stream::concat
                     );
 

@@ -1,20 +1,17 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeCollection;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
-import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,15 +28,17 @@ public class DataGenerator implements IDataGenerator {
     }
 
     @Override
-    public TestCaseGenerationResult generateData(
-        Profile profile,
-        DecisionTreeProfile analysedProfile) {
+    public Iterable<TestCaseDataRow> generateData(
+        ProfileFields profileFields,
+        ProfileDecisionTreeCollection analysedProfile) {
 
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,
                 rowSpecMerger);
 
-        List<RowSpec> rowSpecs = walker.walk(analysedProfile).collect(Collectors.toList());
+        List<RowSpec> rowSpecs = walker
+            .walk(analysedProfile, profileFields)
+            .collect(Collectors.toList());
 
         IDataBagSource allDataBagSource =
             rowSpecs
@@ -53,15 +52,10 @@ public class DataGenerator implements IDataGenerator {
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
             allDataBagSource.generate(GenerationConfig.exhaustivePresets),
             dataBag -> new TestCaseDataRow(
-                profile.fields.stream()
+                profileFields.stream()
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
-        return new TestCaseGenerationResult(
-            profile,
-            Arrays.asList(
-                new TestCaseDataSet(
-                    null,
-                    dataRows)));
+        return dataRows;
     }
 }

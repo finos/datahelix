@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.Rule;
 
 public interface IDecisionTreeGenerator {
-    DecisionTreeProfile analyse(Profile profile);
+    DecisionTree generateTreeFor(Rule rule);
 }
