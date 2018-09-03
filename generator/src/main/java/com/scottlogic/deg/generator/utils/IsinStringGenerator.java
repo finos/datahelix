@@ -36,24 +36,22 @@ public class IsinStringGenerator implements IStringGenerator {
 
   @Override
   public Iterable<String> generateAllValues() {
-    return () -> getAllCountryIsinGeneratorsAsStream()
-      .flatMap(isinSansCheckDigitGenerator ->
-        IterableAsStream.convert(isinSansCheckDigitGenerator.generateAllValues()))
-      .map(isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit))
-      .iterator();
+    final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
+      .map(isinSansCheckDigitGenerator ->
+        new ProjectingIterable<>(isinSansCheckDigitGenerator.generateAllValues(),
+          isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit)))
+      .collect(Collectors.toList());
+    return new ConcatenatingIterable<>(countryCodeIterables);
   }
 
   @Override
   public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
-    return () -> {
-      final List<Iterator<String>> countryIsinIterators = getAllCountryIsinGeneratorsAsStream()
-        .map(isinSansCheckDigitGenerator ->
-          IterableAsStream.convert(isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator))
-            .map(isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit))
-            .iterator())
-        .collect(Collectors.toList());
-      return new RandomMergeIterator<>(countryIsinIterators, randomNumberGenerator);
-    };
+    final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
+      .map(isinSansCheckDigitGenerator ->
+        new ProjectingIterable<>(isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
+          isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit)))
+      .collect(Collectors.toList());
+    return new RandomMergingIterable<>(countryCodeIterables, randomNumberGenerator);
   }
 
   private static Stream<IStringGenerator> getAllCountryIsinGeneratorsAsStream() {

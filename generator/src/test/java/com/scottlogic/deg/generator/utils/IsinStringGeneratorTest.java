@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class IsinStringGeneratorTest {
 
@@ -15,6 +17,32 @@ public class IsinStringGeneratorTest {
   @Before
   public void setup() {
     target = new IsinStringGenerator();
+  }
+
+  @Test
+  public void shouldEndAllIsinsWithValidCheckDigit() {
+    final int NumberOfTests = 100;
+
+    final Iterator<String> allIsins = target.generateAllValues().iterator();
+
+    for (int ii = 0; ii < NumberOfTests; ++ii) {
+      final String nextIsin = allIsins.next();
+      final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+      assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+    }
+  }
+
+  @Test
+  public void shouldEndAllRandomIsinsWithValidCheckDigit() {
+    final int NumberOfTests = 100;
+
+    final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+    for (int ii = 0; ii < NumberOfTests; ++ii) {
+      final String nextIsin = allIsins.next();
+      final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+      assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+    }
   }
 
   @Test
