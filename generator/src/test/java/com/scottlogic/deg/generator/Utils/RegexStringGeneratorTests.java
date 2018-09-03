@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -44,6 +45,25 @@ public class RegexStringGeneratorTests {
         givenRegex("\\d");
 
         expectFirstResult("0");
+    }
+
+    @Test
+    void shouldCreateBoundaryValues() {
+        IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)");
+
+        Iterable<String> resultsIterable = generator.generateBoundaryValues();
+
+        String[] sampleValues =
+            IterableAsStream.convert(resultsIterable)
+                .toArray(String[]::new);
+
+        Assert.assertThat(
+            sampleValues,
+            arrayContainingInAnyOrder(
+                "Test_000_banana",
+                "Test_000_apple",
+                "Test_AAAAA_apple",
+                "Test_AAAAA_banana"));
     }
 
     @Test

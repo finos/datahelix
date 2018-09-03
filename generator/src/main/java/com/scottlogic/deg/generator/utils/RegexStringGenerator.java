@@ -8,6 +8,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class RegexStringGenerator implements IStringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
@@ -76,7 +77,22 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateBoundaryValues() {
-        return generateAllValues();
+        Stream<String> boundaryValues = generateBoundaryValues(automaton.getInitialState(), "");
+
+        return () -> boundaryValues.iterator();
+    }
+
+    private Stream<String> generateBoundaryValues(State state, String matchedValue)
+    {
+        return state.getTransitions().stream().flatMap(transition ->
+        {
+            State destinationState = transition.getDest();
+            String nextMatchedValue = matchedValue + transition.getMin(); // take the first available character option (e.g. A or 0 etc)
+
+            return destinationState.isAccept()
+                ? Stream.of(nextMatchedValue) // if destination state is accept it means this is an end state and we can return the string as a boundary value
+                : generateBoundaryValues(destinationState, nextMatchedValue); // otherwise we continue down the tree
+        });
     }
 
     @Override
