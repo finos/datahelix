@@ -1,13 +1,22 @@
 package com.scottlogic.deg.generator.utils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class IsinStringGenerator implements IStringGenerator {
 
-  private static final String GENERIC_ISIN_REGEX = "[A-Z0-9]{9}";
+  private static final String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
+
+  private List<String> validCountryCodes;
+
+  public IsinStringGenerator() {
+    validCountryCodes = Isin.VALID_COUNTRY_CODES;
+  }
+
+  public IsinStringGenerator(List<String> validCountryCodes) {
+    this.validCountryCodes = validCountryCodes;
+  }
 
   @Override
   public IStringGenerator intersect(IStringGenerator stringGenerator) {
@@ -54,8 +63,8 @@ public class IsinStringGenerator implements IStringGenerator {
     return new RandomMergingIterable<>(countryCodeIterables, randomNumberGenerator);
   }
 
-  private static Stream<IStringGenerator> getAllCountryIsinGeneratorsAsStream() {
-    return Isin.VALID_COUNTRY_CODES.stream()
+  private Stream<IStringGenerator> getAllCountryIsinGeneratorsAsStream() {
+    return validCountryCodes.stream()
       .map(IsinStringGenerator::getIsinSansCheckDigitGeneratorForCountry);
   }
 
@@ -63,6 +72,6 @@ public class IsinStringGenerator implements IStringGenerator {
     if (countryCode.equals("GB")) {
       return new SedolStringGenerator(countryCode);
     }
-    return new RegexStringGenerator(countryCode + GENERIC_ISIN_REGEX);
+    return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX);
   }
 }
