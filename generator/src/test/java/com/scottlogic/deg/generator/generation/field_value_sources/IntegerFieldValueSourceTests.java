@@ -70,7 +70,7 @@ class IntegerFieldValueSourceTests {
         givenLowerBound(-100, true);
         givenUpperBound(100, true);
 
-        expectInterestingValues(-100, 100);
+        expectInterestingValues(-100, 0, 100);
     }
 
     @Test
@@ -83,12 +83,12 @@ class IntegerFieldValueSourceTests {
 
     @Test
     void shouldAvoidBlacklistedInterestingValues() {
-        givenLowerBound(0, false);
+        givenLowerBound(-100, false);
         givenUpperBound(100, true);
 
-        givenBlacklist(1, 100);
+        givenBlacklist(-100, 0, 100);
 
-        expectInterestingValues(2, 99);
+        expectInterestingValues(-99, 99);
     }
 
     @Test
@@ -102,12 +102,12 @@ class IntegerFieldValueSourceTests {
     void shouldSupplyToLowerBoundary() {
         givenUpperBound(4, true);
 
-        expectInterestingValues(Integer.MIN_VALUE, 4);
+        expectInterestingValues(Integer.MIN_VALUE, 0, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
-        expectInterestingValues(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
+        expectInterestingValues(Integer.MIN_VALUE, 0, Integer.MAX_VALUE - 1);
     }
 
     private NumericLimit<BigDecimal> upperLimit;

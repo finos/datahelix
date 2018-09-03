@@ -107,7 +107,11 @@ public class IntegerFieldValueSource implements IFieldValueSource {
         return () -> new UpCastingIterator<>(
             Stream.of(
                     incrementWhile(inclusiveLower, x -> blacklist.contains(x)),
+                    inclusiveLower <= 0 && 0 < exclusiveUpper && !blacklist.contains(0)
+                        ? 0
+                        : null,
                     decrementWhile(exclusiveUpper - 1, x -> blacklist.contains(x)))
+                .filter(x -> x != null)
                 .iterator()
             );
     }
