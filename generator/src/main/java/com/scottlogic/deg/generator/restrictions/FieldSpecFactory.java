@@ -70,16 +70,10 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
-        SetRestrictions setRestrictions = fieldSpec.getSetRestrictions();
-        if (setRestrictions == null) {
-            setRestrictions = new SetRestrictions();
-            fieldSpec.setSetRestrictions(setRestrictions);
-        }
-        if (negate) {
-            setRestrictions.blacklist = constraint.legalValues;
-        } else {
-            setRestrictions.whitelist = constraint.legalValues;
-        }
+        fieldSpec.setSetRestrictions(
+            negate
+                ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                : SetRestrictions.fromWhitelist(constraint.legalValues));
     }
 
     private void apply(FieldSpec fieldSpec, IsNullConstraint constraint, boolean negate) {
