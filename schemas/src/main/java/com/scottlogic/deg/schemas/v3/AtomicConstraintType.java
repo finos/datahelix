@@ -12,7 +12,7 @@ public enum AtomicConstraintType {
     AVALID("aValid"),
 
     // String
-    HASLENGTH("hasLength"),
+    HASLENGTH("ofLength"),
     ISSTRINGLONGERTHAN("longerThan"),
     ISSTRINGSHORTERTHAN("shorterThan"),
 

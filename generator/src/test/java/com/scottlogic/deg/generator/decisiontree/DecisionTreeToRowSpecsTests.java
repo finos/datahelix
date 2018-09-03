@@ -38,7 +38,7 @@ public class DecisionTreeToRowSpecsTests {
 
     @Test
     public void test() {
-        final IDecisionTreeProfile dTree = dTreeGenerator.analyse(makeProfile());
+        final DecisionTreeProfile dTree = dTreeGenerator.analyse(makeProfile());
         final List<RowSpec> rowSpecs = dTreeWalker.walk(dTree)
                 .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));

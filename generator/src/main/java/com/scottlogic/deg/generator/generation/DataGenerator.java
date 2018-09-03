@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
@@ -33,7 +33,7 @@ public class DataGenerator implements IDataGenerator {
     @Override
     public TestCaseGenerationResult generateData(
         Profile profile,
-        IDecisionTreeProfile analysedProfile) {
+        DecisionTreeProfile analysedProfile) {
 
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.mappers
 
 import com.scottlogic.deg.models._
-import com.scottlogic.deg.schemas.v3.{ConstraintDTO, ConstraintDTOBuilder}
+import com.scottlogic.deg.schemas.v3.{AtomicConstraintType, ConstraintDTO, ConstraintDTOBuilder}
 
 object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
   override def Map(original: IConstraint): ConstraintDTO = {
@@ -14,22 +14,22 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     original match {
       case instance: IsOfTypeConstraint =>
         builder.appendField(instance.FieldName)
-          .appendIs("ofType")
+          .appendIs(AtomicConstraintType.ISOFTYPE.toString)
           .appendValue(instance.Value)
           .Build;
       case instance: IsGreaterThanOrEqualToConstantConstraint =>
         builder.appendField(instance.FieldName)
-          .appendIs("greaterThanOrEqual")
+          .appendIs(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT.toString)
           .appendValue(instance.Value)
           .Build;
       case instance: IsLowerThanConstraint =>
         builder.appendField(instance.FieldName)
-          .appendIs("lowerThan")
+          .appendIs(AtomicConstraintType.ISLESSTHANCONSTANT.toString)
           .appendValue(instance.Value)
           .Build;
       case instance: MatchesRegexConstraint =>
         builder.appendField(instance.FieldName)
-          .appendIs("matchesRegex")
+          .appendIs(AtomicConstraintType.MATCHESREGEX.toString)
           .appendValue(instance.Value)
           .Build;
       case instance: HasDecimalPlacesConstraint =>

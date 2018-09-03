@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitPlatform])
 @SelectClasses(Array(
+  classOf[Classifier],
   classOf[FileReaderInt],
   classOf[JsonTest],
   classOf[SemanticInferenceTest]

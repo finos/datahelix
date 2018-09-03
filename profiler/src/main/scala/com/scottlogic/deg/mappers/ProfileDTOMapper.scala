@@ -7,17 +7,11 @@ import scala.collection.JavaConversions
 
 object ProfileDTOMapper extends IMapper[Profile,V3ProfileDTO] {
   override def Map(original: Profile): V3ProfileDTO = {
-    if(original == null){
-      return null;
-    }
+    if (original == null) return null
 
-    val profile = new V3ProfileDTO();
-    if(original.Fields != null){
-      profile.fields = JavaConversions.asJavaCollection(original.Fields.map(field => FieldDTOMapper.Map(field)));
-    }
-    if(original.Rules != null){
-      profile.rules = JavaConversions.asJavaCollection(original.Rules.map(rule => RuleDTOMapper.Map(rule)));
-    }
-    return profile;
+    val profile = new V3ProfileDTO()
+    profile.fields = JavaConversions.asJavaCollection(original.fields.map(field => FieldDTOMapper.Map(field)))
+    profile.rules = JavaConversions.asJavaCollection(original.rules.map(rule => RuleDTOMapper.Map(rule)))
+    profile
   }
 }

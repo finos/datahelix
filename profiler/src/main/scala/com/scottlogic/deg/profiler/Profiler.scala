@@ -4,26 +4,29 @@ import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
 import com.scottlogic.deg.analyser.field_analyser.timestamp_analyser.NaiveTimestampAnalyser
+import com.scottlogic.deg.classifier._
 import com.scottlogic.deg.models.{Field, Profile}
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.types._
 
-case class Location(lat: Double, lon: Double)
+object Profiler {
+  def profile(df: DataFrame, fieldClassification: Seq[SemanticTypeField]): Profile = {
+    val fields = df.schema.fields.map(field => new Field(field.name))
 
-class Profiler(df: DataFrame) {
-  def profile(): Profile = {
-    val fieldArray = df.schema.fields.map(field => new Field(field.name));
-    val ruleArray = df.schema.fields.map(field => (field.dataType match {
-      case DoubleType | LongType | IntegerType => new NaiveNumericAnalyser(df, field)
-      case TimestampType => new NaiveTimestampAnalyser(df, field)
-      case StringType => new NaiveStringAnalyser(df, field)
-      case _ => new GenericFieldAnalyser(df, field)
-    }).constructField());
+    val rules = df.schema.fields.map(field => {
+      val semanticType = if (fieldClassification == null || fieldClassification.isEmpty) {
+        StringType
+      } else {
+        fieldClassification.filter(f => f.fieldName == field.name).last.semanticType
+      }
 
-    val profile = new Profile();
-    profile.Fields = fieldArray.toList;
-    profile.Rules = ruleArray.toList;
+      (semanticType match {
+        case DoubleType | FloatType | IntegerType => new NaiveNumericAnalyser(df, field)
+        case TimeStampType => new NaiveTimestampAnalyser(df, field)
+        case StringType | CountryCodeType | CurrencyType | EnumType | EmailType => new NaiveStringAnalyser(df, field)
+        case _ => new GenericFieldAnalyser(df, field)
+      }).constructField()
+    })
 
-    return profile;
+    new Profile(fields, rules)
   }
 }
