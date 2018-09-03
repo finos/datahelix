@@ -40,7 +40,7 @@ public interface IStringGenerator {
         @Override
         public Iterable<Object> generateInterestingValues() {
             return () -> new UpCastingIterator<>(
-                    underlyingGenerator.generateInterestingValues().iterator());
+                underlyingGenerator.generateInterestingValues().iterator());
         }
 
         @Override

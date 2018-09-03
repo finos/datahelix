@@ -67,6 +67,23 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
+    void shouldCreateZeroLengthInterestingValue() {
+        IStringGenerator generator = new RegexStringGenerator("(Test)?");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        String[] sampleValues =
+            IterableAsStream.convert(resultsIterable)
+                .toArray(String[]::new);
+
+        Assert.assertThat(
+            sampleValues,
+            arrayContainingInAnyOrder(
+                "",
+                "Test"));
+    }
+
+    @Test
     void shouldCorrectlySampleInfiniteResults() {
         IStringGenerator generator = new RegexStringGenerator("[a]+");
 

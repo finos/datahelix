@@ -82,17 +82,18 @@ public class RegexStringGenerator implements IStringGenerator {
         return () -> interestingValues.iterator();
     }
 
-    private Stream<String> generateInterestingValues(State state, String matchedValue)
-    {
-        return state.getTransitions().stream().flatMap(transition ->
-        {
-            State destinationState = transition.getDest();
-            String nextMatchedValue = matchedValue + transition.getMin(); // take the first available character option (e.g. A or 0 etc)
+    private Stream<String> generateInterestingValues(State state, String matchedValue) {
+        Stream<String> matchedValueStream = state.isAccept()
+            ? Stream.of(matchedValue)
+            : Stream.empty();
 
-            return destinationState.isAccept()
-                ? Stream.of(nextMatchedValue) // if destination state is accept it means this is an end state and we can return the string as an interesting value
-                : generateInterestingValues(destinationState, nextMatchedValue); // otherwise we continue down the tree
-        });
+        Stream<String> subTransitionStream = state
+            .getTransitions()
+            .stream()
+            .flatMap(transition ->
+                generateInterestingValues(transition.getDest(), matchedValue + transition.getMin()));
+
+        return Stream.concat(matchedValueStream, subTransitionStream);
     }
 
     @Override
