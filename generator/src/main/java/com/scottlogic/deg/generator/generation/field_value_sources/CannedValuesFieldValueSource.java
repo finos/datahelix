@@ -29,7 +29,7 @@ public class CannedValuesFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateBoundaryValues() {
+    public Iterable<Object> generateInterestingValues() {
         return () -> Stream.of(
                 values.get(0),
                 values.get(values.size() / 2),

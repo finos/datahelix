@@ -28,10 +28,10 @@ public class CombiningFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateBoundaryValues() {
+    public Iterable<Object> generateInterestingValues() {
         return new ConcatenatingIterable<>(
                 underlyingSources.stream()
-                        .map(IFieldValueSource::generateBoundaryValues)
+                        .map(IFieldValueSource::generateInterestingValues)
                         .collect(Collectors.toList()));
     }
 

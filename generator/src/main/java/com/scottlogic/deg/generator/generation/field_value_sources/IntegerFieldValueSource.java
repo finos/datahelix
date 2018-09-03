@@ -103,7 +103,7 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateBoundaryValues() {
+    public Iterable<Object> generateInterestingValues() {
         return () -> new UpCastingIterator<>(
             Stream.of(
                     incrementWhile(inclusiveLower, x -> blacklist.contains(x)),

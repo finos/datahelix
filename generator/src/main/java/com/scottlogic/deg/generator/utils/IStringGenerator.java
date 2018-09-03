@@ -9,7 +9,7 @@ public interface IStringGenerator {
     boolean isFinite();
     long getValueCount();
 
-    Iterable<String> generateBoundaryValues();
+    Iterable<String> generateInterestingValues();
 
     Iterable<String> generateAllValues();
 
@@ -38,9 +38,9 @@ public interface IStringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateBoundaryValues() {
+        public Iterable<Object> generateInterestingValues() {
             return () -> new UpCastingIterator<>(
-                    underlyingGenerator.generateBoundaryValues().iterator());
+                    underlyingGenerator.generateInterestingValues().iterator());
         }
 
         @Override

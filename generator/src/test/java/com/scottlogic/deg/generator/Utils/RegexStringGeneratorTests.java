@@ -48,10 +48,10 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldCreateBoundaryValues() {
+    void shouldCreateInterestingValues() {
         IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)");
 
-        Iterable<String> resultsIterable = generator.generateBoundaryValues();
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
 
         String[] sampleValues =
             IterableAsStream.convert(resultsIterable)

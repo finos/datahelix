@@ -66,48 +66,48 @@ class IntegerFieldValueSourceTests {
     }
 
     @Test
-    void shouldSupplyBoundaryValues() {
+    void shouldSupplyInterestingValues() {
         givenLowerBound(-100, true);
         givenUpperBound(100, true);
 
-        expectBoundaryValues(-100, 100);
+        expectInterestingValues(-100, 100);
     }
 
     @Test
-    void shouldSupplyExclusiveBoundaryValues() {
+    void shouldSupplyExclusiveInterestingValues() {
         givenLowerBound(0, false);
         givenUpperBound(100, false);
 
-        expectBoundaryValues(1, 99);
+        expectInterestingValues(1, 99);
     }
 
     @Test
-    void shouldAvoidBlacklistedBoundaryValues() {
+    void shouldAvoidBlacklistedInterestingValues() {
         givenLowerBound(0, false);
         givenUpperBound(100, true);
 
         givenBlacklist(1, 100);
 
-        expectBoundaryValues(2, 99);
+        expectInterestingValues(2, 99);
     }
 
     @Test
     void shouldSupplyToUpperBoundary() {
         givenLowerBound(4, true);
 
-        expectBoundaryValues(4, Integer.MAX_VALUE - 1);
+        expectInterestingValues(4, Integer.MAX_VALUE - 1);
     }
 
     @Test
     void shouldSupplyToLowerBoundary() {
         givenUpperBound(4, true);
 
-        expectBoundaryValues(Integer.MIN_VALUE, 4);
+        expectInterestingValues(Integer.MIN_VALUE, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
-        expectBoundaryValues(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
+        expectInterestingValues(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
     }
 
     private NumericLimit<BigDecimal> upperLimit;
@@ -141,8 +141,8 @@ class IntegerFieldValueSourceTests {
         expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
     }
 
-    private void expectBoundaryValues(Integer... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateBoundaryValues(), false, expectedValuesArray);
+    private void expectInterestingValues(Integer... expectedValuesArray) {
+        expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
     }
 
     private void expectValues(Iterable<Object> values, boolean assertCount, Integer... expectedValuesArray) {

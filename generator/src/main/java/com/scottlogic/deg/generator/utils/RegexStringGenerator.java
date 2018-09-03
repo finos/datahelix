@@ -76,13 +76,13 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public Iterable<String> generateBoundaryValues() {
-        Stream<String> boundaryValues = generateBoundaryValues(automaton.getInitialState(), "");
+    public Iterable<String> generateInterestingValues() {
+        Stream<String> interestingValues = generateInterestingValues(automaton.getInitialState(), "");
 
-        return () -> boundaryValues.iterator();
+        return () -> interestingValues.iterator();
     }
 
-    private Stream<String> generateBoundaryValues(State state, String matchedValue)
+    private Stream<String> generateInterestingValues(State state, String matchedValue)
     {
         return state.getTransitions().stream().flatMap(transition ->
         {
@@ -90,8 +90,8 @@ public class RegexStringGenerator implements IStringGenerator {
             String nextMatchedValue = matchedValue + transition.getMin(); // take the first available character option (e.g. A or 0 etc)
 
             return destinationState.isAccept()
-                ? Stream.of(nextMatchedValue) // if destination state is accept it means this is an end state and we can return the string as a boundary value
-                : generateBoundaryValues(destinationState, nextMatchedValue); // otherwise we continue down the tree
+                ? Stream.of(nextMatchedValue) // if destination state is accept it means this is an end state and we can return the string as an interesting value
+                : generateInterestingValues(destinationState, nextMatchedValue); // otherwise we continue down the tree
         });
     }
 

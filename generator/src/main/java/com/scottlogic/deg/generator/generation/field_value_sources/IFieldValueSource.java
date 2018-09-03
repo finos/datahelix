@@ -6,7 +6,7 @@ public interface IFieldValueSource {
     boolean isFinite();
     long getValueCount();
 
-    Iterable<Object> generateBoundaryValues();
+    Iterable<Object> generateInterestingValues();
 
     Iterable<Object> generateAllValues();
 
