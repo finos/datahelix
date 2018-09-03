@@ -18,10 +18,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.Matchers.*;
 
 class ConstraintReducerTest {
 
@@ -92,15 +89,15 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has set restrictions", countryFieldSpec.getSetRestrictions(),
                 Is.is(IsNull.notNullValue()));
         Assert.assertThat("Country fieldspec set restrictions have no blacklist",
-                countryFieldSpec.getSetRestrictions().blacklist, Is.is(IsNull.nullValue()));
+                countryFieldSpec.getSetRestrictions().getBlacklist(), anyOf(nullValue(), empty()));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-                countryFieldSpec.getSetRestrictions().whitelist, Is.is(IsNull.notNullValue()));
+                countryFieldSpec.getSetRestrictions().getWhitelist(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-                countryFieldSpec.getSetRestrictions().whitelist.size(), Is.is(2));
+                countryFieldSpec.getSetRestrictions().getWhitelist().size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-                countryFieldSpec.getSetRestrictions().whitelist.contains("UK"), Is.is(true));
+                countryFieldSpec.getSetRestrictions().getWhitelist().contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-                countryFieldSpec.getSetRestrictions().whitelist.contains("US"), Is.is(true));
+                countryFieldSpec.getSetRestrictions().getWhitelist().contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getSetRestrictions(),

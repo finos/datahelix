@@ -63,7 +63,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
         // if there's a whitelist, we can just output that
         if (spec.getSetRestrictions() != null) {
-            Set<?> whitelist = spec.getSetRestrictions().getReconciledWhitelist();
+            Set<?> whitelist = spec.getSetRestrictions().getWhitelist();
             if (whitelist != null) {
                 return Collections.singletonList(
                         new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
@@ -138,6 +138,6 @@ public class FieldSpecFulfiller implements IDataBagSource {
         if (spec.getSetRestrictions() == null)
             return Collections.emptySet();
 
-        return new HashSet<>(spec.getSetRestrictions().blacklist);
+        return new HashSet<>(spec.getSetRestrictions().getBlacklist());
     }
 }

@@ -2,6 +2,12 @@
 
 ## Setup
 
+### Scala
+
+[Download Scala 2.11.12](https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.msi)
+
+Spark does not support Scala 2.12.X yet. So you will need to set up Scala 2.11.12 in your environment.
+
 ### Spark
 
 [Download Spark](https://spark.apache.org/downloads.html).
@@ -61,6 +67,18 @@ Set Project language level to 8.
 
 Open the "Maven Projects" Tool Window, and double-click _Lifecycle > compile_.  
 This is only necessary when your Maven dependencies change. Otherwise prefer the IDE's built-in Build.
+
+Now click on `File -> Project structure` on the main menu
+
+Select `Global libraries` from the left hand side of the settings window.
+
+If you can't see `scala-sdk-2.11.12` in there, you will need to add it by clicking on the `+` button at the top of the window (`New global library`) and then selecting `Scala SDK`.
+
+Now select `Modules` from the left hand side of the project structure window.
+
+Select the `profiler` module.
+
+Make sure `scala-sdk-2.11.12` has been added to the profiler's module list and other Scala SDK versions have been removed from it.
 
 ##### Plugins
 

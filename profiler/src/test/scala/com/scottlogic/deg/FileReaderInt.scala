@@ -21,7 +21,7 @@ class FileReaderInt extends {
     var fileReader : FileReader = _
 
     @Test
-    def readCsv_returns_DF_with_expectedColumns() {
+    def givenValidCsvFile_whenReadCsv_thenDFWithExpectedColumnsIsReturned() {
         val path = getClass.getClassLoader.getResource("gfx_cleaned.csv").getPath
         val df = fileReader.readCSV(new File(path))
         assertThat(df.columns, is(equalTo(Array("Video Card", "Series", "Chipset", "Memory", "Core Clock", "Price"))))

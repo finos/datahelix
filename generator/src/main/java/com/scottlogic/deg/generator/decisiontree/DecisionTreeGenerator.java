@@ -1,157 +1,180 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.*;
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DecisionTreeGenerator implements IDecisionTreeGenerator {
+    private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
+
     @Override
-    public IDecisionTreeProfile analyse(Profile profile) {
-        ArrayList<RuleDecisionTree> ruleDecisionTrees = new ArrayList<>();
-        for (Rule rule : profile.rules) {
-            ruleDecisionTrees.add(analyseRule(rule));
-        }
-        return new DecisionTreeProfile(profile.fields, ruleDecisionTrees);
+    public DecisionTreeProfile analyse(Profile profile) {
+        return new DecisionTreeProfile(
+            profile.fields,
+            profile.rules.stream()
+                .map(r -> new RuleDecisionTree(r.description, convertRule(r)))
+                .map(decisionTreeSimplifier::simplify)
+                .collect(Collectors.toList()));
     }
 
-    private RuleDecisionTree analyseRule(Rule rule) {
-        return new RuleDecisionTree(rule.description, getRuleOptionForConstraintCollection(rule.constraints));
+    private ConstraintNode convertRule(Rule rule) {
+        Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
+            .flatMap(c -> convertConstraint(c).stream())
+            .iterator();
+
+        return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
-    private boolean isConstraintAtomic(IConstraint constraint) {
+    private Collection<ConstraintNode> convertConstraint(IConstraint constraint) {
         if (constraint instanceof NotConstraint) {
-            return isConstraintAtomic(((NotConstraint)constraint).negatedConstraint);
-        }
-        if (constraint instanceof AndConstraint || isConstraintDecisionPoint(constraint)) {
-            return false;
-        }
-        return true;
-    }
+            IConstraint negatedConstraint = ((NotConstraint) constraint).negatedConstraint;
 
-    private boolean isConstraintDecisionPoint(IConstraint constraint) {
-        return (constraint instanceof OrConstraint || constraint instanceof ConditionalConstraint);
-    }
-
-    private RuleOption getRuleOptionForConstraint(IConstraint constraint) {
-        constraint = unwrapNotConstraint(constraint);
-        if (isConstraintAtomic(constraint)) {
-            return new RuleOption(constraint);
-        }
-        if (isConstraintDecisionPoint(constraint)) {
-            return new RuleOption(getRuleDecisionForConstraint(constraint));
-        }
-        else { // is AndConstraint
-            return getRuleOptionForAndConstraint((AndConstraint)constraint);
-        }
-    }
-
-    private IConstraint unwrapNotConstraint(IConstraint constraint) {
-        if (!(constraint instanceof NotConstraint)) {
-            return constraint;
-        }
-        NotConstraint nc = (NotConstraint)constraint;
-        if (nc.negatedConstraint instanceof NotConstraint) {
-            return unwrapNotConstraint(((NotConstraint)nc.negatedConstraint).negatedConstraint);
-        }
-        if (nc.negatedConstraint instanceof AndConstraint) {
-            return new OrConstraint(((AndConstraint)nc.negatedConstraint).subConstraints
-                    .stream()
-                    .map(NotConstraint::new)
-                    .collect(Collectors.toList()));
-        }
-        if (nc.negatedConstraint instanceof OrConstraint) {
-            return new AndConstraint(((OrConstraint)nc.negatedConstraint).subConstraints
-                    .stream()
-                    .map(NotConstraint::new)
-                    .collect(Collectors.toList()));
-        }
-        // This is a bit of a weird concept but provided for completeness.
-        if (nc.negatedConstraint instanceof ConditionalConstraint) {
-            ConditionalConstraint conditionalConstraint = (ConditionalConstraint)nc.negatedConstraint;
-            IConstraint unwrappedCondition = unwrapNotConstraint(conditionalConstraint.condition);
-            IConstraint firstBranch =
-                    unwrappedCondition.and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsTrue)));
-            if (conditionalConstraint.whenConditionIsFalse != null) {
-                return firstBranch.or(
-                        unwrapNotConstraint(new NotConstraint(unwrappedCondition))
-                                .and(unwrapNotConstraint(new NotConstraint(conditionalConstraint.whenConditionIsFalse))));
+            // ¬¬X reduces to X
+            if (negatedConstraint instanceof NotConstraint) {
+                return convertConstraint(((NotConstraint) negatedConstraint).negatedConstraint);
             }
-            return firstBranch;
-        }
+            // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
+            else if (negatedConstraint instanceof AndConstraint) {
+                Collection<IConstraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
 
-        // This method cannot unwrap all possible kinds of NotConstraint.
-        return constraint;
-    }
-
-    private RuleOption getRuleOptionForTwoConstraints(IConstraint constraintA, IConstraint constraintB) {
-        return getRuleOptionForConstraint(constraintA).merge(getRuleOptionForConstraint(constraintB));
-    }
-
-    private RuleOption getRuleOptionForConstraintCollection(Collection<IConstraint> constraintCollection) {
-        ArrayList<IConstraint> atomicConstraints = new ArrayList<>();
-        ArrayList<IRuleDecision> decisions = new ArrayList<>();
-        ArrayList<RuleOption> mergeableOptions = new ArrayList<>();
-        for (IConstraint subConstraint : constraintCollection) {
-            subConstraint = unwrapNotConstraint(subConstraint);
-            if (isConstraintAtomic(subConstraint)) {
-                atomicConstraints.add(subConstraint);
+                return convertConstraint(new OrConstraint(
+                    subConstraints.stream()
+                        .map(NotConstraint::new)
+                        .collect(Collectors.toList())));
             }
-            else if (isConstraintDecisionPoint(subConstraint)) {
-                decisions.add(getRuleDecisionForConstraint(subConstraint));
+            // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
+            else if (negatedConstraint instanceof OrConstraint) {
+                Collection<IConstraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
+
+                return convertConstraint(new AndConstraint(
+                    subConstraints.stream()
+                        .map(NotConstraint::new)
+                        .collect(Collectors.toList())));
             }
-            else { // is AndConstraint
-                mergeableOptions.add(getRuleOptionForAndConstraint((AndConstraint)subConstraint));
-            }
-        }
-        RuleOption option = new RuleOption(atomicConstraints, decisions);
-        for (RuleOption toMerge : mergeableOptions) {
-            option.merge(toMerge);
-        }
+            // ¬IF(X, then: Y) reduces to AND(X, ¬Y)
+            // ¬IF(X, then: Y, else: Z) reduces to OR(AND(X, ¬Y), AND(¬X, ¬Z))
+            else if (negatedConstraint instanceof ConditionalConstraint) {
+                ConditionalConstraint conditional = (ConditionalConstraint) negatedConstraint;
 
-        return option;
-    }
+                IConstraint positiveNegation = new AndConstraint(
+                    conditional.condition,
+                    new NotConstraint(conditional.whenConditionIsTrue));
 
-    private RuleDecision getRuleDecisionForConstraint(IConstraint constraint) {
-        if (constraint instanceof OrConstraint) {
-            return getRuleDecisionForOrConstraint((OrConstraint)constraint);
-        }
-        if (constraint instanceof ConditionalConstraint) {
-            return getRuleDecisionForConditionalConstraint((ConditionalConstraint)constraint);
-        }
-        throw new IllegalStateException("This code should never be reached.");
-    }
+                IConstraint negativeNegation = conditional.whenConditionIsFalse == null
+                    ? null
+                    : new AndConstraint(
+                        new NotConstraint(conditional.condition),
+                        new NotConstraint(conditional.whenConditionIsFalse));
 
-    private RuleOption getRuleOptionForAndConstraint(AndConstraint constraint) {
-        return getRuleOptionForConstraintCollection(constraint.subConstraints);
-    }
-
-    private RuleDecision getRuleDecisionForOrConstraint(OrConstraint constraint) {
-        ArrayList<IRuleOption> options = new ArrayList<>();
-        for (IConstraint subConstraint : constraint.subConstraints) {
-            if (subConstraint instanceof OrConstraint) {
-                RuleDecision toMerge = getRuleDecisionForOrConstraint((OrConstraint)subConstraint);
-                options.addAll(toMerge.getOptions());
+                return convertConstraint(
+                    negativeNegation != null
+                        ? positiveNegation.or(negativeNegation)
+                        : positiveNegation);
             }
             else {
-                options.add(getRuleOptionForConstraint(subConstraint));
+                return asConstraintNodeList(constraint);
             }
         }
-        return new RuleDecision(options);
-    }
+        // AND(X, Y, Z) becomes a flattened list of constraint nodes
+        else if (constraint instanceof AndConstraint) {
+            Collection<IConstraint> subConstraints = ((AndConstraint) constraint).subConstraints;
 
-    private RuleDecision getRuleDecisionForConditionalConstraint(ConditionalConstraint constraint) {
-        RuleOption branchWhen = getRuleOptionForTwoConstraints(constraint.condition, constraint.whenConditionIsTrue);
-        RuleOption branchWhenNot;
-        NotConstraint negatedCondition = new NotConstraint(constraint.condition);
-        if (constraint.whenConditionIsFalse == null) {
-            branchWhenNot = getRuleOptionForConstraint(negatedCondition);
+            return subConstraints.stream()
+                .flatMap(c -> convertConstraint(c).stream())
+                .collect(Collectors.toList());
+        }
+        // OR(X, Y, Z) becomes a decision node
+        else if (constraint instanceof OrConstraint) {
+            Collection<IConstraint> subConstraints = ((OrConstraint) constraint).subConstraints;
+
+            DecisionNode decisionPoint = new DecisionNode(
+                subConstraints.stream()
+                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
+                    .collect(Collectors.toList()));
+
+            return asConstraintNodeList(decisionPoint);
+        }
+        else if (constraint instanceof ConditionalConstraint) {
+            return convertConstraint(reduceConditionalConstraint(constraint));
         }
         else {
-            branchWhenNot = getRuleOptionForTwoConstraints(negatedCondition, constraint.whenConditionIsFalse);
+            return asConstraintNodeList(constraint);
         }
-        return new RuleDecision(branchWhen, branchWhenNot);
+    }
+
+    private static IConstraint reduceConditionalConstraint(IConstraint constraint) {
+        ConditionalConstraint constraintAsCondition = ((ConditionalConstraint) constraint);
+        IConstraint ifConstraint = constraintAsCondition.condition;
+        IConstraint thenConstraint = constraintAsCondition.whenConditionIsTrue;
+        IConstraint elseConstraint = constraintAsCondition.whenConditionIsFalse;
+
+        return new OrConstraint(
+            ifConstraint.and(thenConstraint),
+            elseConstraint != null
+                ? ifConstraint.isFalse().and(elseConstraint)
+                : ifConstraint.isFalse());
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
+        return Collections.singleton(
+            new ConstraintNode(
+                constraints,
+                Collections.emptyList()));
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(IConstraint constraint) {
+        return asConstraintNodeList(Collections.singleton(constraint));
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
+        return Collections.singleton(
+            new ConstraintNode(
+                Collections.emptyList(),
+                Collections.singleton(decision)));
+    }
+
+    class DecisionTreeSimplifier {
+        public RuleDecisionTree simplify(RuleDecisionTree originalTree) {
+            return new RuleDecisionTree(
+                originalTree.getDescription(),
+                simplify(originalTree.getRootNode()));
+        }
+
+        private ConstraintNode simplify(ConstraintNode node) {
+            if (node.getDecisions().isEmpty())
+                return node;
+
+            return new ConstraintNode(
+                node.getAtomicConstraints(),
+                node.getDecisions().stream()
+                    .map(this::simplify)
+                    .collect(Collectors.toList()));
+        }
+
+        private DecisionNode simplify(DecisionNode decision) {
+            List<ConstraintNode> newNodes = new ArrayList<>();
+
+            for (ConstraintNode existingOption : decision.getOptions()) {
+                ConstraintNode simplifiedNode = simplify(existingOption);
+
+                // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
+                // this helps simplify the sorts of trees that come from eg A OR (B OR C)
+                if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getDecisions().size() == 1) {
+                    newNodes.addAll(
+                        simplifiedNode.getDecisions()
+                            .iterator().next() //get only member
+                            .getOptions());
+                }
+                else {
+                    newNodes.add(simplifiedNode);
+                }
+            }
+
+            return new DecisionNode(newNodes);
+        }
     }
 }
+
