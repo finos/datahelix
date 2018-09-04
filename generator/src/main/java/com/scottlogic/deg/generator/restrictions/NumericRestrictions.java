@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class NumericRestrictions {
 
-    public static boolean defaultMatcher(Object o){
+    public static boolean isNumeric(Object o){
         return o instanceof Number;
     }
 
@@ -12,7 +12,7 @@ public class NumericRestrictions {
     public NumericLimit<BigDecimal> max;
 
     public boolean match(Object o) {
-        if (!(o instanceof Number)) {
+        if (!NumericRestrictions.isNumeric(o)) {
             return false;
         }
 

@@ -9,12 +9,12 @@ import com.scottlogic.deg.generator.utils.IStringGenerator;
 public class StringRestrictions {
     public IStringGenerator stringGenerator;
 
-    public static boolean defaultMatcher(Object o){
+    public static boolean isString(Object o){
         return o instanceof String;
     }
 
     public boolean match(Object o) {
-        if (!(o instanceof String)) {
+        if (!StringRestrictions.isString(o)) {
             return false;
         }
 

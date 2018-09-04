@@ -63,9 +63,6 @@ public class FieldSpecMerger {
                     throw new UnmergeableRestrictionException();
                 }
 
-                if(setRestrictions != null) {
-                    setRestrictions.whitelist = filter(setRestrictions.whitelist, x -> stringRestrictions.match(x));
-                }
             }
 
             // Numeric
@@ -79,10 +76,6 @@ public class FieldSpecMerger {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Numeric));
                 } else {
                     throw new UnmergeableRestrictionException();
-                }
-
-                if(setRestrictions != null) {
-                    setRestrictions.whitelist = filter(setRestrictions.whitelist, x -> numberRestrictions.match(x));
                 }
             }
 
@@ -98,27 +91,38 @@ public class FieldSpecMerger {
                 } else {
                     throw new UnmergeableRestrictionException();
                 }
-
-//                if(setRestrictions != null) {
-//                    setRestrictions.whitelist = filter(setRestrictions.whitelist, x -> !dateTimeRestrictions.matches(x));
-//                }
             }
 
             // Filter the set to match any new restrictions
-            if (setRestrictions != null && setRestrictions.whitelist != null && !setRestrictions.whitelist.isEmpty()) {
-                Stream<?> filterStream = setRestrictions.whitelist.stream();
+            if (setRestrictions != null &&
+                    setRestrictions.getWhitelist() != null &&
+                    !setRestrictions.getWhitelist().isEmpty()) {
+
+                Stream<?> filterStream = setRestrictions.getWhitelist().stream();
 
                 if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                    filterStream = filterStream.filter(x -> !NumericRestrictions.defaultMatcher(x));
+                    filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
                 }
 
                 if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                    filterStream = filterStream.filter(x -> !StringRestrictions.defaultMatcher(x));
+                    filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
+                }
+
+                if(stringRestrictions != null){
+                    filterStream = filterStream.filter(x -> stringRestrictions.match(x));
+                }
+
+                if(numberRestrictions != null){
+                    filterStream = filterStream.filter(x -> numberRestrictions.match(x));
                 }
 
                 // todo: temporal
+//                if(dateTimeRestrictions != null){
+//                    filterStream = filterStream.filter(x -> !dateTimeRestrictions.match(x));
+//                }
 
-                setRestrictions.whitelist = filterStream.collect(Collectors.toCollection(HashSet::new));
+                setRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
+                        setRestrictions.getBlacklist()) ;
             }
 
             merged.setNullRestrictions(

@@ -83,7 +83,7 @@ public class IntegerFieldValueSource implements IFieldValueSource {
         if (!isFinite())
             throw new IllegalStateException();
 
-        return exclusiveUpper - inclusiveLower - blacklist.size(); // eg, if 3 <= X < 5, there are two values: [3, 4]
+        return (long)exclusiveUpper - inclusiveLower - blacklist.size(); // eg, if 3 <= X < 5, there are two values: [3, 4]
     }
 
     @Override
