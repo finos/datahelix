@@ -10,4 +10,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.scottlogic.deg.App"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="src/test/resources/gfx_cleaned.csv ."/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="profiler"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.library.path=&quot;C:\hadoop-2.7.6\bin&quot;"/>
 </launchConfiguration>
