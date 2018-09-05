@@ -36,6 +36,13 @@ public class LimitingFieldValueSource implements IFieldValueSource {
     }
 
     @Override
+    public Iterable<Object> generateInterestingValues() {
+        return new LimitingIterable<>(
+            underlyingSource.generateInterestingValues(),
+            this.getValueCount());
+    }
+
+    @Override
     public Iterable<Object> generateAllValues() {
         return new LimitingIterable<>(
             underlyingSource.generateAllValues(),

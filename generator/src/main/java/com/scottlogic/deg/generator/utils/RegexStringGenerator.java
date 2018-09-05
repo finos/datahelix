@@ -8,6 +8,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class RegexStringGenerator implements IStringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
@@ -72,6 +73,25 @@ public class RegexStringGenerator implements IStringGenerator {
     @Override
     public boolean isFinite() {
         return automaton.isFinite();
+    }
+
+    @Override
+    public Iterable<String> generateInterestingValues() {
+        return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
+    }
+
+    private Stream<String> generateInterestingValues(State state, String matchedValue) {
+        Stream<String> matchedValueStream = state.isAccept()
+            ? Stream.of(matchedValue)
+            : Stream.empty();
+
+        Stream<String> subTransitionStream = state
+            .getTransitions()
+            .stream()
+            .flatMap(transition ->
+                generateInterestingValues(transition.getDest(), matchedValue + transition.getMin()));
+
+        return Stream.concat(matchedValueStream, subTransitionStream);
     }
 
     @Override

@@ -36,7 +36,8 @@ public class LimitingIterable<T> implements Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return this.numberOfItemsReturned < this.maxNumberOfItemsToReturn;
+            return this.numberOfItemsReturned < this.maxNumberOfItemsToReturn
+                && underlyingIterator.hasNext();
         }
 
         @Override

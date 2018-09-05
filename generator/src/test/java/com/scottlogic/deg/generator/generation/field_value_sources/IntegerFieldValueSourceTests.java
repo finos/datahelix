@@ -65,7 +65,50 @@ class IntegerFieldValueSourceTests {
         expectNoValues();
     }
 
+    @Test
+    void shouldSupplyInterestingValues() {
+        givenLowerBound(-100, true);
+        givenUpperBound(100, true);
 
+        expectInterestingValues(-100, 0, 100);
+    }
+
+    @Test
+    void shouldSupplyExclusiveInterestingValues() {
+        givenLowerBound(0, false);
+        givenUpperBound(100, false);
+
+        expectInterestingValues(1, 99);
+    }
+
+    @Test
+    void shouldAvoidBlacklistedInterestingValues() {
+        givenLowerBound(-100, false);
+        givenUpperBound(100, true);
+
+        givenBlacklist(-100, 0, 100);
+
+        expectInterestingValues(-99, 99);
+    }
+
+    @Test
+    void shouldSupplyToUpperBoundary() {
+        givenLowerBound(4, true);
+
+        expectInterestingValues(4, Integer.MAX_VALUE - 1);
+    }
+
+    @Test
+    void shouldSupplyToLowerBoundary() {
+        givenUpperBound(4, true);
+
+        expectInterestingValues(Integer.MIN_VALUE, 0, 4);
+    }
+
+    @Test
+    void shouldSupplyToBoundary() {
+        expectInterestingValues(Integer.MIN_VALUE, 0, Integer.MAX_VALUE - 1);
+    }
 
     private NumericLimit<BigDecimal> upperLimit;
     private NumericLimit<BigDecimal> lowerLimit;
@@ -95,16 +138,24 @@ class IntegerFieldValueSourceTests {
     }
 
     private void expectAllValues(Integer... expectedValuesArray) {
+        expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
+    }
+
+    private void expectInterestingValues(Integer... expectedValuesArray) {
+        expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
+    }
+
+    private void expectValues(Iterable<Object> values, boolean assertCount, Integer... expectedValuesArray) {
         List<Integer> expectedValues = Arrays.asList(expectedValuesArray);
         List<Integer> actualValues = new ArrayList<>();
 
-        getObjectUnderTest()
-            .generateAllValues()
-            .forEach(v -> actualValues.add((Integer)v));
+        values.forEach(v -> actualValues.add((Integer)v));
 
         // ASSERT
-        expectValueCount(expectedValuesArray.length);
-        expectFinite();
+        if (assertCount) {
+            expectValueCount(expectedValuesArray.length);
+            expectFinite();
+        }
 
         Assert.assertThat(actualValues, equalTo(expectedValues));
     }
