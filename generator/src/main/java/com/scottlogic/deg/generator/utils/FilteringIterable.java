@@ -4,19 +4,15 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class FilteringIterable<T> implements Iterable<T> {
-    private final Iterable<T> underlyingIterator;
+    private final Iterable<T> underlyingIterable;
+    private final Predicate<T> predicate;
 
-    private T nextValueToReturn;
-    private boolean haveCompletedIteration;
-
-    private Predicate<T> predicate;
-
-    public FilteringIterable(Iterable<T> underlyingIterator, Predicate<T> predicate) {
-        this.underlyingIterator = underlyingIterator;
+    public FilteringIterable(Iterable<T> underlyingIterable, Predicate<T> predicate) {
+        this.underlyingIterable = underlyingIterable;
         this.predicate = predicate;
     }
     @Override
     public Iterator<T> iterator() {
-        return new FilteringIterator<>(underlyingIterator.iterator(), predicate);
+        return new FilteringIterator<>(underlyingIterable.iterator(), predicate);
     }
 }

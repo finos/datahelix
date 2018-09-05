@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

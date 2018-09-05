@@ -1,5 +1,7 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.utils.IterableAsStream;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

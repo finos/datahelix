@@ -1,9 +1,7 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.utils.IStringGenerator;
-
-import java.util.regex.Pattern;
+import com.scottlogic.deg.generator.generation.IStringGenerator;
 
 public class MatchesStandardConstraint implements IConstraint
 {

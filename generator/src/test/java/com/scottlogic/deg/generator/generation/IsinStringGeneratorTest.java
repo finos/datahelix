@@ -1,5 +1,9 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.IsinStringGenerator;
+import com.scottlogic.deg.generator.utils.Isin;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Before;
 import org.junit.Test;
 

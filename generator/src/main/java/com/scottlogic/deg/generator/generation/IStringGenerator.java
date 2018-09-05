@@ -1,6 +1,8 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.field_value_sources.IFieldValueSource;
+import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 public interface IStringGenerator {
     IStringGenerator intersect(IStringGenerator stringGenerator);

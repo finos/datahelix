@@ -1,5 +1,8 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;

@@ -1,4 +1,12 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
+
+import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
+import com.scottlogic.deg.generator.utils.ExpandingIterable;
+import com.scottlogic.deg.generator.utils.FilteringIterable;
+import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.Isin;
+import com.scottlogic.deg.generator.utils.ProjectingIterable;
+import com.scottlogic.deg.generator.utils.RandomMergingIterable;
 
 import java.util.Arrays;
 import java.util.List;

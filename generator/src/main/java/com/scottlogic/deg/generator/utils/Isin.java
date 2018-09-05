@@ -8,24 +8,6 @@ import java.util.stream.IntStream;
 public class Isin {
   public static final List<String> VALID_COUNTRY_CODES = Arrays.asList("GB", "US");
 
-  private String isinString;
-
-  public Isin(String isinString) {
-    this.isinString = isinString;
-  }
-
-  public String getCountryCode() {
-    return isinString.substring(0, 2);
-  }
-
-  public String getNsin() {
-    return isinString.substring(2, 11);
-  }
-
-  public String getCheckDigit() {
-    return isinString.substring(11, 12);
-  }
-
   public static boolean isValidIsin(String isin) {
     if (isin.length() != 12) {
       return false;
