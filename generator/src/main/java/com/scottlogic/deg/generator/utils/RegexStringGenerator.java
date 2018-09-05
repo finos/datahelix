@@ -77,9 +77,7 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        Stream<String> interestingValues = generateInterestingValues(automaton.getInitialState(), "");
-
-        return () -> interestingValues.iterator();
+        return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
     }
 
     private Stream<String> generateInterestingValues(State state, String matchedValue) {

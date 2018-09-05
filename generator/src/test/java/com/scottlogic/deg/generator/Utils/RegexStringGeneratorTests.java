@@ -67,6 +67,17 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
+    void iterableShouldBeRepeatable() {
+        IStringGenerator generator = new RegexStringGenerator("Test");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        resultsIterable.iterator().forEachRemaining(string -> {}); // once
+
+        resultsIterable.iterator().forEachRemaining(string -> {}); // twice
+    }
+
+    @Test
     void shouldCreateZeroLengthInterestingValue() {
         IStringGenerator generator = new RegexStringGenerator("(Test)?");
 
