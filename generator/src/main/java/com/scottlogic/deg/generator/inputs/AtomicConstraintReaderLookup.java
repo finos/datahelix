@@ -44,9 +44,10 @@ public class AtomicConstraintReaderLookup {
                                 Pattern.compile((String) dto.value)));
 
         add(AtomicConstraintType.AVALID.toString(),
-          (dto, fields) -> new MatchesStandardConstraint(
-            fields.getByName(dto.field),
-            standardNameToStringGenerator.get((String) dto.value)
+                (dto, fields) ->
+                        new MatchesStandardConstraint(
+                                fields.getByName(dto.field),
+                                standardNameToStringGenerator.get((String) dto.value)
           ));
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),

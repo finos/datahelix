@@ -1,16 +1,13 @@
 package com.scottlogic.deg.generator.utils;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class IsinStringGeneratorTest {
@@ -59,6 +56,39 @@ public class IsinStringGeneratorTest {
     for (int ii = 0; ii < NumberOfTests; ++ii) {
       final String nextIsin = allIsins.next();
       assertThat(nextIsin.substring(0,2), equalTo(testCountry));
+    }
+  }
+
+  @Test
+  public void shouldUseSedolWhenCountryIsGB() {
+    final String testCountry = "GB";
+    IsinStringGenerator target = new IsinStringGenerator(Collections.singletonList(testCountry));
+    final int NumberOfTests = 100;
+
+    final Iterator<String> allIsins = target.generateAllValues().iterator();
+
+    for (int ii = 0; ii < NumberOfTests; ++ii) {
+      final String nextIsin = allIsins.next();
+      assertThat(Isin.isValidSedolNsin(nextIsin.substring(2,11)), is(true));
+    }
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void complementShouldNotSupportGeneratingAllStrings() {
+    new IsinStringGenerator().complement().generateAllValues();
+  }
+
+  @Test
+  public void complementShouldProduceNoRandomValidIsins() {
+    IStringGenerator target = new IsinStringGenerator().complement();
+
+    final int NumberOfTests = 100;
+
+    final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+    for (int ii = 0; ii < NumberOfTests; ++ii) {
+      final String nextIsin = allIsins.next();
+      assertThat(Isin.isValidIsin(nextIsin), is(false));
     }
   }
 

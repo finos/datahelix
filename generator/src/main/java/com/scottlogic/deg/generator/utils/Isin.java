@@ -50,7 +50,7 @@ public class Isin {
       return false;
     }
     if (countryCode.equals("GB")) {
-      return checkNsinIsSedol(nsin);
+      return isValidSedolNsin(nsin);
     }
     return true;
   }
@@ -58,7 +58,7 @@ public class Isin {
   private static List<Integer> SEDOL_WEIGHTS = Arrays.asList(1, 3, 1, 7, 3, 9, 1);
 
   // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
-  private static boolean checkNsinIsSedol(String nsin){
+  public static boolean isValidSedolNsin(String nsin){
     // SEDOL has length 7, so first two digits of NSIN must be padded 0s
     if (!nsin.substring(0, 2).equals("00")) {
       return false;
