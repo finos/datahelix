@@ -9,15 +9,16 @@ import java.util.Iterator;
 public class RealNumberFieldValueSource implements IFieldValueSource {
     private final BigDecimal upperLimit;
     private final BigDecimal lowerLimit;
-    private final int scale;
     private final BigDecimal stepSize;
+    private final int scale;
 
     public RealNumberFieldValueSource(
         BigDecimal upperLimit,
         BigDecimal lowerLimit,
         int scale) {
-        this.upperLimit = upperLimit.setScale(scale, BigDecimal.ROUND_HALF_UP);
-        this.lowerLimit = lowerLimit.setScale(scale, BigDecimal.ROUND_HALF_UP);
+        this.upperLimit = upperLimit;
+        this.lowerLimit = lowerLimit;
+
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
     }
@@ -29,10 +30,19 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     @Override
     public long getValueCount() {
-        return upperLimit
+        long innerSteps = upperLimit
             .subtract(lowerLimit)
             .divideToIntegralValue(stepSize, new MathContext(1, RoundingMode.FLOOR))
-            .longValue() + 1;
+            .longValue();
+
+        return isOnStep(upperLimit) || isOnStep(lowerLimit)
+            ? innerSteps + 1
+            : innerSteps;
+    }
+
+    private boolean isOnStep(BigDecimal value)
+    {
+        return value.setScale(scale, RoundingMode.CEILING).compareTo(value) == 0;
     }
 
     @Override
@@ -40,7 +50,6 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         return null;
     }
 
-    // perhaps we can changed IndexedSupplier to pass in the previous value as an arg rather than the index!
     @Override
     public Iterable<Object> generateAllValues() {
         return RealNumberIterator::new;
@@ -52,7 +61,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     }
 
     private class RealNumberIterator implements Iterator<Object> {
-        private BigDecimal nextValue = lowerLimit;
+        private BigDecimal nextValue = lowerLimit.setScale(scale, RoundingMode.HALF_UP);
 
         @Override
         public boolean hasNext() {

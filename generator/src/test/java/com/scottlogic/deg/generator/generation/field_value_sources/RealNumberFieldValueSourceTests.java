@@ -1,13 +1,16 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 
 class RealNumberFieldValueSourceTests {
@@ -19,6 +22,15 @@ class RealNumberFieldValueSourceTests {
 
         expectAllValues("-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1",
             "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0");
+    }
+
+    @Test
+    void withBoundsNotOnStepSize() {
+        givenLowerBound("5");
+        givenUpperBound("35");
+        givenScale(-1);
+
+        expectAllValues("10", "20", "30");
     }
 
 //    @Test
@@ -136,9 +148,10 @@ class RealNumberFieldValueSourceTests {
     }
 
     private void expectValues(Iterable<Object> values, boolean assertCount, String... expectedValuesArray) {
-        BigDecimal[] expectedValues = Stream.of(expectedValuesArray)
+        Collection<Matcher<? super BigDecimal>> expectedValuesMatchers = Stream.of(expectedValuesArray)
             .map(BigDecimal::new)
-            .toArray(BigDecimal[]::new);
+            .map(Matchers::comparesEqualTo) // we have to use compare otherwise it fails if the scale is different
+            .collect(Collectors.toList());
 
         BigDecimal[] actualValues = StreamSupport
             .stream(values.spliterator(), false)
@@ -150,7 +163,7 @@ class RealNumberFieldValueSourceTests {
             expectFinite();
         }
 
-        Assert.assertThat(actualValues, arrayContainingInAnyOrder(expectedValues));
+        Assert.assertThat(actualValues, arrayContainingInAnyOrder(expectedValuesMatchers));
     }
 
     private void expectNoValues() {
