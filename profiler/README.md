@@ -2,9 +2,18 @@
 
 ## Setup
 
+### JDK
+
+Install [Oracle JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Scala does not support JDK 9+.
+
+In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
+Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
+
 ### Scala
 
-[Download Scala 2.11.12](https://downloads.lightbend.com/scala/2.11.12/scala-2.11.12.msi)
+Please follow the instruction [here](https://www.scala-lang.org/download/).  Note that if
+you use an IDE (IntelliJ or Eclipse) then your Scala may come with the IDE package 
+(e.g IntelliJ EAP, see below) or a plug-in for the IDE (e.g. `scala-ide` for Eclipse)
 
 Spark does not support Scala 2.12.X yet. So you will need to set up Scala 2.11.12 in your environment.
 
@@ -32,7 +41,7 @@ Extract such that a folder `C:\hadoop-2.7.6\bin` exists.
 In Control Panel: edit your environment variables; set `HADOOP_HOME=C:\hadoop-2.7.6`.  
 Add Hadoop binary utilities to your `PATH` (`C:\hadoop-2.7.6\bin`).
 
-#### Windows shims
+### Windows shims
 
 [winutils](https://github.com/steveloughran/winutils) is a set of POSIX compatibility shims for Hadoop.
 
@@ -44,13 +53,6 @@ git clone https://github.com/steveloughran/winutils
 
 **Without replacing existing files**: copy the contents of `hadoop-2.7.1\bin` into `C:\hadoop-2.7.6\bin`.  
 Such that `C:\hadoop-2.7.6\bin\winutils.exe` and friends exist, but such that you do not overwrite your existing 2.7.6 hadoop.dll.
-
-### JDK
-
-Install [Oracle JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Scala does not support JDK 9+.
-
-In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
-Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
 
 ### IntelliJ IDE
 
@@ -108,9 +110,10 @@ Edit the Run Configuration...
 
 #### Arguments
 
-In Program Arguments, specify the path to a csv for analysis.
+In Program Arguments, specify the path to an input csv for analysis, and an output path to a directory
 
-For now, I run it upon `gfx_cleaned.csv` (found in test/resources):
+For example, you may set your input path to `gfx_cleaned.csv` (found in test/resources), and
+output path to the current directory (`.`):
 
 ```bash
 "C:\git\data-engineering-generator\data-generator-spark\src\test\resources\gfx_cleaned.csv"
@@ -131,16 +134,42 @@ You can specify `HADOOP_HOME` and `SPARK_HOME` here (or just rely on your Window
 
 ### Eclipse IDE
 
-#### Setup
+You can set up an existing Eclipse to support Scala or set up a new Eclipse with Scala support
+
+#### Set up an existing Eclipse installation
+
+Your Eclipse will need the `scala-ide` plug-in and the `m2e-scala` connector
+
+##### `scala-ide`
+
+You can follow the installation instruction on 
+[here](http://scala-ide.org/docs/current-user-doc/gettingstarted/index.html)
+
+As of this writing, we are using `Scala IDE for Eclipse` version 
+4.7.1.v-2_12-20180102121323-2dfe808 and `Scala 2.12.3` version 4.7.1.201801011322 (Note: 
+this version also supports Scala 2.11, the version that Spark needs).  Other versions may also work. 
+
+##### `m2e-scala` connector
+
+Adding the following url as a "Repository" in Eclipse (Help > Install New Software... > Add...)
+
+`http://alchim31.free.fr/m2e-scala/update-site/`
+
+And from there you install `Maven Integration for Scala IDE` (we use version 0.5.1.201410131304)
+
+#### Set up a new Eclipse installation with Scala support
 
 Get the [scala-ide](http://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-win32.win32.x86_64.zip)
 version of Eclipse.
 
 Extract the archive, launch Eclipse and choose your workspace location.
 
-Import the project as a Maven project.
+#### Import the project as a Maven project.
 
-When importing is complete some errors relating to Scala versions will be shown.
+For example, in Eclipse, File > Import... > Maven > Existing Maven Project, and then point to the 
+top-level directory of this project `data-engineering-generator`
+
+When importing is complete some errors relating to Scala versions may be shown.
 To fix this:
 
 - Right-click the *profiler* project in the Package Explorer view and click
@@ -167,9 +196,13 @@ To change the arguments the Profiler is run with, edit the run configuration:
 
 Don't accidentally commit your changes to the run configuration.
 
+As per the argument defined in the launch configuration, you should find an output file 
+`test-output.json` in your current directory (which is 
+`data-engineering-generator\profiler`)
+
 ## Submitting a Spark job
 
-Output a jar artefact to `target/data-engineering-generator-1.0-SNAPSHOT.jar`:
+Output a jar artifact to `target/data-engineering-generator-1.0-SNAPSHOT.jar`:
 
 ```bash
 mvn package

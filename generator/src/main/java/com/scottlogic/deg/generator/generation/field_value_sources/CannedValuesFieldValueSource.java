@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class CannedValuesFieldValueSource implements IFieldValueSource {
     private final List<Object> values;
@@ -25,6 +26,16 @@ public class CannedValuesFieldValueSource implements IFieldValueSource {
     @Override
     public long getValueCount() {
         return this.values.size();
+    }
+
+    @Override
+    public Iterable<Object> generateInterestingValues() {
+        return () -> Stream.of(
+                values.get(0),
+                values.get(values.size() / 2),
+                values.get(values.size() - 1))
+            .distinct()
+            .iterator();
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -42,6 +43,53 @@ public class RegexStringGeneratorTests {
         givenRegex("\\d");
 
         expectFirstResult("0");
+    }
+
+    @Test
+    void shouldCreateInterestingValues() {
+        IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        String[] sampleValues =
+            IterableAsStream.convert(resultsIterable)
+                .toArray(String[]::new);
+
+        Assert.assertThat(
+            sampleValues,
+            arrayContainingInAnyOrder(
+                "Test_000_banana",
+                "Test_000_apple",
+                "Test_AAAAA_apple",
+                "Test_AAAAA_banana"));
+    }
+
+    @Test
+    void iterableShouldBeRepeatable() {
+        IStringGenerator generator = new RegexStringGenerator("Test");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        resultsIterable.iterator().forEachRemaining(string -> {}); // once
+
+        resultsIterable.iterator().forEachRemaining(string -> {}); // twice
+    }
+
+    @Test
+    void shouldCreateZeroLengthInterestingValue() {
+        IStringGenerator generator = new RegexStringGenerator("(Test)?");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        String[] sampleValues =
+            IterableAsStream.convert(resultsIterable)
+                .toArray(String[]::new);
+
+        Assert.assertThat(
+            sampleValues,
+            arrayContainingInAnyOrder(
+                "",
+                "Test"));
     }
 
     @Test
