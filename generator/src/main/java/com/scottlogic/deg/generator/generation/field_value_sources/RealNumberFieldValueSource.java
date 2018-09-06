@@ -2,20 +2,27 @@ package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.NumberUtils;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RealNumberFieldValueSource implements IFieldValueSource {
     private final BigDecimal upperLimit;
     private final BigDecimal lowerLimit;
     private final BigDecimal stepSize;
+    private final Set<BigDecimal> blacklist;
     private final int scale;
 
     // TODO: Add comment about what scale parameter is (if we continue to use it)
     public RealNumberFieldValueSource(
         NumericLimit<BigDecimal> upperLimit,
         NumericLimit<BigDecimal> lowerLimit,
+        Set<Object> blacklist,
         int scale) {
         BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
 
@@ -28,6 +35,13 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         this.lowerLimit = lowerLimit.isInclusive()
             ? lowerLimit.getLimit().subtract(exclusivityAdjuster)
             : lowerLimit.getLimit();
+
+        this.blacklist = blacklist.stream()
+            .map(NumberUtils::coerceToBigDecimal)
+            .filter(Objects::nonNull)
+            .map(i -> i.setScale(scale, RoundingMode.HALF_UP))
+            .filter(i -> this.lowerLimit.compareTo(i) <= 0 && i.compareTo(this.upperLimit) <= 0)
+            .collect(Collectors.toSet());
 
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
@@ -43,7 +57,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         BigDecimal upperStep = upperLimit.divide(stepSize, 0, RoundingMode.FLOOR);
         BigDecimal lowerStep = lowerLimit.divide(stepSize, 0, RoundingMode.FLOOR);
 
-        return upperStep.subtract(lowerStep).longValue();
+        return upperStep.subtract(lowerStep).longValue() - blacklist.size();
     }
 
     @Override
@@ -62,7 +76,12 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     }
 
     private class RealNumberIterator implements Iterator<Object> {
-        private BigDecimal nextValue = lowerLimit.add(stepSize).setScale(scale, RoundingMode.FLOOR);
+        private BigDecimal nextValue;
+
+        public RealNumberIterator() {
+            nextValue = lowerLimit.setScale(scale, RoundingMode.FLOOR);
+            next();
+        }
 
         @Override
         public boolean hasNext() {
@@ -73,7 +92,9 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         public BigDecimal next() {
             BigDecimal currentValue = nextValue;
 
-            nextValue = nextValue.add(stepSize);
+            do {
+                nextValue = nextValue.add(stepSize);
+            } while (blacklist.contains(nextValue));
 
             return currentValue;
         }

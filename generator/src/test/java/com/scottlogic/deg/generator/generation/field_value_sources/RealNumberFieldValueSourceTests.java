@@ -69,32 +69,59 @@ class RealNumberFieldValueSourceTests {
         expectAllValues(expectedResults.split(";"));
     }
 
-//    @Test
-//    void whenBlacklistHasNoValuesInRange() {
-//        givenLowerBound(3);
-//        givenUpperBound(5, true);
-//
-//        expectAllValues(3, 4, 5);
-//    }
-//
-//    @Test
-//    void exclusiveRangesShouldExcludeTheirOwnValue() {
-//        givenLowerBound(3, false);
-//        givenUpperBound(5, false);
-//
-//        expectAllValues(4);
-//    }
-//
-//    @Test
-//    void whenBlacklistContainsNonIntegralValues() {
-//        givenLowerBound(3, true);
-//        givenUpperBound(5, true);
-//
-//        givenBlacklist("hello", 4, new BigDecimal(5));
-//
-//        expectAllValues(3);
-//    }
-//
+    @Test
+    void whenBlacklistHasNoValuesInRange() {
+        givenLowerBound("3", true);
+        givenUpperBound("5", true);
+
+        givenBlacklist(1);
+
+        expectAllValues("3", "4", "5");
+    }
+
+    @Test
+    void whenBlacklistContainsNonIntegralValues() {
+        givenLowerBound("3", true);
+        givenUpperBound("6", true);
+
+        givenBlacklist("hello", 4, new BigDecimal(5));
+
+        expectAllValues("3", "6");
+    }
+
+    @Test
+    void whenBlacklistContainsAllValuesInRange() {
+        givenLowerBound("3", true);
+        givenUpperBound("5", true);
+
+        givenBlacklist(3, 4, 5);
+
+        expectNoValues();
+    }
+
+    @Test
+    void whenBlacklistRounded() {
+        givenLowerBound("0", true);
+        givenUpperBound("100", true);
+        givenScale(-1);
+
+        givenBlacklist(8, 31, 56, 64);
+        // should filter out 10, 30, 60 (twice)
+
+        expectAllValues("0", "20", "40", "50", "70", "80", "90", "100");
+    }
+
+    @Test
+    void whenSmall() {
+        givenLowerBound("-0.05", false);
+        givenUpperBound("0.05", false);
+        givenScale(2);
+
+        givenBlacklist("-0.03", "-0", "0.021", 4);
+
+        expectAllValues("-0.04", "-0.02", "-0.01", "0.01", "0.03", "0.04");
+    }
+
 //    @Test
 //    void whenUpperBoundNotSpecified() {
 //        givenLowerBound(0, true);
@@ -161,12 +188,19 @@ class RealNumberFieldValueSourceTests {
     private NumericLimit<BigDecimal> upperLimit;
     private NumericLimit<BigDecimal> lowerLimit;
     private int scale;
+    private Set<Object> blacklist;
     private RealNumberFieldValueSource objectUnderTest;
 
+    private void givenLowerBound(String limit, boolean isInclusive) {
+        givenLowerBound(new BigDecimal(limit), isInclusive);
+    }
     private void givenLowerBound(BigDecimal limit, boolean isInclusive) {
         this.lowerLimit = new NumericLimit<>(limit, isInclusive);
     }
 
+    private void givenUpperBound(String limit, boolean isInclusive) {
+        givenUpperBound(new BigDecimal(limit), isInclusive);
+    }
     private void givenUpperBound(BigDecimal limit, boolean isInclusive) {
         this.upperLimit = new NumericLimit<>(limit, isInclusive);
     }
@@ -175,6 +209,9 @@ class RealNumberFieldValueSourceTests {
         this.scale = scale;
     }
 
+    private void givenBlacklist(Object... values) {
+        blacklist = new HashSet<>(Arrays.asList(values));
+    }
     private void expectAllValues(String... expectedValuesArray) {
         expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
     }
@@ -208,7 +245,7 @@ class RealNumberFieldValueSourceTests {
 
     private IFieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            objectUnderTest = new RealNumberFieldValueSource(upperLimit, lowerLimit, scale);
+            objectUnderTest = new RealNumberFieldValueSource(upperLimit, lowerLimit, blacklist, scale);
         }
 
         return objectUnderTest;
@@ -231,6 +268,7 @@ class RealNumberFieldValueSourceTests {
         this.upperLimit = null;
         this.lowerLimit = null;
         this.scale = 0;
+        this.blacklist = Collections.emptySet();
         this.objectUnderTest = null;
     }
 }
