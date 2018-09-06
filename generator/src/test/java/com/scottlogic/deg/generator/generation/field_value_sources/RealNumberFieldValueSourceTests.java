@@ -35,6 +35,7 @@ class RealNumberFieldValueSourceTests {
         "-4,  5,    0, -4;-3;-2;-1;0;1;2;3;4;5",
         "0.9, 2.1,  0, 1;2",
         "0.1, 5.9,  0, 1;2;3;4;5",
+        "1,   3,    0, 1;2;3"
     })
     void expectValuesInclusiveOfBounds(BigDecimal lowerBound, BigDecimal upperBound, int scale, String expectedResults) {
         givenLowerBound(lowerBound, true);
@@ -60,6 +61,7 @@ class RealNumberFieldValueSourceTests {
         "-4,   5,    0, -3;-2;-1;0;1;2;3;4",
         "0.9,  2.1,  0, 1;2",
         "0.1,  5.9,  0, 1;2;3;4;5",
+        "1,    3,    0, 2"
     })
     void expectValuesExclusiveOfBounds(BigDecimal lowerBound, BigDecimal upperBound, int scale, String expectedResults) {
         givenLowerBound(lowerBound, false);
@@ -138,6 +140,34 @@ class RealNumberFieldValueSourceTests {
 
         expectInterestingValues("-10", "-9.9", "0", "9.9", "10");
     }
+
+    @Test
+    void shouldSupplySmallNonZeroInterestingValues() {
+        givenLowerBound("1.9", true);
+        givenUpperBound("2.59", true);
+        givenScale(2);
+
+        expectInterestingValues("1.9", "1.91", "2.58", "2.59");
+    }
+
+    @Test
+    void shouldSupplyInterestingValuesWhenBoundariesAreInclusiveAndClose() {
+        givenLowerBound("1.55555", true);
+        givenUpperBound("1.55555", true);
+        givenScale(5);
+
+        expectInterestingValues("1.55555");
+    }
+
+    @Test
+    void shouldSupplyInterestingValuesWhenBoundariesAreExclusiveAndClose() {
+        givenLowerBound("1.55555", false);
+        givenUpperBound("1.55557", false);
+        givenScale(5);
+
+        expectInterestingValues("1.55556");
+    }
+
 //
 //    @Test
 //    void shouldSupplyExclusiveInterestingValues() {

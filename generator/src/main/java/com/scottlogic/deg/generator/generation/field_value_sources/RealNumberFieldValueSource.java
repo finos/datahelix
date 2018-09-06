@@ -22,6 +22,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     private final BigDecimal stepSize;
     private final Set<BigDecimal> blacklist;
     private final int scale;
+    private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
 
     // TODO: Add comment about what scale parameter is (if we continue to use it)
     public RealNumberFieldValueSource(
@@ -29,10 +30,8 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         NumericLimit<BigDecimal> lowerLimit,
         Set<Object> blacklist,
         int scale) {
-        BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
-
-        // Using floor rounding, so with a step size of 10, we have steps of
-        // [0-10), [10-20), [20-30) etc. Nudge the boundaries slightly to implement
+        // Using floor-based rounding for the limits, so with a step size of 10, we have steps of
+        // [0-10), [10-20), [20-30) etc. We nudge the boundaries slightly to implement
         this.upperLimit = upperLimit.isInclusive()
             ? upperLimit.getLimit()
             : upperLimit.getLimit().subtract(exclusivityAdjuster);
@@ -44,7 +43,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         this.blacklist = blacklist.stream()
             .map(NumberUtils::coerceToBigDecimal)
             .filter(Objects::nonNull)
-            .map(i -> i.setScale(scale, RoundingMode.HALF_UP))
+            .map(i -> i.setScale(scale, RoundingMode.HALF_UP)) // not sure if we should just dump any blacklist item that doesn't fit exactly on the scale
             .filter(i -> this.lowerLimit.compareTo(i) <= 0 && i.compareTo(this.upperLimit) <= 0)
             .collect(Collectors.toSet());
 
@@ -67,21 +66,19 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     @Override
     public Iterable<Object> generateInterestingValues() {
-        Iterable<Object> ascendingIterable = () -> new RealNumberIterator(true);
-        Iterable<Object> descendingIterable = () -> new RealNumberIterator(false);
-
         return () -> new UpCastingIterator<>(
             Stream.of(
-                StreamSupport.stream(ascendingIterable.spliterator(), true).limit(2),
-                Stream.of(new BigDecimal(0)),
-                StreamSupport.stream(descendingIterable.spliterator(), true).limit(2))
+                streamOf(() -> new RealNumberIterator()).limit(2),
+                streamOf(() -> new RealNumberIterator(new BigDecimal(0), true)).limit(1),
+                streamOf(() -> new RealNumberIterator(upperLimit.subtract(stepSize), true)).limit(2))
             .flatMap(Function.identity())
+            .distinct()
             .iterator());
     }
 
     @Override
     public Iterable<Object> generateAllValues() {
-        return () -> new RealNumberIterator(true);
+        return RealNumberIterator::new;
     }
 
     @Override
@@ -91,28 +88,24 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     private class RealNumberIterator implements Iterator<Object> {
         private BigDecimal nextValue;
-        private Function<BigDecimal, BigDecimal> step;
-        private Predicate<BigDecimal> hasNext;
 
-        public RealNumberIterator(boolean ascending) {
-            if (ascending){
-                nextValue = lowerLimit;
-                hasNext = value -> value.compareTo(upperLimit) <= 0;
-                step = value -> value.add(stepSize);
-            }
-            else {
-                nextValue = upperLimit.add(stepSize);
-                hasNext = value -> value.compareTo(lowerLimit) > 0;
-                step = value -> value.subtract(stepSize);
-            }
+        RealNumberIterator() {
+            this(lowerLimit, false); // we can say always exclusive because it will have been adjusted if not
+        }
 
-            nextValue = nextValue.setScale(scale, RoundingMode.FLOOR);
+        RealNumberIterator(BigDecimal startingPoint, boolean inclusive) {
+            if (startingPoint.compareTo(lowerLimit) < 0)
+                startingPoint = lowerLimit;
+            else if (inclusive)
+                startingPoint = startingPoint.subtract(exclusivityAdjuster);
+
+            nextValue = startingPoint.setScale(scale, RoundingMode.FLOOR);
             next();
         }
 
         @Override
         public boolean hasNext() {
-            return hasNext.test(nextValue);
+            return nextValue.compareTo(upperLimit) <= 0;
         }
 
         @Override
@@ -120,10 +113,14 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
             BigDecimal currentValue = nextValue;
 
             do {
-                nextValue = step.apply(nextValue);
+                nextValue = nextValue.add(stepSize);
             } while (blacklist.contains(nextValue));
 
             return currentValue;
         }
+    }
+
+    private Stream<Object> streamOf(Iterable<Object> iterable){
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }
