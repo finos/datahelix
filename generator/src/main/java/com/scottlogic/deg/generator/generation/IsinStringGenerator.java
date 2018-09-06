@@ -70,6 +70,11 @@ public class IsinStringGenerator implements IStringGenerator {
   }
 
   @Override
+  public Iterable<String> generateInterestingValues() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public Iterable<String> generateAllValues() {
     if (negate) {
       return new ConcatenatingIterable<>(
