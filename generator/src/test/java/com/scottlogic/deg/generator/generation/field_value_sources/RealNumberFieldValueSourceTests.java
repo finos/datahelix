@@ -130,23 +130,14 @@ class RealNumberFieldValueSourceTests {
 //        expectValueCount(Integer.MAX_VALUE);
 //    }
 //
-//    @Test
-//    void whenBlacklistContainsAllValuesInRange() {
-//        givenLowerBound(3, true);
-//        givenUpperBound(5, true);
-//
-//        givenBlacklist(3, 4, 5);
-//
-//        expectNoValues();
-//    }
-//
-//    @Test
-//    void shouldSupplyInterestingValues() {
-//        givenLowerBound(-100, true);
-//        givenUpperBound(100, true);
-//
-//        expectInterestingValues(-100, 0, 100);
-//    }
+    @Test
+    void shouldSupplyInterestingValues() {
+        givenLowerBound("-10", true);
+        givenUpperBound("10", true);
+        givenScale(1);
+
+        expectInterestingValues("-10", "-9.9", "0", "9.9", "10");
+    }
 //
 //    @Test
 //    void shouldSupplyExclusiveInterestingValues() {
