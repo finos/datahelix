@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -10,13 +11,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 class RealNumberFieldValueSourceTests {
     @ParameterizedTest
@@ -168,6 +169,33 @@ class RealNumberFieldValueSourceTests {
         expectInterestingValues("1.55556");
     }
 
+    @Test
+    void shouldGenerateRandomValues() {
+        givenLowerBound("-10", true);
+        givenUpperBound("10", true);
+        givenScale(5);
+
+        expectCorrectRandomValues();
+    }
+
+    @Test
+    void shouldGenerateLargeInclusiveRandomValues() {
+        givenLowerBound("-100", true);
+        givenUpperBound("100", true);
+        givenScale(-1);
+
+        expectCorrectRandomValues();
+    }
+
+    @Test
+    void shouldGenerateLargeExclusiveRandomValues() {
+        givenLowerBound("-100", false);
+        givenUpperBound("100", false);
+        givenScale(-1);
+
+        expectCorrectRandomValues();
+    }
+
 //
 //    @Test
 //    void shouldSupplyExclusiveInterestingValues() {
@@ -277,11 +305,36 @@ class RealNumberFieldValueSourceTests {
     }
 
     private void expectValueCount(int expectedCount) {
-        long cound = getObjectUnderTest().getValueCount();
-
         Assert.assertThat(
             getObjectUnderTest().getValueCount(),
             equalTo((long)expectedCount));
+    }
+
+    private void expectCorrectRandomValues() {
+        Iterable<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+
+        StreamSupport
+            .stream(resultsIterable.spliterator(), false)
+            .limit(1000)
+            .map(value -> (BigDecimal)value)
+            .forEach(value ->
+            {
+                // Not sure if this is the most efficient way to test all these values,
+                // I think it'll do for now though.
+                Assert.assertThat(
+                    lowerLimit.getLimit(),
+                    lowerLimit.isInclusive()
+                        ? lessThanOrEqualTo(value)
+                        : lessThan(value));
+
+                Assert.assertThat(
+                    value,
+                    upperLimit.isInclusive()
+                        ? lessThanOrEqualTo(upperLimit.getLimit())
+                        : lessThan(upperLimit.getLimit()));
+
+                Assert.assertThat(value.scale(), equalTo(scale));
+            });
     }
 
     @BeforeEach

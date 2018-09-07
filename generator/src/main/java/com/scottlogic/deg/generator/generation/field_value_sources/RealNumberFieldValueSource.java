@@ -1,9 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.NumberUtils;
-import com.scottlogic.deg.generator.utils.UpCastingIterator;
+import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -83,7 +81,14 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     @Override
     public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
-        return null;
+        return () -> new UpCastingIterator<>(
+            new SupplierBasedIterator<>(() ->
+                new BigDecimal(
+                    randomNumberGenerator.nextDouble(
+                        lowerLimit.doubleValue(),
+                        upperLimit.doubleValue()
+                    )).setScale(scale, RoundingMode.FLOOR)
+                ));
     }
 
     private class RealNumberIterator implements Iterator<Object> {
