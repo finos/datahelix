@@ -2,12 +2,14 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.util.*;
@@ -28,8 +30,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
         if (generationConfig.shouldChooseFiniteSampling()) {
             fieldValueSources = fieldValueSources.stream()
-                .map(fvs -> new LimitingFieldValueSource(fvs, 3, 8))
-                .collect(Collectors.toList());
+                    .map(fvs -> new LimitingFieldValueSource(fvs, 3, 8))
+                    .collect(Collectors.toList());
         }
 
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
@@ -44,12 +46,12 @@ public class FieldSpecFulfiller implements IDataBagSource {
                         ? this.spec.getFormatRestrictions().formatString
                         : null);
 
-                return DataBag.startBuilding()
-                    .set(
-                        this.field,
-                        dataBagValue)
-                    .build();
-            });
+                    return DataBag.startBuilding()
+                            .set(
+                                    this.field,
+                                    dataBagValue)
+                            .build();
+                });
     }
 
     private List<IFieldValueSource> getAllApplicableValueSources() {
@@ -64,44 +66,51 @@ public class FieldSpecFulfiller implements IDataBagSource {
             Set<?> whitelist = spec.getSetRestrictions().getWhitelist();
             if (whitelist != null) {
                 return Collections.singletonList(
-                    new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
+                        new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
             }
         }
 
-        // if there're reasonably populated numeric restrictions, output within range
-        if (spec.getNumericRestrictions() != null) {
-            validSources.add(
-                new IntegerFieldValueSource(
-                    spec.getNumericRestrictions().min,
-                    spec.getNumericRestrictions().max,
-                    getBlacklist()));
+        TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
+                ? spec.getTypeRestrictions()
+                : TypeRestrictions.createAllowAll();
 
-            return validSources;
-        }
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+            // if there're reasonably populated numeric restrictions, output within range
+            // else provide default values
+            if (spec.getNumericRestrictions() != null) {
+                validSources.add(
+                        new IntegerFieldValueSource(
+                                spec.getNumericRestrictions().min,
+                                spec.getNumericRestrictions().max,
+                                getBlacklist()));
 
-        // if there're reasonably populated string restrictions, output from stringGenerator
-        StringRestrictions stringRestrictions = spec.getStringRestrictions();
-        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
-            Set<Object> blacklist = getBlacklist();
 
-            final IStringGenerator generator;
-            if (blacklist.size() > 0) {
-                RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
-
-                generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
             } else {
-                generator = stringRestrictions.stringGenerator;
+                validSources.add(CannedValuesFieldValueSource.of(-1, 0, 1, 99));
             }
-
-            validSources.add(generator.asFieldValueSource());
-
-            return validSources;
         }
 
-        // there were no typed restrictions - just output some random bits of data
-        validSources.add(
-            CannedValuesFieldValueSource.of(
-                "string", 123, true));
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+
+            StringRestrictions stringRestrictions = spec.getStringRestrictions();
+            if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
+                Set<Object> blacklist = getBlacklist();
+
+                final IStringGenerator generator;
+                if (blacklist.size() > 0) {
+                    RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+
+                    generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
+                } else {
+                    generator = stringRestrictions.stringGenerator;
+                }
+
+                validSources.add(generator.asFieldValueSource());
+
+            } else {
+                validSources.add(CannedValuesFieldValueSource.of("Lorem", "Ipsum"));
+            }
+        }
 
         return validSources;
     }

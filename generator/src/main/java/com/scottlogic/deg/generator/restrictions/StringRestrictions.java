@@ -9,5 +9,17 @@ import com.scottlogic.deg.generator.generation.IStringGenerator;
 public class StringRestrictions {
     public IStringGenerator stringGenerator;
 
+    public static boolean isString(Object o){
+        return o instanceof String;
+    }
 
+    public boolean match(Object o) {
+        if (!StringRestrictions.isString(o)) {
+            return false;
+        }
+
+        String s = (String) o;
+        return stringGenerator.match(s);
+
+    }
 }

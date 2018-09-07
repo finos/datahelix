@@ -10,6 +10,7 @@ public interface IStringGenerator {
 
     boolean isFinite();
     long getValueCount();
+    boolean match(String subject);
 
     Iterable<String> generateInterestingValues();
 

@@ -115,12 +115,12 @@ public class RegexStringGenerator implements IStringGenerator {
     @Override
     public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> generateRandomStringInternal(
-                "",
-                automaton.getInitialState(),
-                1,
-                Integer.MAX_VALUE,
-                randomNumberGenerator));
+                () -> generateRandomStringInternal(
+                        "",
+                        automaton.getInitialState(),
+                        1,
+                        Integer.MAX_VALUE,
+                        randomNumberGenerator));
     }
 
     private String getMatchedString(int indexOrder) {
@@ -147,6 +147,13 @@ public class RegexStringGenerator implements IStringGenerator {
         return rootNode.matchedStringIdx;
     }
 
+    @Override
+    public boolean match(String subject) {
+
+        return automaton.run(subject);
+
+    }
+
     private String escapeCharacters(String regex) {
         final Pattern patternRequoted = Pattern.compile("\\\\Q(.*?)\\\\E");
         final Pattern patternSpecial = Pattern.compile("[.^$*+?(){|\\[\\\\@]");
@@ -170,11 +177,11 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     private String generateRandomStringInternal(
-        String strMatch,
-        State state,
-        int minLength,
-        int maxLength,
-        IRandomNumberGenerator random) {
+            String strMatch,
+            State state,
+            int minLength,
+            int maxLength,
+            IRandomNumberGenerator random) {
 
         List<Transition> transitions = state.getSortedTransitions(false);
         Set<Integer> selectedTransitions = new HashSet<>();
@@ -280,6 +287,12 @@ public class RegexStringGenerator implements IStringGenerator {
             transactionNodes.add(acceptedNode);
         }
         List<Transition> transitions = state.getSortedTransitions(true);
+
+        //System.out.println(">" + state.toString());
+//        if (transitions.size() > 1) {
+//            System.out.println(">" + transitions.get(0).getMin());
+//        }
+
         for (Transition transition : transitions) {
             RegexStringGenerator.Node trsNode = new RegexStringGenerator.Node();
             int nbrChar = transition.getMax() - transition.getMin() + 1;
