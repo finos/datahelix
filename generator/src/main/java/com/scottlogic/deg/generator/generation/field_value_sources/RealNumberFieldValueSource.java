@@ -9,14 +9,13 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class RealNumberFieldValueSource implements IFieldValueSource {
-    private final BigDecimal upperLimit;
-    private final BigDecimal lowerLimit;
+    private final BigDecimal inclusiveUpperLimit;
+    private final BigDecimal inclusiveLowerLimit;
     private final BigDecimal stepSize;
     private final Set<BigDecimal> blacklist;
     private final int scale;
@@ -28,25 +27,27 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         NumericLimit<BigDecimal> lowerLimit,
         Set<Object> blacklist,
         int scale) {
-        // Using floor-based rounding for the limits, so with a step size of 10, we have steps of
-        // [0-10), [10-20), [20-30) etc. We nudge the boundaries slightly to implement
-        this.upperLimit = upperLimit.isInclusive()
-            ? upperLimit.getLimit()
-            : upperLimit.getLimit().subtract(exclusivityAdjuster);
+        this.scale = scale;
+        this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
 
-        this.lowerLimit = lowerLimit.isInclusive()
-            ? lowerLimit.getLimit().subtract(exclusivityAdjuster)
-            : lowerLimit.getLimit();
+        this.inclusiveLowerLimit =
+            (lowerLimit.isInclusive()
+                ? lowerLimit.getLimit()
+                : lowerLimit.getLimit().add(exclusivityAdjuster))
+            .setScale(scale, RoundingMode.CEILING);
+
+        this.inclusiveUpperLimit =
+            (upperLimit.isInclusive()
+                ? upperLimit.getLimit()
+                : upperLimit.getLimit().subtract(exclusivityAdjuster))
+            .setScale(scale, RoundingMode.FLOOR);
 
         this.blacklist = blacklist.stream()
             .map(NumberUtils::coerceToBigDecimal)
             .filter(Objects::nonNull)
-            .map(i -> i.setScale(scale, RoundingMode.HALF_UP)) // not sure if we should just dump any blacklist item that doesn't fit exactly on the scale
-            .filter(i -> this.lowerLimit.compareTo(i) <= 0 && i.compareTo(this.upperLimit) <= 0)
+            .map(i -> i.setScale(scale, RoundingMode.HALF_UP))
+            .filter(i -> this.inclusiveLowerLimit.compareTo(i) <= 0 && i.compareTo(this.inclusiveUpperLimit) <= 0)
             .collect(Collectors.toSet());
-
-        this.scale = scale;
-        this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
     }
 
     @Override
@@ -56,10 +57,10 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     @Override
     public long getValueCount() {
-        BigDecimal upperStep = upperLimit.divide(stepSize, 0, RoundingMode.FLOOR);
-        BigDecimal lowerStep = lowerLimit.divide(stepSize, 0, RoundingMode.FLOOR);
+        BigDecimal lowerStep = inclusiveLowerLimit.divide(stepSize, 0, RoundingMode.HALF_UP);
+        BigDecimal upperStep = inclusiveUpperLimit.divide(stepSize, 0, RoundingMode.HALF_UP);
 
-        return upperStep.subtract(lowerStep).longValue() - blacklist.size();
+        return upperStep.subtract(lowerStep).longValue() + 1 - blacklist.size();
     }
 
     @Override
@@ -67,8 +68,8 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         return () -> new UpCastingIterator<>(
             Stream.of(
                 streamOf(() -> new RealNumberIterator()).limit(2),
-                streamOf(() -> new RealNumberIterator(new BigDecimal(0), true)).limit(1),
-                streamOf(() -> new RealNumberIterator(upperLimit.subtract(stepSize), true)).limit(2))
+                streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
+                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2))
             .flatMap(Function.identity())
             .distinct()
             .iterator());
@@ -85,8 +86,8 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
             new SupplierBasedIterator<>(() ->
                 new BigDecimal(
                     randomNumberGenerator.nextDouble(
-                        lowerLimit.doubleValue(),
-                        upperLimit.doubleValue()
+                        inclusiveLowerLimit.doubleValue(),
+                        inclusiveUpperLimit.doubleValue()
                     )).setScale(scale, RoundingMode.FLOOR)
                 ));
     }
@@ -95,22 +96,22 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         private BigDecimal nextValue;
 
         RealNumberIterator() {
-            this(lowerLimit, false); // we can say always exclusive because it will have been adjusted if not
+            this(inclusiveLowerLimit); // we can say always exclusive because it will have been adjusted if not
         }
 
-        RealNumberIterator(BigDecimal startingPoint, boolean inclusive) {
-            if (startingPoint.compareTo(lowerLimit) < 0)
-                startingPoint = lowerLimit;
-            else if (inclusive)
-                startingPoint = startingPoint.subtract(exclusivityAdjuster);
+        RealNumberIterator(BigDecimal startingPoint) {
+            if (startingPoint.compareTo(inclusiveLowerLimit) < 0)
+                startingPoint = inclusiveLowerLimit;
 
-            nextValue = startingPoint.setScale(scale, RoundingMode.FLOOR);
-            next();
+            nextValue = startingPoint;
+
+            if (blacklist.contains(nextValue))
+                next();
         }
 
         @Override
         public boolean hasNext() {
-            return nextValue.compareTo(upperLimit) <= 0;
+            return nextValue.compareTo(inclusiveUpperLimit) <= 0;
         }
 
         @Override

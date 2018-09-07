@@ -103,6 +103,17 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
+    void whenBlacklistContainsAllValuesInExclusiveRange() {
+        givenLowerBound("0.9", false);
+        givenUpperBound("2.1", false);
+        givenScale(0);
+
+        givenBlacklist("1", "2");
+
+        expectNoValues();
+    }
+
+    @Test
     void whenBlacklistRounded() {
         givenLowerBound("0", true);
         givenUpperBound("100", true);
@@ -115,7 +126,7 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void whenSmall() {
+    void whenSmallAndExclusive() {
         givenLowerBound("-0.05", false);
         givenUpperBound("0.05", false);
         givenScale(2);
