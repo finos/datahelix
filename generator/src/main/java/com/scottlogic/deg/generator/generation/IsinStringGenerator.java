@@ -70,6 +70,11 @@ public class IsinStringGenerator implements IStringGenerator {
   }
 
   @Override
+  public boolean match(String subject) {
+    return Isin.isValidIsin(subject);
+  }
+
+  @Override
   public Iterable<String> generateInterestingValues() {
     throw new UnsupportedOperationException();
   }

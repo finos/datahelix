@@ -55,6 +55,11 @@ public class SedolStringGenerator implements IStringGenerator {
   }
 
   @Override
+  public boolean match(String subject) {
+    return Isin.isValidSedolNsin(subject);
+  }
+
+  @Override
   public Iterable<String> generateInterestingValues() {
     throw new UnsupportedOperationException();
   }
