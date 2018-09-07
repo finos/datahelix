@@ -79,6 +79,15 @@ public class FieldSpecFulfiller implements IDataBagSource {
             return validSources;
         }
 
+        if (spec.getDateTimeRestrictions() != null) {
+            validSources.add(
+                    new TemporalFieldValueSource(
+                            spec.getDateTimeRestrictions(),
+                            getBlacklist()));
+
+            return validSources;
+        }
+
         // if there're reasonably populated string restrictions, output from stringGenerator
         StringRestrictions stringRestrictions = spec.getStringRestrictions();
         if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {

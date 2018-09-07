@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.FORMATTEDAS.toString(),
                 (dto, fields) ->
                         new FormatConstraint(
-                            fields.getByName(dto.field),
-                            (String) dto.value));
+                                fields.getByName(dto.field),
+                                (String) dto.value));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields) ->
@@ -67,25 +68,25 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields) ->
                         new IsBeforeConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                LocalDate.parse(dto.value.toString()).atStartOfDay()));
+                                parseDate(dto.value.toString())));
 
         add(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsBeforeOrEqualToConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                LocalDate.parse(dto.value.toString()).atStartOfDay()));
+                                parseDate(dto.value.toString())));
 
         add(AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsAfterConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                LocalDate.parse(dto.value.toString()).atStartOfDay()));
+                                parseDate(dto.value.toString())));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsAfterOrEqualToConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                LocalDate.parse(dto.value.toString()).atStartOfDay()));
+                                parseDate(dto.value.toString())));
 
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields) ->
@@ -148,6 +149,16 @@ public class AtomicConstraintReaderLookup {
 
     private static void add(String typeCode, IConstraintReader func) {
         typeCodeToSpecificReader.put(typeCode, func);
+    }
+
+    private static LocalDateTime parseDate(String value) {
+
+        if (value.length() > 10) {
+            return LocalDateTime.parse(value);
+        } else {
+            return LocalDate.parse(value).atStartOfDay();
+        }
+
     }
 
     public IConstraintReader getByTypeCode(String typeCode) {
