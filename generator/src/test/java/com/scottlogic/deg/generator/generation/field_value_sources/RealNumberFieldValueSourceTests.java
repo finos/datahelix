@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.NumberUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -126,7 +128,7 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void whenSmallAndExclusive() {
+    void whenSmallWithBlacklist() {
         givenLowerBound("-0.05", false);
         givenUpperBound("0.05", false);
         givenScale(2);
@@ -181,6 +183,17 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
+    void shouldSupplyInterestingNonBlacklistedValues() {
+        givenLowerBound("-10", true);
+        givenUpperBound("10", true);
+        givenScale(1);
+
+        givenBlacklist("-10", "0", "9.9");
+
+        expectInterestingValues("-9.9", "-9.8", "0.1", "10");
+    }
+
+    @Test
     void shouldGenerateRandomValues() {
         givenLowerBound("-10", true);
         givenUpperBound("10", true);
@@ -203,6 +216,17 @@ class RealNumberFieldValueSourceTests {
         givenLowerBound("-100", false);
         givenUpperBound("100", false);
         givenScale(-1);
+
+        expectCorrectRandomValues();
+    }
+
+    @Test
+    void shouldGenerateNonBlacklistedValues() {
+        givenLowerBound("5", true);
+        givenUpperBound("10", false);
+        givenScale(0);
+
+        givenBlacklist("6", "8");
 
         expectCorrectRandomValues();
     }
@@ -324,6 +348,12 @@ class RealNumberFieldValueSourceTests {
     private void expectCorrectRandomValues() {
         Iterable<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
+        Set<BigDecimal> decimalBlacklist = blacklist
+            .stream()
+            .map(NumberUtils::coerceToBigDecimal)
+            .map(value -> value.setScale(scale, RoundingMode.HALF_UP))
+            .collect(Collectors.toCollection(TreeSet::new));
+
         StreamSupport
             .stream(resultsIterable.spliterator(), false)
             .limit(1000)
@@ -343,6 +373,9 @@ class RealNumberFieldValueSourceTests {
                     upperLimit.isInclusive()
                         ? lessThanOrEqualTo(upperLimit.getLimit())
                         : lessThan(upperLimit.getLimit()));
+
+                if (decimalBlacklist.size() != 0)
+                    Assert.assertFalse(decimalBlacklist.contains(value));
 
                 Assert.assertThat(value.scale(), equalTo(scale));
             });

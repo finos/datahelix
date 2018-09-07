@@ -83,13 +83,14 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     @Override
     public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
         return () -> new UpCastingIterator<>(
-            new SupplierBasedIterator<>(() ->
-                new BigDecimal(
-                    randomNumberGenerator.nextDouble(
-                        inclusiveLowerLimit.doubleValue(),
-                        inclusiveUpperLimit.doubleValue()
-                    )).setScale(scale, RoundingMode.FLOOR)
-                ));
+            new FilteringIterator<>(
+                new SupplierBasedIterator<>(() ->
+                    new BigDecimal(
+                        randomNumberGenerator.nextDouble(
+                            inclusiveLowerLimit.doubleValue(),
+                            inclusiveUpperLimit.doubleValue()
+                        )).setScale(scale, RoundingMode.HALF_UP)),
+                i -> !blacklist.contains(i)));
     }
 
     private class RealNumberIterator implements Iterator<Object> {
@@ -103,7 +104,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
             if (startingPoint.compareTo(inclusiveLowerLimit) < 0)
                 startingPoint = inclusiveLowerLimit;
 
-            nextValue = startingPoint;
+            nextValue = startingPoint.setScale(scale);
 
             if (blacklist.contains(nextValue))
                 next();
