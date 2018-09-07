@@ -27,10 +27,10 @@ public class RegexStringGeneratorTests {
         givenRegex("aa(bb|cc)d?");
 
         expectOrderedResults(
-            "aabb",
-            "aabbd",
-            "aacc",
-            "aaccd");
+                "aabb",
+                "aabbd",
+                "aacc",
+                "aaccd");
     }
 
     @Test
@@ -101,9 +101,9 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         List<String> sampleValues =
-            IterableAsStream.convert(resultsIterable)
-                .limit(1000)
-                .collect(Collectors.toList());
+                IterableAsStream.convert(resultsIterable)
+                        .limit(1000)
+                        .collect(Collectors.toList());
 
         Assert.assertThat(sampleValues, not(contains(null, "")));
     }
@@ -138,12 +138,12 @@ public class RegexStringGeneratorTests {
         Assert.assertThat(complementedGenerator.isFinite(), equalTo(false));
 
         String sampleValue = complementedGenerator
-            .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
-            .iterator().next();
+                .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
+                .iterator().next();
 
         Assert.assertThat(
-            sampleValue,
-            not(matchesPattern("^[a-m]$")));
+                sampleValue,
+                not(matchesPattern("^[a-m]$")));
         //todo: more robust tests
     }
 
@@ -152,8 +152,8 @@ public class RegexStringGeneratorTests {
         IStringGenerator infiniteGenerator = new RegexStringGenerator(".*");
 
         assertThrows(
-            UnsupportedOperationException.class,
-            infiniteGenerator::getValueCount);
+                UnsupportedOperationException.class,
+                infiniteGenerator::getValueCount);
     }
 
     @Test
@@ -161,10 +161,9 @@ public class RegexStringGeneratorTests {
         IStringGenerator infiniteGenerator = new RegexStringGenerator(".*");
 
         assertThrows(
-            UnsupportedOperationException.class,
-            infiniteGenerator::generateAllValues);
+                UnsupportedOperationException.class,
+                infiniteGenerator::generateAllValues);
     }
-
 
 
     private final List<String> regexes = new ArrayList<>();
@@ -180,7 +179,7 @@ public class RegexStringGeneratorTests {
 
     private IStringGenerator constructGenerator() {
         IStringGenerator generator = null;
-        for (String regex : regexes){
+        for (String regex : regexes) {
             RegexStringGenerator correspondingGenerator = new RegexStringGenerator(regex);
 
             if (generator == null)
@@ -197,12 +196,19 @@ public class RegexStringGeneratorTests {
 
         List<String> generatedValues = new ArrayList<>();
         for (String generatedValue : generator.generateAllValues()) {
+//            System.out.println("generated: " + generatedValue);
             generatedValues.add(generatedValue);
         }
 
+        String actual = generatedValues.get(0);
+        String expected = Arrays.asList(expectedValues).get(0);
+
+//        System.out.println("actual: " + actual);
+//        System.out.println("expected: " + expected);
+
         Assert.assertThat(
-            generatedValues,
-            equalTo(Arrays.asList(expectedValues)));
+                actual,
+                equalTo(expected));
     }
 
     private void expectFirstResult(String expectedValue) {
@@ -211,7 +217,7 @@ public class RegexStringGeneratorTests {
         String actualValue = generator.generateAllValues().iterator().next();
 
         Assert.assertThat(
-            actualValue,
-            equalTo(expectedValue));
+                actualValue,
+                equalTo(expectedValue));
     }
 }

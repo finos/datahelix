@@ -89,14 +89,15 @@ public class FieldSpecFactory {
 
     private void apply(FieldSpec fieldSpec, IsOfTypeConstraint constraint, boolean negate) {
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
-        if (typeRestrictions == null) {
-            typeRestrictions = new TypeRestrictions();
-            fieldSpec.setTypeRestrictions(typeRestrictions);
-        }
+
         if (negate) {
-            throw new UnsupportedOperationException();
+            typeRestrictions = TypeRestrictions.createFromBlackList(constraint.requiredType);
+        } else {
+            typeRestrictions = TypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
-        typeRestrictions.type = constraint.requiredType;
+
+        fieldSpec.setTypeRestrictions(typeRestrictions);
+
     }
 
     private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
