@@ -3,33 +3,40 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
 
+import javax.xml.crypto.Data;
+
 public class GenerationConfig {
     public static GenerationConfig exhaustivePresets = new GenerationConfig(
-        true,
-        true,
+        DataGenerationType.Interesting,
+        false,
         new FieldExhaustiveCombinationStrategy());
 
-    private final boolean shouldEnumerateSetsExhaustively;
+    public enum DataGenerationType
+    {
+        FullSequential,
+        Interesting,
+        Random
+    }
+
     private final boolean shouldChooseFiniteSampling;
+    private final DataGenerationType dataGenerationType;
     private final ICombinationStrategy combinationStrategy;
 
     public GenerationConfig(
-        boolean shouldEnumerateSetsExhaustively,
+        DataGenerationType dataGenerationType,
         boolean shouldChooseFiniteSampling,
         ICombinationStrategy combinationStrategy) {
 
-        this.shouldEnumerateSetsExhaustively = shouldEnumerateSetsExhaustively;
+        this.dataGenerationType = dataGenerationType;
         this.shouldChooseFiniteSampling = shouldChooseFiniteSampling;
         this.combinationStrategy = combinationStrategy;
-    }
-
-    public boolean shouldEnumerateSetsExhaustively() {
-        return this.shouldEnumerateSetsExhaustively;
     }
 
     public boolean shouldChooseFiniteSampling() {
         return this.shouldChooseFiniteSampling;
     }
+
+    public DataGenerationType dataGenerationType() { return this.dataGenerationType; }
 
     public ICombinationStrategy getCombinationStrategy() {
         return combinationStrategy;

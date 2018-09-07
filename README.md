@@ -1,4 +1,4 @@
-Badges go here (see [shields.io](https://shields.io/), for examples).
+(To be updated: Badges go here (see [shields.io](https://shields.io/), for examples).)
 
 # Data Generator
 
@@ -6,40 +6,30 @@ This monorepo contains the different technological arms of Scott Logic's Data Ge
 
 ## Installation
 
-OS X & Linux:
-
-```sh
-npm install my-crazy-module --save
-```
-
-Windows:
-
-```sh
-edit autoexec.bat
-```
+(To be added)
 
 ## Usage example
 
-A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing).
+(To be added: A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing).
 
 _For more examples and usage, please refer to the [Wiki][wiki]._
+)
 
 ## Development setup
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
+The `profiler` module contains Scala code so you have to first set up your IDE (IntelliJ IDEA or
+Eclipse) to support Scala.  It also depends on Spark and Hadoop.  Please refer to `profiler/README.md` for the details.
 
-```sh
-make install
-npm test
-```
+And then you can import the top level working directory `data-engineering-generator` into your IDE as an Maven project (In Eclipse: File > Import... > Maven > Existing Maven Project).  Four projects will be imported as a result
+
+* `parent`
+* `generator`
+* `profiler`
+* `schemas` 
 
 ## Contributing
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+(To be added)
 
 ## License
 

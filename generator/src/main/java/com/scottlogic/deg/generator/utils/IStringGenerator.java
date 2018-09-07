@@ -10,6 +10,8 @@ public interface IStringGenerator {
     long getValueCount();
     boolean match(String subject);
 
+    Iterable<String> generateInterestingValues();
+
     Iterable<String> generateAllValues();
 
     Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
@@ -34,6 +36,12 @@ public interface IStringGenerator {
         @Override
         public long getValueCount() {
             return underlyingGenerator.getValueCount();
+        }
+
+        @Override
+        public Iterable<Object> generateInterestingValues() {
+            return () -> new UpCastingIterator<>(
+                underlyingGenerator.generateInterestingValues().iterator());
         }
 
         @Override

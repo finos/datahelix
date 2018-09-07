@@ -37,14 +37,14 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         return new ProjectingIterable<>(
-                combinedFieldValueSource.generateAllValues(),
-                value ->
-                {
-                    DataBagValue dataBagValue = new DataBagValue(
-                            value,
-                            this.spec.getFormatRestrictions() != null
-                                    ? this.spec.getFormatRestrictions().formatString
-                                    : null);
+            getDataValues(combinedFieldValueSource, generationConfig.dataGenerationType()),
+            value ->
+            {
+                DataBagValue dataBagValue = new DataBagValue(
+                    value,
+                    this.spec.getFormatRestrictions() != null
+                        ? this.spec.getFormatRestrictions().formatString
+                        : null);
 
                     return DataBag.startBuilding()
                             .set(
@@ -113,6 +113,18 @@ public class FieldSpecFulfiller implements IDataBagSource {
         }
 
         return validSources;
+    }
+
+    private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+        switch (dataType) {
+            case FullSequential:
+            default:
+                return source.generateAllValues();
+            case Interesting:
+                return source.generateInterestingValues();
+            case Random:
+                return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+        }
     }
 
     private boolean determineNullabilityAndDecideWhetherToHalt(List<IFieldValueSource> fieldValueSources) {
