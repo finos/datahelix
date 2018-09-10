@@ -23,8 +23,8 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
 
     // TODO: Add comment about what scale parameter is (if we continue to use it)
     public RealNumberFieldValueSource(
-        NumericLimit<BigDecimal> upperLimit,
         NumericLimit<BigDecimal> lowerLimit,
+        NumericLimit<BigDecimal> upperLimit,
         Set<Object> blacklist,
         int scale) {
         this.scale = scale;
