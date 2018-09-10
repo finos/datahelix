@@ -21,7 +21,9 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     private final int scale;
     private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
 
-    // TODO: Add comment about what scale parameter is (if we continue to use it)
+    /**
+     * @param scale The granularity of the output values: the number of digits to the right of the decimal point. See BigDecimal.scale() for details
+     */
     public RealNumberFieldValueSource(
         NumericLimit<BigDecimal> lowerLimit,
         NumericLimit<BigDecimal> upperLimit,
