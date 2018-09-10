@@ -13,25 +13,6 @@ import java.util.stream.Stream;
 public class RegexStringGenerator implements IStringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
-    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
-        return RegexStringGenerator.createFromBlacklist(blacklist, new JavaUtilRandomNumberGenerator());
-    }
-
-    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, IRandomNumberGenerator random) {
-        String[] blacklistStrings = new String[blacklist.size()];
-        int i = 0;
-        for (Object obj : blacklist) {
-            blacklistStrings[i] = obj.toString();
-        }
-        Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
-
-        return new RegexStringGenerator(automaton);
-    }
-
-    private Automaton automaton;
-    private Node rootNode;
-    private boolean isRootNodeBuilt;
-
     static {
         Map<String, String> characterClasses = new HashMap<>();
         characterClasses.put("\\\\d", "[0-9]");
@@ -42,6 +23,11 @@ public class RegexStringGenerator implements IStringGenerator {
         characterClasses.put("\\\\W", "[^a-zA-Z_0-9]");
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
+
+    private Automaton automaton;
+    private Node rootNode;
+    private boolean isRootNodeBuilt;
+    private int preparedTransactionNode;
 
     public RegexStringGenerator(String regexStr) {
         final String requotedStr = escapeCharacters(regexStr);
@@ -55,6 +41,21 @@ public class RegexStringGenerator implements IStringGenerator {
 
     private RegexStringGenerator(Automaton automaton) {
         this.automaton = automaton;
+    }
+
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
+        return RegexStringGenerator.createFromBlacklist(blacklist, new JavaUtilRandomNumberGenerator());
+    }
+
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, IRandomNumberGenerator random) {
+        String[] blacklistStrings = new String[blacklist.size()];
+        int i = 0;
+        for (Object obj : blacklist) {
+            blacklistStrings[i] = obj.toString();
+        }
+        Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
+
+        return new RegexStringGenerator(automaton);
     }
 
     @Override
@@ -77,19 +78,22 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
+
+        String dot = automaton.toDot();
+
         return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
     }
 
     private Stream<String> generateInterestingValues(State state, String matchedValue) {
         Stream<String> matchedValueStream = state.isAccept()
-            ? Stream.of(matchedValue)
-            : Stream.empty();
+                ? Stream.of(matchedValue)
+                : Stream.empty();
 
         Stream<String> subTransitionStream = state
-            .getTransitions()
-            .stream()
-            .flatMap(transition ->
-                generateInterestingValues(transition.getDest(), matchedValue + transition.getMin()));
+                .getTransitions()
+                .stream()
+                .flatMap(transition ->
+                        generateInterestingValues(transition.getDest(), matchedValue + transition.getMin()));
 
         return Stream.concat(matchedValueStream, subTransitionStream);
     }
@@ -250,8 +254,6 @@ public class RegexStringGenerator implements IStringGenerator {
         }
         return result;
     }
-
-    private int preparedTransactionNode;
 
     private void buildRootNode() {
 

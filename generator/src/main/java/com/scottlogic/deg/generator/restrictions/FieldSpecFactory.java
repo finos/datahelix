@@ -213,17 +213,17 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".*{%s}", constraint.referenceValue));
+        final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
         applyPattern(fieldSpec, regex, negate);
     }
 
     private void apply(FieldSpec fieldSpec, IsStringShorterThanConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".*{0,%d}", constraint.referenceValue + 1));
+        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue + 1));
         applyPattern(fieldSpec, regex, negate);
     }
 
     private void apply(FieldSpec fieldSpec, IsStringLongerThanConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".*{%d,}", constraint.referenceValue + 1));
+        final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
         applyPattern(fieldSpec, regex, negate);
     }
 

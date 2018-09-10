@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
@@ -17,12 +18,11 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     private final Set<Integer> blacklist;
 
     public IntegerFieldValueSource(
-        NumericLimit<BigDecimal> lowerLimit,
-        NumericLimit<BigDecimal> upperLimit,
+        NumericRestrictions restrictions,
         Set<Object> blacklist) {
 
-        this.inclusiveLower = getInclusiveLower(lowerLimit);
-        this.exclusiveUpper = getExclusiveUpper(upperLimit);
+        this.inclusiveLower = getInclusiveLower(restrictions.min);
+        this.exclusiveUpper = getExclusiveUpper(restrictions.max);
 
         this.blacklist =
             blacklist.stream()
