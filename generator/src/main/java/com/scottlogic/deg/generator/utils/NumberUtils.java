@@ -18,13 +18,17 @@ public class NumberUtils {
         else if (value instanceof BigDecimal)
             return (BigDecimal)value;
         else if (value instanceof String)
-            return (BigDecimal) bigDecimalFormatter.parse((String)value, new ParsePosition(0));
+            return tryParse((String)value);
         else if (value instanceof BigInteger)
             return new BigDecimal((BigInteger)value);
         else if (value instanceof Number)
             return new BigDecimal(((Number)value).doubleValue());
         else
             return null;
+    }
+
+    public static BigDecimal tryParse(String value) {
+        return (BigDecimal) bigDecimalFormatter.parse(value, new ParsePosition(0));
     }
 
     private static final DecimalFormat bigDecimalFormatter;

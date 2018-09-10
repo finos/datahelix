@@ -13,6 +13,7 @@ public class FieldSpecMerger {
     private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
     private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
+    private final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -41,6 +42,7 @@ public class FieldSpecMerger {
             merged.setDateTimeRestrictions(dateTimeRestrictionsMerger.merge(left.getDateTimeRestrictions(),
                     right.getDateTimeRestrictions()));
             merged.setFormatRestrictions(formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
+            merged.setGranularityRestrictions(granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
         } catch (UnmergeableRestrictionException e) {
             return Optional.empty();
         }

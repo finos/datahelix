@@ -25,7 +25,9 @@ public enum AtomicConstraintType {
     ISAFTERCONSTANTDATETIME("after"),
     ISAFTEROREQUALTOCONSTANTDATETIME("afterOrAt"),
     ISBEFORECONSTANTDATETIME("before"),
-    ISBEFOREOREQUALTOCONSTANTDATETIME("beforeOrAt");
+    ISBEFOREOREQUALTOCONSTANTDATETIME("beforeOrAt"),
+
+    ISGRANULARTO("granularTo");
 
     private final String text;
 

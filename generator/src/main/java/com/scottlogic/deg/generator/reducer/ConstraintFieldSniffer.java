@@ -31,6 +31,8 @@ public class ConstraintFieldSniffer {
             return ((IsBeforeConstantDateTimeConstraint) constraint).field;
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
             return ((IsBeforeOrEqualToConstantDateTimeConstraint) constraint).field;
+        } else if (constraint instanceof IsGranularToConstraint) {
+            return ((IsGranularToConstraint) constraint).field;
         } else if (constraint instanceof IsInSetConstraint) {
             return ((IsInSetConstraint) constraint).field;
         } else if (constraint instanceof IsNullConstraint) {

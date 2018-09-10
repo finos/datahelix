@@ -82,10 +82,16 @@ public class AtomicConstraintReaderLookup {
                                 LocalDate.parse(dto.value.toString()).atStartOfDay()));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
+            (dto, fields) ->
+                new IsAfterOrEqualToConstantDateTimeConstraint(
+                    fields.getByName(dto.field),
+                    LocalDate.parse(dto.value.toString()).atStartOfDay()));
+
+        add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields) ->
-                        new IsAfterOrEqualToConstantDateTimeConstraint(
+                        new IsGranularToConstraint(
                                 fields.getByName(dto.field),
-                                LocalDate.parse(dto.value.toString()).atStartOfDay()));
+                                dto.value.toString()));
 
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields) ->

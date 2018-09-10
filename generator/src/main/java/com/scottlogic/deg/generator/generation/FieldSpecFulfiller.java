@@ -70,11 +70,23 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
         // if there're reasonably populated numeric restrictions, output within range
         if (spec.getNumericRestrictions() != null) {
-            validSources.add(
-                new IntegerFieldValueSource(
-                    spec.getNumericRestrictions().min,
-                    spec.getNumericRestrictions().max,
-                    getBlacklist()));
+            int numericScale = spec.getGranularityRestrictions() != null
+                ? spec.getGranularityRestrictions().numericScale
+                : 0;
+
+            if (numericScale == 0)
+                validSources.add(
+                    new IntegerFieldValueSource(
+                        spec.getNumericRestrictions().min,
+                        spec.getNumericRestrictions().max,
+                        getBlacklist()));
+            else
+                validSources.add(
+                    new RealNumberFieldValueSource(
+                        spec.getNumericRestrictions().min,
+                        spec.getNumericRestrictions().max,
+                        getBlacklist(),
+                        numericScale));
 
             return validSources;
         }
