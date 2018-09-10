@@ -76,28 +76,28 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void whenBlacklistHasNoValuesInRange() {
-        givenLowerBound("3", true);
-        givenUpperBound("5", true);
+        givenLowerBound(3, true);
+        givenUpperBound(5, true);
 
         givenBlacklist(1);
 
-        expectAllValues("3", "4", "5");
+        expectAllValues(3, 4, 5);
     }
 
     @Test
     void whenBlacklistContainsNonIntegralValues() {
-        givenLowerBound("3", true);
-        givenUpperBound("6", true);
+        givenLowerBound(3, true);
+        givenUpperBound(6, true);
 
         givenBlacklist("hello", 4, new BigDecimal(5));
 
-        expectAllValues("3", "6");
+        expectAllValues(3, 6);
     }
 
     @Test
     void whenBlacklistContainsAllValuesInRange() {
-        givenLowerBound("3", true);
-        givenUpperBound("5", true);
+        givenLowerBound(3, true);
+        givenUpperBound(5, true);
 
         givenBlacklist(3, 4, 5);
 
@@ -110,21 +110,21 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound("2.1", false);
         givenScale(0);
 
-        givenBlacklist("1", "2");
+        givenBlacklist(1, 2);
 
         expectNoValues();
     }
 
     @Test
     void whenBlacklistRounded() {
-        givenLowerBound("0", true);
-        givenUpperBound("100", true);
+        givenLowerBound(0, true);
+        givenUpperBound(100, true);
         givenScale(-1);
 
         givenBlacklist(8, 31, 56, 64);
         // should filter out 10, 30, 60 (twice)
 
-        expectAllValues("0", "20", "40", "50", "70", "80", "90", "100");
+        expectAllValues(0, 20, 40, 50, 70, 80, 90, 100);
     }
 
     @Test
@@ -140,8 +140,8 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldSupplyInterestingValues() {
-        givenLowerBound("-10", true);
-        givenUpperBound("10", true);
+        givenLowerBound(-10, true);
+        givenUpperBound(10, true);
         givenScale(1);
 
         expectInterestingValues("-10", "-9.9", "0", "9.9", "10");
@@ -176,19 +176,19 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldSupplyInterestingNonBlacklistedValues() {
-        givenLowerBound("-10", true);
-        givenUpperBound("10", true);
+        givenLowerBound(-10, true);
+        givenUpperBound(10, true);
         givenScale(1);
 
-        givenBlacklist("-10", "0", "9.9");
+        givenBlacklist(-10, 0, 9.9);
 
         expectInterestingValues("-9.9", "-9.8", "0.1", "10");
     }
 
     @Test
     void shouldGenerateRandomValues() {
-        givenLowerBound("-10", true);
-        givenUpperBound("10", true);
+        givenLowerBound(-10, true);
+        givenUpperBound(10, true);
         givenScale(5);
 
         expectCorrectRandomValues();
@@ -196,8 +196,8 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldGenerateLargeInclusiveRandomValues() {
-        givenLowerBound("-100", true);
-        givenUpperBound("100", true);
+        givenLowerBound(-100, true);
+        givenUpperBound(100, true);
         givenScale(-1);
 
         expectCorrectRandomValues();
@@ -205,8 +205,8 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldGenerateLargeExclusiveRandomValues() {
-        givenLowerBound("-100", false);
-        givenUpperBound("100", false);
+        givenLowerBound(-100, false);
+        givenUpperBound(100, false);
         givenScale(-1);
 
         expectCorrectRandomValues();
@@ -214,18 +214,18 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldGenerateNonBlacklistedValues() {
-        givenLowerBound("5", true);
-        givenUpperBound("10", false);
+        givenLowerBound(5, true);
+        givenUpperBound(10, false);
         givenScale(0);
 
-        givenBlacklist("6", "8");
+        givenBlacklist(6, 8);
 
         expectCorrectRandomValues();
     }
 
     @Test
     void shouldSupplyToUpperBoundary() {
-        givenLowerBound("4", true);
+        givenLowerBound(4, true);
 
         expectInterestingValues(
             4, 5,
@@ -235,7 +235,7 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     void shouldSupplyToLowerBoundary() {
-        givenUpperBound("4", true);
+        givenUpperBound(4, true);
 
         expectInterestingValues(
             BigDecimal.valueOf(Double.MAX_VALUE).negate(),
@@ -260,15 +260,15 @@ class RealNumberFieldValueSourceTests {
     private Set<Object> blacklist;
     private RealNumberFieldValueSource objectUnderTest;
 
-    private void givenLowerBound(String limit, boolean isInclusive) {
-        givenLowerBound(new BigDecimal(limit), isInclusive);
+    private void givenLowerBound(Object limit, boolean isInclusive) {
+        givenLowerBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenLowerBound(BigDecimal limit, boolean isInclusive) {
         this.lowerLimit = new NumericLimit<>(limit, isInclusive);
     }
 
-    private void givenUpperBound(String limit, boolean isInclusive) {
-        givenUpperBound(new BigDecimal(limit), isInclusive);
+    private void givenUpperBound(Object limit, boolean isInclusive) {
+        givenUpperBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenUpperBound(BigDecimal limit, boolean isInclusive) {
         this.upperLimit = new NumericLimit<>(limit, isInclusive);
@@ -281,7 +281,7 @@ class RealNumberFieldValueSourceTests {
     private void givenBlacklist(Object... values) {
         blacklist = new HashSet<>(Arrays.asList(values));
     }
-    private void expectAllValues(String... expectedValuesArray) {
+    private void expectAllValues(Object... expectedValuesArray) {
         expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
     }
 
