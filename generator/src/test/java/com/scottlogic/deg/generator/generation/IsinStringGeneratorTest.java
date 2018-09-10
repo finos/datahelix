@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.utils.Isin;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import java.util.Iterator;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IsinStringGeneratorTest {
 
@@ -75,9 +77,12 @@ public class IsinStringGeneratorTest {
         }
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void complementShouldNotSupportGeneratingAllStrings() {
-        new IsinStringGenerator().complement().generateAllValues();
+        final UnsupportedOperationException unsupportedOperationException = assertThrows(UnsupportedOperationException.class, () -> {
+            new IsinStringGenerator().complement().generateAllValues();
+        });
+        assertThat(unsupportedOperationException.getMessage(), is("Can't generate all strings for a non-finite regex"));
     }
 
     @Test
