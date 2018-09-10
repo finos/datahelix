@@ -138,14 +138,6 @@ class RealNumberFieldValueSourceTests {
         expectAllValues("-0.04", "-0.02", "-0.01", "0.01", "0.03", "0.04");
     }
 
-//    @Test
-//    void whenUpperBoundNotSpecified() {
-//        givenLowerBound(0, true);
-//
-//        expectFinite();
-//        expectValueCount(Integer.MAX_VALUE);
-//    }
-//
     @Test
     void shouldSupplyInterestingValues() {
         givenLowerBound("-10", true);
@@ -231,43 +223,36 @@ class RealNumberFieldValueSourceTests {
         expectCorrectRandomValues();
     }
 
-//
-//    @Test
-//    void shouldSupplyExclusiveInterestingValues() {
-//        givenLowerBound(0, false);
-//        givenUpperBound(100, false);
-//
-//        expectInterestingValues(1, 99);
-//    }
-//
-//    @Test
-//    void shouldAvoidBlacklistedInterestingValues() {
-//        givenLowerBound(-100, false);
-//        givenUpperBound(100, true);
-//
-//        givenBlacklist(-100, 0, 100);
-//
-//        expectInterestingValues(-99, 99);
-//    }
-//
-//    @Test
-//    void shouldSupplyToUpperBoundary() {
-//        givenLowerBound(4, true);
-//
-//        expectInterestingValues(4, Integer.MAX_VALUE - 1);
-//    }
-//
-//    @Test
-//    void shouldSupplyToLowerBoundary() {
-//        givenUpperBound(4, true);
-//
-//        expectInterestingValues(Integer.MIN_VALUE, 0, 4);
-//    }
-//
-//    @Test
-//    void shouldSupplyToBoundary() {
-//        expectInterestingValues(Integer.MIN_VALUE, 0, Integer.MAX_VALUE - 1);
-//    }
+    @Test
+    void shouldSupplyToUpperBoundary() {
+        givenLowerBound("4", true);
+
+        expectInterestingValues(
+            4, 5,
+            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
+            BigDecimal.valueOf(Double.MAX_VALUE));
+    }
+
+    @Test
+    void shouldSupplyToLowerBoundary() {
+        givenUpperBound("4", true);
+
+        expectInterestingValues(
+            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
+            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            0, 3, 4);
+    }
+
+    @Test
+    void shouldSupplyToBoundary() {
+        expectInterestingValues(
+            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
+            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            0,
+            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
+            BigDecimal.valueOf(Double.MAX_VALUE)
+        );
+    }
 
     private NumericLimit<BigDecimal> upperLimit;
     private NumericLimit<BigDecimal> lowerLimit;
@@ -300,13 +285,13 @@ class RealNumberFieldValueSourceTests {
         expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
     }
 
-    private void expectInterestingValues(String... expectedValuesArray) {
+    private void expectInterestingValues(Object... expectedValuesArray) {
         expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
     }
 
-    private void expectValues(Iterable<Object> values, boolean assertCount, String... expectedValuesArray) {
+    private void expectValues(Iterable<Object> values, boolean assertCount, Object... expectedValuesArray) {
         Collection<Matcher<? super BigDecimal>> expectedValuesMatchers = Stream.of(expectedValuesArray)
-            .map(BigDecimal::new)
+            .map(NumberUtils::coerceToBigDecimal)
             .map(Matchers::comparesEqualTo) // we have to use compare otherwise it fails if the scale is different
             .collect(Collectors.toList());
 
@@ -329,7 +314,7 @@ class RealNumberFieldValueSourceTests {
 
     private IFieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            objectUnderTest = new RealNumberFieldValueSource(upperLimit, lowerLimit, blacklist, scale);
+            objectUnderTest = new RealNumberFieldValueSource(lowerLimit, upperLimit, blacklist, scale);
         }
 
         return objectUnderTest;

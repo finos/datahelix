@@ -30,11 +30,17 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
 
+        if (lowerLimit == null)
+            lowerLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE).negate(), true);
+
         this.inclusiveLowerLimit =
             (lowerLimit.isInclusive()
                 ? lowerLimit.getLimit()
                 : lowerLimit.getLimit().add(exclusivityAdjuster))
             .setScale(scale, RoundingMode.CEILING);
+
+        if (upperLimit == null)
+            upperLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE), true);
 
         this.inclusiveUpperLimit =
             (upperLimit.isInclusive()

@@ -95,8 +95,6 @@ public class FieldSpecFulfiller implements IDataBagSource {
                             spec.getNumericRestrictions().max,
                             getBlacklist(),
                             numericScale));
-
-
             } else {
                 validSources.add(CannedValuesFieldValueSource.of(-1, 0, 1, 99));
             }
