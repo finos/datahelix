@@ -1,91 +1,112 @@
 package com.scottlogic.deg.generator.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Isin {
-  public static final List<String> VALID_COUNTRY_CODES = Arrays.asList("GB", "US");
+    public static final List<String> VALID_COUNTRY_CODES = Arrays.asList("GB", "US");
 
-  public static boolean isValidIsin(String isin) {
-    if (isin.length() != 12) {
-      return false;
+    public static boolean isValidIsin(String isin) {
+        if (isin.length() != 12) {
+            return false;
+        }
+        final String countryCode = isin.substring(0, 2);
+        final String nsin = isin.substring(2, 11);
+        if (!isValidCountryCode(countryCode)) {
+            return false;
+        }
+        if (!isValidNsin(countryCode, nsin)) {
+            return false;
+        }
+        return isinHasValidCheckDigit(isin);
     }
-    final String countryCode = isin.substring(0, 2);
-    final String nsin = isin.substring(2, 11);
-    if (!isValidCountryCode(countryCode)) {
-      return false;
+
+    private static boolean isValidCountryCode(String countryCode) {
+        return VALID_COUNTRY_CODES.contains(countryCode);
     }
-    if (!isValidNsin(countryCode, nsin)) {
-      return false;
+
+    private static boolean isValidNsin(String countryCode, String nsin) {
+        if (!nsin.matches("[A-Z0-9@*#]{9}")) {
+            return false;
+        }
+        if (countryCode.equals("GB")) {
+            return isValidSedolNsin(nsin);
+        }
+        if (countryCode.equals("US")) {
+            return isValidCusipNsin(nsin);
+        }
+        return true;
     }
-    return isinHasValidCheckDigit(isin);
-  }
 
-  private static boolean isValidCountryCode(String countryCode) {
-    return VALID_COUNTRY_CODES.contains(countryCode);
-  }
+    private static List<Integer> SEDOL_WEIGHTS = Arrays.asList(1, 3, 1, 7, 3, 9, 1);
 
-  private static boolean isValidNsin(String countryCode, String nsin) {
-    if (!nsin.matches("[A-Z0-9]{9}")) {
-      return false;
+    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
+    public static boolean isValidSedolNsin(String nsin) {
+        // SEDOL has length 7, so first two digits of NSIN must be padded 0s
+        if (!nsin.substring(0, 2).equals("00")) {
+            return false;
+        }
+        // SEDOL is alphanumeric but cannot contain vowels
+        if (nsin.matches(".*[AEIOU@*#].*")) {
+            return false;
+        }
+        String sedolPreCheckDigit = nsin.substring(2, 8);
+        char checkDigit = calculateSedolCheckDigit(sedolPreCheckDigit);
+        return nsin.charAt(8) == checkDigit;
     }
-    if (countryCode.equals("GB")) {
-      return isValidSedolNsin(nsin);
+
+    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
+    public static boolean isValidCusipNsin(String nsin) {
+        String cusipPreCheckDigit = nsin.substring(0, 8);
+        char checkDigit = calculateCusipCheckDigit(cusipPreCheckDigit);
+        return nsin.charAt(8) == checkDigit;
     }
-    return true;
-  }
 
-  private static List<Integer> SEDOL_WEIGHTS = Arrays.asList(1, 3, 1, 7, 3, 9, 1);
-
-  // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
-  public static boolean isValidSedolNsin(String nsin){
-    // SEDOL has length 7, so first two digits of NSIN must be padded 0s
-    if (!nsin.substring(0, 2).equals("00")) {
-      return false;
+    public static char calculateSedolCheckDigit(String sedol) {
+        final Iterator<Integer> reverseSedolWeightIterator = new LinkedList<>(SEDOL_WEIGHTS).descendingIterator();
+        reverseSedolWeightIterator.next();
+        return luhnsCheckDigit(sedol, false, false, reverseSedolWeightIterator, Collections.emptyList());
     }
-    // SEDOL is alphanumeric but cannot contain vowels
-    if (nsin.matches(".*[AEIOU].*")) {
-      return false;
+
+    private static List<Character> CUSIP_SPECIAL_CHARACTERS = Arrays.asList('*', '@', '#');
+
+    public static char calculateCusipCheckDigit(String cusip) {
+        assert (cusip.length() == 8);
+        return luhnsCheckDigit(cusip, false, true, new CyclicIterable<>(Arrays.asList(2, 1)).iterator(), CUSIP_SPECIAL_CHARACTERS);
     }
-    String sedolPreCheckDigit = nsin.substring(2, 8);
-    char checkDigit = calculateSedolCheckDigit(sedolPreCheckDigit);
-    return nsin.charAt(8) == checkDigit;
-  }
 
-  public static char calculateSedolCheckDigit(String sedol) {
-    int sum = 0;
-    for (int ii = 0; ii < 6; ++ii){
-      sum += SEDOL_WEIGHTS.get(ii) * Character.digit(sedol.charAt(ii), 36);
+    // Validates the check digit at the end of `isin`, which is assumed to be a valid 12-character ISIN
+    private static boolean isinHasValidCheckDigit(String isin) {
+        final char calculatedCheckDigit = calculateIsinCheckDigit(isin.substring(0, 11));
+        return isin.charAt(11) == calculatedCheckDigit;
     }
-    int check = (10 - (sum % 10)) % 10;
-    return Character.forDigit(check, 10);
-  }
 
-  // Validates the check digit at the end of `isin`, which is assumed to be a valid 12-character ISIN
-  private static boolean isinHasValidCheckDigit(String isin) {
-    final char calculatedCheckDigit = calculateIsinCheckDigit(isin.substring(0, 11));
-    return isin.charAt(11) == calculatedCheckDigit;
-  }
+    // Generates  the check digit that should be appended to `isin`, which should be the first 11-characters of a valid ISIN
+    public static char calculateIsinCheckDigit(String isin) {
+        return luhnsCheckDigit(isin, true, true, new CyclicIterable<>(Arrays.asList(2, 1)).iterator(), Collections.emptyList());
+    }
 
-  // Generates  the check digit that should be appended to `isin`, which should be the first 11-characters of a valid ISIN
-  public static char calculateIsinCheckDigit(String isin) {
-    final List<Integer> isinConvertedDigits = isin.chars()
-      .map(character -> Character.digit(character, 36))
-      .flatMap(Isin::splitDigits)
-      .collect(ArrayList::new, List::add, ArrayList::addAll);
-    final int weightedDigitSum = IntStream.range(0, isinConvertedDigits.size())
-      .map(reverseIndex -> isinConvertedDigits.get(isinConvertedDigits.size() - reverseIndex - 1) * (reverseIndex % 2 == 0 ? 2 : 1))
-      .flatMap(Isin::splitDigits)
-      .reduce(0, Integer::sum);
-    int checkDigit = (10 - (weightedDigitSum % 10)) % 10;
-    return Character.forDigit(checkDigit, 10);
-  }
+    private static char luhnsCheckDigit(String source, boolean splitStartingDigits, boolean splitWeightedDigits,
+                                        Iterator<Integer> weights, List<Character> specialCharacters) {
+        final List<Integer> convertedDigits = source.chars()
+                .map(character -> specialCharacters.contains((char) character)
+                        ? 36 + specialCharacters.indexOf((char) character)
+                        : Character.digit(character, 36))
+                .flatMap(splitStartingDigits ? Isin::splitDigits : IntStream::of)
+                .collect(ArrayList::new, List::add, ArrayList::addAll);
 
-  private static IntStream splitDigits(int num) {
-    return num >= 10
-      ? IntStream.of(num / 10, num % 10)
-      : IntStream.of(num);
-  }
+        final int weightedDigitSum = IntStream.range(0, convertedDigits.size())
+                .map(reverseIndex -> convertedDigits.get(convertedDigits.size() - reverseIndex - 1) * weights.next())
+                .flatMap(splitWeightedDigits ? Isin::splitDigits : IntStream::of)
+                .reduce(0, Integer::sum);
+
+        int checkDigit = (10 - (weightedDigitSum % 10)) % 10;
+        return Character.forDigit(checkDigit, 10);
+    }
+
+    private static IntStream splitDigits(int num) {
+        return num >= 10
+                ? IntStream.of(num / 10, num % 10)
+                : IntStream.of(num);
+    }
 }

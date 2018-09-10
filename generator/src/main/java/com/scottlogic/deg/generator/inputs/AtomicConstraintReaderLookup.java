@@ -24,8 +24,8 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.FORMATTEDAS.toString(),
                 (dto, fields) ->
                         new FormatConstraint(
-                            fields.getByName(dto.field),
-                            (String) dto.value));
+                                fields.getByName(dto.field),
+                                (String) dto.value));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields) ->
@@ -50,7 +50,7 @@ public class AtomicConstraintReaderLookup {
                         new MatchesStandardConstraint(
                                 fields.getByName(dto.field),
                                 standardNameToStringGenerator.get((String) dto.value)
-          ));
+                        ));
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),
                 (dto, fields) ->

@@ -116,13 +116,13 @@ public class AtomicConstraintTests {
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
-    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType){
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
         IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
             IConstraint constraint = reader.apply(dto, profileFields);
 
-            Assert.assertThat("Expected " + constraintType.getName() +" but got " + constraint.getClass().getName(),
+            Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,
                     instanceOf(constraintType));
 

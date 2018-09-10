@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.IStringGenerator;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.utils.Isin;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Before;
@@ -16,84 +14,84 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class IsinStringGeneratorTest {
 
-  @Before
-  public void setup() {
-  }
-
-  @Test
-  public void shouldEndAllIsinsWithValidCheckDigit() {
-    IsinStringGenerator target = new IsinStringGenerator();
-    final int NumberOfTests = 100;
-
-    final Iterator<String> allIsins = target.generateAllValues().iterator();
-
-    for (int ii = 0; ii < NumberOfTests; ++ii) {
-      final String nextIsin = allIsins.next();
-      final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
-      assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+    @Before
+    public void setup() {
     }
-  }
 
-  @Test
-  public void shouldEndAllRandomIsinsWithValidCheckDigit() {
-    IsinStringGenerator target = new IsinStringGenerator();
+    @Test
+    public void shouldEndAllIsinsWithValidCheckDigit() {
+        IsinStringGenerator target = new IsinStringGenerator();
+        final int NumberOfTests = 100;
 
-    final int NumberOfTests = 100;
+        final Iterator<String> allIsins = target.generateAllValues().iterator();
 
-    final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
-
-    for (int ii = 0; ii < NumberOfTests; ++ii) {
-      final String nextIsin = allIsins.next();
-      final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
-      assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextIsin = allIsins.next();
+            final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+        }
     }
-  }
 
-  @Test
-  public void shouldOnlyUseSpecifiedCountries() {
-    final String testCountry = "GB";
-    IsinStringGenerator target = new IsinStringGenerator(Collections.singletonList(testCountry));
-    final int NumberOfTests = 100;
+    @Test
+    public void shouldEndAllRandomIsinsWithValidCheckDigit() {
+        IsinStringGenerator target = new IsinStringGenerator();
 
-    final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+        final int NumberOfTests = 100;
 
-    for (int ii = 0; ii < NumberOfTests; ++ii) {
-      final String nextIsin = allIsins.next();
-      assertThat(nextIsin.substring(0,2), equalTo(testCountry));
+        final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextIsin = allIsins.next();
+            final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            assertThat(nextIsin.charAt(11), equalTo(checkDigit));
+        }
     }
-  }
 
-  @Test
-  public void shouldUseSedolWhenCountryIsGB() {
-    final String testCountry = "GB";
-    IsinStringGenerator target = new IsinStringGenerator(Collections.singletonList(testCountry));
-    final int NumberOfTests = 100;
+    @Test
+    public void shouldOnlyUseSpecifiedCountries() {
+        final String testCountry = "GB";
+        IsinStringGenerator target = new IsinStringGenerator(Collections.singletonList(testCountry));
+        final int NumberOfTests = 100;
 
-    final Iterator<String> allIsins = target.generateAllValues().iterator();
+        final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
 
-    for (int ii = 0; ii < NumberOfTests; ++ii) {
-      final String nextIsin = allIsins.next();
-      assertThat(Isin.isValidSedolNsin(nextIsin.substring(2,11)), is(true));
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextIsin = allIsins.next();
+            assertThat(nextIsin.substring(0, 2), equalTo(testCountry));
+        }
     }
-  }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void complementShouldNotSupportGeneratingAllStrings() {
-    new IsinStringGenerator().complement().generateAllValues();
-  }
+    @Test
+    public void shouldUseSedolWhenCountryIsGB() {
+        final String testCountry = "GB";
+        IsinStringGenerator target = new IsinStringGenerator(Collections.singletonList(testCountry));
+        final int NumberOfTests = 100;
 
-  @Test
-  public void complementShouldProduceNoRandomValidIsins() {
-    IStringGenerator target = new IsinStringGenerator().complement();
+        final Iterator<String> allIsins = target.generateAllValues().iterator();
 
-    final int NumberOfTests = 100;
-
-    final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
-
-    for (int ii = 0; ii < NumberOfTests; ++ii) {
-      final String nextIsin = allIsins.next();
-      assertThat(Isin.isValidIsin(nextIsin), is(false));
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextIsin = allIsins.next();
+            assertThat(Isin.isValidSedolNsin(nextIsin.substring(2, 11)), is(true));
+        }
     }
-  }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void complementShouldNotSupportGeneratingAllStrings() {
+        new IsinStringGenerator().complement().generateAllValues();
+    }
+
+    @Test
+    public void complementShouldProduceNoRandomValidIsins() {
+        IStringGenerator target = new IsinStringGenerator().complement();
+
+        final int NumberOfTests = 100;
+
+        final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextIsin = allIsins.next();
+            assertThat(Isin.isValidIsin(nextIsin), is(false));
+        }
+    }
 
 }

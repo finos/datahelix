@@ -11,6 +11,7 @@ public class FilteringIterable<T> implements Iterable<T> {
         this.underlyingIterable = underlyingIterable;
         this.predicate = predicate;
     }
+
     @Override
     public Iterator<T> iterator() {
         return new FilteringIterator<>(underlyingIterable.iterator(), predicate);

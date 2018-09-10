@@ -73,9 +73,9 @@ public class FieldSpecFactory {
 
     private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
         fieldSpec.setSetRestrictions(
-            negate
-                ? SetRestrictions.fromBlacklist(constraint.legalValues)
-                : SetRestrictions.fromWhitelist(constraint.legalValues));
+                negate
+                        ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                        : SetRestrictions.fromWhitelist(constraint.legalValues));
     }
 
     private void apply(FieldSpec fieldSpec, IsNullConstraint constraint, boolean negate) {
@@ -242,8 +242,8 @@ public class FieldSpecFactory {
         fieldSpec.setStringRestrictions(stringRestrictions);
 
         stringRestrictions.stringGenerator = negate
-            ? generator.complement()
-            : generator;
+                ? generator.complement()
+                : generator;
     }
 
     private BigDecimal numberToBigDecimal(Number number) {

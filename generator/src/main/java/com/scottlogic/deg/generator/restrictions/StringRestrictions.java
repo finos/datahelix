@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.generation.IStringGenerator;
 public class StringRestrictions {
     public IStringGenerator stringGenerator;
 
-    public static boolean isString(Object o){
+    public static boolean isString(Object o) {
         return o instanceof String;
     }
 

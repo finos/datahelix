@@ -1,20 +1,18 @@
 package com.scottlogic.deg.generator.utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-public class ExpandingIterable<TFrom, TTo> implements Iterable<TTo>
-{
+public class ExpandingIterable<TFrom, TTo> implements Iterable<TTo> {
     private final Iterable<TFrom> underlyingIterable;
     private final Function<TFrom, List<TTo>> converter;
 
     public ExpandingIterable(
-        Iterable<TFrom> underlyingIterable,
-        Function<TFrom, List<TTo>> converter) {
+            Iterable<TFrom> underlyingIterable,
+            Function<TFrom, List<TTo>> converter) {
 
         this.underlyingIterable = underlyingIterable;
         this.converter = converter;
@@ -24,12 +22,11 @@ public class ExpandingIterable<TFrom, TTo> implements Iterable<TTo>
     @Override
     public Iterator<TTo> iterator() {
         return new InternalIterator(
-            this.underlyingIterable.iterator(),
-            this.converter);
+                this.underlyingIterable.iterator(),
+                this.converter);
     }
 
-    class InternalIterator implements Iterator<TTo>
-    {
+    class InternalIterator implements Iterator<TTo> {
         private final Iterator<TFrom> sourceIterator;
         private final Function<TFrom, List<TTo>> converter;
         private List<TTo> currentItemList;
