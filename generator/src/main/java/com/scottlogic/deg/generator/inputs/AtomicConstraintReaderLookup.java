@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.time.LocalDate;
@@ -11,15 +13,19 @@ import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
     private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
+    private static final Map<String, IStringGenerator> standardNameToStringGenerator;
 
     static {
+        standardNameToStringGenerator = new HashMap<>();
+        standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
+
         typeCodeToSpecificReader = new HashMap<>();
 
         add(AtomicConstraintType.FORMATTEDAS.toString(),
                 (dto, fields) ->
                         new FormatConstraint(
-                            fields.getByName(dto.field),
-                            (String) dto.value));
+                                fields.getByName(dto.field),
+                                (String) dto.value));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields) ->
@@ -38,6 +44,13 @@ public class AtomicConstraintReaderLookup {
                         new MatchesRegexConstraint(
                                 fields.getByName(dto.field),
                                 Pattern.compile((String) dto.value)));
+
+        add(AtomicConstraintType.AVALID.toString(),
+                (dto, fields) ->
+                        new MatchesStandardConstraint(
+                                fields.getByName(dto.field),
+                                standardNameToStringGenerator.get((String) dto.value)
+                        ));
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),
                 (dto, fields) ->
