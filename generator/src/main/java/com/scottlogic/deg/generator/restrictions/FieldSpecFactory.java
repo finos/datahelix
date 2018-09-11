@@ -163,8 +163,9 @@ public class FieldSpecFactory {
 
     private void apply(FieldSpec fieldSpec, IsGranularToConstraint constraint, boolean negate) {
         // TODO: Decide what to do here
-        if (negate)
+        if (negate) {
             throw new NotImplementedException();
+        }
 
         GranularityRestrictions granularityRestrictions = fieldSpec.getGranularityRestrictions();
 

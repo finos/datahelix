@@ -32,8 +32,9 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
 
-        if (lowerLimit == null)
+        if (lowerLimit == null) {
             lowerLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE).negate(), true);
+        }
 
         this.inclusiveLowerLimit =
             (lowerLimit.isInclusive()
@@ -41,8 +42,9 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
                 : lowerLimit.getLimit().add(exclusivityAdjuster))
             .setScale(scale, RoundingMode.CEILING);
 
-        if (upperLimit == null)
+        if (upperLimit == null) {
             upperLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE), true);
+        }
 
         this.inclusiveUpperLimit =
             (upperLimit.isInclusive()
@@ -109,13 +111,15 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
         }
 
         RealNumberIterator(BigDecimal startingPoint) {
-            if (startingPoint.compareTo(inclusiveLowerLimit) < 0)
+            if (startingPoint.compareTo(inclusiveLowerLimit) < 0) {
                 startingPoint = inclusiveLowerLimit;
+            }
 
             nextValue = startingPoint.setScale(scale);
 
-            if (blacklist.contains(nextValue))
+            if (blacklist.contains(nextValue)) {
                 next();
+            }
         }
 
         @Override

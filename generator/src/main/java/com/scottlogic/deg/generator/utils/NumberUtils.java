@@ -13,18 +13,19 @@ public class NumberUtils {
 
     public static BigDecimal coerceToBigDecimal( Object value ) {
         // stolen from http://www.java2s.com/Code/Java/Data-Type/ConvertObjecttoBigDecimal.htm
-        if (value == null)
+        if (value == null) {
             return null;
-        else if (value instanceof BigDecimal)
-            return (BigDecimal)value;
-        else if (value instanceof String)
-            return tryParse((String)value);
-        else if (value instanceof BigInteger)
-            return new BigDecimal((BigInteger)value);
-        else if (value instanceof Number)
-            return BigDecimal.valueOf((Double)value);
-        else
+        } else if (value instanceof BigDecimal) {
+            return (BigDecimal) value;
+        } else if (value instanceof String) {
+            return tryParse((String) value);
+        } else if (value instanceof BigInteger) {
+            return new BigDecimal((BigInteger) value);
+        } else if (value instanceof Number) {
+            return BigDecimal.valueOf((Double) value);
+        } else {
             return null;
+        }
     }
 
     public static BigDecimal tryParse(String value) {

@@ -82,19 +82,20 @@ public class FieldSpecFulfiller implements IDataBagSource {
                     ? spec.getGranularityRestrictions().numericScale
                     : 0;
 
-                if (numericScale == 0)
+                if (numericScale == 0) {
                     validSources.add(
                         new IntegerFieldValueSource(
                             spec.getNumericRestrictions().min,
                             spec.getNumericRestrictions().max,
                             getBlacklist()));
-                else
+                } else {
                     validSources.add(
                         new RealNumberFieldValueSource(
                             spec.getNumericRestrictions().min,
                             spec.getNumericRestrictions().max,
                             getBlacklist(),
                             numericScale));
+                }
             } else {
                 validSources.add(CannedValuesFieldValueSource.of(-1, 0, 1, 99));
             }

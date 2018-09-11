@@ -359,8 +359,9 @@ class RealNumberFieldValueSourceTests {
                         ? lessThanOrEqualTo(upperLimit.getLimit())
                         : lessThan(upperLimit.getLimit()));
 
-                if (decimalBlacklist.size() != 0)
+                if (decimalBlacklist.size() != 0) {
                     Assert.assertFalse(decimalBlacklist.contains(value));
+                }
 
                 Assert.assertThat(value.scale(), equalTo(scale));
             });

@@ -9,7 +9,8 @@ public class GranularityRestrictions {
 
     public void setGranularity(String granularity) {
         BigDecimal numericGranularity = NumberUtils.tryParse(granularity);
-        if (numericGranularity != null)
+        if (numericGranularity != null) {
             numericScale = numericGranularity.scale();
+        }
     }
 }
