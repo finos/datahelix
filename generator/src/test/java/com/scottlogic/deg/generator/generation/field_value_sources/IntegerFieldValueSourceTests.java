@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -166,7 +167,10 @@ class IntegerFieldValueSourceTests {
 
     private IFieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            objectUnderTest = new IntegerFieldValueSource(lowerLimit, upperLimit, blacklist);
+            NumericRestrictions restrictions = new NumericRestrictions();
+            restrictions.min = lowerLimit;
+            restrictions.max = upperLimit;
+            objectUnderTest = new IntegerFieldValueSource(restrictions, blacklist);
         }
 
         return objectUnderTest;

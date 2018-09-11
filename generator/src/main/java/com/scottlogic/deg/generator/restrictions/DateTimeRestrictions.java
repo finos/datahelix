@@ -6,6 +6,34 @@ public class DateTimeRestrictions {
     public DateTimeLimit min;
     public DateTimeLimit max;
 
+    public static boolean isDateTime(Object o){
+        return o instanceof LocalDateTime;
+    }
+
+    public boolean match(Object o) {
+        if(!DateTimeRestrictions.isDateTime(o)){
+            return false;
+        }
+
+        LocalDateTime d = (LocalDateTime) o;
+
+        if(min != null){
+            if(d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
+            {
+                return false;
+            }
+        }
+
+        if(max != null){
+            if(d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static class DateTimeLimit {
         private final LocalDateTime limit;
         private final boolean inclusive;

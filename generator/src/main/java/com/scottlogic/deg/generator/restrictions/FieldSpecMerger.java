@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.generation.field_value_sources.TemporalFieldValueSource;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -56,13 +57,11 @@ public class FieldSpecMerger {
             merged.setStringRestrictions(stringRestrictions);
 
             if (stringRestrictions != null) {
-
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.String));
                 } else {
                     throw new UnmergeableRestrictionException();
                 }
-
             }
 
             // Numeric
@@ -71,7 +70,6 @@ public class FieldSpecMerger {
             merged.setNumericRestrictions(numberRestrictions);
 
             if (numberRestrictions != null) {
-
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Numeric));
                 } else {
@@ -85,7 +83,6 @@ public class FieldSpecMerger {
             merged.setDateTimeRestrictions(dateTimeRestrictions);
 
             if (dateTimeRestrictions != null) {
-
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Temporal));
                 } else {
@@ -108,6 +105,10 @@ public class FieldSpecMerger {
                     filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
                 }
 
+                if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+                    filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
+                }
+
                 if(stringRestrictions != null){
                     filterStream = filterStream.filter(x -> stringRestrictions.match(x));
                 }
@@ -116,10 +117,9 @@ public class FieldSpecMerger {
                     filterStream = filterStream.filter(x -> numberRestrictions.match(x));
                 }
 
-                // todo: temporal
-//                if(dateTimeRestrictions != null){
-//                    filterStream = filterStream.filter(x -> !dateTimeRestrictions.match(x));
-//                }
+                if(dateTimeRestrictions != null){
+                    filterStream = filterStream.filter(x -> dateTimeRestrictions.match(x));
+                }
 
                 setRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
                         setRestrictions.getBlacklist()) ;
