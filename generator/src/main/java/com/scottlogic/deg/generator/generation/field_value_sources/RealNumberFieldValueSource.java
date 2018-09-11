@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
@@ -25,16 +26,15 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
      * @param scale The granularity of the output values: the number of digits to the right of the decimal point. See BigDecimal.scale() for details
      */
     public RealNumberFieldValueSource(
-        NumericLimit<BigDecimal> lowerLimit,
-        NumericLimit<BigDecimal> upperLimit,
+        NumericRestrictions restrictions,
         Set<Object> blacklist,
         int scale) {
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
 
-        if (lowerLimit == null) {
-            lowerLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE).negate(), true);
-        }
+        NumericLimit<BigDecimal> lowerLimit = restrictions.min == null
+            ? new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE).negate(), true)
+            : restrictions.min;
 
         this.inclusiveLowerLimit =
             (lowerLimit.isInclusive()
@@ -42,9 +42,9 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
                 : lowerLimit.getLimit().add(exclusivityAdjuster))
             .setScale(scale, RoundingMode.CEILING);
 
-        if (upperLimit == null) {
-            upperLimit = new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE), true);
-        }
+        NumericLimit<BigDecimal> upperLimit = restrictions.max == null
+            ? new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE), true)
+            : restrictions.max;
 
         this.inclusiveUpperLimit =
             (upperLimit.isInclusive()

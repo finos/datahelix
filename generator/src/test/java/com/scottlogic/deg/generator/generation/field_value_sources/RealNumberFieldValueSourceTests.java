@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 import org.hamcrest.Matcher;
@@ -314,7 +315,10 @@ class RealNumberFieldValueSourceTests {
 
     private IFieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            objectUnderTest = new RealNumberFieldValueSource(lowerLimit, upperLimit, blacklist, scale);
+            NumericRestrictions restrictions = new NumericRestrictions();
+            restrictions.max = upperLimit;
+            restrictions.min = lowerLimit;
+            objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist, scale);
         }
 
         return objectUnderTest;

@@ -73,7 +73,9 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 : TypeRestrictions.createAllowAll();
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-            NumericRestrictions restrictions = spec.getNumericRestrictions();
+            NumericRestrictions restrictions = spec.getNumericRestrictions() == null
+                ? new NumericRestrictions()
+                : spec.getNumericRestrictions();
 
             int numericScale = spec.getGranularityRestrictions() != null
                 ? spec.getGranularityRestrictions().numericScale
@@ -87,8 +89,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             } else {
                 validSources.add(
                     new RealNumberFieldValueSource(
-                        spec.getNumericRestrictions().min,
-                        spec.getNumericRestrictions().max,
+                        restrictions,
                         getBlacklist(),
                         numericScale));
             }
