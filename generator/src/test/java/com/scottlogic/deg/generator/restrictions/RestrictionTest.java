@@ -1,12 +1,11 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.utils.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class RestrictionTest {
 

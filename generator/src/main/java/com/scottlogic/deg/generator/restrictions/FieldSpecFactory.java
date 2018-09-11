@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.utils.IStringGenerator;
-import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -46,6 +46,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
             apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
+        } else if (constraint instanceof MatchesStandardConstraint) {
+            apply(fieldSpec, (MatchesStandardConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
         } else if (constraint instanceof FormatConstraint) {
@@ -74,9 +76,9 @@ public class FieldSpecFactory {
 
     private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
         fieldSpec.setSetRestrictions(
-            negate
-                ? SetRestrictions.fromBlacklist(constraint.legalValues)
-                : SetRestrictions.fromWhitelist(constraint.legalValues));
+                negate
+                        ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                        : SetRestrictions.fromWhitelist(constraint.legalValues));
     }
 
     private void apply(FieldSpec fieldSpec, IsNullConstraint constraint, boolean negate) {
@@ -220,6 +222,10 @@ public class FieldSpecFactory {
         applyPattern(fieldSpec, constraint.regex, negate);
     }
 
+    private void apply(FieldSpec fieldSpec, MatchesStandardConstraint constraint, boolean negate) {
+        applyGenerator(fieldSpec, constraint.standard, negate);
+    }
+
     private void apply(FieldSpec fieldSpec, FormatConstraint constraint, boolean negate) {
         FormatRestrictions formatRestrictions = fieldSpec.getFormatRestrictions();
         if (formatRestrictions == null) {
@@ -246,15 +252,16 @@ public class FieldSpecFactory {
     }
 
     private void applyPattern(FieldSpec fieldSpec, Pattern pattern, boolean negate) {
+        applyGenerator(fieldSpec, new RegexStringGenerator(pattern.toString()), negate);
+    }
+
+    private void applyGenerator(FieldSpec fieldSpec, IStringGenerator generator, boolean negate) {
         StringRestrictions stringRestrictions = new StringRestrictions();
         fieldSpec.setStringRestrictions(stringRestrictions);
 
-        IStringGenerator nominalStringGenerator = new RegexStringGenerator(pattern.toString());
-        nominalStringGenerator = negate
-            ? nominalStringGenerator.complement()
-            : nominalStringGenerator;
-
-        stringRestrictions.stringGenerator = nominalStringGenerator;
+        stringRestrictions.stringGenerator = negate
+                ? generator.complement()
+                : generator;
     }
 
     private BigDecimal numberToBigDecimal(Number number) {

@@ -1,5 +1,8 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;
@@ -59,10 +62,14 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public IStringGenerator intersect(IStringGenerator stringGenerator) {
-        Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
-        Automaton merged = automaton.intersection(b);
+      if (!(stringGenerator instanceof RegexStringGenerator)) {
+        return stringGenerator.intersect(this);
+      }
 
-        return new RegexStringGenerator(merged);
+      Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
+      Automaton merged = automaton.intersection(b);
+
+      return new RegexStringGenerator(merged);
     }
 
     @Override
@@ -96,8 +103,9 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateAllValues() {
-        if (this.isFinite())
+        if (this.isFinite()) {
             return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
+        }
 
         // TODO: Assess whether we can do better here. Is it unacceptable to just generate indefinitely?
         // We used to generate randomly, but that violates a reasonable expectation that values returned by this method should be unique

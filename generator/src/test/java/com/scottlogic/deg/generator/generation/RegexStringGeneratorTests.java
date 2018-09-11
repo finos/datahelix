@@ -1,9 +1,7 @@
-package com.scottlogic.deg.generator.Utils;
+package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.IStringGenerator;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -54,16 +50,16 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
         String[] sampleValues =
-            IterableAsStream.convert(resultsIterable)
-                .toArray(String[]::new);
+                IterableAsStream.convert(resultsIterable)
+                        .toArray(String[]::new);
 
         Assert.assertThat(
-            sampleValues,
-            arrayContainingInAnyOrder(
-                "Test_000_banana",
-                "Test_000_apple",
-                "Test_AAAAA_apple",
-                "Test_AAAAA_banana"));
+                sampleValues,
+                arrayContainingInAnyOrder(
+                        "Test_000_banana",
+                        "Test_000_apple",
+                        "Test_AAAAA_apple",
+                        "Test_AAAAA_banana"));
     }
 
     @Test
@@ -72,9 +68,11 @@ public class RegexStringGeneratorTests {
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
-        resultsIterable.iterator().forEachRemaining(string -> {}); // once
+        resultsIterable.iterator().forEachRemaining(string -> {
+        }); // once
 
-        resultsIterable.iterator().forEachRemaining(string -> {}); // twice
+        resultsIterable.iterator().forEachRemaining(string -> {
+        }); // twice
     }
 
     @Test
@@ -84,14 +82,14 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
         String[] sampleValues =
-            IterableAsStream.convert(resultsIterable)
-                .toArray(String[]::new);
+                IterableAsStream.convert(resultsIterable)
+                        .toArray(String[]::new);
 
         Assert.assertThat(
-            sampleValues,
-            arrayContainingInAnyOrder(
-                "",
-                "Test"));
+                sampleValues,
+                arrayContainingInAnyOrder(
+                        "",
+                        "Test"));
     }
 
     @Test
