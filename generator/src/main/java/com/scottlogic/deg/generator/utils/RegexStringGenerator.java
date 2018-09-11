@@ -78,9 +78,6 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-
-        String dot = automaton.toDot();
-
         return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
     }
 

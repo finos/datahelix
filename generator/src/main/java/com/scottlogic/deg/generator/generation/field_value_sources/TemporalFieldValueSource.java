@@ -14,14 +14,10 @@ import java.util.Set;
 
 public class TemporalFieldValueSource implements IFieldValueSource {
 
-    //    private final LocalDateTime inclusiveLower;
-//    private final LocalDateTime exclusiveUpper;
-
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
     private final LocalDateTime inclusiveLower;
     private final LocalDateTime exclusiveUpper;
-    // private final TemporalUnit unit;
 
     public TemporalFieldValueSource(
             DateTimeRestrictions restrictions,
