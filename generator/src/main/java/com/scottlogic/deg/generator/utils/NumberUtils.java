@@ -22,7 +22,7 @@ public class NumberUtils {
         else if (value instanceof BigInteger)
             return new BigDecimal((BigInteger)value);
         else if (value instanceof Number)
-            return new BigDecimal(((Number)value).doubleValue());
+            return BigDecimal.valueOf((Double)value);
         else
             return null;
     }
