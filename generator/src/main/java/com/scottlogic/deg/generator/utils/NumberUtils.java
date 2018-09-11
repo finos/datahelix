@@ -21,8 +21,14 @@ public class NumberUtils {
             return tryParse((String) value);
         } else if (value instanceof BigInteger) {
             return new BigDecimal((BigInteger) value);
-        } else if (value instanceof Number) {
+        } else if (value instanceof Integer) {
+            return new BigDecimal((Integer) value);
+        } else if (value instanceof Long) {
+            return new BigDecimal((Long) value);
+        } else if (value instanceof Double) {
             return BigDecimal.valueOf((Double) value);
+        } else if (value instanceof Float) {
+            return BigDecimal.valueOf((Float) value);
         } else {
             return null;
         }
