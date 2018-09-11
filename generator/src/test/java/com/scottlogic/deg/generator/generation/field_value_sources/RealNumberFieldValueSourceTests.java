@@ -45,7 +45,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(upperBound, true);
         givenScale(scale);
 
-        expectAllValues(expectedResults.split(";"));
+        expectAllValues((Object[])expectedResults.split(";"));
     }
 
     @ParameterizedTest
@@ -71,7 +71,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(upperBound, false);
         givenScale(scale);
 
-        expectAllValues(expectedResults.split(";"));
+        expectAllValues((Object[])expectedResults.split(";"));
     }
 
     @Test
