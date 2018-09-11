@@ -6,11 +6,11 @@ import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
-import com.scottlogic.deg.generator.utils.*;
+import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.IStringGenerator;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.ProjectingIterable;
+import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,14 +37,14 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         return new ProjectingIterable<>(
-            getDataValues(combinedFieldValueSource, generationConfig.dataGenerationType()),
-            value ->
-            {
-                DataBagValue dataBagValue = new DataBagValue(
-                    value,
-                    this.spec.getFormatRestrictions() != null
-                        ? this.spec.getFormatRestrictions().formatString
-                        : null);
+                getDataValues(combinedFieldValueSource, generationConfig.dataGenerationType()),
+                value ->
+                {
+                    DataBagValue dataBagValue = new DataBagValue(
+                            value,
+                            this.spec.getFormatRestrictions() != null
+                                    ? this.spec.getFormatRestrictions().formatString
+                                    : null);
 
                     return DataBag.startBuilding()
                             .set(
@@ -75,19 +75,12 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 : TypeRestrictions.createAllowAll();
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-            // if there're reasonably populated numeric restrictions, output within range
-            // else provide default values
-            if (spec.getNumericRestrictions() != null) {
-                validSources.add(
-                        new IntegerFieldValueSource(
-                                spec.getNumericRestrictions().min,
-                                spec.getNumericRestrictions().max,
-                                getBlacklist()));
 
-
-            } else {
-                validSources.add(CannedValuesFieldValueSource.of(-1, 0, 1, 99));
-            }
+            NumericRestrictions restrictions = spec.getNumericRestrictions();
+            validSources.add(
+                    new IntegerFieldValueSource(
+                            restrictions != null ? restrictions : new NumericRestrictions(),
+                            getBlacklist()));
         }
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
@@ -108,8 +101,17 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 validSources.add(generator.asFieldValueSource());
 
             } else {
+                // todo: move default interesting values into the string field value source
                 validSources.add(CannedValuesFieldValueSource.of("Lorem", "Ipsum"));
             }
+        }
+
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+
+            DateTimeRestrictions restrictions = spec.getDateTimeRestrictions();
+            validSources.add(new TemporalFieldValueSource(
+                    restrictions != null ? restrictions : new DateTimeRestrictions(),
+                    getBlacklist()));
         }
 
         return validSources;

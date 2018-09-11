@@ -43,4 +43,9 @@ public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
             return nextInt();
         }
     }
+
+    @Override
+    public double nextDouble() {
+        return random.nextDouble();
+    }
 }
