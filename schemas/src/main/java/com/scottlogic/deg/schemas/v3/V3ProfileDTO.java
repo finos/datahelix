@@ -12,6 +12,7 @@ public class V3ProfileDTO extends BaseProfile {
 
     public Collection<FieldDTO> fields;
     public Collection<RuleDTO> rules;
+    public String description;
 
     public V3ProfileDTO() {
         super(SchemaVersion);
