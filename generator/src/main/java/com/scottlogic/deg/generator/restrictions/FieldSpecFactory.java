@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 
@@ -39,6 +40,8 @@ public class FieldSpecFactory {
             apply(fieldSpec, (IsBeforeConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
             apply(fieldSpec, (IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate);
+        } else if (constraint instanceof IsGranularToConstraint) {
+            apply(fieldSpec, (IsGranularToConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
             apply(fieldSpec, (IsNullConstraint) constraint, negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
@@ -156,6 +159,22 @@ public class FieldSpecFactory {
                     inclusive
             );
         }
+    }
+
+    private void apply(FieldSpec fieldSpec, IsGranularToConstraint constraint, boolean negate) {
+        // TODO: Decide what to do here
+        if (negate) {
+            throw new NotImplementedException();
+        }
+
+        GranularityRestrictions granularityRestrictions = fieldSpec.getGranularityRestrictions();
+
+        if (granularityRestrictions == null) {
+            granularityRestrictions = new GranularityRestrictions();
+            fieldSpec.setGranularityRestrictions(granularityRestrictions);
+        }
+
+        granularityRestrictions.setGranularity(constraint.granularity);
     }
 
     private void apply(FieldSpec fieldSpec, IsAfterConstantDateTimeConstraint constraint, boolean negate) {

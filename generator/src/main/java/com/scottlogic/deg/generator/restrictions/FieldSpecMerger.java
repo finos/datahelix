@@ -22,6 +22,7 @@ public class FieldSpecMerger {
     private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
     private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
+    private final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -40,7 +41,6 @@ public class FieldSpecMerger {
         }
         final FieldSpec merged = new FieldSpec();
         try {
-
             TypeRestrictions typeRestrictions = typeRestrictionsMerger.merge(
                     left.getTypeRestrictions(), right.getTypeRestrictions());
 
@@ -132,6 +132,11 @@ public class FieldSpecMerger {
 
             merged.setFormatRestrictions(
                     formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
+
+            merged.setGranularityRestrictions(
+                granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
+
+            // If one or more restrictions have provided a type (e.g. less than) add it as a restriction
 
             merged.setTypeRestrictions(typeRestrictions);
 

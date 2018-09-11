@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.utils;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
@@ -45,7 +46,7 @@ public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
     }
 
     @Override
-    public double nextDouble() {
-        return random.nextDouble();
+    public double nextDouble(double lower, double upper) {
+        return random.nextDouble() * (upper - lower) + lower;
     }
 }

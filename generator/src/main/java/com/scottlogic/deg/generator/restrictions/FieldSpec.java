@@ -15,6 +15,7 @@ public class FieldSpec {
     private TypeRestrictions typeRestrictions;
     private DateTimeRestrictions dateTimeRestrictions;
     private FormatRestrictions formatRestrictions;
+    private GranularityRestrictions granularityRestrictions;
 
     public SetRestrictions getSetRestrictions() {
         return setRestrictions;
@@ -37,6 +38,8 @@ public class FieldSpec {
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
+
+    public GranularityRestrictions getGranularityRestrictions() { return granularityRestrictions; }
 
     public void setSetRestrictions(SetRestrictions setRestrictions) {
         this.setRestrictions = setRestrictions;
@@ -62,6 +65,10 @@ public class FieldSpec {
         this.dateTimeRestrictions = dateTimeRestrictions;
     }
 
+    public void setGranularityRestrictions(GranularityRestrictions granularityRestrictions) {
+        this.granularityRestrictions = granularityRestrictions;
+    }
+
     @Override
     public String toString() {
         return String.format(
@@ -71,7 +78,8 @@ public class FieldSpec {
                 Objects.toString(stringRestrictions, "-"),
                 Objects.toString(nullRestrictions, "-"),
                 Objects.toString(typeRestrictions, "-"),
-                Objects.toString(dateTimeRestrictions, "-")
+                Objects.toString(dateTimeRestrictions, "-"),
+                Objects.toString(granularityRestrictions, "-")
         );
     }
 

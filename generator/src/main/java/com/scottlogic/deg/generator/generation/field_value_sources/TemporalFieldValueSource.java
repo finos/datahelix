@@ -195,7 +195,7 @@ public class TemporalFieldValueSource implements IFieldValueSource {
             long min = this.minDate.toInstant(ZoneOffset.UTC).toEpochMilli();
             long max = this.maxDate.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
 
-            long generatedLong = min + (long) (random.nextDouble() * (max - min));
+            long generatedLong = (long)random.nextDouble(min, max);
 
             return Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toLocalDateTime();
         }

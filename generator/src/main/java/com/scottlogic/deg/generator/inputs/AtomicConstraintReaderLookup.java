@@ -101,6 +101,12 @@ public class AtomicConstraintReaderLookup {
                                 fields.getByName(dto.field),
                                 parseDate(dto.value.toString())));
 
+        add(AtomicConstraintType.ISGRANULARTO.toString(),
+                (dto, fields) ->
+                        new IsGranularToConstraint(
+                                fields.getByName(dto.field),
+                                dto.value.toString()));
+
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields) ->
                         new IsNullConstraint(fields.getByName(dto.field)));

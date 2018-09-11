@@ -202,9 +202,8 @@ public class TemporalFieldValueSourceTests {
         }
 
         @Override
-        public double nextDouble() {
-            return nextDoubleValue;
+        public double nextDouble(double lower, double upper) {
+            return nextDoubleValue * (upper - lower) + lower;
         }
     }
-
 }

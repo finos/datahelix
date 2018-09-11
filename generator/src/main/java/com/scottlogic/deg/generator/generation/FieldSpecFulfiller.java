@@ -7,10 +7,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.utils.IStringGenerator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
-import com.scottlogic.deg.generator.utils.RegexStringGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,12 +73,26 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 : TypeRestrictions.createAllowAll();
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+            NumericRestrictions restrictions = spec.getNumericRestrictions() == null
+                ? new NumericRestrictions()
+                : spec.getNumericRestrictions();
 
-            NumericRestrictions restrictions = spec.getNumericRestrictions();
-            validSources.add(
+            int numericScale = spec.getGranularityRestrictions() != null
+                ? spec.getGranularityRestrictions().numericScale
+                : 0;
+
+            if (numericScale == 0) {
+                validSources.add(
                     new IntegerFieldValueSource(
-                            restrictions != null ? restrictions : new NumericRestrictions(),
-                            getBlacklist()));
+                        restrictions,
+                        getBlacklist()));
+            } else {
+                validSources.add(
+                    new RealNumberFieldValueSource(
+                        restrictions,
+                        getBlacklist(),
+                        numericScale));
+            }
         }
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
