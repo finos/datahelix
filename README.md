@@ -17,15 +17,12 @@ _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
 
-The `profiler` module contains Scala code so you have to first set up your IDE (IntelliJ IDEA or
-Eclipse) to support Scala.  It also depends on Spark and Hadoop.  Please refer to `profiler/README.md` for the details.
-
-And then you can import the top level working directory `data-engineering-generator` into your IDE as an Maven project (In Eclipse: File > Import... > Maven > Existing Maven Project).  Four projects will be imported as a result
-
-* `parent`
-* `generator`
-* `profiler`
-* `schemas` 
+1) Follow the [profiler setup instructions](profiler/README.md).
+2) Import the top level working directory `data-engineering-generator` into your IDE as an Maven project (In Eclipse: File > Import... > Maven > Existing Maven Project).  Four projects will be imported as a result:
+   - `parent`
+   - `generator`
+   - `profiler`
+   - `schemas` 
 
 ## Contributing
 

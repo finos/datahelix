@@ -1,6 +1,10 @@
-# Profile com.scottlogic.deg.generator.Generator
+# Profiler
 
 ## Setup
+
+The `profiler` module contains Scala code so you have to set up your IDE to support Scala. It also depends on Spark and Hadoop.
+
+The following instructions are requirements to develop the profiler. If you just want to build the project as a whole (for instance, to work on the generator), you can skip setup of Spark, Hadoop, etc. 
 
 ### JDK
 
