@@ -1,0 +1,1 @@
+When a particular type is disallowed (but there are no other constraints), we should see sample data for other, non-forbidden types 
