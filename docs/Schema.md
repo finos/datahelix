@@ -39,14 +39,14 @@
 		{
 			"if": {
 				"anyOf": [
-					{ "field": "type", "is": "equalTo", "value": "USA" },
-					{ "field": "type", "is": "null" }
+					{ "field": "country", "is": "equalTo", "value": "USA" },
+					{ "field": "country", "is": "null" }
 				]
 			},
 			"then": {
 				"allOf": [
 					{ "field": "tariff", "is": "null" },
-					{ "field": "time", "is": "greaterThan", "value": "2014-01-01" }
+					{ "field": "time", "is": "after", "value": "2014-01-01" }
 				]
 			},
 			"else": { "not": { "field": "tariff", "is": "null" } }
