@@ -58,6 +58,9 @@ class GenerationEngine {
         }
         catch (Exception e) {
             System.err.println("Failed to write generation result");
+            System.err.println(e.toString());
+            for (StackTraceElement ste : e.getStackTrace())
+                System.err.println(ste.toString());
         }
     }
 }
