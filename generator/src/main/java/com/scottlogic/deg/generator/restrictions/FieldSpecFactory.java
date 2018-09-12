@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 
@@ -164,7 +163,7 @@ public class FieldSpecFactory {
     private void apply(FieldSpec fieldSpec, IsGranularToConstraint constraint, boolean negate) {
         // TODO: Decide what to do here
         if (negate) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         GranularityRestrictions granularityRestrictions = fieldSpec.getGranularityRestrictions();
