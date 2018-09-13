@@ -78,7 +78,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 : spec.getNumericRestrictions();
 
             int numericScale = spec.getGranularityRestrictions() != null
-                ? spec.getGranularityRestrictions().numericScale
+                ? spec.getGranularityRestrictions().getNumericScale()
                 : 0;
 
             if (numericScale == 0) {

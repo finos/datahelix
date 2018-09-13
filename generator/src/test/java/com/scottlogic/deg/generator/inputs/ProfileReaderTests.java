@@ -10,7 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -332,5 +333,27 @@ public class ProfileReaderTests {
                                             c.whenConditionIsFalse,
                                             nullValue());
                                 })));
+    }
+
+    @Test
+    public void shouldDeserialiseNumericGranularToConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 10 }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(new BigDecimal(10)));
+                    })));
     }
 }

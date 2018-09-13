@@ -161,19 +161,13 @@ public class FieldSpecFactory {
     }
 
     private void apply(FieldSpec fieldSpec, IsGranularToConstraint constraint, boolean negate) {
-        // TODO: Decide what to do here
         if (negate) {
+            // TODO: Decide what to do here
             throw new UnsupportedOperationException();
         }
 
-        GranularityRestrictions granularityRestrictions = fieldSpec.getGranularityRestrictions();
-
-        if (granularityRestrictions == null) {
-            granularityRestrictions = new GranularityRestrictions();
-            fieldSpec.setGranularityRestrictions(granularityRestrictions);
-        }
-
-        granularityRestrictions.setGranularity(constraint.granularity);
+        fieldSpec.setGranularityRestrictions(
+            new GranularityRestrictions(constraint.granularity));
     }
 
     private void apply(FieldSpec fieldSpec, IsAfterConstantDateTimeConstraint constraint, boolean negate) {
