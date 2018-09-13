@@ -41,6 +41,8 @@ public class ConstraintFieldSniffer {
             return ((IsOfTypeConstraint) constraint).field;
         } else if (constraint instanceof MatchesRegexConstraint) {
             return ((MatchesRegexConstraint) constraint).field;
+        } else if (constraint instanceof ContainsRegexConstraint) {
+            return ((ContainsRegexConstraint) constraint).field;
         } else if (constraint instanceof FormatConstraint) {
             return ((FormatConstraint) constraint).field;
         } else if (constraint instanceof StringHasLengthConstraint) {

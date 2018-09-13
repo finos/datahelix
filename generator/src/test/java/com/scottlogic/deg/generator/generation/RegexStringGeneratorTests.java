@@ -19,8 +19,50 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RegexStringGeneratorTests {
     @Test
+    void shouldFullStringMatchAnchoredString() {
+        givenRegex("^test$");
+
+        expectMatch("test", true);
+    }
+
+    @Test
+    void shouldContainAnchoredString() {
+        givenRegex("^test$");
+
+        expectMatch("test", false);
+    }
+
+    @Test
+    void shouldNotFullStringMatchAnchoredString() {
+        givenRegex("^test$");
+
+        expectNoMatch("testtest", true);
+    }
+
+    @Test
+    void shouldNotContainAnchoredString() {
+        givenRegex("^test$");
+
+        expectNoMatch("testtest", false);
+    }
+
+    @Test
+    void shouldContainUnAnchoredString() {
+        givenRegex("test");
+
+        expectMatch("testtest", false);
+    }
+
+    @Test
+    void shouldNotMatchUnAnchoredString() {
+        givenRegex("test");
+
+        expectNoMatch("testtest", true);
+    }
+
+    @Test
     void shouldGenerateStringsInLexicographicalOrder() {
-        givenRegex("aa(bb|cc)d?");
+        givenRegex("^aa(bb|cc)d?$");
 
         expectOrderedResults(
                 "aabb",
@@ -31,21 +73,21 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldCorrectlyIterateFiniteResults() {
-        givenRegex("xyz(xyz)?xyz");
+        givenRegex("^xyz(xyz)?xyz$");
 
         expectOrderedResults("xyzxyz", "xyzxyzxyz");
     }
 
     @Test
     void shouldCorrectlyReplaceCharacterGroups() {
-        givenRegex("\\d");
+        givenRegex("^\\d$");
 
         expectFirstResult("0");
     }
 
     @Test
     void shouldCreateInterestingValues() {
-        IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)");
+        IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
@@ -64,7 +106,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void interestingValuesShouldBePrintable() {
-        IStringGenerator generator = new RegexStringGenerator("Test.Test");
+        IStringGenerator generator = new RegexStringGenerator("Test.Test", true);
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
@@ -77,7 +119,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void iterableShouldBeRepeatable() {
-        IStringGenerator generator = new RegexStringGenerator("Test");
+        IStringGenerator generator = new RegexStringGenerator("Test", true);
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
@@ -90,7 +132,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldCreateZeroLengthInterestingValue() {
-        IStringGenerator generator = new RegexStringGenerator("(Test)?");
+        IStringGenerator generator = new RegexStringGenerator("(Test)?", true);
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
@@ -107,7 +149,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldCorrectlySampleInfiniteResults() {
-        IStringGenerator generator = new RegexStringGenerator("[a]+");
+        IStringGenerator generator = new RegexStringGenerator("[a]+", false);
 
         Iterable<String> resultsIterable = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
@@ -121,15 +163,15 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldExpandSingletons() {
-        IStringGenerator generator = new RegexStringGenerator("THIS_IS_A_SINGLETON");
+        IStringGenerator generator = new RegexStringGenerator("THIS_IS_A_SINGLETON", true);
         Assert.assertThat(generator.getValueCount(), Is.is(1L));
     }
 
     @Test
     void shouldProduceIntersection() {
-        IStringGenerator infiniteGenerator = new RegexStringGenerator("[a-z]+");
+        IStringGenerator infiniteGenerator = new RegexStringGenerator("[a-z]+", false);
 
-        IStringGenerator rangeGenerator = new RegexStringGenerator("(a|b){1,10}");
+        IStringGenerator rangeGenerator = new RegexStringGenerator("(a|b){1,10}", true);
 
         IStringGenerator actual = infiniteGenerator.intersect(rangeGenerator);
 
@@ -143,7 +185,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldProduceComplement() {
-        IStringGenerator limitedRangeGenerator = new RegexStringGenerator("[a-m]");
+        IStringGenerator limitedRangeGenerator = new RegexStringGenerator("[a-m]", true);
         IStringGenerator complementedGenerator = limitedRangeGenerator.complement();
 
         Assert.assertThat(complementedGenerator.isFinite(), equalTo(false));
@@ -160,7 +202,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldThrowWhenCountingNonFinite() {
-        IStringGenerator infiniteGenerator = new RegexStringGenerator(".*");
+        IStringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
                 UnsupportedOperationException.class,
@@ -169,7 +211,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldThrowWhenGeneratingAllFromNonFinite() {
-        IStringGenerator infiniteGenerator = new RegexStringGenerator(".*");
+        IStringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
                 UnsupportedOperationException.class,
@@ -188,10 +230,10 @@ public class RegexStringGeneratorTests {
         this.regexes.clear();
     }
 
-    private IStringGenerator constructGenerator() {
+    private IStringGenerator constructGenerator(boolean matchFullString) {
         IStringGenerator generator = null;
         for (String regex : regexes) {
-            RegexStringGenerator correspondingGenerator = new RegexStringGenerator(regex);
+            RegexStringGenerator correspondingGenerator = new RegexStringGenerator(regex, matchFullString);
 
             if (generator == null)
                 generator = correspondingGenerator;
@@ -203,7 +245,7 @@ public class RegexStringGeneratorTests {
     }
 
     private void expectOrderedResults(String... expectedValues) {
-        IStringGenerator generator = constructGenerator();
+        IStringGenerator generator = constructGenerator(true);
 
         List<String> generatedValues = new ArrayList<>();
         for (String generatedValue : generator.generateAllValues()) {
@@ -223,12 +265,24 @@ public class RegexStringGeneratorTests {
     }
 
     private void expectFirstResult(String expectedValue) {
-        IStringGenerator generator = constructGenerator();
+        IStringGenerator generator = constructGenerator(true);
 
         String actualValue = generator.generateAllValues().iterator().next();
 
         Assert.assertThat(
                 actualValue,
                 equalTo(expectedValue));
+    }
+
+    private void expectMatch(String subject, boolean matchFullString) {
+        IStringGenerator generator = constructGenerator(matchFullString);
+
+        Assert.assertTrue(generator.match(subject));
+    }
+
+    private void expectNoMatch(String subject, boolean matchFullString) {
+        IStringGenerator generator = constructGenerator(matchFullString);
+
+        Assert.assertFalse(generator.match(subject));
     }
 }
