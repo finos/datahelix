@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +46,13 @@ class SetRestrictionsTests {
         expectOutputBlacklist(); //empty
     }
 
+    @Test
+    void shouldDeclareUnsatisfiabilityIfResultingWhitelistIsEmpty() {
+        givenFirstInputWhitelist(1, 2);
+        givenSecondInputWhitelist(3, 4);
+
+        expectUnsatisfiable();
+    }
 
 
     @BeforeEach
@@ -96,5 +104,11 @@ class SetRestrictionsTests {
         Assert.assertThat(
             getActualOutput().getBlacklist(),
             equalTo(new HashSet<>(Arrays.asList(expectedValues))));
+    }
+
+    private void expectUnsatisfiable() {
+        Assertions.assertThrows(
+            UnmergeableRestrictionException.class,
+            () -> getActualOutput());
     }
 }

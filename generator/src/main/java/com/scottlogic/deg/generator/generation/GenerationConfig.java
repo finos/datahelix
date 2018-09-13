@@ -3,8 +3,6 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
 
-import javax.xml.crypto.Data;
-
 public class GenerationConfig {
     public static GenerationConfig exhaustivePresets = new GenerationConfig(
         DataGenerationType.Interesting,
@@ -36,7 +34,9 @@ public class GenerationConfig {
         return this.shouldChooseFiniteSampling;
     }
 
-    public DataGenerationType dataGenerationType() { return this.dataGenerationType; }
+    public DataGenerationType getDataGenerationType() {
+        return this.dataGenerationType;
+    }
 
     public ICombinationStrategy getCombinationStrategy() {
         return combinationStrategy;

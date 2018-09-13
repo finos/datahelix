@@ -35,7 +35,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         return new ProjectingIterable<>(
-                getDataValues(combinedFieldValueSource, generationConfig.dataGenerationType()),
+                getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType()),
                 value ->
                 {
                     DataBagValue dataBagValue = new DataBagValue(
@@ -64,7 +64,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
             Set<?> whitelist = spec.getSetRestrictions().getWhitelist();
             if (whitelist != null) {
                 return Collections.singletonList(
-                        new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
+                    new CannedValuesFieldValueSource(
+                        new ArrayList<>(whitelist)));
             }
         }
 

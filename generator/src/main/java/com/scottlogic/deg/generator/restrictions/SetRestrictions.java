@@ -72,6 +72,11 @@ public class SetRestrictions {
             newBlacklist = Collections.emptySet();
         }
 
+        if (newWhitelist != null && newWhitelist.size() == 0) {
+            // TODO: We shouldn't really have exceptions thrown in non-anomalous circumstances (this condition can happen in valid profiles)
+            throw new UnmergeableRestrictionException("An empty whitelist was formed");
+        }
+
         return new SetRestrictions(newWhitelist, newBlacklist);
     }
 
