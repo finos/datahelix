@@ -17,7 +17,17 @@ public class ParsedGranularity {
 
     public static ParsedGranularity parse(Object granularityExpression) {
         if (granularityExpression instanceof Number) {
-            return new ParsedGranularity(NumberUtils.coerceToBigDecimal(granularityExpression));
+            BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
+
+            if (asNumber.compareTo(BigDecimal.ONE) > 0) {
+                throw new IllegalArgumentException("Numeric granularity must be less than 1");
+            }
+
+            if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale()))) {
+                throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
+            }
+
+            return new ParsedGranularity(asNumber);
         }
 
         throw new IllegalArgumentException("Can't interpret granularity expression: " + granularityExpression);
