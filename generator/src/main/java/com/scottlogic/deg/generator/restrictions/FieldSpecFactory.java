@@ -3,96 +3,94 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
+import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
     public FieldSpec construct(IConstraint constraint) {
-        final FieldSpec fieldSpec = new FieldSpec();
-        apply(fieldSpec, constraint, false);
-        return fieldSpec;
+        return construct(constraint, false);
     }
 
-    private void apply(FieldSpec fieldSpec, IConstraint constraint, boolean negate) {
+    private FieldSpec construct(IConstraint constraint, boolean negate) {
         if (constraint instanceof NotConstraint) {
-            apply(fieldSpec, ((NotConstraint) constraint).negatedConstraint, !negate);
+            return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
-            apply(fieldSpec, (IsInSetConstraint) constraint, negate);
+            return construct((IsInSetConstraint) constraint, negate);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
-            apply(fieldSpec, (IsEqualToConstantConstraint) constraint, negate);
+            return construct((IsEqualToConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
-            apply(fieldSpec, (IsGreaterThanConstantConstraint) constraint, negate);
+            return construct((IsGreaterThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
-            apply(fieldSpec, (IsGreaterThanOrEqualToConstantConstraint) constraint, negate);
+            return construct((IsGreaterThanOrEqualToConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsLessThanConstantConstraint) {
-            apply(fieldSpec, (IsLessThanConstantConstraint) constraint, negate);
+            return construct((IsLessThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
-            apply(fieldSpec, (IsLessThanOrEqualToConstantConstraint) constraint, negate);
+            return construct((IsLessThanOrEqualToConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
-            apply(fieldSpec, (IsAfterConstantDateTimeConstraint) constraint, negate);
+            return construct((IsAfterConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
-            apply(fieldSpec, (IsAfterOrEqualToConstantDateTimeConstraint) constraint, negate);
+            return construct((IsAfterOrEqualToConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
-            apply(fieldSpec, (IsBeforeConstantDateTimeConstraint) constraint, negate);
+            return construct((IsBeforeConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
-            apply(fieldSpec, (IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate);
+            return construct((IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate);
         } else if (constraint instanceof IsGranularToConstraint) {
-            apply(fieldSpec, (IsGranularToConstraint) constraint, negate);
+            return construct((IsGranularToConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
-            apply(fieldSpec, (IsNullConstraint) constraint, negate);
+            return constructIsNull(negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
-            apply(fieldSpec, (MatchesRegexConstraint) constraint, negate);
+            return construct((MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof MatchesStandardConstraint) {
-            apply(fieldSpec, (MatchesStandardConstraint) constraint, negate);
+            return construct((MatchesStandardConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
-            apply(fieldSpec, (IsOfTypeConstraint) constraint, negate);
+            return construct((IsOfTypeConstraint) constraint, negate);
         } else if (constraint instanceof FormatConstraint) {
-            apply(fieldSpec, (FormatConstraint) constraint, negate);
+            return construct((FormatConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
-            apply(fieldSpec, (StringHasLengthConstraint) constraint, negate);
+            return construct((StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
-            apply(fieldSpec, (IsStringLongerThanConstraint) constraint, negate);
+            return construct((IsStringLongerThanConstraint) constraint, negate);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
-            apply(fieldSpec, (IsStringShorterThanConstraint) constraint, negate);
+            return construct((IsStringShorterThanConstraint) constraint, negate);
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
-    private void apply(FieldSpec fieldSpec, IsEqualToConstantConstraint constraint, boolean negate) {
-        apply(
-                fieldSpec,
-                new IsInSetConstraint(
-                        constraint.field,
-                        Collections.singleton(constraint.requiredValue)
-                ),
-                negate
-        );
+    private FieldSpec construct(IsEqualToConstantConstraint constraint, boolean negate) {
+        return construct(
+            new IsInSetConstraint(
+                constraint.field,
+                Collections.singleton(constraint.requiredValue)
+            ),
+            negate);
     }
 
-    private void apply(FieldSpec fieldSpec, IsInSetConstraint constraint, boolean negate) {
-        fieldSpec.setSetRestrictions(
+    private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
+        return createFieldSpec(fs ->
+            fs.setSetRestrictions(
                 negate
-                        ? SetRestrictions.fromBlacklist(constraint.legalValues)
-                        : SetRestrictions.fromWhitelist(constraint.legalValues));
+                    ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                    : SetRestrictions.fromWhitelist(constraint.legalValues)));
     }
 
-    private void apply(FieldSpec fieldSpec, IsNullConstraint constraint, boolean negate) {
-        NullRestrictions nullRestrictions = fieldSpec.getNullRestrictions();
-        if (nullRestrictions == null) {
-            nullRestrictions = new NullRestrictions();
-            fieldSpec.setNullRestrictions(nullRestrictions);
-        }
+    private FieldSpec constructIsNull(boolean negate) {
+        final NullRestrictions nullRestrictions = new NullRestrictions();
+
         nullRestrictions.nullness = negate
-                ? NullRestrictions.Nullness.MustNotBeNull
-                : NullRestrictions.Nullness.MustBeNull;
+            ? NullRestrictions.Nullness.MustNotBeNull
+            : NullRestrictions.Nullness.MustBeNull;
+
+        return createFieldSpec(fs -> fs.setNullRestrictions(nullRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, IsOfTypeConstraint constraint, boolean negate) {
-        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions();
+    private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
+        final TypeRestrictions typeRestrictions;
 
         if (negate) {
             typeRestrictions = TypeRestrictions.createFromBlackList(constraint.requiredType);
@@ -100,175 +98,160 @@ public class FieldSpecFactory {
             typeRestrictions = TypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
 
-        fieldSpec.setTypeRestrictions(typeRestrictions);
-
+        return createFieldSpec(fs -> fs.setTypeRestrictions(typeRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, IsGreaterThanConstantConstraint constraint, boolean negate) {
-        applyGreaterThanConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {
+        return constructGreaterThanConstraint(constraint.referenceValue, false, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, IsGreaterThanOrEqualToConstantConstraint constraint, boolean negate) {
-        applyGreaterThanConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    private FieldSpec construct(IsGreaterThanOrEqualToConstantConstraint constraint, boolean negate) {
+        return constructGreaterThanConstraint(constraint.referenceValue, true, negate);
     }
 
-    private void applyGreaterThanConstraint(FieldSpec fieldSpec, Number limitValue, boolean inclusive, boolean negate) {
-        NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
-        if (numericRestrictions == null) {
-            numericRestrictions = new NumericRestrictions();
-            fieldSpec.setNumericRestrictions(numericRestrictions);
-        }
-        final BigDecimal limit = numberToBigDecimal(limitValue);
+    private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate) {
+        final NumericRestrictions numericRestrictions = new NumericRestrictions();
+
+        final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions.max = new NumericLimit<>(
-                    limit,
-                    !inclusive
-            );
+                limit,
+                !inclusive);
         } else {
             numericRestrictions.min = new NumericLimit<>(
-                    limit,
-                    inclusive
-            );
+                limit,
+                inclusive);
         }
+
+        return createFieldSpec(fs -> fs.setNumericRestrictions(numericRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, IsLessThanConstantConstraint constraint, boolean negate) {
-        applyLessThanConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate) {
+        return constructLessThanConstraint(constraint.referenceValue, false, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, IsLessThanOrEqualToConstantConstraint constraint, boolean negate) {
-        applyLessThanConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    private FieldSpec construct(IsLessThanOrEqualToConstantConstraint constraint, boolean negate) {
+        return constructLessThanConstraint(constraint.referenceValue, true, negate);
     }
 
-    private void applyLessThanConstraint(FieldSpec fieldSpec, Number limitValue, boolean inclusive, boolean negate) {
-        NumericRestrictions numericRestrictions = fieldSpec.getNumericRestrictions();
-        if (numericRestrictions == null) {
-            numericRestrictions = new NumericRestrictions();
-            fieldSpec.setNumericRestrictions(numericRestrictions);
-        }
-        final BigDecimal limit = numberToBigDecimal(limitValue);
+    private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate) {
+        final NumericRestrictions numericRestrictions = new NumericRestrictions();
+        final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions.min = new NumericLimit<>(
-                    limit,
-                    !inclusive
-            );
+                limit,
+                !inclusive);
         } else {
             numericRestrictions.max = new NumericLimit<>(
-                    limit,
-                    inclusive
-            );
+                limit,
+                inclusive);
         }
+
+        return createFieldSpec(fs -> fs.setNumericRestrictions(numericRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, IsGranularToConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
         if (negate) {
             // TODO: Decide what to do here
             throw new UnsupportedOperationException();
         }
 
-        fieldSpec.setGranularityRestrictions(
-            new GranularityRestrictions(constraint.granularity));
+        return createFieldSpec(fs -> fs.setGranularityRestrictions(
+            new GranularityRestrictions(constraint.granularity)));
     }
 
-    private void apply(FieldSpec fieldSpec, IsAfterConstantDateTimeConstraint constraint, boolean negate) {
-        applyIsAfterConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
+        return constructIsAfterConstraint(constraint.referenceValue, false, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, IsAfterOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
-        applyIsAfterConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    private FieldSpec construct(IsAfterOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
+        return constructIsAfterConstraint(constraint.referenceValue, true, negate);
     }
 
-    private void applyIsAfterConstraint(FieldSpec fieldSpec, LocalDateTime limit, boolean inclusive, boolean negate) {
-        DateTimeRestrictions dateTimeRestrictions = fieldSpec.getDateTimeRestrictions();
-        if (dateTimeRestrictions == null) {
-            dateTimeRestrictions = new DateTimeRestrictions();
-            fieldSpec.setDateTimeRestrictions(dateTimeRestrictions);
-        }
+    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate) {
+        final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
+
         if (negate) {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
         } else {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
+
+        return createFieldSpec(fs -> fs.setDateTimeRestrictions(dateTimeRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
-        applyIsBeforeConstraint(fieldSpec, constraint.referenceValue, false, negate);
+    private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
+        return constructIsBeforeConstraint(constraint.referenceValue, false, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, IsBeforeOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
-        applyIsBeforeConstraint(fieldSpec, constraint.referenceValue, true, negate);
+    private FieldSpec construct(IsBeforeOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
+        return constructIsBeforeConstraint(constraint.referenceValue, true, negate);
     }
 
-    private void applyIsBeforeConstraint(FieldSpec fieldSpec, LocalDateTime limit, boolean inclusive, boolean negate) {
-        DateTimeRestrictions dateTimeRestrictions = fieldSpec.getDateTimeRestrictions();
-        if (dateTimeRestrictions == null) {
-            dateTimeRestrictions = new DateTimeRestrictions();
-            fieldSpec.setDateTimeRestrictions(dateTimeRestrictions);
-        }
+    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate) {
+        final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
+
         if (negate) {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
         } else {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
+
+        return createFieldSpec(fs -> fs.setDateTimeRestrictions(dateTimeRestrictions));
     }
 
-    private void apply(FieldSpec fieldSpec, MatchesRegexConstraint constraint, boolean negate) {
-        applyPattern(fieldSpec, constraint.regex, negate);
+    private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
+        return constructPattern(constraint.regex, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, MatchesStandardConstraint constraint, boolean negate) {
-        applyGenerator(fieldSpec, constraint.standard, negate);
+    private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
+        return constructGenerator(constraint.standard, negate);
     }
 
-    private void apply(FieldSpec fieldSpec, FormatConstraint constraint, boolean negate) {
-        FormatRestrictions formatRestrictions = fieldSpec.getFormatRestrictions();
-        if (formatRestrictions == null) {
-            formatRestrictions = new FormatRestrictions();
-            fieldSpec.setFormatRestrictions(formatRestrictions);
-        }
-
-        formatRestrictions.formatString = constraint.format;
-    }
-
-    private void apply(FieldSpec fieldSpec, StringHasLengthConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
-        applyPattern(fieldSpec, regex, negate);
-    }
-
-    private void apply(FieldSpec fieldSpec, IsStringShorterThanConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue + 1));
-        applyPattern(fieldSpec, regex, negate);
-    }
-
-    private void apply(FieldSpec fieldSpec, IsStringLongerThanConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
-        applyPattern(fieldSpec, regex, negate);
-    }
-
-    private void applyPattern(FieldSpec fieldSpec, Pattern pattern, boolean negate) {
-        applyGenerator(fieldSpec, new RegexStringGenerator(pattern.toString()), negate);
-    }
-
-    private void applyGenerator(FieldSpec fieldSpec, IStringGenerator generator, boolean negate) {
-        StringRestrictions stringRestrictions = new StringRestrictions();
-        fieldSpec.setStringRestrictions(stringRestrictions);
-
-        stringRestrictions.stringGenerator = negate
-                ? generator.complement()
-                : generator;
-    }
-
-    private BigDecimal numberToBigDecimal(Number number) {
-        if (number instanceof Long) {
-            return BigDecimal.valueOf(number.longValue());
-        } else if (number instanceof Integer) {
-            return BigDecimal.valueOf(number.intValue());
-        } else if (number instanceof Double) {
-            return BigDecimal.valueOf(number.doubleValue());
-        } else if (number instanceof Float) {
-            return BigDecimal.valueOf(number.floatValue());
-        } else {
+    private FieldSpec construct(FormatConstraint constraint, boolean negate) {
+        if (negate) {
+            // TODO: Decide what to do here
             throw new UnsupportedOperationException();
         }
+
+        final FormatRestrictions formatRestrictions = new FormatRestrictions();
+        formatRestrictions.formatString = constraint.format;
+
+        return createFieldSpec(fs -> fs.setFormatRestrictions(formatRestrictions));
+    }
+
+    private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
+        return constructPattern(regex, negate);
+    }
+
+    private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue + 1));
+        return constructPattern(regex, negate);
+    }
+
+    private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate) {
+        final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
+        return constructPattern(regex, negate);
+    }
+
+    private FieldSpec constructPattern(Pattern pattern, boolean negate) {
+        return constructGenerator(new RegexStringGenerator(pattern.toString()), negate);
+    }
+
+    private FieldSpec constructGenerator(IStringGenerator generator, boolean negate) {
+        final StringRestrictions stringRestrictions = new StringRestrictions();
+
+        stringRestrictions.stringGenerator = negate
+            ? generator.complement()
+            : generator;
+
+        return createFieldSpec(fs -> fs.setStringRestrictions(stringRestrictions));
+    }
+
+    private FieldSpec createFieldSpec(Consumer<FieldSpec> mutateSpec) {
+        final FieldSpec fieldSpec = new FieldSpec();
+        mutateSpec.accept(fieldSpec);
+        return fieldSpec;
     }
 }
