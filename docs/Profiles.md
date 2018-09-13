@@ -8,7 +8,7 @@
   * however, if _user_id_ is itself an email address, _email_address_ must be absent
 * _creation_date_ is a non-optional date, with no time component, later than 2003 and output per [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)    
 
-We can model these and other requirements through combinations of **constraints**, which make assertions about what properties a valid data entry must have or how it must be formatted. Constraints are either [grammatical](ConstraintGrammar.md) or [data](DataConstraints.md) constraints.
+We can model these and other requirements through combinations of **constraints**, which make assertions about what properties a valid data entry must have or how it must be formatted. Constraints are either [grammatical](GrammaticalConstraints.md) or [data](DataConstraints.md) constraints.
 
 ## Persistence
 

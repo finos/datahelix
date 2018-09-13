@@ -79,4 +79,4 @@ A named collection of constraints. Test case generation revolves around rules, i
 Either of:
 
 - a [data constraint](DataConstraints.md)
-- a [grammatical constraint](ConstraintGrammar.md)
+- a [grammatical constraint](GrammaticalConstraints.md)
