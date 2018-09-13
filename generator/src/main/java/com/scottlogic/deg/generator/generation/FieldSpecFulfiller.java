@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FieldSpecFulfiller implements IDataBagSource {
     private final Field field;
@@ -25,12 +24,6 @@ public class FieldSpecFulfiller implements IDataBagSource {
     @Override
     public Iterable<DataBag> generate(GenerationConfig generationConfig) {
         List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
-
-        if (generationConfig.shouldChooseFiniteSampling()) {
-            fieldValueSources = fieldValueSources.stream()
-                    .map(fvs -> new LimitingFieldValueSource(fvs, 3, 8))
-                    .collect(Collectors.toList());
-        }
 
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
@@ -50,8 +51,12 @@ public class DataGenerator implements IDataGenerator {
                         Collectors.toList(),
                         ConcatenatingDataBagSource::new));
 
+        GenerationConfig generationConfig = new GenerationConfig(
+            GenerationConfig.DataGenerationType.Interesting,
+            new FieldExhaustiveCombinationStrategy());
+
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
-            allDataBagSource.generate(GenerationConfig.exhaustivePresets),
+            allDataBagSource.generate(generationConfig),
             dataBag -> new TestCaseDataRow(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
