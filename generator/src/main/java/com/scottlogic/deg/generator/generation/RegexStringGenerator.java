@@ -90,14 +90,14 @@ public class RegexStringGenerator implements IStringGenerator {
 
     private Stream<String> generateInterestingValues(State state, String matchedValue) {
         Stream<String> matchedValueStream = state.isAccept()
-                ? Stream.of(matchedValue)
-                : Stream.empty();
+            ? Stream.of(matchedValue)
+            : Stream.empty();
 
         Stream<String> subTransitionStream = state
-                .getTransitions()
-                .stream()
-                .flatMap(transition ->
-                        generateInterestingValues(transition.getDest(), matchedValue + transition.getMin()));
+            .getTransitions()
+            .stream()
+            .flatMap(transition ->
+                generateInterestingValues(transition.getDest(), matchedValue + (char)Math.max(transition.getMin(), 32))); // 32 first printable ASCII char (space)
 
         return Stream.concat(matchedValueStream, subTransitionStream);
     }
