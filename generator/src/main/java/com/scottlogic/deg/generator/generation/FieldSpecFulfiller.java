@@ -114,7 +114,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
             } else {
                 // todo: move default interesting values into the string field value source
-                validSources.add(CannedValuesFieldValueSource.of("Lorem", "Ipsum"));
+                validSources.add(CannedValuesFieldValueSource.of("Lorem Ipsum"));
             }
         }
 
