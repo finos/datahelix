@@ -7,8 +7,8 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -16,7 +16,7 @@ import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.nio.file.Paths;
 
-class GenerationEngine {
+public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator = new DataGenerator(
@@ -25,7 +25,13 @@ class GenerationEngine {
                     new FieldSpecFactory(),
                     fieldSpecMerger));
 
-    void generateTestCases(String profileFilePath, String directoryFilePath, GenerationConfig config) {
+    private final IDataSetOutputter outputter;
+
+    public GenerationEngine(IDataSetOutputter outputter) {
+        this.outputter = outputter;
+    }
+
+    public void generateTestCases(String profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
@@ -41,16 +47,17 @@ class GenerationEngine {
 
         final DecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
 
-        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile,
-                analysedProfile, config);
+        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile, config);
 
         try {
-            new TestCaseGenerationResultWriter().writeToDirectory(
-                    generationResult,
-                    Paths.get(directoryFilePath).toAbsolutePath().normalize());
+            this.outputter.output(generationResult);
         }
         catch (Exception e) {
             System.err.println("Failed to write generation result");
+            System.err.println(e.toString());
+            for (StackTraceElement ste : e.getStackTrace())
+                System.err.println(ste.toString());
         }
     }
 }
+
