@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,10 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 class ConcatenatingDataBagSourceTests {
+    private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
+        GenerationConfig.DataGenerationType.Interesting,
+        new FieldExhaustiveCombinationStrategy());
+
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
         // ARRANGE
@@ -31,7 +36,7 @@ class ConcatenatingDataBagSourceTests {
 
         // ACT
         List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(GenerationConfig.exhaustivePresets))
+        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
             output.add(db);
 
         // ASSERT
@@ -59,7 +64,7 @@ class ConcatenatingDataBagSourceTests {
 
         // ACT
         List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(GenerationConfig.exhaustivePresets))
+        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
             output.add(db);
 
         // ASSERT
@@ -91,7 +96,7 @@ class ConcatenatingDataBagSourceTests {
 
         // ACT
         List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(GenerationConfig.exhaustivePresets))
+        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
             output.add(db);
 
         // ASSERT
@@ -119,7 +124,7 @@ class ConcatenatingDataBagSourceTests {
 
         // ACT
         List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(GenerationConfig.exhaustivePresets))
+        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
             output.add(db);
 
         // ASSERT

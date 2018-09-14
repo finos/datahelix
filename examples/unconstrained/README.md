@@ -1,0 +1,1 @@
+A field with no constraints whatsoever should have a sampling of possible data generated for it, across all supported types.

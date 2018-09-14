@@ -5,13 +5,19 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class CannedValuesFieldValueSource implements IFieldValueSource {
-    private final List<Object> values;
+    private final List<Object> allValues;
+    private final List<Object> interestingValues;
 
     public CannedValuesFieldValueSource(List<Object> values) {
-        this.values = values;
+        this.allValues = values;
+        this.interestingValues = values;
+    }
+
+    public CannedValuesFieldValueSource(List<Object> allValues, List<Object> interestingValues) {
+        this.allValues = allValues;
+        this.interestingValues = interestingValues;
     }
 
     public static IFieldValueSource of(Object... values) {
@@ -25,27 +31,24 @@ public class CannedValuesFieldValueSource implements IFieldValueSource {
 
     @Override
     public long getValueCount() {
-        return this.values.size();
+        return this.allValues.size();
     }
 
     @Override
     public Iterable<Object> generateInterestingValues() {
-        return () -> Stream.of(
-                values.get(0),
-                values.get(values.size() / 2),
-                values.get(values.size() - 1))
-            .distinct()
-            .iterator();
+        return this.interestingValues;
     }
 
     @Override
     public Iterable<Object> generateAllValues() {
-        return values;
+        return this.allValues;
     }
 
     @Override
     public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> values.get(randomNumberGenerator.nextInt(values.size())));
+            () -> this.allValues.get(
+                randomNumberGenerator.nextInt(
+                    this.allValues.size())));
     }
 }
