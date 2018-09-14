@@ -1,0 +1,7 @@
+{
+    "schemaVersion": "v3",
+    "fields": [
+        { "name": "a" }
+    ],
+    "rules": []
+}

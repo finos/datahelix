@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FieldSpecFulfiller implements IDataBagSource {
     private final Field field;
@@ -26,12 +25,6 @@ public class FieldSpecFulfiller implements IDataBagSource {
     public Iterable<DataBag> generate(GenerationConfig generationConfig) {
         List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
-        if (generationConfig.shouldChooseFiniteSampling()) {
-            fieldValueSources = fieldValueSources.stream()
-                    .map(fvs -> new LimitingFieldValueSource(fvs, 3, 8))
-                    .collect(Collectors.toList());
-        }
-
         fieldValueSources = fieldValueSources.stream()
                 .map(fvs -> new MaximumValuesFieldValueSource(fvs))
                 .collect(Collectors.toList());
@@ -39,7 +32,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         return new ProjectingIterable<>(
-                getDataValues(combinedFieldValueSource, generationConfig.dataGenerationType()),
+                getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType()),
                 value ->
                 {
                     DataBagValue dataBagValue = new DataBagValue(
@@ -68,7 +61,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
             Set<?> whitelist = spec.getSetRestrictions().getWhitelist();
             if (whitelist != null) {
                 return Collections.singletonList(
-                        new CannedValuesFieldValueSource(new ArrayList<>(whitelist)));
+                    new CannedValuesFieldValueSource(
+                        new ArrayList<>(whitelist)));
             }
         }
 
@@ -82,7 +76,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 : spec.getNumericRestrictions();
 
             int numericScale = spec.getGranularityRestrictions() != null
-                ? spec.getGranularityRestrictions().numericScale
+                ? spec.getGranularityRestrictions().getNumericScale()
                 : 0;
 
             if (numericScale == 0) {
@@ -118,7 +112,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
             } else {
                 // todo: move default interesting values into the string field value source
-                validSources.add(CannedValuesFieldValueSource.of("Lorem", "Ipsum"));
+                validSources.add(CannedValuesFieldValueSource.of("Lorem Ipsum"));
             }
         }
 

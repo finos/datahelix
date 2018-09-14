@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
+import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
+import com.scottlogic.deg.generator.utils.NumberUtils;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.time.LocalDate;
@@ -105,7 +107,7 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields) ->
                         new IsGranularToConstraint(
                                 fields.getByName(dto.field),
-                                dto.value.toString()));
+                                ParsedGranularity.parse(dto.value)));
 
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields) ->

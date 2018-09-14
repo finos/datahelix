@@ -1,4 +1,4 @@
-(To be updated: Badges go here (see [shields.io](https://shields.io/), for examples).)
+<!-- Badges go here (see [shields.io](https://shields.io/), for examples). -->
 
 # Data Generator
 
@@ -6,14 +6,17 @@ This monorepo contains the different technological arms of Scott Logic's Data Ge
 
 ## Installation
 
-(To be added)
+_(To be added)_
 
 ## Usage example
 
-(To be added: A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing).
+<!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
-)
+_(To be added)_
+
+## Documentation
+
+* [Data profiles](docs/Profiles.md)
 
 ## Development setup
 
@@ -26,7 +29,7 @@ _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Contributing
 
-(To be added)
+_(To be added)_
 
 ## License
 

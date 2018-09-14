@@ -8,9 +8,11 @@ import com.scottlogic.deg.generator.constraints.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,6 +40,10 @@ public class ProfileReaderTests {
         }
 
         return this.profile;
+    }
+
+    private void expectException() {
+        Assertions.assertThrows(Exception.class, this::getResultingProfile);
     }
 
     private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException, InvalidProfileException {
@@ -332,5 +338,99 @@ public class ProfileReaderTests {
                                             c.whenConditionIsFalse,
                                             nullValue());
                                 })));
+    }
+
+    @Test
+    public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 1 }" +
+            "    ]" +
+            "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(new BigDecimal(1)));
+                    })));
+    }
+
+    @Test
+    public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.1 }" +
+                "    ]" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(BigDecimal.valueOf(0.1)));
+                    })));
+    }
+
+    @Test
+    public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.100000000 }" +
+                "    ]" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(BigDecimal.valueOf(0.1)));
+                    })));
+    }
+
+    @Test
+    public void shouldRejectGreaterThanOneNumericGranularityConstraint() {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 2 }" +
+            "    ]" +
+            "}");
+
+        expectException();
+    }
+
+    @Test
+    public void shouldRejectNonPowerOfTenNumericGranularityConstraint() {
+        givenJson(
+            "{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [" +
+            "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.15 }" +
+            "    ]" +
+            "}");
+
+        expectException();
     }
 }

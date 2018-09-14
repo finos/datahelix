@@ -7,13 +7,6 @@ public class GranularityRestrictionsMerger {
             return left == null ? right : left;
         }
 
-        GranularityRestrictions mergedRestrictions = new GranularityRestrictions();
-        mergedRestrictions.numericScale = mergeNumericScale(left.numericScale, right.numericScale);
-
-        return mergedRestrictions;
-    }
-
-    private int mergeNumericScale(int leftNumericScale, int rightNumericScale) {
-        return Math.min(leftNumericScale, rightNumericScale);
+        return GranularityRestrictions.merge(left, right);
     }
 }

@@ -63,6 +63,19 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
+    void interestingValuesShouldBePrintable() {
+        IStringGenerator generator = new RegexStringGenerator("Test.Test");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        for (String interestingValue : resultsIterable) {
+            for (char character : interestingValue.toCharArray()) {
+                Assert.assertThat(character, greaterThanOrEqualTo((char)32));
+            }
+        }
+    }
+
+    @Test
     void iterableShouldBeRepeatable() {
         IStringGenerator generator = new RegexStringGenerator("Test");
 

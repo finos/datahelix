@@ -1,0 +1,9 @@
+{
+	"schemaVersion": "v3",
+	"fields": [
+		{ "name": "not_number" }
+	],
+	"rules": [
+		{ "not": { "field": "not_number", "is": "ofType", "value": "numeric" } }
+	]
+}
