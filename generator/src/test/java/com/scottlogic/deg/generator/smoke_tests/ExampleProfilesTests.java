@@ -12,12 +12,22 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.BiConsumer;
 
 import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesTests {
     @TestFactory
-    Collection<DynamicTest> shouldAllGenerateWithoutErrors() throws IOException {
+    Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
+        return forEachProfileFile(((generationEngine, profileFile) -> generationEngine.generateTestCases(profileFile.getAbsolutePath())));
+    }
+
+    @TestFactory
+    Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
+        return forEachProfileFile(((generationEngine, profileFile) -> generationEngine.generateDataSet(profileFile.getAbsolutePath())));
+    }
+
+    private Collection<DynamicTest> forEachProfileFile(BiConsumer<GenerationEngine, File> consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -28,11 +38,9 @@ class ExampleProfilesTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-            DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                new GenerationEngine(
-                        new NullDataSetOutputter())
-                    .generateTestCases(profileFile.getAbsolutePath());
-            });
+            GenerationEngine engine = new GenerationEngine(new NullDataSetOutputter());
+
+            DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> consumer.accept(engine, profileFile));
 
             dynamicTests.add(test);
         }
@@ -40,7 +48,7 @@ class ExampleProfilesTests {
         return dynamicTests;
     }
 
-    class NullDataSetOutputter implements IDataSetOutputter {
+    private class NullDataSetOutputter implements IDataSetOutputter {
         @Override
         public void output(TestCaseGenerationResult dataSets) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted every iterable
