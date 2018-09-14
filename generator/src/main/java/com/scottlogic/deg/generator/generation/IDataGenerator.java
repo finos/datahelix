@@ -5,5 +5,5 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 
 public interface IDataGenerator {
-    TestCaseGenerationResult generateData(Profile profile, DecisionTreeProfile analysedProfile);
+    TestCaseGenerationResult generateData(Profile profile, DecisionTreeProfile analysedProfile,  GenerationConfig generationConfig);
 }

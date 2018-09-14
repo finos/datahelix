@@ -32,6 +32,10 @@ public class FieldSpecFulfiller implements IDataBagSource {
                     .collect(Collectors.toList());
         }
 
+        fieldValueSources = fieldValueSources.stream()
+                .map(fvs -> new MaximumValuesFieldValueSource(fvs))
+                .collect(Collectors.toList());
+
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         return new ProjectingIterable<>(

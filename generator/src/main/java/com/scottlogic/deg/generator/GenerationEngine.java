@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -15,15 +16,6 @@ import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.nio.file.Paths;
 
-public class App {
-    public static void main(String[] args) {
-        final String profileFilePath = args[0];
-        final String directoryFilePath = args[1];
-
-        new GenerationEngine().generateTestCases(profileFilePath, directoryFilePath);
-    }
-}
-
 class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
@@ -33,7 +25,7 @@ class GenerationEngine {
                     new FieldSpecFactory(),
                     fieldSpecMerger));
 
-    void generateTestCases(String profileFilePath, String directoryFilePath) {
+    void generateTestCases(String profileFilePath, String directoryFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
@@ -49,12 +41,13 @@ class GenerationEngine {
 
         final DecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
 
-        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile);
+        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile,
+                analysedProfile, config);
 
         try {
             new TestCaseGenerationResultWriter().writeToDirectory(
-                generationResult,
-                Paths.get(directoryFilePath).toAbsolutePath().normalize());
+                    generationResult,
+                    Paths.get(directoryFilePath).toAbsolutePath().normalize());
         }
         catch (Exception e) {
             System.err.println("Failed to write generation result");

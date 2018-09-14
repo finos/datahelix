@@ -33,7 +33,8 @@ public class DataGenerator implements IDataGenerator {
     @Override
     public TestCaseGenerationResult generateData(
         Profile profile,
-        DecisionTreeProfile analysedProfile) {
+        DecisionTreeProfile analysedProfile,
+        GenerationConfig generationConfig) {
 
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,
@@ -51,7 +52,7 @@ public class DataGenerator implements IDataGenerator {
                         ConcatenatingDataBagSource::new));
 
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
-            allDataBagSource.generate(GenerationConfig.exhaustivePresets),
+            allDataBagSource.generate(generationConfig),
             dataBag -> new TestCaseDataRow(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
