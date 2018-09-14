@@ -20,7 +20,7 @@ public class ParsedGranularity {
             BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
 
             if (asNumber.compareTo(BigDecimal.ONE) > 0) {
-                throw new IllegalArgumentException("Numeric granularity must be less than 1");
+                throw new IllegalArgumentException("Numeric granularity must be <= 1");
             }
 
             if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale()))) {

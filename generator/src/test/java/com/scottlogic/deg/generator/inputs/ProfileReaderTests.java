@@ -385,6 +385,28 @@ public class ProfileReaderTests {
     }
 
     @Test
+    public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.100000000 }" +
+                "    ]" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(BigDecimal.valueOf(0.1)));
+                    })));
+    }
+
+    @Test
     public void shouldRejectGreaterThanOneNumericGranularityConstraint() {
         givenJson(
             "{" +
