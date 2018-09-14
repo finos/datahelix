@@ -76,7 +76,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                         : positiveViolation);
             }
 
-            // we've got an atomic (or negated atomic) constraint
+            // we've got an atomic constraint
             return convertConstraint(new NotConstraint(violatedConstraint));
         }
         else if (constraintToConvert instanceof NotConstraint) {
