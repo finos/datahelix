@@ -109,6 +109,16 @@ Is satisfied if `field` is a number less than `value`.
 
 Is satisfied if `field` is a number less than or equal to `value`.
 
+### `granularTo` _(field, value)_
+
+```javascript
+{ "field": "price", "is": "granularTo", "value": 0.1 }
+```
+
+Is satisfied if `field` has the granularity specified in `value`. Numerical granularities must be numbers, either 1 or a fractional power of ten; valid values can have no more meaningful decimal places than the granularity. Example values:
+
+- `1` would permit only integers
+- `0.1` would permit `20` and `20.1`, but not `20.01` 
 
 ## Temporal
 These constraints imply `ofType temporal`.
