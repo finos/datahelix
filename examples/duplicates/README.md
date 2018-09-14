@@ -1,0 +1,1 @@
+A profile that, if we're not careful, will yield duplicate rows
