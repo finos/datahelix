@@ -31,7 +31,7 @@ public class IsinTest {
     @Test
     public void testCorrectCheckDigitIsCalculated() {
         for (String isin : VALID_ISINS) {
-            final char checkDigit = Isin.calculateIsinCheckDigit(isin.substring(0, 11));
+            final char checkDigit = IsinUtils.calculateIsinCheckDigit(isin.substring(0, 11));
             assertThat(isin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -39,28 +39,28 @@ public class IsinTest {
     @Test
     public void testValidIsinsAreVerified() {
         for (String isin : VALID_ISINS) {
-            assertThat(Isin.isValidIsin(isin), is(true));
+            assertThat(IsinUtils.isValidIsin(isin), is(true));
         }
     }
 
     @Test
     public void testIncorrectCheckDigitIsinsAreVerifiedInvalid() {
         for (String isin : INCORRECT_CHECK_DIGIT_ISINS) {
-            assertThat(Isin.isValidIsin(isin), is(false));
+            assertThat(IsinUtils.isValidIsin(isin), is(false));
         }
     }
 
     @Test
     public void testIncorrectSedolCheckDigitIsinsAreVerifiedInvalid() {
         for (String isin : INCORRECT_SEDOL_ISINS) {
-            assertThat(Isin.isValidIsin(isin), is(false));
+            assertThat(IsinUtils.isValidIsin(isin), is(false));
         }
     }
 
     @Test
     public void testCusipCheckDigitsCorrectlyCalculated() {
         for (String isin : INCORRECT_CUSIP_ISINS) {
-            assertThat(Isin.isValidIsin(isin), is(false));
+            assertThat(IsinUtils.isValidIsin(isin), is(false));
         }
     }
 }

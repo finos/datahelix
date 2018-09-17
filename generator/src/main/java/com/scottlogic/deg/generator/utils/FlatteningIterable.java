@@ -6,18 +6,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-public class ExpandingIterable<TFrom, TTo> implements Iterable<TTo> {
+/**
+ * Iterable that decorates an underlying iterable where each item maps to a list of items, where the iterable of lists is flattened into a single iterable.
+ */
+public class FlatteningIterable<TFrom, TTo> implements Iterable<TTo> {
     private final Iterable<TFrom> underlyingIterable;
     private final Function<TFrom, List<TTo>> converter;
 
-    public ExpandingIterable(
+    public FlatteningIterable(
             Iterable<TFrom> underlyingIterable,
             Function<TFrom, List<TTo>> converter) {
 
         this.underlyingIterable = underlyingIterable;
         this.converter = converter;
     }
-
 
     @Override
     public Iterator<TTo> iterator() {

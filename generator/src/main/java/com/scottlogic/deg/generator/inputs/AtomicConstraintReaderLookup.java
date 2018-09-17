@@ -16,10 +16,9 @@ import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
     private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
-    private static final Map<String, IStringGenerator> standardNameToStringGenerator;
 
     static {
-        standardNameToStringGenerator = new HashMap<>();
+        Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
         standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
 
         typeCodeToSpecificReader = new HashMap<>();

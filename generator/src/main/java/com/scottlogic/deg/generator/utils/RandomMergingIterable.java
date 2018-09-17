@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO Weight the probability of selecting each iterable by its value count?
 public class RandomMergingIterable<E> implements Iterable<E> {
     private final List<Iterable<E>> iterableList;
     private final IRandomNumberGenerator randomNumberGenerator;
@@ -39,8 +38,14 @@ public class RandomMergingIterable<E> implements Iterable<E> {
 
         @Override
         public E next() {
-            return iteratorList.get(randomNumberGenerator.nextInt(iteratorList.size())).next();
+            List<Iterator<E>> nonEmptyIteratorsList = iteratorList
+                .stream()
+                .filter(iterator -> iterator.hasNext())
+                .collect(Collectors.toList());
+
+            return nonEmptyIteratorsList
+                .get(randomNumberGenerator.nextInt(nonEmptyIteratorsList.size()))
+                .next();
         }
     }
-
 }

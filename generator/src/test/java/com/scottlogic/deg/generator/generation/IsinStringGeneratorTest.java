@@ -1,8 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.Isin;
+import com.scottlogic.deg.generator.utils.IsinUtils;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +28,7 @@ public class IsinStringGeneratorTest {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            final char checkDigit = IsinUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
             assertThat(nextIsin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -44,7 +43,7 @@ public class IsinStringGeneratorTest {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            final char checkDigit = Isin.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            final char checkDigit = IsinUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
             assertThat(nextIsin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -73,7 +72,7 @@ public class IsinStringGeneratorTest {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            assertThat(Isin.isValidSedolNsin(nextIsin.substring(2, 11)), is(true));
+            assertThat(IsinUtils.isValidSedolNsin(nextIsin.substring(2, 11)), is(true));
         }
     }
 
@@ -95,7 +94,7 @@ public class IsinStringGeneratorTest {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            assertThat(Isin.isValidIsin(nextIsin), is(false));
+            assertThat(IsinUtils.isValidIsin(nextIsin), is(false));
         }
     }
 
