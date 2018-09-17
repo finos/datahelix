@@ -8,20 +8,19 @@ import picocli.CommandLine;
 import java.io.File;
 import java.nio.file.Path;
 
-@CommandLine.Command(description = "Generates data.",
-        name = "generate", mixinStandardHelpOptions = true, version = "1.0")
+@CommandLine.Command(description = "Generates data using a profile file.",
+    name = "generate", mixinStandardHelpOptions = true, version = "1.0")
 public class Generate implements Runnable {
 
-    @CommandLine.Parameters(index = "0", description = "A valid json schema file.")
+    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
 
-    @CommandLine.Parameters(index = "1", description = "The target directory.")
+    @CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
-            description = "Determines how values are generated (FullSequential, Interesting, Random).",
-            defaultValue = "Interesting")
-
+        description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
+        defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
     public static void main(String[] args) throws Exception {
@@ -32,11 +31,11 @@ public class Generate implements Runnable {
     public void run() {
 
         GenerationConfig config = new GenerationConfig(
-                generationType,
-                new FieldExhaustiveCombinationStrategy());
+            generationType,
+            new FieldExhaustiveCombinationStrategy());
 
         new GenerationEngine(
-                new FileSystemDataSetOutputter(outputDir.toString()))
-                .generateTestCases(sourceFile.getAbsolutePath(), config);
+            new FileSystemDataSetOutputter(outputDir.toString()))
+            .generateTestCases(sourceFile.getAbsolutePath(), config);
     }
 }

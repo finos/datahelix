@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import org.junit.Assert;
@@ -28,10 +30,13 @@ class ExampleProfilesTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
+            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+                new FieldExhaustiveCombinationStrategy());
+
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 new GenerationEngine(
                         new NullDataSetOutputter())
-                    .generateTestCases(profileFile.getAbsolutePath());
+                    .generateTestCases(profileFile.getAbsolutePath(), config);
             });
 
             dynamicTests.add(test);

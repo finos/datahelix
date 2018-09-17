@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
@@ -12,6 +11,7 @@ import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.utils.HardLimitingIterable;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
@@ -52,9 +52,7 @@ public class DataGenerator implements IDataGenerator {
                         Collectors.toList(),
                         ConcatenatingDataBagSource::new));
 
-        GenerationConfig generationConfig = new GenerationConfig(
-            GenerationConfig.DataGenerationType.Interesting,
-            new FieldExhaustiveCombinationStrategy());
+
 
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
             allDataBagSource.generate(generationConfig),
@@ -63,6 +61,8 @@ public class DataGenerator implements IDataGenerator {
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
+        dataRows = new HardLimitingIterable<>(dataRows, generationConfig.getMaxRows());
+
         return new TestCaseGenerationResult(
             profile,
             Arrays.asList(
@@ -70,4 +70,5 @@ public class DataGenerator implements IDataGenerator {
                     null,
                     dataRows)));
     }
+
 }
