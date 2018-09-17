@@ -16,12 +16,12 @@ public class SedolStringGenerator implements IStringGenerator {
 
     public SedolStringGenerator() {
         this.negate = false;
-        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(SEDOL_SANS_CHECK_DIGIT_REGEX);
+        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(SEDOL_SANS_CHECK_DIGIT_REGEX, true);
     }
 
     public SedolStringGenerator(String prefix) {
         this.negate = false;
-        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX);
+        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX, true);
     }
 
     private SedolStringGenerator(RegexStringGenerator sedolSansCheckDigitGenerator, boolean negate) {

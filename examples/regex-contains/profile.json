@@ -1,0 +1,10 @@
+{
+    "schemaVersion": "v3",
+    "fields": [
+		{ "name": "first_name" }
+    ],
+    "rules": [
+		{ "not": { "field": "first_name", "is": "null" } },
+		{ "field": "first_name", "is": "containingRegex", "value": "^(Joh?n|Mar[yk])$" }
+	]
+}

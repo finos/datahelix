@@ -41,6 +41,12 @@ public class AtomicConstraintReaderLookup {
                                 fields.getByName(dto.field),
                                 new HashSet<>(dto.values)));
 
+        add(AtomicConstraintType.CONTAINSREGEX.toString(),
+            (dto, fields) ->
+                new ContainsRegexConstraint(
+                    fields.getByName(dto.field),
+                    Pattern.compile((String) dto.value)));
+
         add(AtomicConstraintType.MATCHESREGEX.toString(),
                 (dto, fields) ->
                         new MatchesRegexConstraint(

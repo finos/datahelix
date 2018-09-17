@@ -47,7 +47,15 @@ These constraints imply `ofType string`.
 { "field": "name", "is": "matchingRegex", "value": "[a-z]{0, 10}" }
 ```
 
-Is satisfied if `field` is a string matching the regular expression expressed in `value`. 
+Is satisfied if `field` is a string matching the regular expression expressed in `value`. The regular expression must match the entire string in `field`, start and end anchors `^` & `$` are ignored.
+
+### `containingRegex` _(field, value)_
+
+```javascript
+{ "field": "name", "is": "containingRegex", "value": "[a-z]{0, 10}" }
+```
+
+Is satisfied if `field` is a string containing the regular expression expressed in `value`. Using both start and end anchors `^` & `$` make the constraint behave like `matchingRegex`.
 
 ### `ofLength` _(field, value)_
 

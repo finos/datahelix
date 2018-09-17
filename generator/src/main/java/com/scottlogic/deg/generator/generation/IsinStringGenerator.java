@@ -111,13 +111,13 @@ public class IsinStringGenerator implements IStringGenerator {
     private Iterable<String> generateAllInvalidCountryStrings() {
         final String invalidCountryCodeRegex = validCountryCodes.stream()
                 .collect(Collectors.joining("|", "((?!", ")).*"));
-        return new RegexStringGenerator(invalidCountryCodeRegex).generateAllValues();
+        return new RegexStringGenerator(invalidCountryCodeRegex, true).generateAllValues();
     }
 
     private Iterable<String> generateRandomInvalidCountryStrings(IRandomNumberGenerator randomNumberGenerator) {
         final String invalidCountryCodeRegex = validCountryCodes.stream()
                 .collect(Collectors.joining("|", "((?!", ")).*"));
-        return new RegexStringGenerator(invalidCountryCodeRegex).generateRandomValues(randomNumberGenerator);
+        return new RegexStringGenerator(invalidCountryCodeRegex, true).generateRandomValues(randomNumberGenerator);
     }
 
     private Iterable<String> generateAllCountriesWithInvalidNsins() {
@@ -187,13 +187,13 @@ public class IsinStringGenerator implements IStringGenerator {
         if (countryCode.equals("GB")) {
             return new SedolStringGenerator(countryCode);
         }
-        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX);
+        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX, true);
     }
 
     private static IStringGenerator getNsinGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
             return new SedolStringGenerator();
         }
-        return new RegexStringGenerator(GENERIC_NSIN_REGEX);
+        return new RegexStringGenerator(GENERIC_NSIN_REGEX, true);
     }
 }
