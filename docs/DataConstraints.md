@@ -73,6 +73,14 @@ Is satisfied if `field` is a string with length greater than `value`.
 
 Is satisfied if `field` is a string with length less than `value`.   
 
+### `aValid` _(field, value)_
+
+```javascript
+{ "field": "name", "is": "aValid", "value": "ISIN" }
+```
+
+Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Possible options for `value` are:
+* ISIN
 
 ## Numeric
 These constraints imply `ofType numeric`.

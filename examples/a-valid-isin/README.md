@@ -1,0 +1,1 @@
+Generates valid ISIN codes.
