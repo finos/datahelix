@@ -29,6 +29,31 @@ As a result, PRs submitted to the {project name} project cannot be accepted unti
 liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
+## Coding Style
+
+Regarding coding style we favor a minimalistic and pragmatic approach.  We adopt, respectively for Java and Scale, only a minimal subset from Google Java and Scala coding style guides.  The subsets can be expanded or modified if there are strong opinions from the community.
+
+### Java Coding Style
+
+We adopt only these four rules from the Google Java Coding Style: [https://google.github.io/styleguide/javaguide.html](https://google.github.io/styleguide/javaguide.html) 
+
+(Here the rule numbers are from the Google Java Coding Style as of September 2018)
+
+* Rule 2.2 Files are encoded in UTF-8
+* Rule 2.3.1 Use ASCII hard space (0x20) not tab for indentation
+* (Modifed from Rule 4.2) Block indentation: 4 spaces
+* Rule 4.4 Column limit: 100
+
+### Scala Coding Style
+
+We adopt only one rule from the Scala Style Guide: [https://docs.scala-lang.org/style/](https://docs.scala-lang.org/style/).  We also add two more rules to make our Java and Scala styles consistent.
+
+* Files are encoded in UTF-8 (Note 1)
+* Each level of indentation is 2 spaces.  Tabs are not used
+* Column limit: 100 (Note 1)
+
+Note 1: This rule was not mentioned in the Scala style guide, but we add it anyway to make our styles for Java and Scala consistent.
+  
 # Contributing Pull Requests (Code & Docs)
 To make review of PRs easier, please:
 
