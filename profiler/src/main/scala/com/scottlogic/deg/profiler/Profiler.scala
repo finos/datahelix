@@ -2,6 +2,7 @@ package com.scottlogic.deg.profiler
 
 import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
+import com.scottlogic.deg.analyser.field_analyser.string_analyser.EmailAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
 import com.scottlogic.deg.analyser.field_analyser.timestamp_analyser.NaiveTimestampAnalyser
 import com.scottlogic.deg.classifier._
@@ -22,7 +23,8 @@ object Profiler {
       (semanticType match {
         case DoubleType | FloatType | IntegerType => new NaiveNumericAnalyser(df, field)
         case TimeStampType => new NaiveTimestampAnalyser(df, field)
-        case StringType | CountryCodeType | CurrencyType | EnumType | EmailType => new NaiveStringAnalyser(df, field)
+        case StringType | CountryCodeType | CurrencyType | EnumType => new NaiveStringAnalyser(df, field)
+        case EmailType => new EmailAnalyser(df, field)
         case _ => new GenericFieldAnalyser(df, field)
       }).constructField()
     })
