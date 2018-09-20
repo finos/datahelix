@@ -121,8 +121,18 @@ public class TemporalFieldValueSource implements IFieldValueSource {
     @Override
     public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
 
+        LocalDateTime lower = inclusiveLower != null
+                ? inclusiveLower
+                : LocalDateTime.of(1900, 01, 01, 0, 0);
+
+
+        LocalDateTime upper = exclusiveUpper != null
+                ? exclusiveUpper
+                : LocalDateTime.of(2100, 01, 01, 0, 0);
+
+
         return () -> new UpCastingIterator<>(
-                new FilteringIterator<>(new RandomDateIterator(inclusiveLower, exclusiveUpper, randomNumberGenerator),
+                new FilteringIterator<>(new RandomDateIterator(lower, upper, randomNumberGenerator),
                         i -> !blacklist.contains(i)));
 
     }

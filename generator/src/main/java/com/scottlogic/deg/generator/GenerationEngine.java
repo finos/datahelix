@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
@@ -30,7 +31,7 @@ public class GenerationEngine {
         this.outputter = outputter;
     }
 
-    public void generateTestCases(String profileFilePath) {
+    public void generateTestCases(String profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
@@ -46,7 +47,7 @@ public class GenerationEngine {
 
         final DecisionTreeProfile analysedProfile = this.profileAnalyser.analyse(profile);
 
-        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile);
+        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile, config);
 
         try {
             this.outputter.output(generationResult);
