@@ -26,7 +26,7 @@ object Profiler {
         case TimeStampType => new NaiveTimestampAnalyser(df, field)
         case StringType | CountryCodeType | CurrencyType | EnumType => new NaiveStringAnalyser(df, field)
         // Could alternatively use EmailAnalyserRegexFromData instead?
-        case EmailType => new EmailAnalyserRegexFromTemplate(df, field)
+        case EmailType => new EmailAnalyserRegexFromTemplate(field)
         case _ => new GenericFieldAnalyser(df, field)
       }).constructField()
     })
