@@ -77,8 +77,11 @@ public class DecisionTreeWalker {
             }
 
             return option.getDecisions()
-                    .stream()
-                    .flatMap(decision -> walk(decision, mergedRowSpec));
+                .stream()
+                .reduce(
+                    Stream.of(mergedRowSpec),
+                    (acc, decisionNode) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionNode, aRowSpecFromCartesianProductsSoFar)),
+                    Stream::concat);
         }
 
         private Stream<RowSpec> walk(DecisionNode decision, RowSpec accumulatedSpec) {
