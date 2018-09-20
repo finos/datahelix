@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
@@ -30,9 +29,9 @@ public class DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(ProfileFields fields, ConstraintNode rootConstraintNode) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(fields);
-        return helper.walk(rootConstraintNode);
+    public Stream<RowSpec> walk(DecisionTreeProfile analysedProfile) {
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(analysedProfile.getFields());
+        return helper.walk(analysedProfile.getRootNode());
     }
 
     private class DecisionTreeWalkerHelper {
