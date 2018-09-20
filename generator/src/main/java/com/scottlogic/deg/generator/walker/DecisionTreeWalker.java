@@ -30,9 +30,9 @@ public class DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(decisionTreeProfile.getFields());
-        return helper.walk(decisionTreeProfile);
+    public Stream<RowSpec> walk(ProfileFields fields, ConstraintNode rootConstraintNode) {
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(fields);
+        return helper.walk(rootConstraintNode);
     }
 
     private class DecisionTreeWalkerHelper {
@@ -49,7 +49,11 @@ public class DecisionTreeWalker {
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
 
-        private Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
+        public Stream<RowSpec> walk(ConstraintNode constraint) {
+            return walk(constraint, getIdentityRowSpec());
+        }
+
+        public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
             final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
@@ -89,21 +93,6 @@ public class DecisionTreeWalker {
                     .getOptions()
                     .stream()
                     .flatMap(option -> walk(option, accumulatedSpec));
-        }
-
-        public Stream<RowSpec> walk(RuleDecisionTree decisionTree, RowSpec accumulatedSpec) {
-            return walk(decisionTree.getRootNode(), accumulatedSpec);
-        }
-
-        public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
-            return decisionTreeProfile.getDecisionTrees()
-                    .stream()
-                    .reduce(
-                            Stream.of(getIdentityRowSpec()),
-                            (acc, decisionTree) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
-                            Stream::concat
-                    );
-
         }
     }
 }

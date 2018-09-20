@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
@@ -16,8 +18,10 @@ import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.utils.HardLimitingIterable;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,4 +83,12 @@ public class DataGenerator implements IDataGenerator {
                     dataRows)));
     }
 
+    private ConstraintNode reduceRules(DecisionTreeProfile profile) {
+        return ConstraintNode.merge(
+            profile.getDecisionTrees()
+                .stream()
+                .map(RuleDecisionTree::getRootNode)
+                .iterator()
+        );
+    }
 }
