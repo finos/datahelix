@@ -12,6 +12,11 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     val builder = ConstraintDTOBuilder.instance;
 
     original match {
+      case instance: IsAValidConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.AVALID.toString)
+          .appendValue(instance.Value)
+          .Build;
       case instance: IsOfTypeConstraint =>
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.ISOFTYPE.toString)
