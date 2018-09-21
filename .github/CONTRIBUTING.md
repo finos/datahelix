@@ -51,7 +51,13 @@ We adopt only one rule from the [Scala Style Guide](https://docs.scala-lang.org/
 * Column limit: 100 (Note 1)
 
 Note 1: This rule was not mentioned in the Scala style guide, but we add it anyway to make our styles for Java and Scala consistent.
-  
+
+
+### Markdown Style
+
+* Use single spaces after sentence terminators, rather than double-spacing
+
+
 # Contributing Pull Requests (Code & Docs)
 To make review of PRs easier, please:
 
