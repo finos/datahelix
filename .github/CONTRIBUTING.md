@@ -2,14 +2,9 @@
 :+1: First off, thanks for taking the time to contribute! :+1:
 
 # Contributor License Agreement (CLA)
-A CLA is a document that specifies how a project is allowed to use your
-contribution; they are commonly used in many open source projects.
+A CLA is a document that specifies how a project is allowed to use your contribution; they are commonly used in many open source projects.
 
-**_All_ contributions to _all_ projects hosted by [FINOS](https://www.finos.org/)
-must be made with a
-[Foundation CLA](https://finosfoundation.atlassian.net/wiki/spaces/FINOS/pages/83034172/Contribute)
-in place, and there are [additional legal requirements](https://finosfoundation.atlassian.net/wiki/spaces/FINOS/pages/75530375/Legal+Requirements)
-that must also be met.**
+**_All_ contributions to _all_ projects hosted by [FINOS](https://www.finos.org/) must be made with a [Foundation CLA](https://finosfoundation.atlassian.net/wiki/spaces/FINOS/pages/83034172/Contribute) in place, and there are [additional legal requirements](https://finosfoundation.atlassian.net/wiki/spaces/FINOS/pages/75530375/Legal+Requirements) that must also be met.**
 
 As a result, PRs submitted to the {project name} project cannot be accepted until you have a CLA in place with the Foundation.
 
@@ -25,8 +20,7 @@ As a result, PRs submitted to the {project name} project cannot be accepted unti
 * Create your issue [here](https://github.com/{program name}/{project name}/issues/new).
 * New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
   * Please also tag the new issue with either "Bug" or "Enhancement".
-* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
-liberally to assist in readability.
+* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/) liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
 ## Coding Style
@@ -53,7 +47,7 @@ We adopt a modified subset of the [Google Java Coding Style](https://google.gith
 We adopt only one rule from the [Scala Style Guide](https://docs.scala-lang.org/style/).  We also add two more rules to make our Java and Scala styles consistent.
 
 * Files are encoded in UTF-8 (Note 1)
-* Each level of indentation is 2 spaces.  Tabs are not used
+* Each level of indentation is 2 spaces. Tabs are not used
 * Column limit: 100 (Note 1)
 
 Note 1: This rule was not mentioned in the Scala style guide, but we add it anyway to make our styles for Java and Scala consistent.
@@ -74,8 +68,7 @@ To make review of PRs easier, please:
 ## Commit and PR Messages
 
 * **Reference issues, wiki pages, and pull requests liberally!**
-* We follow six of the seven rules of Chris Beams's style guide (https://chris.beams.io/posts/git-commit/)
-
+* We adopt a subset of [Chris Beams's style guide](https://chris.beams.io/posts/git-commit/):
 
 1. Separate subject from body with a blank line
 2. Limit the subject line to 50 characters
