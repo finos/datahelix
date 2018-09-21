@@ -1,0 +1,70 @@
+{
+  "schemaVersion" : "v3",
+  "fields" : [ {
+    "name" : "Title"
+  }, {
+    "name" : "ISIN"
+  }, {
+    "name" : "Description"
+  }, {
+    "name" : "Country"
+  }, {
+    "name" : "Type"
+  } ],
+  "rules" : [ {
+    "rule" : "String field Title rule",
+    "constraints" : [ {
+      "field" : "Title",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Title",
+      "is" : "matchingRegex",
+      "value" : ".{10,25}"
+    } ]
+  }, {
+    "rule" : "String field ISIN rule",
+    "constraints" : [ {
+      "field" : "ISIN",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "ISIN",
+      "is" : "aValid",
+      "value" : "ISIN"
+    } ]
+  }, {
+    "rule" : "String field Description rule",
+    "constraints" : [ {
+      "field" : "Description",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Description",
+      "is" : "matchingRegex",
+      "value" : ".{35,43}"
+    } ]
+  }, {
+    "rule" : "String field Country rule",
+    "constraints" : [ {
+      "field" : "Country",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Country",
+      "is" : "matchingRegex",
+      "value" : ".{2,11}"
+    } ]
+  }, {
+    "rule" : "String field Type rule",
+    "constraints" : [ {
+      "field" : "Type",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Type",
+      "is" : "matchingRegex",
+      "value" : ".{4,6}"
+    } ]
+  } ]
+}

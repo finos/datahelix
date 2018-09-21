@@ -1,0 +1,44 @@
+{
+  "schemaVersion" : "v3",
+  "fields" : [ {
+    "name" : "Last Name"
+  }, {
+    "name" : "First Name"
+  }, {
+    "name" : "Email Address"
+  } ],
+  "rules" : [ {
+    "rule" : "String field Last Name rule",
+    "constraints" : [ {
+      "field" : "Last Name",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Last Name",
+      "is" : "matchingRegex",
+      "value" : ".{3,5}"
+    } ]
+  }, {
+    "rule" : "String field First Name rule",
+    "constraints" : [ {
+      "field" : "First Name",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "First Name",
+      "is" : "matchingRegex",
+      "value" : ".{4,4}"
+    } ]
+  }, {
+    "rule" : "String field Email Address rule",
+    "constraints" : [ {
+      "field" : "Email Address",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "Email Address",
+      "is" : "matchingRegex",
+      "value" : "(tim|frank|greg)\\.(smith|jones|sestero)@(gmail|hotmail|live)\\.com"
+    } ]
+  } ]
+}

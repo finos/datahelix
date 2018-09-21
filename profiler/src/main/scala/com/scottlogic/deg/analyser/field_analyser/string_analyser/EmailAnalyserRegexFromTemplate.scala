@@ -13,16 +13,14 @@ import scala.collection.mutable.ListBuffer
 class EmailAnalyserRegexFromTemplate(val field: StructField) extends EmailAnalyser {
   override def constructField(): Rule = {
     
-    val fieldName = field.name;
-    val allFieldConstraints = ListBuffer[IConstraint]();
     val RegexTemplate = "(tim|frank|greg)\\.(smith|jones|sestero)@(gmail|hotmail|live)\\.com";
+    val fieldName = field.name;
     
-    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName, "string"); // FIXME use a constant?
-    val regexConstraint = new MatchesRegexConstraint(fieldName, RegexTemplate)
+    val allFieldConstraints: List[IConstraint] = List(
+            new IsOfTypeConstraint(fieldName, "string"),         // FIXME use a constant?
+            new MatchesRegexConstraint(fieldName, RegexTemplate)
+        )
         
-    allFieldConstraints += fieldTypeConstraint
-    allFieldConstraints += regexConstraint
-    
-    return new Rule(s"String field ${fieldName} rule", allFieldConstraints.toList);                 
+    new Rule(s"String field ${fieldName} rule", allFieldConstraints.toList);                 
   }  
 }
