@@ -2,8 +2,9 @@ package com.scottlogic.deg.profiler
 
 import com.scottlogic.deg.analyser.field_analyser.GenericFieldAnalyser
 import com.scottlogic.deg.analyser.field_analyser.numeric_analyser.NaiveNumericAnalyser
-import com.scottlogic.deg.analyser.field_analyser.string_analyser.EmailAnalyserRegexFromData
+//import com.scottlogic.deg.analyser.field_analyser.string_analyser.EmailAnalyserRegexFromData
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.EmailAnalyserRegexFromTemplate
+import com.scottlogic.deg.analyser.field_analyser.string_analyser.IsinAnalyser
 import com.scottlogic.deg.analyser.field_analyser.string_analyser.NaiveStringAnalyser
 import com.scottlogic.deg.analyser.field_analyser.timestamp_analyser.NaiveTimestampAnalyser
 import com.scottlogic.deg.classifier._
@@ -27,6 +28,7 @@ object Profiler {
         case StringType | CountryCodeType | CurrencyType | EnumType => new NaiveStringAnalyser(df, field)
         // Could alternatively use EmailAnalyserRegexFromData instead?
         case EmailType => new EmailAnalyserRegexFromTemplate(field)
+        case IsinType => new IsinAnalyser(field)
         case _ => new GenericFieldAnalyser(df, field)
       }).constructField()
     })
