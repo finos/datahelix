@@ -10,14 +10,11 @@ class IsinAnalyser(val field: StructField) extends StringAnalyser {
   override def constructField(): Rule = {
     
     val fieldName = field.name;
-    val allFieldConstraints = ListBuffer[IConstraint]();
     
-    val fieldTypeConstraint = new IsOfTypeConstraint(fieldName, "string"); // FIXME use a constant?
-    val aValidConstraint = new IsAValidConstraint(fieldName, "ISIN")       // FIXME use a constant?
+    val allFieldConstraints: ListBuffer[IConstraint] = ListBuffer(
+      new IsOfTypeConstraint(fieldName, "string"),    // FIXME use a constant?
+      new IsAValidConstraint(fieldName, "ISIN"))      // FIXME use a constant?
         
-    allFieldConstraints += fieldTypeConstraint
-    allFieldConstraints += aValidConstraint
-    
     return new Rule(s"String field ${fieldName} rule", allFieldConstraints.toList);                 
   }  
 }
