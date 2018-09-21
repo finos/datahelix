@@ -31,22 +31,26 @@ liberally to assist in readability.
 
 ## Coding Style
 
-Regarding coding style we favor a minimalistic and pragmatic approach.  We adopt, respectively for Java and Scale, only a minimal subset from Google Java and Scala coding style guides.  The subsets can be expanded or modified if there are strong opinions from the community.
+Regarding coding style we favor a minimalistic and pragmatic approach. We add additional rules as they are needed rather than specifying up front.
 
 ### Java Coding Style
 
-We adopt only these four rules from the Google Java Coding Style: [https://google.github.io/styleguide/javaguide.html](https://google.github.io/styleguide/javaguide.html) 
+We adopt a modified subset of the [Google Java Coding Style](https://google.github.io/styleguide/javaguide.html): 
 
-(Here the rule numbers are from the Google Java Coding Style as of September 2018)
+* [2.2](https://google.github.io/styleguide/javaguide.html#s2.2-file-encoding) Files are encoded in UTF-8
+* [2.3.1](https://google.github.io/styleguide/javaguide.html#s2.3.1-whitespace-characters) Use ASCII hard space (0x20) not tab for indentation
+* [4.1.1](https://google.github.io/styleguide/javaguide.html#s4.1.1-braces-always-used) Braces are used where optional
+* [4.1.2](https://google.github.io/styleguide/javaguide.html#s4.1.2-blocks-k-r-style) Nonempty blocks: K & R style
+* [4.1.3](https://google.github.io/styleguide/javaguide.html#s4.1.3-braces-empty-blocks) Empty blocks: may be concise
+* _**Contrary** to [4.2](https://google.github.io/styleguide/javaguide.html#s4.2-block-indentation)_: Block indentation: **4 spaces**
+* [4.3](https://google.github.io/styleguide/javaguide.html#s4.3-one-statement-per-line) One statement per line
+* [4.4](https://google.github.io/styleguide/javaguide.html#s4.4-column-limit) Column limit: 100
+* [4.5.1](https://google.github.io/styleguide/javaguide.html#s4.5.1-line-wrapping-where-to-break) Where to break (but _**not**_ [4.5.2](https://google.github.io/styleguide/javaguide.html#s4.5.2-line-wrapping-indent))
 
-* Rule 2.2 Files are encoded in UTF-8
-* Rule 2.3.1 Use ASCII hard space (0x20) not tab for indentation
-* (Modifed from Rule 4.2) Block indentation: 4 spaces
-* Rule 4.4 Column limit: 100
 
 ### Scala Coding Style
 
-We adopt only one rule from the Scala Style Guide: [https://docs.scala-lang.org/style/](https://docs.scala-lang.org/style/).  We also add two more rules to make our Java and Scala styles consistent.
+We adopt only one rule from the [Scala Style Guide](https://docs.scala-lang.org/style/).  We also add two more rules to make our Java and Scala styles consistent.
 
 * Files are encoded in UTF-8 (Note 1)
 * Each level of indentation is 2 spaces.  Tabs are not used
