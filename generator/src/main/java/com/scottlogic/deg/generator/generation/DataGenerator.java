@@ -42,24 +42,25 @@ public class DataGenerator implements IDataGenerator {
         DecisionTreeProfile analysedProfile,
         GenerationConfig generationConfig) {
 
-        Map<RuleDecisionTree, Field> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(analysedProfile);
-        List<DecisionTreeProfile> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(analysedProfile, ruleToFieldMapping);
+        Map<RuleDecisionTree, List<Field>> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(analysedProfile);
+        Stream<DecisionTreeProfile> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(analysedProfile, ruleToFieldMapping);
 
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,
                 rowSpecMerger);
 
-        Stream<RowSpec> rowSpecs = partitionedTrees
-            .stream()
-            .flatMap(walker::walk);
+        Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
+            .map(walker::walk);
 
-        IDataBagSource allDataBagSource =
-            rowSpecs
-                .map(RowSpecDataBagSource::create)
-                .collect(
-                    Collectors.collectingAndThen(
-                        Collectors.toList(),
-                        ConcatenatingDataBagSource::new));
+        Stream<IDataBagSource> allDataBagSource =
+            rowSpecsByPartition
+                .map(rowSpecs ->
+                    rowSpecs
+                        .map(RowSpecDataBagSource::create)
+                        .collect(
+                            Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                ConcatenatingDataBagSource::new)));
 
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
             allDataBagSource.generate(generationConfig),
