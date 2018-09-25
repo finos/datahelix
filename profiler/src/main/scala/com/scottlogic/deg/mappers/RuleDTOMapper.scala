@@ -7,7 +7,7 @@ import scala.collection.JavaConversions
 
 object RuleDTOMapper extends IMapper[Rule,RuleDTO] {
   override def Map(original: Rule): RuleDTO = 
-    new RuleDTO(original.rule, 
+    new RuleDTO(original.Description, 
                 JavaConversions
                   .asJavaCollection(original
                                       .Constraints

@@ -21,7 +21,7 @@ public class RuleDeserializer extends JsonDeserializer<RuleDTO> {
 
         if (node.has("rule")) {
             RuleDTO rule = new RuleDTO();
-            rule.rule = node.get("rule").asText();
+            rule.description = node.get("rule").asText();
             rule.constraints = readConstraintsFromArrayNode(node.get("constraints"), mapper);
             return rule;
         }

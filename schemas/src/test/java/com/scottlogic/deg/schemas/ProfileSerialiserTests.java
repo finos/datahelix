@@ -101,11 +101,11 @@ public class ProfileSerialiserTests {
     }
 
     private static RuleDTO createRule(
-        String rule,
+        String description,
         ConstraintDTO... constraints) {
         RuleDTO newRule = new RuleDTO();
 
-        newRule.rule = rule;
+        newRule.description = description;
         newRule.constraints = Arrays.asList(constraints);
 
         return newRule;
