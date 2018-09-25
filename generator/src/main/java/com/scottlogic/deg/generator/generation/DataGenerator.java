@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
@@ -17,16 +19,19 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
+    private final RuleFieldMapper ruleFieldMapper = new RuleFieldMapper();
+    private final TreePartitioner fieldPartitioner = new TreePartitioner();
 
     public DataGenerator(
-            RowSpecMerger rowSpecMerger,
-            ConstraintReducer constraintReducer
-    ) {
+        RowSpecMerger rowSpecMerger,
+        ConstraintReducer constraintReducer) {
         this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
     }
@@ -37,22 +42,24 @@ public class DataGenerator implements IDataGenerator {
         DecisionTreeProfile analysedProfile,
         GenerationConfig generationConfig) {
 
+        Map<RuleDecisionTree, Field> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(analysedProfile);
+        List<DecisionTreeProfile> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(analysedProfile, ruleToFieldMapping);
+
         DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,
                 rowSpecMerger);
 
-        List<RowSpec> rowSpecs = walker.walk(analysedProfile).collect(Collectors.toList());
+        Stream<RowSpec> rowSpecs = partitionedTrees
+            .stream()
+            .flatMap(walker::walk);
 
         IDataBagSource allDataBagSource =
             rowSpecs
-                .stream()
                 .map(RowSpecDataBagSource::create)
                 .collect(
                     Collectors.collectingAndThen(
                         Collectors.toList(),
                         ConcatenatingDataBagSource::new));
-
-
 
         Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
             allDataBagSource.generate(generationConfig),
