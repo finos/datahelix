@@ -14,7 +14,7 @@ public class RuleSerializer extends JsonSerializer<RuleDTO> {
         SerializerProvider serializerProvider)
         throws IOException {
 
-        if (rule.description == null) {
+        if (rule.rule == null) {
 
             for (ConstraintDTO constraint : rule.constraints)
             {
@@ -23,8 +23,8 @@ public class RuleSerializer extends JsonSerializer<RuleDTO> {
         }
         else {
             jsonGenerator.writeStartObject();
-            jsonGenerator.writeFieldName("description");
-            jsonGenerator.writeString(rule.description);
+            jsonGenerator.writeFieldName("rule");
+            jsonGenerator.writeString(rule.rule);
             jsonGenerator.writeArrayFieldStart("constraints");
             for (ConstraintDTO constraint : rule.constraints)
             {
