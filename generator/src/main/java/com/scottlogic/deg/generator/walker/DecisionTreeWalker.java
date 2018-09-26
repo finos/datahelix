@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -29,9 +30,13 @@ public class DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTreeProfile analysedProfile) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(analysedProfile.getFields());
-        return helper.walk(analysedProfile.getRootNode());
+    public Stream<RowSpec> walk(DecisionTreeProfile profile) {
+        return walk(profile.getRootNode(), profile.getFields());
+    }
+
+    public Stream<RowSpec> walk(ConstraintNode rootNode, ProfileFields fields) {
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(fields);
+        return helper.walk(rootNode);
     }
 
     private class DecisionTreeWalkerHelper {
