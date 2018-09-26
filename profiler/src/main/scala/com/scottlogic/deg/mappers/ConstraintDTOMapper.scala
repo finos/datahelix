@@ -37,10 +37,16 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
           .appendIs(AtomicConstraintType.MATCHESREGEX.toString)
           .appendValue(instance.Value)
           .Build;
-      case instance: HasDecimalPlacesConstraint =>
+      // FIXME for now we can only generate granular-to constraint with a value of "1"
+      case instance: GranularToConstraint if instance.Value==1.0 =>        
         builder.appendField(instance.FieldName)
-          .appendIs("hasDecimalPlaces")
-          .appendValue(instance.NumberOfDecimalPlaces)
+          .appendIs(AtomicConstraintType.ISGRANULARTO.toString)
+          .appendValue("1")
+          .Build;
+      case instance: GranularToConstraint =>        
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISGRANULARTO.toString)
+          .appendValue(instance.Value)
           .Build;
       case _ =>
         throw new IllegalArgumentException("Can't convert constraint of supplied type")
