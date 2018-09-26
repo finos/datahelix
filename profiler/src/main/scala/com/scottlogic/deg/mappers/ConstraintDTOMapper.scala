@@ -37,15 +37,11 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
           .appendIs(AtomicConstraintType.MATCHESREGEX.toString)
           .appendValue(instance.Value)
           .Build;
-      // FIXME for now we can only generate granular-to constraint with a value of "1"
-      case instance: GranularToConstraint if instance.Value==1.0 => {
-        val str: String = 
-          if (instance.Value==1.0) instance.Value.toInt.toString else instance.Value.toString
+      case instance: GranularToConstraint => 
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.ISGRANULARTO.toString)
-          .appendValue(str)
+          .appendValue(instance.Value)
           .Build;
-      }
       case _ =>
         throw new IllegalArgumentException("Can't convert constraint of supplied type")
     }
