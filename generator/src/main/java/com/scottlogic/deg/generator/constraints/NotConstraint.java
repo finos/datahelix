@@ -7,4 +7,9 @@ public class NotConstraint implements IConstraint
     public NotConstraint(IConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
+
+    @Override
+    public String toString(){
+        return String.format("Not (%s)", negatedConstraint.toString());
+    }
 }

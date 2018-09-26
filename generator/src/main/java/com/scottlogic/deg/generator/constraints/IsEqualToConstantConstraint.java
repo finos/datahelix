@@ -11,4 +11,9 @@ public class IsEqualToConstantConstraint implements IConstraint
         this.field = field;
         this.requiredValue = requiredValue;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s is equal to '%s'", field.name, requiredValue);
+    }
 }

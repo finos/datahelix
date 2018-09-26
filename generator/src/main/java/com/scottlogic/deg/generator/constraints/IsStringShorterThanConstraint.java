@@ -11,4 +11,9 @@ public class IsStringShorterThanConstraint implements IConstraint {
         this.referenceValue = referenceValue;
         this.field = field;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s is shorter than '%s'", field.name, referenceValue);
+    }
 }

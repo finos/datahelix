@@ -10,4 +10,9 @@ public class IsStringLongerThanConstraint implements IConstraint {
         this.referenceValue = referenceValue;
         this.field = field;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s is longer than '%s'", field.name, referenceValue);
+    }
 }

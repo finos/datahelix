@@ -18,4 +18,9 @@ public class IsOfTypeConstraint implements IConstraint
         String,
         Temporal
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s is of type '%s'", field.name, requiredType.name());
+    }
 }
