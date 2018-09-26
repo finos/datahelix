@@ -1,14 +1,15 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,6 +45,7 @@ public class TreePartitioner {
                 .stream()
                 .map(partitionsByField::get)
                 .distinct()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
             final List<Field> fieldsToPartition = partitionsTouched.size() <= 1
@@ -63,7 +65,30 @@ public class TreePartitioner {
             fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
         }
 
-        return null;
+        Map<Integer, List<IConstraint>> partitionedConstraints = rootNode
+            .getAtomicConstraints()
+            .stream()
+            .collect(Collectors.groupingBy(constraint -> partitionsByField.get(mapping.get(constraint).get(0))));
+
+        Map<Integer, List<DecisionNode>> partitionedDecisions = rootNode
+            .getDecisions()
+            .stream()
+            .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).get(0))));
+
+        return partitionsById
+            .keySet()
+            .stream()
+            .map(id -> new ConstraintNode( // TODO: consider moving this class to decision tree so we don't have to make that constructor public
+                partitionedConstraints.getOrDefault(id, Collections.emptyList()),
+                partitionedDecisions.getOrDefault(id, Collections.emptyList())
+            ));
+
+//        return partitionsById
+//            .keySet()
+//            .stream()
+//            .map(partitionId -> {
+//
+//            });
     }
 //            .reduce(
 //                new RuleDecisionTree("", new ConstraintNode()),

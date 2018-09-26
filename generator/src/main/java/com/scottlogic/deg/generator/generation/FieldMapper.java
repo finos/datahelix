@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,11 +19,16 @@ public class FieldMapper {
 
     private class ObjectFields {
         public Object object;
-        public Stream<Field> fields;
+        public List<Field> fields;
 
-        public ObjectFields(Object object, Stream<Field> fields) {
+        ObjectFields(Object object, List<Field> fields) {
             this.object = object;
             this.fields = fields;
+        }
+
+        ObjectFields(Object object, Field field) {
+            this.object = object;
+            this.fields = Collections.singletonList(field);
         }
     }
 
@@ -31,16 +38,22 @@ public class FieldMapper {
         return Stream.concat(
             node.getAtomicConstraints()
                 .stream()
-                .map(constraint -> new ObjectFields(constraint, Stream.of(constraintSniffer.detectField(constraint)))),
+                .map(constraint -> new ObjectFields(constraint, constraintSniffer.detectField(constraint))),
             node.getDecisions()
                 .stream()
-                .flatMap(decision -> decision.getOptions()
-                    .stream()
-                    .flatMap(this::mapConstraintToFields)
-                    .flatMap(map -> Stream.of(
-                        map, // this part is technically not used, but no reason not to keep it
-                        new ObjectFields(decision, map.fields)
-                    ))
+                .map(decision -> new ObjectFields(
+                    decision,
+                    decision
+                        .getOptions()
+                        .stream()
+                        .flatMap(this::mapConstraintToFields)
+                        .flatMap(objectField -> objectField.fields.stream())
+                        .collect(Collectors.toList()))
+                    // TODO: This will only produce mappings from the root decisions/constraints. (Technically all we need, but investigate the below if needed)
+//                        .flatMap(map -> Stream.of(
+//                            map.fields, // this part is technically not used, but no reason not to keep it
+//                            new ObjectFields(decision, map.fields)
+//                        ))
         ));
     }
 
@@ -60,7 +73,7 @@ public class FieldMapper {
         return mapConstraintToFields(profile.getRootNode())
             .collect(Collectors.toMap(
                 map -> map.object,
-                map -> map.fields.collect(Collectors.toList())
+                map -> map.fields
             ));
     }
 }
