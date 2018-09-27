@@ -5,10 +5,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,16 +16,16 @@ public class FieldMapper {
 
     private class ObjectFields {
         public Object object;
-        public List<Field> fields;
+        public Set<Field> fields;
 
-        ObjectFields(Object object, List<Field> fields) {
+        ObjectFields(Object object, Set<Field> fields) {
             this.object = object;
             this.fields = fields;
         }
 
         ObjectFields(Object object, Field field) {
             this.object = object;
-            this.fields = Collections.singletonList(field);
+            this.fields = Collections.singleton(field);
         }
     }
 
@@ -48,7 +45,7 @@ public class FieldMapper {
                         .stream()
                         .flatMap(this::mapConstraintToFields)
                         .flatMap(objectField -> objectField.fields.stream())
-                        .collect(Collectors.toList()))
+                        .collect(Collectors.toSet()))
                     // TODO: This will only produce mappings from the root decisions/constraints. (Technically all we need, but investigate the below if needed)
 //                        .flatMap(map -> Stream.of(
 //                            map.fields, // this part is technically not used, but no reason not to keep it
@@ -69,7 +66,7 @@ public class FieldMapper {
 //                    .flatMap(this::mapConstraintToFields)));
 //    }
 
-    public Map<Object, List<Field>> mapRulesToFields(DecisionTreeProfile profile){
+    public Map<Object, Set<Field>> mapRulesToFields(DecisionTreeProfile profile){
         return mapConstraintToFields(profile.getRootNode())
             .collect(Collectors.toMap(
                 map -> map.object,
