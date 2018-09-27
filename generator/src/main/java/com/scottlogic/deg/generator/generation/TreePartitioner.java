@@ -63,17 +63,19 @@ public class TreePartitioner {
             .stream()
             .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
 
-        return partitionsById
-            .keySet()
-            .stream()
-            .map(id -> new PartitionTree(
-                new ConstraintNode(
-                    partitionedConstraints.getOrDefault(id, Collections.emptyList()),
-                    partitionedDecisions.getOrDefault(id, Collections.emptyList())
-                ),
-                partitionsById.get(id)
-            ));
-//            .map(id -> new ConstraintNode( // TODO: consider moving this class to decision tree so we don't have to make that constructor public
+        return partitionsById.size() == 0
+            ? Stream.of(new PartitionTree(rootNode, mapping.get(rootNode)))
+            : partitionsById
+                .keySet()
+                .stream()
+                .map(id -> new PartitionTree(
+                    new ConstraintNode( // TODO: consider moving this class to decision tree so we don't have to make that constructor public
+                        partitionedConstraints.getOrDefault(id, Collections.emptyList()),
+                        partitionedDecisions.getOrDefault(id, Collections.emptyList())
+                    ),
+                    partitionsById.get(id)
+                ));
+//            .map(id -> new ConstraintNode(
 //                partitionedConstraints.getOrDefault(id, Collections.emptyList()),
 //                partitionedDecisions.getOrDefault(id, Collections.emptyList())
 //            ));

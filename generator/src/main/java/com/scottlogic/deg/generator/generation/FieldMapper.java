@@ -67,8 +67,11 @@ public class FieldMapper {
 //    }
 
     public Map<Object, Set<Field>> mapRulesToFields(DecisionTreeProfile profile){
-        return mapConstraintToFields(profile.getRootNode())
-            .collect(Collectors.toMap(
+        return Stream.concat(
+                mapConstraintToFields(profile.getRootNode()),
+                Stream.of(new ObjectFields(profile.getRootNode(), profile.getFields().stream().collect(Collectors.toSet()))))
+            .collect(
+                Collectors.toMap(
                 map -> map.object,
                 map -> map.fields
             ));
