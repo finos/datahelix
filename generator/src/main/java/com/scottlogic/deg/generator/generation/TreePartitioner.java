@@ -21,11 +21,13 @@ public class TreePartitioner {
 
         int partitionCount = 0;
 
+        // TODO: why not just iterate over mapping.keys()‽
         ConcatenatingIterable<Object> fieldedObjects = new ConcatenatingIterable<>(
             new ProjectingIterable<>(rootNode.getAtomicConstraints(), constraint -> constraint),
             new ProjectingIterable<>(rootNode.getDecisions(), decision -> decision)
         );
 
+        // TODO: This won't partition fields that don't have rules. Make test and fix
         for (Object fieldedObject : fieldedObjects) {
             final Set<Field> fields = mapping.get(fieldedObject);
 
