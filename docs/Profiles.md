@@ -20,13 +20,13 @@ By default, any piece of data is valid for a field. To get more specific, we nee
 
 Every rule is a named collection of *constraints*, which can be any of:
 
-* [Epistemic constraints](DataConstraints.md) limit a field's possible values
-* [Presentational constraints](DataConstraints.md) control how values are serialised (eg, number of significant figures)
-* [Grammatical constraints](GrammaticalConstraints.md) let you combine other constraints together
+* [Epistemic constraints](EpistemicConstraints.md), which limit a field's possible values
+* [Presentational constraints](PresentationalConstraints.md), which control how values are serialised (eg, number of significant figures)
+* [Grammatical constraints](GrammaticalConstraints.md), which let you combine other constraints together
 
 (Epistemic and formatting constraints are collectively referred to as **data constraints**)
 
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, "X is a non-null integer between 0 and 100" is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation] comes into play.
+The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation] comes into play.
 
 ## Persistence
 
