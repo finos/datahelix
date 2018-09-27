@@ -23,4 +23,13 @@ public class DecisionTreeCollection {
     public Collection<DecisionTree> getDecisionTrees() {
         return decisionTrees;
     }
+
+    public DecisionTree getMergedTree() {
+        return new DecisionTree(
+            ConstraintNode.merge(decisionTrees
+                .stream()
+                .map(DecisionTree::getRootNode)
+                .iterator()),
+            fields);
+    }
 }

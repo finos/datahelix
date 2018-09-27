@@ -123,7 +123,7 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         Assert.assertEquals(0, testOutput.getDecisionTrees().size());
     }
@@ -134,30 +134,13 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, new ArrayList<>());
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
         ProfileFields actualFields = testOutput.getFields();
 
         pairwiseAssert(
             actualFields,
             inputFieldList,
             (actual, expected) -> Assert.assertThat(actual, sameInstance(expected)));
-    }
-
-    @Test
-    void shouldReturnDecisionTreeWithCorrectDescription() {
-        List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
-
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Assert.assertThat("Rule decision tree has correct desciption", outputRule.getDescription(),
-                Is.is(testRule.description));
     }
 
     @Test
@@ -171,10 +154,10 @@ class DecisionTreeGeneratorTests {
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         Assert.assertThat("analyse() output is not null", testOutput, Is.is(IsNull.notNullValue()));
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root has non-null list of decisions",
                 outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
@@ -192,9 +175,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root atomic constraint list is same size as original constraint list",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(inputConstraints.size()));
         for (IConstraint constraint : inputConstraints) {
@@ -214,11 +197,11 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         Assert.assertThat("analyse() output contain decision tree list", testOutput.getDecisionTrees(),
                 Is.is(IsNull.notNullValue()));
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root has non-null list of decisions",
                 outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
@@ -237,11 +220,11 @@ class DecisionTreeGeneratorTests {
 
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         Assert.assertThat("analyse() output contain decision tree list", testOutput.getDecisionTrees(),
                 Is.is(IsNull.notNullValue()));
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root contains correct number of atomic constraints",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(3));
         Assert.assertThat("Decision tree root atomic constraints list contains constraint 0",
@@ -265,9 +248,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root contains correct number of decisions",
                 outputRule.getRootNode().getDecisions().size(), Is.is(2));
     }
@@ -286,9 +269,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root contains no atomic constraints",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
     }
@@ -307,9 +290,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         List<DecisionNode> decisions = new ArrayList<>(outputRule.getRootNode().getDecisions());
         Assert.assertThat("First decision has correct number of options", decisions.get(0).getOptions().size(),
                 Is.is(2));
@@ -339,9 +322,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         List<DecisionNode> decisions = new ArrayList<>(outputRule.getRootNode().getDecisions());
         Assert.assertThat("First decision has two options", decisions.get(0).getOptions().size(), Is.is(2));
         List<ConstraintNode> options = new ArrayList<>(decisions.get(0).getOptions());
@@ -373,9 +356,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root contains no atomic constraints",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
         Assert.assertThat("Decision tree root contains one decision",
@@ -441,9 +424,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root contains no atomic constraints",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
         Assert.assertThat("Decision tree root contains one decision",
@@ -508,9 +491,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         // Result should just be A.
         Assert.assertThat("Decision tree root contains one atomic constraint",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(1));
@@ -531,9 +514,9 @@ class DecisionTreeGeneratorTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
 
-        DecisionTreeProfile testOutput = testObject.analyse(testInput);
+        DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
-        RuleDecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         // Result should be (NOT A) OR (NOT B)
         Assert.assertThat("Decision tree root contains no atomic constraints",
                 outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));

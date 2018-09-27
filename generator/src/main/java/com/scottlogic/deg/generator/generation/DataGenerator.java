@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
@@ -34,7 +33,6 @@ public class DataGenerator implements IDataGenerator {
         this.constraintReducer = constraintReducer;
     }
 
-    // when do we do the decision tree merging?
     @Override
     public TestCaseGenerationResult generateData(
         Profile profile,

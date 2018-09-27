@@ -46,9 +46,7 @@ public class GenerationEngine {
 
         final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
 
-        final DecisionTree mergedTree = null;
-
-        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, mergedTree, config);
+        final TestCaseGenerationResult generationResult = this.dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
         try {
             this.outputter.output(generationResult);
