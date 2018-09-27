@@ -1,8 +1,16 @@
-# Data constraints
+# Epistemic constraints
 
-Data constraints are either **epistemic** (concerned with what values are valid) or **presentational** (concerned with how values are outputted).
+## Theory
 
-## General
+* An **epistemic constraint** is a predicate that defines any given value as being _valid_ or _invalid_
+* The **universal set** contains all generatable values (`null`, any string, any date, any number, etc)
+* The **denotation** of a constraint is the subset of the universal set that it defines as valid
+
+If no constraints are defined over a field, then it can accept any member of the universal set. Each constraint added to that field progressively limits the universal set.
+
+The [grammatical `not` constraint](GrammaticalConstraints.md) inverts a constraint's denotation; in other words, it produces the complement of the constraint's denotation and the universal set.
+
+## General constraints
 
 ### `equalTo` _(field, value)_
 
@@ -38,7 +46,7 @@ Is satisfied if `field` is null or absent.
 
 Is satisfied if `field` is of type represented by `value` (valid options: `numeric`, `string`, `temporal`)
 
-## Textual
+## Textual constraints
 These constraints imply `ofType string`.
 
 ### `matchingRegex` _(field, value)_
@@ -90,7 +98,7 @@ Is satisfied if `field` is a string with length less than `value`.
 Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Possible options for `value` are:
 * ISIN
 
-## Numeric
+## Numeric constraints
 These constraints imply `ofType numeric`.
 
 ### `greaterThan` _(field, value)_
@@ -136,7 +144,7 @@ Is satisfied if `field` has the granularity specified in `value`. Numerical gran
 - `1` would permit only integers
 - `0.1` would permit `20` and `20.1`, but not `20.01` 
 
-## Temporal
+## Temporal constraints
 These constraints imply `ofType temporal`.
 
 ### `after` _(field, value)_
@@ -170,17 +178,3 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
-
-## Presentational
-  
-### `formattedAs` _(field, value)_
-
-```javascript
-{ "field": "price", "formattedAs": "%.5s" }
-```
-
-Used by output serialisers where string output is required. `value` must be:
- 
- * a string recognised by Java's `String.format` method
- * appropriate for the data type of `field`
- 
