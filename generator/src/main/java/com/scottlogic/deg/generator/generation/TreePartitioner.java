@@ -1,9 +1,11 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
@@ -15,7 +17,7 @@ import java.util.stream.Stream;
  * Given a profile and mapping from rules to fields, split the tree into multiple trees based on which rules affect which fields
  */
 public class TreePartitioner {
-    public Stream<PartitionTree> splitTreeIntoPartitions(ConstraintNode rootNode, Map<Object, Set<Field>> mapping) {
+    public Stream<DecisionTree> splitTreeIntoPartitions(ConstraintNode rootNode, Map<Object, Set<Field>> mapping) {
         final Map<Field, Integer> partitionsByField = new HashMap<>();
         final Map<Integer, Set<Field>> partitionsById = new HashMap<>();
 
@@ -66,17 +68,17 @@ public class TreePartitioner {
             .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
 
         return partitionsById.size() == 0
-            ? Stream.of(new PartitionTree(rootNode, mapping.get(rootNode)))
+            ? Stream.of(new DecisionTree(rootNode, new ProfileFields(new ArrayList<>(mapping.get(rootNode)))))
             : partitionsById
                 .keySet()
                 .stream()
-                .map(id -> new PartitionTree(
+                .map(id -> new DecisionTree(
                     new ConstraintNode( // TODO: consider moving this class to decision tree so we don't have to make that constructor public
                         partitionedConstraints.getOrDefault(id, Collections.emptyList()),
                         partitionedDecisions.getOrDefault(id, Collections.emptyList())
                     ),
-                    partitionsById.get(id)
-                ));
+                    new ProfileFields(new ArrayList<>(partitionsById.get(id))
+                )));
 //            .map(id -> new ConstraintNode(
 //                partitionedConstraints.getOrDefault(id, Collections.emptyList()),
 //                partitionedDecisions.getOrDefault(id, Collections.emptyList())

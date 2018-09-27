@@ -27,7 +27,7 @@ class DecisionTreeGeneratorTests {
     private final Field fieldC = new Field("C");
 
     private final List<Rule> rules = new ArrayList<>();
-    private DecisionTreeProfile actualOutput = null;
+    private DecisionTreeCollection actualOutput = null;
 
     private void beforeEach() {
         rules.clear();
@@ -38,7 +38,7 @@ class DecisionTreeGeneratorTests {
         this.rules.add(new Rule("", Arrays.asList(constraints)));
     }
 
-    private DecisionTreeProfile getActualOutput() {
+    private DecisionTreeCollection getActualOutput() {
         if (this.actualOutput == null) {
             Profile testInput = new Profile(
                 new ProfileFields(
@@ -54,7 +54,8 @@ class DecisionTreeGeneratorTests {
     }
 
     private ConstraintNode getResultingRootOption() {
-        return this.getActualOutput().getRootNode();
+        return this.getActualOutput().getDecisionTrees().iterator().next()
+            .getRootNode();
     }
 
     private Matcher<IConstraint> sameNegation(IConstraint expected) {

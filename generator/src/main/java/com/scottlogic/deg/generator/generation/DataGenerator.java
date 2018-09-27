@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
@@ -34,14 +34,15 @@ public class DataGenerator implements IDataGenerator {
         this.constraintReducer = constraintReducer;
     }
 
+    // when do we do the decision tree merging?
     @Override
     public TestCaseGenerationResult generateData(
         Profile profile,
-        DecisionTreeProfile analysedProfile,
+        DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
-        final Map<Object, Set<Field>> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(analysedProfile);
-        final List<PartitionTree> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(analysedProfile.getRootNode(), ruleToFieldMapping)
+        final Map<Object, Set<Field>> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(decisionTree);
+        final List<DecisionTree> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(decisionTree.getRootNode(), ruleToFieldMapping)
             .collect(Collectors.toList());
 
         final DecisionTreeWalker walker = new DecisionTreeWalker(
@@ -50,10 +51,7 @@ public class DataGenerator implements IDataGenerator {
 
         final List<List<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
-            .map(partitionTree -> walker.walk(
-                partitionTree.rootNode,
-                new ProfileFields(new ArrayList<>(partitionTree.fields))
-            ).collect(Collectors.toList()))
+            .map(tree -> walker.walk(tree).collect(Collectors.toList()))
             .collect(Collectors.toList());
 
         final List<IDataBagSource> allDataBagSources =

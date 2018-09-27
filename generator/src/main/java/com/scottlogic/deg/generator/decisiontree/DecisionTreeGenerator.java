@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,18 +11,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     @Override
-    public DecisionTreeProfile analyse(Profile profile) {
-
-        List<ConstraintNode> rootNodes = profile.rules
-            .stream()
-            .map(this::convertRule)
-            .collect(Collectors.toList());
-
-        ConstraintNode rootNode = ConstraintNode.merge(rootNodes.iterator());
-
-        return new DecisionTreeProfile(
+    public DecisionTreeCollection analyse(Profile profile) {
+        return new DecisionTreeCollection(
             profile.fields,
-            decisionTreeSimplifier.simplify(rootNode));
+            profile.rules.stream()
+                .map(rule -> new DecisionTree(convertRule(rule), profile.fields))
+                .map(decisionTreeSimplifier::simplify)
+                .collect(Collectors.toList()));
     }
 
     private ConstraintNode convertRule(Rule rule) {
@@ -143,6 +137,12 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     class DecisionTreeSimplifier {
+        public DecisionTree simplify(DecisionTree originalTree) {
+            return new DecisionTree(
+                simplify(originalTree.getRootNode()),
+                originalTree.getFields());
+        }
+
         public ConstraintNode simplify(ConstraintNode node) {
             if (node.getDecisions().isEmpty())
                 return node;

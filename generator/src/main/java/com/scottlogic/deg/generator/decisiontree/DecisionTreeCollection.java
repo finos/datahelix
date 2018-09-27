@@ -5,21 +5,22 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
-public class DecisionTreeProfile {
+public class DecisionTreeCollection {
     private final ProfileFields fields;
-    private final ConstraintNode rootNode;
+    private final Collection<DecisionTree> decisionTrees;
 
-    DecisionTreeProfile(ProfileFields fields, ConstraintNode rootNode) {
+    DecisionTreeCollection(ProfileFields fields, Collection<DecisionTree> decisionTrees) {
         this.fields = fields;
-        this.rootNode = rootNode;
+        this.decisionTrees = decisionTrees;
     }
 
     public ProfileFields getFields() {
         return fields;
     }
 
-    public ConstraintNode getRootNode() {
-        return rootNode;
+    public Collection<DecisionTree> getDecisionTrees() {
+        return decisionTrees;
     }
 }

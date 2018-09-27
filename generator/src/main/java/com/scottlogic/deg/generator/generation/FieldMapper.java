@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
 import java.util.*;
@@ -66,7 +66,7 @@ public class FieldMapper {
 //                    .flatMap(this::mapConstraintToFields)));
 //    }
 
-    public Map<Object, Set<Field>> mapRulesToFields(DecisionTreeProfile profile){
+    public Map<Object, Set<Field>> mapRulesToFields(DecisionTree profile){
         return Stream.concat(
                 mapConstraintToFields(profile.getRootNode()),
                 Stream.of(new ObjectFields(profile.getRootNode(), profile.getFields().stream().collect(Collectors.toSet()))))
