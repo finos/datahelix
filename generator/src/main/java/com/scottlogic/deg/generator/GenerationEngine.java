@@ -81,6 +81,8 @@ public class GenerationEngine {
 
         final TestCaseDataSet validCase = generate(profile, profile.rules, null);
 
+        System.out.println("Valid cases generated, starting violation generation...");
+
         final List<TestCaseDataSet> violatingCases = profile.rules.stream()
             .map(rule ->
                 generate(
@@ -90,7 +92,7 @@ public class GenerationEngine {
                             ? violateRule(rule)
                             : r)
                         .collect(Collectors.toList()),
-                    "violatesfdsfsdfs"))
+                    rule.description))
             .collect(Collectors.toList());
 
 

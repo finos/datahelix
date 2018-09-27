@@ -12,5 +12,10 @@ public class IsInSetConstraint implements IConstraint
     public IsInSetConstraint(Field field, Set<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
+
+        if(legalValues.isEmpty()){
+            throw new IllegalStateException("Cannot create an IsInSetConstraint for field '" +
+                field.name + "' with an empty set.");
+        }
     }
 }

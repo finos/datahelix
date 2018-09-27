@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,21 @@ public class RegexStringGeneratorTests {
                 Assert.assertThat(character, greaterThanOrEqualTo((char)32));
             }
         }
+    }
+
+    @Test
+    void interestingValuesShouldBeBounds() {
+        IStringGenerator generator = new RegexStringGenerator(".{10,20}");
+
+        Iterable<String> resultsIterable = generator.generateInterestingValues();
+
+        ArrayList<String> results = new ArrayList<>();
+
+        resultsIterable.iterator().forEachRemaining(results::add);
+
+        Assert.assertThat(results.size(), Is.is(2));
+        Assert.assertThat(results.get(0).length(), Is.is(10));
+        Assert.assertThat(results.get(1).length(), Is.is(20));
     }
 
     @Test

@@ -63,14 +63,14 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public IStringGenerator intersect(IStringGenerator stringGenerator) {
-      if (!(stringGenerator instanceof RegexStringGenerator)) {
-        return stringGenerator.intersect(this);
-      }
+        if (!(stringGenerator instanceof RegexStringGenerator)) {
+            return stringGenerator.intersect(this);
+        }
 
-      Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
-      Automaton merged = automaton.intersection(b);
+        Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
+        Automaton merged = automaton.intersection(b);
 
-      return new RegexStringGenerator(merged);
+        return new RegexStringGenerator(merged);
     }
 
     @Override
@@ -85,7 +85,10 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
+        String shortestString = AutomationUtils.getShortestExample(automaton);
+        String longestString = AutomationUtils.getLongestExample(automaton);
+
+        return () -> Arrays.asList(shortestString, longestString).iterator();
     }
 
     private Stream<String> generateInterestingValues(State state, String matchedValue) {
@@ -96,8 +99,9 @@ public class RegexStringGenerator implements IStringGenerator {
         Stream<String> subTransitionStream = state
             .getTransitions()
             .stream()
+            .filter(x -> x.getDest() != state)
             .flatMap(transition ->
-                generateInterestingValues(transition.getDest(), matchedValue + (char)Math.max(transition.getMin(), 32))); // 32 first printable ASCII char (space)
+                generateInterestingValues(transition.getDest(), matchedValue + (char) Math.max(transition.getMin(), 32))); // 32 first printable ASCII char (space)
 
         return Stream.concat(matchedValueStream, subTransitionStream);
     }
@@ -116,12 +120,12 @@ public class RegexStringGenerator implements IStringGenerator {
     @Override
     public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-                () -> generateRandomStringInternal(
-                        "",
-                        automaton.getInitialState(),
-                        1,
-                        Integer.MAX_VALUE,
-                        randomNumberGenerator));
+            () -> generateRandomStringInternal(
+                "",
+                automaton.getInitialState(),
+                1,
+                Integer.MAX_VALUE,
+                randomNumberGenerator));
     }
 
     private String getMatchedString(int indexOrder) {
@@ -178,11 +182,11 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     private String generateRandomStringInternal(
-            String strMatch,
-            State state,
-            int minLength,
-            int maxLength,
-            IRandomNumberGenerator random) {
+        String strMatch,
+        State state,
+        int minLength,
+        int maxLength,
+        IRandomNumberGenerator random) {
 
         List<Transition> transitions = state.getSortedTransitions(false);
         Set<Integer> selectedTransitions = new HashSet<>();
@@ -190,7 +194,7 @@ public class RegexStringGenerator implements IStringGenerator {
 
         for (int resultLength = -1;
              transitions.size() > selectedTransitions.size()
-                     && (resultLength < minLength || resultLength > maxLength);
+                 && (resultLength < minLength || resultLength > maxLength);
              resultLength = result.length()) {
 
             if (randomPrepared(strMatch, state, minLength, maxLength, transitions, random)) {
@@ -213,12 +217,12 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     private boolean randomPrepared(
-            String strMatch,
-            State state,
-            int minLength,
-            int maxLength,
-            List<Transition> transitions,
-            IRandomNumberGenerator random) {
+        String strMatch,
+        State state,
+        int minLength,
+        int maxLength,
+        List<Transition> transitions,
+        IRandomNumberGenerator random) {
 
         if (state.isAccept()) {
             if (strMatch.length() == maxLength) {
@@ -388,4 +392,7 @@ public class RegexStringGenerator implements IStringGenerator {
             return stringGenerator.getMatchedString(currentIndex);
         }
     }
+
+
+
 }
