@@ -3,6 +3,8 @@ package com.scottlogic.deg.mappers
 import com.scottlogic.deg.models._
 import com.scottlogic.deg.schemas.v3.{AtomicConstraintType, ConstraintDTO, ConstraintDTOBuilder}
 
+import collection.JavaConverters._
+
 object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
   override def Map(original: IConstraint): ConstraintDTO = {
     if(original == null){
@@ -41,6 +43,11 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.ISGRANULARTO.toString)
           .appendValue(instance.Value)
+          .Build;
+      case instance: InSetConstraint => 
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISINSET.toString)
+          .appendValues(instance.Value.asJava)
           .Build;
       case _ =>
         throw new IllegalArgumentException("Can't convert constraint of supplied type")
