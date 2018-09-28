@@ -1,8 +1,6 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
 import java.util.*;

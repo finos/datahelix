@@ -25,7 +25,7 @@ public final class ConstraintNode {
     private final Collection<IConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
 
-    public ConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
+    ConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
         this.atomicConstraints =  new ArrayList<>(atomicConstraints);
         this.decisions = new ArrayList<>(decisions);
     }

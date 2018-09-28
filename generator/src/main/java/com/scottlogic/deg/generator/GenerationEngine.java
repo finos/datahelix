@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
