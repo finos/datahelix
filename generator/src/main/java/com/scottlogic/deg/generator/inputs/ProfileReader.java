@@ -39,8 +39,8 @@ public class ProfileReader {
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
             r -> new Rule(
-                r.description != null
-                    ? r.description
+                r.rule != null
+                    ? r.rule
                     : "Unnamed rule",
                 mapDtos(
                     r.constraints,

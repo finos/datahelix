@@ -7,11 +7,11 @@ import java.util.Collection;
 public final class DecisionNode {
     private final Collection<ConstraintNode> options;
 
-    public DecisionNode(Collection<ConstraintNode> options) {
+    DecisionNode(Collection<ConstraintNode> options) {
         this.options = options;
     }
 
-    public DecisionNode(ConstraintNode... options) {
+    DecisionNode(ConstraintNode... options) {
         this.options = Arrays.asList(options);
     }
 
