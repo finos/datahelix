@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Given a rule or list of rules it finds which rules act on which fields and returns a map of rules to fields
+ * Given a decision tree, find which constraints and decisions act on which fields and return a map from them to fields
  */
-public class FieldMapper {
+class FieldMapper {
 
     private class ObjectFields {
         public Object object;
@@ -64,7 +64,7 @@ public class FieldMapper {
 //                    .flatMap(this::mapConstraintToFields)));
 //    }
 
-    public Map<Object, Set<Field>> mapRulesToFields(DecisionTree profile){
+    Map<Object, Set<Field>> mapRulesToFields(DecisionTree profile){
         return Stream.concat(
                 mapConstraintToFields(profile.getRootNode()),
                 Stream.of(new ObjectFields(profile.getRootNode(), profile.getFields().stream().collect(Collectors.toSet()))))

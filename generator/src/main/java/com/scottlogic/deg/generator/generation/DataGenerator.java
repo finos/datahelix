@@ -1,9 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.FieldMapper;
 import com.scottlogic.deg.generator.decisiontree.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
@@ -25,7 +23,6 @@ import java.util.stream.Collectors;
 public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
-    private final FieldMapper ruleFieldMapper = new FieldMapper();
     private final TreePartitioner fieldPartitioner = new TreePartitioner();
 
     public DataGenerator(
@@ -41,9 +38,10 @@ public class DataGenerator implements IDataGenerator {
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
-        final Map<Object, Set<Field>> ruleToFieldMapping = ruleFieldMapper.mapRulesToFields(decisionTree);
-        final List<DecisionTree> partitionedTrees = fieldPartitioner.splitTreeIntoPartitions(decisionTree.getRootNode(), ruleToFieldMapping)
-            .collect(Collectors.toList());
+        final List<DecisionTree> partitionedTrees =
+            fieldPartitioner
+                .splitTreeIntoPartitions(decisionTree)
+                .collect(Collectors.toList());
 
         final DecisionTreeWalker walker = new DecisionTreeWalker(
                 constraintReducer,

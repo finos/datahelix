@@ -11,10 +11,22 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Given a profile and mapping from rules to fields, split the tree into multiple trees based on which rules affect which fields
+ * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
 public class TreePartitioner {
-    public Stream<DecisionTree> splitTreeIntoPartitions(ConstraintNode rootNode, Map<Object, Set<Field>> mapping) {
+    private final FieldMapper fieldMapper;
+
+    public TreePartitioner() {
+        this(new FieldMapper());
+    }
+
+    public TreePartitioner(FieldMapper fieldMapper) {
+        this.fieldMapper = fieldMapper;
+    }
+
+    public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
+        final Map<Object, Set<Field>> mapping = fieldMapper.mapRulesToFields(decisionTree);
+
         final Map<Field, Integer> partitionsByField = new HashMap<>();
         final Map<Integer, Set<Field>> partitionsById = new HashMap<>();
 
@@ -22,8 +34,8 @@ public class TreePartitioner {
 
         // TODO: why not just iterate over mapping.keys()‽
         ConcatenatingIterable<Object> fieldedObjects = new ConcatenatingIterable<>(
-            new ProjectingIterable<>(rootNode.getAtomicConstraints(), constraint -> constraint),
-            new ProjectingIterable<>(rootNode.getDecisions(), decision -> decision)
+            new ProjectingIterable<>(decisionTree.getRootNode().getAtomicConstraints(), constraint -> constraint),
+            new ProjectingIterable<>(decisionTree.getRootNode().getDecisions(), decision -> decision)
         );
 
         // TODO: This won't partition fields that don't have rules. Make test and fix
@@ -54,18 +66,18 @@ public class TreePartitioner {
             fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
         }
 
-        Map<Integer, List<IConstraint>> partitionedConstraints = rootNode
+        Map<Integer, List<IConstraint>> partitionedConstraints = decisionTree.getRootNode()
             .getAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(constraint -> partitionsByField.get(mapping.get(constraint).stream().findFirst().get())));
 
-        Map<Integer, List<DecisionNode>> partitionedDecisions = rootNode
+        Map<Integer, List<DecisionNode>> partitionedDecisions = decisionTree.getRootNode()
             .getDecisions()
             .stream()
             .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
 
         return partitionsById.size() == 0
-            ? Stream.of(new DecisionTree(rootNode, new ProfileFields(new ArrayList<>(mapping.get(rootNode)))))
+            ? Stream.of(new DecisionTree(decisionTree.getRootNode(), new ProfileFields(new ArrayList<>(mapping.get(decisionTree.getRootNode())))))
             : partitionsById
                 .keySet()
                 .stream()
