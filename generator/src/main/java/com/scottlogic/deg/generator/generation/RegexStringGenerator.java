@@ -86,7 +86,8 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
+        return Arrays.asList("??");
+        //return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
     }
 
     private Stream<String> generateInterestingValues(State state, String matchedValue) {
