@@ -10,7 +10,7 @@ public class ConstraintFieldSniffer {
         return new ConstraintAndFieldTuple(constraint, field);
     }
 
-    Field detectField(IConstraint constraint) {
+    public Field detectField(IConstraint constraint) {
         if (constraint instanceof NotConstraint) {
             return detectField(((NotConstraint) constraint).negatedConstraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
