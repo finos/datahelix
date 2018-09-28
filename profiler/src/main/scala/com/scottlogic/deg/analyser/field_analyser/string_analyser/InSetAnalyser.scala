@@ -14,9 +14,14 @@ class InSetAnalyser(val df: DataFrame, val field: StructField) extends StringAna
 
   override def constructField(): Rule = {
 
-    val members: List[Object] = analyse()
-
     val fieldName = field.name;
+
+    val members: List[Object] = df.select(field.name)
+                                  .map(r => r.getString(0))
+                                  .distinct
+                                  .collect()
+                                  .toList
+
 
     val allFieldConstraints: List[IConstraint] = List(
           new IsOfTypeConstraint(fieldName, "string"),
@@ -24,22 +29,5 @@ class InSetAnalyser(val df: DataFrame, val field: StructField) extends StringAna
         )
 
     return new Rule(s"String field ${fieldName} rule", allFieldConstraints.toList);
-  }
-
-  def analyse(): List[Object] = {
-    val columnName = field.name
-    val col = df(columnName)
-
-    if (col == null) {
-      throw new NullPointerException("Column does not exist")
-    }
-
-    val members = df.select(columnName)
-                        .map(r => r.getString(0))
-                        .distinct
-                        .collect()
-                        .toList
-      
-    members
   }
 }
