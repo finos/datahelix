@@ -13,4 +13,9 @@ public class ContainsRegexConstraint implements IConstraint
         this.field = field;
         this.regex = regex;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s contains '%s'", field.name, regex);
+    }
 }

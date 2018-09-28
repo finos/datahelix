@@ -14,6 +14,6 @@ public class IsGreaterThanConstantConstraint implements IConstraint
 
     @Override
     public String toString(){
-        return String.format("%s is greater than %s", field.name, referenceValue);
+        return String.format("%s > %s", field.name, referenceValue);
     }
 }

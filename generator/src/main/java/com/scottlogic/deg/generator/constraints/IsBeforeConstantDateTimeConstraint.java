@@ -12,4 +12,9 @@ import java.time.LocalDateTime;
             this.field = field;
             this.referenceValue = referenceValue;
         }
+
+        @Override
+        public String toString(){
+            return String.format("%s < '%s'", field.name, referenceValue);
+        }
     }

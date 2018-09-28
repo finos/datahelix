@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class OrConstraint implements IConstraint
 {
@@ -13,5 +14,11 @@ public class OrConstraint implements IConstraint
 
     public OrConstraint(IConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Or (%s)", subConstraints.stream()
+            .map(x -> x.toString()).collect(Collectors.joining(", ")));
     }
 }

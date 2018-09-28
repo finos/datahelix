@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class AndConstraint implements IConstraint
 {
@@ -13,5 +14,11 @@ public class AndConstraint implements IConstraint
 
     public AndConstraint(IConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
+    }
+
+    @Override
+    public String toString(){
+        return String.format("And (%s)", subConstraints.stream()
+            .map(x -> x.toString()).collect(Collectors.joining(", ")));
     }
 }

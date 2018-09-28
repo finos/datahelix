@@ -21,6 +21,6 @@ public class IsOfTypeConstraint implements IConstraint
 
     @Override
     public String toString(){
-        return String.format("%s is of type '%s'", field.name, requiredType.name());
+        return String.format("%s of type '%s'", field.name, requiredType.name());
     }
 }

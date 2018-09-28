@@ -13,6 +13,6 @@ public class IsLessThanConstantConstraint implements IConstraint {
 
     @Override
     public String toString(){
-        return String.format("%s is less than %s", field.name, referenceValue);
+        return String.format("%s < %s", field.name, referenceValue);
     }
 }

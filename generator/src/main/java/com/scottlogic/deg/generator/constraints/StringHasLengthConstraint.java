@@ -15,4 +15,9 @@ public class StringHasLengthConstraint implements IConstraint {
         this.referenceValue = referenceValue;
         this.field = field;
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s length = '%s'", field.name, referenceValue);
+    }
 }

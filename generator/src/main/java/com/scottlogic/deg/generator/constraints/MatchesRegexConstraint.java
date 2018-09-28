@@ -16,6 +16,6 @@ public class MatchesRegexConstraint implements IConstraint
 
     @Override
     public String toString(){
-        return String.format("%s matches regex '%s'", field.name, regex);
+        return String.format("%s matches '%s'", field.name, regex);
     }
 }
