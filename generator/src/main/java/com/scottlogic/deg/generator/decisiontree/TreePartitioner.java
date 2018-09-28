@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
-public class TreePartitioner {
+public class TreePartitioner implements ITreePartitioner{
     private final FieldMapper fieldMapper;
 
     public TreePartitioner() {
@@ -62,6 +62,9 @@ public class TreePartitioner {
                 ? partitionsTouched.get(0)
                 : partitionCount++;
 
+            if (partitionsTouched.size() > 1)
+                partitionsTouched.forEach(partitionsById::remove);
+
             partitionsById.put(currentPartition, fieldsToPartition);
             fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
         }
@@ -82,7 +85,7 @@ public class TreePartitioner {
                 .keySet()
                 .stream()
                 .map(id -> new DecisionTree(
-                    new ConstraintNode( // TODO: consider moving this class to decision tree so we don't have to make that constructor public
+                    new ConstraintNode(
                         partitionedConstraints.getOrDefault(id, Collections.emptyList()),
                         partitionedDecisions.getOrDefault(id, Collections.emptyList())
                     ),
