@@ -10,33 +10,33 @@ import java.util.stream.Stream;
 /**
  * Given a decision tree, find which constraints and decisions act on which fields and return a map from them to fields
  */
-class FieldMapper {
+class ConstraintToFieldMapper {
 
-    private class ObjectFields {
-        public Object object;
+    private class ConstraintToFields {
+        public Object constraint;
         public Set<Field> fields;
 
-        ObjectFields(Object object, Set<Field> fields) {
-            this.object = object;
+        ConstraintToFields(Object constraint, Set<Field> fields) {
+            this.constraint = constraint;
             this.fields = fields;
         }
 
-        ObjectFields(Object object, Field field) {
-            this.object = object;
+        ConstraintToFields(Object constraint, Field field) {
+            this.constraint = constraint;
             this.fields = Collections.singleton(field);
         }
     }
 
     private final ConstraintFieldSniffer constraintSniffer = new ConstraintFieldSniffer();
 
-    private Stream<ObjectFields> mapConstraintToFields(ConstraintNode node) {
+    private Stream<ConstraintToFields> mapConstraintToFields(ConstraintNode node) {
         return Stream.concat(
             node.getAtomicConstraints()
                 .stream()
-                .map(constraint -> new ObjectFields(constraint, constraintSniffer.detectField(constraint))),
+                .map(constraint -> new ConstraintToFields(constraint, constraintSniffer.detectField(constraint))),
             node.getDecisions()
                 .stream()
-                .map(decision -> new ObjectFields(
+                .map(decision -> new ConstraintToFields(
                     decision,
                     decision
                         .getOptions()
@@ -47,7 +47,7 @@ class FieldMapper {
                     // TODO: This will only produce mappings from the root decisions/constraints. (Technically all we need, but investigate the below if needed)
 //                        .flatMap(map -> Stream.of(
 //                            map.fields, // this part is technically not used, but no reason not to keep it
-//                            new ObjectFields(decision, map.fields)
+//                            new ConstraintToFields(decision, map.fields)
 //                        ))
         ));
     }
@@ -64,13 +64,13 @@ class FieldMapper {
 //                    .flatMap(this::mapConstraintToFields)));
 //    }
 
-    Map<Object, Set<Field>> mapRulesToFields(DecisionTree profile){
+    Map<Object, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree){
         return Stream.concat(
-                mapConstraintToFields(profile.getRootNode()),
-                Stream.of(new ObjectFields(profile.getRootNode(), profile.getFields().stream().collect(Collectors.toSet()))))
+                mapConstraintToFields(decisionTree.getRootNode()),
+                Stream.of(new ConstraintToFields(decisionTree.getRootNode(), decisionTree.getFields().stream().collect(Collectors.toSet()))))
             .collect(
                 Collectors.toMap(
-                map -> map.object,
+                map -> map.constraint,
                 map -> map.fields
             ));
     }

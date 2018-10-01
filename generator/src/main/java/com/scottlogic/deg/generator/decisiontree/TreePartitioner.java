@@ -14,18 +14,18 @@ import java.util.stream.Stream;
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
 public class TreePartitioner implements ITreePartitioner{
-    private final FieldMapper fieldMapper;
+    private final ConstraintToFieldMapper fieldMapper;
 
     public TreePartitioner() {
-        this(new FieldMapper());
+        this(new ConstraintToFieldMapper());
     }
 
-    public TreePartitioner(FieldMapper fieldMapper) {
+    public TreePartitioner(ConstraintToFieldMapper fieldMapper) {
         this.fieldMapper = fieldMapper;
     }
 
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
-        final Map<Object, Set<Field>> mapping = fieldMapper.mapRulesToFields(decisionTree);
+        final Map<Object, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
 
         final Map<Field, Integer> partitionsByField = new HashMap<>();
         final Map<Integer, Set<Field>> partitionsById = new HashMap<>();
@@ -69,12 +69,12 @@ public class TreePartitioner implements ITreePartitioner{
             fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
         }
 
-        Map<Integer, List<IConstraint>> partitionedConstraints = decisionTree.getRootNode()
+        final Map<Integer, List<IConstraint>> partitionedConstraints = decisionTree.getRootNode()
             .getAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(constraint -> partitionsByField.get(mapping.get(constraint).stream().findFirst().get())));
 
-        Map<Integer, List<DecisionNode>> partitionedDecisions = decisionTree.getRootNode()
+        final Map<Integer, List<DecisionNode>> partitionedDecisions = decisionTree.getRootNode()
             .getDecisions()
             .stream()
             .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
