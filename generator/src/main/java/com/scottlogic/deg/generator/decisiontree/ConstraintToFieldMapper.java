@@ -44,30 +44,11 @@ class ConstraintToFieldMapper {
                         .flatMap(this::mapConstraintToFields)
                         .flatMap(objectField -> objectField.fields.stream())
                         .collect(Collectors.toSet()))
-                    // TODO: This will only produce mappings from the root decisions/constraints. (Technically all we need, but investigate the below if needed)
-//                        .flatMap(map -> Stream.of(
-//                            map.fields, // this part is technically not used, but no reason not to keep it
-//                            new ConstraintToFields(decision, map.fields)
-//                        ))
         ));
     }
 
-//    private Stream<Field> mapConstraintToFields(ConstraintNode node) {
-//        return Stream.concat(
-//            node.getAtomicConstraints()
-//                .stream()
-//                .map(constraintSniffer::detectField),
-//            node.getDecisions()
-//                .stream()
-//                .flatMap(decision -> decision.getOptions()
-//                    .stream()
-//                    .flatMap(this::mapConstraintToFields)));
-//    }
-
     Map<Object, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree){
-        return Stream.concat(
-                mapConstraintToFields(decisionTree.getRootNode()),
-                Stream.of(new ConstraintToFields(decisionTree.getRootNode(), decisionTree.getFields().stream().collect(Collectors.toSet()))))
+        return mapConstraintToFields(decisionTree.getRootNode())
             .collect(
                 Collectors.toMap(
                 map -> map.constraint,

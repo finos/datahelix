@@ -79,18 +79,16 @@ public class TreePartitioner implements ITreePartitioner{
             .stream()
             .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
 
-        return partitionsById.size() == 0
-            ? Stream.of(new DecisionTree(decisionTree.getRootNode(), new ProfileFields(new ArrayList<>(mapping.get(decisionTree.getRootNode())))))
-            : partitionsById
-                .keySet()
-                .stream()
-                .map(id -> new DecisionTree(
-                    new ConstraintNode(
-                        partitionedConstraints.getOrDefault(id, Collections.emptyList()),
-                        partitionedDecisions.getOrDefault(id, Collections.emptyList())
-                    ),
-                    new ProfileFields(new ArrayList<>(partitionsById.get(id))
-                )));
+        return  partitionsById
+            .keySet()
+            .stream()
+            .map(id -> new DecisionTree(
+                new ConstraintNode(
+                    partitionedConstraints.getOrDefault(id, Collections.emptyList()),
+                    partitionedDecisions.getOrDefault(id, Collections.emptyList())
+                ),
+                new ProfileFields(new ArrayList<>(partitionsById.get(id))
+            )));
 //            .map(id -> new ConstraintNode(
 //                partitionedConstraints.getOrDefault(id, Collections.emptyList()),
 //                partitionedDecisions.getOrDefault(id, Collections.emptyList())
