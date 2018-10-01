@@ -4,8 +4,7 @@ import com.scottlogic.deg.generator.Field;
 
 import java.util.Set;
 
-public class IsInSetConstraint implements IConstraint
-{
+public class IsInSetConstraint implements IConstraint {
     public final Field field;
     public final Set<Object> legalValues;
 
@@ -13,8 +12,8 @@ public class IsInSetConstraint implements IConstraint
         this.field = field;
         this.legalValues = legalValues;
 
-        if(legalValues.isEmpty()){
-            throw new IllegalStateException("Cannot create an IsInSetConstraint for field '" +
+        if (legalValues.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with an empty set.");
         }
     }

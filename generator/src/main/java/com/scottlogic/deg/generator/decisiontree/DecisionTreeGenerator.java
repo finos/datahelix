@@ -11,6 +11,52 @@ import java.util.stream.Collectors;
 public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
+    private static Collection<IConstraint> wrapEach(Collection<IConstraint> constraints,
+                                                    Function<IConstraint, IConstraint> wrapFunc) {
+        return constraints.stream()
+            .map(wrapFunc)
+            .collect(Collectors.toList());
+    }
+
+    private static Collection<IConstraint> negateEach(Collection<IConstraint> constraints) {
+        return wrapEach(constraints, NotConstraint::new);
+    }
+
+    private static Collection<IConstraint> violateEach(Collection<IConstraint> constraints) {
+        return wrapEach(constraints, ViolateConstraint::new);
+    }
+
+    private static IConstraint reduceConditionalConstraint(IConstraint constraint) {
+        ConditionalConstraint constraintAsCondition = ((ConditionalConstraint) constraint);
+        IConstraint ifConstraint = constraintAsCondition.condition;
+        IConstraint thenConstraint = constraintAsCondition.whenConditionIsTrue;
+        IConstraint elseConstraint = constraintAsCondition.whenConditionIsFalse;
+
+        return new OrConstraint(
+            ifConstraint.and(thenConstraint),
+            elseConstraint != null
+                ? ifConstraint.isFalse().and(elseConstraint)
+                : ifConstraint.isFalse());
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
+        return Collections.singleton(
+            new ConstraintNode(
+                constraints,
+                Collections.emptyList()));
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(IConstraint constraint) {
+        return asConstraintNodeList(Collections.singleton(constraint));
+    }
+
+    private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
+        return Collections.singleton(
+            new ConstraintNode(
+                Collections.emptyList(),
+                Collections.singleton(decision)));
+    }
+
     @Override
     public DecisionTreeCollection analyse(Profile profile) {
         return new DecisionTreeCollection(
@@ -30,7 +76,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     private Collection<ConstraintNode> convertConstraint(IConstraint constraintToConvert) {
-        if (constraintToConvert instanceof ViolateConstraint){
+        if (constraintToConvert instanceof ViolateConstraint) {
             IConstraint violatedConstraint = ((ViolateConstraint) constraintToConvert).violatedConstraint;
 
             // VIOLATE(AND(X, Y, Z)) reduces to
@@ -70,13 +116,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
                 IConstraint positiveViolation = new AndConstraint(
                     conditional.condition,
-                        new ViolateConstraint(conditional.whenConditionIsTrue));
+                    new ViolateConstraint(conditional.whenConditionIsTrue));
 
                 IConstraint negativeViolation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
-                        new ViolateConstraint(conditional.condition),
-                        new ViolateConstraint(conditional.whenConditionIsFalse));
+                    new ViolateConstraint(conditional.condition),
+                    new ViolateConstraint(conditional.whenConditionIsFalse));
 
                 return convertConstraint(
                     negativeViolation != null
@@ -86,8 +132,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             // we've got an atomic constraint
             return convertConstraint(new NotConstraint(violatedConstraint));
-        }
-        else if (constraintToConvert instanceof NotConstraint) {
+        } else if (constraintToConvert instanceof NotConstraint) {
             IConstraint negatedConstraint = ((NotConstraint) constraintToConvert).negatedConstraint;
 
             // ¬¬X reduces to X
@@ -120,8 +165,8 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 IConstraint negativeNegation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
-                        new NotConstraint(conditional.condition),
-                        new NotConstraint(conditional.whenConditionIsFalse));
+                    new NotConstraint(conditional.condition),
+                    new NotConstraint(conditional.whenConditionIsFalse));
 
                 return convertConstraint(
                     negativeNegation != null
@@ -151,56 +196,11 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                     .collect(Collectors.toList()));
 
             return asConstraintNodeList(decisionPoint);
-        }
-        else if (constraintToConvert instanceof ConditionalConstraint) {
+        } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConstraint(reduceConditionalConstraint(constraintToConvert));
-        }
-        else {
+        } else {
             return asConstraintNodeList(constraintToConvert);
         }
-    }
-
-    private static Collection<IConstraint> wrapEach(Collection<IConstraint> constraints, Function<IConstraint, IConstraint> wrapFunc) {
-        return constraints.stream()
-            .map(NotConstraint::new)
-            .collect(Collectors.toList());
-    }
-    private static Collection<IConstraint> negateEach(Collection<IConstraint> constraints) {
-        return wrapEach(constraints, NotConstraint::new);
-    }
-    private static Collection<IConstraint> violateEach(Collection<IConstraint> constraints) {
-        return wrapEach(constraints, ViolateConstraint::new);
-    }
-
-    private static IConstraint reduceConditionalConstraint(IConstraint constraint) {
-        ConditionalConstraint constraintAsCondition = ((ConditionalConstraint) constraint);
-        IConstraint ifConstraint = constraintAsCondition.condition;
-        IConstraint thenConstraint = constraintAsCondition.whenConditionIsTrue;
-        IConstraint elseConstraint = constraintAsCondition.whenConditionIsFalse;
-
-        return new OrConstraint(
-            ifConstraint.and(thenConstraint),
-            elseConstraint != null
-                ? ifConstraint.isFalse().and(elseConstraint)
-                : ifConstraint.isFalse());
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
-        return Collections.singleton(
-            new ConstraintNode(
-                constraints,
-                Collections.emptyList()));
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(IConstraint constraint) {
-        return asConstraintNodeList(Collections.singleton(constraint));
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
-        return Collections.singleton(
-            new ConstraintNode(
-                Collections.emptyList(),
-                Collections.singleton(decision)));
     }
 
     class DecisionTreeSimplifier {
@@ -234,8 +234,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                         simplifiedNode.getDecisions()
                             .iterator().next() //get only member
                             .getOptions());
-                }
-                else {
+                } else {
                     newNodes.add(simplifiedNode);
                 }
             }

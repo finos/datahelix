@@ -92,21 +92,6 @@ public class RegexStringGenerator implements IStringGenerator {
         return () -> Arrays.asList(shortestString, longestString).iterator();
     }
 
-    private Stream<String> generateInterestingValues(State state, String matchedValue) {
-        Stream<String> matchedValueStream = state.isAccept()
-            ? Stream.of(matchedValue)
-            : Stream.empty();
-
-        Stream<String> subTransitionStream = state
-            .getTransitions()
-            .stream()
-            .filter(x -> x.getDest() != state)
-            .flatMap(transition ->
-                generateInterestingValues(transition.getDest(), matchedValue + (char) Math.max(transition.getMin(), 32))); // 32 first printable ASCII char (space)
-
-        return Stream.concat(matchedValueStream, subTransitionStream);
-    }
-
     @Override
     public Iterable<String> generateAllValues() {
         if (this.isFinite()) {

@@ -1,27 +1,33 @@
-    package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator;
 
-    import com.scottlogic.deg.generator.constraints.AndConstraint;
-    import com.scottlogic.deg.generator.constraints.IConstraint;
-    import com.scottlogic.deg.generator.decisiontree.*;
-    import com.scottlogic.deg.generator.generation.DataGenerator;
-    import com.scottlogic.deg.generator.generation.GenerationConfig;
-    import com.scottlogic.deg.generator.generation.IDataGenerator;
-    import com.scottlogic.deg.generator.inputs.ProfileReader;
-    import com.scottlogic.deg.generator.outputs.*;
-    import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-    import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-    import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-    import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.constraints.AndConstraint;
+import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.ViolateConstraint;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
+import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
+import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
+import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
-    import java.nio.file.Paths;
-    import java.util.Collection;
-    import java.util.Collections;
-    import java.util.List;
-    import java.util.stream.Collectors;
-    import java.util.stream.Stream;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator profileAnalyser  = new DecisionTreeGenerator();
+    private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator = new DataGenerator(
         new RowSpecMerger(fieldSpecMerger),
@@ -40,8 +46,7 @@ public class GenerationEngine {
 
         try {
             profile = new ProfileReader().read(Paths.get(profileFilePath));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to read file!");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
@@ -58,8 +63,7 @@ public class GenerationEngine {
 
         try {
             this.outputter.output(generationResult);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to write generation result");
         }
     }
@@ -69,8 +73,7 @@ public class GenerationEngine {
 
         try {
             profile = new ProfileReader().read(Paths.get(profileFilePath));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to read file!");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
@@ -110,8 +113,7 @@ public class GenerationEngine {
 
         try {
             this.outputter.output(generationResult);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to write generation result");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
