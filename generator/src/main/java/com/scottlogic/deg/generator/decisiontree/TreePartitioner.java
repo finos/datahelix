@@ -20,7 +20,7 @@ public class TreePartitioner implements ITreePartitioner{
         this(new ConstraintToFieldMapper());
     }
 
-    public TreePartitioner(ConstraintToFieldMapper fieldMapper) {
+    TreePartitioner(ConstraintToFieldMapper fieldMapper) {
         this.fieldMapper = fieldMapper;
     }
 
