@@ -8,6 +8,7 @@ public enum AtomicConstraintType {
     ISOFTYPE("ofType"),
 
     MATCHESREGEX("matchingRegex"),
+    CONTAINSREGEX("containingRegex"),
     FORMATTEDAS("formattedAs"),
     AVALID("aValid"),
 

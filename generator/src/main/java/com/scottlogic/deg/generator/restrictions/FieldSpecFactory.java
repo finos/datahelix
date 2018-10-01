@@ -45,6 +45,8 @@ public class FieldSpecFactory {
             return constructIsNull(negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
             return construct((MatchesRegexConstraint) constraint, negate);
+        } else if (constraint instanceof ContainsRegexConstraint) {
+            return construct((ContainsRegexConstraint) constraint, negate);
         } else if (constraint instanceof MatchesStandardConstraint) {
             return construct((MatchesStandardConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
@@ -201,7 +203,11 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
-        return constructPattern(constraint.regex, negate);
+        return constructPattern(constraint.regex, negate, true);
+    }
+
+    private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate) {
+        return constructPattern(constraint.regex, negate, false);
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
@@ -222,21 +228,21 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
         final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
-        return constructPattern(regex, negate);
+        return constructPattern(regex, negate, true);
     }
 
     private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate) {
         final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue + 1));
-        return constructPattern(regex, negate);
+        return constructPattern(regex, negate, true);
     }
 
     private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate) {
         final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
-        return constructPattern(regex, negate);
+        return constructPattern(regex, negate, true);
     }
 
-    private FieldSpec constructPattern(Pattern pattern, boolean negate) {
-        return constructGenerator(new RegexStringGenerator(pattern.toString()), negate);
+    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString) {
+        return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate);
     }
 
     private FieldSpec constructGenerator(IStringGenerator generator, boolean negate) {

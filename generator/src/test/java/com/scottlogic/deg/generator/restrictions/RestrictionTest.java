@@ -28,7 +28,7 @@ public class RestrictionTest {
     public void shouldFilterString() {
         StringRestrictions restriction = new StringRestrictions();
 
-        restriction.stringGenerator = new RegexStringGenerator("H(i|ello) World");
+        restriction.stringGenerator = new RegexStringGenerator("H(i|ello) World", true);
 
         Assert.assertThat(restriction.match("Hello World"), Is.is(true));
         Assert.assertThat(restriction.match("Hi World"), Is.is(true));

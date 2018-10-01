@@ -8,13 +8,13 @@ import java.util.Collection;
 @JsonDeserialize(using = RuleDeserializer.class)
 @JsonSerialize(using = RuleSerializer.class)
 public class RuleDTO {
-    public String description;
+    public String rule;
     public Collection<ConstraintDTO> constraints;
 
     public RuleDTO() {}
 
-    public RuleDTO(String description, Collection<ConstraintDTO> constraints){
-        this.description = description;
+    public RuleDTO(String rule, Collection<ConstraintDTO> constraints){
+        this.rule = rule;
         this.constraints = constraints;
     }
 }

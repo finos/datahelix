@@ -12,6 +12,11 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
     val builder = ConstraintDTOBuilder.instance;
 
     original match {
+      case instance: IsAValidConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.AVALID.toString)
+          .appendValue(instance.Value)
+          .Build;
       case instance: IsOfTypeConstraint =>
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.ISOFTYPE.toString)
@@ -32,10 +37,10 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
           .appendIs(AtomicConstraintType.MATCHESREGEX.toString)
           .appendValue(instance.Value)
           .Build;
-      case instance: HasDecimalPlacesConstraint =>
+      case instance: GranularToConstraint => 
         builder.appendField(instance.FieldName)
-          .appendIs("hasDecimalPlaces")
-          .appendValue(instance.NumberOfDecimalPlaces)
+          .appendIs(AtomicConstraintType.ISGRANULARTO.toString)
+          .appendValue(instance.Value)
           .Build;
       case _ =>
         throw new IllegalArgumentException("Can't convert constraint of supplied type")

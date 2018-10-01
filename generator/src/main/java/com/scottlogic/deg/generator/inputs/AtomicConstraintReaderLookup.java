@@ -16,10 +16,9 @@ import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
     private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
-    private static final Map<String, IStringGenerator> standardNameToStringGenerator;
 
     static {
-        standardNameToStringGenerator = new HashMap<>();
+        Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
         standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
 
         typeCodeToSpecificReader = new HashMap<>();
@@ -41,6 +40,12 @@ public class AtomicConstraintReaderLookup {
                         new IsInSetConstraint(
                                 fields.getByName(dto.field),
                                 new HashSet<>(dto.values)));
+
+        add(AtomicConstraintType.CONTAINSREGEX.toString(),
+            (dto, fields) ->
+                new ContainsRegexConstraint(
+                    fields.getByName(dto.field),
+                    Pattern.compile((String) dto.value)));
 
         add(AtomicConstraintType.MATCHESREGEX.toString(),
                 (dto, fields) ->

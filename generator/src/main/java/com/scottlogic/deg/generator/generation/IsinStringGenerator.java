@@ -12,12 +12,12 @@ public class IsinStringGenerator implements IStringGenerator {
 
     private static final String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
 
-    private List<String> validCountryCodes;
-    private boolean negate;
+    private final List<String> validCountryCodes;
+    private final boolean negate;
 
     public IsinStringGenerator() {
         this.negate = false;
-        this.validCountryCodes = Isin.VALID_COUNTRY_CODES;
+        this.validCountryCodes = IsinUtils.VALID_COUNTRY_CODES;
     }
 
     public IsinStringGenerator(List<String> validCountryCodes) {
@@ -65,12 +65,12 @@ public class IsinStringGenerator implements IStringGenerator {
 
     @Override
     public boolean match(String subject) {
-        return Isin.isValidIsin(subject);
+        return IsinUtils.isValidIsin(subject);
     }
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        throw new UnsupportedOperationException();
+        return new LimitingIterable<>(generateAllValues(), 1);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class IsinStringGenerator implements IStringGenerator {
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
                 .map(isinSansCheckDigitGenerator ->
                         new ProjectingIterable<>(isinSansCheckDigitGenerator.generateAllValues(),
-                                isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit)))
+                                isinSansCheckDigit -> isinSansCheckDigit + IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit)))
                 .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
@@ -103,7 +103,7 @@ public class IsinStringGenerator implements IStringGenerator {
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
                 .map(isinSansCheckDigitGenerator ->
                         new ProjectingIterable<>(isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-                                isinSansCheckDigit -> isinSansCheckDigit + Isin.calculateIsinCheckDigit(isinSansCheckDigit)))
+                                isinSansCheckDigit -> isinSansCheckDigit + IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit)))
                 .collect(Collectors.toList());
         return new RandomMergingIterable<>(countryCodeIterables, randomNumberGenerator);
     }
@@ -111,13 +111,13 @@ public class IsinStringGenerator implements IStringGenerator {
     private Iterable<String> generateAllInvalidCountryStrings() {
         final String invalidCountryCodeRegex = validCountryCodes.stream()
                 .collect(Collectors.joining("|", "((?!", ")).*"));
-        return new RegexStringGenerator(invalidCountryCodeRegex).generateAllValues();
+        return new RegexStringGenerator(invalidCountryCodeRegex, true).generateAllValues();
     }
 
     private Iterable<String> generateRandomInvalidCountryStrings(IRandomNumberGenerator randomNumberGenerator) {
         final String invalidCountryCodeRegex = validCountryCodes.stream()
                 .collect(Collectors.joining("|", "((?!", ")).*"));
-        return new RegexStringGenerator(invalidCountryCodeRegex).generateRandomValues(randomNumberGenerator);
+        return new RegexStringGenerator(invalidCountryCodeRegex, true).generateRandomValues(randomNumberGenerator);
     }
 
     private Iterable<String> generateAllCountriesWithInvalidNsins() {
@@ -129,7 +129,7 @@ public class IsinStringGenerator implements IStringGenerator {
                 })
                 .collect(Collectors.toList());
         return new FilteringIterable<>(new ConcatenatingIterable<>(countryWithInvalidNsinIterables),
-                isin -> !Isin.isValidIsin(isin));
+                isin -> !IsinUtils.isValidIsin(isin));
     }
 
     private Iterable<String> generateRandomCountriesWithInvalidNsins(IRandomNumberGenerator randomNumberGenerator) {
@@ -141,16 +141,16 @@ public class IsinStringGenerator implements IStringGenerator {
                 })
                 .collect(Collectors.toList());
         return new FilteringIterable<>(new RandomMergingIterable<>(countryWithInvalidNsinIterables, randomNumberGenerator),
-                isin -> !Isin.isValidIsin(isin));
+                isin -> !IsinUtils.isValidIsin(isin));
     }
 
     private Iterable<String> generateAllInvalidCheckDigitIsins() {
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
                 .map(isinSansCheckDigitGenerator ->
-                        new ExpandingIterable<>(
+                        new FlatteningIterable<>(
                                 isinSansCheckDigitGenerator.generateAllValues(),
                                 isinSansCheckDigit -> {
-                                    final char checkDigit = Isin.calculateIsinCheckDigit(isinSansCheckDigit);
+                                    final char checkDigit = IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit);
                                     return IntStream.range(0, 10).boxed()
                                             .map(digit -> Character.forDigit(digit, 10))
                                             .filter(digit -> digit != checkDigit)
@@ -164,10 +164,10 @@ public class IsinStringGenerator implements IStringGenerator {
     private Iterable<String> generateRandomInvalidCheckDigitIsins(IRandomNumberGenerator randomNumberGenerator) {
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
                 .map(isinSansCheckDigitGenerator ->
-                        new ExpandingIterable<>(
+                        new FlatteningIterable<>(
                                 isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
                                 isinSansCheckDigit -> {
-                                    final char checkDigit = Isin.calculateIsinCheckDigit(isinSansCheckDigit);
+                                    final char checkDigit = IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit);
                                     return IntStream.range(0, 10).boxed()
                                             .map(digit -> Character.forDigit(digit, 10))
                                             .filter(digit -> digit != checkDigit)
@@ -187,13 +187,13 @@ public class IsinStringGenerator implements IStringGenerator {
         if (countryCode.equals("GB")) {
             return new SedolStringGenerator(countryCode);
         }
-        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX);
+        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX, true);
     }
 
     private static IStringGenerator getNsinGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
             return new SedolStringGenerator();
         }
-        return new RegexStringGenerator(GENERIC_NSIN_REGEX);
+        return new RegexStringGenerator(GENERIC_NSIN_REGEX, true);
     }
 }

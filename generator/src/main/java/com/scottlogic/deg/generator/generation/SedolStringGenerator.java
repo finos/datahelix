@@ -9,19 +9,19 @@ import java.util.stream.IntStream;
 
 public class SedolStringGenerator implements IStringGenerator {
 
-    private static String SEDOL_SANS_CHECK_DIGIT_REGEX = "00[B-DF-HJ-NP-TV-Z0-9]{6}";
+    private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "00[B-DF-HJ-NP-TV-Z0-9]{6}";
 
-    private RegexStringGenerator sedolSansCheckDigitGenerator;
-    private boolean negate;
+    private final RegexStringGenerator sedolSansCheckDigitGenerator;
+    private final boolean negate;
 
     public SedolStringGenerator() {
         this.negate = false;
-        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(SEDOL_SANS_CHECK_DIGIT_REGEX);
+        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(SEDOL_SANS_CHECK_DIGIT_REGEX, true);
     }
 
     public SedolStringGenerator(String prefix) {
         this.negate = false;
-        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX);
+        this.sedolSansCheckDigitGenerator = new RegexStringGenerator(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX, true);
     }
 
     private SedolStringGenerator(RegexStringGenerator sedolSansCheckDigitGenerator, boolean negate) {
@@ -31,7 +31,7 @@ public class SedolStringGenerator implements IStringGenerator {
 
     @Override
     public IStringGenerator intersect(IStringGenerator stringGenerator) {
-        throw new UnsupportedOperationException();
+        return this;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class SedolStringGenerator implements IStringGenerator {
 
     @Override
     public boolean match(String subject) {
-        return Isin.isValidSedolNsin(subject);
+        return IsinUtils.isValidSedolNsin(subject);
     }
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        throw new UnsupportedOperationException();
+        return new LimitingIterable<>(generateAllValues(), 1);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SedolStringGenerator implements IStringGenerator {
                     Arrays.asList(generateAllInvalidRegexSedols(), generateAllInvalidCheckDigitSedols()));
         }
         return new ProjectingIterable<>(sedolSansCheckDigitGenerator.generateAllValues(),
-                sedolSansCheckDigit -> sedolSansCheckDigit + Isin.calculateSedolCheckDigit(
+                sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(
                         sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6)));
     }
 
@@ -78,7 +78,7 @@ public class SedolStringGenerator implements IStringGenerator {
                     randomNumberGenerator);
         }
         return new ProjectingIterable<>(sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-                sedolSansCheckDigit -> sedolSansCheckDigit + Isin.calculateSedolCheckDigit(sedolSansCheckDigit.substring(4)));
+                sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(sedolSansCheckDigit.substring(4)));
     }
 
     private Iterable<String> generateAllInvalidRegexSedols() {
@@ -99,10 +99,10 @@ public class SedolStringGenerator implements IStringGenerator {
     }
 
     private Iterable<String> generateInvalidCheckDigitSedols(Supplier<Iterable<String>> sedolSansCheckDigitSupplier) {
-        return new ExpandingIterable<>(
+        return new FlatteningIterable<>(
                 sedolSansCheckDigitSupplier.get(),
                 sedolSansCheckDigit -> {
-                    final char checkDigit = Isin.calculateSedolCheckDigit(
+                    final char checkDigit = IsinUtils.calculateSedolCheckDigit(
                             sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6));
                     return IntStream.range(0, 10).boxed()
                             .map(digit -> Character.forDigit(digit, 10))

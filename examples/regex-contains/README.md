@@ -1,0 +1,1 @@
+Generates strings containing `^(Joh?n|Mar[yk])$`. This should generate the same ouput as [../regex](../regex). Start and end anchors `^` & `$` are required here because generating an infinite string is impossible.

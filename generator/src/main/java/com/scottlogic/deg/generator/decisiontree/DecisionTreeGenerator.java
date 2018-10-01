@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 
@@ -11,14 +12,21 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     @Override
-    public DecisionTree generateTreeFor(Rule rule) {
+    public DecisionTreeCollection analyse(Profile profile) {
+        return new DecisionTreeCollection(
+            profile.fields,
+            profile.rules.stream()
+                .map(rule -> new DecisionTree(convertRule(rule), profile.fields))
+                .map(decisionTreeSimplifier::simplify)
+                .collect(Collectors.toList()));
+    }
+
+    private ConstraintNode convertRule(Rule rule) {
         Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
             .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
-        ConstraintNode rootNode = ConstraintNode.merge(rootConstraintNodeFragments);
-
-        return this.decisionTreeSimplifier.simplify(new DecisionTree(rootNode));
+        return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
     private Collection<ConstraintNode> convertConstraint(IConstraint constraintToConvert) {
@@ -196,12 +204,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     class DecisionTreeSimplifier {
-        DecisionTree simplify(DecisionTree originalTree) {
+        public DecisionTree simplify(DecisionTree originalTree) {
             return new DecisionTree(
-                simplify(originalTree.getRootNode()));
+                simplify(originalTree.getRootNode()),
+                originalTree.getFields());
         }
 
-        private ConstraintNode simplify(ConstraintNode node) {
+        public ConstraintNode simplify(ConstraintNode node) {
             if (node.getDecisions().isEmpty())
                 return node;
 

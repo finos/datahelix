@@ -1,34 +1,33 @@
-package com.scottlogic.deg.generator;
+    package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.AndConstraint;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.*;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+    import com.scottlogic.deg.generator.constraints.AndConstraint;
+    import com.scottlogic.deg.generator.constraints.IConstraint;
+    import com.scottlogic.deg.generator.decisiontree.*;
+    import com.scottlogic.deg.generator.generation.DataGenerator;
+    import com.scottlogic.deg.generator.generation.GenerationConfig;
+    import com.scottlogic.deg.generator.generation.IDataGenerator;
+    import com.scottlogic.deg.generator.inputs.ProfileReader;
+    import com.scottlogic.deg.generator.outputs.*;
+    import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+    import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+    import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+    import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+    import java.nio.file.Paths;
+    import java.util.Collection;
+    import java.util.Collections;
+    import java.util.List;
+    import java.util.stream.Collectors;
+    import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
+    private final IDecisionTreeGenerator profileAnalyser  = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator = new DataGenerator(
-            new RowSpecMerger(fieldSpecMerger),
-            new ConstraintReducer(
-                    new FieldSpecFactory(),
-                    fieldSpecMerger));
+        new RowSpecMerger(fieldSpecMerger),
+        new ConstraintReducer(
+            new FieldSpecFactory(),
+            fieldSpecMerger));
 
     private final IDataSetOutputter outputter;
 
@@ -36,7 +35,7 @@ public class GenerationEngine {
         this.outputter = outputter;
     }
 
-    public void generateDataSet(String profileFilePath) {
+    public void generateDataSet(String profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
@@ -50,12 +49,12 @@ public class GenerationEngine {
             return;
         }
 
-        final TestCaseDataSet dataSet = generate(profile, profile.rules, null);
+        final TestCaseDataSet validCase = generate(profile, config, "");
 
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
-            Collections.singleton(dataSet));
+            Collections.singleton(validCase));
 
         try {
             this.outputter.output(generationResult);
@@ -65,7 +64,7 @@ public class GenerationEngine {
         }
     }
 
-    public void generateTestCases(String profileFilePath) {
+    public void generateTestCases(String profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
@@ -79,20 +78,26 @@ public class GenerationEngine {
             return;
         }
 
-        final TestCaseDataSet validCase = generate(profile, profile.rules, null);
+        final TestCaseDataSet validCase = generate(profile, config, "");
 
         System.out.println("Valid cases generated, starting violation generation...");
 
         final List<TestCaseDataSet> violatingCases = profile.rules.stream()
             .map(rule ->
-                generate(
-                    profile,
-                    profile.rules.stream()
-                        .map(r -> r == rule
-                            ? violateRule(rule)
-                            : r)
-                        .collect(Collectors.toList()),
-                    rule.description))
+            {
+                Collection<Rule> violatedRule = profile.rules.stream()
+                    .map(r -> r == rule
+                        ? violateRule(rule)
+                        : r)
+                    .collect(Collectors.toList());
+
+                Profile violatingProfile = new Profile(profile.fields, violatedRule);
+
+                return generate(
+                    violatingProfile,
+                    config,
+                    rule.description);
+            })
             .collect(Collectors.toList());
 
 
@@ -114,19 +119,14 @@ public class GenerationEngine {
         }
     }
 
-    private TestCaseDataSet generate(Profile profile, Collection<Rule> rules, String violationDescription) {
-        final Map<Rule, DecisionTree> ruleToDecisionTree =
-            rules.stream().collect(
-                Collectors.toMap(
-                    Function.identity(),
-                    this.decisionTreeGenerator::generateTreeFor));
+    private TestCaseDataSet generate(Profile profile, GenerationConfig config, String violationDescription) {
 
-        final ProfileDecisionTreeCollection collection = new ProfileDecisionTreeCollection(
-            ruleToDecisionTree);
+        final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
 
         final Iterable<TestCaseDataRow> validRows = this.dataGenerator.generateData(
-            profile.fields,
-            collection);
+            profile,
+            analysedProfile.getMergedTree(),
+            config);
 
         return new TestCaseDataSet(violationDescription, validRows);
     }
@@ -143,5 +143,4 @@ public class GenerationEngine {
         return new Rule(rule.description, Collections.singleton(violateConstraint));
     }
 }
-
 

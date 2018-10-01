@@ -26,7 +26,7 @@ public class AutomationUtils {
         StringBuilder sb = new StringBuilder();
 
         for (Transition transition : solution) {
-            sb.append((char) Math.max('~', transition.getMin()));
+            sb.append((char) Math.max(' ', transition.getMin()));
         }
 
         return sb.toString();
@@ -74,7 +74,7 @@ public class AutomationUtils {
             } else
                 for (Transition t : q.getTransitions()) {
                     String tp = path.get(t.getDest());
-                    String np = p + (char) Math.max(t.getMin(), '~');
+                    String np = p + (char) Math.max(t.getMin(), ' ');
                     if (tp == null || (tp.length() == np.length() && np.compareTo(tp) < 0)) {
                         if (tp == null)
                             queue.addLast(t.getDest());

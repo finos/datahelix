@@ -22,6 +22,11 @@ object App {
   val usage =
     """
 Usage: java com.scottlogic.deg.App inputFile outputDir
+  The basename of the input file will be used to construct the name
+  of the output JSON file.  For example, if the input file is 
+    isin_example.csv
+  then the output file will be called 
+    isin_example.json
     """
 
   def main(args: Array[String]) {
@@ -47,7 +52,8 @@ class DEGApp @Inject()(
                       ) {
   def run(params: Params): Unit = {
     val inFile = new File(params.inputPath)
-    val outFile = new File(params.outputDir, "test-output.json")
+    val baseName = inFile.getName().replaceFirst("[.][^.]+$", "")
+    val outFile = new File(params.outputDir, baseName + ".json")
 
     val df = fileReader.readCSV(inFile)
     val classification = DataFrameClassifier.analyse(df)

@@ -1,0 +1,9 @@
+{
+    "schemaVersion": "v3",
+    "fields": [
+        { "name": "isin" }
+    ],
+    "rules": [
+		{ "field": "isin", "is": "aValid", "value": "ISIN" }
+	]
+}

@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import org.junit.Assert;
@@ -19,12 +21,22 @@ import static org.hamcrest.Matchers.notNullValue;
 class ExampleProfilesTests {
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> generationEngine.generateTestCases(profileFile.getAbsolutePath())));
+        return forEachProfileFile(((generationEngine, profileFile) ->
+        {
+            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+                new FieldExhaustiveCombinationStrategy());
+            generationEngine.generateTestCases(profileFile.getAbsolutePath(), config);
+        }));
     }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> generationEngine.generateDataSet(profileFile.getAbsolutePath())));
+        return forEachProfileFile(((generationEngine, profileFile) ->
+        {
+            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+                new FieldExhaustiveCombinationStrategy());
+            generationEngine.generateDataSet(profileFile.getAbsolutePath(), config);
+        }));
     }
 
     private Collection<DynamicTest> forEachProfileFile(BiConsumer<GenerationEngine, File> consumer) throws IOException {
@@ -38,9 +50,14 @@ class ExampleProfilesTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-            GenerationEngine engine = new GenerationEngine(new NullDataSetOutputter());
+            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+                new FieldExhaustiveCombinationStrategy());
 
-            DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> consumer.accept(engine, profileFile));
+            DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
+                new GenerationEngine(
+                        new NullDataSetOutputter())
+                    .generateTestCases(profileFile.getAbsolutePath(), config);
+            });
 
             dynamicTests.add(test);
         }

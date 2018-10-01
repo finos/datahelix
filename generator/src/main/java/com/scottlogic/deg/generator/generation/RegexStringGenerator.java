@@ -32,8 +32,9 @@ public class RegexStringGenerator implements IStringGenerator {
     private boolean isRootNodeBuilt;
     private int preparedTransactionNode;
 
-    public RegexStringGenerator(String regexStr) {
-        final String requotedStr = escapeCharacters(regexStr);
+    public RegexStringGenerator(String regexStr, boolean matchFullString) {
+        final String anchoredStr = convertEndAnchors(regexStr, matchFullString);
+        final String requotedStr = escapeCharacters(anchoredStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
@@ -168,6 +169,26 @@ public class RegexStringGenerator implements IStringGenerator {
             sb.replace(matcher.start(), matcher.end(), patternSpecial.matcher(matcher.group(1)).replaceAll("\\\\$0"));
         }
         return sb.toString();
+    }
+
+    private String convertEndAnchors(String regexStr, boolean matchFullString) {
+        final Matcher startAnchorMatcher = Pattern.compile("^\\^").matcher(regexStr);
+
+        if (startAnchorMatcher.find()) {
+            regexStr = startAnchorMatcher.replaceAll(""); // brics.RegExp doesn't use anchors - they're treated as literal ^/$ characters
+        } else if (!matchFullString) {
+            regexStr = ".*" + regexStr; // brics.RegExp only supports full string matching, so add .* to simulate it
+        }
+
+        final Matcher endAnchorMatcher = Pattern.compile("\\$$").matcher(regexStr);
+
+        if (endAnchorMatcher.find()) {
+            regexStr = endAnchorMatcher.replaceAll("");
+        } else if (!matchFullString) {
+            regexStr = regexStr + ".*";
+        }
+
+        return regexStr;
     }
 
     /*

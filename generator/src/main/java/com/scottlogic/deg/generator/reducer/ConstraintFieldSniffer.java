@@ -10,7 +10,7 @@ public class ConstraintFieldSniffer {
         return new ConstraintAndFieldTuple(constraint, field);
     }
 
-    Field detectField(IConstraint constraint) {
+    public Field detectField(IConstraint constraint) {
         if (constraint instanceof NotConstraint) {
             return detectField(((NotConstraint) constraint).negatedConstraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
@@ -41,6 +41,10 @@ public class ConstraintFieldSniffer {
             return ((IsOfTypeConstraint) constraint).field;
         } else if (constraint instanceof MatchesRegexConstraint) {
             return ((MatchesRegexConstraint) constraint).field;
+        } else if (constraint instanceof ContainsRegexConstraint) {
+            return ((ContainsRegexConstraint) constraint).field;
+        } else if (constraint instanceof MatchesStandardConstraint) {
+            return ((MatchesStandardConstraint) constraint).field;
         } else if (constraint instanceof FormatConstraint) {
             return ((FormatConstraint) constraint).field;
         } else if (constraint instanceof StringHasLengthConstraint) {
