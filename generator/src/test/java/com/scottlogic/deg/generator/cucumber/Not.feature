@@ -12,4 +12,3 @@ Scenario: Inner constraint not satisfied
 { "field": "b", "is": "inSet", "values": [ "1", "2" ] }
 
  Then expect
-

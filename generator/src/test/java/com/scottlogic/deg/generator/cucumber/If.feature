@@ -3,7 +3,7 @@ Feature: Values can be specified by using if, then and else constraints
   Scenario: If and then satisfied
     Given: there are fields:
       | product_code | price |
-    And product_code is in a, b
+    And product_code is in "a", "b"
     And there is a constraint:
       {
         "if": { "field": "product_code", "is": "equalTo", "value": "a" },
@@ -32,8 +32,6 @@ Feature: Values can be specified by using if, then and else constraints
       | a            | 10     |
       | b            | 10     |
       | b            | 20     |
-
-
 
 
 

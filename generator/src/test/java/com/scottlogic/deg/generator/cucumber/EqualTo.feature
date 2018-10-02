@@ -1,6 +1,10 @@
 Feature: User can specify that a value is equalTo a required value
 
-  # NOTE THE WAY THE GENERATOR WORKS - VALUES ARE NOT SET
+  # WHAT NOT TO DO - NOT THE WAY THE GENERATOR WORKS - VALUES ARE NOT SET
+
+
+  Scenario:
+
 
 
   Scenario: User requires that the value is equalTo to string
