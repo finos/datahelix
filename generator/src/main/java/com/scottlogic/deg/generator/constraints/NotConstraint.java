@@ -10,6 +10,6 @@ public class NotConstraint implements IConstraint
 
     @Override
     public String toDotLabel(){
-        return String.format("Not (%s)", negatedConstraint.toString());
+        return String.format("Not (%s)", negatedConstraint.toDotLabel());
     }
 }

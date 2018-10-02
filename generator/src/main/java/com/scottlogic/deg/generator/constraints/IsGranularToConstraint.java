@@ -14,6 +14,6 @@ public class IsGranularToConstraint implements IConstraint {
 
     @Override
     public String toDotLabel(){
-        return String.format("%s granular to '%s'", field.name, granularity);
+        return String.format("%s granular to '%s'", field.name, granularity.getNumericGranularity());
     }
 }
