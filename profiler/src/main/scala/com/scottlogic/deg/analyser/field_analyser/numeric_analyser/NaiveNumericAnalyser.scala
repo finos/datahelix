@@ -30,8 +30,11 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += minLengthConstraint;
     allFieldConstraints += maxLengthConstraint;
-    if (inputField.dataType == IntegerType)
-      allFieldConstraints += new HasDecimalPlacesConstraint(fieldName,0);
+    // FIXME for now we add a granular-to constraint (with value 1) only for IntegerType
+    // It is actually non-trivial to find out the granularity of DoubleType and FloatType
+    if (inputField.dataType == IntegerType) {
+      allFieldConstraints += new GranularToConstraint(fieldName,1);
+    }
 
     return new Rule(s"Numeric field ${fieldName} rule", allFieldConstraints.toList);
   }

@@ -105,7 +105,7 @@ public class ProfileSerialiserTests {
         ConstraintDTO... constraints) {
         RuleDTO newRule = new RuleDTO();
 
-        newRule.description = description;
+        newRule.rule = description;
         newRule.constraints = Arrays.asList(constraints);
 
         return newRule;

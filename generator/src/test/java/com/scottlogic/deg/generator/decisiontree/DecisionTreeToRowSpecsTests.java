@@ -36,10 +36,19 @@ public class DecisionTreeToRowSpecsTests {
     );
     private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
 
+    private ConstraintNode reduceRules(DecisionTreeCollection profile) {
+        return ConstraintNode.merge(
+            profile.getDecisionTrees()
+                .stream()
+                .map(DecisionTree::getRootNode)
+                .iterator()
+        );
+    }
+
     @Test
     public void test() {
-        final DecisionTreeProfile dTree = dTreeGenerator.analyse(makeProfile());
-        final List<RowSpec> rowSpecs = dTreeWalker.walk(dTree)
+        final DecisionTreeCollection dTree = dTreeGenerator.analyse(makeProfile());
+        final List<RowSpec> rowSpecs = dTreeWalker.walk(new DecisionTree(reduceRules(dTree), dTree.getFields()))
                 .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }

@@ -11,11 +11,11 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     @Override
-    public DecisionTreeProfile analyse(Profile profile) {
-        return new DecisionTreeProfile(
+    public DecisionTreeCollection analyse(Profile profile) {
+        return new DecisionTreeCollection(
             profile.fields,
             profile.rules.stream()
-                .map(r -> new RuleDecisionTree(r.description, convertRule(r)))
+                .map(rule -> new DecisionTree(convertRule(rule), profile.fields))
                 .map(decisionTreeSimplifier::simplify)
                 .collect(Collectors.toList()));
     }
@@ -137,13 +137,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     class DecisionTreeSimplifier {
-        public RuleDecisionTree simplify(RuleDecisionTree originalTree) {
-            return new RuleDecisionTree(
-                originalTree.getDescription(),
-                simplify(originalTree.getRootNode()));
+        public DecisionTree simplify(DecisionTree originalTree) {
+            return new DecisionTree(
+                simplify(originalTree.getRootNode()),
+                originalTree.getFields());
         }
 
-        private ConstraintNode simplify(ConstraintNode node) {
+        public ConstraintNode simplify(ConstraintNode node) {
             if (node.getDecisions().isEmpty())
                 return node;
 

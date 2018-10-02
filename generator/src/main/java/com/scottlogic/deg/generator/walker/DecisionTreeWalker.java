@@ -2,10 +2,9 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeProfile;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.RuleDecisionTree;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
@@ -30,9 +29,9 @@ public class DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(decisionTreeProfile.getFields());
-        return helper.walk(decisionTreeProfile);
+    public Stream<RowSpec> walk(DecisionTree tree) {
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
+        return helper.walk(tree.getRootNode());
     }
 
     private class DecisionTreeWalkerHelper {
@@ -49,7 +48,11 @@ public class DecisionTreeWalker {
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
 
-        private Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
+        public Stream<RowSpec> walk(ConstraintNode constraint) {
+            return walk(constraint, getIdentityRowSpec());
+        }
+
+        public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
             final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
@@ -77,8 +80,11 @@ public class DecisionTreeWalker {
             }
 
             return option.getDecisions()
-                    .stream()
-                    .flatMap(decision -> walk(decision, mergedRowSpec));
+                .stream()
+                .reduce(
+                    Stream.of(mergedRowSpec),
+                    (acc, decisionNode) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionNode, aRowSpecFromCartesianProductsSoFar)),
+                    Stream::concat);
         }
 
         private Stream<RowSpec> walk(DecisionNode decision, RowSpec accumulatedSpec) {
@@ -86,21 +92,6 @@ public class DecisionTreeWalker {
                     .getOptions()
                     .stream()
                     .flatMap(option -> walk(option, accumulatedSpec));
-        }
-
-        public Stream<RowSpec> walk(RuleDecisionTree decisionTree, RowSpec accumulatedSpec) {
-            return walk(decisionTree.getRootNode(), accumulatedSpec);
-        }
-
-        public Stream<RowSpec> walk(DecisionTreeProfile decisionTreeProfile) {
-            return decisionTreeProfile.getDecisionTrees()
-                    .stream()
-                    .reduce(
-                            Stream.of(getIdentityRowSpec()),
-                            (acc, decisionTree) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionTree, aRowSpecFromCartesianProductsSoFar)),
-                            Stream::concat
-                    );
-
         }
     }
 }
