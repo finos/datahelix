@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.ViolateConstraint;
+import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;

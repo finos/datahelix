@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree;
+package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
 
