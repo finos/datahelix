@@ -13,7 +13,7 @@ public class FormatConstraint implements IConstraint {
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("%s has format '%s'", field.name, format);
     }
 

@@ -15,7 +15,7 @@ public class MatchesRegexConstraint implements IConstraint
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("%s matches '%s'", field.name, regex);
     }
 }

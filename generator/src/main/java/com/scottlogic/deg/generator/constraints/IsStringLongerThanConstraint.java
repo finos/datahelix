@@ -12,7 +12,7 @@ public class IsStringLongerThanConstraint implements IConstraint {
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("%s length > '%s'", field.name, referenceValue);
     }
 }

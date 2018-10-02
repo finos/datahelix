@@ -11,4 +11,9 @@ public class MatchesStandardConstraint implements IConstraint {
         this.field = field;
         this.standard = standard;
     }
+
+    @Override
+    public String toDotLabel(){
+        return String.format("matches standard %s", standard.getClass().getName());
+    }
 }

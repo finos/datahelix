@@ -20,7 +20,7 @@ public class IsOfTypeConstraint implements IConstraint
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("%s of type '%s'", field.name, requiredType.name());
     }
 }

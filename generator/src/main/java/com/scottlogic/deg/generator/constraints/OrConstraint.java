@@ -17,7 +17,7 @@ public class OrConstraint implements IConstraint
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("Or (%s)", subConstraints.stream()
             .map(x -> x.toString()).collect(Collectors.joining(", ")));
     }

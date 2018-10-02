@@ -14,9 +14,6 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class GenerationEngine {
@@ -54,28 +51,11 @@ public class GenerationEngine {
         try {
             this.outputter.output(generationResult);
 
-            // If specified, output trees
-            if (config.getDebugPath() != null) {
-                writeTreeGraphs(analysedProfile, config.getDebugPath());
-            }
-
         } catch (Exception e) {
             System.err.println("Failed to write generation result");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
                 System.err.println(ste.toString());
-        }
-    }
-
-    private void writeTreeGraphs(DecisionTreeCollection analysedProfile, Path directory) {
-        String dot = analysedProfile.getMergedTree().toDot("tree", "");
-
-        try {
-            try (PrintWriter out = new PrintWriter(String.format("%s/tree.gv", directory.toString() ))) {
-                out.println(dot);
-            }
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
         }
     }
 }

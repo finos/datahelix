@@ -16,7 +16,7 @@ public class IsInSetConstraint implements IConstraint
     }
 
     @Override
-    public String toString(){
+    public String toDotLabel(){
         return String.format("%s in [%s]", field.name,
             legalValues.stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
     }

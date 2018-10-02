@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
         }
 
         @Override
-        public String toString(){
+        public String toDotLabel(){
             return String.format("%s < '%s'", field.name, referenceValue);
         }
     }

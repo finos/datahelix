@@ -23,11 +23,6 @@ public class Generate implements Runnable {
         defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
-    @CommandLine.Option(names = {"-d", "--d"},
-        description = "A directory into which diagnostic outputs should be saved (optional).",
-        defaultValue = "Interesting")
-    private Path debugOutputDir;
-
     public static void main(String[] args) throws Exception {
         CommandLine.run(new Generate(), args);
     }
@@ -38,10 +33,6 @@ public class Generate implements Runnable {
         GenerationConfig config = new GenerationConfig(
             generationType,
             new FieldExhaustiveCombinationStrategy());
-
-        if(debugOutputDir != null){
-            config.setDebugPath(debugOutputDir);
-        }
 
         new GenerationEngine(
             new FileSystemDataSetOutputter(outputDir.toString()))

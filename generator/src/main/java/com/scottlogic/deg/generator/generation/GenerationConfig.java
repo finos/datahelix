@@ -10,8 +10,6 @@ public class GenerationConfig {
     private final ICombinationStrategy combinationStrategy;
     private final long maxRows = 10_000_000;
 
-    private Path debugPath;
-
     public GenerationConfig(
         DataGenerationType dataGenerationType,
         ICombinationStrategy combinationStrategy) {
@@ -29,14 +27,6 @@ public class GenerationConfig {
     }
 
     public long getMaxRows() { return maxRows; }
-
-    public Path getDebugPath() {
-        return debugPath;
-    }
-
-    public void setDebugPath(Path debugPath) {
-        this.debugPath = debugPath;
-    }
 
     public enum DataGenerationType {
         FullSequential,

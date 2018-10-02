@@ -20,4 +20,9 @@ public class ConditionalConstraint implements IConstraint
         this.whenConditionIsTrue = whenConditionIsTrue;
         this.whenConditionIsFalse = whenConditionIsFalse;
     }
+
+    @Override
+    public String toDotLabel() {
+        return null;
+    }
 }

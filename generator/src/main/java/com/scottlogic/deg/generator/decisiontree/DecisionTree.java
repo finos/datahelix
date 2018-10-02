@@ -24,6 +24,16 @@ public class DecisionTree {
         return fields;
     }
 
+    //
+    // https://en.wikipedia.org/wiki/DOT_(graph_description_language)
+
+    /**
+     * Generates a DOT formatted representation of the decision tree
+     * See https://en.wikipedia.org/wiki/DOT_(graph_description_language)
+     * @param graphName The name of the generated graph notation
+     * @param description This string is added as a comment at the beginning of the exported file for added context
+     * @return
+     */
     public String toDot(String graphName, String description) {
         StringBuilder sb = new StringBuilder();
 
@@ -46,7 +56,7 @@ public class DecisionTree {
 
             List<String> labels = new ArrayList<>();
             for (IConstraint atomicConstraint : constraintNode.getAtomicConstraints()) {
-                labels.add(atomicConstraint.toString());
+                labels.add(atomicConstraint.toDotLabel());
             }
 
             sb.append(nodeName + " [label=\"" + String.join("\r\n", labels) + "\"][shape=box]" + "\r\n");
