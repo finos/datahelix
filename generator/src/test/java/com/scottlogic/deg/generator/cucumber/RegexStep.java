@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.cucumber;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import cucumber.api.java.en.When;
 
@@ -14,16 +15,30 @@ public class RegexStep {
         this.state = state;
     }
 
-    @When("^(.+) should (.+) /(.+?)/$")
-    public void fieldIsConstrainedWithRegex(
+    @When("^(.+) should match regex /(.+?)/$")
+    public void fieldShouldMatchRegex(
             String fieldName,
-            String constraintTypeId,
             String regexStr)
-            throws Throwable {
+            throws Exception {
+        this.addRegexConstraint(fieldName, AtomicConstraintType.MATCHESREGEX, regexStr);
+    }
 
+    @When("^(.+) should contain regex /(.+?)/$")
+    public void fieldShouldContainRegex(
+            String fieldName,
+            String regexStr)
+            throws Exception {
+        this.addRegexConstraint(fieldName, AtomicConstraintType.CONTAINSREGEX, regexStr);
+    }
+
+    private void addRegexConstraint(
+            String fieldName,
+            AtomicConstraintType type,
+            String regexStr)
+            throws Exception {
         ConstraintDTO dto = new ConstraintDTO();
         dto.field = fieldName;
-        dto.is = DegTestOperatorMapping.getOperator(constraintTypeId);
+        dto.is = type.toString();
         dto.value = regexStr;
 
         IConstraint constraint = new MainConstraintReader().apply(
