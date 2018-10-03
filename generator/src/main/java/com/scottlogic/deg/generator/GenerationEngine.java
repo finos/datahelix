@@ -3,7 +3,9 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -18,10 +20,10 @@ public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator = new DataGenerator(
-            new RowSpecMerger(fieldSpecMerger),
-            new ConstraintReducer(
-                    new FieldSpecFactory(),
-                    fieldSpecMerger));
+        new RowSpecMerger(fieldSpecMerger),
+        new ConstraintReducer(
+            new FieldSpecFactory(),
+            fieldSpecMerger));
 
     private final IDataSetOutputter outputter;
 
@@ -34,8 +36,7 @@ public class GenerationEngine {
 
         try {
             profile = new ProfileReader().read(Paths.get(profileFilePath));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to read file!");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
@@ -49,8 +50,8 @@ public class GenerationEngine {
 
         try {
             this.outputter.output(generationResult);
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             System.err.println("Failed to write generation result");
             System.err.println(e.toString());
             for (StackTraceElement ste : e.getStackTrace())
