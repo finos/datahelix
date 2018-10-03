@@ -1,14 +1,16 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 public interface IDataSetWriter {
-    String write(
-            Profile profile,
-            TestCaseDataSet dataset,
-            Path directoryPath,
-            String filenameWithoutExtension) throws IOException;
+    String makeFilename(
+        String filenameWithoutExtension);
+
+    void write(
+        ProfileFields profileFields,
+        Iterable<GeneratedObject> dataset,
+        Path filePath) throws IOException;
 }

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
         .addSubcommand("generate", new Generate())
+        .addSubcommand("generateTestCases", new GenerateTestCases())
         .addSubcommand("visualise", new Visualise());
 
     public static void main(String[] args) {

@@ -9,12 +9,9 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
-import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -57,15 +54,10 @@ public class GenerationEngine {
             return;
         }
 
-        final TestCaseDataSet validCase = generate(profile, config, "");
-
-
-        final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
-            profile,
-            Collections.singleton(validCase));
+        final Iterable<GeneratedObject> generatedDataItems = generate(profile, config);
 
         try {
-            this.outputter.output(generationResult);
+            this.outputter.outputDataset(generatedDataItems, profile.fields);
         } catch (Exception e) {
             System.err.println("Failed to write generation result");
             System.err.println(e.toString());
@@ -87,7 +79,7 @@ public class GenerationEngine {
             return;
         }
 
-        final TestCaseDataSet validCase = generate(profile, config, "");
+        final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
 
         System.out.println("Valid cases generated, starting violation generation...");
 
@@ -102,10 +94,11 @@ public class GenerationEngine {
 
                 Profile violatingProfile = new Profile(profile.fields, violatedRule);
 
-                return generate(
-                    violatingProfile,
-                    config,
-                    rule.description);
+                return new TestCaseDataSet(
+                    rule.description,
+                    generate(
+                        violatingProfile,
+                        config));
             })
             .collect(Collectors.toList());
 
@@ -118,7 +111,7 @@ public class GenerationEngine {
                 .collect(Collectors.toList()));
 
         try {
-            this.outputter.output(generationResult);
+            this.outputter.outputTestCases(generationResult);
         } catch (Exception e) {
             System.err.println("Failed to write generation result");
             System.err.println(e.toString());
@@ -127,16 +120,14 @@ public class GenerationEngine {
         }
     }
 
-    private TestCaseDataSet generate(Profile profile, GenerationConfig config, String violationDescription) {
+    private Iterable<GeneratedObject> generate(Profile profile, GenerationConfig config) {
 
         final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
 
-        final Iterable<TestCaseDataRow> validRows = this.dataGenerator.generateData(
+        return this.dataGenerator.generateData(
             profile,
             analysedProfile.getMergedTree(),
             config);
-
-        return new TestCaseDataSet(violationDescription, validRows);
     }
 
     private Rule violateRule(Rule rule) {

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -9,29 +9,22 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
-public class CsvTestCaseDataSetWriter implements IDataSetWriter {
-
+public class CsvDataSetWriter implements IDataSetWriter {
     @Override
-    public String write(
-            Profile profile,
-            TestCaseDataSet dataset,
-            Path directoryPath,
-            String filenameWithoutExtension) throws IOException {
-
-        String filename = filenameWithoutExtension + ".csv";
-        Path fileAbsolutePath = directoryPath.resolve(filename);
-
-        System.out.println("  " + filename);
+    public void write(
+        ProfileFields profileFields,
+        Iterable<GeneratedObject> dataset,
+        Path filePath) throws IOException {
 
         CSVPrinter writer =
             CSVFormat.RFC4180
-                .withHeader(profile.fields.stream()
+                .withHeader(profileFields.stream()
                     .map(f -> f.name)
                     .toArray(String[]::new))
-                .print(fileAbsolutePath, Charset.forName("UTF-8"));
+                .print(filePath, Charset.forName("UTF-8"));
 
         try {
-            for (TestCaseDataRow row : dataset) {
+            for (GeneratedObject row : dataset) {
                 writer.printRecord(row.values.stream().map(x -> {
                     if (x.value == null)
                         return null;
@@ -46,7 +39,10 @@ public class CsvTestCaseDataSetWriter implements IDataSetWriter {
         finally {
             writer.close();
         }
+    }
 
-        return filename;
+    @Override
+    public String makeFilename(String filenameWithoutExtension) {
+        return filenameWithoutExtension + ".csv";
     }
 }

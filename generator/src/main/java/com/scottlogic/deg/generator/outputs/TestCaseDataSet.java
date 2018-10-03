@@ -2,18 +2,18 @@ package com.scottlogic.deg.generator.outputs;
 
 import java.util.*;
 
-public class TestCaseDataSet implements Iterable<TestCaseDataRow> {
+public class TestCaseDataSet implements Iterable<GeneratedObject> {
     public final String violation;
-    private final List<TestCaseDataRow> rows;
+    private final List<GeneratedObject> rows;
 
-    public TestCaseDataSet(String violation, List<TestCaseDataRow> rows) {
+    public TestCaseDataSet(String violation, List<GeneratedObject> rows) {
         this.rows = rows;
         this.violation = violation;
     }
-    public TestCaseDataSet(String violation, TestCaseDataRow... rows) {
+    public TestCaseDataSet(String violation, GeneratedObject... rows) {
         this(violation, Arrays.asList(rows));
     }
-    public TestCaseDataSet(String violation, Iterable<TestCaseDataRow> rows) {
+    public TestCaseDataSet(String violation, Iterable<GeneratedObject> rows) {
         this.rows = new ArrayList<>();
         rows.forEach(this.rows::add);
 
@@ -21,7 +21,7 @@ public class TestCaseDataSet implements Iterable<TestCaseDataRow> {
     }
 
     @Override
-    public Iterator<TestCaseDataRow> iterator() {
+    public Iterator<GeneratedObject> iterator() {
         return this.rows.iterator();
     }
 }

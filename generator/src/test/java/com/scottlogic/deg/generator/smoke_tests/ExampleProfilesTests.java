@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import org.junit.Assert;
@@ -67,7 +69,15 @@ class ExampleProfilesTests {
 
     private class NullDataSetOutputter implements IDataSetOutputter {
         @Override
-        public void output(TestCaseGenerationResult dataSets) throws IOException {
+        public void outputDataset(Iterable<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
+            // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
+
+            generatedObjects.iterator().forEachRemaining(
+                row -> Assert.assertThat(row, notNullValue())); // might as well assert non-null while we're at it
+        }
+
+        @Override
+        public void outputTestCases(TestCaseGenerationResult dataSets) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted every iterable
 
             dataSets.datasets.iterator().forEachRemaining(

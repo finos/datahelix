@@ -9,11 +9,11 @@ import java.io.File;
 import java.nio.file.Path;
 
 @CommandLine.Command(
-    name = "generate",
-    description = "Generates data using a profile file.",
+    name = "generateTestCases",
+    description = "Generates valid and violating data using a profile file.",
     mixinStandardHelpOptions = true,
     version = "1.0")
-public class Generate implements Runnable {
+public class GenerateTestCases implements Runnable {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -33,6 +33,6 @@ public class Generate implements Runnable {
 
         new GenerationEngine(
             new FileSystemDataSetOutputter(outputDir.toString()))
-            .generateDataSet(profileFile.getAbsolutePath(), config);
+            .generateTestCases(profileFile.getAbsolutePath(), config);
     }
 }
