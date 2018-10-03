@@ -86,6 +86,7 @@ public class RegexStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
+        //return Arrays.asList("??");
         return () -> generateInterestingValues(automaton.getInitialState(), "").iterator();
     }
 

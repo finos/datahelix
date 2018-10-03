@@ -7,12 +7,16 @@ public class StringHasLengthConstraint implements IConstraint {
     public final Number referenceValue;
 
     public StringHasLengthConstraint(Field field, Number referenceValue) {
-
-        if(referenceValue == null){
+        if (referenceValue == null) {
             throw new IllegalArgumentException("Argument 'referenceValue' cannot be null.");
         }
 
         this.referenceValue = referenceValue;
         this.field = field;
+    }
+
+    @Override
+    public String toDotLabel() {
+        return String.format("%s length = %s", field.name, referenceValue);
     }
 }

@@ -15,6 +15,8 @@ public interface IConstraint
             .collect(Collectors.toList());
     }
 
+    String toDotLabel();
+
     default public IConstraint or(IConstraint... others)
     {
         return new OrConstraint(combine(this, others));
