@@ -20,4 +20,9 @@ public class ConditionalConstraint implements IConstraint
         this.whenConditionIsTrue = whenConditionIsTrue;
         this.whenConditionIsFalse = whenConditionIsFalse;
     }
+
+    @Override
+    public String toDotLabel() {
+        throw new UnsupportedOperationException("IF constraints should be consumed during conversion to decision trees");
+    }
 }

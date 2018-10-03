@@ -10,4 +10,9 @@ public class IsLessThanOrEqualToConstantConstraint implements IConstraint {
         this.referenceValue = referenceValue;
         this.field = field;
     }
+
+    @Override
+    public String toDotLabel() {
+        return String.format("%s <= %s", field.name, referenceValue);
+    }
 }

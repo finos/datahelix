@@ -5,10 +5,15 @@ import com.scottlogic.deg.generator.generation.IStringGenerator;
 
 public class MatchesStandardConstraint implements IConstraint {
     public final Field field;
-    public final IStringGenerator standard;
+    public final IStringGenerator standard; // TODO: Change this to an enum member; string generators shouldn't exist on this level
 
     public MatchesStandardConstraint(Field field, IStringGenerator standard) {
         this.field = field;
         this.standard = standard;
+    }
+
+    @Override
+    public String toDotLabel(){
+        return String.format("%s is a %s", field.name, standard.getClass().getName());
     }
 }

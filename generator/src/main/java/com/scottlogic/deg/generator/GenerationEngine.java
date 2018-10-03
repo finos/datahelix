@@ -5,6 +5,9 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -65,6 +68,9 @@ public class GenerationEngine {
             this.outputter.output(generationResult);
         } catch (Exception e) {
             System.err.println("Failed to write generation result");
+            System.err.println(e.toString());
+            for (StackTraceElement ste : e.getStackTrace())
+                System.err.println(ste.toString());
         }
     }
 
