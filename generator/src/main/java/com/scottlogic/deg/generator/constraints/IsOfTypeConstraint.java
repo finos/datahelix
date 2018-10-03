@@ -2,8 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
-public class IsOfTypeConstraint implements IConstraint
-{
+public class IsOfTypeConstraint implements IConstraint {
     public final Field field;
     public final Types requiredType;
 
@@ -12,15 +11,14 @@ public class IsOfTypeConstraint implements IConstraint
         this.requiredType = requiredType;
     }
 
-    public enum Types
-    {
+    public enum Types {
         Numeric,
         String,
         Temporal
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("%s of type '%s'", field.name, requiredType.name());
+    public String toDotLabel() {
+        return String.format("%s is %s", field.name, requiredType.name());
     }
 }

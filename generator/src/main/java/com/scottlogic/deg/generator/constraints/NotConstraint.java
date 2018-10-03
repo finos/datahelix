@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.constraints;
 
-public class NotConstraint implements IConstraint
-{
+public class NotConstraint implements IConstraint {
     public final IConstraint negatedConstraint;
 
     public NotConstraint(IConstraint negatedConstraint) {
@@ -9,7 +8,7 @@ public class NotConstraint implements IConstraint
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("Not (%s)", negatedConstraint.toDotLabel());
+    public String toDotLabel() {
+        return String.format("¬(%s)", negatedConstraint.toDotLabel());
     }
 }

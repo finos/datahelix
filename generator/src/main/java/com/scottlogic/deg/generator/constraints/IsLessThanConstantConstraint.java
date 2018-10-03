@@ -12,7 +12,7 @@ public class IsLessThanConstantConstraint implements IConstraint {
     }
 
     @Override
-    public String toDotLabel(){
+    public String toDotLabel() {
         return String.format("%s < %s", field.name, referenceValue);
     }
 }

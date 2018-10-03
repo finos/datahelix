@@ -15,6 +15,6 @@ public class IsAfterConstantDateTimeConstraint implements IConstraint {
 
     @Override
     public String toDotLabel(){
-        return String.format("%s > '%s'", field.name, referenceValue);
+        return String.format("%s > %s", field.name, referenceValue);
     }
 }

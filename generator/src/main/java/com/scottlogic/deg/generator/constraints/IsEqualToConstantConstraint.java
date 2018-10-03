@@ -2,8 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
-public class IsEqualToConstantConstraint implements IConstraint
-{
+public class IsEqualToConstantConstraint implements IConstraint {
     public final Field field;
     public final Object requiredValue;
 
@@ -13,7 +12,7 @@ public class IsEqualToConstantConstraint implements IConstraint
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("%s = '%s'", field.name, requiredValue);
+    public String toDotLabel() {
+        return String.format("%s = %s", field.name, requiredValue);
     }
 }
