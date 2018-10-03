@@ -112,7 +112,7 @@ public class DegTestStep {
 
                     int fieldIndex = 0;
                     for (Field field : this.state.profileFields) {
-                        Object actualValue = actualRow.values.get(fieldIndex).value;
+                        String actualValue = actualRow.values.get(fieldIndex).value.toString();
                         String expectedValueAsString = expectedRow.get(field.name);
 
                         Assert.assertThat(actualValue, equalTo(expectedValueAsString));
