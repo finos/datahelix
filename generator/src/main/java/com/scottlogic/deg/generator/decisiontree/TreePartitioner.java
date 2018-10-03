@@ -17,14 +17,11 @@ public class TreePartitioner implements ITreePartitioner{
     private final ConstraintToFieldMapper fieldMapper;
 
     public TreePartitioner() {
-        this(new ConstraintToFieldMapper());
-    }
-
-    TreePartitioner(ConstraintToFieldMapper fieldMapper) {
-        this.fieldMapper = fieldMapper;
+        fieldMapper = new ConstraintToFieldMapper();
     }
 
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
+        // a mapping from root-level constraints/decisions to the fields they affect
         final Map<Object, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
 
         final Map<Field, Integer> partitionsByField = new HashMap<>();
@@ -32,16 +29,9 @@ public class TreePartitioner implements ITreePartitioner{
 
         int partitionCount = 0;
 
-        // TODO: why not just iterate over mapping.keys()‽
-        ConcatenatingIterable<Object> fieldedObjects = new ConcatenatingIterable<>(
-            new ProjectingIterable<>(decisionTree.getRootNode().getAtomicConstraints(), constraint -> constraint),
-            new ProjectingIterable<>(decisionTree.getRootNode().getDecisions(), decision -> decision)
-        );
-
-        // TODO: This won't partition fields that don't have rules. Make test and fix
-        for (Object fieldedObject : fieldedObjects) {
-            final Set<Field> fields = mapping.get(fieldedObject);
-
+        // each set of fields iterated here are constrained by a single root-level constraint/decision
+        for (Set<Field> fields : mapping.values()) {
+            // find which existing partitions this constraint/decision affects (if any)
             final List<Integer> partitionsTouched = fields
                 .stream()
                 .map(partitionsByField::get)
@@ -49,37 +39,52 @@ public class TreePartitioner implements ITreePartitioner{
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+            // if there aren't any, we start a new partition,
+            // otherwise we gather up all the fields in the touched partitions and move them to a new one
             final Set<Field> fieldsToPartition = partitionsTouched.size() == 0
                 ? fields
                 : Stream.concat(
-                    fields.stream(),
-                    partitionsTouched
-                        .stream()
-                        .flatMap(id -> partitionsById.get(id).stream()))
+                        fields.stream(),
+                        partitionsTouched
+                            .stream()
+                            .flatMap(id -> partitionsById.get(id).stream()))
                     .collect(Collectors.toSet());
 
+            // we can reuse the partition ID our new constraint fits exactly into an existing partition
             final int currentPartition = partitionsTouched.size() == 1
                 ? partitionsTouched.get(0)
                 : partitionCount++;
 
+            // TODO: write test for this
+            // if partitions are being merged, remove the old ones
             if (partitionsTouched.size() > 1)
                 partitionsTouched.forEach(partitionsById::remove);
 
+            // create/update partitions
             partitionsById.put(currentPartition, fieldsToPartition);
             fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
         }
 
+        // take all the root level constraints and group them by what partition they're in...
         final Map<Integer, List<IConstraint>> partitionedConstraints = decisionTree.getRootNode()
             .getAtomicConstraints()
             .stream()
-            .collect(Collectors.groupingBy(constraint -> partitionsByField.get(mapping.get(constraint).stream().findFirst().get())));
+            .collect(Collectors.groupingBy(
+                constraint ->
+                    partitionsByField.get(
+                        mapping.get(constraint).iterator().next())));
 
-        final Map<Integer, List<DecisionNode>> partitionedDecisions = decisionTree.getRootNode()
+        // ...same with root level decisions
+        final Map<Integer, List<DecisionNode>> partitionedDecisions = decisionTree
+            .getRootNode()
             .getDecisions()
             .stream()
-            .collect(Collectors.groupingBy(decision -> partitionsByField.get(mapping.get(decision).stream().findFirst().get())));
+            .collect(Collectors.groupingBy(
+                decision ->
+                    partitionsByField.get(
+                        mapping.get(decision).iterator().next())));
 
-        return  partitionsById
+        return partitionsById
             .keySet()
             .stream()
             .map(id -> new DecisionTree(
@@ -89,70 +94,5 @@ public class TreePartitioner implements ITreePartitioner{
                 ),
                 new ProfileFields(new ArrayList<>(partitionsById.get(id))
             )));
-//            .map(id -> new ConstraintNode(
-//                partitionedConstraints.getOrDefault(id, Collections.emptyList()),
-//                partitionedDecisions.getOrDefault(id, Collections.emptyList())
-//            ));
-
-//        return partitionsById
-//            .keySet()
-//            .stream()
-//            .map(partitionId -> {
-//
-//            });
     }
-//            .reduce(
-//                new RuleDecisionTree("", new ConstraintNode()),
-//                (accumulator, nextRule) -> {
-//                    return Stream.of(nextRule);
-//                },
-//                rules -> new DecisionTreeProfile(profile.getFields(), rules.collect(Collectors.toList())),
-//                rules -> rules);
-
-
-
-
-//    public Stream<DecisionTreeProfile> splitTreeIntoPartitionsOld(DecisionTreeProfile profile, Map<RuleDecisionTree, List<Field>> ruleFieldMapping) {
-//
-//        final Map<Field, Integer> partitionsByField = new HashMap<>();
-//        final Map<Integer, List<Field>> partitionsById = new HashMap<>();
-//
-//        int partitionCount = 0;
-//
-//        for (RuleDecisionTree rule : profile.getDecisionTrees()) {
-//            final List<Field>  fields = ruleFieldMapping.get(rule);
-//
-//            final List<Integer> partitionsTouched = fields
-//                .stream()
-//                .map(partitionsByField::get)
-//                .distinct()
-//                .collect(Collectors.toList());
-//
-//            final List<Field> fieldsToPartition = partitionsTouched.size() <= 1
-//                ? fields
-//                : Stream.concat(
-//                        fields.stream(),
-//                        partitionsTouched
-//                            .stream()
-//                            .flatMap(id -> partitionsById.get(id).stream()))
-//                    .collect(Collectors.toList());
-//
-//            final int currentPartition = partitionsTouched.size() == 1
-//                ? partitionsTouched.get(0)
-//                : partitionCount++;
-//
-//            partitionsById.put(currentPartition, fieldsToPartition);
-//            fieldsToPartition.forEach(field -> partitionsByField.put(field, currentPartition));
-//        }
-//
-//        return null;
-////            .reduce(
-////                new RuleDecisionTree("", new ConstraintNode()),
-////                (accumulator, nextRule) -> {
-////                    return Stream.of(nextRule);
-////                },
-////                rules -> new DecisionTreeProfile(profile.getFields(), rules.collect(Collectors.toList())),
-////                rules -> rules);
-//    }
-//}
 }
