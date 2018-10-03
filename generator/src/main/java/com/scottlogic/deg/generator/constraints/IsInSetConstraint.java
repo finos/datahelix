@@ -9,8 +9,6 @@ public class IsInSetConstraint implements IConstraint {
     public final Field field;
     public final Set<Object> legalValues;
 
-    private final int limit = 3;
-
     public IsInSetConstraint(Field field, Set<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
@@ -18,6 +16,7 @@ public class IsInSetConstraint implements IConstraint {
 
     @Override
     public String toDotLabel() {
+        final int limit = 3;
 
         if (legalValues.size() < limit) {
             return String.format("%s in [%s]", field.name,
@@ -29,6 +28,5 @@ public class IsInSetConstraint implements IConstraint {
             field.name,
             legalValues.stream().limit(limit).map(x -> x.toString()).collect(Collectors.joining(", ")),
             legalValues.size());
-
     }
 }

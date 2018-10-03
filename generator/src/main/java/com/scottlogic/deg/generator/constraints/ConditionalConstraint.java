@@ -23,6 +23,6 @@ public class ConditionalConstraint implements IConstraint
 
     @Override
     public String toDotLabel() {
-        return null;
+        throw new UnsupportedOperationException("IF constraints should be consumed during conversion to decision trees");
     }
 }
