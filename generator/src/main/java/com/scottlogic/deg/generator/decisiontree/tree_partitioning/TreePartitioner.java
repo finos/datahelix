@@ -48,9 +48,6 @@ public class TreePartitioner implements ITreePartitioner {
 
                 partitions.mergePartitions(partitionsToMerge);
             }
-
-            // TODO: write test for this
-            // if partitions are being merged, remove the old ones
         }
 
         final Stream<Field> unpartitionedFields = decisionTree

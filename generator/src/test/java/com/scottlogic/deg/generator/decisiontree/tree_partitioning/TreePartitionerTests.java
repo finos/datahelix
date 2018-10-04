@@ -24,21 +24,22 @@ import static org.hamcrest.Matchers.*;
 class TreePartitionerTests {
     @Test
     void shouldSplitTreeIntoPartitions() {
-        givenFields("A", "B", "C", "D", "E", "F");
-        givenRootNode(constraint(
-            decision(
-                constraint("A"),
-                constraint("B")
-            ),
-            decision(
-                constraint("C"),
-                constraint("D")
-            ),
-            decision(
-                constraint("E"),
-                constraint("F")
-            )
-        ));
+        givenTree(
+            tree(fields("A", "B", "C", "D", "E", "F"),
+                constraint(
+                    decision(
+                        constraint("A"),
+                        constraint("B")
+                    ),
+                    decision(
+                        constraint("C"),
+                        constraint("D")
+                    ),
+                    decision(
+                        constraint("E"),
+                        constraint("F")
+                    )
+        )));
 
         expectTrees(
             tree(fields("A", "B"),
@@ -64,22 +65,23 @@ class TreePartitionerTests {
 
     @Test
     void shouldPartitionTwoNodesCorrectly() {
-        givenFields("A", "B", "C", "D", "E", "F");
-        givenRootNode(constraint(
-            decision(
-                constraint("A"),
-                constraint("B"),
-                constraint("E")
-            ),
-            decision(
-                constraint("C"),
-                constraint("D")
-            ),
-            decision(
-                constraint("E"),
-                constraint("F")
-            )
-        ));
+        givenTree(
+            tree(fields("A", "B", "C", "D", "E", "F"),
+                constraint(
+                    decision(
+                        constraint("A"),
+                        constraint("B"),
+                        constraint("E")
+                    ),
+                    decision(
+                        constraint("C"),
+                        constraint("D")
+                    ),
+                    decision(
+                        constraint("E"),
+                        constraint("F")
+                    )
+        )));
 
         expectTrees(
             tree(fields("A", "B", "E", "F"),
@@ -104,24 +106,25 @@ class TreePartitionerTests {
 
     @Test
     void shouldNotPartition() {
-        givenFields("A", "B", "C", "D", "E", "F", "G");
-        givenRootNode(constraint(
-            decision(
-                constraint("A"),
-                constraint("B"),
-                constraint("C")
-            ),
-            decision(
-                constraint("C"),
-                constraint("D"),
-                constraint("E")
-            ),
-            decision(
-                constraint("E"),
-                constraint("F"),
-                constraint("G")
-            )
-        ));
+        givenTree(
+            tree(fields("A", "B", "C", "D", "E", "F", "G"),
+                constraint(
+                    decision(
+                        constraint("A"),
+                        constraint("B"),
+                        constraint("C")
+                    ),
+                    decision(
+                        constraint("C"),
+                        constraint("D"),
+                        constraint("E")
+                    ),
+                    decision(
+                        constraint("E"),
+                        constraint("F"),
+                        constraint("G")
+                    )
+        )));
 
         expectTrees(
             tree(fields("A", "B", "C", "D", "E", "F", "G"),
@@ -147,15 +150,15 @@ class TreePartitionerTests {
 
     @Test
     void shouldPartitionConstraintsCorrectly() {
-        givenFields("A", "B", "C");
-        givenRootNode(
-            constraint(
-                new String[] {"A", "B", "C"},
-                decision(constraint("A")),
-                decision(constraint("B")),
-                decision(constraint("C"))
-            )
-        );
+        givenTree(
+            tree(fields("A", "B", "C"),
+                constraint(
+                    new String[] {"A", "B", "C"},
+                    decision(constraint("A")),
+                    decision(constraint("B")),
+                    decision(constraint("C"))
+                )
+        ));
 
         expectTrees(
             tree(fields("A"),
@@ -178,8 +181,9 @@ class TreePartitionerTests {
 
     @Test
     void shouldNotErrorIfFieldsNotConstrained() {
-        givenFields("A", "B");
-        givenRootNode(constraint("A"));
+        givenTree(
+            tree(fields("A", "B"),
+                constraint("A")));
 
         expectTrees(
             tree(fields("A"),
@@ -190,8 +194,9 @@ class TreePartitionerTests {
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
-        givenFields("A", "B", "C");
-        givenRootNode(new ConstraintNode());
+        givenTree(
+            tree(fields("A", "B", "C"),
+                new ConstraintNode()));
 
         expectTrees(
             tree(fields("A"), new ConstraintNode()),
@@ -244,34 +249,24 @@ class TreePartitionerTests {
     @BeforeEach
     void beforeEach() {
         constraints = new HashMap<>();
-        rootNode = null;
-        fields = new ProfileFields(Collections.emptyList());
+        decisionTree = null;
         partitionedTrees = null;
     }
 
     private Map<String, IConstraint> constraints;
-    private ConstraintNode rootNode;
-    private ProfileFields fields;
     private List<DecisionTree> partitionedTrees;
+    private DecisionTree decisionTree;
 
-    void givenFields(String... fieldNames) {
-        fields = new ProfileFields(
-            Arrays.stream(fieldNames)
-                .map(Field::new)
-                .collect(Collectors.toList()));
+    private void givenTree(DecisionTree decisionTree) {
+        this.decisionTree = decisionTree;
     }
 
-    void givenRootNode(ConstraintNode rootNode) {
-        this.rootNode = rootNode;
-    }
-
-    void partitionTrees() {
+    private void partitionTrees() {
         partitionedTrees = new TreePartitioner()
-            .splitTreeIntoPartitions(
-                new DecisionTree(rootNode, fields))
+            .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }
-    void expectTrees(DecisionTree... decisionTrees) {
+    private void expectTrees(DecisionTree... decisionTrees) {
         if (partitionedTrees == null)
             partitionTrees();
 
