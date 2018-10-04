@@ -87,22 +87,16 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldCreateInterestingValues() {
+    void generateInterestingValuesShouldGenerateShortestAndLongestValues() {
         IStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
-        String[] sampleValues =
-                IterableAsStream.convert(resultsIterable)
-                        .toArray(String[]::new);
-
         Assert.assertThat(
-                sampleValues,
-                arrayContainingInAnyOrder(
-                        "Test_000_banana",
-                        "Test_000_apple",
-                        "Test_AAAAA_apple",
-                        "Test_AAAAA_banana"));
+            resultsIterable,
+            containsInAnyOrder(
+                "Test_000_apple",
+                "Test_AAAAA_banana"));
     }
 
     @Test

@@ -910,10 +910,9 @@ class ConstraintReducerTest {
                 new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.Temporal)
         );
 
-        assertThrows(UnsupportedOperationException.class, () -> {
-            constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
-        });
+        Optional<RowSpec> satisfyingRowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
 
+        Assert.assertThat("RowSpec should be empty", satisfyingRowSpec, Is.is(Optional.empty()));
     }
 
     @Test
