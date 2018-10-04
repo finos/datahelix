@@ -1,0 +1,100 @@
+Feature: User can specify that a numeric value is of a decimalised value to a specified level of unit
+    
+Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
+     Given there is a field foo
+       And foo is granularTo 0.1
+       And foo is greaterThanOrEqualTo 0
+       And foo is lessThanOrEqualTo 1
+     When I ask to generate all values for field foo
+     Then the following data should be generated:
+       | foo  |
+       | 0    |
+       | 0.1  |
+       | 0.2  |
+       | 0.3  |
+       | 0.4  |
+       | 0.5  |
+       | 0.6  |
+       | 0.7  |
+       | 0.8  |
+       | 0.9  |
+       | 1    |
+
+Scenario: User requires to create a numeric field with data values that include a decimal value to two decimal points
+     Given there is a field foo
+       And foo is granularTo 0.01
+       And foo is greaterThanOrEqualTo 0
+       And foo is lessThanOrEqualTo 0.2
+     When I ask to generate all values for field foo
+     Then the following data should be generated:
+       | foo  |
+       | 0    |
+       | 0.01 |
+       | 0.02 |
+       | 0.03 |
+       | 0.04 |
+       | 0.05 |
+       | 0.06 |
+       | 0.07 |
+       | 0.08 |
+       | 0.09 |
+       | 0.1  |
+       | 0.11 |
+       | 0.12 |
+       | 0.13 |
+       | 0.14 |
+       | 0.15 |
+       | 0.16 |
+       | 0.17 |
+       | 0.18 |
+       | 0.19 |
+       | 0.2  |
+
+Scenario: User requires to create a numeric field with data values that include a decimal value to five decimal points
+     Given there is a field foo
+       And foo is granularTo 0.00001
+       And foo is greaterThanOrEqualTo 0
+       And foo is lessThanOrEqualTo 0.0001
+     When I ask to generate all values for field foo
+     Then the following data should be generated:
+       | foo     |
+       | 0       |
+       | 0.00001 |
+       | 0.00002 |
+       | 0.00003 |
+       | 0.00004 |
+       | 0.00005 |
+       | 0.00006 |
+       | 0.00007 |
+       | 0.00008 |
+       | 0.00009 |
+       | 0.0001  |
+
+Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
+     Given there is a field foo
+       And foo is granularTo 0.1
+       And foo is lessThanOrEqualTo 0
+       And foo is greaterThanOrEqualTo -1
+     When I ask to generate all values for field foo
+     Then the following data should be generated:
+       | foo  |
+       | 0    |
+       | -0.1 |
+       | -0.2 |
+       | -0.3 |
+       | -0.4 |
+       | -0.5 |
+       | -0.6 |
+       | -0.7 |
+       | -0.8 |
+       | -0.9 |
+       | -1   |
+
+Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
+     Given there is a field foo
+       And foo is granularTo "0.1"
+       And foo is greaterThanOrEqualTo 0
+       And foo is lessThanOrEqualTo 1
+     When I ask to generate all values for field foo
+     Then I am presented with an error message
+        And no data is created
