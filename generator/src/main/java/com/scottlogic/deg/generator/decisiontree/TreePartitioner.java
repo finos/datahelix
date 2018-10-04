@@ -8,6 +8,23 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+class RootLevelAtomicConstraint extends RootLevelConstraint {
+    public IConstraint constraint;
+
+    public RootLevelAtomicConstraint(IConstraint constraint) {
+        this.constraint = constraint;
+    }
+}
+class RootLevelDecisionNodeConstraint extends RootLevelConstraint {
+    public DecisionNode constraint;
+
+    public RootLevelDecisionNodeConstraint(DecisionNode constraint) {
+        this.constraint = constraint;
+    }
+}
+class RootLevelConstraint {
+
+}
 /**
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
@@ -19,31 +36,12 @@ public class TreePartitioner implements ITreePartitioner {
     }
 
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
-        final BasePartitionIndex partitionIndex = new BasePartitionIndex();
+        final PartitionIndex partitions = new PartitionIndex();
 
-        partitionParts(
-            fieldMapper.mapDecisionsToFields(decisionTree),
-            partitionIndex.asDecisionNodePartitionIndex());
+        Map<RootLevelConstraint, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
 
-        partitionParts(
-            fieldMapper.mapConstraintsToFields(decisionTree),
-            partitionIndex.asConstraintPartitionIndex());
-
-        return partitionIndex
-            .getPartitions()
-            .stream()
-            .map(partition -> new DecisionTree(
-                new ConstraintNode(
-                    partition.constraints,
-                    partition.decisions
-                ),
-                new ProfileFields(new ArrayList<>(partition.fields))
-            ));
-    }
-
-    <T> void partitionParts(Map<T, Set<Field>> mapping, PartitionIndex<T> partitions) {
         // each set of fields iterated here are constrained by a single root-level constraint/decision
-        for (T constraint : mapping.keySet()) {
+        for (RootLevelConstraint constraint : mapping.keySet()) {
             Set<Field> fields = mapping.get(constraint);
 
             // find which existing partitions this constraint/decision affects (if any)
@@ -67,27 +65,48 @@ public class TreePartitioner implements ITreePartitioner {
             // TODO: write test for this
             // if partitions are being merged, remove the old ones
         }
+
+        return partitions
+            .getPartitions()
+            .stream()
+            .map(partition -> new DecisionTree(
+                new ConstraintNode(
+                    partition.constraints
+                        .stream()
+                        .filter(constraint -> constraint instanceof RootLevelAtomicConstraint)
+                        .map(constraint -> ((RootLevelAtomicConstraint)constraint).constraint)
+                        .collect(Collectors.toList()),
+                    partition.constraints
+                        .stream()
+                        .filter(constraint -> constraint instanceof RootLevelDecisionNodeConstraint)
+                        .map(constraint -> ((RootLevelDecisionNodeConstraint)constraint).constraint)
+                        .collect(Collectors.toList())
+                ),
+                new ProfileFields(new ArrayList<>(partition.fields))
+            ));
     }
 
-    interface PartitionIndex<T> {
-        UUID addPartition(Set<Field> fields, Set<T> constraints);
+    class Partition {
+        final UUID id;
+        final Set<Field> fields;
+        final Set<RootLevelConstraint> constraints;
 
-        UUID mergePartitions(Set<UUID> partitions);
+        Partition(UUID id, Set<Field> fields, Set<RootLevelConstraint> constraints) {
+            this.id = id;
+            this.fields = fields;
+            this.constraints = constraints;
+        }
+}
 
-        UUID getPartitionId(Field field);
-    }
-
-    class BasePartitionIndex {
+class PartitionIndex {
         private final Map<UUID, Partition> idToPartition = new HashMap<>();
         private final Map<Field, Partition> fieldsToPartition = new HashMap<>();
 
-        UUID addPartition(Set<Field> fields, Set<IConstraint> constraints, Set<DecisionNode> decisions) {
+        UUID addPartition(Set<Field> fields, Set<RootLevelConstraint> constraints) {
             final Partition newPartition = new Partition(
                 java.util.UUID.randomUUID(),
                 fields,
-                constraints,
-                decisions
-            );
+                constraints);
 
             idToPartition.put(newPartition.id, newPartition);
 
@@ -104,14 +123,12 @@ public class TreePartitioner implements ITreePartitioner {
                 .collect(Collectors.toSet());
 
             final Set<Field> fields = getFromAllPartitions(partitions, partition -> partition.fields);
-            final Set<IConstraint> constraints = getFromAllPartitions(partitions, partition -> partition.constraints);
-            final Set<DecisionNode> decisions = getFromAllPartitions(partitions, partition -> partition.decisions);
+            final Set<RootLevelConstraint> constraints = getFromAllPartitions(partitions, partition -> partition.constraints);
 
             final Partition newPartition = new Partition(
                 java.util.UUID.randomUUID(),
                 fields,
-                constraints,
-                decisions);
+                constraints);
             idToPartition.put(newPartition.id, newPartition);
             fields.forEach(field -> fieldsToPartition.put(field, newPartition));
 
@@ -135,74 +152,6 @@ public class TreePartitioner implements ITreePartitioner {
 
         Collection<Partition> getPartitions() {
             return idToPartition.values();
-        }
-
-        PartitionIndex<IConstraint> asConstraintPartitionIndex() {
-            return new ConstraintPartitionIndex(this);
-        }
-
-        PartitionIndex<DecisionNode> asDecisionNodePartitionIndex() {
-            return new DecisionPartitionIndex(this);
-        }
-
-        class DecisionPartitionIndex implements PartitionIndex<DecisionNode> {
-            final BasePartitionIndex partitionIndex;
-
-            DecisionPartitionIndex(BasePartitionIndex partitionIndex) {
-                this.partitionIndex = partitionIndex;
-            }
-
-            @Override
-            public UUID addPartition(Set<Field> fields, Set<DecisionNode> constraints) {
-                return partitionIndex.addPartition(fields, Collections.emptySet(), constraints);
-            }
-
-            @Override
-            public UUID mergePartitions(Set<UUID> partitions) {
-                return partitionIndex.mergePartitions(partitions);
-            }
-
-            @Override
-            public UUID getPartitionId(Field field) {
-                return partitionIndex.getPartitionId(field);
-            }
-        }
-
-        class ConstraintPartitionIndex implements PartitionIndex<IConstraint> {
-            final BasePartitionIndex partitionIndex;
-
-            ConstraintPartitionIndex(BasePartitionIndex partitionIndex) {
-                this.partitionIndex = partitionIndex;
-            }
-
-            @Override
-            public UUID addPartition(Set<Field> fields, Set<IConstraint> constraints) {
-                return partitionIndex.addPartition(fields, constraints, Collections.emptySet());
-            }
-
-            @Override
-            public UUID mergePartitions(Set<UUID> partitions) {
-                return partitionIndex.mergePartitions(partitions);
-            }
-
-            @Override
-            public UUID getPartitionId(Field field) {
-                return partitionIndex.getPartitionId(field);
-            }
-        }
-    }
-
-    class Partition {
-        final UUID id;
-        final Set<Field> fields;
-        final Set<DecisionNode> decisions;
-        final Set<IConstraint> constraints;
-
-        Partition(UUID id, Set<Field> fields, Set<IConstraint> constraints, Set<DecisionNode> decisions) {
-            this.id = id;
-            this.fields = fields;
-            this.decisions = decisions;
-            this.constraints = constraints;
         }
     }
 }
