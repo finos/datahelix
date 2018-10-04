@@ -3,27 +3,47 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class RootLevelAtomicConstraint extends RootLevelConstraint {
-    public IConstraint constraint;
-
-    public RootLevelAtomicConstraint(IConstraint constraint) {
-        this.constraint = constraint;
-    }
-}
-class RootLevelDecisionNodeConstraint extends RootLevelConstraint {
-    public DecisionNode constraint;
-
-    public RootLevelDecisionNodeConstraint(DecisionNode constraint) {
-        this.constraint = constraint;
-    }
-}
 class RootLevelConstraint {
+    private Object constraint;
 
+    RootLevelConstraint(DecisionNode decisionNode) {
+        constraint = decisionNode;
+    }
+
+    RootLevelConstraint(IConstraint atomicConstraint) {
+        constraint = atomicConstraint;
+    }
+
+    public DecisionNode getDecisionNode() {
+        return constraint instanceof DecisionNode
+            ? (DecisionNode)constraint
+            : null;
+    }
+
+    public IConstraint getAtomicConstraint() {
+        return constraint instanceof IConstraint
+            ? (IConstraint)constraint
+            : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RootLevelConstraint that = (RootLevelConstraint) o;
+        return Objects.equals(constraint, that.constraint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(constraint);
+    }
 }
 /**
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
@@ -70,20 +90,9 @@ public class TreePartitioner implements ITreePartitioner {
             .getPartitions()
             .stream()
             .map(partition -> new DecisionTree(
-                new ConstraintNode(
-                    partition.constraints
-                        .stream()
-                        .filter(constraint -> constraint instanceof RootLevelAtomicConstraint)
-                        .map(constraint -> ((RootLevelAtomicConstraint)constraint).constraint)
-                        .collect(Collectors.toList()),
-                    partition.constraints
-                        .stream()
-                        .filter(constraint -> constraint instanceof RootLevelDecisionNodeConstraint)
-                        .map(constraint -> ((RootLevelDecisionNodeConstraint)constraint).constraint)
-                        .collect(Collectors.toList())
-                ),
+                new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
                 new ProfileFields(new ArrayList<>(partition.fields))
-            ));
+                ));
     }
 
     class Partition {
@@ -95,6 +104,22 @@ public class TreePartitioner implements ITreePartitioner {
             this.id = id;
             this.fields = fields;
             this.constraints = constraints;
+        }
+
+        Set<IConstraint> getAtomicConstraints() {
+            return constraints
+                .stream()
+                .map(RootLevelConstraint::getAtomicConstraint)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        }
+
+        Set<DecisionNode> getDecisionNodes() {
+            return constraints
+                .stream()
+                .map(RootLevelConstraint::getDecisionNode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         }
 }
 

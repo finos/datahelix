@@ -33,11 +33,11 @@ class ConstraintToFieldMapper {
         return Stream.concat(
             node.getAtomicConstraints()
                 .stream()
-                .map(constraint -> new ConstraintToFields(new RootLevelAtomicConstraint(constraint), constraintSniffer.detectField(constraint))),
+                .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraintSniffer.detectField(constraint))),
             node.getDecisions()
                 .stream()
                 .map(decision -> new ConstraintToFields(
-                    new RootLevelDecisionNodeConstraint(decision),
+                    new RootLevelConstraint(decision),
                     decision
                         .getOptions()
                         .stream()
