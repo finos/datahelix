@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
+import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestDTO;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.TestCaseDTO;

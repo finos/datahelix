@@ -2,24 +2,24 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.AndConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
-import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,17 +35,17 @@ public class GenerationEngine {
             new FieldSpecFactory(),
             fieldSpecMerger));
 
-    private final IDataSetOutputter outputter;
+    private final IOutputTarget outputter;
 
-    public GenerationEngine(IDataSetOutputter outputter) {
+    public GenerationEngine(IOutputTarget outputter) {
         this.outputter = outputter;
     }
 
-    public void generateDataSet(String profileFilePath, GenerationConfig config) {
+    public void generateDataSet(Path profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
-            profile = new ProfileReader().read(Paths.get(profileFilePath));
+            profile = new ProfileReader().read(profileFilePath);
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             System.err.println(e.toString());
@@ -66,11 +66,11 @@ public class GenerationEngine {
         }
     }
 
-    public void generateTestCases(String profileFilePath, GenerationConfig config) {
+    public void generateTestCases(Path profileFilePath, GenerationConfig config) {
         final Profile profile;
 
         try {
-            profile = new ProfileReader().read(Paths.get(profileFilePath));
+            profile = new ProfileReader().read(profileFilePath);
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             System.err.println(e.toString());
@@ -142,4 +142,3 @@ public class GenerationEngine {
         return new Rule(rule.description, Collections.singleton(violateConstraint));
     }
 }
-

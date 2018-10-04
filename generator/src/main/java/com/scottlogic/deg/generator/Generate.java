@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
-import com.scottlogic.deg.generator.outputs.FileSystemDataSetOutputter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -17,8 +18,8 @@ public class Generate implements Runnable {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
-    @CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
-    private Path outputDir;
+    @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
+    private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
@@ -32,7 +33,7 @@ public class Generate implements Runnable {
             new FieldExhaustiveCombinationStrategy());
 
         new GenerationEngine(
-            new FileSystemDataSetOutputter(outputDir.toString()))
-            .generateDataSet(profileFile.getAbsolutePath(), config);
+                new FileOutputTarget(outputPath, new CsvDataSetWriter()))
+            .generateDataSet(profileFile.toPath(), config);
     }
 }

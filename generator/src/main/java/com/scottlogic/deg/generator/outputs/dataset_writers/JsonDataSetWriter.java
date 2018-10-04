@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs;
+package com.scottlogic.deg.generator.outputs.dataset_writers;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;

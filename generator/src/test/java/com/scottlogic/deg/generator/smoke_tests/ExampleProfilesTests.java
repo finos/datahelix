@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.IDataSetOutputter;
+import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -27,7 +27,7 @@ class ExampleProfilesTests {
         {
             GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
                 new FieldExhaustiveCombinationStrategy());
-            generationEngine.generateTestCases(profileFile.getAbsolutePath(), config);
+            generationEngine.generateTestCases(profileFile.toPath(), config);
         }));
     }
 
@@ -37,7 +37,7 @@ class ExampleProfilesTests {
         {
             GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
                 new FieldExhaustiveCombinationStrategy());
-            generationEngine.generateDataSet(profileFile.getAbsolutePath(), config);
+            generationEngine.generateDataSet(profileFile.toPath(), config);
         }));
     }
 
@@ -57,8 +57,8 @@ class ExampleProfilesTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 new GenerationEngine(
-                        new NullDataSetOutputter())
-                    .generateTestCases(profileFile.getAbsolutePath(), config);
+                        new NullOutputTarget())
+                    .generateTestCases(profileFile.toPath(), config);
             });
 
             dynamicTests.add(test);
@@ -67,7 +67,7 @@ class ExampleProfilesTests {
         return dynamicTests;
     }
 
-    private class NullDataSetOutputter implements IDataSetOutputter {
+    private class NullOutputTarget implements IOutputTarget {
         @Override
         public void outputDataset(Iterable<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable

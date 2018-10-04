@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
-import com.scottlogic.deg.generator.outputs.FileSystemDataSetOutputter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class GenerateTestCases implements Runnable {
             new FieldExhaustiveCombinationStrategy());
 
         new GenerationEngine(
-            new FileSystemDataSetOutputter(outputDir.toString()))
-            .generateTestCases(profileFile.getAbsolutePath(), config);
+                new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()))
+            .generateTestCases(profileFile.toPath(), config);
     }
 }
