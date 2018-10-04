@@ -25,7 +25,7 @@ public class TreePartitioner implements ITreePartitioner {
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
         final PartitionIndex partitions = new PartitionIndex();
 
-        Map<RootLevelConstraint, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
+        final Map<RootLevelConstraint, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
 
         // each set of fields iterated here are constrained by a single root-level constraint/decision
         for (RootLevelConstraint constraint : mapping.keySet()) {
@@ -53,13 +53,25 @@ public class TreePartitioner implements ITreePartitioner {
             // if partitions are being merged, remove the old ones
         }
 
-        return partitions
-            .getPartitions()
+        final Stream<Field> unpartitionedFields = decisionTree
+            .getFields()
             .stream()
-            .map(partition -> new DecisionTree(
-                new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                new ProfileFields(new ArrayList<>(partition.fields))
-                ));
+            .filter(field -> Objects.isNull(partitions.getPartitionId(field)));
+
+        return Stream.concat(
+            partitions
+                .getPartitions()
+                .stream()
+                .map(partition -> new DecisionTree(
+                    new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
+                    new ProfileFields(new ArrayList<>(partition.fields))
+                )),
+            unpartitionedFields
+                .map(field -> new DecisionTree(
+                    new ConstraintNode(),
+                    new ProfileFields(Collections.singletonList(field))
+                ))
+            );
     }
 
     class Partition {
@@ -88,9 +100,9 @@ public class TreePartitioner implements ITreePartitioner {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         }
-}
+    }
 
-class PartitionIndex {
+    class PartitionIndex {
         private final Map<UUID, Partition> idToPartition = new HashMap<>();
         private final Map<Field, Partition> fieldsToPartition = new HashMap<>();
 
