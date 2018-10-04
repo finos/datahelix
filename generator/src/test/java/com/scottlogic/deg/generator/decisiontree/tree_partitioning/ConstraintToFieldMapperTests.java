@@ -94,54 +94,6 @@ class ConstraintToFieldMapperTests {
         expectMapping(decisionDEF, "D", "E", "F");
     }
 
-    @Disabled("Nested mappings are currently not supported")
-    @Test
-    void shouldMapNestedConstraintsToNestedFields() {
-        givenFields("A", "B", "C", "D", "E", "F");
-
-        final IConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
-        final IConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final IConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
-        final IConstraint constraintD = new IsEqualToConstantConstraint(new Field("D"), "test-value");
-        final IConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
-        final IConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
-
-        final DecisionNode decisionB = new DecisionNode(new ConstraintNode(constraintB));
-
-        final DecisionNode decisionABC = new DecisionNode(
-            new ConstraintNode(
-                Collections.emptyList(),
-                Arrays.asList(
-                    new DecisionNode(new ConstraintNode(constraintA)),
-                    decisionB,
-                    new DecisionNode(new ConstraintNode(constraintC))
-                )
-            )
-        );
-
-        final DecisionNode decisionDEF = new DecisionNode(
-            new ConstraintNode(
-                Collections.emptyList(),
-                Collections.singletonList(
-                    new DecisionNode(
-                        new ConstraintNode(constraintD),
-                        new ConstraintNode(constraintE),
-                        new ConstraintNode(constraintF))
-                )
-            )
-        );
-
-        givenDecisions(decisionABC, decisionDEF);
-
-        expectMapping(constraintA, "A");
-        expectMapping(constraintB, "B");
-        expectMapping(constraintC, "C");
-        expectMapping(constraintD, "D");
-        expectMapping(constraintE, "E");
-        expectMapping(constraintF, "F");
-        expectMapping(decisionB, "B");
-    }
-
     @BeforeEach
     void beforeEach() {
         constraintsList = new ArrayList<>();
