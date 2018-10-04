@@ -10,19 +10,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 
-@picocli.CommandLine.Command(description = "Produces a decision tree in DOT format for the specified profile.",
-    name = "visualise", mixinStandardHelpOptions = true, version = "1.0")
+@picocli.CommandLine.Command(
+    name = "visualise",
+    description = "Produces a decision tree in DOT format for the specified profile.",
+    mixinStandardHelpOptions = true,
+    version = "1.0")
 public class Visualise implements Runnable {
-
     @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
 
     @picocli.CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
     private Path outputDir;
-
-    public static void main(String[] args) throws Exception {
-        picocli.CommandLine.run(new Visualise(), args);
-    }
 
     @Override
     public void run() {

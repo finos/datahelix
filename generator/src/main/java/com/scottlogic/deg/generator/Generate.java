@@ -8,10 +8,12 @@ import picocli.CommandLine;
 import java.io.File;
 import java.nio.file.Path;
 
-@CommandLine.Command(description = "Generates data using a profile file.",
-    name = "generate", mixinStandardHelpOptions = true, version = "1.0")
+@CommandLine.Command(
+    name = "generate",
+    description = "Generates data using a profile file.",
+    mixinStandardHelpOptions = true,
+    version = "1.0")
 public class Generate implements Runnable {
-
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
 
@@ -23,13 +25,8 @@ public class Generate implements Runnable {
         defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
-    public static void main(String[] args) throws Exception {
-        CommandLine.run(new Generate(), args);
-    }
-
     @Override
     public void run() {
-
         GenerationConfig config = new GenerationConfig(
             generationType,
             new FieldExhaustiveCombinationStrategy());
