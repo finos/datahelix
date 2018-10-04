@@ -1,9 +1,11 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,48 +13,48 @@ import java.util.stream.Stream;
  * Given a decision tree, find which constraints and decisions act on which fields and return a map from them to fields
  */
 class ConstraintToFieldMapper {
-
-    private class ConstraintToFields {
-        public Object constraint;
-        public Set<Field> fields;
-
-        ConstraintToFields(Object constraint, Set<Field> fields) {
-            this.constraint = constraint;
-            this.fields = fields;
-        }
-
-        ConstraintToFields(Object constraint, Field field) {
-            this.constraint = constraint;
-            this.fields = Collections.singleton(field);
-        }
-    }
-
     private final ConstraintFieldSniffer constraintSniffer = new ConstraintFieldSniffer();
 
-    private Stream<ConstraintToFields> mapConstraintToFields(ConstraintNode node) {
+    private Stream<Field> findFields(ConstraintNode node) {
         return Stream.concat(
             node.getAtomicConstraints()
                 .stream()
-                .map(constraint -> new ConstraintToFields(constraint, constraintSniffer.detectField(constraint))),
+                .map(constraintSniffer::detectField),
             node.getDecisions()
                 .stream()
-                .map(decision -> new ConstraintToFields(
-                    decision,
+                .flatMap(decision ->
                     decision
                         .getOptions()
                         .stream()
-                        .flatMap(this::mapConstraintToFields)
-                        .flatMap(objectField -> objectField.fields.stream())
-                        .collect(Collectors.toSet()))
-        ));
+                        .flatMap(this::findFields))
+        );
     }
 
-    Map<Object, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree){
-        return mapConstraintToFields(decisionTree.getRootNode())
+    Map<DecisionNode, Set<Field>> mapDecisionsToFields(DecisionTree decisionTree) {
+        return decisionTree
+            .getRootNode()
+            .getDecisions()
+            .stream()
             .collect(
                 Collectors.toMap(
-                map -> map.constraint,
-                map -> map.fields
+                    decision -> decision,
+                    decision -> decision
+                        .getOptions()
+                        .stream()
+                        .flatMap(this::findFields)
+                        .collect(Collectors.toSet())
+                )
+            );
+    }
+
+    Map<IConstraint, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree) {
+        return decisionTree
+            .getRootNode()
+            .getAtomicConstraints()
+            .stream()
+            .collect(Collectors.toMap(
+                    constraint -> constraint,
+                constraint -> Collections.singleton(constraintSniffer.detectField(constraint))
             ));
     }
 }
