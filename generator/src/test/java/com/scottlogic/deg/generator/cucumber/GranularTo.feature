@@ -2,10 +2,9 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
     
 Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
      Given there is a field foo
-       And foo is granularTo 0.1
-       And foo is greaterThanOrEqualTo 0
-       And foo is lessThanOrEqualTo 1
-     When I ask to generate all values for field foo
+       And foo is granular to 0.1
+       And foo is greater than or equal to 0
+       And foo is less than or equal to 1
      Then the following data should be generated:
        | foo  |
        | 0    |
@@ -22,10 +21,9 @@ Scenario: User requires to create a numeric field with data values that include 
 
 Scenario: User requires to create a numeric field with data values that include a decimal value to two decimal points
      Given there is a field foo
-       And foo is granularTo 0.01
-       And foo is greaterThanOrEqualTo 0
-       And foo is lessThanOrEqualTo 0.2
-     When I ask to generate all values for field foo
+       And foo is granular to 0.01
+       And foo is greater than or equal to 0
+       And foo is less than or equal to 0.2
      Then the following data should be generated:
        | foo  |
        | 0    |
@@ -52,10 +50,9 @@ Scenario: User requires to create a numeric field with data values that include 
 
 Scenario: User requires to create a numeric field with data values that include a decimal value to five decimal points
      Given there is a field foo
-       And foo is granularTo 0.00001
-       And foo is greaterThanOrEqualTo 0
-       And foo is lessThanOrEqualTo 0.0001
-     When I ask to generate all values for field foo
+       And foo is granular to 0.00001
+       And foo is greater than or equal to 0
+       And foo is less than or equal to 0.0001
      Then the following data should be generated:
        | foo     |
        | 0       |
@@ -72,10 +69,9 @@ Scenario: User requires to create a numeric field with data values that include 
 
 Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
      Given there is a field foo
-       And foo is granularTo 0.1
-       And foo is lessThanOrEqualTo 0
-       And foo is greaterThanOrEqualTo -1
-     When I ask to generate all values for field foo
+       And foo is granular to 0.1
+       And foo is less than or equal to 0
+       And foo is greater than or equal to -1
      Then the following data should be generated:
        | foo  |
        | 0    |
@@ -92,9 +88,6 @@ Scenario: User requires to create a numeric field with negative data values that
 
 Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
      Given there is a field foo
-       And foo is granularTo "0.1"
-       And foo is greaterThanOrEqualTo 0
-       And foo is lessThanOrEqualTo 1
-     When I ask to generate all values for field foo
+       And foo is granular to "0.1"
      Then I am presented with an error message
         And no data is created
