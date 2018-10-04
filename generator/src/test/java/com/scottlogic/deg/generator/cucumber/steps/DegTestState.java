@@ -6,9 +6,7 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DegTestState {
@@ -31,7 +29,11 @@ public class DegTestState {
         dto.field = fieldName;
         dto.is = this.extractConstraint(constraintName);
         if (value != null){
-            dto.value = value;
+            if (value instanceof Collection){
+                dto.values = (Collection) value;
+            } else {
+                dto.value = value;
+            }
         }
         return dto;
     }
@@ -51,6 +53,5 @@ public class DegTestState {
             new ProfileFields(this.profileFields));
         this.constraints.add(constraint);
     }
-
 
 }

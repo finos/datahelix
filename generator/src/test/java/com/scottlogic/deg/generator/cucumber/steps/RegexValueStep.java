@@ -2,21 +2,20 @@ package com.scottlogic.deg.generator.cucumber.steps;
 
 import cucumber.api.java.en.When;
 
-public class RegexStep {
+public class RegexValueStep {
 
     private DegTestState state;
-    private final static String regexOperations = "(matching regex|containing regex)";
 
-    public RegexStep(DegTestState state){
+    public RegexValueStep(DegTestState state){
         this.state = state;
     }
 
-    @When("^(.+) is "+ RegexStep.regexOperations + " /(.+)/$")
+    @When("{fieldVar} is {regexValueOperation} {regex}")
     public void whenFieldIsConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("^(.+) is not "+ RegexStep.regexOperations + " /(.+)/$")
+    @When("{fieldVar} is not {regexValueOperation} {regex}")
     public void whenFieldIsNotConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }
