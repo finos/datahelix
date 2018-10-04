@@ -1,50 +1,17 @@
-package com.scottlogic.deg.generator.decisiontree;
+package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class RootLevelConstraint {
-    private Object constraint;
-
-    RootLevelConstraint(DecisionNode decisionNode) {
-        constraint = decisionNode;
-    }
-
-    RootLevelConstraint(IConstraint atomicConstraint) {
-        constraint = atomicConstraint;
-    }
-
-    public DecisionNode getDecisionNode() {
-        return constraint instanceof DecisionNode
-            ? (DecisionNode)constraint
-            : null;
-    }
-
-    public IConstraint getAtomicConstraint() {
-        return constraint instanceof IConstraint
-            ? (IConstraint)constraint
-            : null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RootLevelConstraint that = (RootLevelConstraint) o;
-        return Objects.equals(constraint, that.constraint);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(constraint);
-    }
-}
 /**
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
