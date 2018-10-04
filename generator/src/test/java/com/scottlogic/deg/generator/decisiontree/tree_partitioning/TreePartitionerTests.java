@@ -4,11 +4,9 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import static com.scottlogic.deg.generator.AssertingMatcher.matchesAssertions;
-import static org.hamcrest.Matchers.*;
+import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 
 class TreePartitionerTests {
     @Test
@@ -274,98 +270,5 @@ class TreePartitionerTests {
             partitionedTrees,
             isEquivalentTo(Arrays.asList(decisionTrees))
         );
-    }
-
-    // TODO: Code from here down is copied from DataGeneratorTests.java, move them to some common place
-    private Matcher<List<DecisionTree>> isEquivalentTo(List<DecisionTree> expectedTrees) {
-        return matchesAssertions(
-            "matching decision trees",
-            (actual, asserter) -> {
-                asserter.assertThat(
-                    actual,
-                    containsInAnyOrder(
-                        expectedTrees
-                            .stream()
-                            .map(this::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            }
-        );
-    }
-
-    private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
-        return matchesAssertions(
-            "matching decision tree",
-            (actual, asserter) -> {
-                asserter.assertThat(actual.getRootNode(), isEquivalentTo(expectedTree.getRootNode()));
-
-                asserter.assertThat(
-                    actual.getFields(),
-                    containsInAnyOrder(
-                        StreamSupport.stream(expectedTree.getFields().spliterator(), true)
-                            .toArray(Field[]::new)));
-            }
-        );
-    }
-
-    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
-        return matchesAssertions(
-            "matching option node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of atomic constraints
-                    actual.getAtomicConstraints().size(),
-                    equalTo(expected.getAtomicConstraints().size()));
-
-                asserter.assertThat( // Should have same atomic constraints
-                    actual.getAtomicConstraints(),
-                    containsInAnyOrder(
-                        expected.getAtomicConstraints().stream()
-                            .map(c -> anyOf(sameInstance(c), sameNegation(c)))
-                            .collect(Collectors.toList())));
-
-                asserter.assertThat( // Should have same number of decisions
-                    actual.getDecisions().size(),
-                    equalTo(expected.getDecisions().size()));
-
-                asserter.assertThat( // Should have same decisions
-                    actual.getDecisions(),
-                    containsInAnyOrder(
-                            expected.getDecisions().stream()
-                            .map(this::isEquivalentTo)
-//                            .map(option -> isEquivalentTo(option))
-                            .collect(Collectors.toList())));
-            });
-    }
-
-    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
-        return matchesAssertions(
-            "matching decision node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of options
-                    actual.getOptions().size(),
-                    equalTo(expected.getOptions().size()));
-
-                asserter.assertThat( // Should have same options
-                    actual.getOptions(),
-                    containsInAnyOrder(
-                        expected.getOptions().stream()
-                            .map(this::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            });
-    }
-
-    private Matcher<IConstraint> sameNegation(IConstraint expected) {
-        return matchesAssertions(
-            "Both constraints negate the same constraint instance",
-            (actual, subAssert) -> {
-                subAssert.assertThat(actual, instanceOf(NotConstraint.class));
-                subAssert.assertThat(expected, instanceOf(NotConstraint.class));
-
-                if (!(actual instanceof NotConstraint && expected instanceof NotConstraint))
-                    return;
-
-                subAssert.assertThat(
-                    ((NotConstraint) actual).negatedConstraint,
-                    sameInstance(((NotConstraint)expected).negatedConstraint));
-            });
     }
 }

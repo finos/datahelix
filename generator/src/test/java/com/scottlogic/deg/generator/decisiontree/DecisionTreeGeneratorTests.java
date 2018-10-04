@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
-import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -16,10 +15,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
-import static com.scottlogic.deg.generator.AssertingMatcher.matchesAssertions;
+import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.*;
 
@@ -59,65 +57,6 @@ class DecisionTreeGeneratorTests {
         return this.getActualOutput().getDecisionTrees().iterator().next()
             .getRootNode();
     }
-
-    private Matcher<IConstraint> sameNegation(IConstraint expected) {
-        return matchesAssertions(
-            "Both constraints negate the same constraint instance",
-            (actual, subAssert) -> {
-                subAssert.assertThat(actual, instanceOf(NotConstraint.class));
-                subAssert.assertThat(expected, instanceOf(NotConstraint.class));
-                subAssert.assertThat(
-                    ((NotConstraint) actual).negatedConstraint,
-                    sameInstance(((NotConstraint)expected).negatedConstraint));
-            });
-    }
-
-    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
-        return matchesAssertions(
-            "matching option node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of atomic constraints
-                    actual.getAtomicConstraints().size(),
-                    equalTo(expected.getAtomicConstraints().size()));
-
-                asserter.assertThat( // Should have same atomic constraints
-                    actual.getAtomicConstraints(),
-                    containsInAnyOrder(
-                        expected.getAtomicConstraints().stream()
-                            .map(c -> anyOf(sameInstance(c), sameNegation(c)))
-                            .collect(Collectors.toList())));
-
-                asserter.assertThat( // Should have same number of decisions
-                    actual.getDecisions().size(),
-                    equalTo(expected.getDecisions().size()));
-
-                asserter.assertThat( // Should have same decisions
-                    actual.getDecisions(),
-                    containsInAnyOrder(
-                        expected.getDecisions().stream()
-                            .map(this::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            });
-    }
-
-    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
-        return matchesAssertions(
-            "matching decision node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of options
-                    actual.getOptions().size(),
-                    equalTo(expected.getOptions().size()));
-
-                asserter.assertThat( // Should have same options
-                    actual.getOptions(),
-                    containsInAnyOrder(
-                        expected.getOptions().stream()
-                            .map(this::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            });
-    }
-
-
     @Test
     void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
