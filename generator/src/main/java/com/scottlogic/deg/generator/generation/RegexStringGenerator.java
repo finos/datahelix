@@ -89,7 +89,9 @@ public class RegexStringGenerator implements IStringGenerator {
         String shortestString = AutomationUtils.getShortestExample(automaton);
         String longestString = AutomationUtils.getLongestExample(automaton);
 
-        return () -> Arrays.asList(shortestString, longestString).iterator();
+        return shortestString.equals(longestString)
+            ? Collections.singleton(shortestString)
+            : Arrays.asList(shortestString, longestString);
     }
 
     @Override
