@@ -1,11 +1,10 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
@@ -39,18 +38,28 @@ public class Visualise implements Runnable {
 
         final DecisionTreeCollection analysedProfile = profileAnalyser.analyse(profile);
 
-        writeTreeGraphs(analysedProfile, outputDir, sourceFile.getName());
+        try {
+            writeTreeGraphs(
+                analysedProfile,
+                outputDir,
+                sourceFile.getName().replaceFirst("\\.[^.]+$", ""));
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    private void writeTreeGraphs(DecisionTreeCollection analysedProfile, Path directory, String filename) {
-        String dot = analysedProfile.getMergedTree().toDot("tree", "");
+    private void writeTreeGraphs(
+        DecisionTreeCollection analysedProfile,
+        Path directory,
+        String filenameBase)
+        throws IOException {
 
-        try {
-            try (PrintWriter out = new PrintWriter(String.format("%s/%s.gv", directory.toString(), filename ))) {
-                out.println(dot);
-            }
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
+        try (PrintWriter out = new PrintWriter(directory.resolve(filenameBase + ".gv").toString())) {
+            new DecisionTreeVisualisationWriter(out).writeDot(
+                analysedProfile.getMergedTree(),
+                "tree",
+                "");
         }
     }
 }
