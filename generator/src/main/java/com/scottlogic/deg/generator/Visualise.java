@@ -4,10 +4,12 @@ import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @picocli.CommandLine.Command(
     name = "visualise",
@@ -36,28 +38,39 @@ public class Visualise implements Runnable {
             return;
         }
 
-        final DecisionTreeCollection analysedProfile = profileAnalyser.analyse(profile);
+        final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
+        final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+
+        final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
+
+        List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
 
         try {
-            writeTreeGraphs(
-                analysedProfile,
-                outputDir,
-                sourceFile.getName().replaceFirst("\\.[^.]+$", ""));
+            writeTreeTo(
+                mergedTree,
+                outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
+
+            if (treePartitions.size() > 1) {
+                for (int i = 0; i < treePartitions.size(); i++) {
+                    writeTreeTo(
+                        mergedTree,
+                        outputDir.resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
+                }
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void writeTreeGraphs(
-        DecisionTreeCollection analysedProfile,
-        Path directory,
-        String filenameBase)
+    private void writeTreeTo(
+        DecisionTree decisionTree,
+        Path outputFilePath)
         throws IOException {
 
-        try (PrintWriter out = new PrintWriter(directory.resolve(filenameBase + ".gv").toString())) {
-            new DecisionTreeVisualisationWriter(out).writeDot(
-                analysedProfile.getMergedTree(),
+        try (PrintWriter outWriter = new PrintWriter(outputFilePath.toString())) {
+            new DecisionTreeVisualisationWriter(outWriter).writeDot(
+                decisionTree,
                 "tree",
                 "");
         }
