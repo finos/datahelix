@@ -43,9 +43,7 @@ public class Visualise implements Runnable {
             profile = new ProfileReader().read(sourceFile.toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
-            System.err.println(e.toString());
-            for (StackTraceElement ste : e.getStackTrace())
-                System.err.println(ste.toString());
+            e.printStackTrace();
             return;
         }
 
