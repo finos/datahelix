@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @picocli.CommandLine.Command(
     name = "visualise",
@@ -43,17 +42,21 @@ public class Visualise implements Runnable {
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
 
-        List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
+        final List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
+
+        final String title = profile.description != null ? profile.description : profileBaseName;
 
         try {
             writeTreeTo(
                 mergedTree,
+                title,
                 outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
 
             if (treePartitions.size() > 1) {
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
                         mergedTree,
+                        title + " (partition " + (i + 1) + ")",
                         outputDir.resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
                 }
             }
@@ -65,6 +68,7 @@ public class Visualise implements Runnable {
 
     private void writeTreeTo(
         DecisionTree decisionTree,
+        String description,
         Path outputFilePath)
         throws IOException {
 
@@ -72,7 +76,7 @@ public class Visualise implements Runnable {
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,
                 "tree",
-                "");
+                description);
         }
     }
 }

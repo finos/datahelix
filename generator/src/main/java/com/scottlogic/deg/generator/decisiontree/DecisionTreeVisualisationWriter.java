@@ -23,8 +23,13 @@ public class DecisionTreeVisualisationWriter {
      * @return
      */
     public void writeDot(DecisionTree decisionTree, String graphName, String description) throws IOException {
-        writeLine("/* " + description + " */");
         writeLine("graph " + graphName + " {");
+
+        if (description != null) {
+            writeLine("  label=\"" + description + "\""); // NOTE: no effort at escaping "s
+            writeLine("  labelloc=\"t\"");
+            writeLine("  fontsize=\"20\"");
+        }
 
         visit(decisionTree.getRootNode(), null);
 
@@ -57,7 +62,7 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(String id) throws IOException {
-        writeLine(id + "[label=\"\"][shape=invtriangle]");
+        writeLine("  " + id + "[label=\"\"][shape=invtriangle]");
     }
 
     private void declareConstraintNode(String id, Collection<IConstraint> constraints) throws IOException {
@@ -66,11 +71,11 @@ public class DecisionTreeVisualisationWriter {
             .map(IConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
 
-        writeLine(id + "[label=\"" + label + "\"][shape=box]");
+        writeLine("  " + id + "[fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
     }
 
     private void declareParenthood(String parentNodeId, String childNodeId) throws IOException {
-        writeLine(parentNodeId + " -- " + childNodeId);
+        writeLine("  " + parentNodeId + " -- " + childNodeId);
     }
 
     private void writeLine(String line) throws IOException {
