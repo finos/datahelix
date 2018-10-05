@@ -154,8 +154,8 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
         if (negate) {
-            // TODO: Decide what to do here
-            throw new UnsupportedOperationException();
+            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            return new FieldSpec();
         }
 
         return createFieldSpec(fs -> fs.setGranularityRestrictions(
@@ -216,8 +216,8 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate) {
         if (negate) {
-            // TODO: Decide what to do here
-            throw new UnsupportedOperationException();
+            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            return new FieldSpec();
         }
 
         final FormatRestrictions formatRestrictions = new FormatRestrictions();

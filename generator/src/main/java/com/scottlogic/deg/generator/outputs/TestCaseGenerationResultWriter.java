@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
+import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestDTO;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.TestCaseDTO;
@@ -16,9 +17,10 @@ public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
     private final IDataSetWriter datasetWriter;
 
-    public TestCaseGenerationResultWriter() {
-        this.datasetWriter = new CsvTestCaseDataSetWriter();
+    public TestCaseGenerationResultWriter(IDataSetWriter datasetWriter) {
         this.manifestWriter = new ManifestWriter();
+
+        this.datasetWriter = datasetWriter;
     }
 
     public void writeToDirectory(TestCaseGenerationResult result, Path directoryPath) throws IOException {
@@ -28,22 +30,25 @@ public class TestCaseGenerationResultWriter {
 
         System.out.println("Writing test case files");
         int index = 1;
-        for (TestCaseDataSet dataset : result.datasets)
-        {
+        for (TestCaseDataSet dataset : result.datasets) {
             String filenameWithoutExtension = intFormatter.format(index);
 
-            String filename = this.datasetWriter.write(
-                result.profile,
+            String filename = this.datasetWriter.makeFilename(filenameWithoutExtension);
+
+            Path fileAbsolutePath = directoryPath.resolve(filename);
+
+            System.out.println("  " + filename);
+            this.datasetWriter.write(
+                result.profile.fields,
                 dataset,
-                directoryPath,
-                filenameWithoutExtension);
+                fileAbsolutePath);
 
             testCaseDtos.add(
                 new TestCaseDTO(
                     filename,
                     dataset.violation == null
-                    ? Collections.emptyList()
-                    : Collections.singleton(dataset.violation)));
+                        ? Collections.emptyList()
+                        : Collections.singleton(dataset.violation)));
 
             index++;
         }

@@ -3,23 +3,23 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 
 @CommandLine.Command(
-    name = "generate",
-    description = "Generates data using a profile file.",
+    name = "generateTestCases",
+    description = "Generates valid and violating data using a profile file.",
     mixinStandardHelpOptions = true,
     version = "1.0")
-public class Generate implements Runnable {
+public class GenerateTestCases implements Runnable {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
-    @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
-    private Path outputPath;
+    @CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
+    private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
@@ -33,7 +33,7 @@ public class Generate implements Runnable {
             new FieldExhaustiveCombinationStrategy());
 
         new GenerationEngine(
-                new FileOutputTarget(outputPath, new CsvDataSetWriter()))
-            .generateDataSet(profileFile.toPath(), config);
+                new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()))
+            .generateTestCases(profileFile.toPath(), config);
     }
 }
