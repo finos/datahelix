@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.cucumber.steps;
+package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import static com.scottlogic.deg.schemas.v3.AtomicConstraintType.*;

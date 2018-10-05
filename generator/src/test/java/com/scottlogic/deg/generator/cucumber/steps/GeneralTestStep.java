@@ -42,6 +42,7 @@ public class GeneralTestStep {
     public void BeforeEach() {
         this.state.profileFields.clear();
         this.state.constraints.clear();
+        this.state.generationResult = null;
     }
 
     @Given("there is a field (.+)$")
@@ -79,7 +80,7 @@ public class GeneralTestStep {
 
     @And("^no data is created$")
     public void noDataIsGenerated() {
-        
+        dataGeneratorShouldError();
     }
 
     @Then("^the following data should be generated:$")
