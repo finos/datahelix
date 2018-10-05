@@ -25,6 +25,8 @@ public class DecisionTreeVisualisationWriter {
     public void writeDot(DecisionTree decisionTree, String graphName, String description) throws IOException {
         writeLine("graph " + graphName + " {");
 
+        writeLine("  bgcolor=\"transparent\"");
+
         if (description != null && description.length() > 0) {
             writeLine("  label=\"" + description + "\""); // NOTE: no effort at escaping "s
             writeLine("  labelloc=\"t\"");
@@ -62,7 +64,7 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(String id) throws IOException {
-        writeLine("  " + id + "[label=\"\"][shape=invtriangle]");
+        writeLine("  " + id + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
     }
 
     private void declareConstraintNode(String id, Collection<IConstraint> constraints) throws IOException {
@@ -71,7 +73,7 @@ public class DecisionTreeVisualisationWriter {
             .map(IConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
 
-        writeLine("  " + id + "[fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
+        writeLine("  " + id + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
     }
 
     private void declareParenthood(String parentNodeId, String childNodeId) throws IOException {
