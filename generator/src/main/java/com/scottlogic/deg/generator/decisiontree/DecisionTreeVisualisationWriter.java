@@ -25,7 +25,7 @@ public class DecisionTreeVisualisationWriter {
     public void writeDot(DecisionTree decisionTree, String graphName, String description) throws IOException {
         writeLine("graph " + graphName + " {");
 
-        if (description != null) {
+        if (description != null && description.length() > 0) {
             writeLine("  label=\"" + description + "\""); // NOTE: no effort at escaping "s
             writeLine("  labelloc=\"t\"");
             writeLine("  fontsize=\"20\"");

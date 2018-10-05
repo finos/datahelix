@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @picocli.CommandLine.Command(
     name = "visualise",
@@ -21,6 +23,16 @@ public class Visualise implements Runnable {
 
     @picocli.CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
     private Path outputDir;
+
+    @picocli.CommandLine.Option(
+        names = {"-t", "--title"},
+        description = "The title to place at the top of the file")
+    private String titleOverride;
+
+    @picocli.CommandLine.Option(
+        names = {"--no-title"},
+        description = "Hides the title from the output")
+    private boolean shouldHideTitle;
 
     @Override
     public void run() {
@@ -44,19 +56,31 @@ public class Visualise implements Runnable {
 
         final List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
 
-        final String title = profile.description != null ? profile.description : profileBaseName;
+        final String title = shouldHideTitle
+            ? null
+            : Stream.of(titleOverride, profile.description, profileBaseName)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
 
         try {
-            writeTreeTo(
-                mergedTree,
-                title,
-                outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
+            if (treePartitions.size() == 1) {
+                writeTreeTo(
+                    mergedTree,
+                    title,
+                    outputDir.resolve(profileBaseName + ".gv"));
+            } else {
+                writeTreeTo(
+                    mergedTree,
+                    title,
+                    outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
 
-            if (treePartitions.size() > 1) {
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
                         mergedTree,
-                        title + " (partition " + (i + 1) + ")",
+                        title != null
+                            ? title + " (partition " + (i + 1) + ")"
+                            : null,
                         outputDir.resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
                 }
             }
