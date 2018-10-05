@@ -1,0 +1,11 @@
+{
+    "schemaVersion": "v3",
+
+    "fields": [
+		{ "name": "x" },
+		{ "name": "y" }
+    ],
+    "rules": [
+		{ "field": "x", "is": "equalTo", "value": 3 }
+	]
+}
