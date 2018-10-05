@@ -5,6 +5,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than 0
        And foo is less than 10
        And foo is granular to 1
+       And foo is not null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -22,6 +23,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than 0
        And foo is less than 2
        And foo is granular to 0.1
+       And foo is not null
      Then the following data should be generated:
        | foo |
        | 0.1 |
@@ -49,6 +51,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
+       And foo is not null
      Then the following data should be generated:
        | foo |
        | 0.1 |
@@ -76,6 +79,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than -10
        And foo is less than 0
        And foo is granular to 1
+       And foo is not null
      Then the following data should be generated:
        | foo |
        | -9  |
@@ -94,6 +98,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than 1
        And foo is less than 10
        And foo is granular to 1
+       And foo is not null
      Then the following data should be generated:
        | foo |
        | 2   |
