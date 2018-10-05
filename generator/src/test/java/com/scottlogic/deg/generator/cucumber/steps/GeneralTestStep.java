@@ -10,8 +10,7 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
-import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
-import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -69,6 +68,9 @@ public class GeneralTestStep {
     public void dataGeneratorShouldError() {
         try {
             this.generateData();
+            final Iterable<GeneratedObject> dataSet = this.state.generationResult;
+            List<GeneratedObject> allActualRows = new ArrayList<>();
+            dataSet.iterator().forEachRemaining(allActualRows::add);
             Assert.fail("Expected Exception");
         } catch (Exception e) {
             Assert.assertNotNull(e);
@@ -77,15 +79,15 @@ public class GeneralTestStep {
 
     @And("^no data is created$")
     public void noDataIsGenerated() {
-        Assert.assertNull(this.state.generationResult);
+        
     }
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
         this.generateData();
 
-        final TestCaseDataSet dataSet = this.state.generationResult.datasets.iterator().next();
-        List<TestCaseDataRow> allActualRows = new ArrayList<>();
+        final Iterable<GeneratedObject> dataSet = this.state.generationResult;
+        List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.iterator().forEachRemaining(allActualRows::add);
 
         Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data", allActualRows.size(), equalTo(expectedResultsTable.size()));
@@ -95,7 +97,7 @@ public class GeneralTestStep {
                     0,
                     Math.min(allActualRows.size(), expectedResultsTable.size()))
             .forEach(i -> {
-                TestCaseDataRow actualRow = allActualRows.get(i);
+                GeneratedObject actualRow = allActualRows.get(i);
                 Map<String, String> expectedRow = expectedResultsTable.get(i);
                 for (int fieldIndex = 0; fieldIndex < this.state.profileFields.size(); fieldIndex++)
                 {

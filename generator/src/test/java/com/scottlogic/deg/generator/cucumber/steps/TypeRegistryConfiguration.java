@@ -31,7 +31,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         ISAFTEROREQUALTOCONSTANTDATETIME,
         ISBEFORECONSTANTDATETIME,
         ISBEFOREOREQUALTOCONSTANTDATETIME,
-        ISOFTYPE
+        ISOFTYPE,
+        FORMATTEDAS
     ));
 
     private final Set regexValueOperations = new HashSet<AtomicConstraintType>(Arrays.asList(
