@@ -12,7 +12,6 @@ import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -66,29 +65,27 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
+    @Then("^I am presented with an error message$")
+    public void dataGeneratorShouldError() {
+        try {
+            this.generateData();
+            Assert.fail("Expected Exception");
+        } catch (Exception e) {
+            Assert.assertNotNull(e);
+        }
+    }
+
+    @And("^no data is created$")
+    public void noDataIsGenerated() {
+        Assert.assertNull(this.state.generationResult);
+    }
+
     @Then("^the following data should be generated:$")
-    public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Throwable {
-        Profile profile = new Profile(
-            new ProfileFields(this.state.profileFields),
-            Collections.singleton(new Rule("TEST_RULE", this.state.constraints)));
+    public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
+        this.generateData();
 
-        final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
-
-        final IDataGenerator dataGenerator = new DataGenerator(
-            new RowSpecMerger(
-                    new FieldSpecMerger()),
-            new ConstraintReducer(
-                    new FieldSpecFactory(),
-                    new FieldSpecMerger()));
-
-        final GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.FullSequential, new FieldExhaustiveCombinationStrategy());
-
-        final TestCaseGenerationResult generationResult = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-
-        final TestCaseDataSet dataSet = generationResult.datasets.iterator().next();
-
+        final TestCaseDataSet dataSet = this.state.generationResult.datasets.iterator().next();
         List<TestCaseDataRow> allActualRows = new ArrayList<>();
-
         dataSet.iterator().forEachRemaining(allActualRows::add);
 
         Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data", allActualRows.size(), equalTo(expectedResultsTable.size()));
@@ -108,6 +105,24 @@ public class GeneralTestStep {
                     Assert.assertThat(actualValue, equalTo(expectedValueAsString));
                 }
             });
+    }
+
+    private void generateData() throws Exception {
+        Profile profile = new Profile(
+        new ProfileFields(this.state.profileFields),
+        Collections.singleton(new Rule("TEST_RULE", this.state.constraints)));
+
+        final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
+
+        final IDataGenerator dataGenerator = new DataGenerator(
+            new RowSpecMerger(
+                new FieldSpecMerger()),
+            new ConstraintReducer(
+                new FieldSpecFactory(),
+                new FieldSpecMerger()));
+
+        final GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.FullSequential, new FieldExhaustiveCombinationStrategy());
+        this.state.generationResult = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
     }
 
 }

@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
+import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 public class DegTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<IConstraint> constraints = new ArrayList<>();
+    TestCaseGenerationResult generationResult;
 
     public void addConstraint(String fieldName, String constraintName, Object value) throws Exception {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
