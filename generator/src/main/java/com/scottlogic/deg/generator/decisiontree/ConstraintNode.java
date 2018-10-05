@@ -2,10 +2,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public final class ConstraintNode {
     public static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
@@ -36,10 +33,10 @@ public final class ConstraintNode {
             new ArrayList<>());
     }
 
-    ConstraintNode(IConstraint singleAtomicConstraint) {
-        decisions = new ArrayList<>();
-        atomicConstraints = new ArrayList<>();
-        atomicConstraints.add(singleAtomicConstraint);
+    ConstraintNode(DecisionNode... decisionNodes) {
+        this(
+            Collections.emptyList(),
+            Arrays.asList(decisionNodes));
     }
 
     public Collection<IConstraint> getAtomicConstraints() {

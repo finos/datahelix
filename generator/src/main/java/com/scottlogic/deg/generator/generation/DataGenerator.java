@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSour
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
-import com.scottlogic.deg.generator.outputs.TestCaseDataRow;
-import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
@@ -18,7 +16,7 @@ import com.scottlogic.deg.generator.utils.HardLimitingIterable;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataGenerator implements IDataGenerator {
@@ -34,7 +32,7 @@ public class DataGenerator implements IDataGenerator {
     }
 
     @Override
-    public TestCaseGenerationResult generateData(
+    public Iterable<GeneratedObject> generateData(
         Profile profile,
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
@@ -66,20 +64,17 @@ public class DataGenerator implements IDataGenerator {
                                 ConcatenatingDataBagSource::new)))
             .collect(Collectors.toList());
 
-        Iterable<TestCaseDataRow> dataRows = new ProjectingIterable<>(
+        Iterable<GeneratedObject> dataRows = new ProjectingIterable<>(
             new MultiplexingDataBagSource(allDataBagSources).generate(generationConfig),
-            dataBag -> new TestCaseDataRow(
+            dataBag -> new GeneratedObject(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
+
         dataRows = new HardLimitingIterable<>(dataRows, generationConfig.getMaxRows());
 
-        return new TestCaseGenerationResult(
-            profile,
-            Arrays.asList(
-                new TestCaseDataSet(
-                    null,
-                    dataRows)));
+        return dataRows;
+
     }
 }

@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 
 import java.util.Collection;
 
+
 public class DecisionTreeCollection {
     private final ProfileFields fields;
     private final Collection<DecisionTree> decisionTrees;
