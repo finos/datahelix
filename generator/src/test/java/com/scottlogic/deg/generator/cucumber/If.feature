@@ -33,19 +33,3 @@ Feature: Values can be specified by using if, then and else constraints
       | b            | 10     |
       | b            | 20     |
 
-
-
-  { "if": { "field": "product_code", "is": "null" },
-    "then": { "field": "price", "is": "equalTo", "value": 3 } },
-
-  { "field": "price", "is": "ofType", "value": "numeric" }
-
-
-  { "if": { "field": "product_code", "is": "null" },
-    "then": {
-      "allOf": [
-        { "field": "price", "is": "equalTo", "value": 3 },
-        { "field": "price", "is": "ofType", "value": "numeric" }
-      ]
-    }
-  }
