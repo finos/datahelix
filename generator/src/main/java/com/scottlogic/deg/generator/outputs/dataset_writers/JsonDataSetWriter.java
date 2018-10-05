@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs;
+package com.scottlogic.deg.generator.outputs.dataset_writers;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,35 +7,34 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 
-public class JsonTestCaseDataSetWriter implements IDataSetWriter {
-
-    ObjectMapper mapper = new ObjectMapper();
-    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+public class JsonDataSetWriter implements IDataSetWriter {
+    private static final SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Override
-    public String write(Profile profile,
-                        TestCaseDataSet dataset,
-                        Path directoryPath,
-                        String filenameWithoutExtension) throws IOException {
+    public void write(
+        ProfileFields profileFields,
+        Iterable<GeneratedObject> dataset,
+        Path filePath) throws IOException {
 
-        ArrayNode arrayNode = mapper.createArrayNode();
+        ObjectMapper jsonObjectMapper = new ObjectMapper();
 
-        for (TestCaseDataRow row : dataset) {
-            ObjectNode rowNode = mapper.createObjectNode();
+        ArrayNode arrayNode = jsonObjectMapper.createArrayNode();
+
+        for (GeneratedObject row : dataset) {
+            ObjectNode rowNode = jsonObjectMapper.createObjectNode();
 
             Iterator<DataBagValue> dataBagIterator = row.values.iterator();
-            Iterator<Field> fieldNameIterator = profile.fields.iterator();
+            Iterator<Field> fieldNameIterator = profileFields.iterator();
 
             while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
 
@@ -55,7 +54,7 @@ public class JsonTestCaseDataSetWriter implements IDataSetWriter {
                 } else if (value instanceof String) {
                     rowNode.put(fieldName, (String) value);
                 } else if (value instanceof LocalDateTime) {
-                    rowNode.put(fieldName, df.format(value));
+                    rowNode.put(fieldName, standardDateFormat.format(value));
                 } else {
                     rowNode.put(fieldName, value.toString());
                 }
@@ -65,12 +64,12 @@ public class JsonTestCaseDataSetWriter implements IDataSetWriter {
             arrayNode.add(rowNode);
         }
 
-        String filename = filenameWithoutExtension + ".json";
-        Path fileAbsolutePath = directoryPath.resolve(filename);
+        ObjectWriter writer = jsonObjectMapper.writer(new DefaultPrettyPrinter());
+        writer.writeValue(filePath.toFile(), arrayNode);
+    }
 
-        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-        writer.writeValue(fileAbsolutePath.toFile(), arrayNode);
-
-        return filename;
+    @Override
+    public String makeFilename(String filenameWithoutExtension) {
+        return filenameWithoutExtension + ".json";
     }
 }

@@ -60,7 +60,7 @@ public class FieldSpecMerger {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.String));
                 } else {
-                    throw new UnmergeableRestrictionException();
+                    throw new UnmergeableRestrictionException("Cannot merge string restriction");
                 }
             }
 
@@ -73,7 +73,7 @@ public class FieldSpecMerger {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Numeric));
                 } else {
-                    throw new UnmergeableRestrictionException();
+                    throw new UnmergeableRestrictionException("Cannot merge numeric restriction");
                 }
             }
 
@@ -86,7 +86,7 @@ public class FieldSpecMerger {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
                     typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Temporal));
                 } else {
-                    throw new UnmergeableRestrictionException();
+                    throw new UnmergeableRestrictionException("Cannot merge date restriction");
                 }
             }
 

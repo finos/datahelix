@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
 
+import java.nio.file.Path;
+
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;

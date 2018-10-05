@@ -9,4 +9,9 @@ public class IsNullConstraint implements IConstraint
     public IsNullConstraint(Field field) {
         this.field = field;
     }
+
+    @Override
+    public String toDotLabel() {
+        return String.format("%s is null", field.name);
+    }
 }

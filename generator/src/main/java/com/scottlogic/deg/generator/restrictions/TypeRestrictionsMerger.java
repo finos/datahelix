@@ -39,8 +39,8 @@ public class TypeRestrictionsMerger {
         intersection.retainAll(right);
 
         if (intersection.isEmpty()) {
-            throw new UnsupportedOperationException(
-                    "Unable to merge type restrictions - two or more conflicting types found");
+            throw new UnmergeableRestrictionException(
+                "Unable to merge type restrictions - two or more conflicting types found");
         }
 
 
