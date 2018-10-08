@@ -5,7 +5,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2018-10-10
        And foo is after 2018-10-01
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2018-10-02 |
@@ -22,7 +22,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2018-10-10
        And foo is after 2018-09-28
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2018-09-29 |
@@ -42,7 +42,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2018-01-03
        And foo is after 2017-12-25
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2017-12-26 |
@@ -59,7 +59,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2016-03-03
        And foo is after 2016-02-25
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2016-02-26 |
@@ -74,7 +74,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2017-03-03
        And foo is after 2017-02-25
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2017-02-26 |
@@ -88,7 +88,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM) values wi
        And foo is before 2018-12
        And foo is after 2018-01
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo     |
        | 2018-02 |
@@ -107,7 +107,7 @@ Scenario: User requires to create a temporal field with date (YYYY) values withi
        And foo is before 2010
        And foo is after 2000
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo  |
        | 2001 |
@@ -125,7 +125,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is before 2018-10-01T12:00:10
        And foo is after 2018-10-01T12:00:00
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo                 |
        | 2018-10-01T12:00:01 |
@@ -143,7 +143,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is before 2018-10-01T12:01:05
        And foo is after 2018-10-01T12:00:57
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo                 |
        | 2018-10-01T12:00:58 |
@@ -159,7 +159,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is before 2018-10-01T13:00:05
        And foo is after 2018-10-01T12:59:57
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo                 |
        | 2018-10-01T12:59:58 |
@@ -175,7 +175,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is before 2018-10-01T12:00
        And foo is after 2018-10-01T11:50
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo              |
        | 2018-10-01T11:51 |
@@ -193,7 +193,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is before 2018-10-01T12
        And foo is after 2018-10-01T01
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo           |
        | 2018-10-01T02 |
@@ -213,7 +213,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is before 2018-10-09
        And foo is after 2018-10-01
        And foo is not null
-       And foo is of type temporal
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo        |
        | 2018-10-02 |
