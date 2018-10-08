@@ -4,26 +4,22 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DegTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<IConstraint> constraints = new ArrayList<>();
-    Iterable<GeneratedObject> generationResult;
+    final List<Exception> testExceptions = new ArrayList<>();
 
-    public void addConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    void addConstraint(String fieldName, String constraintName, Object value) throws Exception {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(dto);
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    void addNotConstraint(String fieldName, String constraintName, Object value) throws Exception {
         ConstraintDTO notDto = new ConstraintDTO();
         notDto.not = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(notDto);
@@ -35,7 +31,7 @@ public class DegTestState {
         dto.is = this.extractConstraint(constraintName);
         if (value != null){
             if (value instanceof Collection){
-                dto.values = (Collection) value;
+                dto.values = (Collection<Object>) value;
             } else {
                 dto.value = value;
             }
@@ -57,6 +53,12 @@ public class DegTestState {
             constraintDTO,
             new ProfileFields(this.profileFields));
         this.constraints.add(constraint);
+    }
+
+    void clearState(){
+        this.profileFields.clear();
+        this.constraints.clear();
+        this.testExceptions.clear();
     }
 
 }

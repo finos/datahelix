@@ -18,6 +18,7 @@ import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.But;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
@@ -26,9 +27,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class GeneralTestStep {
 
@@ -40,8 +43,7 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.profileFields.clear();
-        this.state.constraints.clear();
+        this.state.clearState();
     }
 
     @Given("there is a field (.+)$")
@@ -51,7 +53,7 @@ public class GeneralTestStep {
 
     @Given("^the following fields exist:$")
     public void thereAreFields(DataTable fields) {
-        fields.asList(String.class).stream().forEach(field -> this.thereIsAField(field));
+        fields.asList(String.class).forEach(this::thereIsAField);
     }
 
     @And("^(.+) is null$")
@@ -64,33 +66,55 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
+    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|([0-9]+(.[0-9]+){1}))+)")
+    public void fieldIsInvalid(String fieldName, String constraint, String value) {
+        Object parsedValue;
+        if (value.startsWith("\"") && value.endsWith("\"")){
+            parsedValue = value.substring(1, value.length()-1);
+        } else if (value.contains(".")){
+            parsedValue = Double.parseDouble(value);
+        } else {
+            parsedValue = Integer.parseInt(value);
+        }
+
+        try {
+            this.state.addConstraint(fieldName, constraint, parsedValue);
+            Assert.fail("Expected invalid profile");
+        } catch (Exception e) {
+            Assert.assertNotNull(e);
+            this.state.testExceptions.add(e);
+        }
+    }
+
     @Then("^I am presented with an error message$")
     public void dataGeneratorShouldError() {
+        if (this.state.testExceptions.size() > 0) {
+            return;
+        }
         try {
-            this.generateData();
-            final Iterable<GeneratedObject> dataSet = this.state.generationResult;
-            List<GeneratedObject> allActualRows = new ArrayList<>();
-            dataSet.iterator().forEachRemaining(allActualRows::add);
+            getGeneratedDataAsList();
             Assert.fail("Expected Exception");
         } catch (Exception e) {
             Assert.assertNotNull(e);
+            this.state.testExceptions.add(e);
         }
     }
 
     @And("^no data is created$")
     public void noDataIsGenerated() {
-        
+        Assert.assertThat(this.state.testExceptions.size(), greaterThan(0));
     }
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
-        this.generateData();
-
-        final Iterable<GeneratedObject> dataSet = this.state.generationResult;
-        List<GeneratedObject> allActualRows = new ArrayList<>();
-        dataSet.iterator().forEachRemaining(allActualRows::add);
-
-        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data", allActualRows.size(), equalTo(expectedResultsTable.size()));
+        List<GeneratedObject> allActualRows = getGeneratedDataAsList();
+        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data. \nActual rows:"
+                + allActualRows.stream().flatMap(row ->
+                    row.values.stream()
+                    .map(v-> "\n" + v.value.toString()))
+                .collect(Collectors.joining()),
+            allActualRows.size(),
+            equalTo(expectedResultsTable.size()));
 
         IntStream
             .range(
@@ -109,7 +133,14 @@ public class GeneralTestStep {
             });
     }
 
-    private void generateData() throws Exception {
+    private List<GeneratedObject> getGeneratedDataAsList() {
+        final Iterable<GeneratedObject> dataSet = this.generateData();
+        List<GeneratedObject> allActualRows = new ArrayList<>();
+        dataSet.iterator().forEachRemaining(allActualRows::add);
+        return allActualRows;
+    }
+
+    private Iterable<GeneratedObject> generateData() {
         Profile profile = new Profile(
         new ProfileFields(this.state.profileFields),
         Collections.singleton(new Rule("TEST_RULE", this.state.constraints)));
@@ -124,7 +155,6 @@ public class GeneralTestStep {
                 new FieldSpecMerger()));
 
         final GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.FullSequential, new FieldExhaustiveCombinationStrategy());
-        this.state.generationResult = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
+        return dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
     }
-
 }

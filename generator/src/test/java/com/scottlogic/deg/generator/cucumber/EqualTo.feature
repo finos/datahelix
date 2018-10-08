@@ -4,6 +4,7 @@ Feature: User can specify that a value is equalTo a required value
 
 
   Scenario:
+    Given
 
 
 
@@ -32,14 +33,4 @@ Feature: User can specify that a value is equalTo a required value
       | 21 |
       | 32 |
     Then expect age is equalTo 21 or 32
-
-
-    # Can some of these be combined? Maybe just -
-
-  Scenario: User requires that the field is equalTo to string OR integer
-    Given the following field exists:
-      | forename | age |
-      | "Joe" | 21 |
-    Then expect forename is equalTo "Joe"
-    And age is equalTo 21
 

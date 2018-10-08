@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.cucumber.steps;
+package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import static com.scottlogic.deg.schemas.v3.AtomicConstraintType.*;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
 
-    private final Set numericValueOperations = new HashSet<AtomicConstraintType>(Arrays.asList(
+    private final Set<AtomicConstraintType> numericValueOperations = new HashSet<>(Arrays.asList(
         ISEQUALTOCONSTANT,
         HASLENGTH,
         ISSTRINGLONGERTHAN,
@@ -24,24 +24,28 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         ISGRANULARTO
     ));
 
-    private final Set stringValueOperations = new HashSet<AtomicConstraintType>(Arrays.asList(
+    private final Set<AtomicConstraintType> stringValueOperations = new HashSet<>(Arrays.asList(
         ISEQUALTOCONSTANT,
         AVALID,
-        ISAFTERCONSTANTDATETIME,
-        ISAFTEROREQUALTOCONSTANTDATETIME,
-        ISBEFORECONSTANTDATETIME,
-        ISBEFOREOREQUALTOCONSTANTDATETIME,
         ISOFTYPE,
         FORMATTEDAS
     ));
 
-    private final Set regexValueOperations = new HashSet<AtomicConstraintType>(Arrays.asList(
+    private final Set<AtomicConstraintType> regexValueOperations = new HashSet<>(Arrays.asList(
         MATCHESREGEX,
         CONTAINSREGEX
     ));
 
-    private final Set setValueOperations = new HashSet<AtomicConstraintType>(Arrays.asList(
+    private final Set<AtomicConstraintType> setValueOperations = new HashSet<>(Arrays.asList(
         ISINSET
+    ));
+
+    private final Set<AtomicConstraintType> dateValueOperations = new HashSet<>(Arrays.asList(
+        ISEQUALTOCONSTANT,
+        ISAFTERCONSTANTDATETIME,
+        ISAFTEROREQUALTOCONSTANTDATETIME,
+        ISBEFORECONSTANTDATETIME,
+        ISBEFOREOREQUALTOCONSTANTDATETIME
     ));
 
     @Override
@@ -52,16 +56,18 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     @Override
     public void configureTypeRegistry(TypeRegistry tr) {
         this.defineParameterType(tr,"fieldVar", "^(.+)");
+        this.defineParameterType(tr,"dateString", "((20\\d{2})-(\\d{2})-(\\d{2}))$");
         this.defineParameterType(tr,"regex", "/(.+)/$");
         this.defineParameterType(tr,"set", "\\[((\"(.+)\")(, \"(.+)\")*)\\]");
         this.defineOperationParameterType(tr,"numericValueOperation", numericValueOperations);
         this.defineOperationParameterType(tr,"stringValueOperation", stringValueOperations);
         this.defineOperationParameterType(tr,"regexValueOperation", regexValueOperations);
         this.defineOperationParameterType(tr,"setValueOperation", setValueOperations);
+        this.defineOperationParameterType(tr,"dateValueOperation", dateValueOperations);
     }
 
     private void defineOperationParameterType(TypeRegistry tr, String name, Set<AtomicConstraintType> operations){
-        Transformer<String> transformer = (gherkinConstraint) -> extractConstraint(gherkinConstraint);
+        Transformer<String> transformer = this::extractConstraint;
         this.defineParameterType(tr, name, this.getHumanReadableOperationRegex(operations), transformer);
     }
 
@@ -70,8 +76,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineParameterType(tr, name, regex, transformer);
     }
 
-    private void defineParameterType(TypeRegistry tr, String name, String regex, Transformer transformer) {
-        tr.defineParameterType(new ParameterType<String>(
+    private void defineParameterType(TypeRegistry tr, String name, String regex, Transformer<String> transformer) {
+        tr.defineParameterType(new ParameterType<>(
             name,
             regex,
             String.class,
