@@ -1,9 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
@@ -125,7 +122,8 @@ public class GeneralTestStep {
                 for (int fieldIndex = 0; fieldIndex < this.state.profileFields.size(); fieldIndex++)
                 {
                     Field field = this.state.profileFields.get(fieldIndex);
-                    String actualValue = actualRow.values.get(fieldIndex).value.toString();
+                    DataBagValue value = actualRow.values.get(fieldIndex);
+                    String actualValue = this.getDataBagAsString(value);
                     String expectedValueAsString = expectedRow.get(field.name);
                     Assert.assertThat(actualValue, equalTo(expectedValueAsString));
                 }
@@ -155,5 +153,15 @@ public class GeneralTestStep {
 
         final GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.FullSequential, new FieldExhaustiveCombinationStrategy());
         return dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
+    }
+
+    private String getDataBagAsString(DataBagValue x){
+        if (x.value == null)
+            return null;
+
+        if (x.format == null)
+            return x.value.toString();
+
+        return String.format(x.format, x.value);
     }
 }
