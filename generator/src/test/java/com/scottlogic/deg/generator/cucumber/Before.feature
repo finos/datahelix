@@ -219,20 +219,20 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
 #       | 2018-10-01T10 |
 #       | 2018-10-01T11 |
 
-#Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date and a second specified date
-#     Given there is a field foo
-#       And foo is before 2018-10-10
-#       And foo is before 2018-10-09
-#       And foo is after 2018-10-01
-#       And foo is not null
-#       And foo is of type "temporal"
-#       And foo is formatted as "%tF"
-#     Then the following data should be generated:
-#       | foo        |
-#       | 2018-10-02 |
-#       | 2018-10-03 |
-#       | 2018-10-04 |
-#       | 2018-10-05 |
-#       | 2018-10-06 |
-#       | 2018-10-07 |
-#       | 2018-10-08 |
+Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date and a second specified date
+     Given there is a field foo
+       And foo is before 2018-10-10
+       And foo is before 2018-10-09
+       And foo is after 2018-10-01
+       And foo is not null
+       And foo is of type "temporal"
+       And foo is formatted as "%tF"
+     Then the following data should be generated:
+       | foo        |
+       | 2018-10-02 |
+       | 2018-10-03 |
+       | 2018-10-04 |
+       | 2018-10-05 |
+       | 2018-10-06 |
+       | 2018-10-07 |
+       | 2018-10-08 |
