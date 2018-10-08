@@ -1,9 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
@@ -15,7 +12,6 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.But;
@@ -52,8 +48,8 @@ public class GeneralTestStep {
     }
 
     @Given("^the following fields exist:$")
-    public void thereAreFields(DataTable fields) {
-        fields.asList(String.class).forEach(this::thereIsAField);
+    public void thereAreFields(List<String> fields) {
+        fields.forEach(this::thereIsAField);
     }
 
     @And("^(.+) is null$")
@@ -126,7 +122,8 @@ public class GeneralTestStep {
                 for (int fieldIndex = 0; fieldIndex < this.state.profileFields.size(); fieldIndex++)
                 {
                     Field field = this.state.profileFields.get(fieldIndex);
-                    String actualValue = actualRow.values.get(fieldIndex).value.toString();
+                    DataBagValue value = actualRow.values.get(fieldIndex);
+                    String actualValue = this.getDataBagAsString(value);
                     String expectedValueAsString = expectedRow.get(field.name);
                     Assert.assertThat(actualValue, equalTo(expectedValueAsString));
                 }
@@ -156,5 +153,15 @@ public class GeneralTestStep {
 
         final GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.FullSequential, new FieldExhaustiveCombinationStrategy());
         return dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
+    }
+
+    private String getDataBagAsString(DataBagValue x){
+        if (x.value == null)
+            return null;
+
+        if (x.format == null)
+            return x.value.toString();
+
+        return String.format(x.format, x.value);
     }
 }
