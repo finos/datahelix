@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -52,7 +53,7 @@ public class GeneralTestStep {
 
     @Given("^the following fields exist:$")
     public void thereAreFields(DataTable fields) {
-        fields.asList(String.class).stream().forEach(field -> this.thereIsAField(field));
+        fields.asList(String.class).forEach(this::thereIsAField);
     }
 
     @And("^(.+) is null$")
@@ -67,7 +68,7 @@ public class GeneralTestStep {
 
     @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        Object parsedValue = null;
+        Object parsedValue;
         if (value.startsWith("\"") && value.endsWith("\"")){
             parsedValue = value.substring(1, value.length()-1);
         } else if (value.contains(".")){
@@ -107,7 +108,13 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
         List<GeneratedObject> allActualRows = getGeneratedDataAsList();
-        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data", allActualRows.size(), equalTo(expectedResultsTable.size()));
+        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data. \nActual rows:"
+                + allActualRows.stream().flatMap(row ->
+                    row.values.stream()
+                    .map(v-> "\n" + v.value.toString()))
+                .collect(Collectors.joining()),
+            allActualRows.size(),
+            equalTo(expectedResultsTable.size()));
 
         IntStream
             .range(
@@ -126,14 +133,14 @@ public class GeneralTestStep {
             });
     }
 
-    private List<GeneratedObject> getGeneratedDataAsList() throws Exception {
+    private List<GeneratedObject> getGeneratedDataAsList() {
         final Iterable<GeneratedObject> dataSet = this.generateData();
         List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.iterator().forEachRemaining(allActualRows::add);
         return allActualRows;
     }
 
-    private Iterable<GeneratedObject> generateData() throws Exception {
+    private Iterable<GeneratedObject> generateData() {
         Profile profile = new Profile(
         new ProfileFields(this.state.profileFields),
         Collections.singleton(new Rule("TEST_RULE", this.state.constraints)));
