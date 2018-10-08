@@ -15,7 +15,6 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.But;
@@ -52,8 +51,8 @@ public class GeneralTestStep {
     }
 
     @Given("^the following fields exist:$")
-    public void thereAreFields(DataTable fields) {
-        fields.asList(String.class).forEach(this::thereIsAField);
+    public void thereAreFields(List<String> fields) {
+        fields.forEach(this::thereIsAField);
     }
 
     @And("^(.+) is null$")
