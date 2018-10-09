@@ -8,7 +8,7 @@ Scenario: User requires to create a field with strings that conform to one or ma
        { "field": "foo", "is": "equalTo", "value": "Test0" },
        { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
        { "field": "foo", "is": null },
-       { "field": "foo", "is": "matchingRegex", "value": "[a-b]" }
+       { "field": "foo", "is": "matchingRegex", "value": "[a-b]{5}" }
        ]}
        """
        And foo is of type "string"
