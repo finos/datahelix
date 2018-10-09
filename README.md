@@ -18,6 +18,10 @@ _(To be added)_
 
 * [Data profiles](docs/Profiles.md)
 
+* [Frequently asked questions](docs/FrequentlyAskedQuestions.md)
+
+Developers of Data Generator, or users who're curious about an aspect of its functionality, might be interested in the [key decisions log](docs/KeyDecisions.md).
+
 ## Development setup
 
 1) Follow the [profiler setup instructions](profiler/README.md).
