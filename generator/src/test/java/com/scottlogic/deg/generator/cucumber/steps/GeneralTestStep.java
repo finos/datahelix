@@ -24,10 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
 
@@ -65,9 +63,9 @@ public class GeneralTestStep {
     @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
         Object parsedValue;
-        if (value.startsWith("\"") && value.endsWith("\"")){
-            parsedValue = value.substring(1, value.length()-1);
-        } else if (value.contains(".")){
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            parsedValue = value.substring(1, value.length() - 1);
+        }  else if (value.contains(".")){
             parsedValue = Double.parseDouble(value);
         } else {
             parsedValue = Integer.parseInt(value);
@@ -103,31 +101,20 @@ public class GeneralTestStep {
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
-        List<GeneratedObject> allActualRows = getGeneratedDataAsList();
-        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data. \nActual rows:"
-                + allActualRows.stream().flatMap(row ->
-                    row.values.stream()
-                    .map(v-> "\n" + v.value.toString()))
-                .collect(Collectors.joining()),
-            allActualRows.size(),
-            equalTo(expectedResultsTable.size()));
+        List <List<String>> rowsOfResults = getGeneratedDataAsList()
+            .stream()
+            .map(genObj ->
+                genObj.values
+                    .stream()
+                    .map(dataBagValue -> this.getDataBagAsString(dataBagValue))
+                    .collect(Collectors.toList())
+            ).collect(Collectors.toList());
 
-        IntStream
-            .range(
-                    0,
-                    Math.min(allActualRows.size(), expectedResultsTable.size()))
-            .forEach(i -> {
-                GeneratedObject actualRow = allActualRows.get(i);
-                Map<String, String> expectedRow = expectedResultsTable.get(i);
-                for (int fieldIndex = 0; fieldIndex < this.state.profileFields.size(); fieldIndex++)
-                {
-                    Field field = this.state.profileFields.get(fieldIndex);
-                    DataBagValue value = actualRow.values.get(fieldIndex);
-                    String actualValue = this.getDataBagAsString(value);
-                    String expectedValueAsString = expectedRow.get(field.name);
-                    Assert.assertThat(actualValue, equalTo(expectedValueAsString));
-                }
-            });
+        List <List<String>> expectedRowsOfResults = expectedResultsTable
+            .stream()
+            .map(row -> new ArrayList<>(row.values()))
+            .collect(Collectors.toList());
+        Assert.assertThat(rowsOfResults, containsInAnyOrder(expectedRowsOfResults.toArray()));
     }
 
     private List<GeneratedObject> getGeneratedDataAsList() {
@@ -157,7 +144,7 @@ public class GeneralTestStep {
 
     private String getDataBagAsString(DataBagValue x){
         if (x.value == null)
-            return null;
+            return "null";
 
         if (x.format == null)
             return x.value.toString();

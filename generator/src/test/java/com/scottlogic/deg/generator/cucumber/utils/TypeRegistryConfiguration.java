@@ -58,7 +58,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"dateString", "((20\\d{2})-(\\d{2})-(\\d{2})(T(\\d{2}:\\d{2}:\\d{2}))?)$");
         this.defineParameterType(tr,"regex", "/(.+)/$");
-        this.defineParameterType(tr,"set", "\\[((\"(.+)\")(, \"(.+)\")*)\\]");
+        this.defineParameterType(tr,"set", "\\[(((.+))(, (.+))*)\\]");
         this.defineOperationParameterType(tr,"numericValueOperation", numericValueOperations);
         this.defineOperationParameterType(tr,"stringValueOperation", stringValueOperations);
         this.defineOperationParameterType(tr,"regexValueOperation", regexValueOperations);
