@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -407,6 +408,40 @@ public class ProfileReaderTests {
     }
 
     @Test
+    public void shouldAllowValidISO8601DateTime() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": \"2019-01-01T00:00:00.000\"}," +
+                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": \"2019-01-03T00:00:00.000\"}" +
+                "    ]" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsAfterOrEqualToConstantDateTimeConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.referenceValue,
+                            equalTo(LocalDateTime.parse("2019-01-01T00:00:00.000")));
+                    })
+                ),
+            ruleWithConstraints(
+                typedConstraint(
+                    IsBeforeConstantDateTimeConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.referenceValue,
+                            equalTo(LocalDateTime.parse("2019-01-03T00:00:00.000")));
+                    })
+            )
+        );
+    }
+
+    @Test
     public void shouldRejectGreaterThanOneNumericGranularityConstraint() {
         givenJson(
             "{" +
@@ -433,4 +468,19 @@ public class ProfileReaderTests {
 
         expectException();
     }
+
+    @Test
+    public void shouldRejectNonISO8601DateTime() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"after\", \"value\": \"2018-01-12\" }" +
+                "    ]" +
+                "}");
+
+        expectException();
+    }
+
 }
