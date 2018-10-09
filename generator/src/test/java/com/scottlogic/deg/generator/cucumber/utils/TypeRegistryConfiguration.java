@@ -56,7 +56,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     @Override
     public void configureTypeRegistry(TypeRegistry tr) {
         this.defineParameterType(tr,"fieldVar", "^(.+)");
-        this.defineParameterType(tr,"dateString", "((20\\d{2})-(\\d{2})-(\\d{2})(T(\\d{2}:\\d{2}:\\d{2}))?)$");
+        this.defineParameterType(tr,"dateString", "((20\\d{2})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$");
         this.defineParameterType(tr,"regex", "/(.+)/$");
         this.defineParameterType(tr,"set", "\\[(((.+))(, (.+))*)\\]");
         this.defineOperationParameterType(tr,"numericValueOperation", numericValueOperations);
