@@ -9,6 +9,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2018-10-01 |
        | 2018-10-02 |
        | 2018-10-03 |
        | 2018-10-04 |
@@ -27,6 +28,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2018-09-28 |
        | 2018-09-29 |
        | 2018-09-30 |
        | 2018-10-01 |
@@ -48,6 +50,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2017-12-25 |
        | 2017-12-26 |
        | 2017-12-27 |
        | 2017-12-28 |
@@ -66,6 +69,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2016-02-25 |
        | 2016-02-26 |
        | 2016-02-27 |
        | 2016-02-28 |
@@ -82,6 +86,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2017-02-25 |
        | 2017-02-26 |
        | 2017-02-27 |
        | 2017-02-28 |
@@ -133,17 +138,19 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is after 2018-10-01T12:00:00
        And foo is not null
        And foo is of type "temporal"
+       And foo is formatted as "%tT"
      Then the following data should be generated:
-       | foo                    |
-       | 2018-10-01T12:00:01.01 |
-       | 2018-10-01T12:00:02.01 |
-       | 2018-10-01T12:00:03.01 |
-       | 2018-10-01T12:00:04.01 |
-       | 2018-10-01T12:00:05.01 |
-       | 2018-10-01T12:00:06.01 |
-       | 2018-10-01T12:00:07.01 |
-       | 2018-10-01T12:00:08.01 |
-       | 2018-10-01T12:00:09.01 |
+       | foo      |
+       | 12:00:00 |
+       | 12:00:01 |
+       | 12:00:02 |
+       | 12:00:03 |
+       | 12:00:04 |
+       | 12:00:05 |
+       | 12:00:06 |
+       | 12:00:07 |
+       | 12:00:08 |
+       | 12:00:09 |
 
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than a specified date and time
      Given there is a field foo
@@ -151,15 +158,17 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is after 2018-10-01T12:00:57
        And foo is not null
        And foo is of type "temporal"
+       And foo is formatted as "%tT"
      Then the following data should be generated:
-       | foo                    |
-       | 2018-10-01T12:00:58.01 |
-       | 2018-10-01T12:00:59.01 |
-       | 2018-10-01T12:01:00.01 |
-       | 2018-10-01T12:01:01.01 |
-       | 2018-10-01T12:01:02.01 |
-       | 2018-10-01T12:01:03.01 |
-       | 2018-10-01T12:01:04.01 |
+       | foo      |
+       | 12:00:57 |
+       | 12:00:58 |
+       | 12:00:59 |
+       | 12:01:00 |
+       | 12:01:01 |
+       | 12:01:02 |
+       | 12:01:03 |
+       | 12:01:04 |
 
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across an hour boundary that are less than a specified date and time
      Given there is a field foo
@@ -167,15 +176,17 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is after 2018-10-01T12:59:57
        And foo is not null
        And foo is of type "temporal"
+       And foo is formatted as "%tT"
      Then the following data should be generated:
-       | foo                    |
-       | 2018-10-01T12:59:58.01 |
-       | 2018-10-01T12:59:59.01 |
-       | 2018-10-01T13:00:00.01 |
-       | 2018-10-01T13:00:01.01 |
-       | 2018-10-01T13:00:02.01 |
-       | 2018-10-01T13:00:03.01 |
-       | 2018-10-01T13:00:04.01 |
+       | foo      |
+       | 12:59:57 |
+       | 12:59:58 |
+       | 12:59:59 |
+       | 13:00:00 |
+       | 13:00:01 |
+       | 13:00:02 |
+       | 13:00:03 |
+       | 13:00:04 |
 
 #Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM) values within a given hour that are less than a specified time
 #     Given there is a field foo
@@ -226,6 +237,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo        |
+       | 2018-10-01 |
        | 2018-10-02 |
        | 2018-10-03 |
        | 2018-10-04 |
