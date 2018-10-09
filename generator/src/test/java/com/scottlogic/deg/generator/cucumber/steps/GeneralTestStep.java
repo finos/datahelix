@@ -101,16 +101,7 @@ public class GeneralTestStep {
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) throws Exception {
-        List<GeneratedObject> allActualRows = getGeneratedDataAsList();
-        Assert.assertThat("Should be " + expectedResultsTable.size() + " rows of data. \nActual rows:"
-                + allActualRows.stream().flatMap(row ->
-                    row.values.stream()
-                    .map(v-> "\n" + v.value.toString()))
-                .collect(Collectors.joining()),
-            allActualRows.size(),
-            equalTo(expectedResultsTable.size()));
-
-        List <List<String>> rowsOfResults = allActualRows
+        List <List<String>> rowsOfResults = getGeneratedDataAsList()
             .stream()
             .map(genObj ->
                 genObj.values
@@ -123,7 +114,6 @@ public class GeneralTestStep {
             .stream()
             .map(row -> new ArrayList<>(row.values()))
             .collect(Collectors.toList());
-
         Assert.assertThat(rowsOfResults, containsInAnyOrder(expectedRowsOfResults.toArray()));
     }
 
@@ -154,7 +144,7 @@ public class GeneralTestStep {
 
     private String getDataBagAsString(DataBagValue x){
         if (x.value == null)
-            return null;
+            return "null";
 
         if (x.format == null)
             return x.value.toString();
