@@ -145,12 +145,14 @@ Is satisfied if `field` has the granularity specified in `value`. Numerical gran
 - `0.1` would permit `20` and `20.1`, but not `20.01` 
 
 ## Temporal constraints
-These constraints imply `ofType temporal`.
+These constraints imply `ofType temporal`. All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS`.
+
+Example: `"2018-01-01T00:00:00.000"`
 
 ### `after` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "after", "value": "2018-09-01" }
+{ "field": "date", "is": "after", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after `value`.
@@ -158,7 +160,7 @@ Is satisfied if `field` is a datetime occurring after `value`.
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "afterOrAt", "value": "2018-09-01" }
+{ "field": "date", "is": "afterOrAt", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
@@ -166,7 +168,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 ### `before` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "before", "value": "2018-09-01" }
+{ "field": "date", "is": "before", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before `value`.
@@ -174,7 +176,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ### `beforeOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01" }
+{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
