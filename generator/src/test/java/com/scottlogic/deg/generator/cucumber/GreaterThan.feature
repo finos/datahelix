@@ -18,8 +18,8 @@ Scenario: User requires to create a numeric field with data values that are grea
        | 8   |
        | 9   |
 
-Scenario: User requires to create a field with decimal values that are greater than zero, specified as an interger
-     Given that there is a field foo
+Scenario: User requires to create a field with decimal values that are greater than zero, specified as an integer
+     Given there is a field foo
        And foo is greater than 0
        And foo is less than 2
        And foo is granular to 0.1
@@ -35,7 +35,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 0.7 |
        | 0.8 |
        | 0.9 |
-       | 1   |
+       | 1.0 |
        | 1.1 |
        | 1.2 |
        | 1.3 |
@@ -46,8 +46,8 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 1.8 |
        | 1.9 |
 
-Scenario: User requires to create a field with decimal values that are greater than zero, specifed as a decimal
-     Given that there is a field foo
+Scenario: User requires to create a field with decimal values that are greater than zero, specified as a decimal
+     Given there is a field foo
        And foo is greater than 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
@@ -63,7 +63,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 0.7 |
        | 0.8 |
        | 0.9 |
-       | 1   |
+       | 1.0 |
        | 1.1 |
        | 1.2 |
        | 1.3 |
@@ -112,7 +112,6 @@ Scenario: User requires to create a numeric field with data values that are grea
 
 Scenario: User attempts to create a numeric field with data value that are greater than zero using an incorrect field value type of string
      Given there is a field foo
-       And foo is greater than "Zero"
-       And foo is not null
+       But the profile is invalid as foo can't be greater than "Zero"
      Then I am presented with an error message
         And no data is created

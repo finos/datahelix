@@ -20,6 +20,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | 2018-10-09 |
        | 2018-10-10 |
 
+
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a month boundary that are less than of the same as a specified date
      Given there is a field foo
        And foo is before or at 2018-10-10
@@ -148,6 +149,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo      |
+       | 12:00:00 |
        | 12:00:01 |
        | 12:00:02 |
        | 12:00:03 |
@@ -168,6 +170,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo      |
+       | 12:00:57 |
        | 12:00:58 |
        | 12:00:59 |
        | 12:01:00 |
@@ -186,6 +189,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo      |
+       | 12:59:57 |
        | 12:59:58 |
        | 12:59:59 |
        | 13:00:00 |

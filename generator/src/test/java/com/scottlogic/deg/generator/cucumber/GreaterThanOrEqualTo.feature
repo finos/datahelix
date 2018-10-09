@@ -29,15 +29,15 @@ Scenario: User requires to create a numeric field with data values that are grea
        | foo |
        | 0   |
 
-Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specified as an interger
-     Given that there is a field foo
+Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specified as an integer
+     Given there is a field foo
        And foo is greater than or equal to 0
        And foo is less than 2
        And foo is granular to 0.1
        And foo is not null
      Then the following data should be generated:
        | foo |
-       | 0   |
+       | 0.0 |
        | 0.1 |
        | 0.2 |
        | 0.3 |
@@ -47,7 +47,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 0.7 |
        | 0.8 |
        | 0.9 |
-       | 1   |
+       | 1.0 |
        | 1.1 |
        | 1.2 |
        | 1.3 |
@@ -58,15 +58,15 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 1.8 |
        | 1.9 |
 
-Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specifed as a decimal
-     Given that there is a field foo
+Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specified as a decimal
+     Given there is a field foo
        And foo is greater than or equal to 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
        And foo is not null
      Then the following data should be generated:
        | foo |
-       | 0   |
+       | 0.0 |
        | 0.1 |
        | 0.2 |
        | 0.3 |
@@ -76,7 +76,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 0.7 |
        | 0.8 |
        | 0.9 |
-       | 1   |
+       | 1.0 |
        | 1.1 |
        | 1.2 |
        | 1.3 |
@@ -164,7 +164,6 @@ Scenario: User requires to create a numeric field with data values that are grea
 
 Scenario: User attempts to create a numeric field with data value that are greater than or the same as zero using an incorrect field value type of string
      Given there is a field foo
-       And foo is greater than or equal to "Zero"
-       And foo is not null
+       But the profile is invalid as foo can't be greater than or equal to "Zero"
      Then I am presented with an error message
         And no data is created

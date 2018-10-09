@@ -19,7 +19,7 @@ Scenario: User requires to create a numeric field with data values that are less
        | 9   |
 
 Scenario: User requires to create a field with decimal values that are less than ten, specified as an interger
-     Given that there is a field foo
+     Given there is a field foo
        And foo is less than 10
        And foo is greater than 9
        And foo is granular to 0.1
@@ -37,7 +37,7 @@ Scenario: User requires to create a field with decimal values that are less than
        | 9.9 |
 
 Scenario: User requires to create a field with decimal values that are less than ten, specifed as a decimal
-     Given that there is a field foo
+     Given there is a field foo
        And foo is less than 10.0
        And foo is greater than 9.0
        And foo is granular to 0.1
@@ -92,7 +92,6 @@ Scenario: User requires to create a numeric field with data values that are less
 
 Scenario: User attempts to create a numeric field with data value that are less than zero using an incorrect field value type of string
      Given there is a field foo
-       And foo is less than "Zero"
-       And foo is not null
+       But the profile is invalid as foo can't be less than "Zero"
      Then I am presented with an error message
         And no data is created
