@@ -4,11 +4,11 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
-import com.scottlogic.deg.generator.utils.NumberUtils;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -177,14 +177,13 @@ public class AtomicConstraintReaderLookup {
         typeCodeToSpecificReader.put(typeCode, func);
     }
 
-    private static LocalDateTime parseDate(String value) {
-
-        if (value.length() > 10) {
-            return LocalDateTime.parse(value);
-        } else {
-            return LocalDate.parse(value).atStartOfDay();
+    private static LocalDateTime parseDate(String value) throws InvalidProfileException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+        try {
+            return LocalDateTime.parse(value, formatter);
+        } catch (DateTimeParseException dtpe){
+            throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS", value));
         }
-
     }
 
     public IConstraintReader getByTypeCode(String typeCode) {
