@@ -1,6 +1,6 @@
 Feature: Values can be specified by using if, then and else constraints
 
-  Scenario: If and then satisfied
+  Scenario:
     Given the following fields exist:
       | foo |
       | price |
@@ -21,22 +21,24 @@ Feature: Values can be specified by using if, then and else constraints
       |b| 5|
 
 
-#
-#  Scenario: If and then satisfied
-#    Given the following fields exist:
-#  | product_code | price |
-#    And product_code is in set [ "a", "b"]
-#    And price is in set {10, 20]
-#    And there is a constraint:
-#    """
-#  {
-#  "if": { "field": "product_code", "is": "equalTo", "value": "a" },
-#  "then": { "field": "price", "is": "equalTo", "value": 10 }
-#  }
-#  """
-#    Then the following data should be generated
-#      | product_code | price |
-#      | a            | 10     |
-#      | b            | 10     |
-#      | b            | 20     |
-#
+  Scenario: test
+    Given the following fields exist:
+      | productCode |
+      | priceTest |
+    And productCode is of type "string"
+    And priceTest is of type "numeric"
+    And productCode is in set ["a", "b"]
+    And priceTest is in set [10, 20]
+    And there is a constraint:
+    """
+    {
+    "if": { "field": "productCode", "is": "equalTo", "value": "a" },
+    "then": { "field": "priceTest", "is": "equalTo", "value": 10 }
+    }
+    """
+    Then the following data should be generated:
+      | productCode | priceTest |
+      | a            | 10     |
+      | b            | 10     |
+      | b            | 20     |
+
