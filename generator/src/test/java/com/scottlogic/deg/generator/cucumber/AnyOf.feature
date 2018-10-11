@@ -5,9 +5,9 @@ Scenario: User requires to create a field with strings that conform to one or ma
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "equalTo", "value": "Test0" },
-       { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
-       { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+         { "field": "foo", "is": "equalTo", "value": "Test0" },
+         { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
+         { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
        ]}
        """
        And foo is of type "string"
@@ -42,16 +42,16 @@ Scenario: User requires to create a field with strings that conform to multiple 
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "equalTo", "value": "Test0" },
-       { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
-       { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+         { "field": "foo", "is": "equalTo", "value": "Test0" },
+         { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
+         { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
        ]}
        """
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "equalTo", "value": "Test6" },
-       { "field": "foo", "is": "inSet", "values": ["Test7", "Test8", "Test9"] }
+         { "field": "foo", "is": "equalTo", "value": "Test6" },
+         { "field": "foo", "is": "inSet", "values": ["Test7", "Test8", "Test9"] }
        ]}
        """
        And foo is of type "string"
@@ -64,8 +64,8 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "greaterThan", "value": 0 },
-       { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
+         { "field": "foo", "is": "greaterThan", "value": 0 },
+         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
        ]}
        """
        And foo is of type "numeric"
@@ -100,15 +100,15 @@ Scenario: User requires to create a field with numbers that conform to multiple 
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "greaterThan", "value": 8 },
-       { "field": "foo", "is": "greaterThanOrEqualTo", "value": 10 }
+         { "field": "foo", "is": "greaterThan", "value": 8 },
+         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 10 }
        ]}
        """
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "greaterThan", "value": 1 },
-       { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
+         { "field": "foo", "is": "greaterThan", "value": 1 },
+         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
        ]}
        """
     And foo is of type "numeric"
@@ -168,8 +168,8 @@ Scenario: User requires to create a field with dates that conform to one or many
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
-       { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
+         { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
+         { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
        ]}
        """
        And foo is of type "temporal"
@@ -202,15 +202,15 @@ Scenario: User requires to create a field with dates that conform to multiple se
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
-       { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
+         { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
+         { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
        ]}
        """
        And there is a constraint:
        """
        { "anyOf": [
-       { "field": "foo", "is": "after", "value": "2018-10-03T00:00:00.000" },
-       { "field": "foo", "is": "afterOrAt", "value": "2018-10-04T00:00:00.000" }
+         { "field": "foo", "is": "after", "value": "2018-10-03T00:00:00.000" },
+         { "field": "foo", "is": "afterOrAt", "value": "2018-10-04T00:00:00.000" }
        ]}
        """
        And foo is of type "temporal"
