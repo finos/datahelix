@@ -22,11 +22,11 @@ Every rule is a named collection of *constraints*, which can be any of:
 
 * [Epistemic constraints](EpistemicConstraints.md), which limit a field's possible values
 * [Presentational constraints](PresentationalConstraints.md), which control how values are serialised (eg, number of significant figures)
-* [Grammatical constraints](GrammaticalConstraints.md), which let you combine other constraints together
+* [Grammatical constraints](GrammaticalConstraints.md), which combine other constraints together
 
 (Epistemic and formatting constraints are collectively referred to as **data constraints**)
 
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation] comes into play.
+The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](../generator/docs/DeliberateViolation.md) is involved.
 
 ## Persistence
 
@@ -37,6 +37,6 @@ Profiles are persisted as JSON documents following a [schema](Schema.md).
 Profiles can be created by any of:
 
 - Writing JSON profiles by hand or by some custom transform process
-- Deriving them by supplying some sample data to the Profiler
-- Designing them through the web front end
+- ~~Deriving them by supplying some sample data to the Profiler~~ (not yet)
+- ~~Designing them through the web front end~~ (not yet)
 
