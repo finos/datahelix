@@ -17,14 +17,16 @@ In our visualisations, we notate constraint nodes with rectangles and decision n
 
 Given a set of input constraints, we can build an equivalent Decision Tree.
 
-One process involved in this is **constraint normalisation**. We transform constraints by applying a number of logical equivalences. Each equivalence consumes one constraint and outputs a set of replacement constraints.
+One process involved in this is **constraint normalisation**, which transforms a set of constraints into a new set with equivalent meaning but simpler structure. This happens through repeated application of some known equivalences, each of which consumes one constraint and outputs a set of replacements:
 
-* `¬¬X` => `[ X ]`
-* `AND(X, Y)` => `[ X, Y ]`
-* `¬OR(X, Y, ...)` => `[ ¬X, ¬Y, ... ]`
-* `¬AND(X, Y, ...)` => `[ OR(¬X, ¬Y, ...) ]`
-* `¬IF(X, Y)` => `[ X, ¬Y ]`
-* `¬IFELSE(X, Y, Z)` => `[ OR(AND(X, ¬Y), AND(¬X, ¬Z)) ]`
+| Input              | Outputs                       |
+| ------------------ | ----------------------------- |
+| `¬¬X`              | `X`                           |
+| `AND(X, Y)`        | `X, Y`                        |
+| `¬OR(X, Y, ...)`   | `¬X, ¬Y, ...`                 |
+| `¬AND(X, Y, ...)`  | `OR(¬X, ¬Y, ...)`             |
+| `¬IF(X, Y)`        | `X, ¬Y`                       |
+| `¬IFELSE(X, Y, Z)` | `OR(AND(X, ¬Y), AND(¬X, ¬Z))` | 
 
 We can convert a set of constraints to a Constraint Node as follows:
 
