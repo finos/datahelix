@@ -5,6 +5,7 @@ import cucumber.api.java.en.When;
 
 public class DateValueStep {
 
+    public static String DATE_REGEX = "((\\d{4})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$";
     private DegTestState state;
 
     public DateValueStep(DegTestState state){
