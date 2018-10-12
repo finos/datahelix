@@ -10,7 +10,7 @@ public class DecisionTree {
     private final ConstraintNode rootNode;
     private final ProfileFields fields;
 
-    DecisionTree(ConstraintNode rootNode, ProfileFields fields) {
+    public DecisionTree(ConstraintNode rootNode, ProfileFields fields) {
         this.rootNode = rootNode;
         this.fields = fields;
     }
