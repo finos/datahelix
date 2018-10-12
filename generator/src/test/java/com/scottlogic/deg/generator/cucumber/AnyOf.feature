@@ -74,17 +74,6 @@ Scenario: User requires to create a field with numbers that conform to one or ma
      Then the following data should be generated:
        | foo  |
        | null |
-       | 1    |
-       | 2    |
-       | 3    |
-       | 4    |
-       | 5    |
-       | 6    |
-       | 7    |
-       | 8    |
-       | 9    |
-       | 10   |
-       | null |
        | 2    |
        | 3    |
        | 4    |
@@ -128,40 +117,6 @@ Scenario: User requires to create a field with numbers that conform to multiple 
       | 17   |
       | 18   |
       | 19   |
-      | null |
-      | 9    |
-      | 10   |
-      | 11   |
-      | 12   |
-      | 13   |
-      | 14   |
-      | 15   |
-      | 16   |
-      | 17   |
-      | 18   |
-      | 19   |
-      | null |
-      | 10   |
-      | 11   |
-      | 12   |
-      | 13   |
-      | 14   |
-      | 15   |
-      | 16   |
-      | 17   |
-      | 18   |
-      | 19   |
-      | null |
-      | 10   |
-      | 11   |
-      | 12   |
-      | 13   |
-      | 14   |
-      | 15   |
-      | 16   |
-      | 17   |
-      | 18   |
-      | 19   |
 
 Scenario: User requires to create a field with dates that conform to one or many constraints
      Given there is a field foo
@@ -179,15 +134,6 @@ Scenario: User requires to create a field with dates that conform to one or many
        | foo        |
        | null       |
        | 2018-10-01 |
-       | 2018-10-02 |
-       | 2018-10-03 |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
-       | 2018-10-09 |
-       | null       |
        | 2018-10-02 |
        | 2018-10-03 |
        | 2018-10-04 |
@@ -220,25 +166,6 @@ Scenario: User requires to create a field with dates that conform to multiple se
        | foo        |
        | null       |
        | 2018-10-03 |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
-       | null       |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
-       | null       |
-       | 2018-10-03 |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
-       | null       |
        | 2018-10-04 |
        | 2018-10-05 |
        | 2018-10-06 |
