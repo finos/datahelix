@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import cucumber.api.java.en.When;
 
 import java.util.Arrays;
@@ -14,12 +15,12 @@ public class SetValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {setValueOperation} {set}")
+    @When("{fieldVar} is {operator} {set}")
     public void whenFieldIsConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, this.getSetValues(value));
     }
 
-    @When("{fieldVar} is not {setValueOperation} {set}")
+    @When("{fieldVar} is not {operator} {set}")
     public void whenFieldIsNotConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, this.getSetValues(value));
     }
@@ -27,7 +28,7 @@ public class SetValueStep {
     private Collection<Object> getSetValues(String csvSet) {
         return Arrays.asList(csvSet.split(","))
             .stream()
-            .map(val -> val.trim())
+            .map(String::trim)
             .map(value -> {
                 Object parsedValue;
                 if (value.startsWith("\"") && value.endsWith("\"")) {
