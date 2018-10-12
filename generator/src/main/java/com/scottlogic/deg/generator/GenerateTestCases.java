@@ -2,11 +2,13 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 @CommandLine.Command(
@@ -32,8 +34,12 @@ public class GenerateTestCases implements Runnable {
             generationType,
             new FieldExhaustiveCombinationStrategy());
 
-        new GenerationEngine(
-                new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()))
-            .generateTestCases(profileFile.toPath(), config);
+        try {
+            new GenerationEngine(
+                    new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()))
+                .generateTestCases(profileFile.toPath(), config);
+        } catch (IOException | InvalidProfileException e) {
+            e.printStackTrace();
+        }
     }
 }

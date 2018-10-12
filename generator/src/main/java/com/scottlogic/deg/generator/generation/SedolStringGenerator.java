@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+// There's a lot of copy-paste in this class. We should address that before we make any significant changes to it
 public class SedolStringGenerator implements IStringGenerator {
 
     private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "00[B-DF-HJ-NP-TV-Z0-9]{6}";
@@ -56,29 +57,39 @@ public class SedolStringGenerator implements IStringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        return new LimitingIterable<>(generateAllValues(), 1);
+        if (negate) {
+            return new ConcatenatingIterable<>(
+                sedolSansCheckDigitGenerator.complement().generateInterestingValues(),
+                generateInvalidCheckDigitSedols(sedolSansCheckDigitGenerator::generateInterestingValues));
+        }
+        return new ProjectingIterable<>(sedolSansCheckDigitGenerator.generateInterestingValues(),
+            sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(
+                sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6)));
     }
 
     @Override
     public Iterable<String> generateAllValues() {
         if (negate) {
             return new ConcatenatingIterable<>(
-                    Arrays.asList(generateAllInvalidRegexSedols(), generateAllInvalidCheckDigitSedols()));
+                generateAllInvalidRegexSedols(),
+                generateAllInvalidCheckDigitSedols());
         }
         return new ProjectingIterable<>(sedolSansCheckDigitGenerator.generateAllValues(),
-                sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(
-                        sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6)));
+            sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(
+                sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6)));
     }
 
     @Override
     public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
         if (negate) {
             return new RandomMergingIterable<>(
-                    Arrays.asList(generateRandomInvalidRegexSedols(randomNumberGenerator), generateRandomInvalidCheckDigitSedols(randomNumberGenerator)),
-                    randomNumberGenerator);
+                Arrays.asList(
+                    generateRandomInvalidRegexSedols(randomNumberGenerator),
+                    generateRandomInvalidCheckDigitSedols(randomNumberGenerator)),
+                randomNumberGenerator);
         }
         return new ProjectingIterable<>(sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-                sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(sedolSansCheckDigit.substring(4)));
+            sedolSansCheckDigit -> sedolSansCheckDigit + IsinUtils.calculateSedolCheckDigit(sedolSansCheckDigit.substring(4)));
     }
 
     private Iterable<String> generateAllInvalidRegexSedols() {
@@ -95,20 +106,20 @@ public class SedolStringGenerator implements IStringGenerator {
 
     private Iterable<String> generateRandomInvalidCheckDigitSedols(IRandomNumberGenerator randomNumberGenerator) {
         return generateInvalidCheckDigitSedols(
-                () -> sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator));
+            () -> sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator));
     }
 
     private Iterable<String> generateInvalidCheckDigitSedols(Supplier<Iterable<String>> sedolSansCheckDigitSupplier) {
         return new FlatteningIterable<>(
-                sedolSansCheckDigitSupplier.get(),
-                sedolSansCheckDigit -> {
-                    final char checkDigit = IsinUtils.calculateSedolCheckDigit(
-                            sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6));
-                    return IntStream.range(0, 10).boxed()
-                            .map(digit -> Character.forDigit(digit, 10))
-                            .filter(digit -> digit != checkDigit)
-                            .map(digit -> sedolSansCheckDigit + digit)
-                            .collect(Collectors.toList());
-                });
+            sedolSansCheckDigitSupplier.get(),
+            sedolSansCheckDigit -> {
+                final char checkDigit = IsinUtils.calculateSedolCheckDigit(
+                    sedolSansCheckDigit.substring(sedolSansCheckDigit.length() - 6));
+                return IntStream.range(0, 10).boxed()
+                    .map(digit -> Character.forDigit(digit, 10))
+                    .filter(digit -> digit != checkDigit)
+                    .map(digit -> sedolSansCheckDigit + digit)
+                    .collect(Collectors.toList());
+            });
     }
 }
