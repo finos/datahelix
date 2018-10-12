@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
+import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
@@ -24,7 +25,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineStrategyType(tr);
         this.defineOperationParameterType(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
-        this.defineParameterType(tr,"dateString", "((20\\d{2})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$");
+        this.defineParameterType(tr,"dateString", DateValueStep.DATE_REGEX);
         this.defineParameterType(tr,"regex", "/(.+)/$");
         this.defineParameterType(tr,"set", "\\[(((.+))(, (.+))*)\\]");
     }

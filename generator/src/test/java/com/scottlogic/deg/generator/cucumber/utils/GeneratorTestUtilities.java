@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
@@ -19,11 +20,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class GeneratorTestUtilities {
+public class GeneratorTestUtilities {
+
+
 
     /**
      * Runs the data generator and returns list of generated result data.
-     * @return
+     * @return Generated data
      */
     static List <List<String>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy)
@@ -65,6 +68,20 @@ class GeneratorTestUtilities {
             return x.value.toString();
 
         return String.format(x.format, x.value);
+    }
+
+    public static Object parseInput(String input) {
+        Object parsedValue;
+        if (input.startsWith("\"") && input.endsWith("\"")) {
+            parsedValue = input.substring(1, input.length() - 1);
+        } else if (input.matches(DateValueStep.DATE_REGEX)){
+            parsedValue = input;
+        } else if (input.contains(".")){
+            parsedValue = Double.parseDouble(input);
+        } else {
+            parsedValue = Integer.parseInt(input);
+        }
+        return parsedValue;
     }
 
 }
