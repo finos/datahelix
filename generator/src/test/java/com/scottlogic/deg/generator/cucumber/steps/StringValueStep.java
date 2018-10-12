@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import cucumber.api.java.en.When;
 
 public class StringValueStep {
@@ -10,12 +11,12 @@ public class StringValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {stringValueOperation} {string}")
+    @When("{fieldVar} is {operator} {string}")
     public void whenFieldIsConstrainedByTextValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {stringValueOperation} {string}")
+    @When("{fieldVar} is not {operator} {string}")
     public void whenFieldIsNotConstrainedByTextValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }
