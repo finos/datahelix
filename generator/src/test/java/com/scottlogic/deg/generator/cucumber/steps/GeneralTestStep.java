@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
 
@@ -88,13 +87,57 @@ public class GeneralTestStep {
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
-        List <List<String>> data = testHelper.generateAndGetData();
-        List <List<String>> expectedRowsOfResults = expectedResultsTable
+        GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+        Assert.assertThat(data.generatedData, containsInAnyOrder(data.expectedData.toArray()));
+    }
+
+    @Then("^the following data should be generated in order:$")
+    public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
+        GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+        Assert.assertThat(data.generatedData, contains(data.expectedData.toArray()));
+    }
+
+    @Then("^the following data is included in what is generated:$")
+    public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
+        GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+        data.expectedData
+            .forEach(row -> {
+                boolean match = data.generatedData.stream().anyMatch(actualRow -> actualRow.equals(row));
+                Assert.assertTrue(match);
+            });
+    }
+
+    @Then("^the following data is not included in what is generated:$")
+    public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
+        GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+        data.expectedData
+            .forEach(row -> {
+                boolean match = data.generatedData.stream().noneMatch(actualRow -> actualRow.equals(row));
+                Assert.assertTrue(match);
+            });
+    }
+
+    private List <List<String>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
+        return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
             .collect(Collectors.toList());
+    }
 
-        Assert.assertThat(data, containsInAnyOrder(expectedRowsOfResults.toArray()));
+    private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
+        List <List<String>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
+        List <List<String>> data = testHelper.generateAndGetData();
+        return new GeneratedTestData(expectedRowsOfResults, data);
+    }
+
+    class GeneratedTestData {
+        List <List<String>> expectedData;
+        List <List<String>> generatedData;
+
+        GeneratedTestData(List <List<String>> expectedData, List <List<String>> generatedData){
+            this.expectedData = expectedData;
+            this.generatedData = generatedData;
+        }
     }
 
 }
