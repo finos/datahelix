@@ -66,7 +66,7 @@ On IntelliJ's splash screen, choose "Open".
 
 Open the repository root directory, `data-engineering-generator`.
 
-Right-click the backend Module, `data-generator-spark`, choose "Open Module Settings".
+Right-click the backend Module, `generator`, choose "Open Module Settings".
 
 In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
 Set Project language level to 8.
