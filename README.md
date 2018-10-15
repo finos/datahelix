@@ -16,7 +16,10 @@ _(To be added)_
 
 ## Documentation
 
-* [Data profiles](docs/Profiles.md)
+* [Data profiles](./docs/Profiles.md)
+* [Decision trees](./docs/DecisionTrees/DecisionTrees.md)
+* [Generator](./generator/README.md)
+  * [Generation algorithm](./generator/docs/GenerationAlgorithm.md)
 
 * [Frequently asked questions](docs/FrequentlyAskedQuestions.md)
 

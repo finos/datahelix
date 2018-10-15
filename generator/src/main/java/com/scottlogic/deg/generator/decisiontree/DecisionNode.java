@@ -11,7 +11,7 @@ public final class DecisionNode {
         this.options = options;
     }
 
-    DecisionNode(ConstraintNode... options) {
+    public DecisionNode(ConstraintNode... options) {
         this.options = Arrays.asList(options);
     }
 

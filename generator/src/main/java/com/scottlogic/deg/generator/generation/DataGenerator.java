@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.ITreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ITreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
-    private final ITreePartitioner treePartitioner = new NoopTreePartitioner();
+    private final ITreePartitioner treePartitioner = new TreePartitioner();
 
     public DataGenerator(
         RowSpecMerger rowSpecMerger,
