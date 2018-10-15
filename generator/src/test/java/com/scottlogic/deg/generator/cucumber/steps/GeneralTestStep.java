@@ -49,7 +49,7 @@ public class GeneralTestStep {
         this.state.addConstraint(fieldName, "null", null);
     }
 
-    @And("^(.+) is not null$")
+    @And("^(.+) is anything but null$")
     public void fieldIsNotNull(String fieldName) throws Exception{
         this.state.addNotConstraint(fieldName, "null", null);
     }

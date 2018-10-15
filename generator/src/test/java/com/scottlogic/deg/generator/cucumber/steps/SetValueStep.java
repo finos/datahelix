@@ -21,7 +21,7 @@ public class SetValueStep {
         this.state.addConstraint(fieldName, constraintName, this.getSetValues(value));
     }
 
-    @When("{fieldVar} is not {operator} {set}")
+    @When("{fieldVar} is anything but {operator} {set}")
     public void whenFieldIsNotConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, this.getSetValues(value));
     }

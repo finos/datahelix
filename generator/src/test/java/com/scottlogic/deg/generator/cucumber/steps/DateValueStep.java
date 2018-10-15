@@ -17,7 +17,7 @@ public class DateValueStep {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {operator} {dateString}")
+    @When("{fieldVar} is anything but {operator} {dateString}")
     public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }
