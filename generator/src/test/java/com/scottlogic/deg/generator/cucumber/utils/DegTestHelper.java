@@ -15,6 +15,10 @@ public class DegTestHelper {
     }
 
     public List <List<Object>> generateAndGetData() {
+        if (state.generationStrategy == null) {
+            throw new RuntimeException("Gherkin error: Please specify the data strategy");
+        }
+
         if (!this.generatorHasRun()){
             try {
                 generatedData = GeneratorTestUtilities.getDEGGeneratedData(
