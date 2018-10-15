@@ -96,6 +96,7 @@ Ensure you have the Scala plugin installed.
 
 _File > Settings_
 
+_Optional_
 Search "Java Compiler". Change this to "Use compiler: Eclipse".  
 This gives you faster builds.
 
