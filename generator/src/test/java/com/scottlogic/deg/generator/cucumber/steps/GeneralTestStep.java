@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.scottlogic.deg.generator.cucumber.utils.DegTestHelper;
 import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
+import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
@@ -97,7 +98,7 @@ public class GeneralTestStep {
         Assert.assertThat(data.generatedData, contains(data.expectedData.toArray()));
     }
 
-    @Then("^the following data is included in what is generated:$")
+    @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
         data.expectedData
@@ -107,7 +108,7 @@ public class GeneralTestStep {
             });
     }
 
-    @Then("^the following data is not included in what is generated:$")
+    @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
         data.expectedData
@@ -117,24 +118,25 @@ public class GeneralTestStep {
             });
     }
 
-    private List <List<String>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
+    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
         return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
+            .map(row -> row.stream().map(GeneratorTestUtilities::parseInput).collect(Collectors.toList()))
             .collect(Collectors.toList());
     }
 
     private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
-        List <List<String>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List <List<String>> data = testHelper.generateAndGetData();
+        List <List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
+        List <List<Object>> data = testHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 
     class GeneratedTestData {
-        List <List<String>> expectedData;
-        List <List<String>> generatedData;
+        List <List<Object>> expectedData;
+        List <List<Object>> generatedData;
 
-        GeneratedTestData(List <List<String>> expectedData, List <List<String>> generatedData){
+        GeneratedTestData(List <List<Object>> expectedData, List <List<Object>> generatedData){
             this.expectedData = expectedData;
             this.generatedData = generatedData;
         }
