@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.File;

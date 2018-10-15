@@ -15,6 +15,8 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,13 +28,18 @@ public class GeneratorTestUtilities {
      * Runs the data generator and returns list of generated result data.
      * @return Generated data
      */
-    static List <List<String>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
+    static List <List<Object>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy)
             .stream()
             .map(genObj ->
                 genObj.values
                     .stream()
-                    .map(GeneratorTestUtilities::getDataBagAsString)
+                    .map(obj -> {
+                        if (obj.value != null && obj.format != null) {
+                            return String.format(obj.format, obj.value);
+                        }
+                        return obj.value;
+                    })
                     .collect(Collectors.toList())
             ).collect(Collectors.toList());
     }
@@ -58,24 +65,16 @@ public class GeneratorTestUtilities {
         return allActualRows;
     }
 
-    private static String getDataBagAsString(DataBagValue x){
-        if (x.value == null)
-            return "null";
-
-        if (x.format == null)
-            return x.value.toString();
-
-        return String.format(x.format, x.value);
-    }
-
     public static Object parseInput(String input) {
         Object parsedValue;
         if (input.startsWith("\"") && input.endsWith("\"")) {
             parsedValue = input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)){
-            parsedValue = input;
-        } else if (input.contains(".")){
-            parsedValue = Double.parseDouble(input);
+            parsedValue = LocalDateTime.parse(input);
+        } else if (input.equals("null")){
+            parsedValue = null;
+        } else if (input.matches("([0-9]+\\.[0-9]+)")){
+            parsedValue = new BigDecimal(input);
         } else {
             parsedValue = Integer.parseInt(input);
         }

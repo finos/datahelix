@@ -8,13 +8,13 @@ import java.util.List;
 public class DegTestHelper {
 
     private DegTestState state;
-    private List <List<String>> generatedData;
+    private List <List<Object>> generatedData;
 
     public DegTestHelper(DegTestState state){
         this.state = state;
     }
 
-    public List <List<String>> generateAndGetData() {
+    public List <List<Object>> generateAndGetData() {
         if (!this.generatorHasRun()){
             try {
                 generatedData = GeneratorTestUtilities.getDEGGeneratedData(
