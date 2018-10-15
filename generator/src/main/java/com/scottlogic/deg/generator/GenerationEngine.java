@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
@@ -19,6 +20,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,43 +43,16 @@ public class GenerationEngine {
         this.outputter = outputter;
     }
 
-    public void generateDataSet(Path profileFilePath, GenerationConfig config) {
-        final Profile profile;
-
-        try {
-            profile = new ProfileReader().read(profileFilePath);
-        } catch (Exception e) {
-            System.err.println("Failed to read file!");
-            System.err.println(e.toString());
-            for (StackTraceElement ste : e.getStackTrace())
-                System.err.println(ste.toString());
-            return;
-        }
+    public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
+        final Profile profile = new ProfileReader().read(profileFilePath);
 
         final Iterable<GeneratedObject> generatedDataItems = generate(profile, config);
 
-        try {
-            this.outputter.outputDataset(generatedDataItems, profile.fields);
-        } catch (Exception e) {
-            System.err.println("Failed to write generation result");
-            System.err.println(e.toString());
-            for (StackTraceElement ste : e.getStackTrace())
-                System.err.println(ste.toString());
-        }
+        this.outputter.outputDataset(generatedDataItems, profile.fields);
     }
 
-    public void generateTestCases(Path profileFilePath, GenerationConfig config) {
-        final Profile profile;
-
-        try {
-            profile = new ProfileReader().read(profileFilePath);
-        } catch (Exception e) {
-            System.err.println("Failed to read file!");
-            System.err.println(e.toString());
-            for (StackTraceElement ste : e.getStackTrace())
-                System.err.println(ste.toString());
-            return;
-        }
+    public void generateTestCases(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
+        final Profile profile = new ProfileReader().read(profileFilePath);
 
         final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
 
@@ -110,14 +85,7 @@ public class GenerationEngine {
                 violatingCases.stream())
                 .collect(Collectors.toList()));
 
-        try {
-            this.outputter.outputTestCases(generationResult);
-        } catch (Exception e) {
-            System.err.println("Failed to write generation result");
-            System.err.println(e.toString());
-            for (StackTraceElement ste : e.getStackTrace())
-                System.err.println(ste.toString());
-        }
+        this.outputter.outputTestCases(generationResult);
     }
 
     private Iterable<GeneratedObject> generate(Profile profile, GenerationConfig config) {

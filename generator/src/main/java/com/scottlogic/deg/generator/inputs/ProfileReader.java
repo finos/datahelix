@@ -48,7 +48,7 @@ public class ProfileReader {
                         dto,
                         profileFields))));
 
-        return new Profile(profileFields, rules);
+        return new Profile(profileFields, rules, profileDto.description);
     }
 
     //* Because Java sucks at handling exceptions during stream operations */

@@ -1,4 +1,6 @@
-package com.scottlogic.deg.generator.decisiontree;
+package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
+
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.stream.Stream;
 
