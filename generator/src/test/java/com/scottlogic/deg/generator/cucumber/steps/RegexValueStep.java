@@ -16,7 +16,7 @@ public class RegexValueStep {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {operator} {regex}")
+    @When("{fieldVar} is anything but {operator} {regex}")
     public void whenFieldIsNotConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }

@@ -16,7 +16,7 @@ public class StringValueStep {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {operator} {string}")
+    @When("{fieldVar} is anything but {operator} {string}")
     public void whenFieldIsNotConstrainedByTextValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }

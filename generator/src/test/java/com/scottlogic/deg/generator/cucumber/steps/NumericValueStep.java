@@ -17,7 +17,7 @@ public class NumericValueStep {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {operator} {int}")
+    @When("{fieldVar} is anything but {operator} {int}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, int value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }
@@ -27,7 +27,7 @@ public class NumericValueStep {
         this.state.addConstraint(fieldName, constraintName, convertDoubleToBigDecimal(value));
     }
 
-    @When("{fieldVar} is not {operator} {double}")
+    @When("{fieldVar} is anything but {operator} {double}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, double value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, convertDoubleToBigDecimal(value));
     }
