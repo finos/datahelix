@@ -121,7 +121,7 @@ For example, you may set your input path to `gfx_cleaned.csv` (found in test/res
 output path to the current directory (`.`):
 
 ```bash
-"C:\git\data-engineering-generator\data-generator-spark\src\test\resources\gfx_cleaned.csv"
+"C:\git\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv"
 ```
 
 #### VM Options
@@ -131,6 +131,11 @@ Specify the folder in which hadoop.dll lives:
 
 ```bash
 -Djava.library.path="C:\hadoop-2.7.6\bin"
+```
+
+_Example_
+```bash
+"C:\git\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv" .
 ```
 
 #### Environment
