@@ -1,14 +1,15 @@
-Feature: User can generate interesting values whilst specifying that a date is lower than, but not equal to, a specified threshold
+Feature: User can generate interesting values whilst specifying that a date is lower than, or not equal to, a specified threshold
 
 Background:
      Given the generation strategy is interesting
 
-Scenario: User creates data before a specified date
+ Scenario: User creates data before or equal to a specified date
      Given there is a field foo
-       And foo is before or at 2018-10-10T00:00:00.000
+       And foo is before 2018-10-10T00:00:00.000
      Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
+       | 2018-10-10T00:00:00.000 |
        | 2018-10-09T23:59:59.999 |
        | 2018-10-09T23:00:00.000 |
        | 2018-10-09T00:00:00.000 |
@@ -27,7 +28,6 @@ Scenario: User creates data before a specified date
        | 0001-01-01T00:00:00.000 |
      And the following data should not be included in what is generated:
        | foo                     |
-       | 2018-10-10T00:00:00.000 |
        | 2018-10-10T00:00:00.001 |
        | 2018-10-10T01:00:00.000 |
        | 2018-10-10T01:00:00.000 |
@@ -44,12 +44,13 @@ Scenario: User creates data before a specified date
        | 3000-01-01T00:00:00.000 |
        | 9999-12-31T00:00:00.000 |
 
-Scenario: User creates data before a specified date and time
+Scenario: User creates data before or equal to a specified date and time
      Given there is a field foo
-       And foo is before 2018-10-10T23:59:59.999
+       And foo is before or at 2018-10-10T23:59:59.999
      Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
+       | 2018-10-10T23:59:59.999 |
        | 2018-10-10T23:59:59.998 |
        | 2018-10-09T23:59:59.999 |
        | 2018-10-09T00:00:00.000 |
@@ -68,7 +69,6 @@ Scenario: User creates data before a specified date and time
        | 0001-01-01T00:00:00.000 |
      And the following data should not be included in what is generated:
        | foo                     |
-       | 2018-10-10T23:59:59.999 |
        | 2018-10-11T00:00:00.000 |
        | 2018-10-11T01:00:00.000 |
        | 2018-10-11T23:59:59.999 |
@@ -84,13 +84,14 @@ Scenario: User creates data before a specified date and time
        | 3000-01-01T00:00:00.000 |
        | 9999-12-31T00:00:00.000 |
 
-Scenario: User creates data before two specified dates
+Scenario: User creates data before or equal to two specified dates
      Given there is a field foo
-       And foo is before 2018-10-10T00:00:00.000
-       And foo is before 2018-10-12T00:00:00.000
+       And foo is before or at 2018-10-10T00:00:00.000
+       And foo is before or at 2018-10-12T00:00:00.000
      Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
+       | 2018-10-10T00:00:00.000 |
        | 2018-10-09T23:59:59.999 |
        | 2018-10-09T23:00:00.000 |
        | 2018-10-09T00:00:00.000 |
@@ -109,8 +110,6 @@ Scenario: User creates data before two specified dates
        | 0001-01-01T00:00:00.000 |
      And the following data should not be included in what is generated:
        | foo                     |
-       | 2018-10-12T00:00:00.000 |
-       | 2018-10-10T00:00:00.000 |
        | 2018-10-10T00:00:00.001 |
        | 2018-10-10T01:00:00.000 |
        | 2018-10-10T01:00:00.000 |
@@ -127,13 +126,12 @@ Scenario: User creates data before two specified dates
        | 3000-01-01T00:00:00.000 |
        | 9999-12-31T00:00:00.000 |
 
-Scenario: User creates data that is anything but before a specified date
+Scenario: User creates data that is anything but before or equal to a specified date
      Given there is a field foo
-       And foo is anything but before 2018-10-10T00:00:00.000
+       And foo is anything but before or at 2018-10-10T00:00:00.000
      Then the following data is included in what is generated:
        | foo                     |
        | null                    |
-       | 2018-10-10T00:00:00.000 |
        | 2018-10-10T00:00:00.001 |
        | 2018-10-10T01:00:00.000 |
        | 2018-10-10T01:00:00.000 |
@@ -151,6 +149,7 @@ Scenario: User creates data that is anything but before a specified date
        | 9999-12-31T00:00:00.000 |
      And the following data should not be included in what is generated:
        | foo                     |
+       | 2018-10-10T00:00:00.000 |
        | 2018-10-09T23:59:59.999 |
        | 2018-10-09T23:00:00.000 |
        | 2018-10-09T00:00:00.000 |
@@ -168,33 +167,33 @@ Scenario: User creates data that is anything but before a specified date
        | 1601-01-01T00:00:00.000 |
        | 0001-01-01T00:00:00.000 |
 
-Scenario: User attempts to create data before a specified invalidly formatted date
+Scenario: User attempts to create data before or equal to a specified invalidly formatted date
      Given there is a field foo
-       But the profile is invalid as foo can't be before 2018-10-01
+       But the profile is invalid as foo can't be before or at 2018-10-01
      Then I am presented with an error message
        And no data is created
 
-Scenario: User attempts to create data before a specified invalid date
+Scenario: User attempts to create data before or equal to a specified invalid date
      Given there is a field foo
-       But the profile is invalid as foo can't be before 2018-10-40T00:00:00.000
+       But the profile is invalid as foo can't be before or at 2018-10-40T00:00:00.000
      Then I am presented with an error message
        And no data is created
 
-Scenario: User attempts to create data before a specified invalidly formatted time
+Scenario: User attempts to create data before or equal to a specified invalidly formatted time
      Given there is a field foo
-       But the profile is invalid as foo can't be before 2018-10-01T01:00:00.000AM
+       But the profile is invalid as foo can't be before or at 2018-10-01T01:00:00.000AM
      Then I am presented with an error message
        And no data is created
 
-Scenario: User attempts to create data before a specified invalid time
+Scenario: User attempts to create data before or equal to a specified invalid time
      Given there is a field foo
-       But the profile is invalid as foo can't be before 2018-10-01T50:00:00.000
+       But the profile is invalid as foo can't be before or at 2018-10-01T50:00:00.000
      Then I am presented with an error message
        And no data is created
 
-Scenario: User attempts to create data before a specified date and an invalidly formatted date
+Scenario: User attempts to create data before or equal to a specified date and an invalidly formatted date
      Given there is a field foo
        And foo is before 2018-10-10T00:00:00.000
-       But the profile is invalid as foo can't be before 2018-10-01
+       But the profile is invalid as foo can't be before or at 2018-10-01
      Then I am presented with an error message
        And no data is created
