@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import cucumber.api.java.en.When;
 
 import java.math.BigDecimal;
@@ -11,22 +12,22 @@ public class NumericValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {numericValueOperation} {int}")
+    @When("{fieldVar} is {operator} {int}")
     public void whenFieldIsConstrainedByNumericValue(String fieldName, String constraintName, int value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is not {numericValueOperation} {int}")
+    @When("{fieldVar} is anything but {operator} {int}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, int value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is {numericValueOperation} {double}")
+    @When("{fieldVar} is {operator} {double}")
     public void whenFieldIsConstrainedByNumericValue(String fieldName, String constraintName, double value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, convertDoubleToBigDecimal(value));
     }
 
-    @When("{fieldVar} is not {numericValueOperation} {double}")
+    @When("{fieldVar} is anything but {operator} {double}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, double value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, convertDoubleToBigDecimal(value));
     }
