@@ -66,7 +66,7 @@ On IntelliJ's splash screen, choose "Open".
 
 Open the repository root directory, `data-engineering-generator`.
 
-Right-click the backend Module, `data-generator-spark`, choose "Open Module Settings".
+Right-click the backend Module, `generator`, choose "Open Module Settings".
 
 In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
 Set Project language level to 8.
@@ -96,9 +96,6 @@ Ensure you have the Scala plugin installed.
 
 _File > Settings_
 
-Search "Java Compiler". Change this to "Use compiler: Eclipse".  
-This gives you faster builds.
-
 Search "Show tool window bars". Ensure this is _checked_.
 
 ##### Run
@@ -120,7 +117,7 @@ For example, you may set your input path to `gfx_cleaned.csv` (found in test/res
 output path to the current directory (`.`):
 
 ```bash
-"C:\git\data-engineering-generator\data-generator-spark\src\test\resources\gfx_cleaned.csv"
+"C:\git\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv"
 ```
 
 #### VM Options
@@ -130,6 +127,11 @@ Specify the folder in which hadoop.dll lives:
 
 ```bash
 -Djava.library.path="C:\hadoop-2.7.6\bin"
+```
+
+_Example_
+```bash
+"C:\git\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv" .
 ```
 
 #### Environment
