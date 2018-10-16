@@ -7,4 +7,8 @@ public class NullRestrictions {
         MustBeNull,
         MustNotBeNull
     }
+
+    public String toString() {
+        return nullness.toString();
+    }
 }
