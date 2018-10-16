@@ -5,8 +5,8 @@ Feature: User can generate interesting values whilst specifying that a date is g
 
   Scenario: User creates data after a specified date
     Given there is a field foo
+    And foo is anything but null
     And foo is after 2018-10-10T00:00:00.000
-
     Then the following data should be included in what is generated:
       | foo                     |
       | 2018-10-10T00:00:00.000 |
@@ -17,7 +17,6 @@ Feature: User can generate interesting values whilst specifying that a date is g
       | 2018-11-10T00:00:00.000 |
       | 2019-10-10T00:00:00.000 |
       | 2020-02-29T00:00:00.000 |
-      | 2018-12-25T00:00:00.000 |
       | 2018-12-25T00:00:00.000 |
       | 2038-12-19T00:00:00.000 |
       | 2079-06-06T00:00:00.000 |
@@ -35,7 +34,6 @@ Feature: User can generate interesting values whilst specifying that a date is g
       | 2018-11-10T23:59:59.999 |
       | 2019-10-10T23:59:59.999 |
       | 2020-02-29T00:00:00.000 |
-      | 2018-12-25T00:00:00.000 |
       | 2018-12-25T00:00:00.000 |
       | 2038-12-19T00:00:00.000 |
       | 2079-06-06T00:00:00.000 |
