@@ -9,7 +9,6 @@ Feature: User can generate interesting values whilst specifying that a date is g
     And foo is after 2018-10-10T00:00:00.000
     Then the following data should be included in what is generated:
       | foo                     |
-      | 2018-10-10T00:00:00.000 |
       | 2018-10-10T00:00:00.001 |
       | 2018-10-10T01:00:00.000 |
       | 2018-10-11T00:00:00.000 |
