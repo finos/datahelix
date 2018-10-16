@@ -10,6 +10,15 @@ The command line has two commands. Usage instructions for a command can be reque
 
 Generates data to a specified endpoint.
 
+### `generateTestCases`
+
+Generates data to a specified directory, including both valid and [invalid data](./docs/DeliberateViolation.md).
+
 ### `visualise`
 
 Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection.
+
+## Future invocation methods
+
+* Calling into a Java library
+* Contacting an HTTP web service
