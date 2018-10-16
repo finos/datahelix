@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
+import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.When;
 
 import java.util.Arrays;
@@ -14,12 +16,12 @@ public class SetValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {setValueOperation} {set}")
+    @When("{fieldVar} is {operator} {set}")
     public void whenFieldIsConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addConstraint(fieldName, constraintName, this.getSetValues(value));
     }
 
-    @When("{fieldVar} is not {setValueOperation} {set}")
+    @When("{fieldVar} is anything but {operator} {set}")
     public void whenFieldIsNotConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, this.getSetValues(value));
     }
@@ -27,20 +29,8 @@ public class SetValueStep {
     private Collection<Object> getSetValues(String csvSet) {
         return Arrays.asList(csvSet.split(","))
             .stream()
-            .map(val -> val.trim())
-            .map(value -> {
-                Object parsedValue;
-                if (value.startsWith("\"") && value.endsWith("\"")) {
-                    parsedValue = value.substring(1, value.length() - 1);
-                } else if (value.matches("^((20\\d{2})-(\\d{2})-(\\d{2})(T(\\d{2}:\\d{2}:\\d{2}))?)$")){
-                    parsedValue = value;
-                } else if (value.contains(".")){
-                    parsedValue = Double.parseDouble(value);
-                } else {
-                    parsedValue = Integer.parseInt(value);
-                }
-                return parsedValue;
-            })
+            .map(String::trim)
+            .map(GeneratorTestUtilities::parseInput)
             .collect(Collectors.toSet());
     }
 

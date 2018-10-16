@@ -29,8 +29,19 @@ public class GenerationConfig {
     public long getMaxRows() { return maxRows; }
 
     public enum DataGenerationType {
-        FullSequential,
-        Interesting,
-        Random
+        FullSequential("full"),
+        Interesting("interesting"),
+        Random("random");
+
+        private final String text;
+
+        DataGenerationType(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 }
