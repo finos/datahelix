@@ -1,7 +1,7 @@
 Feature: Constraint only satisfied if all inner constraints are satisfied
 
   Background:
-    Given the generation strategy is full
+    And the generation strategy is full
 
   Scenario: User attempts to combine contradicting constraints within an allOf operator
     Given there is a field foo

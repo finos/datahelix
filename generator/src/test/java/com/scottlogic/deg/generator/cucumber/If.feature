@@ -1,5 +1,8 @@
 Feature: Values can be specified by using if, then and else constraints
 
+  Background:
+    And the generation strategy is full
+
   Scenario:
     Given the following fields exist:
       | foo |
@@ -17,8 +20,8 @@ Feature: Values can be specified by using if, then and else constraints
       """
     Then the following data should be generated:
       | foo | price |
-      |a|3|
-      |b| 5|
+      | "a" |  3    |
+      | "b" |  5    |
 
 
   Scenario: test
@@ -38,7 +41,7 @@ Feature: Values can be specified by using if, then and else constraints
     """
     Then the following data should be generated:
       | productCode | priceTest |
-      | a            | 10     |
-      | b            | 10     |
-      | b            | 20     |
+      | "a"         |    10     |
+      | "b"         |    10     |
+      | "b"         |    20     |
 

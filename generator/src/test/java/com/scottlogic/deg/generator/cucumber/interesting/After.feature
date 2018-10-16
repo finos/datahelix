@@ -1,7 +1,7 @@
 Feature: User can generate interesting values whilst specifying that a date is greater than and not equal to, a specified threshold
 
   Background:
-    When the generation strategy is interesting
+    And the generation strategy is interesting
 
   Scenario: User creates data after a specified date
     Given there is a field foo
