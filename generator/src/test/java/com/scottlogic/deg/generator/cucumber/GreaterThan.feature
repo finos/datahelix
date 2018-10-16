@@ -1,12 +1,15 @@
 Feature: User can specify that a numeric value is higher than, but not equal to, a specified threshold
-    
+
+  Background:
+    Given the generation strategy is full
+
 Scenario: User requires to create a numeric field with data values that are greater than zero
      Given there is a field foo
        And foo is greater than 0
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
-     Then the following data should be generated:
+       And foo is anything but null
+     Then the following data should be included in what is generated:
        | foo |
        | 1   |
        | 2   |
@@ -23,8 +26,8 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than 0
        And foo is less than 2
        And foo is granular to 0.1
-       And foo is not null
-     Then the following data should be generated:
+       And foo is anything but null
+    Then the following data should be included in what is generated:
        | foo |
        | 0.1 |
        | 0.2 |
@@ -51,8 +54,8 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
-       And foo is not null
-     Then the following data should be generated:
+       And foo is anything but null
+     Then the following data should be included in what is generated:
        | foo |
        | 0.1 |
        | 0.2 |
@@ -79,8 +82,8 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than -10
        And foo is less than 0
        And foo is granular to 1
-       And foo is not null
-     Then the following data should be generated:
+       And foo is anything but null
+    Then the following data should be included in what is generated:
        | foo |
        | -9  |
        | -8  |
@@ -98,8 +101,8 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than 1
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
-     Then the following data should be generated:
+        And foo is anything but null
+    Then the following data should be included in what is generated:
        | foo |
        | 2   |
        | 3   |
