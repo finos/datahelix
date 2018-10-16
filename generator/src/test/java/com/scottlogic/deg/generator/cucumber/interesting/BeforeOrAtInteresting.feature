@@ -30,7 +30,6 @@ Background:
        | foo                     |
        | 2018-10-10T00:00:00.001 |
        | 2018-10-10T01:00:00.000 |
-       | 2018-10-10T01:00:00.000 |
        | 2018-10-11T00:00:00.000 |
        | 2018-10-17T00:00:00.000 |
        | 2018-11-10T00:00:00.000 |
@@ -112,7 +111,6 @@ Scenario: User creates data before or equal to two specified dates
        | foo                     |
        | 2018-10-10T00:00:00.001 |
        | 2018-10-10T01:00:00.000 |
-       | 2018-10-10T01:00:00.000 |
        | 2018-10-11T00:00:00.000 |
        | 2018-10-17T00:00:00.000 |
        | 2018-11-10T00:00:00.000 |
@@ -129,7 +127,7 @@ Scenario: User creates data before or equal to two specified dates
 Scenario: User creates data that is anything but before or equal to a specified date
      Given there is a field foo
        And foo is anything but before or at 2018-10-10T00:00:00.000
-     Then the following data is included in what is generated:
+     Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
        | 2018-10-10T00:00:00.001 |
@@ -169,7 +167,7 @@ Scenario: User creates data that is anything but before or equal to a specified 
 
 Scenario: User attempts to create data before or equal to a specified invalidly formatted date
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at 2018-10-01
+       But the profile is invalid as foo can't be before or at "2018-10-01"
      Then I am presented with an error message
        And no data is created
 
@@ -194,6 +192,6 @@ Scenario: User attempts to create data before or equal to a specified invalid ti
 Scenario: User attempts to create data before or equal to a specified date and an invalidly formatted date
      Given there is a field foo
        And foo is before 2018-10-10T00:00:00.000
-       But the profile is invalid as foo can't be before or at 2018-10-01
+       But the profile is invalid as foo can't be before or at "2018-10-01"
      Then I am presented with an error message
        And no data is created
