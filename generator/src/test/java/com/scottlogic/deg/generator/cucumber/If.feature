@@ -1,11 +1,11 @@
 Feature: Values can be specified by using if, then and else constraints
 
   Background:
-    And the generation strategy is full
+    Given the generation strategy is full
 
-  Scenario:
+  Scenario: When if constraint is not satisfied, else constraint is
     Given the following fields exist:
-      | foo |
+      | foo   |
       | price |
     And foo is of type "string"
     And price is of type "numeric"
@@ -24,20 +24,20 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |  5    |
 
 
-  Scenario: test
+  Scenario: User requires both if and then constraint to be satisfied
     Given the following fields exist:
       | productCode |
-      | priceTest |
+      | priceTest   |
     And productCode is of type "string"
     And priceTest is of type "numeric"
     And productCode is in set ["a", "b"]
     And priceTest is in set [10, 20]
     And there is a constraint:
     """
-    {
-    "if": { "field": "productCode", "is": "equalTo", "value": "a" },
-    "then": { "field": "priceTest", "is": "equalTo", "value": 10 }
-    }
+      {
+        "if": { "field": "productCode", "is": "equalTo", "value": "a" },
+        "then": { "field": "priceTest", "is": "equalTo", "value": 10 }
+      }
     """
     Then the following data should be generated:
       | productCode | priceTest |

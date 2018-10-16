@@ -3,7 +3,7 @@ Feature: User can specify that a value is equalTo a required value
   Background:
     Given the generation strategy is full
 
-  Scenario: test1
+  Scenario: EqualTo operator can be used to generate a string
     Given there is a field foo
     And foo is equal to "String24£"
     And foo is of type "string"
@@ -12,7 +12,7 @@ Feature: User can specify that a value is equalTo a required value
       |"String24£"|
 
 
-  Scenario: test2
+  Scenario: EqualTo operator can be used to generate a number
     Given there is a field foo
     When foo is equal to 23
     And foo is of type "numeric"

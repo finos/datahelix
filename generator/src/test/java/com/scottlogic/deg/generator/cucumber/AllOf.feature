@@ -1,7 +1,7 @@
 Feature: Constraint only satisfied if all inner constraints are satisfied
 
   Background:
-    And the generation strategy is full
+    Given the generation strategy is full
 
   Scenario: User attempts to combine contradicting constraints within an allOf operator
     Given there is a field foo
@@ -15,7 +15,7 @@ Feature: Constraint only satisfied if all inner constraints are satisfied
     Then no data is created
 
 
-  Scenario:
+  Scenario: Numeric value using the allOf operator
     Given there is a field price
 
     And there is a constraint:
@@ -31,7 +31,7 @@ Feature: Constraint only satisfied if all inner constraints are satisfied
       |  5   |
 
 
-  Scenario:
+  Scenario: String value using the allOf operator
     Given there is a field foo
 
     And there is a constraint:

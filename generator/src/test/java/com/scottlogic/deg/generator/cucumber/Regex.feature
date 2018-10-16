@@ -1,9 +1,9 @@
 Feature: User can specify that a value either matches or contains a specified regex
 
   Background:
-    And the generation strategy is full
+    Given the generation strategy is full
 
-  Scenario:
+  Scenario: User using matchingRegex operator to provide an exact set of values
     Given there is a field foo
     And foo is matching regex /a{1,3}/
     And foo is anything but null
@@ -12,5 +12,3 @@ Feature: User can specify that a value either matches or contains a specified re
       | "a"   |
       | "aa"  |
       | "aaa" |
-
-
