@@ -281,6 +281,6 @@ Scenario: User attempts to data higher than a specified number formatted as a st
 
 Scenario: User attempts to data higher than a specified date
      Given there is a field foo
-       But the profile is invalid as foo can't be greater than 2018-10-09T23:00:00.000
+       But the profile is invalid as foo can't be greater than 2018-10-10T00:00:00.000
      Then I am presented with an error message
        And no data is created
