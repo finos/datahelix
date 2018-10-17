@@ -1,5 +1,8 @@
 Feature: Constraint only satisfied if all inner constraints are satisfied
 
+  Background:
+    Given the generation strategy is full
+
   Scenario: User attempts to combine contradicting constraints within an allOf operator
     Given there is a field foo
     And there is a constraint:
@@ -12,37 +15,35 @@ Feature: Constraint only satisfied if all inner constraints are satisfied
     Then no data is created
 
 
-  Scenario:
+  Scenario: Numeric value using the allOf operator
     Given there is a field price
-      | price |
 
     And there is a constraint:
     """
       { "allOf": [
-         { "field": "price", "is": "ofType", "value": "number" },
+         { "field": "price", "is": "ofType", "value": "numeric" },
          { "field": "price", "is": "equalTo", "value": 5 }
       ]}
     """
 
     Then the following data should be generated:
       | price |
-      |   5   |
+      |  5   |
 
 
-  Scenario:
-    Given the following fields exist:
-      | foo |
+  Scenario: String value using the allOf operator
+    Given there is a field foo
 
     And there is a constraint:
     """
       { "allOf": [
          { "field": "foo", "is": "equalTo", "value": "Test0" },
-         { "field": "foo", "is": "ofType", "value": "string" },
+         { "field": "foo", "is": "ofType", "value": "string" }
       ]}
     """
 
     Then the following data should be generated:
       | foo   |
-      | Test0 |
+      | "Test0" |
 
 

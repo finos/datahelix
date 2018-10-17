@@ -1,5 +1,6 @@
 Feature: User can specify that a temporal date is lower than, but not equal to, a specified threshold
 
+
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date
      Given there is a field foo
        And foo is before 2018-10-10T00:00:00.000
