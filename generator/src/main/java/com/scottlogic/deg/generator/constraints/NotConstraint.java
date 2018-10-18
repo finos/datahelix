@@ -11,4 +11,10 @@ public class NotConstraint implements IConstraint {
     public String toDotLabel() {
         return String.format("¬(%s)", negatedConstraint.toDotLabel());
     }
+
+    public String toString(){
+        return String.format(
+                "NOT(%s)",
+                negatedConstraint);
+    }
 }

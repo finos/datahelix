@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class TypeRestrictions {
@@ -43,4 +44,9 @@ public class TypeRestrictions {
         return allowedTypes.contains(type);
     }
 
+    public String toString() {
+        return String.format(
+                "Types: %s",
+                Objects.toString(allowedTypes));
+    }
 }

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,5 +34,12 @@ public class IsInSetConstraint implements IConstraint {
             field.name,
             legalValues.stream().limit(limit).map(x -> x.toString()).collect(Collectors.joining(", ")),
             legalValues.size());
+    }
+
+    public String toString(){
+        return String.format(
+                "%s in %s",
+                field.name,
+                Objects.toString(legalValues));
     }
 }
