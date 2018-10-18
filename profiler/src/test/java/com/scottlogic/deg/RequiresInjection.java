@@ -1,6 +1,7 @@
 package com.scottlogic.deg;
 
 import com.google.inject.Module;
+import com.google.inject.spi.InjectionPoint;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;

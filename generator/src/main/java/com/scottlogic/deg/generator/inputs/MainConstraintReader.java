@@ -4,10 +4,10 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-class MainConstraintReader implements IConstraintReader {
+public class MainConstraintReader implements IConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
 
-    MainConstraintReader() {
+    public MainConstraintReader() {
         this.atomicConstraintReaderLookup = new AtomicConstraintReaderLookup();
     }
 
