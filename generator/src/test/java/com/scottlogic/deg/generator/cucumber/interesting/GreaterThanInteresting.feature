@@ -21,11 +21,11 @@ Scenario: User creates data higher than a specified number
        | 101     |
        | 1001    |
        | 1000001 |
-       | 01      |
-       | 001     |
-       | 0001    |
-       | 00001   |
-       | +1      |
+       | "01"    |
+       | "001"   |
+       | "0001"  |
+       | "00001" |
+       | "+1"    |
      And the following data should not be included in what is generated:
        | foo      |
        | 0        |
@@ -42,10 +42,10 @@ Scenario: User creates data higher than a specified number
        | -100     |
        | -1000    |
        | -1000000 |
-       | -01      |
-       | -001     |
-       | -0001    |
-       | -00001   |
+       | "-01"    |
+       | "-001"   |
+       | "-0001"  |
+       | "-00001" |
 
 Scenario: User creates data higher than a specified negative number
      Given there is a field foo
@@ -65,30 +65,30 @@ Scenario: User creates data higher than a specified negative number
        | 100     |
        | 1000    |
        | 1000000 |
-       | 01      |
-       | 001     |
-       | 0001    |
-       | 00001   |
-       | +1      |
+       | "01"    |
+       | "001"   |
+       | "0001"  |
+       | "00001" |
+       | "+1"    |
      And the following data should not be included in what is generated:
-       | foo      |
-       | -10      |
-       | -11      |
-       | -12      |
-       | -13      |
-       | -14      |
-       | -15      |
-       | -16      |
-       | -17      |
-       | -18      |
-       | -19      |
-       | -110     |
-       | -1010    |
-       | -1000010 |
-       | -010     |
-       | -0010    |
-       | -00010   |
-       | -000010  |
+       | foo       |
+       | -10       |
+       | -11       |
+       | -12       |
+       | -13       |
+       | -14       |
+       | -15       |
+       | -16       |
+       | -17       |
+       | -18       |
+       | -19       |
+       | -110      |
+       | -1010     |
+       | -1000010  |
+       | "-010"    |
+       | "-0010"   |
+       | "-00010"  |
+       | "-000010" |
 
 Scenario: User creates data higher than a specified decimal number that would round down
      Given there is a field foo
@@ -108,11 +108,11 @@ Scenario: User creates data higher than a specified decimal number that would ro
        | 101     |
        | 1001    |
        | 1000001 |
-       | 01      |
-       | 001     |
-       | 0001    |
-       | 00001   |
-       | +1      |
+       | "01"    |
+       | "001"   |
+       | "0001"  |
+       | "00001" |
+       | "+1"    |
      And the following data should not be included in what is generated:
        | foo      |
        | 0        |
@@ -129,10 +129,10 @@ Scenario: User creates data higher than a specified decimal number that would ro
        | -101     |
        | -1001    |
        | -1000001 |
-        | -01      |
-       | -001     |
-       | -0001    |
-       | -00001   |
+       | "-01"    |
+       | "-001"   |
+       | "-0001"  |
+       | "-00001" |
 
 Scenario: User creates data higher than a specified decimal number that would round up
      Given there is a field foo
@@ -152,11 +152,11 @@ Scenario: User creates data higher than a specified decimal number that would ro
        | 101     |
        | 1001    |
        | 1000001 |
-       | 01      |
-       | 001     |
-       | 0001    |
-       | 00001   |
-       | +1      |
+       | "01"    |
+       | "001"   |
+       | "0001"  |
+       | "00001" |
+       | "+1"    |
      And the following data should not be included in what is generated:
        | foo      |
        | 0        |
@@ -173,10 +173,10 @@ Scenario: User creates data higher than a specified decimal number that would ro
        | -101     |
        | -1001    |
        | -1000001 |
-       | -01      |
-       | -001     |
-       | -0001    |
-       | -00001   |
+       | "-01"    |
+       | "-001"   |
+       | "-0001"  |
+       | "-00001" |
 
 Scenario: User creates data higher than two specified numbers
      Given there is a field foo
@@ -196,11 +196,11 @@ Scenario: User creates data higher than two specified numbers
        | 102     |
        | 1002    |
        | 1000002 |
-       | 02      |
-       | 002     |
-       | 0002    |
-       | 00002   |
-       | +2      |
+       | "02"    |
+       | "002"   |
+       | "0002"  |
+       | "00002" |
+       | "+2"    |
      And the following data should not be included in what is generated:
        | foo      |
        | 1        |
@@ -218,10 +218,10 @@ Scenario: User creates data higher than two specified numbers
        | -101     |
        | -1001    |
        | -1000001 |
-       | 01       |
-       | 001      |
-       | 0001     |
-       | 00001    |
+       | "01"     |
+       | "001"    |
+       | "0001"   |
+       | "00001"  |
 
 Scenario: User creates data that is anything but higher than a specified number
      Given there is a field foo
@@ -242,10 +242,10 @@ Scenario: User creates data that is anything but higher than a specified number
        | -100     |
        | -1000    |
        | -1000000 |
-       | -01      |
-       | -001     |
-       | -0001    |
-       | -00001   |
+       | "-01"    |
+       | "-001"   |
+       | "-0001"  |
+       | "-00001" |
      And the following data should not be included in what is generated:
        | foo     |
        | 1       |
@@ -261,11 +261,11 @@ Scenario: User creates data that is anything but higher than a specified number
        | 101     |
        | 1001    |
        | 1000001 |
-       | 01      |
-       | 001     |
-       | 0001    |
-       | 00001   |
-       | +1      |
+       | "01"    |
+       | "001"   |
+       | "0001"  |
+       | "00001" |
+       | "+1"    |
 
 Scenario: User attempts to data higher than a specified string
      Given there is a field foo
