@@ -32,7 +32,7 @@ public class NullRestrictionsMerger {
             return left;
         }
 
-        throw new UnsupportedOperationException(String.format("Cannot satisfy %s and %s at the same time", left, right));
+        throw new UnmergeableRestrictionException();
     }
 
     private NullRestrictions.Nullness getNullness(NullRestrictions restrictions) {
