@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Details a column's atomic constraints
@@ -71,16 +73,18 @@ public class FieldSpec {
 
     @Override
     public String toString() {
-        return String.format(
-                "%s | %s | %s | %s | %s | %s",
-                Objects.toString(setRestrictions, "-"),
-                Objects.toString(numericRestrictions, "-"),
-                Objects.toString(stringRestrictions, "-"),
-                Objects.toString(nullRestrictions, "-"),
-                Objects.toString(typeRestrictions, "-"),
-                Objects.toString(dateTimeRestrictions, "-"),
-                Objects.toString(granularityRestrictions, "-")
-        );
+        return String.join(
+            " | ",
+            Stream.of(
+                Objects.toString(setRestrictions, null),
+                Objects.toString(numericRestrictions, null),
+                Objects.toString(stringRestrictions, null),
+                Objects.toString(nullRestrictions, null),
+                Objects.toString(typeRestrictions, null),
+                Objects.toString(dateTimeRestrictions, null),
+                Objects.toString(granularityRestrictions, null))
+            .filter(s -> s != null)
+            .collect(Collectors.toList()));
     }
 
     public FormatRestrictions getFormatRestrictions() {

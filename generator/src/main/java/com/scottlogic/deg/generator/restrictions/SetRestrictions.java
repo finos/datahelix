@@ -86,6 +86,19 @@ public class SetRestrictions {
 
     @Override
     public String toString() {
+        if (whitelist.isEmpty() && blacklist.isEmpty())
+            return null;
+
+        if (whitelist.isEmpty())
+            return String.format(
+                    "bList: %s",
+                    Objects.toString(blacklist));
+
+        if (blacklist.isEmpty())
+            return String.format(
+                    "wList: %s",
+                    Objects.toString(whitelist));
+
         return String.format(
             "wList: %s, bList: %s",
             Objects.toString(whitelist, "-"),
