@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.generation.field_value_sources.TemporalFieldValueSource;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,7 +18,7 @@ public class FieldSpecMerger {
     private final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
     private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
     private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
-    private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
+    private TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
     private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
     private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
     private final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
@@ -45,7 +44,7 @@ public class FieldSpecMerger {
                     left.getTypeRestrictions(), right.getTypeRestrictions());
 
             if (typeRestrictions == null) {
-                typeRestrictions = TypeRestrictions.createAllowAll();
+                typeRestrictions = TypeRestrictions.all;
             }
 
             SetRestrictions setRestrictions =
@@ -58,7 +57,7 @@ public class FieldSpecMerger {
 
             if (stringRestrictions != null) {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                    typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.String));
+                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String);
                 } else {
                     throw new UnmergeableRestrictionException("Cannot merge string restriction");
                 }
@@ -71,7 +70,7 @@ public class FieldSpecMerger {
 
             if (numberRestrictions != null) {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                    typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Numeric));
+                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric);
                 } else {
                     throw new UnmergeableRestrictionException("Cannot merge numeric restriction");
                 }
@@ -84,7 +83,7 @@ public class FieldSpecMerger {
 
             if (dateTimeRestrictions != null) {
                 if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
-                    typeRestrictions.allowedTypes.retainAll(Collections.singleton(IsOfTypeConstraint.Types.Temporal));
+                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal);
                 } else {
                     throw new UnmergeableRestrictionException("Cannot merge date restriction");
                 }

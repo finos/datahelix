@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FieldSpecFulfiller implements IDataBagSource {
     private final Field field;
@@ -65,7 +64,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
         TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()
-                : TypeRestrictions.createAllowAll();
+                : TypeRestrictions.all;
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
             NumericRestrictions restrictions = spec.getNumericRestrictions() == null

@@ -95,7 +95,7 @@ public class FieldSpecFactory {
         final TypeRestrictions typeRestrictions;
 
         if (negate) {
-            typeRestrictions = TypeRestrictions.createFromBlackList(constraint.requiredType);
+            typeRestrictions = TypeRestrictions.all.except(constraint.requiredType);
         } else {
             typeRestrictions = TypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
