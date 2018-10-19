@@ -2,26 +2,24 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
-public class TypeRestrictions {
+public class TypeRestrictions implements ITypeRestrictions {
 
-    public final static TypeRestrictions all = new TypeRestrictions(Arrays.asList(IsOfTypeConstraint.Types.values()));
+    public final static ITypeRestrictions all = new NoTypeRestriction();
 
     public TypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
         if (allowedTypes.size() == 0)
             throw new UnsupportedOperationException("Cannot have a type restriction with no types");
 
-        this.allowedTypes = new HashSet<>();
-        this.allowedTypes.addAll(allowedTypes);
+        this.allowedTypes = new HashSet<>(allowedTypes);
     }
 
-    public static TypeRestrictions createFromWhiteList(IsOfTypeConstraint.Types... types) {
+    public static ITypeRestrictions createFromWhiteList(IsOfTypeConstraint.Types... types) {
         return new TypeRestrictions(Arrays.asList(types));
     }
 
-    public TypeRestrictions except(IsOfTypeConstraint.Types... types) {
+    public ITypeRestrictions except(IsOfTypeConstraint.Types... types) {
         if (types.length == 0)
             return this;
 
@@ -38,30 +36,24 @@ public class TypeRestrictions {
     }
 
     public String toString() {
-        if (this == all)
-            return "Types: <all>";
-
         return String.format(
                 "Types: %s",
                 Objects.toString(allowedTypes));
     }
 
-    public TypeRestrictions intersect(TypeRestrictions other) {
-        if (this == all)
-            return other;
-
+    public ITypeRestrictions intersect(ITypeRestrictions other) {
         if (other == all)
             return this;
 
         ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);
-        allowedTypes.retainAll(other.allowedTypes);
+        allowedTypes.retainAll(other.getAllowedTypes());
 
         if (allowedTypes.isEmpty())
             return null;
 
         //micro-optimisation; if there is only one value in allowedTypes then there must have been only one value in either this.allowedTypes or other.allowedTypes
         if (allowedTypes.size() == 1) {
-            return other.allowedTypes.size() == 1
+            return other.getAllowedTypes().size() == 1
                     ? other
                     : this;
         }
@@ -73,3 +65,4 @@ public class TypeRestrictions {
         return allowedTypes;
     }
 }
+

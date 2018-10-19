@@ -14,7 +14,7 @@ public class FieldSpec {
     private NumericRestrictions numericRestrictions;
     private StringRestrictions stringRestrictions;
     private NullRestrictions nullRestrictions;
-    private TypeRestrictions typeRestrictions;
+    private ITypeRestrictions typeRestrictions;
     private DateTimeRestrictions dateTimeRestrictions;
     private FormatRestrictions formatRestrictions;
     private GranularityRestrictions granularityRestrictions;
@@ -35,7 +35,7 @@ public class FieldSpec {
         return nullRestrictions;
     }
 
-    public TypeRestrictions getTypeRestrictions() {
+    public ITypeRestrictions getTypeRestrictions() {
         return typeRestrictions;
     }
 
@@ -55,7 +55,7 @@ public class FieldSpec {
         this.stringRestrictions = stringRestrictions;
     }
 
-    public void setTypeRestrictions(TypeRestrictions typeRestrictions) {
+    public void setTypeRestrictions(ITypeRestrictions typeRestrictions) {
         this.typeRestrictions = typeRestrictions;
     }
 

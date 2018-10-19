@@ -62,7 +62,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
+        ITypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()
                 : TypeRestrictions.all;
 

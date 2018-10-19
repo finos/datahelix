@@ -92,7 +92,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        final TypeRestrictions typeRestrictions;
+        final ITypeRestrictions typeRestrictions;
 
         if (negate) {
             typeRestrictions = TypeRestrictions.all.except(constraint.requiredType);

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TypeRestrictionsMerger {
-    public TypeRestrictions merge(TypeRestrictions left, TypeRestrictions right) {
+    public ITypeRestrictions merge(ITypeRestrictions left, ITypeRestrictions right) {
         if (left == null && right == null)
             return null;
         if (left == null)
@@ -14,7 +14,7 @@ public class TypeRestrictionsMerger {
         if (right == null)
             return left;
 
-        final TypeRestrictions merged = left.intersect(right);
+        final ITypeRestrictions merged = left.intersect(right);
 
         if (merged == null) {
             throw new UnmergeableRestrictionException(
