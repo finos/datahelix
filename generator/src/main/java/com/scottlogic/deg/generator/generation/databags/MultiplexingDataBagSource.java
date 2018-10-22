@@ -18,7 +18,6 @@ public class MultiplexingDataBagSource implements IDataBagSource {
 
         return generationConfig.getCombinationStrategy().permute(
             this.subGenerators
-                .map(sg -> sg.generate(generationConfig))
-                .collect(Collectors.toList()));
+                .map(sg -> sg.generate(generationConfig)));
     }
 }
