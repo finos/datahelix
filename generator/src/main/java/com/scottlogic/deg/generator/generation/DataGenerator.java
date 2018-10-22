@@ -18,6 +18,7 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
@@ -46,23 +47,19 @@ public class DataGenerator implements IDataGenerator {
                 constraintReducer,
                 rowSpecMerger);
 
-        final List<List<RowSpec>> rowSpecsByPartition = partitionedTrees
+        final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
-            .map(tree -> walker.walk(tree).collect(Collectors.toList()))
-            .collect(Collectors.toList());
+            .map(walker::walk);
 
-        final List<IDataBagSource> allDataBagSources =
+        final Stream<IDataBagSource> allDataBagSources =
             rowSpecsByPartition
-                .stream()
                 .map(rowSpecs ->
                     rowSpecs
-                        .stream()
                         .map(RowSpecDataBagSource::create)
                         .collect(
                             Collectors.collectingAndThen(
                                 Collectors.toList(),
-                                ConcatenatingDataBagSource::new)))
-            .collect(Collectors.toList());
+                                ConcatenatingDataBagSource::new)));
 
         Iterable<GeneratedObject> dataRows = new ProjectingIterable<>(
             new MultiplexingDataBagSource(allDataBagSources).generate(generationConfig),
@@ -70,7 +67,6 @@ public class DataGenerator implements IDataGenerator {
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
-
 
         dataRows = new HardLimitingIterable<>(dataRows, generationConfig.getMaxRows());
 
