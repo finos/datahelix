@@ -74,7 +74,7 @@ public class FieldSpec {
     @Override
     public String toString() {
         return String.join(
-            " | ",
+            " & ",
             Stream.of(
                 Objects.toString(setRestrictions, null),
                 Objects.toString(numericRestrictions, null),

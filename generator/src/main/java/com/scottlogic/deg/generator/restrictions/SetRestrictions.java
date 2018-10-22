@@ -91,16 +91,16 @@ public class SetRestrictions {
 
         if (whitelist.isEmpty())
             return String.format(
-                    "bList: %s",
+                    "NOT IN %s",
                     Objects.toString(blacklist));
 
         if (blacklist.isEmpty())
             return String.format(
-                    "wList: %s",
+                    "IN %s",
                     Objects.toString(whitelist));
 
         return String.format(
-            "wList: %s, bList: %s",
+            "IN %s AND NOT IN %s",
             Objects.toString(whitelist, "-"),
             Objects.toString(blacklist, "-"));
     }

@@ -36,6 +36,9 @@ public class TypeRestrictions implements ITypeRestrictions {
     }
 
     public String toString() {
+        if (allowedTypes.size() == 1)
+            return String.format("Type = %s", allowedTypes.toArray()[0]);
+
         return String.format(
                 "Types: %s",
                 Objects.toString(allowedTypes));

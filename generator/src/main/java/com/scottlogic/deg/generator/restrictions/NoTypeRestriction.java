@@ -15,7 +15,7 @@ public class NoTypeRestriction implements ITypeRestrictions {
     }
 
     public String toString() {
-        return "Types: <all>";
+        return "Any type";
     }
 
     public ITypeRestrictions intersect(ITypeRestrictions other) {
