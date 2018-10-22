@@ -17,4 +17,9 @@ public class ContainsRegexConstraint implements IConstraint {
     public String toDotLabel() {
         return String.format("%s contains /%s/", field.name, regex);
     }
+
+    @Override
+    public String toString() {
+        return String.format("`%s` contains /%s/", field.name, regex);
+    }
 }

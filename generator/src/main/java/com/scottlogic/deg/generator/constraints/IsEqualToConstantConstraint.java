@@ -15,4 +15,9 @@ public class IsEqualToConstantConstraint implements IConstraint {
     public String toDotLabel() {
         return String.format("%s = %s", field.name, requiredValue);
     }
+
+    @Override
+    public String toString() {
+        return String.format("`%s` = %s", field.name, requiredValue);
+    }
 }

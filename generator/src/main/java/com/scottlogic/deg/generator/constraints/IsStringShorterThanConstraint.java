@@ -16,4 +16,7 @@ public class IsStringShorterThanConstraint implements IConstraint {
     public String toDotLabel(){
         return String.format("%s length < %s", field.name, referenceValue);
     }
+
+    @Override
+    public String toString() { return String.format("`%s` length < %d", field.name, referenceValue); }
 }

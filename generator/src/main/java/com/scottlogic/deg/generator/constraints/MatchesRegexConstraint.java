@@ -17,4 +17,7 @@ public class MatchesRegexConstraint implements IConstraint {
     public String toDotLabel(){
         return String.format("%s matches /%s/", field.name, regex);
     }
+
+    @Override
+    public String toString(){ return String.format("`%s` matches /%s/", field.name, regex); }
 }

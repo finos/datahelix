@@ -17,4 +17,9 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements IConstraint 
     public String toDotLabel() {
         return String.format("%s <= %s", field.name, referenceValue);
     }
+
+    @Override
+    public String toString() {
+        return String.format("`%s` <= %s", field.name, referenceValue);
+    }
 }
