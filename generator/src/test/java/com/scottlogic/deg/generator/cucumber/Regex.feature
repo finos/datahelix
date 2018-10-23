@@ -7,7 +7,7 @@ Feature: User can specify that a value either matches or contains a specified re
     Given there is a field foo
     And foo is matching regex /a{1,3}/
     And foo is anything but null
-    Then the following data should be generated:
+    Then the following data should be included in what is generated:
       | foo   |
       | "a"   |
       | "aa"  |

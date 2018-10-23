@@ -104,7 +104,7 @@ public class GeneralTestStep {
         data.expectedData
             .forEach(row -> {
                 boolean match = data.generatedData.stream().anyMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue(match);
+                Assert.assertTrue("TEST ERROR", match);
             });
     }
 
