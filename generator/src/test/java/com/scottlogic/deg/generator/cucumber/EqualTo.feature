@@ -17,4 +17,3 @@ Feature: User can specify that a value is equalTo a required value
     Then the following data should be generated:
       | foo |
       | 23  |
-
