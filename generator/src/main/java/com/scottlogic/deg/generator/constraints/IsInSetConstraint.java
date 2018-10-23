@@ -42,4 +42,17 @@ public class IsInSetConstraint implements IConstraint {
                 field.name,
                 Objects.toString(legalValues));
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IsInSetConstraint constraint = (IsInSetConstraint) o;
+        return Objects.equals(field, constraint.field) && Objects.equals(legalValues, constraint.legalValues);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(field, legalValues);
+    }
 }
