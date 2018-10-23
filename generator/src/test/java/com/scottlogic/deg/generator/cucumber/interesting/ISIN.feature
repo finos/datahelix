@@ -13,6 +13,8 @@ Feature: User can specify that a value either matches a regex in the form of an 
       | "GB00BBBBBB68"  |
       | "US0000000002"  |
       | "USAAAAAAAAA9"  |
+    # Expand out expected values to inform design on additional interesting data to be generated
+
     Then the following data should not be included in what is generated:
       | foo             |
       | null |
