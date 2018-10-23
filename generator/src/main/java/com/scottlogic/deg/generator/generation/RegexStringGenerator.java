@@ -31,6 +31,7 @@ public class RegexStringGenerator implements IStringGenerator {
     private Node rootNode;
     private boolean isRootNodeBuilt;
     private int preparedTransactionNode;
+    private final String regexRepresentation;
 
     public RegexStringGenerator(String regexStr, boolean matchFullString) {
         final String anchoredStr = convertEndAnchors(regexStr, matchFullString);
@@ -40,11 +41,24 @@ public class RegexStringGenerator implements IStringGenerator {
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
 
+        this.regexRepresentation = String.format("/%s/", regexStr);
         this.automaton = generatedAutomaton;
     }
 
-    private RegexStringGenerator(Automaton automaton) {
+    private RegexStringGenerator(Automaton automaton, String regexRepresentation) {
         this.automaton = automaton;
+        this.regexRepresentation = regexRepresentation;
+    }
+
+    @Override
+    public String toString() {
+        if (regexRepresentation != null)
+            return regexRepresentation;
+
+        if (this.automaton != null)
+            return this.automaton.toString();
+
+        return "<UNKNOWN>";
     }
 
     public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
@@ -59,7 +73,7 @@ public class RegexStringGenerator implements IStringGenerator {
         }
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
-        return new RegexStringGenerator(automaton);
+        return new RegexStringGenerator(automaton, String.format("NOT-IN %s", Objects.toString(blacklist)));
     }
 
     @Override
@@ -71,12 +85,16 @@ public class RegexStringGenerator implements IStringGenerator {
         Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
         Automaton merged = automaton.intersection(b);
 
-        return new RegexStringGenerator(merged);
+        return new RegexStringGenerator(
+                merged,
+                String.format("%s ∩ %s", this.regexRepresentation, stringGenerator.toString()));
     }
 
     @Override
     public IStringGenerator complement() {
-        return new RegexStringGenerator(this.automaton.clone().complement());
+        return new RegexStringGenerator(
+                this.automaton.clone().complement(),
+                String.format("COMPLEMENT-OF %s", this.regexRepresentation));
     }
 
     @Override

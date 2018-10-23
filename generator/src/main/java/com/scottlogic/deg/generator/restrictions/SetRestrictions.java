@@ -86,8 +86,21 @@ public class SetRestrictions {
 
     @Override
     public String toString() {
+        if (whitelist.isEmpty() && blacklist.isEmpty())
+            return null;
+
+        if (whitelist.isEmpty())
+            return String.format(
+                    "NOT IN %s",
+                    Objects.toString(blacklist));
+
+        if (blacklist.isEmpty())
+            return String.format(
+                    "IN %s",
+                    Objects.toString(whitelist));
+
         return String.format(
-            "wList: %s, bList: %s",
+            "IN %s AND NOT IN %s",
             Objects.toString(whitelist, "-"),
             Objects.toString(blacklist, "-"));
     }

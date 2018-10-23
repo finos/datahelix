@@ -1,8 +1,12 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class ConstraintNode {
     public static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
@@ -52,4 +56,13 @@ public final class ConstraintNode {
     public Collection<DecisionNode> getDecisions() {
         return new ArrayList<>(decisions);
     }
+
+    public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
+        if (adaptedRowSpec != null)
+            return adaptedRowSpec;
+
+        adaptedRowSpec = createRowSpecFunc.get();
+        return adaptedRowSpec;
+    }
+    private Optional<RowSpec> adaptedRowSpec = null;
 }

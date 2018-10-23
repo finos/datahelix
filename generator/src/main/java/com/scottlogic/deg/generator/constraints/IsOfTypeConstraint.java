@@ -21,4 +21,7 @@ public class IsOfTypeConstraint implements IConstraint {
     public String toDotLabel() {
         return String.format("%s is %s", field.name, requiredType.name());
     }
+
+    @Override
+    public String toString() { return String.format("`%s` is %s", field.name, requiredType.name()); }
 }
