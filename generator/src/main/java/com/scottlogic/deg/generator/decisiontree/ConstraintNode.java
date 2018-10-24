@@ -122,4 +122,8 @@ public final class ConstraintNode {
                 .stream()
                 .anyMatch(c -> c.equals(constraint));
     }
+
+    public void addAtomicConstraints(Collection<IConstraint> constraints) {
+        this.atomicConstraints.addAll(constraints);
+    }
 }

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.decisiontree.DecisionOptimiser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ITreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
@@ -23,12 +24,14 @@ public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
     private final ITreePartitioner treePartitioner = new TreePartitioner();
+    private final DecisionOptimiser treeOptimiser;
 
     public DataGenerator(
         RowSpecMerger rowSpecMerger,
         ConstraintReducer constraintReducer) {
         this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
+        this.treeOptimiser = new DecisionOptimiser();
     }
 
     @Override
@@ -40,6 +43,7 @@ public class DataGenerator implements IDataGenerator {
         final List<DecisionTree> partitionedTrees =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
+                    .map(tree -> this.treeOptimiser.optimiseTree(tree))
                 .collect(Collectors.toList());
 
         final DecisionTreeWalker walker = new DecisionTreeWalker(

@@ -38,6 +38,7 @@ public class Visualise implements Runnable {
     @Override
     public void run() {
         final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+        final DecisionOptimiser treeOptimiser = new DecisionOptimiser();
         final Profile profile;
 
         try {
@@ -53,7 +54,10 @@ public class Visualise implements Runnable {
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
 
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
+        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
+                .splitTreeIntoPartitions(mergedTree)
+                .map(tree -> treeOptimiser.optimiseTree(tree))
+                        .collect(Collectors.toList());
 
         final String title = shouldHideTitle
             ? null
