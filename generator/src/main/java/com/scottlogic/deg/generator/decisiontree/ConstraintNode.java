@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public final class ConstraintNode {
     public static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
@@ -99,5 +100,26 @@ public final class ConstraintNode {
 
     public void removeDecision(DecisionNode decision) {
         decisions.remove(decision);
+    }
+
+    public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
+        return new ConstraintNode(
+                this.atomicConstraints
+                        .stream()
+                        .filter(c -> !c.equals(excludeAtomicConstraint))
+                        .collect(Collectors.toList()),
+                decisions);
+    }
+
+    public boolean atomicConstraintExists(ConstraintNode constraintNode) {
+        return constraintNode.atomicConstraints
+                .stream()
+                .anyMatch(ac -> atomicConstraintExists(ac));
+    }
+
+    public boolean atomicConstraintExists(IConstraint constraint) {
+        return atomicConstraints
+                .stream()
+                .anyMatch(c -> c.equals(constraint));
     }
 }

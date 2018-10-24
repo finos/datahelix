@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.constraints.IConstraint;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,5 +27,11 @@ public final class DecisionNode {
 
     public void removeOption(ConstraintNode option) {
         options.remove(option);
+    }
+
+    public boolean optionWithAtomicConstraintExists(ConstraintNode constraint){
+        return options
+                .stream()
+                .anyMatch(c -> c.atomicConstraintExists(constraint));
     }
 }
