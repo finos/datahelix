@@ -86,4 +86,18 @@ public final class ConstraintNode {
                         ? String.format("%d constraints", atomicConstraints.size())
                         : Objects.toString(atomicConstraints));
     }
+
+    public void addDecision(DecisionNode decision){
+        decisions.add(decision);
+    }
+
+    public DecisionNode addDecision() {
+        DecisionNode newDecision = new DecisionNode();
+        decisions.add(newDecision);
+        return newDecision;
+    }
+
+    public void removeDecision(DecisionNode decision) {
+        decisions.remove(decision);
+    }
 }
