@@ -63,7 +63,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         ConstraintNode newConstraint = new ConstraintNode(mostProlificAtomicConstraint);
         rootNodeDecision.addOption(newConstraint);
 
-        ConstraintNode newNegatedConstraint = new ConstraintNode(NotConstraint.negate(mostProlificAtomicConstraint));
+        IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
+        ConstraintNode newNegatedConstraint = new ConstraintNode(negatedMostProlificConstraint);
         rootNodeDecision.addOption(newNegatedConstraint);
 
         for (DecisionNode decision : decisions) {
@@ -73,12 +74,32 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                         .stream()
                         .anyMatch(c -> c.equals(mostProlificConstraint.getKey()));
 
-                if (!matchingConstraints)
-                    continue;
+                if (matchingConstraints)
+                {
+                    moveConstraintToOptimisedConstraint(
+                            rootNode,
+                            mostProlificAtomicConstraint,
+                            rootNodeDecision,
+                            newConstraint,
+                            decision,
+                            option);
+                    break;
+                }
 
-                moveConstraintToOptimisedConstraint(rootNode, mostProlificAtomicConstraint, rootNodeDecision, newConstraint, decision, option);
+                boolean matchingNegatedConstraints = option.getAtomicConstraints()
+                        .stream()
+                        .anyMatch(c -> c.equals(negatedMostProlificConstraint));
 
-                break;
+                if (matchingNegatedConstraints){
+                    moveConstraintToOptimisedConstraint(
+                            rootNode,
+                            negatedMostProlificConstraint,
+                            rootNodeDecision,
+                            newNegatedConstraint,
+                            decision,
+                            option);
+                    break;
+                }
             }
         }
 
