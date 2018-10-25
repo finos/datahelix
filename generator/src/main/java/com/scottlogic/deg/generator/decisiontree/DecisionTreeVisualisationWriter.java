@@ -33,33 +33,44 @@ public class DecisionTreeVisualisationWriter {
             writeLine("  fontsize=\"20\"");
         }
 
-        visit(decisionTree.getRootNode(), null);
+        TreeInfo info = new TreeInfo();
+        visit(decisionTree.getRootNode(), null, info);
+
+        writeLine(String.format(
+                "c%d[fontcolor=\"red\"][label=\"%s\"][fontsize=\"10\"][shape=box][style=\"dotted\"]",
+                nextId++,
+                String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d",
+                    info.decisions,
+                    info.atomicConstraints,
+                    info.constraintNodes)));
 
         writeLine("}");
     }
 
-    private void visit(ConstraintNode constraintNode, String parentNodeId) throws IOException {
+    private void visit(ConstraintNode constraintNode, String parentNodeId, TreeInfo treeInfo) throws IOException {
         String nodeId = "c" + nextId++;
 
-        declareConstraintNode(nodeId, constraintNode.getAtomicConstraints());
+        treeInfo.constraintNodes++;
+        declareConstraintNode(nodeId, constraintNode, treeInfo);
 
         if (parentNodeId != null) {
             declareParenthood(parentNodeId, nodeId);
         }
 
         for (DecisionNode decisionNode : constraintNode.getDecisions()) {
-            visit(decisionNode, nodeId);
+            treeInfo.decisions++;
+            visit(decisionNode, nodeId, treeInfo);
         }
     }
 
-    private void visit(DecisionNode decisionNode, String parentNodeId) throws IOException {
+    private void visit(DecisionNode decisionNode, String parentNodeId, TreeInfo treeInfo) throws IOException {
         String nodeId = "d" + nextId++;
 
         declareDecisionNode(nodeId);
         declareParenthood(parentNodeId, nodeId);
 
         for (ConstraintNode childNode : decisionNode.getOptions()) {
-            visit(childNode, nodeId);
+            visit(childNode, nodeId, treeInfo);
         }
     }
 
@@ -67,11 +78,12 @@ public class DecisionTreeVisualisationWriter {
         writeLine("  " + id + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
     }
 
-    private void declareConstraintNode(String id, Collection<IConstraint> constraints) throws IOException {
+    private void declareConstraintNode(String id, Collection<IConstraint> constraints, TreeInfo treeInfo) throws IOException {
         String label = constraints
             .stream()
             .map(IConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
+        treeInfo.atomicConstraints += constraints.size();
 
         writeLine("  " + id + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
     }
@@ -83,5 +95,12 @@ public class DecisionTreeVisualisationWriter {
     private void writeLine(String line) throws IOException {
         outputStringWriter.write(line);
         outputStringWriter.write(System.lineSeparator());
+    }
+
+    class TreeInfo
+    {
+        int constraintNodes = 0;
+        int atomicConstraints = 0;
+        int decisions = 0;
     }
 }
