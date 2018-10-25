@@ -97,17 +97,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 rootNode.removeDecision(decision);
 
                 if (newDecision.getOptions().size() == 0) //decision is empty, remove it
-                {
                     newConstraint.removeDecision(newDecision);
-                }
-                else if (newDecision.getOptions().size() == 1){ //simplification
-                    newConstraint.addAtomicConstraints(
-                            newDecision.getOptions()
-                                    .stream()
-                                    .flatMap(o -> o.getAtomicConstraints().stream())
-                                    .collect(Collectors.toList()));
-                    newConstraint.removeDecision(newDecision);
-                }
+                else if (newDecision.getOptions().size() == 1) //simplification
+                    simplifyConstraint(newConstraint, newDecision);
 
                 break;
             }
@@ -117,6 +109,15 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         optimiseDecisions(newNegatedConstraint, depth + 1);
 
         return true;
+    }
+
+    private void simplifyConstraint(ConstraintNode newConstraint, DecisionNode newDecision) {
+        newConstraint.addAtomicConstraints(
+                newDecision.getOptions()
+                        .stream()
+                        .flatMap(o -> o.getAtomicConstraints().stream())
+                        .collect(Collectors.toList()));
+        newConstraint.removeDecision(newDecision);
     }
 
     private static int disfavourNotConstraints(Map.Entry<IConstraint, List<IConstraint>> entry){
