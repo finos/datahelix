@@ -19,6 +19,6 @@ public class RowSpecDataBagSource {
                 new FieldSpecFulfiller(field, fieldSpec));
         }
 
-        return new MultiplexingDataBagSource(fieldDataBagSources);
+        return new MultiplexingDataBagSource(fieldDataBagSources.stream());
     }
 }

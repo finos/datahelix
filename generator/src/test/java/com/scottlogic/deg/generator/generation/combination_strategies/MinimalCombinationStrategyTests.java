@@ -69,7 +69,7 @@ class MinimalCombinationStrategyTests {
     private void expect(Iterable<DataBag> bagSequence) {
         ICombinationStrategy combinationStrategy = new MinimalCombinationStrategy();
 
-        Iterable<DataBag> results = combinationStrategy.permute(dataBags);
+        Iterable<DataBag> results = combinationStrategy.permute(dataBags.stream());
 
         DataBag[] bagArray = StreamSupport.stream(bagSequence.spliterator(), false).toArray(DataBag[]::new);
 
@@ -79,7 +79,7 @@ class MinimalCombinationStrategyTests {
     private void expectEmpty() {
         ICombinationStrategy combinationStrategy = new MinimalCombinationStrategy();
 
-        Iterable<DataBag> results = combinationStrategy.permute(dataBags);
+        Iterable<DataBag> results = combinationStrategy.permute(dataBags.stream());
 
         Assert.assertFalse(results.iterator().hasNext());
     }
