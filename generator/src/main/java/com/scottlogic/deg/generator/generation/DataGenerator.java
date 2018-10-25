@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionOptimiser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ITreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
@@ -24,14 +24,15 @@ public class DataGenerator implements IDataGenerator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
     private final ITreePartitioner treePartitioner = new TreePartitioner();
-    private final DecisionOptimiser treeOptimiser;
+    private final IDecisionTreeOptimiser treeOptimiser;
 
     public DataGenerator(
         RowSpecMerger rowSpecMerger,
-        ConstraintReducer constraintReducer) {
+        ConstraintReducer constraintReducer,
+        IDecisionTreeOptimiser optimiser) {
         this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
-        this.treeOptimiser = new DecisionOptimiser();
+        this.treeOptimiser = optimiser;
     }
 
     @Override

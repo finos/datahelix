@@ -54,7 +54,7 @@ class ExampleProfilesTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 consumer.generate(
-                    new GenerationEngine(new NullOutputTarget()),
+                    new GenerationEngine(new NullOutputTarget(), false),
                     profileFile);
             });
 

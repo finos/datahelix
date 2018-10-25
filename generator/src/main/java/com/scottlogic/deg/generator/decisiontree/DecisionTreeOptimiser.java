@@ -6,7 +6,8 @@ import com.scottlogic.deg.generator.constraints.NotConstraint;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DecisionOptimiser {
+public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
+    @Override
     public DecisionTree optimiseTree(DecisionTree tree){
         ConstraintNode rootNode = tree.getRootNode();
         Collection<DecisionNode> decisions = rootNode.getDecisions();
@@ -48,8 +49,8 @@ public class DecisionOptimiser {
         Optional<Map.Entry<IConstraint, List<IConstraint>>> mostProlificConstraintOpt = decisionConstraints.entrySet()
                 .stream()
                 .sorted(Comparator
-                        .comparing(DecisionOptimiser::disfavourNotConstraints)
-                        .thenComparing(DecisionOptimiser::orderByFieldName))
+                        .comparing(DecisionTreeOptimiser::disfavourNotConstraints)
+                        .thenComparing(DecisionTreeOptimiser::orderByFieldName))
                 .max(Comparator.comparing(entry -> entry.getValue().size()));
 
         if (!mostProlificConstraintOpt.isPresent() || mostProlificConstraintOpt.get().getValue().size() == 1)

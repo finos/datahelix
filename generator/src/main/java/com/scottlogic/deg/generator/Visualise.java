@@ -35,10 +35,14 @@ public class Visualise implements Runnable {
         description = "Hides the title from the output")
     private boolean shouldHideTitle;
 
+    @picocli.CommandLine.Option(
+            names = {"--no-optimise"},
+            description = "Prevents tree optimisation")
+    private boolean dontOptimise;
+
     @Override
     public void run() {
         final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-        final DecisionOptimiser treeOptimiser = new DecisionOptimiser();
         final Profile profile;
 
         try {
@@ -53,6 +57,9 @@ public class Visualise implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
+        final IDecisionTreeOptimiser treeOptimiser = dontOptimise
+                ? new NoopDecisionTreeOptimiser()
+                : new DecisionTreeOptimiser();
 
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
                 .splitTreeIntoPartitions(mergedTree)

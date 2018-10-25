@@ -3,9 +3,7 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.constraints.AndConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -31,16 +29,20 @@ import java.util.stream.Stream;
 public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final IDataGenerator dataGenerator = new DataGenerator(
-        new RowSpecMerger(fieldSpecMerger),
-        new ConstraintReducer(
-            new FieldSpecFactory(),
-            fieldSpecMerger));
+    private final IDataGenerator dataGenerator;
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter) {
+    public GenerationEngine(IOutputTarget outputter, boolean optimiseTree) {
         this.outputter = outputter;
+        dataGenerator = new DataGenerator(
+                new RowSpecMerger(fieldSpecMerger),
+                new ConstraintReducer(
+                        new FieldSpecFactory(),
+                        fieldSpecMerger),
+                optimiseTree
+                        ? new DecisionTreeOptimiser()
+                        : new NoopDecisionTreeOptimiser());
     }
 
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
