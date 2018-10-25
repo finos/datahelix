@@ -48,11 +48,23 @@ class FieldExhaustiveCombinationStrategyTests {
     }
 
     @Test
+    void shouldGiveInputForSingleSequence() {
+        tester.given(bagSequence(bag("A"), bag("B"), bag("C")));
+
+        tester.expect(bagSequence(bag("A"), bag("B"), bag("C")));
+    }
+
+    @Test
     void shouldGiveNoResultsForSingleEmptySequence() {
         tester.given(
             bagSequence(bag("A"), bag("B"), bag("C")),
             bagSequence());
 
         tester.expectEmpty();
+    }
+
+    @Test
+    void shouldAllowMultipleIterations() {
+        tester.expectMultipleIterationsDontThrow();
     }
 }
