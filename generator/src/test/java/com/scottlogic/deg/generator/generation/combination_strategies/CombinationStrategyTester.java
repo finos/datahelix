@@ -11,6 +11,7 @@ import java.sql.DatabaseMetaData;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -29,6 +30,9 @@ class CombinationStrategyTester {
 
     void expect(Iterable<DataBag> bagSequence) {
         Iterable<DataBag> results = strategy.permute(dataBags.stream());
+
+        List<DataBag> resultsList = StreamSupport.stream(results.spliterator(), true)
+            .collect(Collectors.toList());
 
         DataBag[] bagArray = StreamSupport.stream(bagSequence.spliterator(), false).toArray(DataBag[]::new);
 
