@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class DataBag {
@@ -46,6 +47,19 @@ public class DataBag {
             });
 
         return new DataBag(newFieldToValue);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataBag dataBag = (DataBag) o;
+        return Objects.equals(fieldToValue, dataBag.fieldToValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldToValue);
     }
 
     public static class DataBagBuilder {

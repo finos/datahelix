@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,11 +12,16 @@ public class MinimalCombinationStrategy implements ICombinationStrategy {
     @Override
     public Iterable<DataBag> permute(List<Iterable<DataBag>> dataBagSequences) {
 
-        return () -> new InternalIterator(
-            dataBagSequences
-                .stream()
-                .map(Iterable::iterator)
-                .collect(Collectors.toList()));
+        return () -> {
+            List<Iterator<DataBag>> iterators = dataBagSequences
+                    .stream()
+                    .map(Iterable::iterator)
+                    .collect(Collectors.toList());
+
+            return iterators.stream().allMatch(Iterator::hasNext)
+                ? new InternalIterator(iterators)
+                : Collections.emptyIterator();
+        };
     }
 
     class InternalIterator implements Iterator<DataBag> {
