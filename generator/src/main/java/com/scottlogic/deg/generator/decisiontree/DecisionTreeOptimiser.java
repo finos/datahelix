@@ -76,30 +76,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 if (!matchingConstraints)
                     continue;
 
-                DecisionNode newDecision = newConstraint.addDecision();
-                ConstraintNode optionWithoutProlificConstraint = option.cloneWithoutAtomicConstraint(mostProlificAtomicConstraint);
-
-                if (!optionWithoutProlificConstraint.getAtomicConstraints().isEmpty()) {
-                    newDecision.addOption(optionWithoutProlificConstraint);
-                }
-
-                decision.removeOption(option);
-
-                //move all other options on this decision to the root node
-                decision.getOptions()
-                        .forEach(constraint -> {
-                            if (!rootNodeDecision.optionWithAtomicConstraintExists(constraint)) {
-                                newDecision.addOption(constraint);
-                            }
-                        });
-
-                //remove this decision
-                rootNode.removeDecision(decision);
-
-                if (newDecision.getOptions().size() == 0) //decision is empty, remove it
-                    newConstraint.removeDecision(newDecision);
-                else if (newDecision.getOptions().size() == 1) //simplification
-                    simplifyConstraint(newConstraint, newDecision);
+                moveConstraintToOptimisedConstraint(rootNode, mostProlificAtomicConstraint, rootNodeDecision, newConstraint, decision, option);
 
                 break;
             }
@@ -109,6 +86,39 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         optimiseDecisions(newNegatedConstraint, depth + 1);
 
         return true;
+    }
+
+    private void moveConstraintToOptimisedConstraint(
+            ConstraintNode rootNode,
+            IConstraint mostProlificAtomicConstraint,
+            DecisionNode rootNodeDecision,
+            ConstraintNode newConstraint,
+            DecisionNode decision,
+            ConstraintNode option) {
+        DecisionNode newDecision = newConstraint.addDecision();
+        ConstraintNode optionWithoutProlificConstraint = option.cloneWithoutAtomicConstraint(mostProlificAtomicConstraint);
+
+        if (!optionWithoutProlificConstraint.getAtomicConstraints().isEmpty()) {
+            newDecision.addOption(optionWithoutProlificConstraint);
+        }
+
+        decision.removeOption(option);
+
+        //move all other options on this decision to the root node
+        decision.getOptions()
+                .forEach(constraint -> {
+                    if (!rootNodeDecision.optionWithAtomicConstraintExists(constraint)) {
+                        newDecision.addOption(constraint);
+                    }
+                });
+
+        //remove this decision
+        rootNode.removeDecision(decision);
+
+        if (newDecision.getOptions().size() == 0) //decision is empty, remove it
+            newConstraint.removeDecision(newDecision);
+        else if (newDecision.getOptions().size() == 1) //simplification
+            simplifyConstraint(newConstraint, newDecision);
     }
 
     private void simplifyConstraint(ConstraintNode newConstraint, DecisionNode newDecision) {
