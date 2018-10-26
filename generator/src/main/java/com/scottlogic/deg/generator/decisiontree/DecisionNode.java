@@ -37,6 +37,12 @@ public final class DecisionNode {
         options.remove(option);
     }
 
+    public boolean optionWithAtomicConstraintExists(IConstraint constraint) {
+        return options
+                .stream()
+                .anyMatch(c -> c.atomicConstraintExists(constraint));
+    }
+
     public boolean optionWithAtomicConstraintExists(ConstraintNode constraint){
         return options
                 .stream()

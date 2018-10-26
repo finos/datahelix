@@ -77,7 +77,17 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
         Map.Entry<IConstraint, List<IConstraint>> mostProlificConstraint = mostProlificConstraintOpt.get();
         IConstraint mostProlificAtomicConstraint = mostProlificConstraint.getValue().get(0);
-        DecisionNode rootNodeDecision = rootNode.addDecision();
+        DecisionNode firstDecisionNodeContainingTheMostProlificAtomicConstraint =
+                decisions
+                        .stream()
+                .filter(d -> d.optionWithAtomicConstraintExists(mostProlificAtomicConstraint))
+                .findFirst()
+                .get();
+
+        DecisionNode rootNodeDecision = new DecisionNode(true);
+        rootNode.insertDecisionNodeAfter(
+                rootNodeDecision,
+                firstDecisionNodeContainingTheMostProlificAtomicConstraint);
 
         ConstraintNode newConstraint = new ConstraintNode(true, mostProlificAtomicConstraint);
         rootNodeDecision.addOption(newConstraint);
@@ -135,7 +145,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             ConstraintNode newConstraint,
             DecisionNode decision,
             ConstraintNode option) {
-        DecisionNode newDecision = newConstraint.addDecision();
+        DecisionNode newDecision = new DecisionNode(true);
+        newConstraint.addDecision(newDecision);
         ConstraintNode optionWithoutProlificConstraint = option.cloneWithoutAtomicConstraint(mostProlificAtomicConstraint);
 
         if (!optionWithoutProlificConstraint.getAtomicConstraints().isEmpty()) {
