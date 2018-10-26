@@ -79,11 +79,11 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         IConstraint mostProlificAtomicConstraint = mostProlificConstraint.getValue().get(0);
         DecisionNode rootNodeDecision = rootNode.addDecision();
 
-        ConstraintNode newConstraint = new ConstraintNode(mostProlificAtomicConstraint);
+        ConstraintNode newConstraint = new ConstraintNode(true, mostProlificAtomicConstraint);
         rootNodeDecision.addOption(newConstraint);
 
         IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
-        ConstraintNode newNegatedConstraint = new ConstraintNode(negatedMostProlificConstraint);
+        ConstraintNode newNegatedConstraint = new ConstraintNode(true, negatedMostProlificConstraint);
         rootNodeDecision.addOption(newNegatedConstraint);
 
         for (DecisionNode decision : decisions) {

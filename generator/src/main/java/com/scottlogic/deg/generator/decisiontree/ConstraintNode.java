@@ -24,28 +24,44 @@ public final class ConstraintNode {
 
     private final Collection<IConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
+    private final boolean optimised;
 
     public ConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
+        this(atomicConstraints, decisions, false);
+    }
+
+    public ConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions, boolean optimised) {
         this.atomicConstraints =  new ArrayList<>(atomicConstraints);
         this.decisions = new ArrayList<>(decisions);
+        this.optimised = optimised;
     }
 
     public ConstraintNode(IConstraint... atomicConstraints) {
         this(
+                Arrays.asList(atomicConstraints),
+                new ArrayList<>(),
+                false);
+    }
+
+    public ConstraintNode(boolean optimised, IConstraint... atomicConstraints) {
+        this(
             Arrays.asList(atomicConstraints),
-            new ArrayList<>());
+            new ArrayList<>(),
+                optimised);
     }
 
     public ConstraintNode(IConstraint singleAtomicConstraint) {
         decisions = new ArrayList<>();
         atomicConstraints = new ArrayList<>();
         atomicConstraints.add(singleAtomicConstraint);
+        optimised = false;
     }
 
     ConstraintNode(DecisionNode... decisionNodes) {
         this(
             Collections.emptyList(),
-            Arrays.asList(decisionNodes));
+            Arrays.asList(decisionNodes),
+                false);
     }
 
     public Collection<IConstraint> getAtomicConstraints() {
@@ -91,7 +107,7 @@ public final class ConstraintNode {
     }
 
     public DecisionNode addDecision() {
-        DecisionNode newDecision = new DecisionNode();
+        DecisionNode newDecision = new DecisionNode(true);
         decisions.add(newDecision);
         return newDecision;
     }
@@ -106,7 +122,8 @@ public final class ConstraintNode {
                         .stream()
                         .filter(c -> !c.equals(excludeAtomicConstraint))
                         .collect(Collectors.toList()),
-                decisions);
+                decisions,
+                true);
     }
 
     public boolean atomicConstraintExists(ConstraintNode constraintNode) {
@@ -123,5 +140,9 @@ public final class ConstraintNode {
 
     public void addAtomicConstraints(Collection<IConstraint> constraints) {
         this.atomicConstraints.addAll(constraints);
+    }
+
+    public boolean isOptimised(){
+        return optimised;
     }
 }
