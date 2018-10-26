@@ -143,7 +143,7 @@ public class DecisionTreeVisualisationWriter {
         outputStringWriter.write(System.lineSeparator());
     }
 
-    class TreeInfo
+    private class TreeInfo
     {
         int constraintNodes = 0;
         int atomicConstraints = 0;
