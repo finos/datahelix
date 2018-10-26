@@ -7,6 +7,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
+    private final boolean simplify;
+    private final int maxIterations;
+    private final int maxDepth;
+    private final boolean favourNegatedConstraints;
+
+    public DecisionTreeOptimiser() {
+        this(true, 10, 10000000, false);
+    }
+
+    public DecisionTreeOptimiser(boolean simplify, int maxIterations, int maxDepth, boolean favourNegatedConstraints) {
+        this.simplify = simplify;
+        this.maxIterations = maxIterations;
+        this.maxDepth = maxDepth;
+        this.favourNegatedConstraints = favourNegatedConstraints;
+    }
+
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
         ConstraintNode rootNode = tree.getRootNode();
@@ -26,7 +42,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
         int iteration = 0;
         int prevDecisionCount = decisions.size();
-        while (iteration < 20 && optimiseDecisions(rootNode, rootNode.getDecisions(), depth))
+        while (iteration < this.maxIterations && optimiseDecisions(rootNode, rootNode.getDecisions(), depth))
         {
             int newDecisionCount = rootNode.getDecisions().size();
             int changeInDecisionCount = newDecisionCount - prevDecisionCount;
@@ -40,6 +56,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     }
 
     private boolean optimiseDecisions(ConstraintNode rootNode, Collection<DecisionNode> decisions, int depth){
+        if (depth > this.maxDepth)
+            return false;
+
         Map<IConstraint, List<IConstraint>> decisionConstraints = decisions
                 .stream()
                 .flatMap(dn -> dn.getOptions().stream())
@@ -49,7 +68,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         Optional<Map.Entry<IConstraint, List<IConstraint>>> mostProlificConstraintOpt = decisionConstraints.entrySet()
                 .stream()
                 .sorted(Comparator
-                        .comparing(DecisionTreeOptimiser::disfavourNotConstraints)
+                        .comparing(this::disfavourNotConstraints)
                         .thenComparing(DecisionTreeOptimiser::orderByFieldName))
                 .max(Comparator.comparing(entry -> entry.getValue().size()));
 
@@ -143,6 +162,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     }
 
     private void simplifyConstraint(ConstraintNode newConstraint, DecisionNode newDecision) {
+        if (!this.simplify)
+            return;
+
         newConstraint.addAtomicConstraints(
                 newDecision.getOptions()
                         .stream()
@@ -151,7 +173,10 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         newConstraint.removeDecision(newDecision);
     }
 
-    private static int disfavourNotConstraints(Map.Entry<IConstraint, List<IConstraint>> entry){
+    private int disfavourNotConstraints(Map.Entry<IConstraint, List<IConstraint>> entry){
+        if (this.favourNegatedConstraints)
+            return entry.getKey() instanceof NotConstraint ? 0 : 1;
+
         return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
