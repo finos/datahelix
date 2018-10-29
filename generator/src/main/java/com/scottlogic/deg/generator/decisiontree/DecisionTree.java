@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class DecisionTree {
-    private final ConstraintNode rootNode;
-    private final ProfileFields fields;
+    public final ConstraintNode rootNode;
+    public final ProfileFields fields;
 
     public DecisionTree(ConstraintNode rootNode, ProfileFields fields) {
         this.rootNode = rootNode;
