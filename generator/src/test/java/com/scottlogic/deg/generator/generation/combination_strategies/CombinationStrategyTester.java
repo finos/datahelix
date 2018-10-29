@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation.combination_strategies;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import gherkin.lexer.Da;
+import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
@@ -17,39 +18,28 @@ import java.util.stream.StreamSupport;
 
 class CombinationStrategyTester {
     private ICombinationStrategy strategy;
-    private List<Iterable<DataBag>> dataBags;
+    private Stream<Stream<DataBag>> dataBags;
 
     CombinationStrategyTester(ICombinationStrategy combinationStrategy) {
         strategy = combinationStrategy;
     }
 
     @SafeVarargs
-    final void given(Iterable<DataBag>... bagSequences) {
-        dataBags = Arrays.asList(bagSequences);
+    final void given(Stream<DataBag>... bagSequences) {
+        dataBags = Stream.of(bagSequences);
     }
 
-    void expect(Iterable<DataBag> bagSequence) {
-        Iterable<DataBag> results = strategy.permute(dataBags.stream());
+    void expect(Stream<DataBag> bagSequence) {
+        DataBag[] results = strategy.permute(dataBags).toArray(DataBag[]::new);
+        DataBag[] bagArray = bagSequence.toArray(DataBag[]::new);
 
-        List<DataBag> resultsList = StreamSupport.stream(results.spliterator(), true)
-            .collect(Collectors.toList());
-
-        DataBag[] bagArray = StreamSupport.stream(bagSequence.spliterator(), false).toArray(DataBag[]::new);
-
-        Assert.assertThat(results, IsIterableContainingInAnyOrder.containsInAnyOrder(bagArray));
+        Assert.assertThat(results, IsArrayContainingInAnyOrder.arrayContainingInAnyOrder(bagArray));
     }
 
     void expectEmpty() {
-        Iterable<DataBag> results = strategy.permute(dataBags.stream());
+        Stream<DataBag> results = strategy.permute(dataBags);
 
         Assert.assertFalse(results.iterator().hasNext());
-    }
-
-    void expectMultipleIterationsDontThrow() {
-        Iterable<DataBag> results = strategy.permute(Stream.empty());
-
-        results.iterator();
-        results.iterator();
     }
 
     static DataBag bag(String... fieldNames) {
@@ -60,9 +50,5 @@ class CombinationStrategyTester {
         }
 
         return builder.build();
-    }
-
-    static Iterable<DataBag> bagSequence(DataBag... bags) {
-        return Arrays.asList(bags);
     }
 }

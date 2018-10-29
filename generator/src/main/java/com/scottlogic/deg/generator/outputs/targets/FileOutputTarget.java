@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /** Output to a specific file */
 public class FileOutputTarget implements IOutputTarget {
@@ -20,7 +21,7 @@ public class FileOutputTarget implements IOutputTarget {
 
     @Override
     public void outputDataset(
-        Iterable<GeneratedObject> generatedObjects,
+        Stream<GeneratedObject> generatedObjects,
         ProfileFields profileFields)
         throws IOException {
 

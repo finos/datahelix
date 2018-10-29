@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.sameInstance;
@@ -30,14 +32,12 @@ class ConcatenatingDataBagSourceTests {
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
-                Arrays.asList(
+                Stream.of(
                     dataBagSource1,
                     dataBagSource2));
 
         // ACT
-        List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
-            output.add(db);
+        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
@@ -59,13 +59,10 @@ class ConcatenatingDataBagSourceTests {
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
-                Arrays.asList(
-                    dataBagSource1));
+                Stream.of(dataBagSource1));
 
         // ACT
-        List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
-            output.add(db);
+        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
@@ -89,15 +86,13 @@ class ConcatenatingDataBagSourceTests {
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
-                Arrays.asList(
+                Stream.of(
                     dataBagSource1,
                     dataBagSource2,
                     dataBagSource3));
 
         // ACT
-        List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
-            output.add(db);
+        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
@@ -118,14 +113,12 @@ class ConcatenatingDataBagSourceTests {
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
-                Arrays.asList(
+                Stream.of(
                     dataBagSource1,
                     dataBagSource2));
 
         // ACT
-        List<DataBag> output = new ArrayList<>();
-        for (DataBag db : objectUnderTest.generate(arbitraryGenerationConfig))
-            output.add(db);
+        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(output, empty());

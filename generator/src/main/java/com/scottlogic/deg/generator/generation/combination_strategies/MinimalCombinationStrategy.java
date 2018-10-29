@@ -4,24 +4,23 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 public class MinimalCombinationStrategy implements ICombinationStrategy {
 
     @Override
-    public Iterable<DataBag> permute(Stream<Iterable<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+        List<Iterator<DataBag>> iterators = dataBagSequences
+                .map(BaseStream::iterator)
+                .collect(Collectors.toList());
 
-        return () -> {
-            List<Iterator<DataBag>> iterators = dataBagSequences
-                    .map(Iterable::iterator)
-                    .collect(Collectors.toList());
+        return iterators.stream().allMatch(Iterator::hasNext)
+            ? StreamSupport.stream(iterable(iterators).spliterator(), false)
+            : Stream.empty();
+    }
 
-            return iterators.stream().allMatch(Iterator::hasNext)
-                ? new InternalIterator(iterators)
-                : Collections.emptyIterator();
-        };
+    private Iterable<DataBag> iterable(List<Iterator<DataBag>> iterators) {
+        return () -> new InternalIterator(iterators);
     }
 
     class InternalIterator implements Iterator<DataBag> {

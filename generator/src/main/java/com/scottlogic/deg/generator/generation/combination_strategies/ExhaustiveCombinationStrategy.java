@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 public class ExhaustiveCombinationStrategy implements ICombinationStrategy {
 
     @Override
-    public Iterable<DataBag> permute(Stream<Iterable<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
 
         List<List<DataBag>> bagsAsLists = dataBagSequences
             .map(sequence ->
@@ -20,9 +20,7 @@ public class ExhaustiveCombinationStrategy implements ICombinationStrategy {
                     .collect(Collectors.toList()))
             .collect(Collectors.toList());
 
-        return () ->
-            next(DataBag.empty, bagsAsLists, 0)
-                .iterator();
+        return next(DataBag.empty, bagsAsLists, 0);
     }
 
     public Stream<DataBag> next(DataBag accumulatingBag, List<List<DataBag>> bagSequences, int bagSequenceIndex) {

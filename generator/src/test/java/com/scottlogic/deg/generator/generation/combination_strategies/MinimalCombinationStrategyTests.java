@@ -3,8 +3,9 @@ package com.scottlogic.deg.generator.generation.combination_strategies;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static com.scottlogic.deg.generator.generation.combination_strategies.CombinationStrategyTester.bag;
-import static com.scottlogic.deg.generator.generation.combination_strategies.CombinationStrategyTester.bagSequence;
 
 class MinimalCombinationStrategyTests {
     private CombinationStrategyTester tester;
@@ -17,22 +18,22 @@ class MinimalCombinationStrategyTests {
     @Test
     void shouldCombineMinimally() {
         tester.given(
-            bagSequence(bag("A"), bag("B"), bag("C")),
-            bagSequence(bag("1"), bag("2"), bag("3")));
+            Stream.of(bag("A"), bag("B"), bag("C")),
+            Stream.of(bag("1"), bag("2"), bag("3")));
 
         tester.expect(
-            bagSequence(bag("A","1"), bag("B","2"), bag("C","3")));
+            Stream.of(bag("A","1"), bag("B","2"), bag("C","3")));
     }
 
     @Test
     void shouldCombineSequencesOfDifferentLengths() {
         tester.given(
-            bagSequence(bag("X")),
-            bagSequence(bag("A"), bag("B"), bag("C")),
-            bagSequence(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
+            Stream.of(bag("X")),
+            Stream.of(bag("A"), bag("B"), bag("C")),
+            Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
 
         tester.expect(
-            bagSequence(
+            Stream.of(
                 bag("X", "A", "1"),
                 bag("X", "B", "2"),
                 bag("X", "C", "3"),
@@ -42,22 +43,17 @@ class MinimalCombinationStrategyTests {
 
     @Test
     void shouldGiveInputForSingleSequence() {
-        tester.given(bagSequence(bag("A"), bag("B"), bag("C")));
+        tester.given(Stream.of(bag("A"), bag("B"), bag("C")));
 
-        tester.expect(bagSequence(bag("A"), bag("B"), bag("C")));
+        tester.expect(Stream.of(bag("A"), bag("B"), bag("C")));
     }
 
     @Test
     void shouldGiveNoResultsForSingleEmptySequence() {
         tester.given(
-            bagSequence(bag("A"), bag("B"), bag("C")),
-            bagSequence());
+            Stream.of(bag("A"), bag("B"), bag("C")),
+            Stream.of());
 
         tester.expectEmpty();
-    }
-
-    @Test
-    void shouldAllowMultipleIterations() {
-        tester.expectMultipleIterationsDontThrow();
     }
 }
