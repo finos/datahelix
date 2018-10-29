@@ -3,7 +3,9 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.NotConstraint;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
+import org.hamcrest.core.IsEqual;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +61,7 @@ public class DecisionTreeMatchers {
                     actual.getAtomicConstraints(),
                     containsInAnyOrder(
                         expected.getAtomicConstraints().stream()
-                            .map(c -> anyOf(sameInstance(c), sameNegation(c)))
+                            .map(CoreMatchers::equalTo)
                             .collect(Collectors.toList())));
 
                 asserter.assertThat( // Should have same number of decisions
@@ -71,7 +73,6 @@ public class DecisionTreeMatchers {
                     containsInAnyOrder(
                         expected.getDecisions().stream()
                             .map(DecisionTreeMatchers::isEquivalentTo)
-//                            .map(option -> isEquivalentTo(option))
                             .collect(Collectors.toList())));
             });
     }
@@ -90,22 +91,6 @@ public class DecisionTreeMatchers {
                         expected.getOptions().stream()
                             .map(DecisionTreeMatchers::isEquivalentTo)
                             .collect(Collectors.toList())));
-            });
-    }
-
-    private static Matcher<IConstraint> sameNegation(IConstraint expected) {
-        return matchesAssertions(
-            "Both constraints negate the same constraint instance",
-            (actual, subAssert) -> {
-                subAssert.assertThat(actual, instanceOf(NotConstraint.class));
-                subAssert.assertThat(expected, instanceOf(NotConstraint.class));
-
-                if (!(actual instanceof NotConstraint && expected instanceof NotConstraint))
-                    return;
-
-                subAssert.assertThat(
-                    ((NotConstraint) actual).negatedConstraint,
-                    sameInstance(((NotConstraint)expected).negatedConstraint));
             });
     }
 }
