@@ -40,7 +40,7 @@ public class TestCaseGenerationResultWriter {
             System.out.println("  " + filename);
             this.datasetWriter.write(
                 result.profile.fields,
-                dataset,
+                dataset.stream(),
                 fileAbsolutePath);
 
             testCaseDtos.add(

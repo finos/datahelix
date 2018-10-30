@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /** Something that can take a stream of data and persist it to a particular filepath; responsible for understanding specific file formats */
 public interface IDataSetWriter {
@@ -13,6 +14,6 @@ public interface IDataSetWriter {
 
     void write(
         ProfileFields profileFields,
-        Iterable<GeneratedObject> dataset,
+        Stream<GeneratedObject> dataset,
         Path filePath) throws IOException;
 }

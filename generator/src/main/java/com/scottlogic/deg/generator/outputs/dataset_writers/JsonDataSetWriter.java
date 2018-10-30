@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 public class JsonDataSetWriter implements IDataSetWriter {
     private static final SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -23,14 +24,14 @@ public class JsonDataSetWriter implements IDataSetWriter {
     @Override
     public void write(
         ProfileFields profileFields,
-        Iterable<GeneratedObject> dataset,
+        Stream<GeneratedObject> dataset,
         Path filePath) throws IOException {
 
         ObjectMapper jsonObjectMapper = new ObjectMapper();
 
         ArrayNode arrayNode = jsonObjectMapper.createArrayNode();
 
-        for (GeneratedObject row : dataset) {
+        dataset.forEach(row -> {
             ObjectNode rowNode = jsonObjectMapper.createObjectNode();
 
             Iterator<DataBagValue> dataBagIterator = row.values.iterator();
@@ -62,7 +63,7 @@ public class JsonDataSetWriter implements IDataSetWriter {
             }
 
             arrayNode.add(rowNode);
-        }
+        });
 
         ObjectWriter writer = jsonObjectMapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(filePath.toFile(), arrayNode);

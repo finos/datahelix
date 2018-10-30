@@ -8,26 +8,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy {
 
     @Override
-    public Iterable<DataBag> permute(Stream<Iterable<DataBag>> dataBagSequences) {
-        return new FieldExhaustiveCombinationStrategy.InternalIterable(dataBagSequences);
+    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+        Iterable<DataBag> iterable = new FieldExhaustiveCombinationStrategy
+                .InternalIterable(dataBagSequences);
+
+        return StreamSupport.stream(iterable.spliterator(), true);
     }
 
     class InternalIterable implements Iterable<DataBag> {
-        private final Stream<Iterable<DataBag>> dataBagSequences;
+        private final Stream<Stream<DataBag>> dataBagSequences;
 
-        InternalIterable(Stream<Iterable<DataBag>> dataBagSequences) {
+        InternalIterable(Stream<Stream<DataBag>> dataBagSequences) {
             this.dataBagSequences = dataBagSequences;
         }
 
         @Override
         public Iterator<DataBag> iterator() {
             List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
-                    .map(Iterable::iterator)
-                    .map(iterator -> new SequenceAndBaselineTuple(iterator))
+                    .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
                     .collect(Collectors.toList());
 
             if (tuples.stream().anyMatch(t -> t.baseline == null))
