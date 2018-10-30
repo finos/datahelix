@@ -31,7 +31,7 @@ public class TreePartitioner implements ITreePartitioner {
         for (RootLevelConstraint constraint : mapping.keySet()) {
             Set<Field> fields = mapping.get(constraint);
 
-            // find which existing partitions this constraint/decision affects (if any)
+            // first, find which existing partitions this constraint/decision affects (if any)
             final Set<UUID> existingIntersectingPartitions = fields
                 .stream()
                 .map(partitions::getPartitionId)
@@ -39,8 +39,10 @@ public class TreePartitioner implements ITreePartitioner {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
+            // then, add new partition for this new constraint
             final UUID partitionId = partitions.addPartition(fields, new HashSet<>(Collections.singletonList(constraint)));
 
+            // if there are any intersecting partitions, merge them with the new one
             if (existingIntersectingPartitions.size() > 0) {
                 final Set<UUID> partitionsToMerge = new HashSet<>();
                 partitionsToMerge.add(partitionId);
@@ -50,6 +52,7 @@ public class TreePartitioner implements ITreePartitioner {
             }
         }
 
+        // any leftover fields must be grouped into their own partition
         final Stream<Field> unpartitionedFields = decisionTree
             .getFields()
             .stream()
