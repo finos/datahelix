@@ -7,7 +7,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AutomationUtils {
+class AutomationUtils {
 
     private static final char printableChar = ' ';
 
@@ -18,7 +18,7 @@ public class AutomationUtils {
     // single character. This means for infinite automatons the resulting string isn't the longest possible (as the
     // longest example would have an infinite length) but is based on the longest path from the start state to
     // the "furthest" end state.
-    public static String getLongestExample(Automaton automaton) {
+    static String getLongestExample(Automaton automaton) {
 
         Stack<Transition> solution = new Stack<>();
 
@@ -37,7 +37,7 @@ public class AutomationUtils {
 
     }
 
-    static void visit(Transition transition, Stack<Transition> ancestors, Stack<Transition> currentBest) {
+    private static void visit(Transition transition, Stack<Transition> ancestors, Stack<Transition> currentBest) {
 
         ancestors.push(transition);
 
@@ -62,7 +62,7 @@ public class AutomationUtils {
     }
 
     // Taken from Automaton but updated to return printable characters
-    public static String getShortestExample(Automaton a) {
+    static String getShortestExample(Automaton a) {
         State initialState = a.getInitialState();
 
         Map<State, String> stateToOutput = new HashMap<>();
