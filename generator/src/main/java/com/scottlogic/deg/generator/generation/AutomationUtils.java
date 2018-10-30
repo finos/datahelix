@@ -16,7 +16,7 @@ public class AutomationUtils {
     // the "furthest" end state.
     public static String getLongestExample(Automaton automaton) {
 
-        Stack<Transition> solution = new Stack<Transition>();
+        Stack<Transition> solution = new Stack<>();
 
         // The start node always has one transition to start
         Transition start = automaton.getInitialState().getSortedTransitions(true).get(0);
@@ -59,30 +59,44 @@ public class AutomationUtils {
 
     // Taken from Automaton but updated to return printable characters
     public static String getShortestExample(Automaton a) {
-        State s = a.getInitialState();
-        Map<State, String> path = new HashMap<State, String>();
-        LinkedList<State> queue = new LinkedList<State>();
-        path.put(s, "");
-        queue.add(s);
-        String best = null;
+        State initialState = a.getInitialState();
+
+        Map<State, String> stateToOutput = new HashMap<>();
+        LinkedList<State> queue = new LinkedList<>();
+
+        stateToOutput.put(initialState, "");
+        queue.add(initialState);
+
+        String currentBest = null;
+
         while (!queue.isEmpty()) {
-            State q = queue.removeFirst();
-            String p = path.get(q);
-            if (q.isAccept()) {
-                if (best == null || p.length() < best.length() || (p.length() == best.length() && p.compareTo(best) < 0))
-                    best = p;
-            } else
-                for (Transition t : q.getTransitions()) {
-                    String tp = path.get(t.getDest());
-                    String np = p + (char) Math.max(t.getMin(), ' ');
-                    if (tp == null || (tp.length() == np.length() && np.compareTo(tp) < 0)) {
-                        if (tp == null)
-                            queue.addLast(t.getDest());
-                        path.put(t.getDest(), np);
+            State currentState = queue.removeFirst();
+            String currentOutput = stateToOutput.get(currentState);
+
+            if (currentState.isAccept()) {
+
+                if (currentBest == null
+                    || currentOutput.length() < currentBest.length()
+                    || (currentOutput.length() == currentBest.length() && currentOutput.compareTo(currentBest) < 0)) {
+                    currentBest = currentOutput;
+                }
+
+            } else {
+                for (Transition transition : currentState.getTransitions()) {
+                    String nextOutput = stateToOutput.get(transition.getDest());
+                    String nextOutputCalculated = currentOutput + (char)Math.max(transition.getMin(), ' ');
+
+                    if (nextOutput == null
+                        || (nextOutput.length() == nextOutputCalculated.length() && nextOutputCalculated.compareTo(nextOutput) < 0)) {
+                        if (nextOutput == null) {
+                            queue.addLast(transition.getDest());
+                        }
+                        stateToOutput.put(transition.getDest(), nextOutputCalculated);
                     }
                 }
+            }
         }
-        return best;
-    }
 
+        return currentBest;
+    }
 }
