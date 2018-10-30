@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.utils.DataBagValueIterator;
 
 import java.util.*;
 import java.util.stream.*;

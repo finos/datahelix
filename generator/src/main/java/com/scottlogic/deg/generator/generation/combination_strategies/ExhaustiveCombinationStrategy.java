@@ -2,8 +2,6 @@ package com.scottlogic.deg.generator.generation.combination_strategies;
 
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
-import javax.xml.crypto.Data;
-import java.sql.DatabaseMetaData;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
