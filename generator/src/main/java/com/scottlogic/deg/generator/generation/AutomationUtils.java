@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 public class AutomationUtils {
 
+    private static final char printableChar = ' ';
+
+
+
     // Returns a string of printable characters based on the supplied automaton.
     // This method ignores transitions that lead back to the same node so recursive states will only ever produce a
     // single character. This means for infinite automatons the resulting string isn't the longest possible (as the
@@ -26,7 +30,7 @@ public class AutomationUtils {
         StringBuilder sb = new StringBuilder();
 
         for (Transition transition : solution) {
-            sb.append((char) Math.max(' ', transition.getMin()));
+            sb.append((char) Math.max(printableChar, transition.getMin()));
         }
 
         return sb.toString();
@@ -84,7 +88,7 @@ public class AutomationUtils {
             } else {
                 for (Transition transition : currentState.getTransitions()) {
                     String nextOutput = stateToOutput.get(transition.getDest());
-                    String nextOutputCalculated = currentOutput + (char)Math.max(transition.getMin(), ' ');
+                    String nextOutputCalculated = currentOutput + (char)Math.max(transition.getMin(), printableChar);
 
                     if (nextOutput == null
                         || (nextOutput.length() == nextOutputCalculated.length() && nextOutputCalculated.compareTo(nextOutput) < 0)) {
