@@ -19,37 +19,37 @@ class AutomationUtils {
     // the "furthest" end state.
     static String getLongestExample(Automaton automaton) {
 
-        Stack<Transition> solution = new Stack<>();
+        Transition[] solution = {};
 
         // The start node always has one transition to start
-        Transition start = automaton.getInitialState().getSortedTransitions(true).get(0);
+        Transition startTransition = automaton.getInitialState().getSortedTransitions(true).get(0);
+        Transition[] startTransitionPath = { startTransition };
 
-        Stack<List<Transition>> transitionsToVisit = new Stack<>();
-        transitionsToVisit.add(Collections.singletonList(start));
+        Stack<Transition[]> transitionsToVisit = new Stack<>();
+        transitionsToVisit.add(startTransitionPath);
 
         while (!transitionsToVisit.empty()) {
-            List<Transition> currentTransitionPath = transitionsToVisit.pop();
-            Transition currentTransition = currentTransitionPath.get(currentTransitionPath.size() - 1);
+            Transition[] currentTransitionPath = transitionsToVisit.pop();
+            Transition currentTransition = currentTransitionPath[currentTransitionPath.length - 1];
 
             State dest = currentTransition.getDest();
 
-            List<Transition> nonRecursiveTransitions = dest.getTransitions()
+            if (dest.isAccept() && currentTransitionPath.length > solution.length) {
+                solution = currentTransitionPath;
+            }
+
+            List<Transition> nextTransitions = dest.getTransitions()
                 .stream()
                 .filter(x -> x.getDest() != dest)
                 .collect(Collectors.toList());
 
-            if (dest.isAccept() && nonRecursiveTransitions.isEmpty() && currentTransitionPath.size() > solution.size()) {
+            for (Transition nextTransition : nextTransitions) {
+                Transition[] nextTransitionPath = Arrays.copyOf(
+                    currentTransitionPath,
+                    currentTransitionPath.length + 1);
+                nextTransitionPath[nextTransitionPath.length - 1] = nextTransition;
 
-                solution.clear();
-                solution.addAll(currentTransitionPath);
-            }
-
-            for (Transition nextTransition : nonRecursiveTransitions) {
-                List<Transition> nextTransitionPath = new ArrayList<>();
-                nextTransitionPath.addAll(currentTransitionPath);
-                nextTransitionPath.add(nextTransition);
-
-                transitionsToVisit.add(nextTransitionPath);
+                transitionsToVisit.push(nextTransitionPath);
             }
         }
 
