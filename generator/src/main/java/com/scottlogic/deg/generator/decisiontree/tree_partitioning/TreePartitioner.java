@@ -17,6 +17,7 @@ import java.util.stream.Stream;
  */
 public class TreePartitioner implements ITreePartitioner {
     private final ConstraintToFieldMapper fieldMapper;
+    private static Integer partitionIndex = 0;
 
     public TreePartitioner() {
         fieldMapper = new ConstraintToFieldMapper();
@@ -32,17 +33,19 @@ public class TreePartitioner implements ITreePartitioner {
             Set<Field> fields = mapping.get(constraint);
 
             // find which existing partitions this constraint/decision affects (if any)
-            final Set<UUID> existingIntersectingPartitions = fields
+            final Set<Integer> existingIntersectingPartitions = fields
                 .stream()
                 .map(partitions::getPartitionId)
                 .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-            final UUID partitionId = partitions.addPartition(fields, new HashSet<>(Collections.singletonList(constraint)));
+            // then, add new partition for this new constraint
+            final Integer partitionId = partitions.addPartition(fields, new HashSet<>(Collections.singletonList(constraint)));
 
+            // if there are any intersecting partitions, merge them with the new one
             if (existingIntersectingPartitions.size() > 0) {
-                final Set<UUID> partitionsToMerge = new HashSet<>();
+                final Set<Integer> partitionsToMerge = new HashSet<>();
                 partitionsToMerge.add(partitionId);
                 partitionsToMerge.addAll(existingIntersectingPartitions);
 
@@ -50,6 +53,7 @@ public class TreePartitioner implements ITreePartitioner {
             }
         }
 
+        // any leftover fields must be grouped into their own partition
         final Stream<Field> unpartitionedFields = decisionTree
             .getFields()
             .stream()
@@ -59,6 +63,7 @@ public class TreePartitioner implements ITreePartitioner {
             partitions
                 .getPartitions()
                 .stream()
+                .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
                     new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
                     new ProfileFields(new ArrayList<>(partition.fields))
@@ -72,11 +77,11 @@ public class TreePartitioner implements ITreePartitioner {
     }
 
     class Partition {
-        final UUID id;
+        final Integer id;
         final Set<Field> fields;
         final Set<RootLevelConstraint> constraints;
 
-        Partition(UUID id, Set<Field> fields, Set<RootLevelConstraint> constraints) {
+        Partition(Integer id, Set<Field> fields, Set<RootLevelConstraint> constraints) {
             this.id = id;
             this.fields = fields;
             this.constraints = constraints;
@@ -100,12 +105,12 @@ public class TreePartitioner implements ITreePartitioner {
     }
 
     class PartitionIndex {
-        private final Map<UUID, Partition> idToPartition = new HashMap<>();
+        private final Map<Integer, Partition> idToPartition = new HashMap<>();
         private final Map<Field, Partition> fieldsToPartition = new HashMap<>();
 
-        UUID addPartition(Set<Field> fields, Set<RootLevelConstraint> constraints) {
+        Integer addPartition(Set<Field> fields, Set<RootLevelConstraint> constraints) {
             final Partition newPartition = new Partition(
-                java.util.UUID.randomUUID(),
+                partitionIndex++,
                 fields,
                 constraints);
 
@@ -117,7 +122,7 @@ public class TreePartitioner implements ITreePartitioner {
             return newPartition.id;
         }
 
-        UUID mergePartitions(Set<UUID> ids) {
+        Integer mergePartitions(Set<Integer> ids) {
             final Set<Partition> partitions = ids
                 .stream()
                 .map(idToPartition::get)
@@ -127,7 +132,7 @@ public class TreePartitioner implements ITreePartitioner {
             final Set<RootLevelConstraint> constraints = getFromAllPartitions(partitions, partition -> partition.constraints);
 
             final Partition newPartition = new Partition(
-                java.util.UUID.randomUUID(),
+                partitionIndex++,
                 fields,
                 constraints);
             idToPartition.put(newPartition.id, newPartition);
@@ -145,7 +150,7 @@ public class TreePartitioner implements ITreePartitioner {
                 .collect(Collectors.toSet());
         }
 
-        UUID getPartitionId(Field field) {
+        Integer getPartitionId(Field field) {
             return fieldsToPartition.containsKey(field)
                 ? fieldsToPartition.get(field).id
                 : null;
