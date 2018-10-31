@@ -1,0 +1,211 @@
+{
+  "schemaVersion" : "v3",
+  "fields" : [ {
+    "name" : "id"
+  }, {
+    "name" : "last_name"
+  }, {
+    "name" : "email"
+  }, {
+    "name" : "gender"
+  }, {
+    "name" : "ip_address"
+  }, {
+    "name" : "isAdmin"
+  }, {
+    "name" : "country"
+  }, {
+    "name" : "when"
+  }, {
+    "name" : "someNumber"
+  }, {
+    "name" : "someIntNumber"
+  }, {
+    "name" : "stockSymbol"
+  }, {
+    "name" : "title"
+  }, {
+    "name" : "currency"
+  }, {
+    "name" : "randomDate"
+  } ],
+  "rules" : [ {
+    "rule" : "Numeric field id rule",
+    "constraints" : [ {
+      "field" : "id",
+      "is" : "ofType",
+      "value" : "numeric"
+    }, {
+      "field" : "id",
+      "is" : "greaterThanOrEqualTo",
+      "value" : "1"
+    }, {
+      "field" : "id",
+      "is" : "lessThan",
+      "value" : "1000"
+    }, {
+      "field" : "id",
+      "is" : "granularTo",
+      "value" : 1
+    } ]
+  }, {
+    "rule" : "String field last_name rule",
+    "constraints" : [ {
+      "field" : "last_name",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "last_name",
+      "is" : "matchingRegex",
+      "value" : ".{3,15}"
+    } ]
+  }, {
+    "rule" : "String field email rule",
+    "constraints" : [ {
+      "field" : "email",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "email",
+      "is" : "matchingRegex",
+      "value" : "(tim|frank|greg)\\.(smith|jones|sestero)@(gmail|hotmail|live)\\.com"
+    } ]
+  }, {
+    "rule" : "String field gender rule",
+    "constraints" : [ {
+      "field" : "gender",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "gender",
+      "is" : "matchingRegex",
+      "value" : ".{4,6}"
+    } ]
+  }, {
+    "rule" : "String field ip_address rule",
+    "constraints" : [ {
+      "field" : "ip_address",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "ip_address",
+      "is" : "matchingRegex",
+      "value" : ".{9,15}"
+    } ]
+  }, {
+    "rule" : "String field isAdmin rule",
+    "constraints" : [ {
+      "field" : "isAdmin",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "isAdmin",
+      "is" : "matchingRegex",
+      "value" : ".{4,5}"
+    } ]
+  }, {
+    "rule" : "String field country rule",
+    "constraints" : [ {
+      "field" : "country",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "country",
+      "is" : "inSet",
+      "values" : [ "LT", "MM", "CI", "AZ", "FI", "UA", "NL", "MN", "BW", "PL", "AM", "PS", "MK", "MX", "TV", "EE", "CN", "RU", "NA", "IQ", "HR", "SV", "CZ", "NP", "PT", "SO", "PG", "CX", "CV", "TW", "BD", "PY", "CL", "TO", "ID", "LY", "PK", "SA", "CA", "UZ", "YE", "MT", "GB", "BR", "KZ", "BY", "HN", "GT", "DE", "ES", "EC", "IR", "IL", "VE", "ZA", "CR", "GU", "KR", "TZ", "US", "RS", "AL", "MY", "JM", "GM", "CM", "FR", "MG", "CH", "TN", "GQ", "WF", "GR", "PA", "TD", "BA", "JO", "KP", "BF", "IT", "CU", "MV", "SE", "PH", "BG", "WS", "GE", "FM", "PE", "MU", "LV", "GD", "XK", "DO", "TH", "EG", "BJ", "MF", "JP", "TM", "ZW", "SN", "NZ", "LK", "HU", "KE", "SI", "ML", "UG", "KW", "IE", "BE", "AS", "MA", "NI", "KH", "NO", "BO", "SY", "ER", "CO", "UY", "NG", "YT", "AR", "LU", "VN", "MP", "AF", "TJ", "DK" ]
+    } ]
+  }, {
+    "rule" : "String field when rule",
+    "constraints" : [ {
+      "field" : "when",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "when",
+      "is" : "matchingRegex",
+      "value" : ".{4,7}"
+    } ]
+  }, {
+    "rule" : "Numeric field someNumber rule",
+    "constraints" : [ {
+      "field" : "someNumber",
+      "is" : "ofType",
+      "value" : "numeric"
+    }, {
+      "field" : "someNumber",
+      "is" : "greaterThanOrEqualTo",
+      "value" : "2.32"
+    }, {
+      "field" : "someNumber",
+      "is" : "lessThan",
+      "value" : "996.3"
+    } ]
+  }, {
+    "rule" : "Numeric field someIntNumber rule",
+    "constraints" : [ {
+      "field" : "someIntNumber",
+      "is" : "ofType",
+      "value" : "numeric"
+    }, {
+      "field" : "someIntNumber",
+      "is" : "greaterThanOrEqualTo",
+      "value" : "2"
+    }, {
+      "field" : "someIntNumber",
+      "is" : "lessThan",
+      "value" : "1000"
+    }, {
+      "field" : "someIntNumber",
+      "is" : "granularTo",
+      "value" : 1
+    } ]
+  }, {
+    "rule" : "String field stockSymbol rule",
+    "constraints" : [ {
+      "field" : "stockSymbol",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "stockSymbol",
+      "is" : "matchingRegex",
+      "value" : ".{1,14}"
+    } ]
+  }, {
+    "rule" : "String field title rule",
+    "constraints" : [ {
+      "field" : "title",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "title",
+      "is" : "matchingRegex",
+      "value" : ".{2,9}"
+    } ]
+  }, {
+    "rule" : "String field currency rule",
+    "constraints" : [ {
+      "field" : "currency",
+      "is" : "ofType",
+      "value" : "string"
+    }, {
+      "field" : "currency",
+      "is" : "inSet",
+      "values" : [ "PYG", "PAB", "DKK", "SYP", "SOS", "KPW", "XPF", "DOP", "MYR", "NIO", "NZD", "ALL", "HUF", "BDT", "HRK", "TJS", "JMD", "GBP", "XCD", "CHF", "RUB", "BRL", "CZK", "BOB", "EGP", "MMK", "BYR", "MUR", "ZWL", "MVR", "COP", "IDR", "HNL", "IRR", "ARS", "CAD", "TND", "CNY", "SAR", "EUR", "TWD", "TZS", "LKR", "MNT", "RSD", "AZN", "THB", "ZAR", "VEF", "YER", "GEL", "PKR", "PEN", "UZS", "ILS", "BWP", "NOK", "AUD", "NAD", "KES", "KRW", "UYU", "BAM", "JPY", "TMT", "KZT", "WST", "GMD", "AMD", "AFN", "XOF", "CRC", "PHP", "IQD", "CUP", "CLP", "ERN", "KWD", "MXN", "NPR", "PGK", "MAD", "GTQ", "LTL", "BGN", "XAF", "UGX", "CVE", "PLN", "USD", "MKD", "TOP", "SEK", "LYD", "MGA", "NGN", "KHR", "VND", "UAH", "JOD" ]
+    } ]
+  }, {
+    "rule" : "randomDate",
+    "constraints" : [ {
+      "field" : "randomDate",
+      "is" : "ofType",
+      "value" : "temporal"
+    }, {
+      "field" : "randomDate",
+      "is" : "greaterThanOrEqualTo",
+      "value" : "2017-08-11 00:00:00.0"
+    }, {
+      "field" : "randomDate",
+      "is" : "lessThan",
+      "value" : "2019-09-14 00:00:00.0"
+    } ]
+  } ]
+}
