@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GeneratorTestUtilities {
 
@@ -61,9 +62,9 @@ public class GeneratorTestUtilities {
             new NoopDecisionTreeOptimiser());
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, new FieldExhaustiveCombinationStrategy());
-        final Iterable<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
+        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
-        dataSet.iterator().forEachRemaining(allActualRows::add);
+        dataSet.forEach(allActualRows::add);
         return allActualRows;
     }
 

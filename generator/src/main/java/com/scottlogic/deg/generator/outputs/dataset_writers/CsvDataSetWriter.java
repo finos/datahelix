@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.outputs.dataset_writers;
 
+import com.scottlogic.deg.generator.Generate;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import org.apache.commons.csv.CSVFormat;
@@ -9,12 +10,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CsvDataSetWriter implements IDataSetWriter {
     @Override
     public void write(
         ProfileFields profileFields,
-        Iterable<GeneratedObject> dataset,
+        Stream<GeneratedObject> dataset,
         Path filePath) throws IOException {
 
         CSVPrinter writer =
@@ -25,7 +27,7 @@ public class CsvDataSetWriter implements IDataSetWriter {
                 .print(filePath, Charset.forName("UTF-8"));
 
         try {
-            for (GeneratedObject row : dataset) {
+            for (GeneratedObject row : (Iterable<GeneratedObject>)dataset::iterator) {
                 writer.printRecord(row.values.stream().map(x -> {
                     if (x.value == null)
                         return null;

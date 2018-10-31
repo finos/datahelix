@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-
 /**
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints

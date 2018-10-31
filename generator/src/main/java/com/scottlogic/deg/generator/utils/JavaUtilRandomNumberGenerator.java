@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.utils;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {

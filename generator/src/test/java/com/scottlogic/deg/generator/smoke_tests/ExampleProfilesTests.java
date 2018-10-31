@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -66,10 +67,10 @@ class ExampleProfilesTests {
 
     private class NullOutputTarget implements IOutputTarget {
         @Override
-        public void outputDataset(Iterable<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
+        public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
 
-            generatedObjects.iterator().forEachRemaining(
+            generatedObjects.forEach(
                 row -> Assert.assertThat(row, notNullValue())); // might as well assert non-null while we're at it
         }
 
@@ -77,8 +78,8 @@ class ExampleProfilesTests {
         public void outputTestCases(TestCaseGenerationResult dataSets) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted every iterable
 
-            dataSets.datasets.iterator().forEachRemaining(
-                ds -> ds.iterator().forEachRemaining(
+            dataSets.datasets.forEach(
+                ds -> ds.stream().forEach(
                     row -> Assert.assertThat(row, notNullValue()))); // might as well assert non-null while we're at it
         }
     }

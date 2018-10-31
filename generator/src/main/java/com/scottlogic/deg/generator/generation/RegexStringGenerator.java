@@ -11,7 +11,6 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class RegexStringGenerator implements IStringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;

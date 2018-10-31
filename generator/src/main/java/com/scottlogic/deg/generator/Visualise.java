@@ -5,8 +5,10 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreeParti
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -106,7 +108,11 @@ public class Visualise implements Runnable {
         Path outputFilePath)
         throws IOException {
 
-        try (PrintWriter outWriter = new PrintWriter(outputFilePath.toString())) {
+        try (OutputStreamWriter outWriter = new OutputStreamWriter(
+                new FileOutputStream(outputFilePath.toString()),
+                StandardCharsets.UTF_8)) {
+            outWriter.write('\ufeff'); //Write the BOM (works on windows)
+
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,
                 "tree",

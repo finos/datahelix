@@ -2,8 +2,6 @@ package com.scottlogic.deg.generator.restrictions;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RowSpecMerger {
     private final FieldSpecMerger fieldSpecMerger;
