@@ -45,8 +45,9 @@ public class DecisionTreeVisualisationWriter {
 
         TreeInfo info = visit(decisionTree.getRootNode(), null);
 
-        if (this.shouldWriteRootInfo)
+        if (this.shouldWriteRootInfo) {
             writeTreeInfo(info, null, "red");
+        }
 
         writeLine("}");
     }
@@ -71,12 +72,8 @@ public class DecisionTreeVisualisationWriter {
             treeInfo.rowSpecs *= thisOptionTreeInfo.rowSpecs;
         }
 
-        if (constraintNode.getDecisions().isEmpty()) {
-            if (this.shouldWriteDecisionNodeInfo && parentNodeId != null)
-                writeTreeInfo(treeInfo, nodeId, "blue");
-        }
-        else {
-
+        if (constraintNode.getDecisions().isEmpty() && this.shouldWriteDecisionNodeInfo && parentNodeId != null) {
+            writeTreeInfo(treeInfo, nodeId, "blue");
         }
 
         return treeInfo;
@@ -97,8 +94,9 @@ public class DecisionTreeVisualisationWriter {
             treeInfo.rowSpecs += thisConstraintTreeInfo.rowSpecs;
         }
 
-        if (this.shouldWriteOptionInfo)
+        if (this.shouldWriteOptionInfo) {
             writeTreeInfo(treeInfo, nodeId, "green");
+        }
 
         return treeInfo;
     }
@@ -124,18 +122,19 @@ public class DecisionTreeVisualisationWriter {
     private void writeTreeInfo(TreeInfo info, String parentNodeId, String fontColour) throws IOException {
         String infoNodeId = "c" + nextId++;
 
-        if (parentNodeId != null)
+        if (parentNodeId != null) {
             declareParenthood(parentNodeId, infoNodeId);
+        }
 
         writeLine(String.format(
-                "%s[fontcolor=\"%s\"][label=\"%s\"][fontsize=\"10\"][shape=box][style=\"dotted\"]",
-                infoNodeId,
-                fontColour,
-                String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d\nExpected RowSpecs: %d",
-                        info.decisions,
-                        info.atomicConstraints,
-                        info.constraintNodes,
-                        info.rowSpecs)));
+            "%s[fontcolor=\"%s\"][label=\"%s\"][fontsize=\"10\"][shape=box][style=\"dotted\"]",
+            infoNodeId,
+            fontColour,
+            String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d\nExpected RowSpecs: %d",
+                info.decisions,
+                info.atomicConstraints,
+                info.constraintNodes,
+                info.rowSpecs)));
     }
 
     private void writeLine(String line) throws IOException {
