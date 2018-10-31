@@ -55,7 +55,7 @@ public class AtomicConstraintTests {
 
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
-        dateValueDto.value = "2020-01-01";
+        dateValueDto.value = "2020-01-01T01:02:03.456";
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
