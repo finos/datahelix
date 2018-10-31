@@ -5,20 +5,21 @@ import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** Given a set of data bag sources, return a new one that concatenates the results of each one, in sequence */
 public class ConcatenatingDataBagSource implements IDataBagSource {
-    private final List<IDataBagSource> subSources;
+    private final Stream<IDataBagSource> subSources;
 
-    public ConcatenatingDataBagSource(List<IDataBagSource> subSources) {
+    public ConcatenatingDataBagSource(Stream<IDataBagSource> subSources) {
         this.subSources = subSources;
     }
 
     @Override
-    public Iterable<DataBag> generate(GenerationConfig generationConfig) {
-        return new ConcatenatingIterable<>(
-            this.subSources.stream()
-                .map(sg -> sg.generate(generationConfig))
-                .collect(Collectors.toList()));
+    public Stream<DataBag> generate(GenerationConfig generationConfig) {
+        return subSources
+            .map(source -> source.generate(generationConfig))
+            .reduce(Stream::concat)
+            .orElse(Stream.empty());
     }
 }

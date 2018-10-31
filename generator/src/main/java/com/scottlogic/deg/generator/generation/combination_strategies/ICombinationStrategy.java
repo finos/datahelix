@@ -5,5 +5,5 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import java.util.stream.Stream;
 
 public interface ICombinationStrategy {
-    Iterable<DataBag> permute(Stream<Iterable<DataBag>> dataBagSequences);
+    Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences);
 }

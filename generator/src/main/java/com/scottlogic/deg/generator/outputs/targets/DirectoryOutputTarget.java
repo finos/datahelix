@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /** Output into a specific directory */
 public class DirectoryOutputTarget implements IOutputTarget {
@@ -20,7 +21,7 @@ public class DirectoryOutputTarget implements IOutputTarget {
     }
 
     @Override
-    public void outputDataset(Iterable<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
+    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
         Path outputPath = this.directoryPath
             .resolve(this.dataSetWriter.makeFilename("output"));
 

@@ -1,23 +1,21 @@
 package com.scottlogic.deg.generator.outputs;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.stream.Stream;
 
-public class TestCaseDataSet implements Iterable<GeneratedObject> {
+public class TestCaseDataSet {
     public final String violation;
-    private final Iterable<GeneratedObject> rows;
+    private final Stream<GeneratedObject> rows;
 
     public TestCaseDataSet(String violation, GeneratedObject... rows) {
-        this(violation, Arrays.asList(rows));
+        this(violation, Stream.of(rows));
     }
 
-    public TestCaseDataSet(String violation, Iterable<GeneratedObject> rows) {
+    public TestCaseDataSet(String violation, Stream<GeneratedObject> rows) {
         this.rows = rows;
         this.violation = violation;
     }
 
-    @Override
-    public Iterator<GeneratedObject> iterator() {
-        return this.rows.iterator();
+    public Stream<GeneratedObject> stream() {
+        return this.rows;
     }
 }

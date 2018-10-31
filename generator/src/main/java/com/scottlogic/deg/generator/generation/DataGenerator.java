@@ -12,8 +12,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.utils.HardLimitingIterable;
-import com.scottlogic.deg.generator.utils.ProjectingIterable;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.List;
@@ -33,7 +31,7 @@ public class DataGenerator implements IDataGenerator {
     }
 
     @Override
-    public Iterable<GeneratedObject> generateData(
+    public Stream<GeneratedObject> generateData(
         Profile profile,
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
@@ -54,21 +52,19 @@ public class DataGenerator implements IDataGenerator {
         final Stream<IDataBagSource> allDataBagSources =
             rowSpecsByPartition
                 .map(rowSpecs ->
-                    rowSpecs
-                        .map(RowSpecDataBagSource::create)
-                        .collect(
-                            Collectors.collectingAndThen(
-                                Collectors.toList(),
-                                ConcatenatingDataBagSource::new)));
+                    new ConcatenatingDataBagSource(
+                        rowSpecs
+                            .map(RowSpecDataBagSource::create)));
 
-        Iterable<GeneratedObject> dataRows = new ProjectingIterable<>(
-            new MultiplexingDataBagSource(allDataBagSources).generate(generationConfig),
-            dataBag -> new GeneratedObject(
+        Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
+            .generate(generationConfig)
+            .map(dataBag -> new GeneratedObject(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
-        dataRows = new HardLimitingIterable<>(dataRows, generationConfig.getMaxRows());
+        dataRows = dataRows
+            .limit(generationConfig.getMaxRows());
 
         return dataRows;
 
