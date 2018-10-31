@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.outputs.targets;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 
 import java.io.IOException;
 import java.nio.file.Path;
