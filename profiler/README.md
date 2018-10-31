@@ -213,7 +213,7 @@ For now we keep track of some input files and their expected output file under t
 - `profiler\src\test\resources\`
 - `profiler\src\test\resources\expected_output\`
 
-This is only a temporary solution.  Please refer to the README.txt file in `profiler\src\test\resources\expected_output\` for more details.
+This is only a temporary solution.  Please refer to the `README.md` file in `profiler\src\test\resources\expected_output\` for more details.
 
 ## Submitting a Spark job
 
