@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.outputs;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
 public class TestCaseDataSet implements Iterable<GeneratedObject> {
     public final String violation;

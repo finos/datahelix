@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation.databags;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /** Given a set of data bag sources, return a new one that concatenates the results of each one, in sequence */

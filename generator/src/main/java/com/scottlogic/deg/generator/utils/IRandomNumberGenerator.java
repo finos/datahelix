@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.utils;
 
-import java.math.BigDecimal;
-
 public interface IRandomNumberGenerator {
     int nextInt();
     int nextInt(int bound);

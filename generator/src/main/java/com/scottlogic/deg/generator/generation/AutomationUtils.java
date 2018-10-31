@@ -4,7 +4,6 @@ import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 
-import javax.swing.text.StyledEditorKit;
 import java.util.*;
 import java.util.stream.Collectors;
 

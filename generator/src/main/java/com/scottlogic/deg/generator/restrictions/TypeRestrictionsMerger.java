@@ -1,10 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint.Types;
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class TypeRestrictionsMerger {
     public ITypeRestrictions merge(ITypeRestrictions left, ITypeRestrictions right) {
         if (left == null && right == null)
