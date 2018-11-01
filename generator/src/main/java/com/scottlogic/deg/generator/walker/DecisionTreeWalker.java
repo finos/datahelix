@@ -52,7 +52,7 @@ public class DecisionTreeWalker {
             return walk(constraint, getIdentityRowSpec());
         }
 
-        public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
+        private Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
             final Optional<RowSpec> nominalRowSpec = option.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
