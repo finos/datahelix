@@ -13,7 +13,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     private final boolean favourNegatedConstraints;
 
     public DecisionTreeOptimiser() {
-        this(true, 10, 10000000, false);
+        this(true, 50, 10000000, false);
     }
 
     public DecisionTreeOptimiser(boolean simplify, int maxIterations, int maxDepth, boolean favourNegatedConstraints) {
