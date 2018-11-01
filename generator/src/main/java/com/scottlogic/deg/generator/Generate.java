@@ -28,10 +28,15 @@ public class Generate implements Runnable {
         defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
-    @picocli.CommandLine.Option(
+    @CommandLine.Option(
             names = {"--no-optimise"},
             description = "Prevents tree optimisation")
     private boolean dontOptimise;
+
+    @CommandLine.Option(
+            names = {"--no-partition"},
+            description = "Prevents tree partitioning")
+    private boolean dontPartitionTrees;
 
     @Override
     public void run() {
@@ -41,7 +46,9 @@ public class Generate implements Runnable {
 
         try {
             new GenerationEngine(
-                    new FileOutputTarget(outputPath, new CsvDataSetWriter()), !dontOptimise)
+                new FileOutputTarget(outputPath, new CsvDataSetWriter()),
+                !dontOptimise,
+                !dontPartitionTrees)
                 .generateDataSet(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

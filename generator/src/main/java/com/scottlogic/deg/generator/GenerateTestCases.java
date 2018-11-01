@@ -36,7 +36,11 @@ public class GenerateTestCases implements Runnable {
 
         try {
             new GenerationEngine(
-                    new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()), false)
+                new DirectoryOutputTarget(
+                        outputDir,
+                        new CsvDataSetWriter()),
+                    false,
+                    true)
                 .generateTestCases(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

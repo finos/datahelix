@@ -4,6 +4,8 @@ import com.scottlogic.deg.generator.constraints.AndConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -33,16 +35,19 @@ public class GenerationEngine {
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter, boolean optimiseTree) {
+    public GenerationEngine(IOutputTarget outputter, boolean optimiseTree, boolean partitionTrees) {
         this.outputter = outputter;
         dataGenerator = new DataGenerator(
                 new RowSpecMerger(fieldSpecMerger),
                 new ConstraintReducer(
                         new FieldSpecFactory(),
                         fieldSpecMerger),
+                partitionTrees
+                    ? new TreePartitioner()
+                    : new NoopTreePartitioner(),
                 optimiseTree
-                        ? new DecisionTreeOptimiser()
-                        : new NoopDecisionTreeOptimiser());
+                    ? new DecisionTreeOptimiser()
+                    : new NoopDecisionTreeOptimiser());
     }
 
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
