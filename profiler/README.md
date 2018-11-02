@@ -61,8 +61,11 @@ Such that `C:\hadoop-2.7.6\bin\winutils.exe` and friends exist, but such that yo
 ### Cucumber 
 
 Add Gherkin and Cucumber for Java plugins (file > settings > plugins if using Intellij IDE) 
+
 Currently the tests cannot be run from the TestRunner class
+
 To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field 
+
 An explanation of the particular syntax used can be found here 
 
 
