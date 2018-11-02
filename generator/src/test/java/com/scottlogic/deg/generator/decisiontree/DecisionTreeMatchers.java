@@ -1,96 +1,129 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.LazyMatcher;
+import com.scottlogic.deg.generator.MatcherTuple;
 import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.core.IsEqual;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static com.scottlogic.deg.generator.AssertingMatcher.matchesAssertions;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-public class DecisionTreeMatchers {
-    public static Matcher<List<DecisionTree>> isEquivalentTo(List<DecisionTree> expectedTrees) {
-        return matchesAssertions(
+public class DecisionTreeMatchers extends BaseMatcher {
+    private List<DecisionTree> decisionTrees;
+    private List<Object> failedMatches = new ArrayList<>();
+
+    private DecisionTreeMatchers(List<DecisionTree> decisionTrees) {
+        this.decisionTrees = decisionTrees;
+    }
+
+    public Matcher<Iterable<? extends DecisionTree>> isEquivalentTo() {
+        return new LazyMatcher<>(
             "matching decision trees",
-            (actual, asserter) -> {
-                asserter.assertThat(
-                    actual,
-                    containsInAnyOrder(
-                        expectedTrees
+            actual ->
+                Arrays.asList(
+                    new MatcherTuple(containsInAnyOrder(
+                        this.decisionTrees
                             .stream()
-                            .map(DecisionTreeMatchers::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            }
-        );
+                            .map(this::isEquivalentTo)
+                            .collect(Collectors.toList())), () -> actual)),
+            this.failedMatches);
     }
 
-    public static Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
-        return matchesAssertions(
+    private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
+        return new LazyMatcher<>(
             "matching decision tree",
-            (actual, asserter) -> {
-                asserter.assertThat(actual.getRootNode(), isEquivalentTo(expectedTree.getRootNode()));
-
-                asserter.assertThat(
-                    actual.getFields(),
-                    containsInAnyOrder(
-                        StreamSupport.stream(expectedTree.getFields().spliterator(), true)
-                            .toArray(Field[]::new)));
-            }
+            actual ->
+                Arrays.asList(
+                    new MatcherTuple(isEquivalentTo(expectedTree.getRootNode()), actual::getRootNode),
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            StreamSupport.stream(expectedTree.getFields().spliterator(), true)
+                                .toArray(Field[]::new)),
+                        actual::getFields)),
+            this.failedMatches
         );
     }
 
-    public static Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
-        return matchesAssertions(
-            "matching option node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of atomic constraints
-                    actual.getAtomicConstraints().size(),
-                    equalTo(expected.getAtomicConstraints().size()));
-
-                asserter.assertThat( // Should have same atomic constraints
-                    actual.getAtomicConstraints(),
-                    containsInAnyOrder(
-                        expected.getAtomicConstraints().stream()
-                            .map(CoreMatchers::equalTo)
-                            .collect(Collectors.toList())));
-
-                asserter.assertThat( // Should have same number of decisions
-                    actual.getDecisions().size(),
-                    equalTo(expected.getDecisions().size()));
-
-                asserter.assertThat( // Should have same decisions
-                    actual.getDecisions(),
-                    containsInAnyOrder(
-                        expected.getDecisions().stream()
-                            .map(DecisionTreeMatchers::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            });
+    private Matcher<IConstraint> isEquivalentTo(IConstraint expected) {
+        return new LazyMatcher<>(
+            "Matching atomic constraint",
+            actual -> Arrays.asList(
+                new MatcherTuple(
+                    equalTo(expected), () -> actual
+                )
+            ),
+            this.failedMatches
+        );
     }
 
-    private static Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
-        return matchesAssertions(
-            "matching decision node",
-            (actual, asserter) -> {
-                asserter.assertThat( // Should have same number of options
-                    actual.getOptions().size(),
-                    equalTo(expected.getOptions().size()));
+    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
+        return new LazyMatcher<>(
+            "matching option node",
+            actual ->
+                Arrays.asList(
+                    new MatcherTuple(equalTo(expected.getAtomicConstraints().size()), () -> actual.getAtomicConstraints().size()),
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            expected.getAtomicConstraints().stream()
+                                .map(this::isEquivalentTo)
+                                .collect(Collectors.toList())),
+                        actual::getAtomicConstraints),
+                    new MatcherTuple(equalTo(expected.getDecisions().size()), () -> actual.getDecisions().size()),
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            expected.getDecisions().stream()
+                                .map(this::isEquivalentTo)
+                                .collect(Collectors.toList())),
+                        actual::getDecisions)
+                ),
+            this.failedMatches
+        );
+    }
 
-                asserter.assertThat( // Should have same options
-                    actual.getOptions(),
-                    containsInAnyOrder(
-                        expected.getOptions().stream()
-                            .map(DecisionTreeMatchers::isEquivalentTo)
-                            .collect(Collectors.toList())));
-            });
+    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
+        return new LazyMatcher<>(
+            "matching decision node",
+            actual ->
+                Arrays.asList(
+                    new MatcherTuple(equalTo(expected.getOptions().size()), () -> actual.getOptions().size()),
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            expected.getOptions().stream()
+                                .map(this::isEquivalentTo)
+                                .collect(Collectors.toList())),
+                        actual::getOptions)
+                ),
+            this.failedMatches
+        );
+    }
+
+    @Override
+    public boolean matches(Object item) {
+        Matcher<Iterable<? extends DecisionTree>> matcher = isEquivalentTo();
+
+        return matcher.matches(item);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText("Matching decision trees");
+    }
+
+    @Override
+    public void describeMismatch(Object item, Description description) {
+        //super.describeMismatch(item, description);
+    }
+
+    public static DecisionTreeMatchers isEqualTo(List<DecisionTree> decisionTrees) {
+        return new DecisionTreeMatchers(decisionTrees);
     }
 }
