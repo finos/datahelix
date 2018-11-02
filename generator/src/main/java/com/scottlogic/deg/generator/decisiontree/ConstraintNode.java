@@ -38,16 +38,16 @@ public final class ConstraintNode {
 
     public ConstraintNode(IConstraint... atomicConstraints) {
         this(
-                Arrays.asList(atomicConstraints),
-                new ArrayList<>(),
-                false);
+            Arrays.asList(atomicConstraints),
+            new ArrayList<>(),
+            false);
     }
 
     public ConstraintNode(boolean optimised, IConstraint... atomicConstraints) {
         this(
             Arrays.asList(atomicConstraints),
             new ArrayList<>(),
-                optimised);
+            optimised);
     }
 
     public ConstraintNode(IConstraint singleAtomicConstraint) {
@@ -61,7 +61,7 @@ public final class ConstraintNode {
         this(
             Collections.emptyList(),
             Arrays.asList(decisionNodes),
-                false);
+            false);
     }
 
     public Collection<IConstraint> getAtomicConstraints() {
@@ -84,22 +84,22 @@ public final class ConstraintNode {
     public String toString(){
         if (decisions.isEmpty())
             return atomicConstraints.size() > 5
-                    ? String.format("%d constraints", atomicConstraints.size())
-                    : Objects.toString(atomicConstraints);
+                ? String.format("%d constraints", atomicConstraints.size())
+                : Objects.toString(atomicConstraints);
 
         if (atomicConstraints.isEmpty())
             return decisions.size() > 5
-                    ? String.format("%d decisions", decisions.size())
-                    : Objects.toString(decisions);
+                ? String.format("%d decisions", decisions.size())
+                : Objects.toString(decisions);
 
         return String.format(
-                "Decision: %s, Constraints: %s",
-                decisions.size() > 5
-                        ? String.format("%d decisions", decisions.size())
-                        : Objects.toString(decisions),
-                atomicConstraints.size() > 5
-                        ? String.format("%d constraints", atomicConstraints.size())
-                        : Objects.toString(atomicConstraints));
+            "Decision: %s, Constraints: %s",
+            decisions.size() > 5
+                ? String.format("%d decisions", decisions.size())
+                : Objects.toString(decisions),
+            atomicConstraints.size() > 5
+                ? String.format("%d constraints", atomicConstraints.size())
+                : Objects.toString(atomicConstraints));
     }
 
     public void addDecision(DecisionNode decision) {
@@ -112,24 +112,24 @@ public final class ConstraintNode {
 
     public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
         return new ConstraintNode(
-                this.atomicConstraints
-                        .stream()
-                        .filter(c -> !c.equals(excludeAtomicConstraint))
-                        .collect(Collectors.toList()),
-                decisions,
-                true);
+            this.atomicConstraints
+                .stream()
+                .filter(c -> !c.equals(excludeAtomicConstraint))
+                .collect(Collectors.toList()),
+            decisions,
+            true);
     }
 
     public boolean atomicConstraintExists(ConstraintNode constraintNode) {
         return constraintNode.atomicConstraints
-                .stream()
-                .anyMatch(ac -> atomicConstraintExists(ac));
+            .stream()
+            .anyMatch(ac -> atomicConstraintExists(ac));
     }
 
     public boolean atomicConstraintExists(IConstraint constraint) {
         return atomicConstraints
-                .stream()
-                .anyMatch(c -> c.equals(constraint));
+            .stream()
+            .anyMatch(c -> c.equals(constraint));
     }
 
     public void addAtomicConstraints(Collection<IConstraint> constraints) {
@@ -141,13 +141,27 @@ public final class ConstraintNode {
     }
 
     public void insertDecisionNodeAfter(
-            DecisionNode decisionNode,
-            DecisionNode immediatelyAfter) {
+        DecisionNode decisionNode,
+        DecisionNode immediatelyAfter) {
         int index = this.decisions.indexOf(immediatelyAfter);
 
         if (index >= 0)
             this.decisions.add(index + 1, decisionNode);
         else
             decisions.add(decisionNode); //add at the end of the collection
+    }
+
+    public void simplify(){
+        List<DecisionNode> decisionsWithOneOption = this.getDecisions()
+            .stream()
+            .filter(dNode -> dNode.getOptions().size() == 1)
+            .collect(Collectors.toList());
+        for (DecisionNode dNode : decisionsWithOneOption) {
+            ConstraintNode option = new ArrayList<>(dNode.getOptions()).get(0);
+            this.addAtomicConstraints(option.getAtomicConstraints());
+            dNode.removeOption(option);
+            option.getDecisions().forEach(this::addDecision);
+            this.removeDecision(dNode);
+        }
     }
 }

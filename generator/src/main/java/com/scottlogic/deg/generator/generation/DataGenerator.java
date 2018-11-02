@@ -44,7 +44,7 @@ public class DataGenerator implements IDataGenerator {
         final List<DecisionTree> partitionedTrees =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
-                    .map(tree -> this.treeOptimiser.optimiseTree(tree))
+                    .map(this.treeOptimiser::optimiseTree)
                 .collect(Collectors.toList());
 
         final DecisionTreeWalker walker = new DecisionTreeWalker(
