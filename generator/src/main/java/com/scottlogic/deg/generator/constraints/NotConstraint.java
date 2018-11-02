@@ -9,7 +9,7 @@ public class NotConstraint implements IConstraint {
 
     @Override
     public String toDotLabel() {
-        return String.format("¬(%s)", negatedConstraint.toDotLabel());
+        return String.format("&#x00AC;(%s)", negatedConstraint.toDotLabel());
     }
 
     public String toString(){
