@@ -1,6 +1,12 @@
 [{
 	"rootNode": {
 		"atomicConstraints": [{
+			"type": "IsStringShorterThanConstraint",
+			"field": {
+				"name": "Event"
+			},
+			"referenceValue": 10
+		},{
 			"type": "IsInSetConstraint",
 			"field": {
 				"name": "Identifier"
@@ -10,12 +16,6 @@
 				"EventC",
 				"EventA"
 			]
-		},{
-			"type": "IsStringShorterThanConstraint",
-			"field": {
-				"name": "Event"
-			},
-			"referenceValue": 10
 		},{
 			"type": "IsOfTypeConstraint",
 			"field": {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class IsInSetConstraintDto implements IConstraintDto {
     public FieldDto field;
-    public List<String> legalValues;
+    public List<Object> legalValues;
 
     @Override
     public IConstraint map() {
