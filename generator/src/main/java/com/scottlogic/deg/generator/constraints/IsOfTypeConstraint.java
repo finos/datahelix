@@ -36,4 +36,7 @@ public class IsOfTypeConstraint implements IConstraint {
     public int hashCode(){
         return Objects.hash(field, requiredType);
     }
+
+    @Override
+    public String toString() { return String.format("`%s` is %s", field.name, requiredType.name()); }
 }

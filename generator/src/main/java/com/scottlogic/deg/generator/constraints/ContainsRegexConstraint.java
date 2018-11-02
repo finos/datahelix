@@ -20,6 +20,11 @@ public class ContainsRegexConstraint implements IConstraint {
     }
 
     @Override
+    public String toString() {
+        return String.format("`%s` contains /%s/", field.name, regex);
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -30,4 +30,9 @@ public class IsGreaterThanConstantConstraint implements IConstraint {
     public int hashCode(){
         return Objects.hash(field, referenceValue);
     }
+
+    @Override
+    public String toString() {
+        return String.format("`%s` > %s", field.name, referenceValue);
+    }
 }

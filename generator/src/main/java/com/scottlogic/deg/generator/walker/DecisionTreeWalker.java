@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
@@ -53,10 +53,10 @@ public class DecisionTreeWalker {
         }
 
         public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
-            final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
+            final Optional<RowSpec> nominalRowSpec = option.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
-            );
+            ));
 
             if (!nominalRowSpec.isPresent()) {
                 return Stream.empty();

@@ -4,21 +4,22 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 class DummyDataBagSource implements IDataBagSource
 {
-    private final List<DataBag> dataBags;
+    private final Stream<DataBag> dataBags;
 
-    public DummyDataBagSource(List<DataBag> dataBags) {
+    public DummyDataBagSource(Stream<DataBag> dataBags) {
         this.dataBags = dataBags;
     }
 
     public DummyDataBagSource(DataBag... dataBags) {
-        this.dataBags = Arrays.asList(dataBags);
+        this.dataBags = Stream.of(dataBags);
     }
 
     @Override
-    public Iterable<DataBag> generate(GenerationConfig generationConfig) {
+    public Stream<DataBag> generate(GenerationConfig generationConfig) {
         return this.dataBags;
     }
 }

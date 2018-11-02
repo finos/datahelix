@@ -46,7 +46,7 @@ public class GenerationEngine {
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
         final Profile profile = new ProfileReader().read(profileFilePath);
 
-        final Iterable<GeneratedObject> generatedDataItems = generate(profile, config);
+        final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
         this.outputter.outputDataset(generatedDataItems, profile.fields);
     }
@@ -88,7 +88,7 @@ public class GenerationEngine {
         this.outputter.outputTestCases(generationResult);
     }
 
-    private Iterable<GeneratedObject> generate(Profile profile, GenerationConfig config) {
+    private Stream<GeneratedObject> generate(Profile profile, GenerationConfig config) {
 
         final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
 

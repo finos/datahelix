@@ -11,7 +11,8 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class FieldSpecFulfiller implements IDataBagSource {
     private final Field field;
@@ -23,27 +24,27 @@ public class FieldSpecFulfiller implements IDataBagSource {
     }
 
     @Override
-    public Iterable<DataBag> generate(GenerationConfig generationConfig) {
+    public Stream<DataBag> generate(GenerationConfig generationConfig) {
         List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
         IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        return new ProjectingIterable<>(
-                getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType()),
-                value ->
-                {
-                    DataBagValue dataBagValue = new DataBagValue(
-                            value,
-                            this.spec.getFormatRestrictions() != null
-                                    ? this.spec.getFormatRestrictions().formatString
-                                    : null);
+        Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
-                    return DataBag.startBuilding()
-                            .set(
-                                    this.field,
-                                    dataBagValue)
-                            .build();
-                });
+        return StreamSupport.stream(iterable.spliterator(), false)
+            .map(value -> {
+                DataBagValue dataBagValue = new DataBagValue(
+                    value,
+                    this.spec.getFormatRestrictions() != null
+                        ? this.spec.getFormatRestrictions().formatString
+                        : null);
+
+                return DataBag.startBuilding()
+                    .set(
+                        this.field,
+                        dataBagValue)
+                    .build();
+            });
     }
 
     private List<IFieldValueSource> getAllApplicableValueSources() {
@@ -63,9 +64,9 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
+        ITypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()
-                : TypeRestrictions.createAllowAll();
+                : TypeRestrictions.all;
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
             NumericRestrictions restrictions = spec.getNumericRestrictions() == null

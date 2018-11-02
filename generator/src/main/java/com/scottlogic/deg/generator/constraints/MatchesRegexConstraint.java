@@ -31,4 +31,7 @@ public class MatchesRegexConstraint implements IConstraint {
     public int hashCode(){
         return Objects.hash(field, regex.toString());
     }
+
+    @Override
+    public String toString(){ return String.format("`%s` matches /%s/", field.name, regex); }
 }

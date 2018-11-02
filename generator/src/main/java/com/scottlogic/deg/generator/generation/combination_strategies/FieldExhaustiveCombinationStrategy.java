@@ -2,61 +2,69 @@ package com.scottlogic.deg.generator.generation.combination_strategies;
 
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy {
 
     @Override
-    public Iterable<DataBag> permute(List<Iterable<DataBag>> dataBagSequences) {
-        return new FieldExhaustiveCombinationStrategy.InternalIterable(dataBagSequences);
+    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+        Iterable<DataBag> iterable = new FieldExhaustiveCombinationStrategy
+                .InternalIterable(dataBagSequences);
+
+        return StreamSupport.stream(iterable.spliterator(), true);
     }
 
     class InternalIterable implements Iterable<DataBag> {
-        private final List<Iterable<DataBag>> dataBagSequences;
+        private final Stream<Stream<DataBag>> dataBagSequences;
 
-        InternalIterable(List<Iterable<DataBag>> dataBagSequences) {
+        InternalIterable(Stream<Stream<DataBag>> dataBagSequences) {
             this.dataBagSequences = dataBagSequences;
         }
 
         @Override
         public Iterator<DataBag> iterator() {
-            List<Iterator<DataBag>> sequenceIterators = this.dataBagSequences.stream()
-                .map(Iterable::iterator)
-                .collect(Collectors.toList());
+            List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
+                    .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
+                    .collect(Collectors.toList());
 
-            List<DataBag> baselines = new ArrayList<>(sequenceIterators.size());
-            for (Iterator<DataBag> sequenceIterator : sequenceIterators)
-            {
-                if (!sequenceIterator.hasNext()) {
-                    // one of our sequences has no items, so this combination strategy can't output any values
-                    return Collections.emptyIterator();
-                }
+            if (tuples.stream().anyMatch(t -> t.baseline == null))
+                return Collections.emptyIterator();
 
-                baselines.add(sequenceIterator.next());
-            }
+            return new InternalIterator(tuples);
+        }
+    }
 
-            return new InternalIterator(sequenceIterators, baselines);
+    class SequenceAndBaselineTuple {
+        private Iterator<DataBag> iterator;
+        private DataBag baseline;
+
+        public SequenceAndBaselineTuple(Iterator<DataBag> iterator) {
+            this.iterator = iterator;
+            this.baseline = iterator.hasNext() ? iterator.next() : null;
+        }
+
+        public DataBag next(){
+            return iterator.next();
+        }
+
+        public boolean hasNext(){
+            return iterator.hasNext();
         }
     }
 
     class InternalIterator implements Iterator<DataBag> {
-        private final List<DataBag> baselinesForInputSequences;
-        private final List<Iterator<DataBag>> inputSequencesIterators;
+        private final List<SequenceAndBaselineTuple> tuples;
 
         private Integer indexOfSequenceToVary;
 
-        InternalIterator(
-            List<Iterator<DataBag>> inputSequencesIterators,
-            List<DataBag> baselinesForInputSequences) {
-
-            this.baselinesForInputSequences = baselinesForInputSequences;
-            this.inputSequencesIterators = inputSequencesIterators;
-
+        InternalIterator(List<SequenceAndBaselineTuple> tuples) {
+            this.tuples = tuples;
             this.indexOfSequenceToVary = null;
         }
 
@@ -66,7 +74,7 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
                 return true; // because this means we haven't output a baselines row yet. I know this code is awful, I'll definitely fix it -MH
 
             // kind of inefficient
-            return this.inputSequencesIterators.stream().anyMatch(Iterator::hasNext);
+            return this.tuples.stream().anyMatch(tuple -> tuple.hasNext());
         }
 
         @Override
@@ -74,22 +82,23 @@ public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy 
             if (this.indexOfSequenceToVary == null) {
                 this.indexOfSequenceToVary = 0;
 
-                return this.baselinesForInputSequences.stream()
+                return this.tuples.stream()
+                        .map(tuple -> tuple.baseline)
                     .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
             }
 
-            return IntStream.range(0, this.inputSequencesIterators.size())
+            return IntStream.range(0, this.tuples.size())
                 .mapToObj(seqIndex -> {
-                    if (seqIndex != this.indexOfSequenceToVary) {
-                        return this.baselinesForInputSequences.get(seqIndex);
+                    SequenceAndBaselineTuple tuple = this.tuples.get(seqIndex);
+
+                    if (seqIndex != this.indexOfSequenceToVary)
+                        return tuple.baseline;
+
+                    if (!tuple.hasNext()) {
+                        this.indexOfSequenceToVary++;
+                        return tuple.baseline;
                     }
-                    else {
-                        if (!this.inputSequencesIterators.get(seqIndex).hasNext()) {
-                            this.indexOfSequenceToVary++;
-                            return this.baselinesForInputSequences.get(seqIndex);
-                        }
-                        return this.inputSequencesIterators.get(seqIndex).next();
-                    }
+                    return tuple.next();
                 })
                 .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
         }

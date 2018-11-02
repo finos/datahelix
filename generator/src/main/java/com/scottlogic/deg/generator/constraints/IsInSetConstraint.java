@@ -38,7 +38,7 @@ public class IsInSetConstraint implements IConstraint {
 
     public String toString(){
         return String.format(
-                "%s in %s",
+                "`%s` in %s",
                 field.name,
                 Objects.toString(legalValues));
     }

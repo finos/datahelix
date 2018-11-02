@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.utils;
 
 import com.scottlogic.deg.generator.DataBagValue;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 
 public class DataBagValueIterator<T> implements Iterator<DataBagValue> {
