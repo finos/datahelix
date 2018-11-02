@@ -66,8 +66,7 @@ Currently the tests cannot be run from the TestRunner class
 
 To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field 
 
-An explanation of the particular syntax used can be found here 
-
+An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/data-engineering-generator/blob/master/docs/CucumberSyntax.md) 
 
 ### IntelliJ IDE
 
