@@ -120,7 +120,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
 
     @Override
     public void describeMismatch(Object item, Description description) {
-        //super.describeMismatch(item, description);
+        // TODO: Error messaging
     }
 
     public static DecisionTreeMatchers isEqualTo(List<DecisionTree> decisionTrees) {

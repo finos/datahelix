@@ -41,41 +41,35 @@ class DecisionTreePartitionerIntegrationTests {
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
         ArrayList<DynamicTest> tests = new ArrayList<>();
 
-        getFilePaths().forEach(path -> {
-            String name = path.getFileName().toString();
-            File expectedOutput = new File(outputDirectory + name);
-            Profile profile = getProfile(path);
+        getInputProfileFilePaths().forEach(path -> {
+            String inputProfileFileName = path.getFileName().toString();
+            File expectedTreeOutputFile = new File(outputDirectory + inputProfileFileName);
+            Profile inputProfile = getProfile(path);
 
-            if (!expectedOutput.exists() || profile == null) {
-                return;
+            if (!expectedTreeOutputFile.exists() || inputProfile == null) {
+                Assert.fail("Could not locate file " + inputProfileFileName);
             }
 
-            DecisionTree decisionTree = decisionTreeGenerator.analyse(profile).getMergedTree();
-            final List<DecisionTree> partitionedTrees = treePartitioner
+            DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
+            final List<DecisionTree> actualPartitionedTree = treePartitioner
                     .splitTreeIntoPartitions(decisionTree)
                     .collect(Collectors.toList());
 
-            List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedOutput);
-            assert expectedTreeDto != null;
-            final List<DecisionTree> mappedTrees = expectedTreeDto.stream()
+            List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedTreeOutputFile);
+            final List<DecisionTree> expectedPartitionedTree = expectedTreeDto.stream()
                     .map(decisionTreeMapper::map)
                     .collect(Collectors.toList());
 
-//            tests.add(DynamicTest.dynamicTest(name, () -> Assert.assertThat(
-//                    partitionedTrees,
-//                    DecisionTreeMatchers.isEquivalentTo(mappedTrees)
-//            )));
-
-            tests.add(DynamicTest.dynamicTest(name, () -> Assert.assertThat(
-                partitionedTrees, /* actual */
-                DecisionTreeMatchers.isEqualTo(mappedTrees) /* expected */
+            tests.add(DynamicTest.dynamicTest(inputProfileFileName, () -> Assert.assertThat(
+                actualPartitionedTree,
+                DecisionTreeMatchers.isEqualTo(expectedPartitionedTree)
             )));
         });
 
         return tests;
     }
 
-    private Stream<Path> getFilePaths() throws IOException {
+    private Stream<Path> getInputProfileFilePaths() throws IOException {
         return Files.walk(Paths.get(inputDirectory)).filter(path -> getFilenameExtension(path.toFile().toString())
                 .toLowerCase().equals("json"));
     }
