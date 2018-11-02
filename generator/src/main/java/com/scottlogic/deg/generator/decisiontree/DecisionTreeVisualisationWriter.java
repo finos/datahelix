@@ -4,7 +4,12 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Collection;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class DecisionTreeVisualisationWriter {
@@ -57,7 +62,7 @@ public class DecisionTreeVisualisationWriter {
 
         TreeInfo treeInfo = new TreeInfo();
         treeInfo.constraintNodes = 1;
-        treeInfo.rowSpecs = 1;
+        treeInfo.rowSpecs = BigInteger.valueOf(1);
 
         declareConstraintNode(nodeId, constraintNode.getAtomicConstraints(), treeInfo);
 
@@ -69,7 +74,7 @@ public class DecisionTreeVisualisationWriter {
             TreeInfo thisOptionTreeInfo = visit(decisionNode, nodeId);
 
             treeInfo.addExceptRowSpecCount(thisOptionTreeInfo);
-            treeInfo.rowSpecs *= thisOptionTreeInfo.rowSpecs;
+            treeInfo.rowSpecs = treeInfo.rowSpecs.multiply(thisOptionTreeInfo.rowSpecs);
         }
 
         if (constraintNode.getDecisions().isEmpty() && this.shouldWriteDecisionNodeInfo && parentNodeId != null) {
@@ -91,7 +96,7 @@ public class DecisionTreeVisualisationWriter {
             TreeInfo thisConstraintTreeInfo = visit(childNode, nodeId);
 
             treeInfo.addExceptRowSpecCount(thisConstraintTreeInfo);
-            treeInfo.rowSpecs += thisConstraintTreeInfo.rowSpecs;
+            treeInfo.rowSpecs = treeInfo.rowSpecs.add(thisConstraintTreeInfo.rowSpecs);
         }
 
         if (this.shouldWriteOptionInfo) {
@@ -130,11 +135,11 @@ public class DecisionTreeVisualisationWriter {
             "%s[fontcolor=\"%s\"][label=\"%s\"][fontsize=\"10\"][shape=box][style=\"dotted\"]",
             infoNodeId,
             fontColour,
-            String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d\nExpected RowSpecs: %d",
+            String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d\nExpected RowSpecs: %s",
                 info.decisions,
                 info.atomicConstraints,
                 info.constraintNodes,
-                info.rowSpecs)));
+                info.getRowSpecsSN())));
     }
 
     private void writeLine(String line) throws IOException {
@@ -147,12 +152,18 @@ public class DecisionTreeVisualisationWriter {
         int constraintNodes = 0;
         int atomicConstraints = 0;
         int decisions = 0;
-        int rowSpecs = 0;
+        BigInteger rowSpecs = BigInteger.valueOf(0);
 
         public void addExceptRowSpecCount(TreeInfo tree){
-            constraintNodes += tree.constraintNodes;
             atomicConstraints += tree.atomicConstraints;
+            constraintNodes += tree.constraintNodes;
             decisions += tree.decisions;
+        }
+
+        public String getRowSpecsSN() {
+            BigDecimal decimal = new BigDecimal(rowSpecs);
+            NumberFormat formatter = new DecimalFormat("0.########E0", DecimalFormatSymbols.getInstance(Locale.ROOT));
+            return formatter.format(decimal);
         }
     }
 }
