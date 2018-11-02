@@ -21,6 +21,8 @@ public class DecisionTreeMatchers extends BaseMatcher {
     private List<DecisionTree> decisionTrees;
     private List<Object> failedMatches = new ArrayList<>();
 
+    public DecisionTreeMatchers() { }
+
     private DecisionTreeMatchers(List<DecisionTree> decisionTrees) {
         this.decisionTrees = decisionTrees;
     }
@@ -38,7 +40,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
             this.failedMatches);
     }
 
-    private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
+    public Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
         return new LazyMatcher<>(
             "matching decision tree",
             actual ->
@@ -53,7 +55,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
         );
     }
 
-    private Matcher<IConstraint> isEquivalentTo(IConstraint expected) {
+    public Matcher<IConstraint> isEquivalentTo(IConstraint expected) {
         return new LazyMatcher<>(
             "Matching atomic constraint",
             actual -> Arrays.asList(
@@ -65,7 +67,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
         );
     }
 
-    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
+    public Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
         return new LazyMatcher<>(
             "matching option node",
             actual ->
@@ -89,7 +91,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
         );
     }
 
-    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
+    public Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
         return new LazyMatcher<>(
             "matching decision node",
             actual ->
@@ -123,7 +125,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
         // TODO: Error messaging
     }
 
-    public static DecisionTreeMatchers isEqualTo(List<DecisionTree> decisionTrees) {
+    public static DecisionTreeMatchers isEquivalentTo(List<DecisionTree> decisionTrees) {
         return new DecisionTreeMatchers(decisionTrees);
     }
 }

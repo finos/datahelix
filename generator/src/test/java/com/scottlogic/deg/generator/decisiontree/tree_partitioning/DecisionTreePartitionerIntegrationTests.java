@@ -62,7 +62,7 @@ class DecisionTreePartitionerIntegrationTests {
 
             tests.add(DynamicTest.dynamicTest(inputProfileFileName, () -> Assert.assertThat(
                 actualPartitionedTree,
-                DecisionTreeMatchers.isEqualTo(expectedPartitionedTree)
+                DecisionTreeMatchers.isEquivalentTo(expectedPartitionedTree)
             )));
         });
 
