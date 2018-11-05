@@ -17,9 +17,9 @@ import java.util.stream.StreamSupport;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-public class DecisionTreeMatchers extends BaseMatcher {
+public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     private List<DecisionTree> decisionTrees;
-    private List<Object> failedMatches = new ArrayList<>();
+    private ArrayList<MatcherTuple> failedMatcher = new ArrayList<>();
 
     private DecisionTreeMatchers(List<DecisionTree> decisionTrees) {
         this.decisionTrees = decisionTrees;
@@ -30,44 +30,46 @@ public class DecisionTreeMatchers extends BaseMatcher {
             "matching decision trees",
             actual ->
                 Arrays.asList(
-                    new MatcherTuple(containsInAnyOrder(
-                        this.decisionTrees
-                            .stream()
-                            .map(this::isEquivalentTo)
-                            .collect(Collectors.toList())), () -> actual)),
-            this.failedMatches);
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            this.decisionTrees
+                                .stream()
+                                .map(this::isEquivalentTo)
+                                .collect(Collectors.toList())), () -> actual)),
+            this);
     }
 
     private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
         return new LazyMatcher<>(
-            "matching decision tree",
+            "matching decision tree: " + expectedTree.toString(),
             actual ->
                 Arrays.asList(
-                    new MatcherTuple(isEquivalentTo(expectedTree.getRootNode()), actual::getRootNode),
+                    new MatcherTuple(
+                        isEquivalentTo(expectedTree.getRootNode()), actual::getRootNode),
                     new MatcherTuple(
                         containsInAnyOrder(
                             StreamSupport.stream(expectedTree.getFields().spliterator(), true)
                                 .toArray(Field[]::new)),
                         actual::getFields)),
-            this.failedMatches
+            this
         );
     }
 
     private Matcher<IConstraint> isEquivalentTo(IConstraint expected) {
         return new LazyMatcher<>(
-            "Matching atomic constraint",
+            expected.toString(),
             actual -> Arrays.asList(
                 new MatcherTuple(
                     equalTo(expected), () -> actual
                 )
             ),
-            this.failedMatches
+            this
         );
     }
 
     private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
         return new LazyMatcher<>(
-            "matching option node",
+            expected.toString(),
             actual ->
                 Arrays.asList(
                     new MatcherTuple(equalTo(expected.getAtomicConstraints().size()), () -> actual.getAtomicConstraints().size()),
@@ -85,13 +87,13 @@ public class DecisionTreeMatchers extends BaseMatcher {
                                 .collect(Collectors.toList())),
                         actual::getDecisions)
                 ),
-            this.failedMatches
+            this
         );
     }
 
     private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
         return new LazyMatcher<>(
-            "matching decision node",
+            expected.toString(),
             actual ->
                 Arrays.asList(
                     new MatcherTuple(equalTo(expected.getOptions().size()), () -> actual.getOptions().size()),
@@ -102,7 +104,7 @@ public class DecisionTreeMatchers extends BaseMatcher {
                                 .collect(Collectors.toList())),
                         actual::getOptions)
                 ),
-            this.failedMatches
+            this
         );
     }
 
@@ -115,15 +117,27 @@ public class DecisionTreeMatchers extends BaseMatcher {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("Matching decision trees");
+        if (this.failedMatcher != null) {
+            final Object actualValue = this.failedMatcher.get(0).getActualFunc.get();
+            description.appendText(actualValue.toString());
+        }
+        else {
+            description.appendText("No description available");
+        }
     }
 
     @Override
     public void describeMismatch(Object item, Description description) {
-        // TODO: Error messaging
+        if (this.failedMatcher != null) {
+            description.appendDescriptionOf(this.failedMatcher.get(0).matcher);
+        }
     }
 
     public static DecisionTreeMatchers isEqualTo(List<DecisionTree> decisionTrees) {
         return new DecisionTreeMatchers(decisionTrees);
+    }
+
+    public void thisMatcherFailed(LazyMatcher failedMatcher, Object actualObject) {
+        this.failedMatcher.add(new MatcherTuple(failedMatcher, () -> actualObject));
     }
 }
