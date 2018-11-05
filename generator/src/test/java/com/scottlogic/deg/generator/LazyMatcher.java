@@ -31,7 +31,7 @@ public class LazyMatcher<T> extends BaseMatcher<T> {
             boolean result = test.matcher.matches(actualValue);
             if (!result) {
                 containsFailedMatch = true;
-                rootMatcher.thisMatcherFailed(test, actualValue);
+                rootMatcher.thisMatcherFailed(test, actualValue, this.description);
             }
         }
 

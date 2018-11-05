@@ -11,6 +11,7 @@ import org.hamcrest.Matcher;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,6 +27,8 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     }
 
     public Matcher<Iterable<? extends DecisionTree>> isEquivalentTo() {
+        AtomicInteger treeIndex = new AtomicInteger();
+
         return new LazyMatcher<>(
             "matching decision trees",
             actual ->
@@ -34,56 +37,59 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
                         containsInAnyOrder(
                             this.decisionTrees
                                 .stream()
-                                .map(this::isEquivalentTo)
-                                .collect(Collectors.toList())), () -> actual)),
+                                .map(t -> this.isEquivalentTo(t, treeIndex.getAndIncrement()))
+                                .collect(Collectors.toList())), () -> actual, "#Partitions")),
             this);
     }
 
-    private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree) {
+    private Matcher<DecisionTree> isEquivalentTo(DecisionTree expectedTree, int treeIndex) {
         return new LazyMatcher<>(
-            "matching decision tree: " + expectedTree.toString(),
+            "\\",
             actual ->
                 Arrays.asList(
                     new MatcherTuple(
-                        isEquivalentTo(expectedTree.getRootNode()), actual::getRootNode),
+                        isEquivalentTo(expectedTree.getRootNode(), String.format("\\Tree[%d]", treeIndex)), actual::getRootNode),
                     new MatcherTuple(
                         containsInAnyOrder(
                             StreamSupport.stream(expectedTree.getFields().spliterator(), true)
                                 .toArray(Field[]::new)),
-                        actual::getFields)),
+                        actual::getFields, "#Fields")),
             this
         );
     }
 
-    private Matcher<IConstraint> isEquivalentTo(IConstraint expected) {
+    private Matcher<IConstraint> isEquivalentTo(IConstraint expected, String path) {
         return new LazyMatcher<>(
-            expected.toString(),
+            path,
             actual -> Arrays.asList(
                 new MatcherTuple(
-                    equalTo(expected), () -> actual
+                    equalTo(expected), () -> actual, "<AtomicConstraint>"
                 )
             ),
             this
         );
     }
 
-    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected) {
+    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected, String path) {
+        AtomicInteger decisionIndex = new AtomicInteger();
+        AtomicInteger atomicConstraintIndex = new AtomicInteger();
+
         return new LazyMatcher<>(
-            expected.toString(),
+            path,
             actual ->
                 Arrays.asList(
-                    new MatcherTuple(equalTo(expected.getAtomicConstraints().size()), () -> actual.getAtomicConstraints().size()),
+                    new MatcherTuple(equalTo(expected.getAtomicConstraints().size()), () -> actual.getAtomicConstraints().size(), "#AtomicConstraints"),
                     new MatcherTuple(
                         containsInAnyOrder(
                             expected.getAtomicConstraints().stream()
-                                .map(this::isEquivalentTo)
+                                .map(ac -> this.isEquivalentTo(ac, String.format("%s\\AtomicConstraint[%d]", path, atomicConstraintIndex.getAndIncrement())))
                                 .collect(Collectors.toList())),
                         actual::getAtomicConstraints),
-                    new MatcherTuple(equalTo(expected.getDecisions().size()), () -> actual.getDecisions().size()),
+                    new MatcherTuple(equalTo(expected.getDecisions().size()), () -> actual.getDecisions().size(), "#Decisions"),
                     new MatcherTuple(
                         containsInAnyOrder(
                             expected.getDecisions().stream()
-                                .map(this::isEquivalentTo)
+                                .map(d -> this.isEquivalentTo(d, String.format("%s\\Decision[%d]", path, decisionIndex.getAndIncrement())))
                                 .collect(Collectors.toList())),
                         actual::getDecisions)
                 ),
@@ -91,16 +97,18 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
         );
     }
 
-    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected) {
+    private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected, String path) {
+        AtomicInteger index = new AtomicInteger();
+
         return new LazyMatcher<>(
-            expected.toString(),
+            path,
             actual ->
                 Arrays.asList(
-                    new MatcherTuple(equalTo(expected.getOptions().size()), () -> actual.getOptions().size()),
+                    new MatcherTuple(equalTo(expected.getOptions().size()), () -> actual.getOptions().size(), "#Options"),
                     new MatcherTuple(
                         containsInAnyOrder(
                             expected.getOptions().stream()
-                                .map(this::isEquivalentTo)
+                                .map(option -> this.isEquivalentTo(option, String.format("%s\\Option[%d]", path, index.getAndIncrement())))
                                 .collect(Collectors.toList())),
                         actual::getOptions)
                 ),
@@ -129,6 +137,11 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     public void describeMismatch(Object item, Description description) {
         if (this.failedMatcher != null) {
             description.appendDescriptionOf(this.failedMatcher.tuple.matcher);
+
+            String path = this.failedMatcher.description;
+            if (this.failedMatcher.tuple.overrideDescription.isPresent())
+                path += "\\" + this.failedMatcher.tuple.overrideDescription.orElse("");
+            description.appendText("\n\nPath:\n" + path);
         }
     }
 
@@ -136,21 +149,23 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
         return new DecisionTreeMatchers(decisionTrees);
     }
 
-    public void thisMatcherFailed(MatcherTuple test, Object actualValue) {
+    public void thisMatcherFailed(MatcherTuple test, Object actualValue, String description) {
         if (this.failedMatcher != null)
             return;
 
-        this.failedMatcher = new FailedMatcher(test, actualValue);
+        this.failedMatcher = new FailedMatcher(test, actualValue, description);
     }
 
     class FailedMatcher
     {
         private final MatcherTuple tuple;
         private final Object actualValue;
+        private final String description;
 
-        public FailedMatcher(MatcherTuple tuple, Object actualValue) {
+        public FailedMatcher(MatcherTuple tuple, Object actualValue, String description) {
             this.tuple = tuple;
             this.actualValue = actualValue;
+            this.description = description;
         }
     }
 }
