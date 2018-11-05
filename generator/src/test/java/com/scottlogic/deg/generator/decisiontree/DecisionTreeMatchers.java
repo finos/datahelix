@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     private List<DecisionTree> decisionTrees;
-    private ArrayList<MatcherTuple> failedMatcher = new ArrayList<>();
+    private FailedMatcher failedMatcher;
 
     private DecisionTreeMatchers(List<DecisionTree> decisionTrees) {
         this.decisionTrees = decisionTrees;
@@ -118,8 +118,7 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     @Override
     public void describeTo(Description description) {
         if (this.failedMatcher != null) {
-            final Object actualValue = this.failedMatcher.get(0).getActualFunc.get();
-            description.appendText(actualValue.toString());
+            description.appendText(this.failedMatcher.actualValue.toString());
         }
         else {
             description.appendText("No description available");
@@ -129,7 +128,7 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
     @Override
     public void describeMismatch(Object item, Description description) {
         if (this.failedMatcher != null) {
-            description.appendDescriptionOf(this.failedMatcher.get(0).matcher);
+            description.appendDescriptionOf(this.failedMatcher.tuple.matcher);
         }
     }
 
@@ -137,7 +136,21 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
         return new DecisionTreeMatchers(decisionTrees);
     }
 
-    public void thisMatcherFailed(LazyMatcher failedMatcher, Object actualObject) {
-        this.failedMatcher.add(new MatcherTuple(failedMatcher, () -> actualObject));
+    public void thisMatcherFailed(MatcherTuple test, Object actualValue) {
+        if (this.failedMatcher != null)
+            return;
+
+        this.failedMatcher = new FailedMatcher(test, actualValue);
+    }
+
+    class FailedMatcher
+    {
+        private final MatcherTuple tuple;
+        private final Object actualValue;
+
+        public FailedMatcher(MatcherTuple tuple, Object actualValue) {
+            this.tuple = tuple;
+            this.actualValue = actualValue;
+        }
     }
 }
