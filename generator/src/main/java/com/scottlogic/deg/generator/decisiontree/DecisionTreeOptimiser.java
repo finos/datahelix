@@ -87,6 +87,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         ConstraintNode negatedFactorisingConstraint = new ConstraintNode(true, negatedMostProlificConstraint);
         factorisedDecisionNode.addOption(negatedFactorisingConstraint);
 
+        List<DecisionNode> removals = new ArrayList<>();
+
         for (DecisionNode decision : decisions) {
             // Sets to add constraints seen in conjunction with most prolific constraint
             Set<IConstraint> mfocConstraints = new HashSet<>();
@@ -101,21 +103,24 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions);
 
             boolean shouldFactoriseDecisionNode = factorisedOptions.size() > 0;
-            if (!shouldFactoriseDecisionNode) {
-                continue;
+            if (shouldFactoriseDecisionNode){
+                /*
+                 * At this point we have removed the nodes with mpc and nmpc from the original tree. All that is left at this level are nodes
+                 * that need moving either to same level as factorising constraint node or as options underneath it
+                 */
+                processOptionsWithoutFactorisingConstraint(decision, mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions, otherOptions);
+
+                // Perform movement of nodes
+                addOptionsToFactorisedNode(factorisingConstraint, factorisedOptions);
+                addOptionsToFactorisedNode(negatedFactorisingConstraint, negatedFactorisedOptions);
+                otherOptions.forEach(factorisedDecisionNode::addOption);
             }
 
-            /*
-             * At this point we have removed the nodes with mfoc and nmfoc from the original tree. All that is left at this level are nodes
-             * that need moving either to same level as factorising constraint or as decisions underneath
-             */
-            processOptionsWithoutFactorisingConstraint(decision, mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions, otherOptions);
+            // Tidy decision if no options left
+            if (decision.getOptions().size() == 0){
+                removals.add(decision);
+            }
 
-            // Perform movement of nodes
-            addOptionsToFactorisedNode(factorisingConstraint, factorisedOptions);
-            addOptionsToFactorisedNode(negatedFactorisingConstraint, negatedFactorisedOptions);
-            otherOptions.forEach(factorisedDecisionNode::addOption);
-            rootNode.removeDecision(decision);
         }
 
         if (this.simplify){
@@ -123,6 +128,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             negatedFactorisingConstraint.simplify();
         }
 
+        removals.forEach(rootNode::removeDecision);
         optimiseDecisions(factorisingConstraint, depth + 1);
         optimiseDecisions(negatedFactorisingConstraint, depth + 1);
         return true;
