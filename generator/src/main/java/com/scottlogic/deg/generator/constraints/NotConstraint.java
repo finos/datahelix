@@ -9,6 +9,7 @@ public class NotConstraint implements IConstraint {
         this.negatedConstraint = negatedConstraint;
     }
 
+
     public static IConstraint negate(IConstraint constraint) {
         if (constraint instanceof NotConstraint)
             return ((NotConstraint) constraint).negatedConstraint;
