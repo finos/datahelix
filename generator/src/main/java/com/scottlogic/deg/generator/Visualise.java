@@ -100,7 +100,6 @@ public class Visualise implements Runnable {
         try (OutputStreamWriter outWriter = new OutputStreamWriter(
                 new FileOutputStream(outputFilePath.toString()),
                 StandardCharsets.UTF_8)) {
-            outWriter.write('\ufeff'); //Write the BOM (works on windows)
 
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,
