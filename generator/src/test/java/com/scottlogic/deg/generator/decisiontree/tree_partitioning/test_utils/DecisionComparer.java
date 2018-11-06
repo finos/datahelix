@@ -2,13 +2,9 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
-import java.util.Collection;
-import java.util.function.BiConsumer;
-
 public class DecisionComparer implements IEqualityComparer {
     private final AnyOrderCollectionEqualityComparer constraintAnyOrderComparer;
     private final TreeComparisonContext comparisonContext;
-    public BiConsumer<Collection, Collection> reportErrors;
 
     public DecisionComparer(TreeComparisonContext comparisonContext) {
         this.comparisonContext = comparisonContext;
@@ -53,8 +49,10 @@ public class DecisionComparer implements IEqualityComparer {
             return false; //either decision1 XOR decision2 is null
 
         boolean equals = this.constraintAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
-        if (!equals && reportErrors != null)
-            reportErrors.accept(this.constraintAnyOrderComparer.itemsMissingFromCollection1, this.constraintAnyOrderComparer.itemsMissingFromCollection2);
+        if (!equals)
+            this.comparisonContext.reportOptionDifferences(
+                this.constraintAnyOrderComparer.itemsMissingFromCollection1,
+                this.constraintAnyOrderComparer.itemsMissingFromCollection2);
 
         return equals;
     }
