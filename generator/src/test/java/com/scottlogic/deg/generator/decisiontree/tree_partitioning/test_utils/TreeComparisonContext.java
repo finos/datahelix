@@ -11,6 +11,7 @@ public class TreeComparisonContext {
     public ConstraintNode right;
     public final ArrayList leftPath = new ArrayList();
     public final ArrayList rightPath = new ArrayList();
+    public boolean errorReported;
 
     public TreeComparisonContext() {
         this.left = null;
@@ -39,6 +40,7 @@ public class TreeComparisonContext {
         this.rightPath.clear();
         this.left = null;
         this.right = null;
+        this.errorReported = false;
     }
 
     public String getLeftPath(){

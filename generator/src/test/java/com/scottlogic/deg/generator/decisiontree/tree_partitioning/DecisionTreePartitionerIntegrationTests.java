@@ -68,6 +68,9 @@ class DecisionTreePartitionerIntegrationTests {
             tests.add(DynamicTest.dynamicTest(inputProfileFileName, () -> {
                 String message = "";
                 constraintNodeComparer.setReportErrors((missing1, missing2) -> {
+                    if (comparisonContext.errorReported)
+                        return;
+
                     System.out.println(String.format("-- %s --", inputProfileFileName));
                     if (!missing1.isEmpty()) {
                         System.out.println(String.format("%s: Got %s", inputProfileFileName, missing1));
@@ -77,6 +80,8 @@ class DecisionTreePartitionerIntegrationTests {
                     }
 
                     System.out.println("");
+
+                    comparisonContext.errorReported = true; //stop at the first error?
                 });
                 comparisonContext.reset();
 
