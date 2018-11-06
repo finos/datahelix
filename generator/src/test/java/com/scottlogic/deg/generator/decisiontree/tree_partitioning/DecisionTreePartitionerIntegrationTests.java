@@ -1,5 +1,19 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.DecisionTreeMapper;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
+import org.junit.Assert;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,22 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.DecisionTreeDto;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.DecisionTreeMapper;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
-
-import org.junit.Assert;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
 
 class DecisionTreePartitionerIntegrationTests {
     private static final String inputDirectory = "../examples/partitioning-tests/input/";
@@ -38,6 +36,11 @@ class DecisionTreePartitionerIntegrationTests {
 
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
+        TreeComparisonContext comparisonContext = new TreeComparisonContext();
+        ConstraintNodeComparer constraintNodeComparer = new ConstraintNodeComparer(comparisonContext);
+        IEqualityComparer treeComparer = new TreeComparer(constraintNodeComparer);
+        IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(treeComparer);
+
         return getInputProfileFilePaths().map(path -> {
             try {
                 String inputProfileFileName = path.getFileName().toString();
@@ -45,19 +48,35 @@ class DecisionTreePartitionerIntegrationTests {
                 Profile inputProfile = getProfile(path);
 
                 DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
-                final List<DecisionTree> actualPartitionedTree = treePartitioner
+                final List<DecisionTree> actualPartitionedTrees = treePartitioner
                     .splitTreeIntoPartitions(decisionTree)
                     .collect(Collectors.toList());
 
                 List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedTreeOutputFile);
-                final List<DecisionTree> expectedPartitionedTree = expectedTreeDto.stream()
+                final List<DecisionTree> expectedPartitionedTrees = expectedTreeDto.stream()
                     .map(decisionTreeMapper::map)
                     .collect(Collectors.toList());
 
-                return DynamicTest.dynamicTest(inputProfileFileName, () -> Assert.assertThat(
-                    actualPartitionedTree,
-                    DecisionTreeMatchers.isEqualTo(expectedPartitionedTree)
-                ));
+                return DynamicTest.dynamicTest(inputProfileFileName, () -> {
+                String message = "";
+                constraintNodeComparer.setReportErrors((missing1, missing2) -> {
+                    System.out.println(String.format("-- %s --", inputProfileFileName));
+                    if (!missing1.isEmpty()) {
+                        System.out.println(String.format("%s: Got %s", inputProfileFileName, missing1));
+                    }
+                    if (!missing2.isEmpty()) {
+                        System.out.println(String.format("%s: Expected %s", inputProfileFileName, missing2));
+                    }
+
+                    System.out.println("");
+                });
+                comparisonContext.reset();
+
+                boolean match = anyOrderComparer.equals(
+                    expectedPartitionedTrees,
+                    actualPartitionedTrees);
+                Assert.assertTrue(message, match);
+            });
             }
             catch (IOException | InvalidProfileException ex) {
                 // Throwing RuntimeException to escape the lambda
