@@ -30,12 +30,14 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(
             names = {"--no-optimise"},
-            description = "Prevents tree optimisation")
+            description = "Prevents tree optimisation",
+            hidden = true)
     private boolean dontOptimise;
 
     @CommandLine.Option(
             names = {"--no-partition"},
-            description = "Prevents tree partitioning")
+            description = "Prevents tree partitioning",
+            hidden = true)
     private boolean dontPartitionTrees;
 
     @Override

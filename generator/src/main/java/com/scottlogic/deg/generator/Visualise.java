@@ -39,7 +39,8 @@ public class Visualise implements Runnable {
 
     @picocli.CommandLine.Option(
             names = {"--no-optimise"},
-            description = "Prevents tree optimisation")
+            description = "Prevents tree optimisation",
+            hidden = true)
     private boolean dontOptimise;
 
     @Override
