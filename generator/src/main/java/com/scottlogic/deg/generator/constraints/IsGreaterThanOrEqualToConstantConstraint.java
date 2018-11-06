@@ -33,19 +33,6 @@ public class IsGreaterThanOrEqualToConstantConstraint implements IConstraint {
     }
 
     @Override
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IsGreaterThanOrEqualToConstantConstraint constraint = (IsGreaterThanOrEqualToConstantConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(field, referenceValue);
-    }
-
-    @Override
     public String toString() {
         return String.format("`%s` >= %s", field.name, referenceValue);
     }

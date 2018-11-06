@@ -8,7 +8,6 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,6 +57,31 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
         );
     }
 
+    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected, String path) {
+        AtomicInteger decisionIndex = new AtomicInteger();
+        AtomicInteger atomicConstraintIndex = new AtomicInteger();
+
+        return new LazyMatcher<>(
+            path,
+            actual ->
+                Arrays.asList(
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            expected.getAtomicConstraints().stream()
+                                .map(ac -> this.isEquivalentTo(ac, String.format("%s\\AtomicConstraint[%d]", path, atomicConstraintIndex.getAndIncrement())))
+                                .collect(Collectors.toList())),
+                        actual::getAtomicConstraints),
+                    new MatcherTuple(
+                        containsInAnyOrder(
+                            expected.getDecisions().stream()
+                                .map(d -> this.isEquivalentTo(d, String.format("%s\\Decision[%d]", path, decisionIndex.getAndIncrement())))
+                                .collect(Collectors.toList())),
+                        actual::getDecisions)
+                ),
+            this
+        );
+    }
+
     private Matcher<IConstraint> isEquivalentTo(IConstraint expected, String path) {
         return new LazyMatcher<>(
             path,
@@ -70,33 +94,6 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
         );
     }
 
-    private Matcher<ConstraintNode> isEquivalentTo(ConstraintNode expected, String path) {
-        AtomicInteger decisionIndex = new AtomicInteger();
-        AtomicInteger atomicConstraintIndex = new AtomicInteger();
-
-        return new LazyMatcher<>(
-            path,
-            actual ->
-                Arrays.asList(
-                    new MatcherTuple(equalTo(expected.getAtomicConstraints().size()), () -> actual.getAtomicConstraints().size(), "#AtomicConstraints"),
-                    new MatcherTuple(
-                        containsInAnyOrder(
-                            expected.getAtomicConstraints().stream()
-                                .map(ac -> this.isEquivalentTo(ac, String.format("%s\\AtomicConstraint[%d]", path, atomicConstraintIndex.getAndIncrement())))
-                                .collect(Collectors.toList())),
-                        actual::getAtomicConstraints),
-                    new MatcherTuple(equalTo(expected.getDecisions().size()), () -> actual.getDecisions().size(), "#Decisions"),
-                    new MatcherTuple(
-                        containsInAnyOrder(
-                            expected.getDecisions().stream()
-                                .map(d -> this.isEquivalentTo(d, String.format("%s\\Decision[%d]", path, decisionIndex.getAndIncrement())))
-                                .collect(Collectors.toList())),
-                        actual::getDecisions)
-                ),
-            this
-        );
-    }
-
     private Matcher<DecisionNode> isEquivalentTo(DecisionNode expected, String path) {
         AtomicInteger index = new AtomicInteger();
 
@@ -104,7 +101,6 @@ public class DecisionTreeMatchers extends BaseMatcher<List<DecisionTree>> {
             path,
             actual ->
                 Arrays.asList(
-                    new MatcherTuple(equalTo(expected.getOptions().size()), () -> actual.getOptions().size(), "#Options"),
                     new MatcherTuple(
                         containsInAnyOrder(
                             expected.getOptions().stream()

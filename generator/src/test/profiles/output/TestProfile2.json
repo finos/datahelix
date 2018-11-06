@@ -17,7 +17,7 @@
 				"GraphType1",
 				"GraphType2",
 				"GraphType3",
-				"GraphType45"
+				"GraphType4"
 			]
 		},{
 			"type": "IsLessThanConstantConstraint",
