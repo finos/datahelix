@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 class DecisionTreePartitionerIntegrationTests {
     private static final String inputDirectory = "../examples/partitioning-tests/input/";
     private static final String outputDirectory = "../examples/partitioning-tests/output/";
@@ -36,11 +37,6 @@ class DecisionTreePartitionerIntegrationTests {
 
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
-        TreeComparisonContext comparisonContext = new TreeComparisonContext();
-        ConstraintNodeComparer constraintNodeComparer = new ConstraintNodeComparer(comparisonContext);
-        IEqualityComparer treeComparer = new TreeComparer(constraintNodeComparer);
-        IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(treeComparer);
-
         return getInputProfileFilePaths().map(path -> {
             try {
                 String inputProfileFileName = path.getFileName().toString();
@@ -58,29 +54,19 @@ class DecisionTreePartitionerIntegrationTests {
                     .collect(Collectors.toList());
 
                 return DynamicTest.dynamicTest(inputProfileFileName, () -> {
-                String message = "";
-                constraintNodeComparer.setReportErrors((missing1, missing2) -> {
-                    if (comparisonContext.errorReported)
-                        return;
+                    TreeComparisonContext context = new TreeComparisonContext();
+                    IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
+                    new TreeComparer(
+                        new ConstraintNodeComparer(context)));
 
-                    System.out.println(String.format("-- %s --", inputProfileFileName));
-                    if (!missing1.isEmpty()) {
-                        System.out.println(String.format("%s: Got %s", inputProfileFileName, missing1));
+                    boolean match = anyOrderComparer.equals(
+                        expectedPartitionedTrees,
+                        actualPartitionedTrees);
+
+                    if (!match) {
+                        context.reportError.run();
+                        Assert.fail("Trees do not match");
                     }
-                    if (!missing2.isEmpty()) {
-                        System.out.println(String.format("%s: Expected %s", inputProfileFileName, missing2));
-                    }
-
-                    System.out.println("");
-
-                    comparisonContext.errorReported = true; //stop at the first error?
-                });
-                comparisonContext.reset();
-
-                boolean match = anyOrderComparer.equals(
-                    expectedPartitionedTrees,
-                    actualPartitionedTrees);
-                Assert.assertTrue(message, match);
             });
             }
             catch (IOException | InvalidProfileException ex) {

@@ -4,23 +4,17 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TreeComparisonContext {
     public ConstraintNode left;
     public ConstraintNode right;
     public final ArrayList leftPath = new ArrayList();
     public final ArrayList rightPath = new ArrayList();
-    public boolean errorReported;
+    public Runnable reportError = null;
 
     public TreeComparisonContext() {
         this.left = null;
         this.right = null;
-    }
-
-    private TreeComparisonContext(ConstraintNode left, ConstraintNode right) {
-        this.left = left;
-        this.right = right;
     }
 
     public void setConstraint(ConstraintNode left, ConstraintNode right) {
@@ -35,19 +29,47 @@ public class TreeComparisonContext {
         this.rightPath.add(right);
     }
 
-    public void reset() {
-        this.leftPath.clear();
-        this.rightPath.clear();
-        this.left = null;
-        this.right = null;
-        this.errorReported = false;
+    public void reportOptionDifferences(ArrayList missingExpectedOptions, ArrayList missingActualOptions) {
+        if (reportError != null)
+            return;
+
+        reportError = () -> {
+            if (!missingExpectedOptions.isEmpty()) {
+                System.out.println(String.format("Got Option %s", missingExpectedOptions));
+            }
+            if (!missingActualOptions.isEmpty()) {
+                System.out.println(String.format("Expected Option %s", missingActualOptions));
+            }
+        };
     }
 
-    public String getLeftPath(){
-        return Objects.toString(this.left);
+    public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
+        if (reportError != null)
+            return;
+
+        reportError = () -> {
+            if (!missingExpectedDecisions.isEmpty()) {
+                System.out.println(String.format("Got Decision %s", missingExpectedDecisions));
+            }
+            if (!missingActualDecisions.isEmpty()) {
+                System.out.println(String.format("Expected Decision %s", missingActualDecisions));
+            }
+        };
     }
 
-    public String getRightPath(){
-        return Objects.toString(this.right);
+    public void reportAtomicConstraintDifferences(
+        ArrayList missingExpectedAtomicConstraints,
+        ArrayList missingActualAtomicConstraints) {
+        if (reportError != null)
+            return;
+
+        reportError = () -> {
+            if (!missingExpectedAtomicConstraints.isEmpty()) {
+                System.out.println(String.format("Got Atomic Constraint %s", missingExpectedAtomicConstraints));
+            }
+            if (!missingActualAtomicConstraints.isEmpty()) {
+                System.out.println(String.format("Expected Atomic Constraint %s", missingActualAtomicConstraints));
+            }
+        };
     }
 }
