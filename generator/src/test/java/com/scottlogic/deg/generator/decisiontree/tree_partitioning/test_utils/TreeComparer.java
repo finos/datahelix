@@ -3,6 +3,12 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 public class TreeComparer implements IEqualityComparer {
+    private final ConstraintNodeComparer constraintNodeComparer;
+
+    public TreeComparer(ConstraintNodeComparer constraintNodeComparer) {
+        this.constraintNodeComparer = constraintNodeComparer;
+    }
+
     @Override
     public int getHashCode(Object item) {
         return 0; //how to calculate a hashCode for a tree!
@@ -20,7 +26,6 @@ public class TreeComparer implements IEqualityComparer {
         if (tree1 == null || tree2 == null)
             return false; //either tree1 XOR tree2 is null
 
-        IEqualityComparer constraintComparer = new ConstraintNodeComparer();
-        return constraintComparer.equals(tree1.getRootNode(), tree2.getRootNode());
+        return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
     }
 }
