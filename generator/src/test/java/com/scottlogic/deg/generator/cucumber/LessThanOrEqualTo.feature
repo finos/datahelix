@@ -1,11 +1,14 @@
 Feature: User can specify that a numeric value is lower than, or equal to, a specified threshold
-    
+
+Background:
+     Given the generation strategy is full
+  
 Scenario: User requires to create a numeric field with data values that are less than or the same as ten
      Given there is a field foo
        And foo is less than or equal to 10
        And foo is greater than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -24,7 +27,7 @@ Scenario: User requires to create a numeric field with data values that are less
        And foo is less than or equal to 1
        And foo is greater than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -34,7 +37,7 @@ Scenario: User requires to create a field with decimal values that are less than
        And foo is less than or equal to 1
        And foo is greater than 0
        And foo is granular to 0.1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0.1 |
@@ -53,7 +56,7 @@ Scenario: User requires to create a field with decimal values that are less than
        And foo is less than or equal to 1.0
        And foo is greater than 0.0
        And foo is granular to 0.1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0.1 |
@@ -72,7 +75,7 @@ Scenario: User requires to create a numeric field with data values that are less
        And foo is less than or equal to -10
        And foo is greater than -20
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | -19 |
@@ -92,7 +95,7 @@ Scenario: User requires to create a numeric field with data values that are less
        And foo is less than or equal to 9
        And foo is greater than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -111,7 +114,7 @@ Scenario: User requires to create a numeric field with data values that are less
        And foo is less than 9
        And foo is greater than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -129,7 +132,7 @@ Scenario: User requires to create a numeric field with data values that are less
        And foo is less than or equal to 4
        And foo is greater than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
