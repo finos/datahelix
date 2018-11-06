@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +28,8 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 class DecisionTreePartitionerIntegrationTests {
-    private static final String inputDirectory = "./src/test/profiles/input/";
-    private static final String outputDirectory = "./src/test/profiles/output/";
+    private static final String inputDirectory = "../examples/partitioning-tests/input/";
+    private static final String outputDirectory = "../examples/partitioning-tests/output/";
 
     private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
     private final ITreePartitioner treePartitioner = new TreePartitioner();
@@ -39,34 +38,32 @@ class DecisionTreePartitionerIntegrationTests {
 
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
-        ArrayList<DynamicTest> tests = new ArrayList<>();
+        return getInputProfileFilePaths().map(path -> {
+            try {
+                String inputProfileFileName = path.getFileName().toString();
+                File expectedTreeOutputFile = new File(outputDirectory + inputProfileFileName);
+                Profile inputProfile = getProfile(path);
 
-        getInputProfileFilePaths().forEach(path -> {
-            String inputProfileFileName = path.getFileName().toString();
-            File expectedTreeOutputFile = new File(outputDirectory + inputProfileFileName);
-            Profile inputProfile = getProfile(path);
-
-            if (!expectedTreeOutputFile.exists() || inputProfile == null) {
-                Assert.fail("Could not locate file " + inputProfileFileName);
-            }
-
-            DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
-            final List<DecisionTree> actualPartitionedTree = treePartitioner
+                DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
+                final List<DecisionTree> actualPartitionedTree = treePartitioner
                     .splitTreeIntoPartitions(decisionTree)
                     .collect(Collectors.toList());
 
-            List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedTreeOutputFile);
-            final List<DecisionTree> expectedPartitionedTree = expectedTreeDto.stream()
+                List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedTreeOutputFile);
+                final List<DecisionTree> expectedPartitionedTree = expectedTreeDto.stream()
                     .map(decisionTreeMapper::map)
                     .collect(Collectors.toList());
 
-            tests.add(DynamicTest.dynamicTest(inputProfileFileName, () -> Assert.assertThat(
-                actualPartitionedTree,
-                DecisionTreeMatchers.isEqualTo(expectedPartitionedTree)
-            )));
-        });
-
-        return tests;
+                return DynamicTest.dynamicTest(inputProfileFileName, () -> Assert.assertThat(
+                    actualPartitionedTree,
+                    DecisionTreeMatchers.isEqualTo(expectedPartitionedTree)
+                ));
+            }
+            catch (IOException | InvalidProfileException ex) {
+                // Throwing RuntimeException to escape the lambda
+                throw new RuntimeException(ex);
+            }
+        }).collect(Collectors.toList());
     }
 
     private Stream<Path> getInputProfileFilePaths() throws IOException {
@@ -79,24 +76,14 @@ class DecisionTreePartitionerIntegrationTests {
         return filename.substring(extensionIndex + 1);
     }
 
-    private Profile getProfile(Path path) {
-        ProfileReader reader = new ProfileReader();
-
-        try {
-            return reader.read(path);
-        } catch (IOException | InvalidProfileException e) {
-            return null;
-        }
+    private Profile getProfile(Path path) throws IOException, InvalidProfileException {
+        return new ProfileReader().read(path);
     }
 
-    private List<DecisionTreeDto> getMappedExpectedOutput(File file) {
-        try {
+    private List<DecisionTreeDto> getMappedExpectedOutput(File file) throws IOException {
             byte[] encoded = Files.readAllBytes(file.toPath());
             String fileContents = new String(encoded, Charset.forName("UTF-8"));
 
             return jsonMapper.readValue(fileContents, new TypeReference<List<DecisionTreeDto>>(){});
-        } catch (IOException e) {
-            return null;
-        }
     }
 }
