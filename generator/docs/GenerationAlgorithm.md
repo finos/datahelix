@@ -2,6 +2,16 @@
 
 Given a set of rules, generate a [decision tree](../../docs/DecisionTrees/DecisionTrees.md) (or multiple if [partitioning](../../docs/DecisionTrees/Optimisation.md#Partitioning) was successful).
 
+## Decision tree interpretation
+
+An interpretation of the decision tree is defined by chosing an option for every decision visited in the tree.
+
+![](interpreted-graph.png)
+
+In the above diagram the red lines represent one interpretation of the graph, for every decision an option has been chosen and we end up with the set of constraints that the red lines touch at any point. These constraints are reduced into a fieldspec (see [Constraint Reduction](#constraint-reduction) below).
+
+Every decision introduces new interpretations, and we provide interpretations of every option of every decision chosen with every option of every other option. If there are many decisons then this can result in too many interpretations.
+
 # Constraint reduction
 
 An interpretation of a decision tree could contain several atomic constraints related to a single field. To make it easier to reason about these collectively, we **reduce** them into more detailed, holistic objects. These objects are referred to as **fieldspecs**, and can express any restrictions expressed by a constraint. For instance, the constraints:
