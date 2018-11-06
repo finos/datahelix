@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -139,7 +140,7 @@ public class DecisionTreeVisualisationWriter {
                 info.decisions,
                 info.atomicConstraints,
                 info.constraintNodes,
-                info.getRowSpecsSN())));
+                info.getRowSpecCountInScientificNotation())));
     }
 
     private void writeLine(String line) throws IOException {
@@ -160,9 +161,11 @@ public class DecisionTreeVisualisationWriter {
             decisions += tree.decisions;
         }
 
-        public String getRowSpecsSN() {
+        public String getRowSpecCountInScientificNotation() {
             BigDecimal decimal = new BigDecimal(rowSpecs);
-            NumberFormat formatter = new DecimalFormat("0.########E0", DecimalFormatSymbols.getInstance(Locale.ROOT));
+            NumberFormat formatter = new DecimalFormat(
+                "0.########E0",
+                DecimalFormatSymbols.getInstance(Locale.ROOT));
             return formatter.format(decimal);
         }
     }
