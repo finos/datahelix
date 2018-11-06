@@ -1,0 +1,46 @@
+package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
+
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+
+public class DecisionComparer implements IEqualityComparer {
+    private final IEqualityComparer constraintAnyOrderComparer;
+
+    public DecisionComparer() {
+        this.constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer(
+            new ConstraintNodeComparer(this));
+    }
+
+    public DecisionComparer(ConstraintNodeComparer constraintComparer) {
+        this.constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer(constraintComparer);
+    }
+
+    @Override
+    public int getHashCode(Object decision){
+        return getHashCode((DecisionNode)decision);
+    }
+
+    public int getHashCode(DecisionNode decision){
+        return decision
+            .getOptions()
+            .stream()
+            .reduce(
+                0,
+                (prev, option) -> prev * option.hashCode(),
+                (prevHash, optionHash) -> prevHash * optionHash);
+    }
+
+    @Override
+    public boolean equals(Object item1, Object item2) {
+        return equals((DecisionNode)item1, (DecisionNode)item2);
+    }
+
+    public boolean equals(DecisionNode decision1, DecisionNode decision2){
+        if (decision1 == null && decision2 == null)
+            return true;
+
+        if (decision1 == null || decision2 == null)
+            return false; //either decision1 XOR decision2 is null
+
+        return this.constraintAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
+    }
+}
