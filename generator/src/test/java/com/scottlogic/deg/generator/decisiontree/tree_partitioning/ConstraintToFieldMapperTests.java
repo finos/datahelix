@@ -126,7 +126,8 @@ class ConstraintToFieldMapperTests {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
                 new ConstraintNode(constraintsList, decisionsList),
-                fields
+                fields,
+                "ConstraintToFieldMapperTests"
             ));
     }
 

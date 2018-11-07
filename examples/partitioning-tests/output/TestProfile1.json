@@ -1,4 +1,5 @@
 [{
+	"description": "TestProfile1[0]",
 	"rootNode": {
 		"atomicConstraints": [{
 			"type": "IsStringShorterThanConstraint",
@@ -60,6 +61,7 @@
 		}]
 	}
 },{
+	"description": "TestProfile1[1]",
 	"rootNode": {
 		"atomicConstraints": [{
 			"type": "IsInSetConstraint",

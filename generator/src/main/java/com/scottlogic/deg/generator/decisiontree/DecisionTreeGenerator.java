@@ -62,7 +62,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return new DecisionTreeCollection(
             profile.fields,
             profile.rules.stream()
-                .map(rule -> new DecisionTree(convertRule(rule), profile.fields))
+                .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
                 .map(decisionTreeSimplifier::simplify)
                 .collect(Collectors.toList()));
     }
@@ -207,7 +207,8 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         public DecisionTree simplify(DecisionTree originalTree) {
             return new DecisionTree(
                 simplify(originalTree.getRootNode()),
-                originalTree.getFields());
+                originalTree.getFields(),
+                originalTree.getDescription());
         }
 
         public ConstraintNode simplify(ConstraintNode node) {

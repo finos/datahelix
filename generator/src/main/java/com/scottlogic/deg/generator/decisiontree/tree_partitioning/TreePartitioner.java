@@ -66,12 +66,14 @@ public class TreePartitioner implements ITreePartitioner {
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
                     new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                    new ProfileFields(new ArrayList<>(partition.fields))
+                    new ProfileFields(new ArrayList<>(partition.fields)),
+                    String.format("%s[%d]", decisionTree.getDescription(), partition.id)
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new ConstraintNode(),
-                    new ProfileFields(Collections.singletonList(field))
+                    new ProfileFields(Collections.singletonList(field)),
+                    String.format("%s[unpartitioned]", decisionTree.getDescription())
                 ))
             );
     }

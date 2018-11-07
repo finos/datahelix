@@ -1,6 +1,6 @@
 {
 	"schemaVersion": "v3",
-	"description": "DTCC",
+	"description": "TestProfile1",
 	"fields":
 	[
 		{ "name": "Level" },

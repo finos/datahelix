@@ -17,7 +17,10 @@ import java.util.stream.Collectors;
 
 public class DecisionTreeMapper {
     public DecisionTree map(DecisionTreeDto decisionTreeDto) {
-        return new DecisionTree(dtoToConstraintNode(decisionTreeDto.rootNode), getMappedProfileFields(decisionTreeDto));
+        return new DecisionTree(
+            dtoToConstraintNode(decisionTreeDto.rootNode),
+            getMappedProfileFields(decisionTreeDto),
+            decisionTreeDto.description);
     }
 
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {

@@ -1,6 +1,6 @@
 {
 	"schemaVersion": "v3",
-	"description": "Test 2",
+	"description": "TestProfile2",
 	"fields": 
 	[
 		{ "name": "Parameter" },
