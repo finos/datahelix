@@ -30,6 +30,8 @@ public class TreeComparer implements IEqualityComparer {
         if (tree1 == null || tree2 == null)
             return false; //either tree1 XOR tree2 is null
 
+        //TODO: compare the fields;
+
         return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
     }
 }

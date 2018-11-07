@@ -5,16 +5,44 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class TreeComparisonContext {
-    public DecisionTree leftTree;
-    public DecisionTree rightTree;
+    public DecisionTree expectedTree;
+    public DecisionTree actualTree;
 
     public ConstraintNode left;
     public ConstraintNode right;
     public final ArrayList leftPath = new ArrayList();
     public final ArrayList rightPath = new ArrayList();
-    public Runnable reportError = null;
+    private final ArrayList<Error> errors = new ArrayList<>();
+
+    class Error {
+        public final ErrorContext expected;
+        public final ErrorContext actual;
+        public final TreeElementType type;
+
+        public Error(ErrorContext expected, ErrorContext actual, TreeElementType type) {
+            this.expected = expected;
+            this.actual = actual;
+            this.type = type;
+        }
+    }
+
+    class ErrorContext {
+        public final DecisionTree tree;
+        public final Object value;
+
+        public ErrorContext(DecisionTree tree, Object value) {
+            this.tree = tree;
+            this.value = value;
+        }
+    }
+
+    public enum TreeElementType {
+        Decision,
+        AtomicConstraint
+    }
 
     public TreeComparisonContext() {
         this.left = null;
@@ -33,38 +61,29 @@ public class TreeComparisonContext {
         this.rightPath.add(right);
     }
 
-    public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
-        if (reportError != null)
-            reportError.run();
+    public void setTrees(DecisionTree expectedTree, DecisionTree actualTree) {
+        this.expectedTree = expectedTree;
+        this.actualTree = actualTree;
+    }
 
-        reportError = () -> {
-            if (!missingExpectedDecisions.isEmpty()) {
-                System.out.println(String.format("%s: Got Decision %s", rightTree.getDescription(), missingExpectedDecisions));
-            }
-            if (!missingActualDecisions.isEmpty()) {
-                System.out.println(String.format("%s: Expected Decision %s", leftTree.getDescription(), missingActualDecisions));
-            }
-        };
+    public Collection<Error> getErrors(){
+        return this.errors;
+    }
+
+    public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
+        errors.add(new Error(
+            new ErrorContext(expectedTree, missingExpectedDecisions),
+            new ErrorContext(actualTree, missingActualDecisions),
+            TreeElementType.Decision));
     }
 
     public void reportAtomicConstraintDifferences(
         ArrayList missingExpectedAtomicConstraints,
         ArrayList missingActualAtomicConstraints) {
-        if (reportError != null)
-            reportError.run();
-
-        reportError = () -> {
-            if (!missingExpectedAtomicConstraints.isEmpty()) {
-                System.out.println(String.format("%s: Got Atomic Constraint %s", rightTree.getDescription(), missingExpectedAtomicConstraints));
-            }
-            if (!missingActualAtomicConstraints.isEmpty()) {
-                System.out.println(String.format("%s: Expected Atomic Constraint %s", leftTree.getDescription(), missingActualAtomicConstraints));
-            }
-        };
-    }
-
-    public void setTrees(DecisionTree left, DecisionTree right) {
-        this.leftTree = left;
-        this.rightTree = right;
+        errors.add(new Error(
+            new ErrorContext(expectedTree, missingExpectedAtomicConstraints),
+            new ErrorContext(actualTree, missingActualAtomicConstraints),
+            TreeElementType.AtomicConstraint));
     }
 }
+

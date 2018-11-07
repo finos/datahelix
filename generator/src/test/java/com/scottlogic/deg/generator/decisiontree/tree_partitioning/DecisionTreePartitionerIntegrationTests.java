@@ -37,6 +37,8 @@ class DecisionTreePartitionerIntegrationTests {
 
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
+        TreeComparisonReporter reporter = new TreeComparisonReporter();
+
         return getInputProfileFilePaths().map(path -> {
             try {
                 String inputProfileFileName = path.getFileName().toString();
@@ -65,7 +67,7 @@ class DecisionTreePartitionerIntegrationTests {
                         actualPartitionedTrees);
 
                     if (!match) {
-                        context.reportError.run();
+                        reporter.reportMessages(context);
                         Assert.fail("Trees do not match");
                     }
             });
