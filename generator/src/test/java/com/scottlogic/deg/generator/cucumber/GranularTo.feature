@@ -1,11 +1,14 @@
 Feature: User can specify that a numeric value is of a decimalised value to a specified level of unit
+
+Background:
+     Given the generation strategy is full
     
 Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
      Given there is a field foo
        And foo is granular to 0.1
        And foo is greater than or equal to 0
        And foo is less than or equal to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.0  |
@@ -25,7 +28,7 @@ Scenario: User requires to create a numeric field with data values that include 
        And foo is granular to 0.01
        And foo is greater than or equal to 0
        And foo is less than or equal to 0.2
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.00 |
@@ -55,7 +58,7 @@ Scenario: User requires to create a numeric field with data values that include 
        And foo is granular to 0.00001
        And foo is greater than or equal to 0
        And foo is less than or equal to 0.0001
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo     |
        | 0.00000 |
@@ -75,7 +78,7 @@ Scenario: User requires to create a numeric field with negative data values that
        And foo is granular to 0.1
        And foo is less than or equal to 0
        And foo is greater than or equal to -1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.0  |

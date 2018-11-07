@@ -74,7 +74,7 @@ public class GeneratorTestUtilities {
             parsedValue = LocalDateTime.parse(input);
         } else if (input.equals("null")){
             parsedValue = null;
-        } else if (input.matches("([0-9]+\\.[0-9]+)")){
+        } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")){
             parsedValue = new BigDecimal(input);
         } else {
             parsedValue = Integer.parseInt(input);
