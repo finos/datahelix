@@ -29,23 +29,9 @@ public class TreeComparisonContext {
         this.rightPath.add(right);
     }
 
-    public void reportOptionDifferences(ArrayList missingExpectedOptions, ArrayList missingActualOptions) {
-        if (reportError != null)
-            return;
-
-        reportError = () -> {
-            if (!missingExpectedOptions.isEmpty()) {
-                System.out.println(String.format("Got Option %s", missingExpectedOptions));
-            }
-            if (!missingActualOptions.isEmpty()) {
-                System.out.println(String.format("Expected Option %s", missingActualOptions));
-            }
-        };
-    }
-
     public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
         if (reportError != null)
-            return;
+            reportError.run();
 
         reportError = () -> {
             if (!missingExpectedDecisions.isEmpty()) {
@@ -61,7 +47,7 @@ public class TreeComparisonContext {
         ArrayList missingExpectedAtomicConstraints,
         ArrayList missingActualAtomicConstraints) {
         if (reportError != null)
-            return;
+            reportError.run();
 
         reportError = () -> {
             if (!missingExpectedAtomicConstraints.isEmpty()) {

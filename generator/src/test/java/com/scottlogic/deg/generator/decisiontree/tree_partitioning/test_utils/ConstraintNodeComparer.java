@@ -1,6 +1,9 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+
+import java.util.Collection;
 
 public class ConstraintNodeComparer implements IEqualityComparer {
     private final DecisionComparer decisionComparer;
@@ -10,7 +13,7 @@ public class ConstraintNodeComparer implements IEqualityComparer {
 
     public ConstraintNodeComparer(TreeComparisonContext comparisonContext) {
         this.comparisonContext = comparisonContext;
-        this.decisionComparer = new DecisionComparer(this, comparisonContext);
+        this.decisionComparer = new DecisionComparer(comparisonContext);
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
 
         this.decisionAnyOrderComparer.reportErrors = true;
@@ -59,8 +62,7 @@ public class ConstraintNodeComparer implements IEqualityComparer {
     public boolean equals(ConstraintNode constraint1, ConstraintNode constraint2) {
         this.comparisonContext.setConstraint(constraint1, constraint2);
 
-        boolean atomicConstraintsMatch = atomicConstraintAnyOrderComparer.equals(constraint1.getAtomicConstraints(), constraint2.getAtomicConstraints());
-        if (!atomicConstraintsMatch) {
+        if (!atomicConstraintsMatch(constraint1, constraint2)) {
             this.comparisonContext.reportAtomicConstraintDifferences(
                 atomicConstraintAnyOrderComparer.itemsMissingFromCollection1,
                 atomicConstraintAnyOrderComparer.itemsMissingFromCollection2);
@@ -75,6 +77,45 @@ public class ConstraintNodeComparer implements IEqualityComparer {
             return false;
         }
 
+        for (DecisionNode constraint1Decision : constraint1.getDecisions()){
+            DecisionNode constraint2Decision = getDecision(constraint1Decision, constraint2.getDecisions());
+
+            if (!optionsAreEqual(constraint1Decision, constraint2Decision))
+                return false;
+        }
+
         return true;
+    }
+
+    private boolean atomicConstraintsMatch(ConstraintNode constraint1, ConstraintNode constraint2) {
+        return atomicConstraintAnyOrderComparer.equals(constraint1.getAtomicConstraints(), constraint2.getAtomicConstraints());
+    }
+
+    private DecisionNode getDecision(DecisionNode toFind, Collection<DecisionNode> decisions) {
+        return decisions
+            .stream()
+            .filter(c -> this.decisionComparer.equals(c, toFind))
+            .findFirst()
+            .orElse(null);
+    }
+
+    private boolean optionsAreEqual(DecisionNode decision1, DecisionNode decision2) {
+        for (ConstraintNode option1: decision1.getOptions()){
+            ConstraintNode option2 = getOption(option1, decision2.getOptions());
+
+            if (!this.equals(option1, option2)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private ConstraintNode getOption(ConstraintNode toFind, Collection<ConstraintNode> constraints) {
+        return constraints
+            .stream()
+            .filter(c -> this.atomicConstraintsMatch(toFind, c))
+            .findFirst()
+            .orElse(null);
     }
 }
