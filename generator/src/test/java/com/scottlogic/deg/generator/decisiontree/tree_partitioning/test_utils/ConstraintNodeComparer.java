@@ -13,7 +13,7 @@ public class ConstraintNodeComparer implements IEqualityComparer {
 
     public ConstraintNodeComparer(TreeComparisonContext comparisonContext) {
         this.comparisonContext = comparisonContext;
-        this.decisionComparer = new DecisionComparer(comparisonContext);
+        this.decisionComparer = new DecisionComparer();
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
 
         this.decisionAnyOrderComparer.reportErrors = true;
@@ -60,31 +60,36 @@ public class ConstraintNodeComparer implements IEqualityComparer {
     }
 
     public boolean equals(ConstraintNode constraint1, ConstraintNode constraint2) {
-        this.comparisonContext.setConstraint(constraint1, constraint2);
+        try {
+            this.comparisonContext.pushToStack(constraint1, constraint2);
 
-        if (!atomicConstraintsMatch(constraint1, constraint2)) {
-            this.comparisonContext.reportAtomicConstraintDifferences(
-                atomicConstraintAnyOrderComparer.itemsMissingFromCollection1,
-                atomicConstraintAnyOrderComparer.itemsMissingFromCollection2);
-            return false;
-        }
-
-        boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
-        if (!decisionsMatch) {
-            this.comparisonContext.reportDecisionDifferences(
-                decisionAnyOrderComparer.itemsMissingFromCollection1,
-                decisionAnyOrderComparer.itemsMissingFromCollection2);
-            return false;
-        }
-
-        for (DecisionNode constraint1Decision : constraint1.getDecisions()){
-            DecisionNode constraint2Decision = getDecision(constraint1Decision, constraint2.getDecisions());
-
-            if (!optionsAreEqual(constraint1Decision, constraint2Decision))
+            if (!atomicConstraintsMatch(constraint1, constraint2)) {
+                this.comparisonContext.reportAtomicConstraintDifferences(
+                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection1,
+                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection2);
                 return false;
-        }
+            }
 
-        return true;
+            boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
+            if (!decisionsMatch) {
+                this.comparisonContext.reportDecisionDifferences(
+                    decisionAnyOrderComparer.itemsMissingFromCollection1,
+                    decisionAnyOrderComparer.itemsMissingFromCollection2);
+                return false;
+            }
+
+            for (DecisionNode constraint1Decision : constraint1.getDecisions()) {
+                DecisionNode constraint2Decision = getDecision(constraint1Decision, constraint2.getDecisions());
+
+                if (!optionsAreEqual(constraint1Decision, constraint2Decision))
+                    return false;
+            }
+
+            return true;
+        }
+        finally {
+            this.comparisonContext.popFromStack();
+        }
     }
 
     private boolean atomicConstraintsMatch(ConstraintNode constraint1, ConstraintNode constraint2) {
@@ -100,15 +105,22 @@ public class ConstraintNodeComparer implements IEqualityComparer {
     }
 
     private boolean optionsAreEqual(DecisionNode decision1, DecisionNode decision2) {
-        for (ConstraintNode option1: decision1.getOptions()){
-            ConstraintNode option2 = getOption(option1, decision2.getOptions());
+        try{
+            comparisonContext.pushToStack(decision1, decision2);
 
-            if (!this.equals(option1, option2)){
-                return false;
+            for (ConstraintNode option1: decision1.getOptions()){
+                ConstraintNode option2 = getOption(option1, decision2.getOptions());
+
+                if (!this.equals(option1, option2)){
+                    return false;
+                }
             }
-        }
 
-        return true;
+            return true;
+        }
+        finally {
+            comparisonContext.popFromStack();
+        }
     }
 
     private ConstraintNode getOption(ConstraintNode toFind, Collection<ConstraintNode> constraints) {

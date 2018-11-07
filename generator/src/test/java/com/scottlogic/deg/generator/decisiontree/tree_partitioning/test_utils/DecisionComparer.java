@@ -7,14 +7,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class DecisionComparer implements IEqualityComparer {
-    private final AnyOrderCollectionEqualityComparer constraintAnyOrderComparer;
-    private final TreeComparisonContext comparisonContext;
-
-    public DecisionComparer(TreeComparisonContext comparisonContext) {
-        this.comparisonContext = comparisonContext;
-        this.constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();
-        this.constraintAnyOrderComparer.reportErrors = true;
-    }
+    private final static AnyOrderCollectionEqualityComparer constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();
 
     @Override
     public int getHashCode(Object decision){
@@ -37,8 +30,6 @@ public class DecisionComparer implements IEqualityComparer {
     }
 
     public boolean equals(DecisionNode decision1, DecisionNode decision2){
-        comparisonContext.setDecision(decision1, decision2);
-
         if (decision1 == null && decision2 == null)
             return true;
 

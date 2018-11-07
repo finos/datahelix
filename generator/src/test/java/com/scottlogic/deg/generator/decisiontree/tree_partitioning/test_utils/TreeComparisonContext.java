@@ -1,31 +1,48 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Stack;
 
 public class TreeComparisonContext {
     public DecisionTree expectedTree;
     public DecisionTree actualTree;
 
-    public ConstraintNode left;
-    public ConstraintNode right;
-    public final ArrayList leftPath = new ArrayList();
-    public final ArrayList rightPath = new ArrayList();
     private final ArrayList<Error> errors = new ArrayList<>();
+    private final Stack<StackEntry> stack = new Stack<>();
+
+    public void pushToStack(Object expected, Object actual) {
+        stack.push(new StackEntry(expected, actual));
+    }
+
+    public void popFromStack(){
+        stack.pop();
+    }
+
+    class StackEntry {
+        public final Object expected;
+        public final Object actual;
+
+        public StackEntry(Object expected, Object actual) {
+            this.expected = expected;
+            this.actual = actual;
+        }
+    }
 
     class Error {
         public final ErrorContext expected;
         public final ErrorContext actual;
         public final TreeElementType type;
+        public final StackEntry[] stack;
 
-        public Error(ErrorContext expected, ErrorContext actual, TreeElementType type) {
+        public Error(ErrorContext expected, ErrorContext actual, TreeElementType type, Stack<StackEntry> currentStack) {
             this.expected = expected;
             this.actual = actual;
             this.type = type;
+            this.stack = new StackEntry[currentStack.size()];
+            currentStack.copyInto(this.stack);
         }
     }
 
@@ -44,23 +61,6 @@ public class TreeComparisonContext {
         AtomicConstraint
     }
 
-    public TreeComparisonContext() {
-        this.left = null;
-        this.right = null;
-    }
-
-    public void setConstraint(ConstraintNode left, ConstraintNode right) {
-        this.leftPath.add(left);
-        this.rightPath.add(right);
-        this.left = left;
-        this.right = right;
-    }
-
-    public void setDecision(DecisionNode left, DecisionNode right) {
-        this.leftPath.add(left);
-        this.rightPath.add(right);
-    }
-
     public void setTrees(DecisionTree expectedTree, DecisionTree actualTree) {
         this.expectedTree = expectedTree;
         this.actualTree = actualTree;
@@ -74,7 +74,8 @@ public class TreeComparisonContext {
         errors.add(new Error(
             new ErrorContext(expectedTree, missingExpectedDecisions),
             new ErrorContext(actualTree, missingActualDecisions),
-            TreeElementType.Decision));
+            TreeElementType.Decision,
+            this.stack));
     }
 
     public void reportAtomicConstraintDifferences(
@@ -83,7 +84,8 @@ public class TreeComparisonContext {
         errors.add(new Error(
             new ErrorContext(expectedTree, missingExpectedAtomicConstraints),
             new ErrorContext(actualTree, missingActualAtomicConstraints),
-            TreeElementType.AtomicConstraint));
+            TreeElementType.AtomicConstraint,
+            this.stack));
     }
 }
 
