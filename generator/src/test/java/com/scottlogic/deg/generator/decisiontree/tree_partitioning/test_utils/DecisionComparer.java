@@ -1,23 +1,13 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
+import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public class DecisionComparer implements IEqualityComparer {
-    private final AnyOrderCollectionEqualityComparer constraintAnyOrderComparer;
-    private final TreeComparisonContext comparisonContext;
-
-    public DecisionComparer(TreeComparisonContext comparisonContext) {
-        this.comparisonContext = comparisonContext;
-        this.constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer(
-            new ConstraintNodeComparer(comparisonContext, this));
-        this.constraintAnyOrderComparer.reportErrors = true;
-    }
-
-    public DecisionComparer(ConstraintNodeComparer constraintComparer, TreeComparisonContext comparisonContext) {
-        this.constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer(constraintComparer);
-        this.comparisonContext = comparisonContext;
-        this.constraintAnyOrderComparer.reportErrors = true;
-    }
+    private final static AnyOrderCollectionEqualityComparer constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();
 
     @Override
     public int getHashCode(Object decision){
@@ -40,20 +30,24 @@ public class DecisionComparer implements IEqualityComparer {
     }
 
     public boolean equals(DecisionNode decision1, DecisionNode decision2){
-        comparisonContext.setDecision(decision1, decision2);
-
         if (decision1 == null && decision2 == null)
             return true;
 
         if (decision1 == null || decision2 == null)
             return false; //either decision1 XOR decision2 is null
 
-        boolean equals = this.constraintAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
-        if (!equals)
-            this.comparisonContext.reportOptionDifferences(
-                this.constraintAnyOrderComparer.itemsMissingFromCollection1,
-                this.constraintAnyOrderComparer.itemsMissingFromCollection2);
+        Collection<IConstraint> decision1AtomicConstraints = decision1
+            .getOptions()
+            .stream()
+            .flatMap(o -> o.getAtomicConstraints().stream())
+            .collect(Collectors.toList());
 
-        return equals;
+        Collection<IConstraint> decision2AtomicConstraints = decision2
+            .getOptions()
+            .stream()
+            .flatMap(o -> o.getAtomicConstraints().stream())
+            .collect(Collectors.toList());
+
+        return this.constraintAnyOrderComparer.equals(decision1AtomicConstraints, decision2AtomicConstraints);
     }
 }

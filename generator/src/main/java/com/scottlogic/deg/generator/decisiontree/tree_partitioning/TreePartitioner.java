@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,6 +60,8 @@ public class TreePartitioner implements ITreePartitioner {
             .stream()
             .filter(field -> Objects.isNull(partitions.getPartitionId(field)));
 
+        AtomicInteger partitionIndex = new AtomicInteger();
+
         return Stream.concat(
             partitions
                 .getPartitions()
@@ -66,12 +69,14 @@ public class TreePartitioner implements ITreePartitioner {
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
                     new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                    new ProfileFields(new ArrayList<>(partition.fields))
+                    new ProfileFields(new ArrayList<>(partition.fields)),
+                    String.format("%s[%d]", decisionTree.getDescription(), partitionIndex.getAndIncrement())
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new ConstraintNode(),
-                    new ProfileFields(Collections.singletonList(field))
+                    new ProfileFields(Collections.singletonList(field)),
+                    String.format("%s[unpartitioned]", decisionTree.getDescription())
                 ))
             );
     }

@@ -1,89 +1,91 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
-import java.util.function.BiConsumer;
+import java.util.Stack;
 
 public class TreeComparisonContext {
-    public ConstraintNode left;
-    public ConstraintNode right;
-    public final ArrayList leftPath = new ArrayList();
-    public final ArrayList rightPath = new ArrayList();
-    public boolean errorReported;
-    public BiConsumer<Collection, Collection> reportErrors;
+    public DecisionTree expectedTree;
+    public DecisionTree actualTree;
 
-    public TreeComparisonContext() {
-        this.left = null;
-        this.right = null;
+    private final ArrayList<Error> errors = new ArrayList<>();
+    private final Stack<StackEntry> stack = new Stack<>();
+
+    public void pushToStack(Object expected, Object actual) {
+        stack.push(new StackEntry(expected, actual));
     }
 
-    private TreeComparisonContext(ConstraintNode left, ConstraintNode right) {
-        this.left = left;
-        this.right = right;
+    public void popFromStack(){
+        stack.pop();
     }
 
-    public void setConstraint(ConstraintNode left, ConstraintNode right) {
-        this.leftPath.add(left);
-        this.rightPath.add(right);
-        this.left = left;
-        this.right = right;
-    }
+    class StackEntry {
+        public final Object expected;
+        public final Object actual;
 
-    public void setDecision(DecisionNode left, DecisionNode right) {
-        this.leftPath.add(left);
-        this.rightPath.add(right);
-    }
-
-    public String getLeftPath(){
-        return Objects.toString(this.left);
-    }
-
-    public String getRightPath(){
-        return Objects.toString(this.right);
-    }
-
-    public void reportOptionDifferences(ArrayList missingExpectedOptions, ArrayList missingActualOptions) {
-        if (errorReported)
-            return;
-        errorReported = true;
-
-        if (!missingExpectedOptions.isEmpty()) {
-            System.out.println(String.format("Got Option %s", missingExpectedOptions));
+        public StackEntry(Object expected, Object actual) {
+            this.expected = expected;
+            this.actual = actual;
         }
-        if (!missingActualOptions.isEmpty()) {
-            System.out.println(String.format("Expected Option %s", missingActualOptions));
+    }
+
+    class Error {
+        public final ErrorContext expected;
+        public final ErrorContext actual;
+        public final TreeElementType type;
+        public final StackEntry[] stack;
+
+        public Error(ErrorContext expected, ErrorContext actual, TreeElementType type, Stack<StackEntry> currentStack) {
+            this.expected = expected;
+            this.actual = actual;
+            this.type = type;
+            this.stack = new StackEntry[currentStack.size()];
+            currentStack.copyInto(this.stack);
         }
+    }
+
+    class ErrorContext {
+        public final DecisionTree tree;
+        public final Object value;
+
+        public ErrorContext(DecisionTree tree, Object value) {
+            this.tree = tree;
+            this.value = value;
+        }
+    }
+
+    public enum TreeElementType {
+        Decision,
+        AtomicConstraint
+    }
+
+    public void setTrees(DecisionTree expectedTree, DecisionTree actualTree) {
+        this.expectedTree = expectedTree;
+        this.actualTree = actualTree;
+    }
+
+    public Collection<Error> getErrors(){
+        return this.errors;
     }
 
     public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
-        if (errorReported)
-            return;
-        errorReported = true;
-
-        if (!missingExpectedDecisions.isEmpty()) {
-            System.out.println(String.format("Got Decision %s", missingExpectedDecisions));
-        }
-        if (!missingActualDecisions.isEmpty()) {
-            System.out.println(String.format("Expected Decision %s", missingActualDecisions));
-        }
+        errors.add(new Error(
+            new ErrorContext(expectedTree, missingExpectedDecisions),
+            new ErrorContext(actualTree, missingActualDecisions),
+            TreeElementType.Decision,
+            this.stack));
     }
 
     public void reportAtomicConstraintDifferences(
         ArrayList missingExpectedAtomicConstraints,
         ArrayList missingActualAtomicConstraints) {
-        if (errorReported)
-            return;
-        errorReported = true;
-
-        if (!missingExpectedAtomicConstraints.isEmpty()) {
-            System.out.println(String.format("Got Atomic Constraint %s", missingExpectedAtomicConstraints));
-        }
-        if (!missingActualAtomicConstraints.isEmpty()) {
-            System.out.println(String.format("Expected Atomic Constraint %s", missingActualAtomicConstraints));
-        }
+        errors.add(new Error(
+            new ErrorContext(expectedTree, missingExpectedAtomicConstraints),
+            new ErrorContext(actualTree, missingActualAtomicConstraints),
+            TreeElementType.AtomicConstraint,
+            this.stack));
     }
 }
+

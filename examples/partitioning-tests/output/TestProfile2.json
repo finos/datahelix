@@ -1,4 +1,5 @@
 [{
+	"description": "TestProfile2[0]",
 	"rootNode": {
 		"atomicConstraints": [{
 			"type": "NotConstraint",
@@ -155,6 +156,7 @@
 		}]
 	}
 },{
+	"description": "TestProfile2[1]",
 	"rootNode": {
 		"atomicConstraints": [{
 			"type": "IsOfTypeConstraint",

@@ -17,7 +17,10 @@ import java.util.stream.Collectors;
 
 public class DecisionTreeMapper {
     public DecisionTree map(DecisionTreeDto decisionTreeDto) {
-        return new DecisionTree(dtoToConstraintNode(decisionTreeDto.rootNode), getMappedProfileFields(decisionTreeDto));
+        return new DecisionTree(
+            dtoToConstraintNode(decisionTreeDto.rootNode),
+            getMappedProfileFields(decisionTreeDto),
+            decisionTreeDto.description);
     }
 
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
@@ -30,7 +33,7 @@ public class DecisionTreeMapper {
     }
 
     private ConstraintNode dtoToConstraintNode(ConstraintNodeDto constraintNodeDto) {
-        if (constraintNodeDto.decisions == null || constraintNodeDto.decisions.size() <= 0){
+        if (constraintNodeDto.decisions == null) {
             // Base case when no more decisions on a constraint node
             return new ConstraintNode(getAtomicConstraints(constraintNodeDto), Collections.emptyList());
         }
