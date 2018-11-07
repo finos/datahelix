@@ -57,7 +57,8 @@ class DecisionTreePartitionerIntegrationTests {
                     TreeComparisonContext context = new TreeComparisonContext();
                     IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
                     new TreeComparer(
-                        new ConstraintNodeComparer(context)));
+                        new ConstraintNodeComparer(context),
+                        context));
 
                     boolean match = anyOrderComparer.equals(
                         expectedPartitionedTrees,

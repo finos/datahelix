@@ -4,9 +4,11 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 public class TreeComparer implements IEqualityComparer {
     private final ConstraintNodeComparer constraintNodeComparer;
+    private final TreeComparisonContext context;
 
-    public TreeComparer(ConstraintNodeComparer constraintNodeComparer) {
+    public TreeComparer(ConstraintNodeComparer constraintNodeComparer, TreeComparisonContext context) {
         this.constraintNodeComparer = constraintNodeComparer;
+        this.context = context;
     }
 
     @Override
@@ -20,6 +22,8 @@ public class TreeComparer implements IEqualityComparer {
     }
 
     public boolean equals(DecisionTree tree1, DecisionTree tree2) {
+        context.setTrees(tree1, tree2);
+
         if (tree1 == null && tree2 == null)
             return true;
 

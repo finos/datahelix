@@ -2,10 +2,14 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.ArrayList;
 
 public class TreeComparisonContext {
+    public DecisionTree leftTree;
+    public DecisionTree rightTree;
+
     public ConstraintNode left;
     public ConstraintNode right;
     public final ArrayList leftPath = new ArrayList();
@@ -35,10 +39,10 @@ public class TreeComparisonContext {
 
         reportError = () -> {
             if (!missingExpectedDecisions.isEmpty()) {
-                System.out.println(String.format("Got Decision %s", missingExpectedDecisions));
+                System.out.println(String.format("%s: Got Decision %s", rightTree.getDescription(), missingExpectedDecisions));
             }
             if (!missingActualDecisions.isEmpty()) {
-                System.out.println(String.format("Expected Decision %s", missingActualDecisions));
+                System.out.println(String.format("%s: Expected Decision %s", leftTree.getDescription(), missingActualDecisions));
             }
         };
     }
@@ -51,11 +55,16 @@ public class TreeComparisonContext {
 
         reportError = () -> {
             if (!missingExpectedAtomicConstraints.isEmpty()) {
-                System.out.println(String.format("Got Atomic Constraint %s", missingExpectedAtomicConstraints));
+                System.out.println(String.format("%s: Got Atomic Constraint %s", rightTree.getDescription(), missingExpectedAtomicConstraints));
             }
             if (!missingActualAtomicConstraints.isEmpty()) {
-                System.out.println(String.format("Expected Atomic Constraint %s", missingActualAtomicConstraints));
+                System.out.println(String.format("%s: Expected Atomic Constraint %s", leftTree.getDescription(), missingActualAtomicConstraints));
             }
         };
+    }
+
+    public void setTrees(DecisionTree left, DecisionTree right) {
+        this.leftTree = left;
+        this.rightTree = right;
     }
 }
