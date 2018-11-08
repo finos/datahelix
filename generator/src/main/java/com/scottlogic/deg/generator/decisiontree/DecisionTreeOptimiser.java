@@ -169,7 +169,6 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             boolean nodeContainsNegatedProlificConstraint = option.atomicConstraintExists(negatedMostProlificConstraint);
 
             if (nodeContainsProlificConstraint && nodeContainsNegatedProlificConstraint) {
-                // OPTIMISATION - this node has contradictory constraints so delete entirely
                 throw new RuntimeException("Contradictory constraint node");
             } else if (nodeContainsProlificConstraint) {
                 factorOutConstraintNode(decision, option, mostProlificAtomicConstraint, mfocConstraints, factorisedOptions);
