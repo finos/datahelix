@@ -157,10 +157,10 @@ public final class ConstraintNode {
             .filter(dNode -> dNode.getOptions().size() == 1)
             .collect(Collectors.toList());
         for (DecisionNode dNode : decisionsWithOneOption) {
-            ConstraintNode option = new ArrayList<>(dNode.getOptions()).get(0);
-            this.addAtomicConstraints(option.getAtomicConstraints());
-            dNode.removeOption(option);
-            option.getDecisions().forEach(this::addDecision);
+            ConstraintNode firstOption = dNode.getOptions().iterator().next();
+            this.addAtomicConstraints(firstOption.getAtomicConstraints());
+            dNode.removeOption(firstOption);
+            firstOption.getDecisions().forEach(this::addDecision);
             this.removeDecision(dNode);
         }
     }
