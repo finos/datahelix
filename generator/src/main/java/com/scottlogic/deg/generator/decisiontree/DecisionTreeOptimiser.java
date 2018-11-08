@@ -26,12 +26,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
-        ConstraintNode rootNode = tree.getRootNode();
-        Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (decisions.size() <= 1)
-            return tree; //not worth optimising
-
-        optimiseDecisions(rootNode, 0);
+        optimiseDecisions(tree.getRootNode(), 0);
         return tree;
     }
 
