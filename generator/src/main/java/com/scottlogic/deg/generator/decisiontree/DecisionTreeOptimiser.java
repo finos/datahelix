@@ -58,18 +58,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
         IConstraint mostProlificAtomicConstraint = mostProlificAtomicConstraintOpt.get();
 
-        DecisionNode firstDecisionNodeContainingTheMostProlificAtomicConstraint =
-            decisions
-                .stream()
-                .filter(d -> d.optionWithAtomicConstraintExists(mostProlificAtomicConstraint))
-                .findFirst()
-                .get();
-
         // Add new decision node
         DecisionNode factorisedDecisionNode = new DecisionNode(true);
-        rootNode.insertDecisionNodeAfter(
-            factorisedDecisionNode,
-            firstDecisionNodeContainingTheMostProlificAtomicConstraint);
+        rootNode.appendDecisionNode(factorisedDecisionNode);
 
         // Add most prolific constraint to new decision node
         ConstraintNode factorisingConstraint = new ConstraintNode(true, mostProlificAtomicConstraint);

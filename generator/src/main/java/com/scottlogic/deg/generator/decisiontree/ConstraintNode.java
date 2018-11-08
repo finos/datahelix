@@ -23,7 +23,7 @@ public final class ConstraintNode {
     }
 
     private final Collection<IConstraint> atomicConstraints;
-    private final ArrayList<DecisionNode> decisions;
+    private final Collection<DecisionNode> decisions;
     private final boolean optimised;
 
     public ConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
@@ -140,14 +140,7 @@ public final class ConstraintNode {
         return optimised;
     }
 
-    public void insertDecisionNodeAfter(
-        DecisionNode decisionNode,
-        DecisionNode immediatelyAfter) {
-        int index = this.decisions.indexOf(immediatelyAfter);
-
-        if (index >= 0)
-            this.decisions.add(index + 1, decisionNode);
-        else
-            decisions.add(decisionNode); //add at the end of the collection
+    public void appendDecisionNode(DecisionNode decisionNode) {
+        decisions.add(decisionNode);
     }
 }
