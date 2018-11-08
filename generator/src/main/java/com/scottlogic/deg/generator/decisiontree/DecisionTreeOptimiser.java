@@ -218,9 +218,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 .comparing(this::disfavourNotConstraints))
             .max(Comparator.comparing(Map.Entry::getValue));
 
-        if (!mostProlificConstraintOpt.isPresent() || mostProlificConstraintOpt.get().getValue() <= 1){
-            return Optional.empty();
-        }
-        return Optional.of(mostProlificConstraintOpt.get().getKey());
+        return mostProlificConstraintOpt
+            .filter(constraint -> constraint.getValue() > 1)
+            .map(Map.Entry::getKey);
     }
 }
