@@ -150,18 +150,4 @@ public final class ConstraintNode {
         else
             decisions.add(decisionNode); //add at the end of the collection
     }
-
-    public void simplify(){
-        List<DecisionNode> decisionsWithOneOption = this.getDecisions()
-            .stream()
-            .filter(dNode -> dNode.getOptions().size() == 1)
-            .collect(Collectors.toList());
-        for (DecisionNode dNode : decisionsWithOneOption) {
-            ConstraintNode firstOption = dNode.getOptions().iterator().next();
-            this.addAtomicConstraints(firstOption.getAtomicConstraints());
-            dNode.removeOption(firstOption);
-            firstOption.getDecisions().forEach(this::addDecision);
-            this.removeDecision(dNode);
-        }
-    }
 }
