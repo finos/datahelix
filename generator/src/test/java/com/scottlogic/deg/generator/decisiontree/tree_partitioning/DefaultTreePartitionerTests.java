@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 
-class TreePartitionerTests {
+class DefaultTreePartitionerTests {
     @Test
     void shouldSplitTreeIntoPartitions() {
         givenTree(
@@ -258,7 +258,7 @@ class TreePartitionerTests {
     }
 
     private void partitionTrees() {
-        partitionedTrees = new TreePartitioner()
+        partitionedTrees = new DefaultTreePartitioner()
             .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }
