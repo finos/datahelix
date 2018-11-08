@@ -11,17 +11,15 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     private final boolean simplify;
     private final int maxIterations;
     private final int maxDepth;
-    private final boolean favourNegatedConstraints;
 
     public DecisionTreeOptimiser() {
-        this(true, 50, 10000000, false);
+        this(true, 50, 10000000);
     }
 
-    public DecisionTreeOptimiser(boolean simplify, int maxIterations, int maxDepth, boolean favourNegatedConstraints) {
+    public DecisionTreeOptimiser(boolean simplify, int maxIterations, int maxDepth) {
         this.simplify = simplify;
         this.maxIterations = maxIterations;
         this.maxDepth = maxDepth;
-        this.favourNegatedConstraints = favourNegatedConstraints;
     }
 
     @Override
@@ -204,9 +202,6 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     }
 
     private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){
-        if (this.favourNegatedConstraints)
-            return entry.getKey() instanceof NotConstraint ? 0 : 1;
-
         return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
