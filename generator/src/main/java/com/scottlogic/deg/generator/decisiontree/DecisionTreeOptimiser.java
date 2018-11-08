@@ -52,11 +52,10 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         if (depth > this.maxDepth)
             return false;
 
-        Optional<IConstraint> mostProlificAtomicConstraintOpt = getMostProlificConstraint(decisions);
-        if (!mostProlificAtomicConstraintOpt.isPresent()){
+        IConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(decisions);
+        if (mostProlificAtomicConstraint == null){
             return false;
         }
-        IConstraint mostProlificAtomicConstraint = mostProlificAtomicConstraintOpt.get();
 
         // Add new decision node
         DecisionNode factorisedDecisionNode = new DecisionNode(true);
@@ -210,21 +209,21 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
-    private Optional<IConstraint> getMostProlificConstraint(Collection<DecisionNode> decisions) {
+    private IConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
         Map<IConstraint, Long> decisionConstraints = decisions
             .stream()
             .flatMap(dn -> dn.getOptions().stream())
             .flatMap(option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        Optional<Map.Entry<IConstraint, Long>> mostProlificConstraintOpt = decisionConstraints.entrySet()
+        return decisionConstraints.entrySet()
             .stream()
             .sorted(Comparator
                 .comparing(this::disfavourNotConstraints))
-            .max(Comparator.comparing(Map.Entry::getValue));
+            .max(Comparator.comparing(Map.Entry::getValue)) //order by the number of occurrences
+            .filter(constraint -> constraint.getValue() > 1) //where the number of occurrences > 1
+            .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
+            .orElse(null); //otherwise return null
 
-        return mostProlificConstraintOpt
-            .filter(constraint -> constraint.getValue() > 1)
-            .map(Map.Entry::getKey);
     }
 }
