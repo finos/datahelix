@@ -86,7 +86,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             processOptionsWithFactoringConstraint(decision, mostProlificAtomicConstraint, negatedMostProlificConstraint,
                 mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions);
 
-            boolean shouldFactoriseDecisionNode = factorisedOptions.size() > 0;
+            boolean shouldFactoriseDecisionNode = !factorisedOptions.isEmpty();
             if (shouldFactoriseDecisionNode){
                 /*
                  * At this point we have removed the nodes with mpc and nmpc from the original tree. All that is left at this level are nodes
@@ -101,7 +101,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             }
 
             // Tidy decision if no options left
-            if (decision.getOptions().size() == 0){
+            if (decision.getOptions().isEmpty()){
                 removals.add(decision);
             }
 
@@ -189,7 +189,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         Set<IConstraint> atomicConstraints,
         List<ConstraintNode> factorisedOptions) {
         ConstraintNode positiveCaseNode = option.cloneWithoutAtomicConstraint(factoringConstraint);
-        if (positiveCaseNode.getAtomicConstraints().size() > 0) {
+        if (!positiveCaseNode.getAtomicConstraints().isEmpty()) {
             atomicConstraints.addAll(positiveCaseNode.getAtomicConstraints());
             factorisedOptions.add(positiveCaseNode);
         }
@@ -197,11 +197,13 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     }
 
     private void addOptionsToFactorisedNode(ConstraintNode newNode, List<ConstraintNode> optionsToAdd) {
-        if (optionsToAdd.size() > 0){
-            DecisionNode decisionUnderFactorisedNode = new DecisionNode(true);
-            optionsToAdd.forEach(decisionUnderFactorisedNode::addOption);
-            newNode.addDecision(decisionUnderFactorisedNode);
+        if (optionsToAdd.isEmpty()) {
+            return;
         }
+
+        DecisionNode decisionUnderFactorisedNode = new DecisionNode(true);
+        optionsToAdd.forEach(decisionUnderFactorisedNode::addOption);
+        newNode.addDecision(decisionUnderFactorisedNode);
     }
 
     private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){
