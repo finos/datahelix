@@ -11,6 +11,7 @@ import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -101,10 +102,15 @@ public class GeneralTestStep {
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+
+        //TODO: Turn this into a matcher, and use assert.assertThat()
         data.expectedData
             .forEach(row -> {
                 boolean match = data.generatedData.stream().anyMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue("TEST ERROR", match);
+
+                Assert.assertTrue(String.format("\n" +
+                    "Expected: data containing rows <%s>\n" +
+                    "     but: found <%s>", row, Objects.toString(data.generatedData)), match);
             });
     }
 
