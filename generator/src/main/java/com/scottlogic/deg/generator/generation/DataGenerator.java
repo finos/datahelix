@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class DataGenerator implements IDataGenerator {
                 .splitTreeIntoPartitions(decisionTree)
                 .collect(Collectors.toList());
 
-        final DecisionTreeWalker walker = new DecisionTreeWalker(
+        final DecisionTreeWalker walker = new ExhaustiveDecisionTreeWalker(
                 constraintReducer,
                 rowSpecMerger);
 

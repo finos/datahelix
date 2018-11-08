@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.notNullValue;
 
-class DecisionTreeWalkerTests {
+class ExhaustiveDecisionTreeWalkerTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(
+    private final ExhaustiveDecisionTreeWalker dTreeWalker = new ExhaustiveDecisionTreeWalker(
             new ConstraintReducer(
                     new FieldSpecFactory(),
                     fieldSpecMerger
