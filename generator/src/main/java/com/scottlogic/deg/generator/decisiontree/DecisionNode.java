@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class DecisionNode {
-    private final ArrayList<ConstraintNode> options;
+    private final Collection<ConstraintNode> options;
     private final boolean optimised;
 
     DecisionNode(Collection<ConstraintNode> options) {
