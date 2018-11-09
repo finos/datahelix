@@ -67,19 +67,19 @@ public class GeneratorTestUtilities {
     }
 
     public static Object parseInput(String input) {
-        Object parsedValue;
         if (input.startsWith("\"") && input.endsWith("\"")) {
-            parsedValue = input.substring(1, input.length() - 1);
+            return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)){
-            parsedValue = LocalDateTime.parse(input);
+            return LocalDateTime.parse(input);
         } else if (input.equals("null")){
-            parsedValue = null;
+            return null;
         } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")){
-            parsedValue = new BigDecimal(input);
-        } else {
-            parsedValue = Integer.parseInt(input);
+            return new BigDecimal(input);
+        } else if (input.matches("(-)?[0-9]+")){
+            return Integer.parseInt(input);
         }
-        return parsedValue;
+
+        return input;
     }
 
 }
