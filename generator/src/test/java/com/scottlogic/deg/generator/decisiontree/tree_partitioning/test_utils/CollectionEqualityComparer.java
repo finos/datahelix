@@ -6,21 +6,12 @@ import java.util.Iterator;
 public class CollectionEqualityComparer implements IEqualityComparer {
     private final IEqualityComparer itemEqualityComparer;
 
-    public CollectionEqualityComparer() {
-        this.itemEqualityComparer = new CollectionEqualityComparer(this);
-    }
-
     public CollectionEqualityComparer(IEqualityComparer itemEqualityComparer){
-
         this.itemEqualityComparer = itemEqualityComparer;
     }
 
     public static boolean isCollection(Object item){
-        if (item instanceof Collection) {
-            return true;
-        }
-
-        return false;
+        return item instanceof Collection;
     }
 
     @Override
@@ -36,7 +27,7 @@ public class CollectionEqualityComparer implements IEqualityComparer {
 
         if (iterator1.hasNext() != iterator2.hasNext())
             return false;
-        if (iterator1.hasNext() == false && iterator2.hasNext() == false)
+        if (!iterator1.hasNext() && !iterator2.hasNext())
             return true; //empty collections are equal, exit early
 
         while (iterator1.hasNext()) {
@@ -52,19 +43,7 @@ public class CollectionEqualityComparer implements IEqualityComparer {
             }
         }
 
-        if (iterator2.hasNext()) {
-            return false; //second collection has more items
-        }
-
-        return true; //no mismatches; collections are equal
-    }
-
-    public static boolean areEqual(Collection x, Collection y, IEqualityComparer itemEqualityComparer){
-        return new CollectionEqualityComparer(itemEqualityComparer).equals(x, y);
-    }
-
-    public static boolean areEqual(Collection x, Collection y){
-        return new CollectionEqualityComparer().equals(x, y);
+        return !iterator2.hasNext(); //no mismatches; collections are equal
     }
 }
 

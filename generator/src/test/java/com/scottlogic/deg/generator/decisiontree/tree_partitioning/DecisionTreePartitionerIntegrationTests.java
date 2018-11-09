@@ -20,15 +20,16 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 class DecisionTreePartitionerIntegrationTests {
-    private static final String inputDirectory = "../examples/partitioning-tests/input/";
-    private static final String outputDirectory = "../examples/partitioning-tests/output/";
+    private static final String treePartitionerTestsDirectory = "../generator/resources/partitioning-tests/";
 
     private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
     private final ITreePartitioner treePartitioner = new TreePartitioner();
@@ -36,26 +37,26 @@ class DecisionTreePartitionerIntegrationTests {
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
     @TestFactory
-    Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() throws IOException {
+    Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
         TreeComparisonReporter reporter = new TreeComparisonReporter();
 
-        return getInputProfileFilePaths().map(path -> {
+        return getPartitioningTestsDirectory().map(directory -> {
             try {
-                String inputProfileFileName = path.getFileName().toString();
-                File expectedTreeOutputFile = new File(outputDirectory + inputProfileFileName);
-                Profile inputProfile = getProfile(path);
+                File inputFile = new File(directory.getPath() + "/input.json");
+                File outputFile = new File(directory.getPath() + "/expected.json");
+                Profile inputProfile = getProfile(inputFile.toPath());
 
                 DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
                 final List<DecisionTree> actualPartitionedTrees = treePartitioner
                     .splitTreeIntoPartitions(decisionTree)
                     .collect(Collectors.toList());
 
-                List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(expectedTreeOutputFile);
+                List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(outputFile);
                 final List<DecisionTree> expectedPartitionedTrees = expectedTreeDto.stream()
                     .map(decisionTreeMapper::map)
                     .collect(Collectors.toList());
 
-                return DynamicTest.dynamicTest(inputProfileFileName, () -> {
+                return DynamicTest.dynamicTest(directory.getName(), () -> {
                     TreeComparisonContext context = new TreeComparisonContext();
                     IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
                     new TreeComparer(
@@ -79,14 +80,11 @@ class DecisionTreePartitionerIntegrationTests {
         }).collect(Collectors.toList());
     }
 
-    private Stream<Path> getInputProfileFilePaths() throws IOException {
-        return Files.walk(Paths.get(inputDirectory)).filter(path -> getFilenameExtension(path.toFile().toString())
-                .toLowerCase().equals("json"));
-    }
-
-    private String getFilenameExtension(String filename) {
-        final int extensionIndex = filename.lastIndexOf(".");
-        return filename.substring(extensionIndex + 1);
+    private Stream<File> getPartitioningTestsDirectory() {
+        return
+            Stream.of(Objects.requireNonNull(Paths.get(treePartitionerTestsDirectory)
+                .toFile()
+                .listFiles(File::isDirectory)));
     }
 
     private Profile getProfile(Path path) throws IOException, InvalidProfileException {

@@ -31,6 +31,6 @@ public class DecisionTreeCollection {
                 .map(DecisionTree::getRootNode)
                 .iterator()),
             fields,
-            decisionTrees.stream().findFirst().get().getDescription());
+            decisionTrees.isEmpty() ? null : decisionTrees.iterator().next().getDescription());
     }
 }

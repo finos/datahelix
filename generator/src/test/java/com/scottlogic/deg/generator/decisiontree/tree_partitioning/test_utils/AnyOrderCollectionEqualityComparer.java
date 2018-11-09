@@ -75,12 +75,4 @@ public class AnyOrderCollectionEqualityComparer implements IEqualityComparer {
 
         return null;
     }
-
-    public static boolean areEqual(Collection x, Collection y, IEqualityComparer itemEqualityComparer){
-        return new AnyOrderCollectionEqualityComparer(itemEqualityComparer).equals(x, y);
-    }
-
-    public static boolean areEqual(Collection x, Collection y){
-        return new AnyOrderCollectionEqualityComparer().equals(x, y);
-    }
 }
