@@ -1,0 +1,17 @@
+package com.scottlogic.deg.generator.walker;
+
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+public class IteratorTestHelper {
+    static ConstraintNode endConstraint() { return new ConstraintNode(); }
+    static DecisionNode singleDecision() { return new DecisionNode(endConstraint()); }
+    static DecisionNode doubleDecision() { return new DecisionNode(endConstraint(), endConstraint()); }
+    static ConstraintNode constraintSingleDouble() { return new ConstraintNode(Collections.emptyList(),
+        Arrays.asList(singleDecision(), doubleDecision())); }
+    static ConstraintNode constraintDoubleDouble() { return new ConstraintNode(Collections.emptyList(),
+        Arrays.asList(doubleDecision(), doubleDecision())); }
+}
