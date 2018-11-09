@@ -17,7 +17,7 @@ public class IsGreaterThanOrEqualToConstantConstraint implements IConstraint {
     public String toDotLabel() {
         return String.format("%s >= %s", field.name, referenceValue);
     }
-    
+
     @Override
     public boolean equals(Object o){
         if (this == o) return true;

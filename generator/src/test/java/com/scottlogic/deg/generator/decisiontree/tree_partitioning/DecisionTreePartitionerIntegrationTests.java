@@ -42,8 +42,8 @@ class DecisionTreePartitionerIntegrationTests {
 
         return getPartitioningTestsDirectory().map(directory -> {
             try {
-                File inputFile = new File(directory.getPath() + "/input.json");
-                File outputFile = new File(directory.getPath() + "/expected.json");
+                File inputFile = new File(directory.getPath() + "/profile.json");
+                File outputFile = new File(directory.getPath() + "/expected-partitioning.json");
                 Profile inputProfile = getProfile(inputFile.toPath());
 
                 DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
