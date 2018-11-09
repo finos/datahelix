@@ -39,7 +39,8 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
 
     @Override
     public boolean hasNext() {
-        return currentOption < options.size() || (nextIterator != null && nextIterator.hasNext());
+        if (nextIterator == null) return currentOption < options.size();
+        return currentOption < options.size() -1 || nextIterator.hasNext(); 
     }
 
     @Override
@@ -55,7 +56,9 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
         List<RowSpecRoute> sideRoutes;
         if (nextIterator.hasNext()){
             sideRoutes = nextIterator.next();
-            //TODO NEED TO GET THE CURRENT OPTION SUBROUTE IF IT HASN'T BEEN GOT!!!!
+            if (currentOptionsSubroute == null){
+                currentOptionsSubroute = options.get(currentOption).next();
+            }
             sideRoutes.add(0, currentOptionsSubroute);
         }
         else {
