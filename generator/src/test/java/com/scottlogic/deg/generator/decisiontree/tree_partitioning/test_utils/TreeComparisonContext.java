@@ -57,10 +57,10 @@ public class TreeComparisonContext {
     }
 
     class Error {
-        public final ErrorContext expected;
-        public final ErrorContext actual;
-        public final TreeElementType type;
-        public final StackEntry[] stack;
+        final ErrorContext expected;
+        final ErrorContext actual;
+        final TreeElementType type;
+        final StackEntry[] stack;
 
         public Error(ErrorContext expected, ErrorContext actual, TreeElementType type, Stack<StackEntry> currentStack) {
             this.expected = expected;
@@ -72,8 +72,8 @@ public class TreeComparisonContext {
     }
 
     class ErrorContext {
-        public final DecisionTree tree;
-        public final Object value;
+        final DecisionTree tree;
+        final Object value;
 
         public ErrorContext(DecisionTree tree, Object value) {
             this.tree = tree;

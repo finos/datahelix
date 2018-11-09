@@ -5,9 +5,9 @@ import java.util.Collection;
 
 public class AnyOrderCollectionEqualityComparer implements IEqualityComparer {
     private final IEqualityComparer itemEqualityComparer;
-    public ArrayList itemsMissingFromCollection1;
-    public ArrayList itemsMissingFromCollection2;
-    public boolean reportErrors = false;
+    private ArrayList itemsMissingFromCollection1;
+    private ArrayList itemsMissingFromCollection2;
+    private boolean reportErrors = false;
 
     public AnyOrderCollectionEqualityComparer() {
         this.itemEqualityComparer = new DefaultEqualityComparer(this);
@@ -15,6 +15,18 @@ public class AnyOrderCollectionEqualityComparer implements IEqualityComparer {
 
     public AnyOrderCollectionEqualityComparer(IEqualityComparer itemEqualityComparer) {
         this.itemEqualityComparer = itemEqualityComparer;
+    }
+
+    public ArrayList getItemsMissingFromCollection1() {
+        return this.itemsMissingFromCollection1;
+    }
+
+    public ArrayList getItemsMissingFromCollection2() {
+        return this.itemsMissingFromCollection2;
+    }
+
+    public void setReportErrors(boolean reportErrors) {
+        this.reportErrors = reportErrors;
     }
 
     @Override

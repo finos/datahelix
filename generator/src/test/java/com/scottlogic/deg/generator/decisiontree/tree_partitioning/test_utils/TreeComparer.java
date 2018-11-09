@@ -35,10 +35,10 @@ public class TreeComparer implements IEqualityComparer {
             return false; //either tree1 XOR tree2 is null
 
         boolean fieldsAreEqual = this.fieldComparer.equals(tree1.getFields(), tree2.getFields());
-        if (fieldsAreEqual) {
-            return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
+        if (!fieldsAreEqual) {
+            return false;
         }
 
-        return false;
+        return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
     }
 }

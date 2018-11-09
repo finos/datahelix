@@ -16,8 +16,8 @@ public class ConstraintNodeComparer implements IEqualityComparer {
         this.decisionComparer = new DecisionComparer();
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
 
-        this.decisionAnyOrderComparer.reportErrors = true;
-        this.atomicConstraintAnyOrderComparer.reportErrors = true;
+        this.decisionAnyOrderComparer.setReportErrors(true);
+        this.atomicConstraintAnyOrderComparer.setReportErrors(true);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class ConstraintNodeComparer implements IEqualityComparer {
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
                 this.comparisonContext.reportDifferences(
-                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection1,
-                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection2,
+                    atomicConstraintAnyOrderComparer.getItemsMissingFromCollection1(),
+                    atomicConstraintAnyOrderComparer.getItemsMissingFromCollection2(),
                     TreeComparisonContext.TreeElementType.AtomicConstraint);
                 return false;
             }
@@ -65,8 +65,8 @@ public class ConstraintNodeComparer implements IEqualityComparer {
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
                 this.comparisonContext.reportDifferences(
-                    decisionAnyOrderComparer.itemsMissingFromCollection1,
-                    decisionAnyOrderComparer.itemsMissingFromCollection2,
+                    decisionAnyOrderComparer.getItemsMissingFromCollection1(),
+                    decisionAnyOrderComparer.getItemsMissingFromCollection2(),
                     TreeComparisonContext.TreeElementType.Decision);
                 return false;
             }

@@ -65,6 +65,7 @@ public final class ConstraintNode {
     private Optional<RowSpec> adaptedRowSpec = null;
 
     public String toString(){
+        // A limit of 5 items is given for debugging display
         if (decisions.isEmpty())
             return atomicConstraints.size() > 5
                 ? String.format("%d constraints", atomicConstraints.size())
