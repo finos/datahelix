@@ -62,58 +62,35 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         rootNode.appendDecisionNode(factorisedDecisionNode);
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraint = new ConstraintNode(true, mostProlificAtomicConstraint);
-        factorisedDecisionNode.addOption(factorisingConstraint);
+        ConstraintNode factorisingConstraintNode = new ConstraintNode(true, mostProlificAtomicConstraint);
+        factorisedDecisionNode.addOption(factorisingConstraintNode);
 
         // Add negation of most prolific constraint to new decision node
         IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
-        ConstraintNode negatedFactorisingConstraint = new ConstraintNode(true, negatedMostProlificConstraint);
-        factorisedDecisionNode.addOption(negatedFactorisingConstraint);
+        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNode(true, negatedMostProlificConstraint);
+        factorisedDecisionNode.addOption(negatedFactorisingConstraintNode);
 
-        List<DecisionNode> removals = new ArrayList<>();
-
+        List<DecisionNode> decisionsToRemove = new ArrayList<>();
         for (DecisionNode decision : decisions) {
-            // Sets to add constraints seen in conjunction with most prolific constraint
-            Set<IConstraint> mfocConstraints = new HashSet<>();
-            Set<IConstraint> notMfocConstraints = new HashSet<>();
-
-            // Lists holding constraint nodes to be added throughout the factorisation process
-            List<ConstraintNode> factorisedOptions = new ArrayList<>();
-            List<ConstraintNode> negatedFactorisedOptions = new ArrayList<>();
-            List<ConstraintNode> otherOptions = new ArrayList<>();
-
-            processOptionsWithFactoringConstraint(decision, mostProlificAtomicConstraint, negatedMostProlificConstraint,
-                mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions);
-
-            boolean shouldFactoriseDecisionNode = !factorisedOptions.isEmpty();
-            if (shouldFactoriseDecisionNode){
-                /*
-                 * At this point we have removed the nodes with mpc and nmpc from the original tree. All that is left at this level are nodes
-                 * that need moving either to same level as factorising constraint node or as options underneath it
-                 */
-                processOptionsWithoutFactorisingConstraint(decision, mfocConstraints, notMfocConstraints, factorisedOptions, negatedFactorisedOptions, otherOptions);
-
-                // Perform movement of nodes
-                addOptionsToFactorisedNode(factorisingConstraint, factorisedOptions);
-                addOptionsToFactorisedNode(negatedFactorisingConstraint, negatedFactorisedOptions);
-                otherOptions.forEach(factorisedDecisionNode::addOption);
+            DecisionAnalysis decisionAnalysis = new DecisionAnalysis(decision, mostProlificAtomicConstraint, negatedMostProlificConstraint);
+            decisionAnalysis.performAnalysis();
+            if (decisionAnalysis.optionsAreFactorisable()){
+                // Perform movement of options
+                addOptionsAsDecisionUnderConstraintNode(factorisingConstraintNode, decisionAnalysis.optionsToFactorise);
+                addOptionsAsDecisionUnderConstraintNode(negatedFactorisingConstraintNode, decisionAnalysis.negatedOptionsToFactorise);
+                decisionAnalysis.adjacentOptions.forEach(factorisedDecisionNode::addOption);
+                decisionsToRemove.add(decision);
             }
-
-            // Tidy decision if no options left
-            if (decision.getOptions().isEmpty()){
-                removals.add(decision);
-            }
-
         }
 
         if (this.simplify){
-            simplifyConstraint(factorisingConstraint);
-            simplifyConstraint(negatedFactorisingConstraint);
+            simplifyConstraint(factorisingConstraintNode);
+            simplifyConstraint(negatedFactorisingConstraintNode);
         }
 
-        removals.forEach(rootNode::removeDecision);
-        optimiseDecisions(factorisingConstraint, depth + 1);
-        optimiseDecisions(negatedFactorisingConstraint, depth + 1);
+        decisionsToRemove.forEach(rootNode::removeDecision);
+        optimiseDecisions(factorisingConstraintNode, depth + 1);
+        optimiseDecisions(negatedFactorisingConstraintNode, depth + 1);
         return true;
     }
 
@@ -130,72 +107,13 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             });
     }
 
-    private void processOptionsWithoutFactorisingConstraint(
-        DecisionNode decision,
-        Set<IConstraint> mfocConstraints,
-        Set<IConstraint> notMfocConstraints,
-        List<ConstraintNode> factorisedOptions,
-        List<ConstraintNode> negatedFactorisedOptions,
-        List<ConstraintNode> otherOptions) {
-        for (ConstraintNode remainingOption : decision.getOptions()){
-            boolean nodeCanBeMovedUnderFactorised = constraintNodeContainsNegatedConstraints(remainingOption, mfocConstraints);
-            boolean nodeCanBeMovedUnderNegatedFactorised = constraintNodeContainsNegatedConstraints(remainingOption, notMfocConstraints);
-            if (nodeCanBeMovedUnderFactorised) {
-                factorisedOptions.add(remainingOption);
-            } else if (nodeCanBeMovedUnderNegatedFactorised) {
-                negatedFactorisedOptions.add(remainingOption);
-            } else {
-                otherOptions.add(remainingOption);
-            }
-            decision.removeOption(remainingOption);
-        }
-    }
-
     private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<IConstraint> constraints){
         return node.getAtomicConstraints().stream()
             .map(NotConstraint::negate)
             .allMatch(constraints::contains);
     }
 
-    private void processOptionsWithFactoringConstraint(
-        DecisionNode decision,
-        IConstraint mostProlificAtomicConstraint,
-        IConstraint negatedMostProlificConstraint,
-        Set<IConstraint> mfocConstraints,
-        Set<IConstraint> notMfocConstraints,
-        List<ConstraintNode> factorisedOptions,
-        List<ConstraintNode> negatedFactorisedOptions
-    ) {
-
-        for (ConstraintNode option : decision.getOptions()) {
-            boolean nodeContainsProlificConstraint = option.atomicConstraintExists(mostProlificAtomicConstraint);
-            boolean nodeContainsNegatedProlificConstraint = option.atomicConstraintExists(negatedMostProlificConstraint);
-
-            if (nodeContainsProlificConstraint && nodeContainsNegatedProlificConstraint) {
-                throw new RuntimeException("Contradictory constraint node");
-            } else if (nodeContainsProlificConstraint) {
-                factorOutConstraintNode(decision, option, mostProlificAtomicConstraint, mfocConstraints, factorisedOptions);
-            } else if (nodeContainsNegatedProlificConstraint) {
-                factorOutConstraintNode(decision, option, negatedMostProlificConstraint, notMfocConstraints, negatedFactorisedOptions);
-            }
-        }
-    }
-
-    private void factorOutConstraintNode(
-        DecisionNode currentDecision,
-        ConstraintNode option,
-        IConstraint factoringConstraint,
-        Set<IConstraint> atomicConstraints,
-        List<ConstraintNode> factorisedOptions) {
-        ConstraintNode positiveCaseNode = option.cloneWithoutAtomicConstraint(factoringConstraint);
-        if (!positiveCaseNode.getAtomicConstraints().isEmpty()) {
-            atomicConstraints.addAll(positiveCaseNode.getAtomicConstraints());
-            factorisedOptions.add(positiveCaseNode);
-        }
-        currentDecision.removeOption(option);
-    }
-
-    private void addOptionsToFactorisedNode(ConstraintNode newNode, List<ConstraintNode> optionsToAdd) {
+    private void addOptionsAsDecisionUnderConstraintNode(ConstraintNode newNode, List<ConstraintNode> optionsToAdd) {
         if (optionsToAdd.isEmpty()) {
             return;
         }
@@ -224,6 +142,73 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .filter(constraint -> constraint.getValue() > 1) //where the number of occurrences > 1
             .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
             .orElse(null); //otherwise return null
+    }
 
+    class DecisionAnalysis {
+        private DecisionNode decision;
+        private IConstraint factorisingConstraint;
+        private IConstraint negatedFactorisingConstraint;
+
+        List<ConstraintNode> optionsToFactorise = new ArrayList<>();
+        List<ConstraintNode> negatedOptionsToFactorise = new ArrayList<>();
+        List<ConstraintNode> adjacentOptions = new ArrayList<>();
+
+        private Set<IConstraint> atomicConstraintsAssociatedWithFactorisingOption = new HashSet<>();
+        private Set<IConstraint> atomicConstraintsAssociatedWithNegatedOption = new HashSet<>();
+
+        DecisionAnalysis(DecisionNode decisionNode, IConstraint factorisingConstraint, IConstraint negatedFactorisingConstraint){
+            this.decision = decisionNode;
+            this.factorisingConstraint = factorisingConstraint;
+            this.negatedFactorisingConstraint = negatedFactorisingConstraint;
+        }
+
+        /**
+         * Iterate through a decision nodes options and determine whether factorisation is possible
+         */
+        void performAnalysis() {
+            List<ConstraintNode> otherOptions = new ArrayList<>();
+            for (ConstraintNode option : decision.getOptions()) {
+                boolean optionContainsProlificConstraint = option.atomicConstraintExists(factorisingConstraint);
+                boolean optionContainsNegatedProlificConstraint = option.atomicConstraintExists(negatedFactorisingConstraint);
+                if (optionContainsProlificConstraint && optionContainsNegatedProlificConstraint) {
+                    throw new RuntimeException("Contradictory constraint node");
+                } else if (optionContainsProlificConstraint) {
+                    markOptionForFactorisation(factorisingConstraint, option, optionsToFactorise, atomicConstraintsAssociatedWithFactorisingOption);
+                } else if (optionContainsNegatedProlificConstraint) {
+                    markOptionForFactorisation(negatedFactorisingConstraint, option, negatedOptionsToFactorise, atomicConstraintsAssociatedWithNegatedOption);
+                } else {
+                    // This option does not contain the factorising constraint so add to a separate list.
+                    otherOptions.add(option);
+                }
+            }
+
+            // The following options need moving either to:
+            // * an option under the factorising constraint node,
+            // * an option under the negated factorising constraint node,
+            // * or another option alongside the factorising constraint node
+            for (ConstraintNode option : otherOptions) {
+                boolean nodeCanBeMovedUnderFactorised = constraintNodeContainsNegatedConstraints(option, atomicConstraintsAssociatedWithFactorisingOption);
+                boolean nodeCanBeMovedUnderNegatedFactorised = constraintNodeContainsNegatedConstraints(option, atomicConstraintsAssociatedWithNegatedOption);
+                if (nodeCanBeMovedUnderFactorised) {
+                    optionsToFactorise.add(option);
+                } else if (nodeCanBeMovedUnderNegatedFactorised) {
+                    negatedOptionsToFactorise.add(option);
+                } else {
+                    adjacentOptions.add(option);
+                }
+            }
+        }
+
+        boolean optionsAreFactorisable(){
+            return !optionsToFactorise.isEmpty();
+        }
+
+        private void markOptionForFactorisation(IConstraint factorisingConstraint, ConstraintNode node, List<ConstraintNode> options, Set<IConstraint> constraints){
+            ConstraintNode newOption = node.cloneWithoutAtomicConstraint(factorisingConstraint);
+            if (!newOption.getAtomicConstraints().isEmpty()){
+                options.add(newOption);
+                constraints.addAll(newOption.getAtomicConstraints());
+            }
+        }
     }
 }
