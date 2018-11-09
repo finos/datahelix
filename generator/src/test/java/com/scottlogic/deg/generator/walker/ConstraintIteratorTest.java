@@ -92,8 +92,8 @@ class ConstraintIteratorTest {
     }
 
     @Test
-    void twoSubDecisions_bothHaveTwoOptions(){
-        ConstraintNode node = IteratorTestHelper.constraintDoubleDouble();
+    void threeSubDecisions_allHaveTwoOptions(){
+        ConstraintNode node = IteratorTestHelper.constraintTripleDouble();
         ConstraintIterator iterator = new ConstraintIterator(node);
 
         assertThat(iterator.hasNext(), is(true));
@@ -101,59 +101,59 @@ class ConstraintIteratorTest {
         assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(arrayWithSize(3)));
         assertThat(route.subRoutes[0].decisionIndex, is(0));
+        assertThat(route.subRoutes[1].decisionIndex, is(0));
+        assertThat(route.subRoutes[2].decisionIndex, is(0));
+
+
+        assertThat(iterator.hasNext(), is(true));
+        route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(3)));
         assertThat(route.subRoutes[0].decisionIndex, is(0));
         assertThat(route.subRoutes[1].decisionIndex, is(0));
-
+        assertThat(route.subRoutes[2].decisionIndex, is(1));
 
         assertThat(iterator.hasNext(), is(true));
         route = iterator.next();
         assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(arrayWithSize(3)));
-        assertThat(route.subRoutes[0].decisionIndex, is(0));
         assertThat(route.subRoutes[0].decisionIndex, is(0));
         assertThat(route.subRoutes[1].decisionIndex, is(1));
+        assertThat(route.subRoutes[2].decisionIndex, is(0));
+
 
         assertThat(iterator.hasNext(), is(true));
         route = iterator.next();
         assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(arrayWithSize(3)));
         assertThat(route.subRoutes[0].decisionIndex, is(0));
+        assertThat(route.subRoutes[1].decisionIndex, is(1));
+        assertThat(route.subRoutes[2].decisionIndex, is(1));
+
+        assertThat(iterator.hasNext(), is(true));
+        route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(3)));
         assertThat(route.subRoutes[0].decisionIndex, is(1));
         assertThat(route.subRoutes[1].decisionIndex, is(0));
+        assertThat(route.subRoutes[2].decisionIndex, is(0));
 
 
         assertThat(iterator.hasNext(), is(true));
         route = iterator.next();
         assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(arrayWithSize(3)));
-        assertThat(route.subRoutes[0].decisionIndex, is(0));
-        assertThat(route.subRoutes[0].decisionIndex, is(1));
-        assertThat(route.subRoutes[1].decisionIndex, is(1));
-
-        assertThat(iterator.hasNext(), is(true));
-        route = iterator.next();
-        assertThat(route.decisionIndex, is(0));
-        assertThat(route.subRoutes,  is(arrayWithSize(3)));
-        assertThat(route.subRoutes[0].decisionIndex, is(1));
-        assertThat(route.subRoutes[0].decisionIndex, is(0));
-        assertThat(route.subRoutes[1].decisionIndex, is(0));
-
-
-        assertThat(iterator.hasNext(), is(true));
-        route = iterator.next();
-        assertThat(route.decisionIndex, is(0));
-        assertThat(route.subRoutes,  is(arrayWithSize(3)));
-        assertThat(route.subRoutes[0].decisionIndex, is(1));
-        assertThat(route.subRoutes[0].decisionIndex, is(0));
-        assertThat(route.subRoutes[1].decisionIndex, is(1));
-
-        assertThat(iterator.hasNext(), is(true));
-        route = iterator.next();
-        assertThat(route.decisionIndex, is(0));
-        assertThat(route.subRoutes,  is(arrayWithSize(3)));
-        assertThat(route.subRoutes[0].decisionIndex, is(1));
         assertThat(route.subRoutes[0].decisionIndex, is(1));
         assertThat(route.subRoutes[1].decisionIndex, is(0));
+        assertThat(route.subRoutes[2].decisionIndex, is(1));
+
+        assertThat(iterator.hasNext(), is(true));
+        route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(3)));
+        assertThat(route.subRoutes[0].decisionIndex, is(1));
+        assertThat(route.subRoutes[1].decisionIndex, is(1));
+        assertThat(route.subRoutes[2].decisionIndex, is(0));
 
 
         assertThat(iterator.hasNext(), is(true));
@@ -161,15 +161,15 @@ class ConstraintIteratorTest {
         assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(arrayWithSize(3)));
         assertThat(route.subRoutes[0].decisionIndex, is(1));
-        assertThat(route.subRoutes[0].decisionIndex, is(1));
         assertThat(route.subRoutes[1].decisionIndex, is(1));
+        assertThat(route.subRoutes[2].decisionIndex, is(1));
 
         assertThat(iterator.hasNext(), is(false));
     }
 
     @Test
-    void threeSubDecisions_allHaveTwoOptions(){
-        ConstraintNode node = IteratorTestHelper.constraintTripleDouble();
+    void twoSubDecisions_bothHaveTwoOptions(){
+        ConstraintNode node = IteratorTestHelper.constraintDoubleDouble();
         ConstraintIterator iterator = new ConstraintIterator(node);
 
         assertThat(iterator.hasNext(), is(true));

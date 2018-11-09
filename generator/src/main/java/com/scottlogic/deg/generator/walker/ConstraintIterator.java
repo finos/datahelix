@@ -21,12 +21,12 @@ public class ConstraintIterator implements Iterator<RowSpecRoute> {
     private int decisionIndexFromParent;
 
     private DecisionIterator decisions;
-    private boolean hasNext = true;
+    private boolean hasNext;
 
     public ConstraintIterator(ConstraintNode constraintNode) { this(constraintNode, 0); }
     public ConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
         decisions = DecisionIterator.build(constraintNode.getDecisions());
-
+        hasNext = true;
         this.decisionIndexFromParent = decisionIndexFromParent;
     }
 
@@ -59,6 +59,7 @@ public class ConstraintIterator implements Iterator<RowSpecRoute> {
     }
 
     void reset(){
-        throw new NotImplementedException();
+        hasNext=true;
+        if(decisions!= null) decisions.reset();
     }
 }

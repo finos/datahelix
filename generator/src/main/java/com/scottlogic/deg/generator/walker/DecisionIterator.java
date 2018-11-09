@@ -82,5 +82,9 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
     void reset(){
         currentOption = 0;
         currentOptionsSubroute = null;
+        if (nextIterator != null) {nextIterator.reset();}
+        for (ConstraintIterator option: options) {
+            option.reset();
+        }
     }
 }
