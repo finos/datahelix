@@ -15,12 +15,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+//TODO re implement with end node as different class, and use a builder to construct
 public class ConstraintIterator implements Iterator<RowSpecRoute> {
 
     private int decisionIndexFromParent;
 
-    private int currentDecision;
     private DecisionIterator decisions;
+    private boolean hasNext = true;
 
     public ConstraintIterator(ConstraintNode constraintNode) { this(constraintNode, 0); }
     public ConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
@@ -31,21 +32,33 @@ public class ConstraintIterator implements Iterator<RowSpecRoute> {
 
     @Override
     public boolean hasNext() {
-        return currentDecision < 1;
-        //TODO this is very wrong
+        if (decisions == null) {
+            return hasNext;
+        }
+
+        return decisions.hasNext();
     }
 
     @Override
     public RowSpecRoute next() {
-        currentDecision++;
 
         if(decisions == null) {
+            hasNext = false;
             RowSpecRoute rowSpecRoute = new RowSpecRoute();
-            rowSpecRoute.subRoutes = new RowSpecRoute[]{};
             rowSpecRoute.decisionIndex = decisionIndexFromParent;
+            rowSpecRoute.subRoutes = new RowSpecRoute[]{};
             return rowSpecRoute;
         }
 
+        RowSpecRoute rowSpecRoute = new RowSpecRoute();
+        rowSpecRoute.decisionIndex = decisionIndexFromParent;
+        List<RowSpecRoute> next = decisions.next();
+        rowSpecRoute.subRoutes = next.toArray(new RowSpecRoute[next.size()]);
+
+        return rowSpecRoute;
+    }
+
+    void reset(){
         throw new NotImplementedException();
     }
 }

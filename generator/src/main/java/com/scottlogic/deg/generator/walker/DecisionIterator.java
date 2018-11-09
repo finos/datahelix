@@ -55,6 +55,7 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
         List<RowSpecRoute> sideRoutes;
         if (nextIterator.hasNext()){
             sideRoutes = nextIterator.next();
+            //TODO NEED TO GET THE CURRENT OPTION SUBROUTE IF IT HASN'T BEEN GOT!!!!
             sideRoutes.add(0, currentOptionsSubroute);
         }
         else {

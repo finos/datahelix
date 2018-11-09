@@ -10,8 +10,12 @@ public class IteratorTestHelper {
     static ConstraintNode endConstraint() { return new ConstraintNode(); }
     static DecisionNode singleDecision() { return new DecisionNode(endConstraint()); }
     static DecisionNode doubleDecision() { return new DecisionNode(endConstraint(), endConstraint()); }
-    static ConstraintNode constraintSingleDouble() { return new ConstraintNode(Collections.emptyList(),
-        Arrays.asList(singleDecision(), doubleDecision())); }
+    static ConstraintNode constraintSingle() {
+        return new ConstraintNode(Collections.emptyList(), Arrays.asList(singleDecision())); }
+    static ConstraintNode constraintDouble() {
+        return new ConstraintNode(Collections.emptyList(), Arrays.asList(doubleDecision())); }
+    static ConstraintNode constraintSingleDouble() {
+        return new ConstraintNode(Collections.emptyList(), Arrays.asList(singleDecision(), doubleDecision())); }
     static ConstraintNode constraintDoubleDouble() { return new ConstraintNode(Collections.emptyList(),
         Arrays.asList(doubleDecision(), doubleDecision())); }
 }

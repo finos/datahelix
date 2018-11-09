@@ -33,7 +33,42 @@ class ConstraintIteratorTest {
     }
 
     @Test
-    void twoSubDecisions_oneHasMultipleOptions(){
+    void oneSubDecisions_oneHasOneOptions(){
+        ConstraintNode node = IteratorTestHelper.constraintSingle();
+        ConstraintIterator iterator = new ConstraintIterator(node);
+
+        assertThat(iterator.hasNext(), is(true));
+        RowSpecRoute route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(1)));
+        assertThat(route.subRoutes[0].decisionIndex, is(0));
+
+        assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    void oneSubDecisions_oneHasTwoOptions(){
+        ConstraintNode node = IteratorTestHelper.constraintDouble();
+        ConstraintIterator iterator = new ConstraintIterator(node);
+
+        assertThat(iterator.hasNext(), is(true));
+        RowSpecRoute route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(1)));
+        assertThat(route.subRoutes[0].decisionIndex, is(0));
+
+
+        assertThat(iterator.hasNext(), is(true));
+        route = iterator.next();
+        assertThat(route.decisionIndex, is(0));
+        assertThat(route.subRoutes,  is(arrayWithSize(1)));
+        assertThat(route.subRoutes[0].decisionIndex, is(1));
+
+        assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    void twoSubDecisions_oneHasTwoOptions(){
         ConstraintNode node = IteratorTestHelper.constraintSingleDouble();
         ConstraintIterator iterator = new ConstraintIterator(node);
 
