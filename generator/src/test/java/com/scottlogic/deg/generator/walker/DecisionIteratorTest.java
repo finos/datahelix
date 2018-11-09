@@ -28,7 +28,7 @@ class DecisionIteratorTest {
         DecisionNode node = IteratorTestHelper.singleDecision();
         DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
-        RowSpecRoute route = iterator.next();
+        RowSpecRoute route = iterator.next().get(0);
         assertThat(route.decisionOptionIndex, is(0));
         assertThat(route.subRoutes,  is(emptyArray()));
         assertThat(iterator.hasNext(), is(false));
@@ -40,12 +40,12 @@ class DecisionIteratorTest {
         DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
         assertThat(iterator.hasNext(), is(true));
-        RowSpecRoute route = iterator.next();
+        RowSpecRoute route = iterator.next().get(0);
         assertThat(route.decisionOptionIndex, is(0));
         assertThat(route.subRoutes,  is(emptyArray()));
 
         assertThat(iterator.hasNext(), is(true));
-        route = iterator.next();
+        route = iterator.next().get(0);
         assertThat(route.decisionOptionIndex, is(1));
         assertThat(route.subRoutes,  is(emptyArray()));
 
