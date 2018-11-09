@@ -67,10 +67,14 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
             sideRoutes.add(0, currentOptionsSubroute);
         }
         else {
-            nextIterator.reset();
-            currentOption++;
-            currentOptionsSubroute = options.get(currentOption).next();
+            ConstraintIterator currentOptionIterator = options.get(currentOption);
+            if (!currentOptionIterator.hasNext()){
+                currentOption++;
+                currentOptionIterator = options.get(currentOption);
+            }
+            currentOptionsSubroute = currentOptionIterator.next();
 
+            nextIterator.reset();
             sideRoutes = nextIterator.next();
             sideRoutes.add(0, currentOptionsSubroute);
 
