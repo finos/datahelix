@@ -19,6 +19,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,10 +33,11 @@ public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator = new DataGenerator(
-        new RowSpecMerger(fieldSpecMerger),
-        new ConstraintReducer(
-            new FieldSpecFactory(),
-            fieldSpecMerger));
+        new ExhaustiveDecisionTreeWalker(
+            new ConstraintReducer(
+                new FieldSpecFactory(),
+                fieldSpecMerger),
+            new RowSpecMerger(fieldSpecMerger)));
 
     private final IOutputTarget outputter;
 

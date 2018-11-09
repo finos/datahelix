@@ -22,9 +22,8 @@ public class ExhaustiveDecisionTreeWalker implements DecisionTreeWalker {
     private final RowSpecMerger rowSpecMerger;
 
     public ExhaustiveDecisionTreeWalker(
-            ConstraintReducer constraintReducer,
-            RowSpecMerger rowSpecMerger
-    ) {
+        ConstraintReducer constraintReducer,
+        RowSpecMerger rowSpecMerger) {
         this.constraintReducer = constraintReducer;
         this.rowSpecMerger = rowSpecMerger;
     }

@@ -14,6 +14,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,11 +54,12 @@ public class GeneratorTestUtilities {
         final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
 
         final IDataGenerator dataGenerator = new DataGenerator(
-            new RowSpecMerger(
-                new FieldSpecMerger()),
-            new ConstraintReducer(
-                new FieldSpecFactory(),
-                new FieldSpecMerger()));
+            new ExhaustiveDecisionTreeWalker(
+                new ConstraintReducer(
+                    new FieldSpecFactory(),
+                    new FieldSpecMerger()),
+                new RowSpecMerger(
+                    new FieldSpecMerger())));
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, new FieldExhaustiveCombinationStrategy());
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
