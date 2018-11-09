@@ -328,5 +328,16 @@ class ConstraintIteratorTest {
         assertThat(iterator.hasNext(), is(false));
     }
 
+    @Test
+    void twentyFive_test() {
+        ConstraintNode node = IteratorTestHelper.constraintBiggy();
+        ConstraintIterator iterator = new ConstraintIterator(node);
 
+        for (int i = 0; i<25; i++){
+            assertThat(""+i,iterator.hasNext(), is(true));
+            RowSpecRoute next = iterator.next();
+            assertThat("",true);
+        }
+        assertThat(iterator.hasNext(), is(false));
+    }
 }

@@ -24,4 +24,9 @@ public class IteratorTestHelper {
         return new ConstraintNode(Collections.emptyList(), Arrays.asList(doubleDecision(),
             new DecisionNode(constraintDoubleDouble())));
     }
+    static ConstraintNode constraintBiggy(){
+        return new ConstraintNode(Collections.emptyList(), Arrays.asList(
+            new DecisionNode(constraintDoubleDouble(), endConstraint()),
+            new DecisionNode(constraintDoubleDouble(), endConstraint())));
+    }
 }
