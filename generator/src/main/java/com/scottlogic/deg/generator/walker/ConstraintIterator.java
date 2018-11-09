@@ -42,7 +42,7 @@ public class ConstraintIterator implements Iterator<RowSpecRoute> {
         if(decisions == null) {
             RowSpecRoute rowSpecRoute = new RowSpecRoute();
             rowSpecRoute.subRoutes = new RowSpecRoute[]{};
-            rowSpecRoute.decisionOptionIndex = decisionIndexFromParent;
+            rowSpecRoute.decisionIndex = decisionIndexFromParent;
             return rowSpecRoute;
         }
 

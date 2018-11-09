@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;

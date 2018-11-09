@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
@@ -44,10 +45,10 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
     private RowSpecRoute produceRoute(DecisionNode decision) {
 
         int decisionIndex = rand.nextInt(decision.getOptions().size());
-        ConstraintNode decisionOption = decision.getOptions().get(decisionIndex);
+        ConstraintNode decisionOption = new ArrayList<>(decision.getOptions()).get(decisionIndex);
 
         RowSpecRoute route = new RowSpecRoute();
-        route.decisionOptionIndex = decisionIndex;
+        route.decisionIndex = decisionIndex;
         route.subRoutes = produceRoute(decisionOption);
         return route;
     }

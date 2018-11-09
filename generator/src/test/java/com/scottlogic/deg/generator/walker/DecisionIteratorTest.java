@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -29,7 +30,7 @@ class DecisionIteratorTest {
         DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
         RowSpecRoute route = iterator.next().get(0);
-        assertThat(route.decisionOptionIndex, is(0));
+        assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(emptyArray()));
         assertThat(iterator.hasNext(), is(false));
     }
@@ -41,12 +42,12 @@ class DecisionIteratorTest {
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next().get(0);
-        assertThat(route.decisionOptionIndex, is(0));
+        assertThat(route.decisionIndex, is(0));
         assertThat(route.subRoutes,  is(emptyArray()));
 
         assertThat(iterator.hasNext(), is(true));
         route = iterator.next().get(0);
-        assertThat(route.decisionOptionIndex, is(1));
+        assertThat(route.decisionIndex, is(1));
         assertThat(route.subRoutes,  is(emptyArray()));
 
         assertThat(iterator.hasNext(), is(false));
