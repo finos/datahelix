@@ -31,18 +31,13 @@ import java.util.stream.Stream;
 
 public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final IDataGenerator dataGenerator = new DataGenerator(
-        new ExhaustiveDecisionTreeWalker(
-            new ConstraintReducer(
-                new FieldSpecFactory(),
-                fieldSpecMerger),
-            new RowSpecMerger(fieldSpecMerger)));
+    private final IDataGenerator dataGenerator;
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter) {
+    public GenerationEngine(IOutputTarget outputter, DataGenerator dataGenerator) {
         this.outputter = outputter;
+        this.dataGenerator = dataGenerator;
     }
 
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
