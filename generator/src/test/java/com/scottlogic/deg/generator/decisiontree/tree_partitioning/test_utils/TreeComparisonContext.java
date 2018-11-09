@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.Stack;
 
 public class TreeComparisonContext {
-    public DecisionTree expectedTree;
-    public DecisionTree actualTree;
+    private DecisionTree expectedTree;
+    private DecisionTree actualTree;
 
     private final ArrayList<Error> errors = new ArrayList<>();
     private final Stack<StackEntry> stack = new Stack<>();
@@ -17,13 +17,38 @@ public class TreeComparisonContext {
         stack.push(new StackEntry(expected, actual));
     }
 
-    public void popFromStack(){
+    public void popFromStack() {
         stack.pop();
     }
 
+    public void setTrees(DecisionTree expectedTree, DecisionTree actualTree) {
+        this.expectedTree = expectedTree;
+        this.actualTree = actualTree;
+    }
+
+    public DecisionTree getExpectedTree() {
+        return this.expectedTree;
+    }
+
+    public DecisionTree getActualTree() {
+        return this.actualTree;
+    }
+
+    public Collection<Error> getErrors() {
+        return this.errors;
+    }
+
+    public void reportDifferences(Collection missingExpected, Collection missingActual, TreeElementType elementType) {
+        errors.add(new Error(
+            new ErrorContext(expectedTree, missingExpected),
+            new ErrorContext(actualTree, missingActual),
+            elementType,
+            this.stack));
+    }
+
     class StackEntry {
-        public final Object expected;
-        public final Object actual;
+        final Object expected;
+        final Object actual;
 
         public StackEntry(Object expected, Object actual) {
             this.expected = expected;
@@ -58,34 +83,8 @@ public class TreeComparisonContext {
 
     public enum TreeElementType {
         Decision,
-        AtomicConstraint
-    }
-
-    public void setTrees(DecisionTree expectedTree, DecisionTree actualTree) {
-        this.expectedTree = expectedTree;
-        this.actualTree = actualTree;
-    }
-
-    public Collection<Error> getErrors(){
-        return this.errors;
-    }
-
-    public void reportDecisionDifferences(ArrayList missingExpectedDecisions, ArrayList missingActualDecisions) {
-        errors.add(new Error(
-            new ErrorContext(expectedTree, missingExpectedDecisions),
-            new ErrorContext(actualTree, missingActualDecisions),
-            TreeElementType.Decision,
-            this.stack));
-    }
-
-    public void reportAtomicConstraintDifferences(
-        ArrayList missingExpectedAtomicConstraints,
-        ArrayList missingActualAtomicConstraints) {
-        errors.add(new Error(
-            new ErrorContext(expectedTree, missingExpectedAtomicConstraints),
-            new ErrorContext(actualTree, missingActualAtomicConstraints),
-            TreeElementType.AtomicConstraint,
-            this.stack));
+        AtomicConstraint,
+        Fields
     }
 }
 

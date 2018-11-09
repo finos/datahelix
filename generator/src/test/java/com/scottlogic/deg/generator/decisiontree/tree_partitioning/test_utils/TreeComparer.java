@@ -3,11 +3,15 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 public class TreeComparer implements IEqualityComparer {
-    private final ConstraintNodeComparer constraintNodeComparer;
+    private final IEqualityComparer constraintNodeComparer;
+    private final IEqualityComparer fieldComparer;
     private final TreeComparisonContext context;
 
-    public TreeComparer(ConstraintNodeComparer constraintNodeComparer, TreeComparisonContext context) {
+    public TreeComparer(IEqualityComparer constraintNodeComparer,
+                        IEqualityComparer fieldComparer,
+                        TreeComparisonContext context) {
         this.constraintNodeComparer = constraintNodeComparer;
+        this.fieldComparer = fieldComparer;
         this.context = context;
     }
 
@@ -30,8 +34,11 @@ public class TreeComparer implements IEqualityComparer {
         if (tree1 == null || tree2 == null)
             return false; //either tree1 XOR tree2 is null
 
-        //TODO: compare the fields;
+        boolean fieldsAreEqual = this.fieldComparer.equals(tree1.getFields(), tree2.getFields());
+        if (fieldsAreEqual) {
+            return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
+        }
 
-        return this.constraintNodeComparer.equals(tree1.getRootNode(), tree2.getRootNode());
+        return false;
     }
 }

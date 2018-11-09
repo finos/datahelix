@@ -20,15 +20,6 @@ public class ConstraintNodeComparer implements IEqualityComparer {
         this.atomicConstraintAnyOrderComparer.reportErrors = true;
     }
 
-    public ConstraintNodeComparer(TreeComparisonContext comparisonContext, DecisionComparer decisionComparer) {
-        this.comparisonContext = comparisonContext;
-        this.decisionComparer = decisionComparer;
-        this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
-
-        this.decisionAnyOrderComparer.reportErrors = true;
-        this.atomicConstraintAnyOrderComparer.reportErrors = true;
-    }
-
     @Override
     public int getHashCode(Object item) {
         return getHashCode((ConstraintNode)item);
@@ -64,17 +55,19 @@ public class ConstraintNodeComparer implements IEqualityComparer {
             this.comparisonContext.pushToStack(constraint1, constraint2);
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
-                this.comparisonContext.reportAtomicConstraintDifferences(
+                this.comparisonContext.reportDifferences(
                     atomicConstraintAnyOrderComparer.itemsMissingFromCollection1,
-                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection2);
+                    atomicConstraintAnyOrderComparer.itemsMissingFromCollection2,
+                    TreeComparisonContext.TreeElementType.AtomicConstraint);
                 return false;
             }
 
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
-                this.comparisonContext.reportDecisionDifferences(
+                this.comparisonContext.reportDifferences(
                     decisionAnyOrderComparer.itemsMissingFromCollection1,
-                    decisionAnyOrderComparer.itemsMissingFromCollection2);
+                    decisionAnyOrderComparer.itemsMissingFromCollection2,
+                    TreeComparisonContext.TreeElementType.Decision);
                 return false;
             }
 

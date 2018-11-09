@@ -59,9 +59,12 @@ class DecisionTreePartitionerIntegrationTests {
                 return DynamicTest.dynamicTest(directory.getName(), () -> {
                     TreeComparisonContext context = new TreeComparisonContext();
                     IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
-                    new TreeComparer(
-                        new ConstraintNodeComparer(context),
-                        context));
+                        new TreeComparer(
+                            new ConstraintNodeComparer(context),
+                            new ProfileFieldComparer(context),
+                            context
+                        )
+                    );
 
                     boolean match = anyOrderComparer.equals(
                         expectedPartitionedTrees,

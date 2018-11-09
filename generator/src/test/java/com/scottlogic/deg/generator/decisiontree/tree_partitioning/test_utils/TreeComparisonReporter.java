@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class TreeComparisonReporter {
     public void reportMessages(TreeComparisonContext context) {
-        System.out.println(String.format("--- Looking for: %s --- ", context.expectedTree));
+        System.out.println(String.format("--- Looking for: %s --- ", context.getExpectedTree()));
 
         for (TreeComparisonContext.Error error : context.getErrors()){
             writeError(error);
