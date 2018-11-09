@@ -8,6 +8,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
+//consider making lasIterator implementation for final decision in a list
 public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
 
     private DecisionIterator nextIterator;
@@ -39,6 +40,7 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
 
     @Override
     public boolean hasNext() {
+        //TODO fix the -1 wackyness
         if (nextIterator == null) return currentOption < options.size();
         return currentOption < options.size() -1 || nextIterator.hasNext();
     }
@@ -46,8 +48,11 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
     @Override
     public List<RowSpecRoute> next() {//TODO refactor
         if (nextIterator == null) {
-            currentOptionsSubroute = options.get(currentOption).next();
-            currentOption++;
+            ConstraintIterator currentOptionIterator = options.get(currentOption);
+            currentOptionsSubroute = currentOptionIterator.next();
+            if (!currentOptionIterator.hasNext()){
+                currentOption++;
+            }
             List<RowSpecRoute> r = new ArrayList<>();
             r.add(0, currentOptionsSubroute);
             return r;
