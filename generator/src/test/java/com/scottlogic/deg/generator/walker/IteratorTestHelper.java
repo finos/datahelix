@@ -18,4 +18,8 @@ public class IteratorTestHelper {
         return new ConstraintNode(Collections.emptyList(), Arrays.asList(singleDecision(), doubleDecision())); }
     static ConstraintNode constraintDoubleDouble() { return new ConstraintNode(Collections.emptyList(),
         Arrays.asList(doubleDecision(), doubleDecision())); }
+    static ConstraintNode constraintDoubleLayered(){
+        return new ConstraintNode(Collections.emptyList(), Arrays.asList(doubleDecision(),
+            new DecisionNode(constraintDoubleDouble())));
+    }
 }

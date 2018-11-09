@@ -10,6 +10,7 @@ import java.util.Arrays;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class ConstraintIteratorTest {
 
@@ -128,7 +129,76 @@ class ConstraintIteratorTest {
         assertThat(iterator.hasNext(), is(false));
     }
 
+    @Test
+    void doubleLayeredConstraint(){
+        ConstraintNode node = IteratorTestHelper.constraintDoubleLayered();
+        ConstraintIterator iterator = new ConstraintIterator(node);
 
+        RowSpecRoute leftDecision = new RowSpecRoute();
+        leftDecision.subRoutes = new RowSpecRoute[]{};
+
+        RowSpecRoute lowerLeftDecision = new RowSpecRoute();
+        lowerLeftDecision.subRoutes = new RowSpecRoute[]{};
+
+        RowSpecRoute lowerRightDecision = new RowSpecRoute();
+        lowerRightDecision.subRoutes = new RowSpecRoute[]{};
+
+        RowSpecRoute rightOuterDecision = new RowSpecRoute();
+        rightOuterDecision.decisionIndex = 0;
+        rightOuterDecision.subRoutes = new RowSpecRoute[]{lowerLeftDecision, lowerRightDecision};
+
+        RowSpecRoute expected = new RowSpecRoute();
+        expected.decisionIndex = 0;
+        expected.subRoutes = new RowSpecRoute[]{leftDecision, rightOuterDecision};
+
+        RowSpecRoute actual = iterator.next();
+        leftDecision.decisionIndex = 0;
+        lowerLeftDecision.decisionIndex = 0;
+        lowerRightDecision.decisionIndex = 0;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 0;
+        lowerLeftDecision.decisionIndex = 0;
+        lowerRightDecision.decisionIndex = 1;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 0;
+        lowerLeftDecision.decisionIndex = 1;
+        lowerRightDecision.decisionIndex = 0;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 0;
+        lowerLeftDecision.decisionIndex = 1;
+        lowerRightDecision.decisionIndex = 1;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 1;
+        lowerLeftDecision.decisionIndex = 0;
+        lowerRightDecision.decisionIndex = 0;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 1;
+        lowerLeftDecision.decisionIndex = 0;
+        lowerRightDecision.decisionIndex = 1;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 1;
+        lowerLeftDecision.decisionIndex = 1;
+        lowerRightDecision.decisionIndex = 0;
+        assertThat(actual, is(sameBeanAs(expected)));
+
+        actual = iterator.next();
+        leftDecision.decisionIndex = 1;
+        lowerLeftDecision.decisionIndex = 1;
+        lowerRightDecision.decisionIndex = 1;
+        assertThat(actual, is(sameBeanAs(expected)));
+    }
 
 
 
