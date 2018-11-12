@@ -28,6 +28,18 @@ public class Generate implements Runnable {
         defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
+    @CommandLine.Option(
+            names = {"--no-optimise"},
+            description = "Prevents tree optimisation",
+            hidden = true)
+    private boolean dontOptimise;
+
+    @CommandLine.Option(
+            names = {"--no-partition"},
+            description = "Prevents tree partitioning",
+            hidden = true)
+    private boolean dontPartitionTrees;
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(
@@ -36,7 +48,9 @@ public class Generate implements Runnable {
 
         try {
             new GenerationEngine(
-                    new FileOutputTarget(outputPath, new CsvDataSetWriter()))
+                new FileOutputTarget(outputPath, new CsvDataSetWriter()),
+                !dontOptimise,
+                !dontPartitionTrees)
                 .generateDataSet(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

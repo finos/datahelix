@@ -65,7 +65,7 @@ public class DecisionTreeVisualisationWriter {
         treeInfo.constraintNodes = 1;
         treeInfo.rowSpecs = BigInteger.valueOf(1);
 
-        declareConstraintNode(nodeId, constraintNode.getAtomicConstraints(), treeInfo);
+        declareConstraintNode(nodeId, constraintNode, treeInfo);
 
         if (parentNodeId != null) {
             declareParenthood(parentNodeId, nodeId);
@@ -88,7 +88,7 @@ public class DecisionTreeVisualisationWriter {
     private TreeInfo visit(DecisionNode decisionNode, String parentNodeId) throws IOException {
         String nodeId = "d" + nextId++;
 
-        declareDecisionNode(nodeId);
+        declareDecisionNode(decisionNode, nodeId);
         declareParenthood(parentNodeId, nodeId);
 
         TreeInfo treeInfo = new TreeInfo();
@@ -107,18 +107,26 @@ public class DecisionTreeVisualisationWriter {
         return treeInfo;
     }
 
-    private void declareDecisionNode(String id) throws IOException {
-        writeLine("  " + id + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
+    private void declareDecisionNode(DecisionNode decisionNode, String id) throws IOException {
+        String optimised = decisionNode.isOptimised()
+                ? "[color=\"blue\"]"
+                : "";
+
+        writeLine("  " + id + optimised + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
     }
 
-    private void declareConstraintNode(String id, Collection<IConstraint> constraints, TreeInfo treeInfo) throws IOException {
-        String label = constraints
+    private void declareConstraintNode(String id, ConstraintNode constraintNode, TreeInfo treeInfo) throws IOException {
+        String label = constraintNode.getAtomicConstraints()
             .stream()
             .map(IConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
-        treeInfo.atomicConstraints += constraints.size();
+        treeInfo.atomicConstraints += constraintNode.getAtomicConstraints().size();
 
-        writeLine("  " + id + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
+        String optimised = constraintNode.isOptimised()
+                ? "[color=\"blue\"]"
+                : "";
+
+        writeLine("  " + id + optimised + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
     }
 
     private void declareParenthood(String parentNodeId, String childNodeId) throws IOException {
