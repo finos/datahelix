@@ -24,44 +24,28 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     private final Collection<IConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
-    private final boolean optimised;
 
     public TreeConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
-        this(atomicConstraints, decisions, false);
-    }
-
-    public TreeConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions, boolean optimised) {
         this.atomicConstraints =  new ArrayList<>(atomicConstraints);
         this.decisions = new ArrayList<>(decisions);
-        this.optimised = optimised;
     }
 
     public TreeConstraintNode(IConstraint... atomicConstraints) {
         this(
             Arrays.asList(atomicConstraints),
-            new ArrayList<>(),
-            false);
-    }
-
-    public TreeConstraintNode(boolean optimised, IConstraint... atomicConstraints) {
-        this(
-            Arrays.asList(atomicConstraints),
-            new ArrayList<>(),
-            optimised);
+            new ArrayList<>());
     }
 
     public TreeConstraintNode(IConstraint singleAtomicConstraint) {
         decisions = new ArrayList<>();
         atomicConstraints = new ArrayList<>();
         atomicConstraints.add(singleAtomicConstraint);
-        optimised = false;
     }
 
     TreeConstraintNode(DecisionNode... decisionNodes) {
         this(
             Collections.emptyList(),
-            Arrays.asList(decisionNodes),
-            false);
+            Arrays.asList(decisionNodes));
     }
 
     public Collection<IConstraint> getAtomicConstraints() {
@@ -116,8 +100,7 @@ public final class TreeConstraintNode implements ConstraintNode {
                 .stream()
                 .filter(c -> !c.equals(excludeAtomicConstraint))
                 .collect(Collectors.toList()),
-            decisions,
-            true);
+            decisions);
     }
 
     public boolean atomicConstraintExists(IConstraint constraint) {
@@ -128,10 +111,6 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     public void addAtomicConstraints(Collection<IConstraint> constraints) {
         this.atomicConstraints.addAll(constraints);
-    }
-
-    public boolean isOptimised(){
-        return optimised;
     }
 
     public void appendDecisionNode(DecisionNode decisionNode) {

@@ -16,7 +16,6 @@ public interface ConstraintNode{
     ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(IConstraint constraint);
     void addAtomicConstraints(Collection<IConstraint> constraints);
-    boolean isOptimised();
     void appendDecisionNode(DecisionNode decisionNode);
 }
 
