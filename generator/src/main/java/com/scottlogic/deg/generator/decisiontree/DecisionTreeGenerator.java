@@ -41,7 +41,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
         return Collections.singleton(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 constraints,
                 Collections.emptyList()));
     }
@@ -52,7 +52,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
         return Collections.singleton(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 Collections.emptyList(),
                 Collections.singleton(decision)));
     }
@@ -72,7 +72,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
-        return ConstraintNode.merge(rootConstraintNodeFragments);
+        return TreeConstraintNode.merge(rootConstraintNodeFragments);
     }
 
     private Collection<ConstraintNode> convertConstraint(IConstraint constraintToConvert) {
@@ -192,7 +192,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             DecisionNode decisionPoint = new DecisionNode(
                 subConstraints.stream()
-                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
+                    .map(c -> TreeConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
 
             return asConstraintNodeList(decisionPoint);
@@ -214,7 +214,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             if (node.getDecisions().isEmpty())
                 return node;
 
-            return new ConstraintNode(
+            return new TreeConstraintNode(
                 node.getAtomicConstraints(),
                 node.getDecisions().stream()
                     .map(this::simplify)

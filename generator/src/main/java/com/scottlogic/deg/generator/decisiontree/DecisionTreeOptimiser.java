@@ -58,11 +58,11 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new ConstraintNode(true, mostProlificAtomicConstraint);
+        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(true, mostProlificAtomicConstraint);
 
         // Add negation of most prolific constraint to new decision node
         IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
-        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNode(true, negatedMostProlificConstraint);
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(true, negatedMostProlificConstraint);
 
         // Add new decision node
         DecisionNode factorisedDecisionNode = new DecisionNode(

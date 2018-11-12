@@ -24,7 +24,7 @@ public class DecisionTreeCollection {
 
     public DecisionTree getMergedTree() {
         return new DecisionTree(
-            ConstraintNode.merge(decisionTrees
+            TreeConstraintNode.merge(decisionTrees
                 .stream()
                 .map(DecisionTree::getRootNode)
                 .iterator()),

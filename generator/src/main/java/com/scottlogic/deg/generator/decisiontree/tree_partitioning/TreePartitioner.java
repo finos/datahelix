@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 
 import java.util.*;
 import java.util.function.Function;
@@ -65,12 +66,12 @@ public class TreePartitioner implements ITreePartitioner {
                 .stream()
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
-                    new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
+                    new TreeConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
                     new ProfileFields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
-                    new ConstraintNode(),
+                    new TreeConstraintNode(),
                     new ProfileFields(Collections.singletonList(field))
                 ))
             );

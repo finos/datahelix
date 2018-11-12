@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -185,19 +186,19 @@ class TreePartitionerTests {
             tree(fields("A"),
                 constraint("A")),
             tree(fields("B"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
     }
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
         givenTree(
             tree(fields("A", "B", "C"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
 
         expectTrees(
-            tree(fields("A"), new ConstraintNode()),
-            tree(fields("B"), new ConstraintNode()),
-            tree(fields("C"), new ConstraintNode()));
+            tree(fields("A"), new TreeConstraintNode()),
+            tree(fields("B"), new TreeConstraintNode()),
+            tree(fields("C"), new TreeConstraintNode()));
     }
 
     private ConstraintNode constraint(String... fieldNames) {
@@ -209,7 +210,7 @@ class TreePartitionerTests {
     }
 
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
-        return new ConstraintNode(
+        return new TreeConstraintNode(
             Stream.of(fieldNames)
                 .map(this::atomicConstraint)
                 .collect(Collectors.toList()),
