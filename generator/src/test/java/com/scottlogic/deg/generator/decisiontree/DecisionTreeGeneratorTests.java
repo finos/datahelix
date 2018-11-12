@@ -235,17 +235,22 @@ class DecisionTreeGeneratorTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        List<DecisionNode> decisions = new ArrayList<>(outputRule.getRootNode().getDecisions());
-        Assert.assertThat("First decision has correct number of options", decisions.get(0).getOptions().size(),
-            Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decisions.get(0).getOptions());
-        assertOptionContainsSingleConstraint(options.get(0), constraintA);
-        assertOptionContainsSingleConstraint(options.get(1), constraintB);
-        Assert.assertThat("Second decision has correct number of options", decisions.get(1).getOptions().size(),
-            Is.is(2));
-        options = new ArrayList<>(decisions.get(1).getOptions());
-        assertOptionContainsSingleConstraint(options.get(0), constraintC);
-        assertOptionContainsSingleConstraint(options.get(1), constraintD);
+        Assert.assertTrue(isEquivalentTo(
+            new TreeConstraintNode(
+                Collections.emptySet(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(constraintA),
+                        new TreeConstraintNode(constraintB)
+                    ),
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(constraintC),
+                        new TreeConstraintNode(constraintD)
+                    )
+                )
+            ),
+            outputRule.getRootNode())
+        );
     }
 
     // Checks (A OR (B AND C)) AND (D OR E)
@@ -267,23 +272,27 @@ class DecisionTreeGeneratorTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        List<DecisionNode> decisions = new ArrayList<>(outputRule.getRootNode().getDecisions());
-        Assert.assertThat("First decision has two options", decisions.get(0).getOptions().size(), Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decisions.get(0).getOptions());
-        assertOptionContainsSingleConstraint(options.get(0), constraintA);
-        Assert.assertThat("Second option of first decision has no further decisions",
-            options.get(1).getDecisions().size(), Is.is(0));
-        Assert.assertThat("Second option of first decision has two atomic constraints",
-            options.get(1).getAtomicConstraints().size(), Is.is(2));
-        Assert.assertThat("Second option of first decision contains constraint C",
-            options.get(1).getAtomicConstraints().contains(constraintC), Is.is(true));
-        Assert.assertThat("Second option of first decision contains constraint B",
-            options.get(1).getAtomicConstraints().contains(constraintB), Is.is(true));
-        Assert.assertThat("Second decision has two options", decisions.get(1).getOptions().size(), Is.is(2));
-        Assert.assertEquals(2, decisions.get(1).getOptions().size());
-        options = new ArrayList<>(decisions.get(1).getOptions());
-        assertOptionContainsSingleConstraint(options.get(0), constraintD);
-        assertOptionContainsSingleConstraint(options.get(1), constraintE);
+        Assert.assertTrue(isEquivalentTo(
+            new TreeConstraintNode(
+                Collections.emptySet(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(
+                            constraintA
+                        ),
+                        new TreeConstraintNode(
+                            constraintC,
+                            constraintB
+                        )
+                    ),
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(constraintD),
+                        new TreeConstraintNode(constraintE)
+                    )
+                )
+            ),
+            outputRule.getRootNode())
+        );
     }
 
     // Checks IF (A) THEN B ELSE C
@@ -301,24 +310,29 @@ class DecisionTreeGeneratorTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-            outputRule.getRootNode().getDecisions().size(), Is.is(1));
-        DecisionNode decision = outputRule.getRootNode().getDecisions().iterator().next();
-        Assert.assertThat("Decision has two options", decision.getOptions().size(), Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decision.getOptions());
-        Assert.assertThat("First option contains atomic constraint A",
-            options.get(0).getAtomicConstraints().contains(constraintA), Is.is(true));
-        Assert.assertThat("First option contains atomic constraint B",
-            options.get(0).getAtomicConstraints().contains(constraintB), Is.is(true));
-        Assert.assertThat("Second option contains atomic constraint C",
-            options.get(1).getAtomicConstraints().contains(constraintC), Is.is(true));
-        IConstraint constraint = options.get(1).getAtomicConstraints().iterator().next();
-        Assert.assertThat("First atomic constraint of second option is a NotConstraint",
-            constraint instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("First atomic constraint of second option is a negated version of constraint A",
-            ((NotConstraint) constraint).negatedConstraint, Is.is(constraintA));
+        Assert.assertTrue(isEquivalentTo(
+            new TreeConstraintNode(
+                Collections.emptySet(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(
+                            Arrays.asList(
+                                constraintA,
+                                constraintB),
+                            Collections.emptySet()
+                        ),
+                        new TreeConstraintNode(
+                            Arrays.asList(
+                                new NotConstraint(constraintA),
+                                constraintC
+                            ),
+                            Collections.emptySet()
+                        )
+                    )
+                )
+            ),
+            outputRule.getRootNode())
+        );
     }
 
     // Checks IF (A OR B) THEN C
@@ -374,36 +388,31 @@ class DecisionTreeGeneratorTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-            outputRule.getRootNode().getDecisions().size(), Is.is(1));
-        DecisionNode decision = outputRule.getRootNode().getDecisions().iterator().next();
-        Assert.assertThat("First decision has two options", decision.getOptions().size(), Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decision.getOptions());
-        // First option should be A AND (NOT B)
-        Assert.assertThat("First option has two atomic constraints", options.get(0).getAtomicConstraints().size(),
-            Is.is(2));
-        List<IConstraint> constraints = new ArrayList<>(options.get(0).getAtomicConstraints());
-        Assert.assertThat("First atomic constraint of first option is constraint A", constraints.get(0),
-            Is.is(constraintA));
-        Assert.assertThat("Second atomic constraint of first option is a NOT constraint",
-            constraints.get(1) instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Second atomic constraint of first option is NOT(constraint B)",
-            ((NotConstraint) constraints.get(1)).negatedConstraint, Is.is(constraintB));
-        // Second option should be (NOT A) AND (NOT C)
-        Assert.assertThat("Second option has two atomic constraints", options.get(1).getAtomicConstraints().size(),
-            Is.is(2));
-        Assert.assertThat("Second option has no subdecisions", options.get(1).getDecisions().size(), Is.is(0));
-        constraints = new ArrayList<>(options.get(1).getAtomicConstraints());
-        Assert.assertThat("First atomic constraint of second option is a NOT constraint",
-            constraints.get(0) instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Second atomic constraint of second option is a NOT constraint",
-            constraints.get(1) instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("First atomic constraint of second option is negated constraint A",
-            ((NotConstraint) constraints.get(0)).negatedConstraint, Is.is(constraintA));
-        Assert.assertThat("Second atomic constraint of second option is negated constraint C",
-            ((NotConstraint) constraints.get(1)).negatedConstraint, Is.is(constraintC));
+
+        Assert.assertTrue(isEquivalentTo(
+            new TreeConstraintNode(
+                Collections.emptySet(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(
+                            Arrays.asList(
+                                constraintA,
+                                new NotConstraint(constraintB)
+                            ),
+                            Collections.emptySet()
+                        ),
+                        new TreeConstraintNode(
+                            Arrays.asList(
+                                new NotConstraint(constraintA),
+                                new NotConstraint(constraintC)
+                            ),
+                            Collections.emptySet()
+                        )
+                    )
+                )
+            ),
+            outputRule.getRootNode())
+        );
     }
 
     // NOT (IF A THEN B) - other edge case
@@ -469,29 +478,24 @@ class DecisionTreeGeneratorTests {
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         // Result should be (NOT A) OR (NOT B)
-        Assert.assertThat("Decision tree root contains no atomic constraints",
-            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
-        Assert.assertThat("Decision tree root contains one decision",
-            outputRule.getRootNode().getDecisions().size(), Is.is(1));
-        DecisionNode decision = outputRule.getRootNode().getDecisions().iterator().next();
-        Assert.assertThat("Decision has two options", decision.getOptions().size(), Is.is(2));
-        List<ConstraintNode> options = new ArrayList<>(decision.getOptions());
-        Assert.assertThat("First option has one atomic constraint", options.get(0).getAtomicConstraints().size(),
-            Is.is(1));
-        Assert.assertThat("First option has no subdecisions", options.get(0).getDecisions().size(), Is.is(0));
-        IConstraint testConstraint = options.get(0).getAtomicConstraints().iterator().next();
-        Assert.assertThat("Atomic constraint of first option is a NOT constraint",
-            testConstraint instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Atomic constraint of first option is NOT(Constraint A)",
-            ((NotConstraint) testConstraint).negatedConstraint, Is.is(constraintA));
-        Assert.assertThat("Second option has one atomic constraint", options.get(1).getAtomicConstraints().size(),
-            Is.is(1));
-        Assert.assertThat("Second option has no subdecisions", options.get(1).getDecisions().size(), Is.is(0));
-        testConstraint = options.get(1).getAtomicConstraints().iterator().next();
-        Assert.assertThat("Atomic constraint of second option is a NOT constraint",
-            testConstraint instanceof NotConstraint, Is.is(true));
-        Assert.assertThat("Atomic constraint of second option is NOT(Constraint B)",
-            ((NotConstraint) testConstraint).negatedConstraint, Is.is(constraintB));
+        Assert.assertTrue(isEquivalentTo(
+            new TreeConstraintNode(
+                Collections.emptySet(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(
+                            Arrays.asList(new NotConstraint(constraintA)),
+                            Collections.emptySet()
+                        ),
+                        new TreeConstraintNode(
+                            Arrays.asList(new NotConstraint(constraintB)),
+                            Collections.emptySet()
+                        )
+                    )
+                )
+            ),
+            outputRule.getRootNode())
+        );
     }
 
     // (A OR B) OR C
