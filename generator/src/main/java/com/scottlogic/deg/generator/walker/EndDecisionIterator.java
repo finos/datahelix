@@ -12,7 +12,6 @@ import java.util.*;
 public class EndDecisionIterator implements IDecisionIterator {
     private List<IConstraintIterator> options = new ArrayList<>();
     private int currentOption;
-    private RowSpecRoute currentOptionsSubroute;
 
     public EndDecisionIterator(DecisionNode decisionNode){
         int count = 0;
@@ -29,20 +28,19 @@ public class EndDecisionIterator implements IDecisionIterator {
 
     @Override
     public List<RowSpecRoute> next() {
-            IConstraintIterator currentOptionIterator = options.get(currentOption);
-            currentOptionsSubroute = currentOptionIterator.next();
-            if (!currentOptionIterator.hasNext()){
-                currentOption++;
-            }
-            List<RowSpecRoute> r = new ArrayList<>();
-            r.add(0, currentOptionsSubroute);
-            return r;
+        IConstraintIterator currentOptionIterator = options.get(currentOption);
+        List<RowSpecRoute> r = new ArrayList<>();
+        r.add(0, currentOptionIterator.next());
+
+        if (!currentOptionIterator.hasNext()){
+            currentOption++;
+        }
+        return r;
     }
 
     @Override
     public void reset(){
         currentOption = 0;
-        currentOptionsSubroute = null;
         for (IConstraintIterator option: options) {
             option.reset();
         }
