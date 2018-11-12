@@ -120,12 +120,6 @@ public final class ConstraintNode {
             true);
     }
 
-    public boolean atomicConstraintExists(ConstraintNode constraintNode) {
-        return constraintNode.atomicConstraints
-            .stream()
-            .anyMatch(ac -> atomicConstraintExists(ac));
-    }
-
     public boolean atomicConstraintExists(IConstraint constraint) {
         return atomicConstraints
             .stream()
