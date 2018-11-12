@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -85,8 +86,11 @@ public final class TreeConstraintNode implements ConstraintNode {
                 : Objects.toString(atomicConstraints));
     }
 
-    public void removeDecision(DecisionNode decision) {
-        decisions.remove(decision);
+    public void removeDecisions(Collection<DecisionNode> decisionsToRemove){
+        Function<DecisionNode, Boolean> shouldRemove = existingDecision -> decisionsToRemove.stream()
+            .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
+
+        decisions.removeIf(existingDecision -> shouldRemove.apply(existingDecision));
     }
 
     public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {

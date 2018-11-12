@@ -90,7 +90,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             simplifyConstraint(negatedFactorisingConstraintNode);
         }
 
-        decisionsToRemove.forEach(rootNode::removeDecision);
+        rootNode.removeDecisions(decisionsToRemove);
         optimiseDecisions(factorisingConstraintNode, depth + 1);
         optimiseDecisions(negatedFactorisingConstraintNode, depth + 1);
         return true;
@@ -104,7 +104,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                 node.addAtomicConstraints(firstOption.getAtomicConstraints());
                 firstOption.getDecisions().forEach(node::appendDecisionNode);
-                node.removeDecision(decisionNode);
+                node.removeDecisions(Arrays.asList(decisionNode));
             });
     }
 

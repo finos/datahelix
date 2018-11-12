@@ -31,8 +31,8 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
     }
 
     @Override
-    public void removeDecision(DecisionNode decision) {
-        underlying.removeDecision(decision);
+    public void removeDecisions(Collection<DecisionNode> decisionsToRemove) {
+        underlying.removeDecisions(decisionsToRemove);
     }
 
     @Override
