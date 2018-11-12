@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ class DecisionTreeGeneratorTests {
     private final List<Rule> rules = new ArrayList<>();
     private DecisionTreeCollection actualOutput = null;
 
-    private void beforeEach() {
+    @BeforeEach
+    void beforeEach() {
         rules.clear();
         actualOutput = null;
     }
@@ -335,11 +337,11 @@ class DecisionTreeGeneratorTests {
             isEquivalentTo(
                 getResultingRootOption(), new TreeConstraintNode(
                     Collections.emptyList(),
-                    Arrays.asList(
+                    Collections.singletonList(
                         new TreeDecisionNode(
                             /* OPTION 1: AND(C, OR(A, B))  */
                             new TreeConstraintNode(
-                                Arrays.asList(bGreaterThan20),
+                                Collections.singletonList(bGreaterThan20),
                                 Collections.singleton(
                                     new TreeDecisionNode(
                                         new TreeConstraintNode(aEquals10),
@@ -509,7 +511,7 @@ class DecisionTreeGeneratorTests {
                 getResultingRootOption(),
                 new TreeConstraintNode(
                     Collections.emptyList(),
-                    Arrays.asList(
+                    Collections.singletonList(
                         new TreeDecisionNode(
                             new TreeConstraintNode(constraintA),
                             new TreeConstraintNode(constraintB),
@@ -544,7 +546,6 @@ class DecisionTreeGeneratorTests {
     private final IConstraint aIsNull = new IsNullConstraint(new Field("A"));
     private final IConstraint bEquals10 = new IsEqualToConstantConstraint(new Field("B"), 10);
     private final IConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.Numeric);
-    private final IConstraint dGreaterThan10 = new IsGreaterThanConstantConstraint(new Field("D"), 10);
     private final IConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.String);
 
     @Test
