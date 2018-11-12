@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 import java.util.*;
 
-//consider making lasIterator implementation for final decision in a list
 public class DecisionIterator implements IDecisionIterator {
 
     private IDecisionIterator nextIterator;
@@ -23,7 +22,9 @@ public class DecisionIterator implements IDecisionIterator {
         for (ConstraintNode constraintNode: decisionNodes.remove().getOptions()) {
             options.add(ConstraintBuilder.build(constraintNode, count));
             count++;
-        }        
+        }
+        currentOptionsSubroute = options.get(currentOption).next();
+
         nextIterator = DecisionBuilder.build(decisionNodes);
     }
 
@@ -37,9 +38,6 @@ public class DecisionIterator implements IDecisionIterator {
         List<RowSpecRoute> sideRoutes;
         if (nextIterator.hasNext()){
             sideRoutes = nextIterator.next();
-            if (currentOptionsSubroute == null){
-                currentOptionsSubroute = options.get(currentOption).next();
-            }
             sideRoutes.add(0, currentOptionsSubroute);
             return sideRoutes;
         }
@@ -59,11 +57,11 @@ public class DecisionIterator implements IDecisionIterator {
 
     @Override
     public void reset(){
-        currentOption = 0;
-        currentOptionsSubroute = null;
         nextIterator.reset();
         for (IConstraintIterator option: options) {
             option.reset();
         }
+        currentOption = 0;
+        currentOptionsSubroute = options.get(currentOption).next();
     }
 }
