@@ -85,10 +85,6 @@ public final class TreeConstraintNode implements ConstraintNode {
                 : Objects.toString(atomicConstraints));
     }
 
-    public void addDecision(DecisionNode decision) {
-        decisions.add(decision);
-    }
-
     public void removeDecision(DecisionNode decision) {
         decisions.remove(decision);
     }
