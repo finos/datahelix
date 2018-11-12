@@ -72,7 +72,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
-        return TreeConstraintNode.merge(rootConstraintNodeFragments);
+        return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
     private Collection<ConstraintNode> convertConstraint(IConstraint constraintToConvert) {
@@ -192,7 +192,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()
-                    .map(c -> TreeConstraintNode.merge(convertConstraint(c).stream().iterator()))
+                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
 
             return asConstraintNodeList(decisionPoint);

@@ -11,20 +11,6 @@ import java.util.stream.Collectors;
 public final class TreeConstraintNode implements ConstraintNode {
     public static final ConstraintNode empty = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
 
-    public static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
-        Collection<IConstraint> atomicConstraints = new ArrayList<>();
-        Collection<DecisionNode> decisions = new ArrayList<>();
-
-        while (constraintNodeIterator.hasNext()) {
-            ConstraintNode constraintNode = constraintNodeIterator.next();
-
-            atomicConstraints.addAll(constraintNode.getAtomicConstraints());
-            decisions.addAll(constraintNode.getDecisions());
-        }
-
-        return new TreeConstraintNode(atomicConstraints, decisions);
-    }
-
     private final Collection<IConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
 

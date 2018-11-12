@@ -3,9 +3,11 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public interface ConstraintNode{
     Collection<IConstraint> getAtomicConstraints();
@@ -16,5 +18,19 @@ public interface ConstraintNode{
     boolean atomicConstraintExists(IConstraint constraint);
     void addAtomicConstraints(Collection<IConstraint> constraints);
     void appendDecisionNode(DecisionNode decisionNode);
+
+    static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
+        Collection<IConstraint> atomicConstraints = new ArrayList<>();
+        Collection<DecisionNode> decisions = new ArrayList<>();
+
+        while (constraintNodeIterator.hasNext()) {
+            ConstraintNode constraintNode = constraintNodeIterator.next();
+
+            atomicConstraints.addAll(constraintNode.getAtomicConstraints());
+            decisions.addAll(constraintNode.getDecisions());
+        }
+
+        return new TreeConstraintNode(atomicConstraints, decisions);
+    }
 }
 
