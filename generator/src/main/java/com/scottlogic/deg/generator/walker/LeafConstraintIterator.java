@@ -7,10 +7,9 @@ public class LeafConstraintIterator implements IConstraintIterator {
 
     private int decisionIndexFromParent;
 
-    private boolean hasNext;
+    private boolean hasNext = true;
 
     public LeafConstraintIterator(int decisionIndexFromParent){
-        hasNext = true;
         this.decisionIndexFromParent = decisionIndexFromParent;
     }
 
@@ -29,6 +28,6 @@ public class LeafConstraintIterator implements IConstraintIterator {
     }
 
     public void reset(){
-        hasNext=true;
+        hasNext = true;
     }
 }

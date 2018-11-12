@@ -29,13 +29,12 @@ public class EndDecisionIterator implements IDecisionIterator {
     @Override
     public List<RowSpecRoute> next() {
         IConstraintIterator currentOptionIterator = options.get(currentOption);
-        List<RowSpecRoute> r = new ArrayList<>();
-        r.add(0, currentOptionIterator.next());
+        RowSpecRoute nextOption = currentOptionIterator.next();
 
         if (!currentOptionIterator.hasNext()){
             currentOption++;
         }
-        return r;
+        return new ArrayList<>(Arrays.asList(nextOption));
     }
 
     @Override
