@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class TreeConstraintNode implements ConstraintNode {
     public static final ConstraintNode empty = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
@@ -74,11 +75,17 @@ public final class TreeConstraintNode implements ConstraintNode {
                 : Objects.toString(atomicConstraints));
     }
 
-    public void removeDecisions(Collection<DecisionNode> decisionsToRemove){
+    public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
         Function<DecisionNode, Boolean> shouldRemove = existingDecision -> decisionsToRemove.stream()
             .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
 
-        decisions.removeIf(existingDecision -> shouldRemove.apply(existingDecision));
+        return new TreeConstraintNode(
+          this.atomicConstraints,
+          decisions
+            .stream()
+            .filter(existingDecision -> !shouldRemove.apply(existingDecision))
+            .collect(Collectors.toList())
+        );
     }
 
     public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
@@ -96,12 +103,27 @@ public final class TreeConstraintNode implements ConstraintNode {
             .anyMatch(c -> c.equals(constraint));
     }
 
-    public void addAtomicConstraints(Collection<IConstraint> constraints) {
-        this.atomicConstraints.addAll(constraints);
+    public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+        return new TreeConstraintNode(
+            Stream
+                .concat(
+                    this.atomicConstraints.stream(),
+                    constraints.stream())
+                .collect(Collectors.toList()),
+            this.decisions
+        );
     }
 
-    public void appendDecisionNode(DecisionNode decisionNode) {
-        decisions.add(decisionNode);
+    @Override
+    public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
+        return new TreeConstraintNode(
+            atomicConstraints,
+            Stream
+                .concat(
+                    this.decisions.stream(),
+                    decisions.stream())
+                .collect(Collectors.toList())
+        );
     }
 
     @Override

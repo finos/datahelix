@@ -30,8 +30,8 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
     }
 
     @Override
-    public void removeDecisions(Collection<DecisionNode> decisionsToRemove) {
-        underlying.removeDecisions(decisionsToRemove);
+    public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
+        return new OptimisedTreeConstraintNode(underlying.removeDecisions(decisionsToRemove));
     }
 
     @Override
@@ -45,13 +45,13 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
     }
 
     @Override
-    public void addAtomicConstraints(Collection<IConstraint> constraints) {
-        underlying.addAtomicConstraints(constraints);
+    public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+        return new OptimisedTreeConstraintNode(underlying.addAtomicConstraints(constraints));
     }
 
     @Override
-    public void appendDecisionNode(DecisionNode decisionNode) {
-        underlying.appendDecisionNode(decisionNode);
+    public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
+        return new OptimisedTreeConstraintNode(underlying.addDecisions(decisions));
     }
 
     @Override

@@ -13,11 +13,11 @@ public interface ConstraintNode{
     Collection<IConstraint> getAtomicConstraints();
     Collection<DecisionNode> getDecisions();
     Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
-    void removeDecisions(Collection<DecisionNode> decisionsToRemove);
+    ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove);
     ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(IConstraint constraint);
-    void addAtomicConstraints(Collection<IConstraint> constraints);
-    void appendDecisionNode(DecisionNode decisionNode);
+    ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints);
+    ConstraintNode addDecisions(Collection<DecisionNode> decisions);
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<IConstraint> atomicConstraints = new ArrayList<>();
