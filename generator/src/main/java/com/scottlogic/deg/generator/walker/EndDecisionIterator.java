@@ -2,11 +2,14 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.walker.builder.ConstraintBuilder;
+import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
+import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 import java.util.*;
 
-public class EndDecisionIterator implements IDecisionIterator{
+public class EndDecisionIterator implements IDecisionIterator {
     private List<IConstraintIterator> options = new ArrayList<>();
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
@@ -14,7 +17,7 @@ public class EndDecisionIterator implements IDecisionIterator{
     public EndDecisionIterator(DecisionNode decisionNode){
         int count = 0;
         for (ConstraintNode constraintNode: decisionNode.getOptions()) {
-            options.add(ConstraintIterator.build(constraintNode, count));
+            options.add(ConstraintBuilder.build(constraintNode, count));
             count++;
         }
     }

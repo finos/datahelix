@@ -2,12 +2,14 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.walker.builder.ConstraintBuilder;
+import com.scottlogic.deg.generator.walker.builder.DecisionBuilder;
+import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
+import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.Matchers.*;
@@ -19,7 +21,7 @@ class ConstraintIteratorTest {
     @Test
     void noSubDecisions_hasNext() {
         ConstraintNode node = new ConstraintNode();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
     }
@@ -27,7 +29,7 @@ class ConstraintIteratorTest {
     @Test
     void noSubDecisions_next_then_hasNextIsFalse() {
         ConstraintNode node = new ConstraintNode();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         RowSpecRoute route = iterator.next();
         assertThat(route.decisionIndex, is(0));//defaults to 0 as not set
@@ -38,7 +40,7 @@ class ConstraintIteratorTest {
     @Test
     void oneSubDecisions_oneHasOneOptions(){
         ConstraintNode node = IteratorTestHelper.constraintSingle();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next();
@@ -52,7 +54,7 @@ class ConstraintIteratorTest {
     @Test
     void oneSubDecisions_oneHasTwoOptions(){
         ConstraintNode node = IteratorTestHelper.constraintDouble();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next();
@@ -73,7 +75,7 @@ class ConstraintIteratorTest {
     @Test
     void twoSubDecisions_oneHasTwoOptions(){
         ConstraintNode node = IteratorTestHelper.constraintSingleDouble();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next();
@@ -96,7 +98,7 @@ class ConstraintIteratorTest {
     @Test
     void threeSubDecisions_allHaveTwoOptions(){
         ConstraintNode node = IteratorTestHelper.constraintTripleDouble();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next();
@@ -172,7 +174,7 @@ class ConstraintIteratorTest {
     @Test
     void twoSubDecisions_bothHaveTwoOptions(){
         ConstraintNode node = IteratorTestHelper.constraintDoubleDouble();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next();
@@ -210,7 +212,7 @@ class ConstraintIteratorTest {
     @Test
     void doubleLayeredConstraint(){
         ConstraintNode node = IteratorTestHelper.constraintDoubleLayered();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         RowSpecRoute leftDecision = new RowSpecRoute();
         leftDecision.subRoutes = new RowSpecRoute[]{};
@@ -296,7 +298,7 @@ class ConstraintIteratorTest {
     @Test
     void oneOption_hasNext() {
         DecisionNode node = IteratorTestHelper.singleDecision();
-        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionBuilder.build(Arrays.asList(node));
 
         assertThat(iterator.hasNext(), is(true));
     }
@@ -304,7 +306,7 @@ class ConstraintIteratorTest {
     @Test
     void oneOption_next_then_hasNextIsFalse() {
         DecisionNode node = IteratorTestHelper.singleDecision();
-        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionBuilder.build(Arrays.asList(node));
 
         RowSpecRoute route = iterator.next().get(0);
         assertThat(route.decisionIndex, is(0));
@@ -315,7 +317,7 @@ class ConstraintIteratorTest {
     @Test
     void twoOptions_hasNext() {
         DecisionNode node = IteratorTestHelper.doubleDecision();
-        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionBuilder.build(Arrays.asList(node));
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next().get(0);
@@ -333,7 +335,7 @@ class ConstraintIteratorTest {
     @Test
     void twentyFive_test() {
         ConstraintNode node = IteratorTestHelper.constraintBiggy();
-        IConstraintIterator iterator = ConstraintIterator.build(node);
+        IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         for (int i = 0; i<25; i++){
             assertThat(""+i,iterator.hasNext(), is(true));
