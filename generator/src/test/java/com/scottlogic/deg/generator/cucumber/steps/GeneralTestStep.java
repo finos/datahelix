@@ -6,11 +6,11 @@ import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -89,33 +89,27 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        Assert.assertThat(data.generatedData, containsInAnyOrder(data.expectedData.toArray()));
+        Assert.assertThat(data.expectedData, new RowsPresentMatcher(data.generatedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        Assert.assertThat(data.generatedData, contains(data.expectedData.toArray()));
+        Assert.assertThat(data.generatedData, contains(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        data.expectedData
-            .forEach(row -> {
-                boolean match = data.generatedData.stream().anyMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue("TEST ERROR", match);
-            });
+
+        Assert.assertThat(data.expectedData, new RowsPresentMatcher(data.generatedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        data.expectedData
-            .forEach(row -> {
-                boolean match = data.generatedData.stream().noneMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue(match);
-            });
+
+        Assert.assertThat(data.expectedData, new RowsAbsentMatcher(data.generatedData));
     }
 
     private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
@@ -142,4 +136,126 @@ public class GeneralTestStep {
         }
     }
 
+    class RowsPresentMatcher extends BaseMatcher<List<List<Object>>>{
+        private final List<List<Object>> generatedRows;
+
+        public RowsPresentMatcher(List<List<Object>> generatedRows) {
+            if (generatedRows == null)
+                generatedRows = new ArrayList<>();
+            this.generatedRows = generatedRows;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            Collection<RowMatcher> generatedMatchers = getGeneratedMatches();
+
+            for (List<Object> expectedRow : (List<List<Object>>) o){
+                if (!generatedMatchers.stream().anyMatch(matcher -> matcher.matches(expectedRow))){
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            Collection<RowMatcher> generatedMatches = getGeneratedMatches();
+            description.appendText(Objects.toString(generatedMatches));
+        }
+
+        private List<RowMatcher> getGeneratedMatches() {
+            return generatedRows
+                .stream()
+                .map(generatedRow -> new RowMatcher(generatedRow))
+                .collect(Collectors.toList());
+        }
+    }
+
+    class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>>{
+        private final List<List<Object>> generatedRows;
+
+        public RowsAbsentMatcher(List<List<Object>> generatedRows) {
+            if (generatedRows == null)
+                generatedRows = new ArrayList<>();
+            this.generatedRows = generatedRows;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            Collection<RowMatcher> generatedMatchers = getGeneratedMatchers();
+
+            for (List<Object> expectedRow : (List<List<Object>>) o){
+                if (generatedMatchers.stream().anyMatch(matcher -> matcher.matches(expectedRow))){
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            Collection<RowMatcher> generatedMatchers = getGeneratedMatchers();
+            description.appendText(Objects.toString(generatedMatchers));
+        }
+
+        private List<RowMatcher> getGeneratedMatchers() {
+            return generatedRows
+                .stream()
+                .map(generatedRow -> new RowMatcher(generatedRow))
+                .collect(Collectors.toList());
+        }
+    }
+
+    class RowMatcher extends BaseMatcher<List<Object>> {
+        private final List<Object> expectedRow;
+
+        public RowMatcher(List<Object> expectedRow) {
+            this.expectedRow = expectedRow;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            List<Object> actualRow = (List<Object>) o;
+
+            if (actualRow == null && expectedRow == null)
+                return true;
+
+            if (actualRow == null || expectedRow == null)
+                return false;
+
+            Iterator<Object> actualRowIterator = actualRow.iterator();
+            Iterator<Object> expectedRowIterator = expectedRow.iterator();
+
+            while (actualRowIterator.hasNext()){
+                Object actualColumnValue = actualRowIterator.next();
+
+                if (!expectedRowIterator.hasNext())
+                    return false; //different lengths
+
+                Object expectedColumnValue = expectedRowIterator.next();
+
+                if (!objectsEquals(actualColumnValue, expectedColumnValue))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private boolean objectsEquals(Object actual, Object expected) {
+            if (actual == null && expected == null)
+                return true;
+
+            if (actual == null || expected == null)
+                return false;
+
+            return actual.equals(expected);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText(Objects.toString(this.expectedRow));
+        }
+    }
 }
