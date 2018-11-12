@@ -56,10 +56,15 @@ class DecisionTreePartitionerIntegrationTests {
                     .collect(Collectors.toList());
 
                 return DynamicTest.dynamicTest(directory.getName(), () -> {
+                    AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
                     TreeComparisonContext context = new TreeComparisonContext();
                     EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
                         new TreeComparer(
-                            new ConstraintNodeComparer(context),
+                            new ConstraintNodeComparer(
+                                context,
+                                defaultAnyOrderCollectionEqualityComparer,
+                                new DecisionComparer(),
+                                defaultAnyOrderCollectionEqualityComparer),
                             new ProfileFieldComparer(context),
                             context
                         )

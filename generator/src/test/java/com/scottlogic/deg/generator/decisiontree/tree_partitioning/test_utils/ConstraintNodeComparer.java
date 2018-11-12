@@ -6,18 +6,23 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import java.util.Collection;
 
 public class ConstraintNodeComparer implements EqualityComparer {
-    private final DecisionComparer decisionComparer;
+    private final EqualityComparer atomicConstraintAnyOrderComparer;
+    private final EqualityComparer decisionComparer;
     private final AnyOrderCollectionEqualityComparer decisionAnyOrderComparer;
-    private final AnyOrderCollectionEqualityComparer atomicConstraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();
     private final TreeComparisonContext comparisonContext;
+    private final CollectionEqualityComparer collectionEqualityComparer;
 
-    public ConstraintNodeComparer(TreeComparisonContext comparisonContext) {
+    public ConstraintNodeComparer(
+        TreeComparisonContext comparisonContext,
+        EqualityComparer atomicConstraintAnyOrderComparer,
+        EqualityComparer decisionComparer,
+        CollectionEqualityComparer collectionEqualityComparer) {
+
         this.comparisonContext = comparisonContext;
-        this.decisionComparer = new DecisionComparer();
+        this.decisionComparer = decisionComparer;
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
-
-        this.decisionAnyOrderComparer.setReportErrors(true);
-        this.atomicConstraintAnyOrderComparer.setReportErrors(true);
+        this.atomicConstraintAnyOrderComparer = atomicConstraintAnyOrderComparer;
+        this.collectionEqualityComparer = collectionEqualityComparer;
     }
 
     @Override
@@ -56,8 +61,14 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
                 this.comparisonContext.reportDifferences(
-                    atomicConstraintAnyOrderComparer.getItemsMissingFromCollection1(),
-                    atomicConstraintAnyOrderComparer.getItemsMissingFromCollection2(),
+                    collectionEqualityComparer.getItemsMissingFrom(
+                        constraint1.getAtomicConstraints(),
+                        constraint2.getAtomicConstraints()
+                    ),
+                    collectionEqualityComparer.getItemsMissingFrom(
+                        constraint2.getAtomicConstraints(),
+                        constraint1.getAtomicConstraints()
+                    ),
                     TreeComparisonContext.TreeElementType.AtomicConstraint);
                 return false;
             }
@@ -65,8 +76,14 @@ public class ConstraintNodeComparer implements EqualityComparer {
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
                 this.comparisonContext.reportDifferences(
-                    decisionAnyOrderComparer.getItemsMissingFromCollection1(),
-                    decisionAnyOrderComparer.getItemsMissingFromCollection2(),
+                    this.collectionEqualityComparer.getItemsMissingFrom(
+                        constraint1.getDecisions(),
+                        constraint2.getDecisions()
+                    ),
+                    this.collectionEqualityComparer.getItemsMissingFrom(
+                        constraint2.getDecisions(),
+                        constraint1.getDecisions()
+                    ),
                     TreeComparisonContext.TreeElementType.Decision);
                 return false;
             }

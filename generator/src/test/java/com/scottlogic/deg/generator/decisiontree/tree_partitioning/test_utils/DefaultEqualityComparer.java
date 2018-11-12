@@ -4,7 +4,7 @@ public class DefaultEqualityComparer implements EqualityComparer {
     private final EqualityComparer collectionComparer;
 
     public DefaultEqualityComparer() {
-        this.collectionComparer = new CollectionEqualityComparer(this);
+        this.collectionComparer = new StrictOrderCollectionEqualityComparer(this);
     }
 
     public DefaultEqualityComparer(EqualityComparer collectionComparer) {
@@ -23,7 +23,7 @@ public class DefaultEqualityComparer implements EqualityComparer {
         if (item1 == null || item2 == null)
             return false;
 
-        if (CollectionEqualityComparer.isCollection(item1) && CollectionEqualityComparer.isCollection(item2)) {
+        if (StrictOrderCollectionEqualityComparer.isCollection(item1) && StrictOrderCollectionEqualityComparer.isCollection(item2)) {
             return collectionComparer.equals(item1, item2);
         }
 

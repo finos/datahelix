@@ -3,11 +3,8 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class AnyOrderCollectionEqualityComparer implements EqualityComparer {
+public class AnyOrderCollectionEqualityComparer implements EqualityComparer, CollectionEqualityComparer {
     private final EqualityComparer itemEqualityComparer;
-    private ArrayList itemsMissingFromCollection1;
-    private ArrayList itemsMissingFromCollection2;
-    private boolean reportErrors = false;
 
     public AnyOrderCollectionEqualityComparer() {
         this.itemEqualityComparer = new DefaultEqualityComparer(this);
@@ -15,18 +12,6 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer {
 
     public AnyOrderCollectionEqualityComparer(EqualityComparer itemEqualityComparer) {
         this.itemEqualityComparer = itemEqualityComparer;
-    }
-
-    public ArrayList getItemsMissingFromCollection1() {
-        return this.itemsMissingFromCollection1;
-    }
-
-    public ArrayList getItemsMissingFromCollection2() {
-        return this.itemsMissingFromCollection2;
-    }
-
-    public void setReportErrors(boolean reportErrors) {
-        this.reportErrors = reportErrors;
     }
 
     @Override
@@ -37,46 +22,40 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer {
 
     @Override
     public boolean equals(Object x, Object y) {
-        Collection collection1 = (Collection) x;
-        Collection collection2 = (Collection) y;
-        boolean pass = true;
-        itemsMissingFromCollection1 = new ArrayList();
-        itemsMissingFromCollection2 = new ArrayList();
+        Collection a = (Collection) x;
+        Collection b = (Collection) y;
 
-        for (Object item1 : collection1){
-            Object item2 = findItem(item1, collection2);
+        if (!collectionsContainMatchingItems(a, b)) {
+            return false;
+        }
 
-            if (item2 == null){
-                pass = false;
+        return collectionsContainMatchingItems(b, a);
+    }
 
-                if (!reportErrors) {
-                    return false; //cannot find <item1> in <collection2>
-                }
+    public ArrayList<Object> getItemsMissingFrom(Collection x, Collection y) {
+        ArrayList<Object> itemsMissing = new ArrayList<>();
 
-                itemsMissingFromCollection2.add(item1);
+        for (Object itemFromX : x) {
+            Object itemFromY = findItem(itemFromX, y);
+
+            if (itemFromY == null) {
+                itemsMissing.add(itemFromX);
             }
         }
 
-        if (collection1.size() == collection2.size() && !reportErrors) {
-            //if collections are the same size then items in <collection2> must relate to items in <collection1>
-            return pass;
-        }
+        return itemsMissing;
+    }
 
-        for (Object item2 : collection2){
-            Object item1 = findItem(item2, collection1);
+    private boolean collectionsContainMatchingItems(Collection a, Collection b) {
+        for (Object itemFromA : a) {
+            Object itemFromB = findItem(itemFromA, b);
 
-            if (item1 == null){
-                pass = false;
-
-                if (!reportErrors) {
-                    return false; //cannot find <item2> in <collection1>
-                }
-
-                itemsMissingFromCollection1.add(item2);
+            if (itemFromB == null) {
+                return false;
             }
         }
 
-        return pass;
+        return true;
     }
 
     private Object findItem(Object toFind, Collection collection){

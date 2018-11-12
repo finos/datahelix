@@ -516,7 +516,12 @@ class DecisionTreeGeneratorTests {
     private boolean isEquivalentTo(ConstraintNode expected, ConstraintNode actual) {
         TreeComparisonReporter reporter = new TreeComparisonReporter();
         TreeComparisonContext context = new TreeComparisonContext();
-        ConstraintNodeComparer constraintNodeComparer = new ConstraintNodeComparer(context);
+        AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
+        ConstraintNodeComparer constraintNodeComparer = new ConstraintNodeComparer(
+            context,
+            defaultAnyOrderCollectionEqualityComparer,
+            new DecisionComparer(),
+            defaultAnyOrderCollectionEqualityComparer);
 
         return constraintNodeComparer.equals(expected, actual);
     }

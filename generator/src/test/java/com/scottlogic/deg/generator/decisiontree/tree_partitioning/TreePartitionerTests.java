@@ -267,9 +267,14 @@ class TreePartitionerTests {
 
         TreeComparisonReporter reporter = new TreeComparisonReporter();
         TreeComparisonContext context = new TreeComparisonContext();
+        AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
         EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
             new TreeComparer(
-                new ConstraintNodeComparer(context),
+                new ConstraintNodeComparer(
+                    context,
+                    defaultAnyOrderCollectionEqualityComparer,
+                    new DecisionComparer(),
+                    defaultAnyOrderCollectionEqualityComparer),
                 new ProfileFieldComparer(context),
                 context
             )
