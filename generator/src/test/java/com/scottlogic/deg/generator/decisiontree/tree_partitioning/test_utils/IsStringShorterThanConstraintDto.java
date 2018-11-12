@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsStringShorterThanConstraint;
 
-public class IsStringShorterThanConstraintDto implements IConstraintDto {
+public class IsStringShorterThanConstraintDto implements ConstraintDto {
     public FieldDto field;
     public int referenceValue;
 

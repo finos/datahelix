@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsLessThanConstantConstraint;
 
-public class IsLessThanConstantConstraintDto implements IConstraintDto {
+public class IsLessThanConstantConstraintDto implements ConstraintDto {
     public FieldDto field;
     public Number referenceValue;
 

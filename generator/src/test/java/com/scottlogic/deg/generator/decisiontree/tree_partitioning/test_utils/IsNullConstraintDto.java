@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsNullConstraint;
 
-public class IsNullConstraintDto implements IConstraintDto {
+public class IsNullConstraintDto implements ConstraintDto {
     public FieldDto field;
 
     @Override

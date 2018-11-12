@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
-public class IsOfTypeConstraintDto implements IConstraintDto {
+public class IsOfTypeConstraintDto implements ConstraintDto {
     public FieldDto field;
     public TypesDto requiredType;
 

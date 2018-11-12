@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
 import java.util.HashSet;
 import java.util.List;
 
-public class IsInSetConstraintDto implements IConstraintDto {
+public class IsInSetConstraintDto implements ConstraintDto {
     public FieldDto field;
     public List<Object> legalValues;
 
