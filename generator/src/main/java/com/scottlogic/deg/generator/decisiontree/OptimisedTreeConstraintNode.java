@@ -54,4 +54,17 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
     public void appendDecisionNode(DecisionNode decisionNode) {
         underlying.appendDecisionNode(decisionNode);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof OptimisedTreeConstraintNode)
+            o = ((OptimisedTreeConstraintNode)o).underlying;
+
+        return underlying.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return underlying.hashCode();
+    }
 }

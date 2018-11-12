@@ -18,4 +18,17 @@ public class OptimisedDecisionNode implements DecisionNode, OptimisedNode{
     public DecisionNode addOption(ConstraintNode newConstraint) {
         return new OptimisedDecisionNode(underlying.addOption(newConstraint));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof OptimisedDecisionNode)
+            o = ((OptimisedDecisionNode)o).underlying;
+
+        return underlying.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return underlying.hashCode();
+    }
 }

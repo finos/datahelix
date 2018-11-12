@@ -111,4 +111,18 @@ public final class TreeConstraintNode implements ConstraintNode {
     public void appendDecisionNode(DecisionNode decisionNode) {
         decisions.add(decisionNode);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TreeConstraintNode that = (TreeConstraintNode) o;
+        return Objects.equals(atomicConstraints, that.atomicConstraints) &&
+            Objects.equals(decisions, that.decisions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(atomicConstraints, decisions);
+    }
 }
