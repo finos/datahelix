@@ -160,6 +160,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             this.decision = decisionNode;
             this.factorisingConstraint = factorisingConstraint;
             this.negatedFactorisingConstraint = negatedFactorisingConstraint;
+            // test change
         }
 
         /**
