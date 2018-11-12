@@ -211,7 +211,7 @@ Scenario: Running a 'matchingRegex' request for a single character (a) should be
        | null |
        | "a"  |
 
-Scenario: Running a 'matchingRegex' request for a single character (a) should be successful
+Scenario: Running a 'matchingRegex' request for a single character range (a-a) should be successful
      Given there is a field foo
       And foo is matching regex /[a-a]{1}/
      Then the following data should be included in what is generated:
@@ -462,7 +462,7 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting shorterTha
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should be successful
      Given there is a field foo
-       And foo is matching regex /[0-z]{12}/
+       And foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
      Then the following data should be included in what is generated:
        | foo            |
