@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNode{
-
     private final ConstraintNode underlying;
 
     public OptimisedTreeConstraintNode(ConstraintNode underlying) {

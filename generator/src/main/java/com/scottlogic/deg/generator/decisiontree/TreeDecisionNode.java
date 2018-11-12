@@ -17,7 +17,7 @@ public final class TreeDecisionNode implements DecisionNode {
     }
 
     public Collection<ConstraintNode> getOptions() {
-        return new ArrayList<>(options);
+        return new HashSet<>(options);
     }
 
     public DecisionNode addOption(ConstraintNode newConstraint) {

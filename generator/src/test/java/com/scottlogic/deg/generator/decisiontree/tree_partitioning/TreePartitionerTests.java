@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class TreePartitionerTests {
+    private static final TreeConstraintNode emptyConstraint
+        = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
+
     @Test
     void shouldSplitTreeIntoPartitions() {
         givenTree(
@@ -182,19 +185,19 @@ class TreePartitionerTests {
             tree(fields("A"),
                 constraint("A")),
             tree(fields("B"),
-                new TreeConstraintNode()));
+                emptyConstraint));
     }
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
         givenTree(
             tree(fields("A", "B", "C"),
-                new TreeConstraintNode()));
+                emptyConstraint));
 
         expectTrees(
-            tree(fields("A"), new TreeConstraintNode()),
-            tree(fields("B"), new TreeConstraintNode()),
-            tree(fields("C"), new TreeConstraintNode()));
+            tree(fields("A"), emptyConstraint),
+            tree(fields("B"), emptyConstraint),
+            tree(fields("C"), emptyConstraint));
     }
 
     private ConstraintNode constraint(String... fieldNames) {

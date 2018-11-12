@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class TreeConstraintNode implements ConstraintNode {
+    public static final ConstraintNode empty = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
+
     public static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<IConstraint> atomicConstraints = new ArrayList<>();
         Collection<DecisionNode> decisions = new ArrayList<>();
@@ -49,11 +51,11 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     public Collection<IConstraint> getAtomicConstraints() {
-        return new ArrayList<>(atomicConstraints);
+        return new HashSet<>(atomicConstraints);
     }
 
     public Collection<DecisionNode> getDecisions() {
-        return new ArrayList<>(decisions);
+        return new HashSet<>(decisions);
     }
 
     public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
