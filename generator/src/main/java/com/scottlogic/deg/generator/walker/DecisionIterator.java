@@ -9,55 +9,39 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.*;
 
 //consider making lasIterator implementation for final decision in a list
-public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
+public class DecisionIterator implements IDecisionIterator {
 
-    private DecisionIterator nextIterator;
+    private IDecisionIterator nextIterator;
     private List<ConstraintIterator> options = new ArrayList<>();
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public static DecisionIterator build(Collection<DecisionNode> decisionNodes){
-        if (decisionNodes == null || decisionNodes.isEmpty()) return null;
+    public static IDecisionIterator build(Collection<DecisionNode> decisionNodes){
+        if (decisionNodes == null || decisionNodes.isEmpty())
+            return null;
+
+        if(decisionNodes.size() == 1) 
+            return new EndDecisionIterator(new ArrayList<>(decisionNodes).get(0));
 
         return new DecisionIterator(new LinkedList<>(decisionNodes));
     }
 
     private DecisionIterator(Queue<DecisionNode> decisionNodes){
-        if (decisionNodes.isEmpty()) { throw new IllegalArgumentException(); }
-
         int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.remove().getOptions()) {
             options.add(new ConstraintIterator(constraintNode, count));
             count++;
-        }
-
-        if (decisionNodes.isEmpty()) {
-            nextIterator = null; // maybe replace with optional
-        } else {
-            nextIterator = new DecisionIterator(decisionNodes);
-        }
+        }        
+        nextIterator = build(decisionNodes);        
     }
 
     @Override
     public boolean hasNext() {
-        //TODO fix the -1 wackyness
-        if (nextIterator == null) return currentOption < options.size();
         return currentOption < options.size() -1 || nextIterator.hasNext();
     }
 
     @Override
-    public List<RowSpecRoute> next() {//TODO refactor
-        if (nextIterator == null) {
-            ConstraintIterator currentOptionIterator = options.get(currentOption);
-            currentOptionsSubroute = currentOptionIterator.next();
-            if (!currentOptionIterator.hasNext()){
-                currentOption++;
-            }
-            List<RowSpecRoute> r = new ArrayList<>();
-            r.add(0, currentOptionsSubroute);
-            return r;
-        }
-
+    public List<RowSpecRoute> next() {
         List<RowSpecRoute> sideRoutes;
         if (nextIterator.hasNext()){
             sideRoutes = nextIterator.next();
@@ -77,16 +61,16 @@ public class DecisionIterator implements Iterator<List<RowSpecRoute>> {
             nextIterator.reset();
             sideRoutes = nextIterator.next();
             sideRoutes.add(0, currentOptionsSubroute);
-
         }
 
         return sideRoutes;
     }
 
-    void reset(){
+    @Override
+    public void reset(){
         currentOption = 0;
         currentOptionsSubroute = null;
-        if (nextIterator != null) {nextIterator.reset();}
+        nextIterator.reset();
         for (ConstraintIterator option: options) {
             option.reset();
         }

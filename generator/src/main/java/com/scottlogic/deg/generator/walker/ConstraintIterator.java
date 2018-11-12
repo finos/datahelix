@@ -20,7 +20,7 @@ public class ConstraintIterator implements Iterator<RowSpecRoute> {
 
     private int decisionIndexFromParent;
 
-    private DecisionIterator decisions;
+    private IDecisionIterator decisions;
     private boolean hasNext;
 
     public ConstraintIterator(ConstraintNode constraintNode) { this(constraintNode, 0); }

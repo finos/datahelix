@@ -6,6 +6,8 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.Matchers.*;
@@ -294,7 +296,7 @@ class ConstraintIteratorTest {
     @Test
     void oneOption_hasNext() {
         DecisionNode node = IteratorTestHelper.singleDecision();
-        DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
         assertThat(iterator.hasNext(), is(true));
     }
@@ -302,7 +304,7 @@ class ConstraintIteratorTest {
     @Test
     void oneOption_next_then_hasNextIsFalse() {
         DecisionNode node = IteratorTestHelper.singleDecision();
-        DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
         RowSpecRoute route = iterator.next().get(0);
         assertThat(route.decisionIndex, is(0));
@@ -313,7 +315,7 @@ class ConstraintIteratorTest {
     @Test
     void twoOptions_hasNext() {
         DecisionNode node = IteratorTestHelper.doubleDecision();
-        DecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
+        IDecisionIterator iterator = DecisionIterator.build(Arrays.asList(node));
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute route = iterator.next().get(0);
