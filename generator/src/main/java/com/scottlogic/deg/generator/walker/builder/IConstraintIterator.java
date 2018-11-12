@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.walker;
+package com.scottlogic.deg.generator.walker.builder;
 
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 public class LeafConstraintIterator implements IConstraintIterator {

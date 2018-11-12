@@ -2,9 +2,11 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.walker.builder.ConstraintBuilder;
+import com.scottlogic.deg.generator.walker.builder.DecisionBuilder;
+import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
+import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -16,23 +18,13 @@ public class DecisionIterator implements IDecisionIterator {
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public static IDecisionIterator build(Collection<DecisionNode> decisionNodes){
-        if (decisionNodes == null || decisionNodes.isEmpty())
-            return null;
-
-        if(decisionNodes.size() == 1) 
-            return new EndDecisionIterator(new ArrayList<>(decisionNodes).get(0));
-
-        return new DecisionIterator(new LinkedList<>(decisionNodes));
-    }
-
-    private DecisionIterator(Queue<DecisionNode> decisionNodes){
+    public DecisionIterator(Queue<DecisionNode> decisionNodes){
         int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.remove().getOptions()) {
-            options.add(ConstraintIterator.build(constraintNode, count));
+            options.add(ConstraintBuilder.build(constraintNode, count));
             count++;
         }        
-        nextIterator = build(decisionNodes);        
+        nextIterator = DecisionBuilder.build(decisionNodes);
     }
 
     @Override
