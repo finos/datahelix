@@ -101,7 +101,6 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .forEach(decisionNode -> {
                 ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                 node.addAtomicConstraints(firstOption.getAtomicConstraints());
-                decisionNode.removeOption(firstOption);
                 firstOption.getDecisions().forEach(node::addDecision);
                 node.removeDecision(decisionNode);
             });

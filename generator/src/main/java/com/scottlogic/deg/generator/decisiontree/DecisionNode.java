@@ -35,10 +35,6 @@ public final class DecisionNode {
         options.add(newConstraint);
     }
 
-    public void removeOption(ConstraintNode option) {
-        options.remove(option);
-    }
-
     public boolean isOptimised(){
         return optimised;
     }
