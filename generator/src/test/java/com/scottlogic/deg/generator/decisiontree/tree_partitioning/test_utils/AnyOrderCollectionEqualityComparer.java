@@ -3,8 +3,8 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class AnyOrderCollectionEqualityComparer implements IEqualityComparer {
-    private final IEqualityComparer itemEqualityComparer;
+public class AnyOrderCollectionEqualityComparer implements EqualityComparer {
+    private final EqualityComparer itemEqualityComparer;
     private ArrayList itemsMissingFromCollection1;
     private ArrayList itemsMissingFromCollection2;
     private boolean reportErrors = false;
@@ -13,7 +13,7 @@ public class AnyOrderCollectionEqualityComparer implements IEqualityComparer {
         this.itemEqualityComparer = new DefaultEqualityComparer(this);
     }
 
-    public AnyOrderCollectionEqualityComparer(IEqualityComparer itemEqualityComparer) {
+    public AnyOrderCollectionEqualityComparer(EqualityComparer itemEqualityComparer) {
         this.itemEqualityComparer = itemEqualityComparer;
     }
 

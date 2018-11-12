@@ -2,13 +2,13 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
-public class TreeComparer implements IEqualityComparer {
-    private final IEqualityComparer constraintNodeComparer;
-    private final IEqualityComparer fieldComparer;
+public class TreeComparer implements EqualityComparer {
+    private final EqualityComparer constraintNodeComparer;
+    private final EqualityComparer fieldComparer;
     private final TreeComparisonContext context;
 
-    public TreeComparer(IEqualityComparer constraintNodeComparer,
-                        IEqualityComparer fieldComparer,
+    public TreeComparer(EqualityComparer constraintNodeComparer,
+                        EqualityComparer fieldComparer,
                         TreeComparisonContext context) {
         this.constraintNodeComparer = constraintNodeComparer;
         this.fieldComparer = fieldComparer;

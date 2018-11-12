@@ -3,10 +3,10 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class CollectionEqualityComparer implements IEqualityComparer {
-    private final IEqualityComparer itemEqualityComparer;
+public class CollectionEqualityComparer implements EqualityComparer {
+    private final EqualityComparer itemEqualityComparer;
 
-    public CollectionEqualityComparer(IEqualityComparer itemEqualityComparer){
+    public CollectionEqualityComparer(EqualityComparer itemEqualityComparer){
         this.itemEqualityComparer = itemEqualityComparer;
     }
 

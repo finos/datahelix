@@ -20,7 +20,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +57,7 @@ class DecisionTreePartitionerIntegrationTests {
 
                 return DynamicTest.dynamicTest(directory.getName(), () -> {
                     TreeComparisonContext context = new TreeComparisonContext();
-                    IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
+                    EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
                         new TreeComparer(
                             new ConstraintNodeComparer(context),
                             new ProfileFieldComparer(context),

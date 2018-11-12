@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.Collection;
 
-public class ConstraintNodeComparer implements IEqualityComparer {
+public class ConstraintNodeComparer implements EqualityComparer {
     private final DecisionComparer decisionComparer;
     private final AnyOrderCollectionEqualityComparer decisionAnyOrderComparer;
     private final AnyOrderCollectionEqualityComparer atomicConstraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();

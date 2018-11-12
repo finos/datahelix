@@ -1,13 +1,13 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
 
-public class DefaultEqualityComparer implements IEqualityComparer {
-    private final IEqualityComparer collectionComparer;
+public class DefaultEqualityComparer implements EqualityComparer {
+    private final EqualityComparer collectionComparer;
 
     public DefaultEqualityComparer() {
         this.collectionComparer = new CollectionEqualityComparer(this);
     }
 
-    public DefaultEqualityComparer(IEqualityComparer collectionComparer) {
+    public DefaultEqualityComparer(EqualityComparer collectionComparer) {
         this.collectionComparer = collectionComparer;
     }
 

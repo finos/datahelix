@@ -267,11 +267,13 @@ class TreePartitionerTests {
 
         TreeComparisonReporter reporter = new TreeComparisonReporter();
         TreeComparisonContext context = new TreeComparisonContext();
-        IEqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
+        EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
             new TreeComparer(
                 new ConstraintNodeComparer(context),
                 new ProfileFieldComparer(context),
-                context));
+                context
+            )
+        );
 
         boolean match = anyOrderComparer.equals(
             Arrays.asList(decisionTrees),

@@ -5,8 +5,8 @@ import com.scottlogic.deg.generator.ProfileFields;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class ProfileFieldComparer implements IEqualityComparer {
-    private final IEqualityComparer collectionComparer = new AnyOrderCollectionEqualityComparer();
+public class ProfileFieldComparer implements EqualityComparer {
+    private final EqualityComparer collectionComparer = new AnyOrderCollectionEqualityComparer();
     private final TreeComparisonContext context;
 
     public ProfileFieldComparer(TreeComparisonContext context) {
