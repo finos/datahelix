@@ -337,12 +337,12 @@ class DecisionTreeGeneratorTests {
                 new TreeConstraintNode(
                     Collections.emptyList(),
                     Arrays.asList(
-                        new DecisionNode(
+                        new TreeDecisionNode(
                             /* OPTION 1: AND(C, OR(A, B))  */
                             new TreeConstraintNode(
                                 Arrays.asList(bGreaterThan20),
                                 Collections.singleton(
-                                    new DecisionNode(
+                                    new TreeDecisionNode(
                                         new TreeConstraintNode(aEquals10),
                                         new TreeConstraintNode(aGreaterThan10)))),
                             /* OPTION 2: AND(¬A, ¬B)  */
@@ -501,7 +501,7 @@ class DecisionTreeGeneratorTests {
                 new TreeConstraintNode(
                     Collections.emptyList(),
                     Arrays.asList(
-                        new DecisionNode(
+                        new TreeDecisionNode(
                             new TreeConstraintNode(constraintA),
                             new TreeConstraintNode(constraintB),
                             new TreeConstraintNode(constraintC))))));
@@ -563,7 +563,7 @@ class DecisionTreeGeneratorTests {
 
         treeRootShouldMatch(
             new TreeConstraintNode(
-                new DecisionNode(
+                new TreeDecisionNode(
                     new TreeConstraintNode(
                         new NotConstraint(aIsNull),
                         cIsNumeric,
@@ -589,7 +589,7 @@ class DecisionTreeGeneratorTests {
 
 
         new TreeConstraintNode(
-            new DecisionNode(
+            new TreeDecisionNode(
                 new TreeConstraintNode(
                     aIsNull,
                     bEquals10.isFalse()),

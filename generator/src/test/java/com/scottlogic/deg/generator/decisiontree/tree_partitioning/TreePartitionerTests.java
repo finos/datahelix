@@ -4,10 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -229,7 +226,7 @@ class TreePartitionerTests {
     }
 
     private DecisionNode decision(ConstraintNode... constraints) {
-        return new DecisionNode(constraints);
+        return new TreeDecisionNode(constraints);
     }
 
     private ProfileFields fields(String... fieldNames) {

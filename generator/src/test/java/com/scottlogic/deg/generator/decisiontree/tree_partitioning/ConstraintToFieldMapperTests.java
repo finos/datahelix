@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class ConstraintToFieldMapperTests {
         givenFields("B");
 
         final IConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final DecisionNode decision = new DecisionNode(
+        final DecisionNode decision = new TreeDecisionNode(
             new TreeConstraintNode(constraint));
 
         givenDecisions(decision);
@@ -64,22 +65,22 @@ class ConstraintToFieldMapperTests {
         final IConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
         final IConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
 
-        final DecisionNode decisionABC = new DecisionNode(
+        final DecisionNode decisionABC = new TreeDecisionNode(
             new TreeConstraintNode(
                 Collections.emptyList(),
                 Arrays.asList(
-                    new DecisionNode(new TreeConstraintNode(constraintA)),
-                    new DecisionNode(new TreeConstraintNode(constraintB)),
-                    new DecisionNode(new TreeConstraintNode(constraintC))
+                    new TreeDecisionNode(new TreeConstraintNode(constraintA)),
+                    new TreeDecisionNode(new TreeConstraintNode(constraintB)),
+                    new TreeDecisionNode(new TreeConstraintNode(constraintC))
                 )
             )
         );
 
-        final DecisionNode decisionDEF = new DecisionNode(
+        final DecisionNode decisionDEF = new TreeDecisionNode(
             new TreeConstraintNode(
                 Collections.emptyList(),
                 Collections.singletonList(
-                    new DecisionNode(
+                    new TreeDecisionNode(
                         new TreeConstraintNode(constraintD),
                         new TreeConstraintNode(constraintE),
                         new TreeConstraintNode(constraintF))

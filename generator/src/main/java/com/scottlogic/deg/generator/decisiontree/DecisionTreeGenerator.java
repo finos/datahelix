@@ -190,7 +190,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         else if (constraintToConvert instanceof OrConstraint) {
             Collection<IConstraint> subConstraints = ((OrConstraint) constraintToConvert).subConstraints;
 
-            DecisionNode decisionPoint = new DecisionNode(
+            DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()
                     .map(c -> TreeConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
@@ -239,7 +239,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 }
             }
 
-            return new DecisionNode(newNodes);
+            return new TreeDecisionNode(newNodes);
         }
     }
 }
