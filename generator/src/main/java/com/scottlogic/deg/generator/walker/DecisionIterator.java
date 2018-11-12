@@ -12,7 +12,7 @@ import java.util.*;
 public class DecisionIterator implements IDecisionIterator {
 
     private IDecisionIterator nextIterator;
-    private List<ConstraintIterator> options = new ArrayList<>();
+    private List<IConstraintIterator> options = new ArrayList<>();
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
@@ -29,7 +29,7 @@ public class DecisionIterator implements IDecisionIterator {
     private DecisionIterator(Queue<DecisionNode> decisionNodes){
         int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.remove().getOptions()) {
-            options.add(new ConstraintIterator(constraintNode, count));
+            options.add(ConstraintIterator.build(constraintNode, count));
             count++;
         }        
         nextIterator = build(decisionNodes);        
@@ -49,20 +49,19 @@ public class DecisionIterator implements IDecisionIterator {
                 currentOptionsSubroute = options.get(currentOption).next();
             }
             sideRoutes.add(0, currentOptionsSubroute);
-        }
-        else {
-            ConstraintIterator currentOptionIterator = options.get(currentOption);
-            if (!currentOptionIterator.hasNext()){
-                currentOption++;
-                currentOptionIterator = options.get(currentOption);
-            }
-            currentOptionsSubroute = currentOptionIterator.next();
-
-            nextIterator.reset();
-            sideRoutes = nextIterator.next();
-            sideRoutes.add(0, currentOptionsSubroute);
+            return sideRoutes;
         }
 
+        IConstraintIterator currentOptionIterator = options.get(currentOption);
+        if (!currentOptionIterator.hasNext()){
+            currentOption++;
+            currentOptionIterator = options.get(currentOption);
+        }
+        currentOptionsSubroute = currentOptionIterator.next();
+
+        nextIterator.reset();
+        sideRoutes = nextIterator.next();
+        sideRoutes.add(0, currentOptionsSubroute);
         return sideRoutes;
     }
 
@@ -71,7 +70,7 @@ public class DecisionIterator implements IDecisionIterator {
         currentOption = 0;
         currentOptionsSubroute = null;
         nextIterator.reset();
-        for (ConstraintIterator option: options) {
+        for (IConstraintIterator option: options) {
             option.reset();
         }
     }
