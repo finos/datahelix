@@ -107,7 +107,7 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(DecisionNode decisionNode, String id) throws IOException {
-        String optimised = decisionNode.isOptimised()
+        String optimised = decisionNode instanceof OptimisedNode
                 ? "[color=\"blue\"]"
                 : "";
 

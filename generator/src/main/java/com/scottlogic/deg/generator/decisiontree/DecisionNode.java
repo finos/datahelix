@@ -4,6 +4,5 @@ import java.util.Collection;
 public interface DecisionNode {
     Collection<ConstraintNode> getOptions();
     void addOption(ConstraintNode newConstraint);
-    boolean isOptimised();
 }
 

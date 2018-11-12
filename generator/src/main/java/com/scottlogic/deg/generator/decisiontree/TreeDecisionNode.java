@@ -7,21 +7,13 @@ import java.util.stream.Collectors;
 
 public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
-    private final boolean optimised;
 
     TreeDecisionNode(Collection<ConstraintNode> options) {
         this.options = new ArrayList<>(options);
-        this.optimised = false;
-    }
-
-    public TreeDecisionNode(boolean optimised) {
-        this.optimised = optimised;
-        this.options = new ArrayList<>();
     }
 
     public TreeDecisionNode(ConstraintNode... options) {
         this.options = new ArrayList<>(Arrays.asList(options));
-        this.optimised = false;
     }
 
     public Collection<ConstraintNode> getOptions() {
@@ -30,10 +22,6 @@ public final class TreeDecisionNode implements DecisionNode {
 
     public void addOption(ConstraintNode newConstraint) {
         options.add(newConstraint);
-    }
-
-    public boolean isOptimised(){
-        return optimised;
     }
 
     public String toString(){

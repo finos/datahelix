@@ -65,9 +65,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         ConstraintNode negatedFactorisingConstraintNode = new OptimisedTreeConstraintNode(new TreeConstraintNode(negatedMostProlificConstraint));
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new TreeDecisionNode(
+        DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
             factorisingConstraintNode,
-            negatedFactorisingConstraintNode);
+            negatedFactorisingConstraintNode));
         rootNode.appendDecisionNode(factorisedDecisionNode);
 
         List<DecisionNode> decisionsToRemove = new ArrayList<>();
@@ -117,7 +117,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd);
+        DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
         newNode.addDecision(decisionUnderFactorisedNode);
     }
 
