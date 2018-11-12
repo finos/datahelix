@@ -58,16 +58,16 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new ConstraintNode(true, mostProlificAtomicConstraint);
+        ConstraintNode factorisingConstraintNode = new OptimisedTreeConstraintNode(new TreeConstraintNode(mostProlificAtomicConstraint));
 
         // Add negation of most prolific constraint to new decision node
         IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
-        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNode(true, negatedMostProlificConstraint);
+        ConstraintNode negatedFactorisingConstraintNode = new OptimisedTreeConstraintNode(new TreeConstraintNode(negatedMostProlificConstraint));
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new DecisionNode(
+        DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
             factorisingConstraintNode,
-            negatedFactorisingConstraintNode);
+            negatedFactorisingConstraintNode));
         rootNode.appendDecisionNode(factorisedDecisionNode);
 
         List<DecisionNode> decisionsToRemove = new ArrayList<>();
@@ -78,7 +78,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                 // Perform movement of options
                 addOptionsAsDecisionUnderConstraintNode(factorisingConstraintNode, decisionAnalysis.optionsToFactorise);
                 addOptionsAsDecisionUnderConstraintNode(negatedFactorisingConstraintNode, decisionAnalysis.negatedOptionsToFactorise);
-                decisionAnalysis.adjacentOptions.forEach(factorisedDecisionNode::addOption);
+                for (ConstraintNode option : decisionAnalysis.adjacentOptions){
+                    factorisedDecisionNode = factorisedDecisionNode.addOption(option);
+                }
                 decisionsToRemove.add(decision);
             }
         }
@@ -101,7 +103,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .forEach(decisionNode -> {
                 ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                 node.addAtomicConstraints(firstOption.getAtomicConstraints());
-                firstOption.getDecisions().forEach(node::addDecision);
+                firstOption.getDecisions().forEach(node::appendDecisionNode);
                 node.removeDecision(decisionNode);
             });
     }
@@ -117,8 +119,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new DecisionNode(optionsToAdd);
-        newNode.addDecision(decisionUnderFactorisedNode);
+        DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
+        newNode.appendDecisionNode(decisionUnderFactorisedNode);
     }
 
     private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){

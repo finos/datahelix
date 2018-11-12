@@ -9,7 +9,6 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -108,7 +107,7 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(DecisionNode decisionNode, String id) throws IOException {
-        String optimised = decisionNode.isOptimised()
+        String optimised = decisionNode instanceof OptimisedNode
                 ? "[color=\"blue\"]"
                 : "";
 
@@ -122,7 +121,7 @@ public class DecisionTreeVisualisationWriter {
             .collect(Collectors.joining("\r\n"));
         treeInfo.atomicConstraints += constraintNode.getAtomicConstraints().size();
 
-        String optimised = constraintNode.isOptimised()
+        String optimised = constraintNode instanceof OptimisedNode
                 ? "[color=\"blue\"]"
                 : "";
 
