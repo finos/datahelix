@@ -31,11 +31,6 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
     }
 
     @Override
-    public void addDecision(DecisionNode decision) {
-        underlying.addDecision(decision);
-    }
-
-    @Override
     public void removeDecision(DecisionNode decision) {
         underlying.removeDecision(decision);
     }

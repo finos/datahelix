@@ -103,7 +103,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .forEach(decisionNode -> {
                 ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                 node.addAtomicConstraints(firstOption.getAtomicConstraints());
-                firstOption.getDecisions().forEach(node::addDecision);
+                firstOption.getDecisions().forEach(node::appendDecisionNode);
                 node.removeDecision(decisionNode);
             });
     }
@@ -120,7 +120,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
-        newNode.addDecision(decisionUnderFactorisedNode);
+        newNode.appendDecisionNode(decisionUnderFactorisedNode);
     }
 
     private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){

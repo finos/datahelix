@@ -11,7 +11,6 @@ public interface ConstraintNode{
     Collection<IConstraint> getAtomicConstraints();
     Collection<DecisionNode> getDecisions();
     Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
-    void addDecision(DecisionNode decision);
     void removeDecision(DecisionNode decision);
     ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(IConstraint constraint);
