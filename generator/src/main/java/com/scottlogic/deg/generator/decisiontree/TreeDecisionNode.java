@@ -1,8 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,11 +8,11 @@ public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
 
     public TreeDecisionNode(Collection<ConstraintNode> options) {
-        this.options = new ArrayList<>(options);
+        this.options = Collections.unmodifiableCollection(options);
     }
 
     public TreeDecisionNode(ConstraintNode... options) {
-        this.options = new ArrayList<>(Arrays.asList(options));
+        this.options = Collections.unmodifiableCollection(Arrays.asList(options));
     }
 
     public Collection<ConstraintNode> getOptions() {

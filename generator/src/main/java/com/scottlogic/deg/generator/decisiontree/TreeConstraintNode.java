@@ -26,20 +26,19 @@ public final class TreeConstraintNode implements ConstraintNode {
     private final Collection<DecisionNode> decisions;
 
     public TreeConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
-        this.atomicConstraints =  new ArrayList<>(atomicConstraints);
-        this.decisions = new ArrayList<>(decisions);
+        this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
+        this.decisions = Collections.unmodifiableCollection(decisions);
     }
 
     public TreeConstraintNode(IConstraint... atomicConstraints) {
         this(
             Arrays.asList(atomicConstraints),
-            new ArrayList<>());
+            Collections.emptySet());
     }
 
     public TreeConstraintNode(IConstraint singleAtomicConstraint) {
-        decisions = new ArrayList<>();
-        atomicConstraints = new ArrayList<>();
-        atomicConstraints.add(singleAtomicConstraint);
+        decisions = Collections.unmodifiableCollection(Collections.emptySet());
+        atomicConstraints = Collections.unmodifiableCollection(Arrays.asList(singleAtomicConstraint));
     }
 
     TreeConstraintNode(DecisionNode... decisionNodes) {
