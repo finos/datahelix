@@ -12,10 +12,12 @@ import java.util.*;
 
 public class DecisionIterator implements IDecisionIterator {
 
-    private IDecisionIterator nextIterator;
+    private IDecisionIterator nextDecision;
     private List<IConstraintIterator> options = new ArrayList<>();
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
+
+    private IConstraintIterator currentOptionIterator() { return options.get(currentOption); }
 
     public DecisionIterator(Queue<DecisionNode> decisionNodes){
         int count = 0;
@@ -23,45 +25,40 @@ public class DecisionIterator implements IDecisionIterator {
             options.add(ConstraintBuilder.build(constraintNode, count));
             count++;
         }
-        currentOptionsSubroute = options.get(currentOption).next();
+        currentOptionsSubroute = currentOptionIterator().next();
 
-        nextIterator = DecisionBuilder.build(decisionNodes);
+        nextDecision = DecisionBuilder.build(decisionNodes);
     }
 
     @Override
     public boolean hasNext() {
-        return currentOption < options.size() -1 || nextIterator.hasNext();
+        return currentOption < options.size()-1 || nextDecision.hasNext();
     }
 
     @Override
     public List<RowSpecRoute> next() {
+        if (!nextDecision.hasNext()) {
+            nextDecision.reset();
+
+            if (!currentOptionIterator().hasNext()) {
+                currentOption++;
+            }
+            currentOptionsSubroute = currentOptionIterator().next();
+        }
+
         List<RowSpecRoute> sideRoutes;
-        if (nextIterator.hasNext()){
-            sideRoutes = nextIterator.next();
-            sideRoutes.add(0, currentOptionsSubroute);
-            return sideRoutes;
-        }
-
-        IConstraintIterator currentOptionIterator = options.get(currentOption);
-        if (!currentOptionIterator.hasNext()){
-            currentOption++;
-            currentOptionIterator = options.get(currentOption);
-        }
-        currentOptionsSubroute = currentOptionIterator.next();
-
-        nextIterator.reset();
-        sideRoutes = nextIterator.next();
+        sideRoutes = nextDecision.next();
         sideRoutes.add(0, currentOptionsSubroute);
         return sideRoutes;
     }
 
     @Override
     public void reset(){
-        nextIterator.reset();
+        nextDecision.reset();
         for (IConstraintIterator option: options) {
             option.reset();
         }
         currentOption = 0;
-        currentOptionsSubroute = options.get(currentOption).next();
+        currentOptionsSubroute = currentOptionIterator().next();
     }
 }
