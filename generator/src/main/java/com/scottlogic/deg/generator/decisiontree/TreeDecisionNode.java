@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
@@ -20,8 +21,13 @@ public final class TreeDecisionNode implements DecisionNode {
         return new ArrayList<>(options);
     }
 
-    public void addOption(ConstraintNode newConstraint) {
-        options.add(newConstraint);
+    public DecisionNode addOption(ConstraintNode newConstraint) {
+        return new TreeDecisionNode(
+            Stream
+                .concat(
+                    this.options.stream(),
+                    Stream.of(newConstraint))
+                .collect(Collectors.toList()));
     }
 
     public String toString(){
