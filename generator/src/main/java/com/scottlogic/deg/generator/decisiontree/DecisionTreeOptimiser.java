@@ -57,18 +57,18 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return false;
         }
 
-        // Add new decision node
-        DecisionNode factorisedDecisionNode = new DecisionNode(true);
-        rootNode.appendDecisionNode(factorisedDecisionNode);
-
         // Add most prolific constraint to new decision node
         ConstraintNode factorisingConstraintNode = new ConstraintNode(true, mostProlificAtomicConstraint);
-        factorisedDecisionNode.addOption(factorisingConstraintNode);
 
         // Add negation of most prolific constraint to new decision node
         IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
         ConstraintNode negatedFactorisingConstraintNode = new ConstraintNode(true, negatedMostProlificConstraint);
-        factorisedDecisionNode.addOption(negatedFactorisingConstraintNode);
+
+        // Add new decision node
+        DecisionNode factorisedDecisionNode = new DecisionNode(
+            factorisingConstraintNode,
+            negatedFactorisingConstraintNode);
+        rootNode.appendDecisionNode(factorisedDecisionNode);
 
         List<DecisionNode> decisionsToRemove = new ArrayList<>();
         for (DecisionNode decision : decisions) {
@@ -118,8 +118,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new DecisionNode(true);
-        optionsToAdd.forEach(decisionUnderFactorisedNode::addOption);
+        DecisionNode decisionUnderFactorisedNode = new DecisionNode(optionsToAdd);
         newNode.addDecision(decisionUnderFactorisedNode);
     }
 
