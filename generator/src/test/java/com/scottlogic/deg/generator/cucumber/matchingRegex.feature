@@ -211,14 +211,6 @@ Scenario: Running a 'matchingRegex' request for a single character (a) should be
        | null |
        | "a"  |
 
-Scenario: Running a 'matchingRegex' request for a single character range (a-a) should be successful
-     Given there is a field foo
-      And foo is matching regex /[a-a]{1}/
-     Then the following data should be included in what is generated:
-       | foo  |
-       | null |
-       | "a"  |
-
 Scenario: Running a 'matchingRegex' request for a range over a single character ([a-a]) should be successful
      Given there is a field foo
        And foo is matching regex /[a-a]{1}/
