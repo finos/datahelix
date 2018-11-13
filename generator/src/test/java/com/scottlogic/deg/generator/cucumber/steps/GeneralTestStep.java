@@ -102,14 +102,14 @@ public class GeneralTestStep {
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        Assert.assertThat(data.expectedData, new RowsPresentMatcher(data.generatedData));
+        Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        Assert.assertThat(data.expectedData, new RowsAbsentMatcher(data.generatedData));
+        Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
     private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
@@ -178,20 +178,20 @@ public class GeneralTestStep {
     }
 
     class RowsPresentMatcher extends BaseMatcher<List<List<Object>>>{
-        private final List<List<Object>> generatedRows;
+        private final List<List<Object>> expectedRows;
 
-        public RowsPresentMatcher(List<List<Object>> generatedRows) {
-            if (generatedRows == null)
-                generatedRows = new ArrayList<>();
-            this.generatedRows = generatedRows;
+        public RowsPresentMatcher(List<List<Object>> expectedRows) {
+            if (expectedRows == null)
+                expectedRows = new ArrayList<>();
+            this.expectedRows = expectedRows;
         }
 
         @Override
         public boolean matches(Object o) {
-            Collection<RowMatcher> generatedMatchers = getGeneratedMatches();
+            Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
 
-            for (List<Object> expectedRow : (List<List<Object>>) o){
-                if (!generatedMatchers.stream().anyMatch(matcher -> matcher.matches(expectedRow))){
+            for (List<Object> actualRow : (List<List<Object>>) o){
+                if (!expectedMatchers.stream().anyMatch(matcher -> matcher.matches(actualRow))){
                     return false;
                 }
             }
@@ -201,33 +201,32 @@ public class GeneralTestStep {
 
         @Override
         public void describeTo(Description description) {
-            Collection<RowMatcher> generatedMatches = getGeneratedMatches();
-            description.appendText(Objects.toString(generatedMatches));
+            description.appendText(Objects.toString(getExpectedMatchers()));
         }
 
-        private List<RowMatcher> getGeneratedMatches() {
-            return generatedRows
+        private List<RowMatcher> getExpectedMatchers() {
+            return expectedRows
                 .stream()
-                .map(generatedRow -> new RowMatcher(generatedRow))
+                .map(expectedRow -> new RowMatcher(expectedRow))
                 .collect(Collectors.toList());
         }
     }
 
     class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>>{
-        private final List<List<Object>> generatedRows;
+        private final List<List<Object>> expectedRows;
 
-        public RowsAbsentMatcher(List<List<Object>> generatedRows) {
-            if (generatedRows == null)
-                generatedRows = new ArrayList<>();
-            this.generatedRows = generatedRows;
+        public RowsAbsentMatcher(List<List<Object>> expectedRows) {
+            if (expectedRows == null)
+                expectedRows = new ArrayList<>();
+            this.expectedRows = expectedRows;
         }
 
         @Override
         public boolean matches(Object o) {
-            Collection<RowMatcher> generatedMatchers = getGeneratedMatchers();
+            Collection<RowMatcher> expectedMatches = getExpectedMatchers();
 
-            for (List<Object> expectedRow : (List<List<Object>>) o){
-                if (generatedMatchers.stream().anyMatch(matcher -> matcher.matches(expectedRow))){
+            for (List<Object> actualRow : (List<List<Object>>) o){
+                if (expectedMatches.stream().anyMatch(matcher -> matcher.matches(actualRow))){
                     return false;
                 }
             }
@@ -237,14 +236,13 @@ public class GeneralTestStep {
 
         @Override
         public void describeTo(Description description) {
-            Collection<RowMatcher> generatedMatchers = getGeneratedMatchers();
-            description.appendText(Objects.toString(generatedMatchers));
+            description.appendText(Objects.toString(getExpectedMatchers()));
         }
 
-        private List<RowMatcher> getGeneratedMatchers() {
-            return generatedRows
+        private List<RowMatcher> getExpectedMatchers() {
+            return expectedRows
                 .stream()
-                .map(generatedRow -> new RowMatcher(generatedRow))
+                .map(expectedRow -> new RowMatcher(expectedRow))
                 .collect(Collectors.toList());
         }
     }
