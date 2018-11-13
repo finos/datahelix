@@ -6,11 +6,16 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class ProfileFieldComparer implements EqualityComparer {
-    private final EqualityComparer collectionComparer = new AnyOrderCollectionEqualityComparer();
+    private final EqualityComparer profileFieldsEqualityComparer;
+    private final CollectionEqualityComparer profileFieldsCollectionEqualityComparer;
     private final TreeComparisonContext context;
 
-    public ProfileFieldComparer(TreeComparisonContext context) {
+    public ProfileFieldComparer(TreeComparisonContext context,
+                                EqualityComparer profileFieldsEqualityComparer,
+                                CollectionEqualityComparer profileFieldsCollectionEqualityComparer) {
         this.context = context;
+        this.profileFieldsEqualityComparer = profileFieldsEqualityComparer;
+        this.profileFieldsCollectionEqualityComparer = profileFieldsCollectionEqualityComparer;
     }
 
     @Override
@@ -27,11 +32,17 @@ public class ProfileFieldComparer implements EqualityComparer {
         Collection firstProfileFieldsCollection = firstProfileFields.stream().collect(Collectors.toList());
         Collection secondProfileFieldsCollection = secondProfileFields.stream().collect(Collectors.toList());
 
-        boolean equals = collectionComparer.equals(firstProfileFieldsCollection, secondProfileFieldsCollection);
+        boolean equals = profileFieldsEqualityComparer.equals(firstProfileFieldsCollection, secondProfileFieldsCollection);
         if (!equals) {
             context.reportDifferences(
-                firstProfileFieldsCollection,
-                secondProfileFieldsCollection,
+                this.profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
+                    firstProfileFieldsCollection,
+                    secondProfileFieldsCollection
+                ),
+                this.profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
+                    secondProfileFieldsCollection,
+                    firstProfileFieldsCollection
+                ),
                 TreeComparisonContext.TreeElementType.Fields
             );
         }

@@ -22,14 +22,11 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer, Col
 
     @Override
     public boolean equals(Object x, Object y) {
-        Collection a = (Collection) x;
-        Collection b = (Collection) y;
+        return equals((Collection) x, (Collection) y);
+    }
 
-        if (!collectionsContainMatchingItems(a, b)) {
-            return false;
-        }
-
-        return collectionsContainMatchingItems(b, a);
+    public boolean equals(Collection x, Collection y) {
+        return collectionsContainMatchingItems(x, y) && collectionsContainMatchingItems(x, y);
     }
 
     public ArrayList<Object> getItemsMissingFrom(Collection x, Collection y) {
@@ -46,16 +43,8 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer, Col
         return itemsMissing;
     }
 
-    private boolean collectionsContainMatchingItems(Collection a, Collection b) {
-        for (Object itemFromA : a) {
-            Object itemFromB = findItem(itemFromA, b);
-
-            if (itemFromB == null) {
-                return false;
-            }
-        }
-
-        return true;
+    private boolean collectionsContainMatchingItems(Collection x, Collection y) {
+        return getItemsMissingFrom(x, y).isEmpty();
     }
 
     private Object findItem(Object toFind, Collection collection){

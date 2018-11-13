@@ -273,7 +273,7 @@ class TreePartitionerTests {
                     defaultAnyOrderCollectionEqualityComparer,
                     new DecisionComparer(),
                     defaultAnyOrderCollectionEqualityComparer),
-                new ProfileFieldComparer(context),
+                new ProfileFieldComparer(context, defaultAnyOrderCollectionEqualityComparer, defaultAnyOrderCollectionEqualityComparer),
                 context
             )
         );

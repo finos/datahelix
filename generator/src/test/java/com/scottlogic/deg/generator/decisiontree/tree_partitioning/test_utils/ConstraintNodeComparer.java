@@ -10,7 +10,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
     private final EqualityComparer decisionComparer;
     private final AnyOrderCollectionEqualityComparer decisionAnyOrderComparer;
     private final TreeComparisonContext comparisonContext;
-    private final CollectionEqualityComparer collectionEqualityComparer;
+    private final CollectionEqualityComparer constraintNodeAnyOrderComparer;
 
     public ConstraintNodeComparer(
         TreeComparisonContext comparisonContext,
@@ -22,7 +22,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
         this.decisionComparer = decisionComparer;
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
         this.atomicConstraintAnyOrderComparer = atomicConstraintAnyOrderComparer;
-        this.collectionEqualityComparer = collectionEqualityComparer;
+        this.constraintNodeAnyOrderComparer = collectionEqualityComparer;
     }
 
     @Override
@@ -61,11 +61,11 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
                 this.comparisonContext.reportDifferences(
-                    collectionEqualityComparer.getItemsMissingFrom(
+                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
                         constraint1.getAtomicConstraints(),
                         constraint2.getAtomicConstraints()
                     ),
-                    collectionEqualityComparer.getItemsMissingFrom(
+                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
                         constraint2.getAtomicConstraints(),
                         constraint1.getAtomicConstraints()
                     ),
@@ -76,11 +76,11 @@ public class ConstraintNodeComparer implements EqualityComparer {
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
                 this.comparisonContext.reportDifferences(
-                    this.collectionEqualityComparer.getItemsMissingFrom(
+                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
                         constraint1.getDecisions(),
                         constraint2.getDecisions()
                     ),
-                    this.collectionEqualityComparer.getItemsMissingFrom(
+                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
                         constraint2.getDecisions(),
                         constraint1.getDecisions()
                     ),
