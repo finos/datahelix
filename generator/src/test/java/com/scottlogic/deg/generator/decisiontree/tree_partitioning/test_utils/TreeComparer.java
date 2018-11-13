@@ -34,7 +34,7 @@ public class TreeComparer implements EqualityComparer {
         if (tree1 == null || tree2 == null)
             return false; //either tree1 XOR tree2 is null
 
-        boolean fieldsAreEqual = this.fieldComparer.equals(tree1.getFields(), tree2.getFields());
+        boolean fieldsAreEqual = fieldComparer.equals(tree1.getFields(), tree2.getFields());
         if (!fieldsAreEqual) {
             return false;
         }

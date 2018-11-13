@@ -10,6 +10,6 @@ public class IsStringShorterThanConstraintDto implements ConstraintDto {
 
     @Override
     public IConstraint map() {
-        return new IsStringShorterThanConstraint(new Field(this.field.name), this.referenceValue);
+        return new IsStringShorterThanConstraint(new Field(field.name), referenceValue);
     }
 }

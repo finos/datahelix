@@ -8,6 +8,6 @@ public class NotConstraintDto implements ConstraintDto {
 
     @Override
     public IConstraint map() {
-        return new NotConstraint(this.negatedConstraint.map());
+        return new NotConstraint(negatedConstraint.map());
     }
 }

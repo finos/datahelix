@@ -27,11 +27,11 @@ public class TreeComparisonContext {
     }
 
     public DecisionTree getExpectedTree() {
-        return this.expectedTree;
+        return expectedTree;
     }
 
     public DecisionTree getActualTree() {
-        return this.actualTree;
+        return actualTree;
     }
 
     public Collection<Error> getErrors() {

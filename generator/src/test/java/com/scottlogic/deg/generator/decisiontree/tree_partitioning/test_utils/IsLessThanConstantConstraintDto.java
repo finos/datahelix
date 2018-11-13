@@ -10,6 +10,6 @@ public class IsLessThanConstantConstraintDto implements ConstraintDto {
 
     @Override
     public IConstraint map() {
-        return new IsLessThanConstantConstraint(new Field(this.field.name), this.referenceValue);
+        return new IsLessThanConstantConstraint(new Field(field.name), referenceValue);
     }
 }

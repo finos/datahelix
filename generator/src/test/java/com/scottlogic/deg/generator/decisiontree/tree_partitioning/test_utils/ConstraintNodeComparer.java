@@ -60,15 +60,15 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
     public boolean equals(ConstraintNode constraint1, ConstraintNode constraint2) {
         try {
-            this.comparisonContext.pushToStack(constraint1, constraint2);
+            comparisonContext.pushToStack(constraint1, constraint2);
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
-                this.comparisonContext.reportDifferences(
-                    this.atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
+                comparisonContext.reportDifferences(
+                    atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
                         constraint1.getAtomicConstraints(),
                         constraint2.getAtomicConstraints()
                     ),
-                    this.atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
+                    atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
                         constraint2.getAtomicConstraints(),
                         constraint1.getAtomicConstraints()
                     ),
@@ -78,12 +78,12 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
-                this.comparisonContext.reportDifferences(
-                    this.decisionCollectionEqualityComparer.getItemsMissingFrom(
+                comparisonContext.reportDifferences(
+                    decisionCollectionEqualityComparer.getItemsMissingFrom(
                         constraint1.getDecisions(),
                         constraint2.getDecisions()
                     ),
-                    this.decisionCollectionEqualityComparer.getItemsMissingFrom(
+                    decisionCollectionEqualityComparer.getItemsMissingFrom(
                         constraint2.getDecisions(),
                         constraint1.getDecisions()
                     ),
@@ -101,7 +101,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
             return true;
         }
         finally {
-            this.comparisonContext.popFromStack();
+            comparisonContext.popFromStack();
         }
     }
 
@@ -112,7 +112,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
     private DecisionNode getDecision(DecisionNode toFind, Collection<DecisionNode> decisions) {
         return decisions
             .stream()
-            .filter(c -> this.decisionComparer.equals(c, toFind))
+            .filter(c -> decisionComparer.equals(c, toFind))
             .findFirst()
             .orElse(null);
     }
@@ -139,7 +139,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
     private ConstraintNode getOption(ConstraintNode toFind, Collection<ConstraintNode> constraints) {
         return constraints
             .stream()
-            .filter(c -> this.atomicConstraintsMatch(toFind, c))
+            .filter(c -> atomicConstraintsMatch(toFind, c))
             .findFirst()
             .orElse(null);
     }

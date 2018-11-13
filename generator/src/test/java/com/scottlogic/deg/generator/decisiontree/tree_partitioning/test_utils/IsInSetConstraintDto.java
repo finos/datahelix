@@ -13,6 +13,6 @@ public class IsInSetConstraintDto implements ConstraintDto {
 
     @Override
     public IConstraint map() {
-        return new IsInSetConstraint(new Field(this.field.name), new HashSet<>(this.legalValues));
+        return new IsInSetConstraint(new Field(field.name), new HashSet<>(legalValues));
     }
 }

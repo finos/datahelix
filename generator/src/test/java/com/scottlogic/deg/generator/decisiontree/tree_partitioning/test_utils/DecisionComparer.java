@@ -48,6 +48,6 @@ public class DecisionComparer implements EqualityComparer {
             .flatMap(o -> o.getAtomicConstraints().stream())
             .collect(Collectors.toList());
 
-        return this.constraintAnyOrderComparer.equals(decision1AtomicConstraints, decision2AtomicConstraints);
+        return constraintAnyOrderComparer.equals(decision1AtomicConstraints, decision2AtomicConstraints);
     }
 }

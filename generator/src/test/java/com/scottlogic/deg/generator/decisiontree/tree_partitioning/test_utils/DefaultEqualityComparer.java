@@ -4,7 +4,7 @@ public class DefaultEqualityComparer implements EqualityComparer {
     private final EqualityComparer collectionComparer;
 
     public DefaultEqualityComparer() {
-        this.collectionComparer = new StrictOrderCollectionEqualityComparer(this);
+        collectionComparer = new StrictOrderCollectionEqualityComparer(this);
     }
 
     public DefaultEqualityComparer(EqualityComparer collectionComparer) {

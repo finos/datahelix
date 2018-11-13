@@ -35,11 +35,11 @@ public class ProfileFieldComparer implements EqualityComparer {
         boolean equals = profileFieldsEqualityComparer.equals(firstProfileFieldsCollection, secondProfileFieldsCollection);
         if (!equals) {
             context.reportDifferences(
-                this.profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
+                profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
                     firstProfileFieldsCollection,
                     secondProfileFieldsCollection
                 ),
-                this.profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
+                profileFieldsCollectionEqualityComparer.getItemsMissingFrom(
                     secondProfileFieldsCollection,
                     firstProfileFieldsCollection
                 ),

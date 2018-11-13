@@ -7,7 +7,7 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer, Col
     private final EqualityComparer itemEqualityComparer;
 
     public AnyOrderCollectionEqualityComparer() {
-        this.itemEqualityComparer = new DefaultEqualityComparer(this);
+        itemEqualityComparer = new DefaultEqualityComparer(this);
     }
 
     public AnyOrderCollectionEqualityComparer(EqualityComparer itemEqualityComparer) {
@@ -49,7 +49,7 @@ public class AnyOrderCollectionEqualityComparer implements EqualityComparer, Col
 
     private Object findItem(Object toFind, Collection collection){
         for (Object item : collection) {
-            if (this.itemEqualityComparer.equals(toFind, item))
+            if (itemEqualityComparer.equals(toFind, item))
                 return item;
         }
 

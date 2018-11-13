@@ -10,6 +10,6 @@ public class IsEqualToConstantConstraintDto implements ConstraintDto {
 
     @Override
     public IConstraint map() {
-        return new IsEqualToConstantConstraint(new Field(this.field.name), this.requiredValue);
+        return new IsEqualToConstantConstraint(new Field(field.name), requiredValue);
     }
 }
