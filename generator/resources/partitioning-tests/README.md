@@ -10,4 +10,4 @@ The profile.json file works the same way that an ordinary profile file would whe
 
 ## expected-partitioning.json
 
-The expected-partitioning.json file is used to model the partitioned tree in the generator and can be thought of as the expected side of the test. The JSON is designed to model the partitioned tree object almost exactly with one different: The type field is used for the Jackson library so that the type can be mapped to the correct DTO.
+The expected-partitioning.json file is used to model the partitioned tree in the generator and can be thought of as the expected side of the test. The JSON is designed to model the partitioned tree object almost exactly with one difference: The type field is used for the Jackson library so that the type can be mapped to the correct DTO. The order of the tres, decision and atomic constraints are unimportant for testing the comparison of the expected with the actual.
