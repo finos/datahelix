@@ -150,13 +150,6 @@ Scenario: Running an 'equalTo' request that includes strings with special charac
        | foo                                 |
        | "abcdefghijk传/傳象形字ФХѰѾЦИتشرقصف" |
 
-Scenario: Running an 'equalTo' request that includes strings with special characters (right to left characters: Hebrew) alongside roman alphanumeric characters should be successful
-     Given there is a field foo
-       And foo is equal to "abcdefghijkבְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ"
-     Then the following data should be generated:
-       | foo                                                |
-       | "בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץabcdefghijk" |
-
 Scenario: Running an 'equalTo' request that includes roman numeric strings that include decimal numbers should be successful
      Given there is a field foo
        And foo is equal to "0.00"
@@ -301,14 +294,14 @@ Scenario: Running an 'equalTo' request that includes a date value (leap year) sh
      Given there is a field foo
        And foo is equal to 2020-02-29T00:00:00.000
      Then the following data should be generated:
-       | foo                      |
-       | 2010-01-01T00:00:00.000 |
+       | foo                     |
+       | 2020-02-29T00:00:00.000 |
 
 Scenario: Running an 'equalTo' request that includes a date value (earliest date) should be successful
      Given there is a field foo
        And foo is equal to 0001-01-01T:00:00:01.000
      Then the following data should be generated:
-       | foo                       |
+       | foo                      |
        | 0001-01-01T:00:00:01.000 |
 
 Scenario: Running an 'equalTo' request that includes a date value (system max future dates) should be successful
@@ -325,8 +318,8 @@ Scenario: Running an 'equalTo' request that includes a null entry ("") character
          { "field": "foo", "is": "equalTo", "value": "" }
        """
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo |
+       | ""  |
 
 Scenario: Running an 'equalTo' request that includes a null entry (null) characters should fail with an error message
      Given there is a field foo
