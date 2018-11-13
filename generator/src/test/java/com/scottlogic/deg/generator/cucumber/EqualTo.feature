@@ -293,30 +293,33 @@ Scenario: Running an 'equalTo' request that includes the number zero should be s
 Scenario: Running an 'equalTo' request that includes a date value (not a string) should be successful
      Given there is a field foo
        And foo is equal to 2010-01-01T00:00:00.000
-     Then the following data is generated:
+     Then the following data should be generated:
        | foo                     |
        | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an 'equalTo' request that includes a date value (leap year) should be successful
      Given there is a field foo
        And foo is equal to 2020-02-29T00:00:00.000
+       And foo is of type "temporal"
      Then the following data should be generated:
-       | foo                      |
-       | 2010-01-01T00:00:00.000 |
+       | foo                     |
+       | 2020-02-29T00:00:00.000 |
 
 Scenario: Running an 'equalTo' request that includes a date value (earliest date) should be successful
      Given there is a field foo
-       And foo is equal to 0001-01-01T:00:00:01.000
+       And foo is equal to 0001-01-01T00:00:01.000
+       And foo is of type "temporal"
      Then the following data should be generated:
-       | foo                       |
-       | 0001-01-01T:00:00:01.000 |
+       | foo                      |
+       | 0001-01-01T00:00:01.000 |
 
 Scenario: Running an 'equalTo' request that includes a date value (system max future dates) should be successful
      Given there is a field foo
-       And foo is equal to 9999-12-31T:23:59:59.999
+       And foo is equal to 9999-12-31T23:59:59.999
+       And foo is of type "temporal"
      Then the following data should be generated:
        | foo                       |
-       | 9999-12-31T:23:59:59.999  |
+       | 9999-12-31T23:59:59.999  |
 
 Scenario: Running an 'equalTo' request that includes a null entry ("") characters should fail with an error message
      Given there is a field foo
