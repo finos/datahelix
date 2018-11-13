@@ -64,7 +64,8 @@ class DecisionTreePartitionerIntegrationTests {
                                 context,
                                 defaultAnyOrderCollectionEqualityComparer,
                                 new DecisionComparer(),
-                                defaultAnyOrderCollectionEqualityComparer),
+                                defaultAnyOrderCollectionEqualityComparer,
+                                new AnyOrderCollectionEqualityComparer(new DecisionComparer())),
                             new ProfileFieldComparer(context, defaultAnyOrderCollectionEqualityComparer, defaultAnyOrderCollectionEqualityComparer),
                             context
                         )

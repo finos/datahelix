@@ -10,19 +10,22 @@ public class ConstraintNodeComparer implements EqualityComparer {
     private final EqualityComparer decisionComparer;
     private final AnyOrderCollectionEqualityComparer decisionAnyOrderComparer;
     private final TreeComparisonContext comparisonContext;
-    private final CollectionEqualityComparer constraintNodeAnyOrderComparer;
+    private final CollectionEqualityComparer atomicConstraintCollectionEqualityComparer;
+    private final CollectionEqualityComparer decisionCollectionEqualityComparer;
 
     public ConstraintNodeComparer(
         TreeComparisonContext comparisonContext,
         EqualityComparer atomicConstraintAnyOrderComparer,
         EqualityComparer decisionComparer,
-        CollectionEqualityComparer collectionEqualityComparer) {
+        CollectionEqualityComparer atomicConstraintCollectionEqualityComparer,
+        CollectionEqualityComparer decisionCollectionEqualityComparer) {
 
         this.comparisonContext = comparisonContext;
         this.decisionComparer = decisionComparer;
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
         this.atomicConstraintAnyOrderComparer = atomicConstraintAnyOrderComparer;
-        this.constraintNodeAnyOrderComparer = collectionEqualityComparer;
+        this.atomicConstraintCollectionEqualityComparer = atomicConstraintCollectionEqualityComparer;
+        this.decisionCollectionEqualityComparer = decisionCollectionEqualityComparer;
     }
 
     @Override
@@ -61,11 +64,11 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
             if (!atomicConstraintsMatch(constraint1, constraint2)) {
                 this.comparisonContext.reportDifferences(
-                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
+                    this.atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
                         constraint1.getAtomicConstraints(),
                         constraint2.getAtomicConstraints()
                     ),
-                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
+                    this.atomicConstraintCollectionEqualityComparer.getItemsMissingFrom(
                         constraint2.getAtomicConstraints(),
                         constraint1.getAtomicConstraints()
                     ),
@@ -76,11 +79,11 @@ public class ConstraintNodeComparer implements EqualityComparer {
             boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
             if (!decisionsMatch) {
                 this.comparisonContext.reportDifferences(
-                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
+                    this.decisionCollectionEqualityComparer.getItemsMissingFrom(
                         constraint1.getDecisions(),
                         constraint2.getDecisions()
                     ),
-                    this.constraintNodeAnyOrderComparer.getItemsMissingFrom(
+                    this.decisionCollectionEqualityComparer.getItemsMissingFrom(
                         constraint2.getDecisions(),
                         constraint1.getDecisions()
                     ),
