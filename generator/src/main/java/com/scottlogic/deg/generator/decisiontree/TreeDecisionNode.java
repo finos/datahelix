@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
 
-    TreeDecisionNode(Collection<ConstraintNode> options) {
+    public TreeDecisionNode(Collection<ConstraintNode> options) {
         this.options = new ArrayList<>(options);
     }
 
