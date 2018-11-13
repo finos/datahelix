@@ -155,7 +155,7 @@ Scenario: Running an 'equalTo' request that includes strings with special charac
        And foo is equal to "abcdefghijkבְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ"
      Then the following data should be generated:
        | foo                                                |
-       | "בְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץabcdefghijk" |
+       | "abcdefghijkבְּרֵאשִׁית, בָּרָא אֱלֹהִים, אֵת הַשָּׁמַיִם, וְאֵת הָאָרֶץ" |
 
 Scenario: Running an 'equalTo' request that includes roman numeric strings that include decimal numbers should be successful
      Given there is a field foo
