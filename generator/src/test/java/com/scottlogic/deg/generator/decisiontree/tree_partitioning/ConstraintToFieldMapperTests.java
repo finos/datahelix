@@ -4,13 +4,13 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -33,8 +33,8 @@ class ConstraintToFieldMapperTests {
         givenFields("B");
 
         final IConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final DecisionNode decision = new DecisionNode(
-            new ConstraintNode(constraint));
+        final DecisionNode decision = new TreeDecisionNode(
+            new TreeConstraintNode(constraint));
 
         givenDecisions(decision);
 
@@ -65,25 +65,25 @@ class ConstraintToFieldMapperTests {
         final IConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
         final IConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
 
-        final DecisionNode decisionABC = new DecisionNode(
-            new ConstraintNode(
+        final DecisionNode decisionABC = new TreeDecisionNode(
+            new TreeConstraintNode(
                 Collections.emptyList(),
                 Arrays.asList(
-                    new DecisionNode(new ConstraintNode(constraintA)),
-                    new DecisionNode(new ConstraintNode(constraintB)),
-                    new DecisionNode(new ConstraintNode(constraintC))
+                    new TreeDecisionNode(new TreeConstraintNode(constraintA)),
+                    new TreeDecisionNode(new TreeConstraintNode(constraintB)),
+                    new TreeDecisionNode(new TreeConstraintNode(constraintC))
                 )
             )
         );
 
-        final DecisionNode decisionDEF = new DecisionNode(
-            new ConstraintNode(
+        final DecisionNode decisionDEF = new TreeDecisionNode(
+            new TreeConstraintNode(
                 Collections.emptyList(),
                 Collections.singletonList(
-                    new DecisionNode(
-                        new ConstraintNode(constraintD),
-                        new ConstraintNode(constraintE),
-                        new ConstraintNode(constraintF))
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(constraintD),
+                        new TreeConstraintNode(constraintE),
+                        new TreeConstraintNode(constraintF))
                 )
             )
         );
@@ -125,9 +125,9 @@ class ConstraintToFieldMapperTests {
     private void getMappings() {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
-                new ConstraintNode(constraintsList, decisionsList),
+                new TreeConstraintNode(constraintsList, decisionsList),
                 fields,
-                "ConstraintToFieldMapperTests"
+                "Decision Tree"
             ));
     }
 

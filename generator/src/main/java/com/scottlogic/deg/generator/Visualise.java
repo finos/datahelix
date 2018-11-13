@@ -37,6 +37,12 @@ public class Visualise implements Runnable {
         description = "Hides the title from the output")
     private boolean shouldHideTitle;
 
+    @picocli.CommandLine.Option(
+            names = {"--no-optimise"},
+            description = "Prevents tree optimisation",
+            hidden = true)
+    private boolean dontOptimise;
+
     @Override
     public void run() {
         final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
@@ -54,8 +60,14 @@ public class Visualise implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
+        final IDecisionTreeOptimiser treeOptimiser = dontOptimise
+                ? new NoopDecisionTreeOptimiser()
+                : new DecisionTreeOptimiser();
 
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
+        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
+                .splitTreeIntoPartitions(mergedTree)
+                .map(tree -> treeOptimiser.optimiseTree(tree))
+                        .collect(Collectors.toList());
 
         final String title = shouldHideTitle
             ? null

@@ -179,7 +179,7 @@ Scenario: User attempts to create data before or equal to a specified invalid da
 
 Scenario: User attempts to create data before or equal to a specified invalidly formatted time
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at 2018-10-01T01:00:00.000AM
+       But the profile is invalid as foo can't be before or at "2018-10-01T01:00:00.000AM"
      Then I am presented with an error message
        And no data is created
 

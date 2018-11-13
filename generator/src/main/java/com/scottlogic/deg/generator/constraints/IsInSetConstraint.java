@@ -24,7 +24,7 @@ public class IsInSetConstraint implements IConstraint {
     public String toDotLabel() {
         final int limit = 3;
 
-        if (legalValues.size() < limit) {
+        if (legalValues.size() <= limit) {
             return String.format("%s in [%s]", field.name,
                 legalValues.stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
         }

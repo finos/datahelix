@@ -4,9 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -184,19 +182,19 @@ class TreePartitionerTests {
             tree(fields("A"),
                 constraint("A")),
             tree(fields("B"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
     }
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
         givenTree(
             tree(fields("A", "B", "C"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
 
         expectTrees(
-            tree(fields("A"), new ConstraintNode()),
-            tree(fields("B"), new ConstraintNode()),
-            tree(fields("C"), new ConstraintNode()));
+            tree(fields("A"), new TreeConstraintNode()),
+            tree(fields("B"), new TreeConstraintNode()),
+            tree(fields("C"), new TreeConstraintNode()));
     }
 
     private ConstraintNode constraint(String... fieldNames) {
@@ -208,7 +206,7 @@ class TreePartitionerTests {
     }
 
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
-        return new ConstraintNode(
+        return new TreeConstraintNode(
             Stream.of(fieldNames)
                 .map(this::atomicConstraint)
                 .collect(Collectors.toList()),
@@ -227,7 +225,7 @@ class TreePartitionerTests {
     }
 
     private DecisionNode decision(ConstraintNode... constraints) {
-        return new DecisionNode(constraints);
+        return new TreeDecisionNode(constraints);
     }
 
     private ProfileFields fields(String... fieldNames) {
@@ -238,7 +236,7 @@ class TreePartitionerTests {
     }
 
     private DecisionTree tree(ProfileFields fields, ConstraintNode rootNode) {
-        return new DecisionTree(rootNode, fields, "TreePartitionerTests");
+        return new DecisionTree(rootNode, fields, "Decision Tree");
     }
 
     @BeforeEach
@@ -281,8 +279,8 @@ class TreePartitionerTests {
         );
 
         boolean match = anyOrderComparer.equals(
-            Arrays.asList(decisionTrees),
-            partitionedTrees);
+            partitionedTrees,
+            Arrays.asList(decisionTrees));
 
         if (!match) {
             reporter.reportMessages(context);

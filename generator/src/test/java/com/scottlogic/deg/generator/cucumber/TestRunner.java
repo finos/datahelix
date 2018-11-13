@@ -8,7 +8,7 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
     plugin = {"pretty"},
     features = {"src/test/java/com/scottlogic/deg/generator/cucumber"},
-    glue={"src/test/java/com/scottlogic/deg/generator/cucumber"},
+    glue={"com.scottlogic.deg.generator.cucumber.steps"},
     monochrome = true
 )
 

@@ -3,9 +3,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.m
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.ConstraintNodeDto;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.DecisionNodeDto;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.DecisionTreeDto;
@@ -35,13 +33,13 @@ public class DecisionTreeMapper {
     private ConstraintNode dtoToConstraintNode(ConstraintNodeDto constraintNodeDto) {
         if (constraintNodeDto.decisions == null) {
             // Base case when no more decisions on a constraint node
-            return new ConstraintNode(getAtomicConstraints(constraintNodeDto), Collections.emptyList());
+            return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), Collections.emptyList());
         }
 
         List<DecisionNode> nodes = constraintNodeDto.decisions.stream()
                 .map(this::dtoToDecisionNode).collect(Collectors.toList());
 
-        return new ConstraintNode(getAtomicConstraints(constraintNodeDto), nodes);
+        return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), nodes);
     }
 
     private DecisionNode dtoToDecisionNode(DecisionNodeDto decisionNodeDto){
@@ -49,7 +47,7 @@ public class DecisionTreeMapper {
                 .map(this::dtoToConstraintNode)
                 .collect(Collectors.toList());
 
-        return new DecisionNode(options);
+        return new TreeDecisionNode(options);
     }
 
     private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){

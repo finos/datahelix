@@ -1,11 +1,14 @@
 Feature: User can specify that a numeric value is higher than, or equal to, a specified threshold
+
+Background:
+     Given the generation strategy is full
     
 Scenario: User requires to create a numeric field with data values that are greater or the same as zero
      Given there is a field foo
        And foo is greater than or equal to 0
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0   |
@@ -24,7 +27,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than or equal to 0
        And foo is less than 1
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0   |
@@ -34,7 +37,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than or equal to 0
        And foo is less than 2
        And foo is granular to 0.1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0.0 |
@@ -63,7 +66,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        And foo is greater than or equal to 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 0.0 |
@@ -92,7 +95,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than or equal to -10
        And foo is less than 0
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | -10 |
@@ -112,7 +115,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than or equal to 1
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -131,7 +134,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than 1
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 2   |
@@ -149,7 +152,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        And foo is greater than or equal to 1
        And foo is less than 10
        And foo is granular to 1
-       And foo is not null
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |

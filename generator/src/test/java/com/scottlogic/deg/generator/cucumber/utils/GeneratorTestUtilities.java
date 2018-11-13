@@ -5,6 +5,9 @@ import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -57,7 +60,9 @@ public class GeneratorTestUtilities {
                 new FieldSpecMerger()),
             new ConstraintReducer(
                 new FieldSpecFactory(),
-                new FieldSpecMerger()));
+                new FieldSpecMerger()),
+            new TreePartitioner(),
+            new NoopDecisionTreeOptimiser());
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, new FieldExhaustiveCombinationStrategy());
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
@@ -67,19 +72,19 @@ public class GeneratorTestUtilities {
     }
 
     public static Object parseInput(String input) {
-        Object parsedValue;
         if (input.startsWith("\"") && input.endsWith("\"")) {
-            parsedValue = input.substring(1, input.length() - 1);
+            return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)){
-            parsedValue = LocalDateTime.parse(input);
+            return LocalDateTime.parse(input);
         } else if (input.equals("null")){
-            parsedValue = null;
-        } else if (input.matches("([0-9]+\\.[0-9]+)")){
-            parsedValue = new BigDecimal(input);
-        } else {
-            parsedValue = Integer.parseInt(input);
+            return null;
+        } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")){
+            return new BigDecimal(input);
+        } else if (input.matches("(-)?[0-9]+")){
+            return Integer.parseInt(input);
         }
-        return parsedValue;
+
+        return input;
     }
 
 }

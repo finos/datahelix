@@ -1,5 +1,8 @@
 Feature: Values can be specified by using any of to set multiple constraints
 
+Background:
+     Given the generation strategy is full
+
 Scenario: User requires to create a field with strings that conform to one or many constraints
      Given there is a field foo
        And there is a constraint:
@@ -12,30 +15,30 @@ Scenario: User requires to create a field with strings that conform to one or ma
        """
        And foo is of type "string"
      Then the following data should be generated:
-       | foo   |
-       | null  |
-       | Test0 |
-       | Test1 |
-       | Test2 |
-       | Test3 |
-       | Test4 |
-       | Test5 |
-       | aaaa  |
-       | aaba  |
-       | aabb  |
-       | aaab  |
-       | abaa  |
-       | abba  |
-       | abbb  |
-       | abab  |
-       | baaa  |
-       | baba  |
-       | babb  |
-       | baab  |
-       | bbaa  |
-       | bbba  |
-       | bbbb  |
-       | bbab  |
+       | foo     |
+       | null    |
+       | "Test0" |
+       | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
+       | "Test5" |
+       | "aaaa"  |
+       | "aaba"  |
+       | "aabb"  |
+       | "aaab"  |
+       | "abaa"  |
+       | "abba"  |
+       | "abbb"  |
+       | "abab"  |
+       | "baaa"  |
+       | "baba"  |
+       | "babb"  |
+       | "baab"  |
+       | "bbaa"  |
+       | "bbba"  |
+       | "bbbb"  |
+       | "bbab"  |
 
 Scenario: User requires to create a field with strings that conform to multiple sets of one or many constraints
      Given there is a field foo
@@ -129,19 +132,18 @@ Scenario: User requires to create a field with dates that conform to one or many
        """
        And foo is of type "temporal"
        And foo is before 2018-10-10T00:00:00.000
-       And foo is formatted as "%tF"
      Then the following data should be generated:
-       | foo        |
-       | null       |
-       | 2018-10-01 |
-       | 2018-10-02 |
-       | 2018-10-03 |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
-       | 2018-10-09 |
+       | foo                     |
+       | null                    |
+       | 2018-10-01T00:00:00.000 |
+       | 2018-10-02T00:00:00.000 |
+       | 2018-10-03T00:00:00.000 |
+       | 2018-10-04T00:00:00.000 |
+       | 2018-10-05T00:00:00.000 |
+       | 2018-10-06T00:00:00.000 |
+       | 2018-10-07T00:00:00.000 |
+       | 2018-10-08T00:00:00.000 |
+       | 2018-10-09T00:00:00.000 |
 
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
      Given there is a field foo
@@ -161,13 +163,12 @@ Scenario: User requires to create a field with dates that conform to multiple se
        """
        And foo is of type "temporal"
        And foo is before 2018-10-09T00:00:00.000
-       And foo is formatted as "%tF"
      Then the following data should be generated:
-       | foo        |
-       | null       |
-       | 2018-10-03 |
-       | 2018-10-04 |
-       | 2018-10-05 |
-       | 2018-10-06 |
-       | 2018-10-07 |
-       | 2018-10-08 |
+       | foo                     |
+       | null                    |
+       | 2018-10-03T00:00:00.000 |
+       | 2018-10-04T00:00:00.000 |
+       | 2018-10-05T00:00:00.000 |
+       | 2018-10-06T00:00:00.000 |
+       | 2018-10-07T00:00:00.000 |
+       | 2018-10-08T00:00:00.000 |
