@@ -132,10 +132,10 @@ Scenario: User requires to create a field with dates that conform to one or many
        """
        And foo is of type "temporal"
        And foo is before 2018-10-10T00:00:00.000
-     Then the following data should be generated:
+     Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
-       | 2018-10-01T00:00:00.000 |
+       | 2018-10-01T00:00:00.001 |
        | 2018-10-02T00:00:00.000 |
        | 2018-10-03T00:00:00.000 |
        | 2018-10-04T00:00:00.000 |
