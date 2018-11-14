@@ -87,12 +87,22 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.generatorHasThrownException(),
+            is(false));
         Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.generatorHasThrownException(),
+            is(false));
         Assert.assertThat(data.generatedData, contains(data.expectedData));
     }
 
@@ -100,6 +110,10 @@ public class GeneralTestStep {
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.generatorHasThrownException(),
+            is(false));
         Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
@@ -107,6 +121,10 @@ public class GeneralTestStep {
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.generatorHasThrownException(),
+            is(false));
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
