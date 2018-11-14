@@ -54,15 +54,13 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
-    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|([0-9]+(.[0-9]+){1}))+)")
+    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
         Object parsedValue;
-        if (value.startsWith("\"") && value.endsWith("\"")) {
-            parsedValue = value.substring(1, value.length() - 1);
-        }  else if (value.contains(".")){
-            parsedValue = Double.parseDouble(value);
+        if (value.matches(DateValueStep.DATE_REGEX)){
+            parsedValue = DateValueStep.dateObject(value);
         } else {
-            parsedValue = Integer.parseInt(value);
+            parsedValue = GeneratorTestUtilities.parseInput(value);
         }
 
         this.state.addConstraint(fieldName, constraint, parsedValue);

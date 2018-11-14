@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DateValueStep {
 
-    public static String DATE_REGEX = "((\\d{4})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$";
+    public static final String DATE_REGEX = "((\\d{4})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$";
     private DegTestState state;
 
     public DateValueStep(DegTestState state){
@@ -25,7 +25,7 @@ public class DateValueStep {
         this.state.addNotConstraint(fieldName, constraintName, dateObject(value));
     }
 
-    private static Map dateObject(String dateValue) {
+    public static Map dateObject(String dateValue) {
         HashMap map = new HashMap();
         map.put("date", dateValue);
         return map;
