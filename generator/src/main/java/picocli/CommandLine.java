@@ -1914,7 +1914,7 @@ public class CommandLine {
     /**
      * Delegates to {@link #invoke(String, Class, PrintStream, PrintStream, Help.Ansi, String...)} with {@code System.out} for
      * requested usage help messages, {@code System.err} for diagnostic error messages, and {@link Help.Ansi#AUTO}.
-     * @param methodName the {@code @Command}-annotated method to build a {@link CommandSpec} model from,
+     * @param methodName the {@code @Command}-annotated method to create a {@link CommandSpec} model from,
      *                   and run when {@linkplain #parseArgs(String...) parsing} succeeds.
      * @param cls the class where the {@code @Command}-annotated method is declared, or a subclass
      * @param args the command line arguments to parse
@@ -1931,7 +1931,7 @@ public class CommandLine {
     /**
      * Delegates to {@link #invoke(String, Class, PrintStream, PrintStream, Help.Ansi, String...)} with the specified stream for
      * requested usage help messages, {@code System.err} for diagnostic error messages, and {@link Help.Ansi#AUTO}.
-     * @param methodName the {@code @Command}-annotated method to build a {@link CommandSpec} model from,
+     * @param methodName the {@code @Command}-annotated method to create a {@link CommandSpec} model from,
      *                   and run when {@linkplain #parseArgs(String...) parsing} succeeds.
      * @param cls the class where the {@code @Command}-annotated method is declared, or a subclass
      * @param out the printstream to print requested help message to
@@ -1949,7 +1949,7 @@ public class CommandLine {
     /**
      * Delegates to {@link #invoke(String, Class, PrintStream, PrintStream, Help.Ansi, String...)} with the specified stream for
      * requested usage help messages, {@code System.err} for diagnostic error messages, and the specified Ansi mode.
-     * @param methodName the {@code @Command}-annotated method to build a {@link CommandSpec} model from,
+     * @param methodName the {@code @Command}-annotated method to create a {@link CommandSpec} model from,
      *                   and run when {@linkplain #parseArgs(String...) parsing} succeeds.
      * @param cls the class where the {@code @Command}-annotated method is declared, or a subclass
      * @param out the printstream to print requested help message to
@@ -1978,7 +1978,7 @@ public class CommandLine {
      *                                           args);
      * return list == null ? null : list.get(0);
      * }</pre>
-     * @param methodName the {@code @Command}-annotated method to build a {@link CommandSpec} model from,
+     * @param methodName the {@code @Command}-annotated method to create a {@link CommandSpec} model from,
      *                   and run when {@linkplain #parseArgs(String...) parsing} succeeds.
      * @param cls the class where the {@code @Command}-annotated method is declared, or a subclass
      * @param out the printStream to print the usage help message to when the user requested help
@@ -5052,7 +5052,7 @@ public class CommandLine {
                 if (toString() == null) { toString = "option " + longestName(); }
             }
 
-            /** Returns a new Builder initialized with the attributes from this {@code OptionSpec}. Calling {@code build} immediately will return a copy of this {@code OptionSpec}.
+            /** Returns a new Builder initialized with the attributes from this {@code OptionSpec}. Calling {@code create} immediately will return a copy of this {@code OptionSpec}.
              * @return a builder that can create a copy of this spec
              */
             public Builder toBuilder()    { return new Builder(this); }
@@ -5228,7 +5228,7 @@ public class CommandLine {
                 capacity = builder.capacity == null ? Range.parameterCapacity(arity(), index) : builder.capacity;
                 if (toString == null) { toString = "positional parameter[" + index() + "]"; }
             }
-            /** Returns a new Builder initialized with the attributes from this {@code PositionalParamSpec}. Calling {@code build} immediately will return a copy of this {@code PositionalParamSpec}.
+            /** Returns a new Builder initialized with the attributes from this {@code PositionalParamSpec}. Calling {@code create} immediately will return a copy of this {@code PositionalParamSpec}.
              * @return a builder that can create a copy of this spec
              */
             public Builder toBuilder()    { return new Builder(this); }

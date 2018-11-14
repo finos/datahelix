@@ -23,7 +23,7 @@ public class LeafConstraintIterator implements IConstraintIterator {
         hasNext = false;
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
         rowSpecRoute.decisionIndex = decisionIndexFromParent;
-        rowSpecRoute.subRoutes = new RowSpecRoute[]{};
+        rowSpecRoute.subRoutes = new RowSpecRoute[0];
         return rowSpecRoute;
     }
 
