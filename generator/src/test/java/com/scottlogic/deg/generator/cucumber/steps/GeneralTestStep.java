@@ -90,8 +90,8 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.generatorHasThrownException(),
-            is(false));
+            testHelper.getThrownExceptions(),
+            empty());
         Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
@@ -101,8 +101,8 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.generatorHasThrownException(),
-            is(false));
+            testHelper.getThrownExceptions(),
+            empty());
         Assert.assertThat(data.generatedData, contains(data.expectedData));
     }
 
@@ -112,8 +112,8 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.generatorHasThrownException(),
-            is(false));
+            testHelper.getThrownExceptions(),
+            empty());
         Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
@@ -123,8 +123,8 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.generatorHasThrownException(),
-            is(false));
+            testHelper.getThrownExceptions(),
+            empty());
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
