@@ -30,6 +30,12 @@ public final class TreeDecisionNode implements DecisionNode {
                 .collect(Collectors.toList()));
     }
 
+    public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
+        return new TreeDecisionNode(Stream.concat(
+            this.options.stream(),
+            newOptions.stream()).collect(Collectors.toList()));
+    }
+
     public String toString(){
         return this.options.size() >= 5
             ? String.format("Options: %d", this.options.size())
