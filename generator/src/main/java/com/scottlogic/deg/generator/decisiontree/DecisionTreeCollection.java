@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.ProfileFields;
 
 import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class DecisionTreeCollection {
@@ -24,10 +26,11 @@ public class DecisionTreeCollection {
 
     public DecisionTree getMergedTree() {
         return new DecisionTree(
-            ConstraintNode.merge(decisionTrees
+            TreeConstraintNode.merge(decisionTrees
                 .stream()
                 .map(DecisionTree::getRootNode)
                 .iterator()),
-            fields);
+            fields,
+            decisionTrees.isEmpty() ? null : decisionTrees.iterator().next().getDescription());
     }
 }

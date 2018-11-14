@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.cucumber.utils;
+package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.generation.GenerationConfig;

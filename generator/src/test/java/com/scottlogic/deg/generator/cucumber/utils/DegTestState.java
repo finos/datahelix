@@ -27,12 +27,12 @@ public class DegTestState {
     final List<IConstraint> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
 
-    public void addConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    public void addConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(dto);
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    public void addNotConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO notDto = new ConstraintDTO();
         notDto.not = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(notDto);
@@ -84,11 +84,19 @@ public class DegTestState {
             .collect(Collectors.joining());
     }
 
-    private void addConstraintToList(ConstraintDTO constraintDTO) throws Exception {
-        IConstraint constraint = new MainConstraintReader().apply(
-            constraintDTO,
-            new ProfileFields(this.profileFields));
-        this.constraints.add(constraint);
+    private void addConstraintToList(ConstraintDTO constraintDTO) {
+        try {
+            IConstraint constraint = new MainConstraintReader().apply(
+                constraintDTO,
+                new ProfileFields(this.profileFields));
+            this.constraints.add(constraint);
+        }
+        catch (InvalidProfileException exc){
+            this.addException(exc);
+        }
+        catch (Exception exc){
+            this.addException(new InvalidProfileException(exc.getMessage()));
+        }
     }
 
     private ConstraintHolder deserialise(String json) throws IOException {

@@ -1,5 +1,9 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.DefaultTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
@@ -32,6 +36,18 @@ public class Generate implements Runnable {
         defaultValue = "Interesting")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
 
+    @CommandLine.Option(
+            names = {"--no-optimise"},
+            description = "Prevents tree optimisation",
+            hidden = true)
+    private boolean dontOptimise;
+
+    @CommandLine.Option(
+            names = {"--no-partition"},
+            description = "Prevents tree partitioning",
+            hidden = true)
+    private boolean dontPartitionTrees;
+
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
         defaultValue = "Exhaustive",
@@ -50,8 +66,15 @@ public class Generate implements Runnable {
             DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
 
             new GenerationEngine(
-                    new FileOutputTarget(outputPath, new CsvDataSetWriter()),
-                new DataGenerator(treeWalker))
+                new FileOutputTarget(outputPath, new CsvDataSetWriter()),
+                new DataGenerator(
+                    treeWalker,
+                    dontPartitionTrees
+                        ? new NoopTreePartitioner()
+                        : new DefaultTreePartitioner(),
+                    dontOptimise
+                        ? new NoopDecisionTreeOptimiser()
+                        : new DecisionTreeOptimiser()))
                 .generateDataSet(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

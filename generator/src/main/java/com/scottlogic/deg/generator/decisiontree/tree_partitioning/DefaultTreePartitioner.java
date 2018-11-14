@@ -3,9 +3,9 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 
 import java.util.*;
 import java.util.function.Function;
@@ -65,13 +65,15 @@ public class DefaultTreePartitioner implements TreePartitioner {
                 .stream()
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
-                    new ConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                    new ProfileFields(new ArrayList<>(partition.fields))
+                    new TreeConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
+                    new ProfileFields(new ArrayList<>(partition.fields)),
+                    "Partitioned Tree"
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
-                    new ConstraintNode(),
-                    new ProfileFields(Collections.singletonList(field))
+                    new TreeConstraintNode(),
+                    new ProfileFields(Collections.singletonList(field)),
+                    "Tree with Unpartitioned Fields"
                 ))
             );
     }

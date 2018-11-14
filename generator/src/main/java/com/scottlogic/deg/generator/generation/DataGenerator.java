@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.DefaultTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
@@ -18,9 +18,15 @@ import java.util.stream.Stream;
 
 public class DataGenerator implements IDataGenerator {
     private final DecisionTreeWalker treeWalker;
-    private final TreePartitioner treePartitioner = new DefaultTreePartitioner();
+    private final TreePartitioner treePartitioner;
+    private final IDecisionTreeOptimiser treeOptimiser;
 
-    public DataGenerator(DecisionTreeWalker treeWalker) {
+    public DataGenerator(
+            DecisionTreeWalker treeWalker,
+            TreePartitioner treePartitioner,
+            IDecisionTreeOptimiser optimiser) {
+        this.treePartitioner = treePartitioner;
+        this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
     }
 
@@ -33,6 +39,7 @@ public class DataGenerator implements IDataGenerator {
         final List<DecisionTree> partitionedTrees =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
+                    .map(this.treeOptimiser::optimiseTree)
                 .collect(Collectors.toList());
 
         final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees

@@ -2,6 +2,10 @@ package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.DefaultTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
@@ -63,7 +67,12 @@ class ExampleProfilesTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 consumer.generate(
-                    new GenerationEngine(new NullOutputTarget(), new DataGenerator(walkerFactory.getDecisionTreeWalker())),
+                    new GenerationEngine(
+                        new NullOutputTarget(),
+                        new DataGenerator(
+                            walkerFactory.getDecisionTreeWalker(),
+                            new DefaultTreePartitioner(),
+                            new DecisionTreeOptimiser())),
                     profileFile);
             });
 

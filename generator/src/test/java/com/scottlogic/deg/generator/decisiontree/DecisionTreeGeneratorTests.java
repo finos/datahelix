@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
-import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.*;
 
@@ -331,24 +331,29 @@ class DecisionTreeGeneratorTests {
                 aEquals10.or(aGreaterThan10),
                 bGreaterThan20));
 
-        Assert.assertThat(
-            getResultingRootOption(),
+        Assert.assertTrue(
             isEquivalentTo(
-                new ConstraintNode(
+                getResultingRootOption(), new TreeConstraintNode(
                     Collections.emptyList(),
                     Arrays.asList(
-                        new DecisionNode(
+                        new TreeDecisionNode(
                             /* OPTION 1: AND(C, OR(A, B))  */
-                            new ConstraintNode(
+                            new TreeConstraintNode(
                                 Arrays.asList(bGreaterThan20),
                                 Collections.singleton(
-                                    new DecisionNode(
-                                        new ConstraintNode(aEquals10),
-                                        new ConstraintNode(aGreaterThan10)))),
+                                    new TreeDecisionNode(
+                                        new TreeConstraintNode(aEquals10),
+                                        new TreeConstraintNode(aGreaterThan10)))),
                             /* OPTION 2: AND(¬A, ¬B)  */
-                            new ConstraintNode(
+                            new TreeConstraintNode(
                                 new NotConstraint(aEquals10),
-                                new NotConstraint(aGreaterThan10)))))));
+                                new NotConstraint(aGreaterThan10)
+                            )
+                        )
+                    )
+                )
+            )
+        );
     }
 
     // NOT (IF A THEN B ELSE C) - edge case
@@ -411,13 +416,17 @@ class DecisionTreeGeneratorTests {
 
         IConstraint inputRule = new NotConstraint(new ConditionalConstraint(aEqualTo10, bGreaterThan20));
 
-        ConstraintNode expectedOutput = new ConstraintNode(
+        ConstraintNode expectedOutput = new TreeConstraintNode(
             aEqualTo10,
             bGreaterThan20.isFalse());
 
         givenRule(inputRule);
 
-        Assert.assertThat(getResultingRootOption(), isEquivalentTo(expectedOutput));
+        Assert.assertTrue(
+            isEquivalentTo(
+                getResultingRootOption(), expectedOutput
+            )
+        );
     }
 
     // NOT (NOT A)
@@ -495,22 +504,41 @@ class DecisionTreeGeneratorTests {
                 new OrConstraint(constraintA, constraintB),
                 constraintC));
 
-        Assert.assertThat(
-            getResultingRootOption(),
+        Assert.assertTrue(
             isEquivalentTo(
-                new ConstraintNode(
+                getResultingRootOption(),
+                new TreeConstraintNode(
                     Collections.emptyList(),
                     Arrays.asList(
-                        new DecisionNode(
-                            new ConstraintNode(constraintA),
-                            new ConstraintNode(constraintB),
-                            new ConstraintNode(constraintC))))));
+                        new TreeDecisionNode(
+                            new TreeConstraintNode(constraintA),
+                            new TreeConstraintNode(constraintB),
+                            new TreeConstraintNode(constraintC))
+                    )
+                )
+            )
+        );
     }
 
     private void treeRootShouldMatch(ConstraintNode expected) {
         ConstraintNode actual = this.getActualOutput().getMergedTree().getRootNode();
 
-        Assert.assertThat(actual, isEquivalentTo(expected));
+        Assert.assertTrue(
+            isEquivalentTo(actual, expected)
+        );
+    }
+
+    private boolean isEquivalentTo(ConstraintNode expected, ConstraintNode actual) {
+        TreeComparisonContext context = new TreeComparisonContext();
+        AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
+        ConstraintNodeComparer constraintNodeComparer = new ConstraintNodeComparer(
+            context,
+            defaultAnyOrderCollectionEqualityComparer,
+            new DecisionComparer(),
+            defaultAnyOrderCollectionEqualityComparer,
+            new AnyOrderCollectionEqualityComparer(new DecisionComparer()));
+
+        return constraintNodeComparer.equals(expected, actual);
     }
 
     private final IConstraint aIsNull = new IsNullConstraint(new Field("A"));
@@ -526,7 +554,7 @@ class DecisionTreeGeneratorTests {
                 aIsNull));
 
         treeRootShouldMatch(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 new NotConstraint(
                     aIsNull)));
     }
@@ -539,7 +567,7 @@ class DecisionTreeGeneratorTests {
                     aIsNull)));
 
         treeRootShouldMatch(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 aIsNull));
     }
 
@@ -550,7 +578,7 @@ class DecisionTreeGeneratorTests {
                 new OrConstraint(aIsNull, cIsNumeric)));
 
         treeRootShouldMatch(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 new NotConstraint(aIsNull),
                 new NotConstraint(cIsNumeric)));
     }
@@ -562,17 +590,17 @@ class DecisionTreeGeneratorTests {
                 new AndConstraint(aIsNull, cIsNumeric, eIsString)));
 
         treeRootShouldMatch(
-            new ConstraintNode(
-                new DecisionNode(
-                    new ConstraintNode(
+            new TreeConstraintNode(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(
                         new NotConstraint(aIsNull),
                         cIsNumeric,
                         eIsString),
-                    new ConstraintNode(
+                    new TreeConstraintNode(
                         aIsNull,
                         new NotConstraint(cIsNumeric),
                         eIsString),
-                    new ConstraintNode(
+                    new TreeConstraintNode(
                         aIsNull,
                         cIsNumeric,
                         new NotConstraint(eIsString)))));
@@ -588,12 +616,12 @@ class DecisionTreeGeneratorTests {
                     eIsString)));
 
 
-        new ConstraintNode(
-            new DecisionNode(
-                new ConstraintNode(
+        new TreeConstraintNode(
+            new TreeDecisionNode(
+                new TreeConstraintNode(
                     aIsNull,
                     bEquals10.isFalse()),
-                new ConstraintNode(
+                new TreeConstraintNode(
                     aIsNull.isFalse(),
                     eIsString.isFalse())));
     }

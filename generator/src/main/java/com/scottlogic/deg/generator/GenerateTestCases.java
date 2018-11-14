@@ -1,18 +1,14 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
 import picocli.CommandLine;
 
@@ -55,7 +51,10 @@ public class GenerateTestCases implements Runnable {
         try {
             new GenerationEngine(
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
-                new DataGenerator(walkerFactory.getDecisionTreeWalker()))
+                new DataGenerator(
+                    walkerFactory.getDecisionTreeWalker(),
+                    new NoopTreePartitioner(),
+                    new NoopDecisionTreeOptimiser()))
                 .generateTestCases(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

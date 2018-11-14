@@ -4,9 +4,8 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 
 class DefaultTreePartitionerTests {
     @Test
@@ -185,19 +182,19 @@ class DefaultTreePartitionerTests {
             tree(fields("A"),
                 constraint("A")),
             tree(fields("B"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
     }
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
         givenTree(
             tree(fields("A", "B", "C"),
-                new ConstraintNode()));
+                new TreeConstraintNode()));
 
         expectTrees(
-            tree(fields("A"), new ConstraintNode()),
-            tree(fields("B"), new ConstraintNode()),
-            tree(fields("C"), new ConstraintNode()));
+            tree(fields("A"), new TreeConstraintNode()),
+            tree(fields("B"), new TreeConstraintNode()),
+            tree(fields("C"), new TreeConstraintNode()));
     }
 
     private ConstraintNode constraint(String... fieldNames) {
@@ -209,7 +206,7 @@ class DefaultTreePartitionerTests {
     }
 
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
-        return new ConstraintNode(
+        return new TreeConstraintNode(
             Stream.of(fieldNames)
                 .map(this::atomicConstraint)
                 .collect(Collectors.toList()),
@@ -228,7 +225,7 @@ class DefaultTreePartitionerTests {
     }
 
     private DecisionNode decision(ConstraintNode... constraints) {
-        return new DecisionNode(constraints);
+        return new TreeDecisionNode(constraints);
     }
 
     private ProfileFields fields(String... fieldNames) {
@@ -239,7 +236,7 @@ class DefaultTreePartitionerTests {
     }
 
     private DecisionTree tree(ProfileFields fields, ConstraintNode rootNode) {
-        return new DecisionTree(rootNode, fields);
+        return new DecisionTree(rootNode, fields, "Decision Tree");
     }
 
     @BeforeEach
@@ -266,9 +263,29 @@ class DefaultTreePartitionerTests {
         if (partitionedTrees == null)
             partitionTrees();
 
-        Assert.assertThat(
-            partitionedTrees,
-            isEquivalentTo(Arrays.asList(decisionTrees))
+        TreeComparisonReporter reporter = new TreeComparisonReporter();
+        TreeComparisonContext context = new TreeComparisonContext();
+        AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
+        EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
+            new TreeComparer(
+                new ConstraintNodeComparer(
+                    context,
+                    defaultAnyOrderCollectionEqualityComparer,
+                    new DecisionComparer(),
+                    defaultAnyOrderCollectionEqualityComparer,
+                    new AnyOrderCollectionEqualityComparer(new DecisionComparer())),
+                new ProfileFieldComparer(context, defaultAnyOrderCollectionEqualityComparer, defaultAnyOrderCollectionEqualityComparer),
+                context
+            )
         );
+
+        boolean match = anyOrderComparer.equals(
+            partitionedTrees,
+            Arrays.asList(decisionTrees));
+
+        if (!match) {
+            reporter.reportMessages(context);
+            Assert.fail("Trees do not match");
+        }
     }
 }
