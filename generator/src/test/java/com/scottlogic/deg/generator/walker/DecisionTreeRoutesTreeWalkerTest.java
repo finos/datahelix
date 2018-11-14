@@ -176,7 +176,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 2);
-        List<String> routePaths = routesList.stream().map(r -> r.toString()).collect(Collectors.toList());
+        List<String> routePaths = routesList.stream().map(RowSpec::toString).collect(Collectors.toList());
         Assert.assertThat(routePaths, Matchers.containsInAnyOrder("left decision<root", "right decision<root"));
     }
 
@@ -213,7 +213,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 1);
-        List<String> routePaths = routesList.stream().map(r -> r.toString()).collect(Collectors.toList());
+        List<String> routePaths = routesList.stream().map(RowSpec::toString).collect(Collectors.toList());
         Assert.assertThat(routePaths, Matchers.containsInAnyOrder("left decision<root"));
         Assert.assertThat(routePaths, Matchers.not(Matchers.containsInAnyOrder("right decision<root")));
     }
@@ -236,14 +236,14 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static ConstraintNode constraint(String name, DecisionNode... decisions){
         return new TreeConstraintNode(
-            Arrays.asList(new IsEqualToConstantConstraint(new Field(name), name)),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
             Arrays.asList(decisions));
     }
 
     private class TestConstraintReducer extends ConstraintReducer {
         private final ConstraintNodeToRowSpecMap[] maps;
 
-        public TestConstraintReducer(ConstraintNodeToRowSpecMap... maps) {
+        TestConstraintReducer(ConstraintNodeToRowSpecMap... maps) {
             super(new FieldSpecFactory(), new FieldSpecMerger());
             this.maps = maps;
         }
@@ -275,17 +275,14 @@ class DecisionTreeRoutesTreeWalkerTest {
                     return false;
             }
 
-            if (compareAtomicConstraints.hasNext() != atomicConstraints.hasNext())
-                return false;
-
-            return true;
+            return compareAtomicConstraints.hasNext() == atomicConstraints.hasNext();
         }
     }
 
     private class TestRowSpecMerger extends RowSpecMerger {
-        public final ArrayList<Collection<RowSpec>> rowSpecsMerged = new ArrayList<>();
+        final ArrayList<Collection<RowSpec>> rowSpecsMerged = new ArrayList<>();
 
-        public TestRowSpecMerger() {
+        TestRowSpecMerger() {
             super(new FieldSpecMerger());
         }
 
@@ -295,16 +292,16 @@ class DecisionTreeRoutesTreeWalkerTest {
 
             String path = String.join(
                 "<",
-                rowSpecs.stream().map(rs -> rs.toString()).collect(Collectors.toList()));
+                rowSpecs.stream().map(RowSpec::toString).collect(Collectors.toList()));
             return Optional.of(new TestRowSpec(path));
         }
     }
 
     private class ConstraintNodeToRowSpecMap{
         public final ConstraintNode constraint;
-        public  final RowSpec rowSpec;
+        final RowSpec rowSpec;
 
-        public ConstraintNodeToRowSpecMap(ConstraintNode constraint, RowSpec rowSpec) {
+        ConstraintNodeToRowSpecMap(ConstraintNode constraint, RowSpec rowSpec) {
             this.constraint = constraint;
             this.rowSpec = rowSpec;
         }
@@ -313,7 +310,7 @@ class DecisionTreeRoutesTreeWalkerTest {
     private class TestRowSpec extends RowSpec {
         private final String name;
 
-        public TestRowSpec(String name) {
+        TestRowSpec(String name) {
             super(new ProfileFields(Arrays.asList(new Field[0])), new HashMap<>());
             this.name = name;
         }
