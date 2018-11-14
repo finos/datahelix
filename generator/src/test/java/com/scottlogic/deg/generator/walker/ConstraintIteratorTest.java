@@ -20,7 +20,7 @@ class ConstraintIteratorTest {
 
     @Test
     void noSubDecisions_hasNext() {
-        ConstraintNode node = new ConstraintNode();
+        ConstraintNode node = IteratorTestHelper.endConstraint();
         IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         assertThat(iterator.hasNext(), is(true));
@@ -28,7 +28,7 @@ class ConstraintIteratorTest {
 
     @Test
     void noSubDecisions_next_then_hasNextIsFalse() {
-        ConstraintNode node = new ConstraintNode();
+        ConstraintNode node = IteratorTestHelper.endConstraint();
         IConstraintIterator iterator = ConstraintBuilder.build(node);
 
         RowSpecRoute route = iterator.next();
