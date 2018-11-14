@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.scottlogic.deg.generator.decisiontree.DecisionTreeMatchers.isEquivalentTo;
 
 class TreePartitionerTests {
     @Test
@@ -237,7 +236,7 @@ class TreePartitionerTests {
     }
 
     private DecisionTree tree(ProfileFields fields, ConstraintNode rootNode) {
-        return new DecisionTree(rootNode, fields);
+        return new DecisionTree(rootNode, fields, "Decision Tree");
     }
 
     @BeforeEach
@@ -264,9 +263,29 @@ class TreePartitionerTests {
         if (partitionedTrees == null)
             partitionTrees();
 
-        Assert.assertThat(
-            partitionedTrees,
-            isEquivalentTo(Arrays.asList(decisionTrees))
+        TreeComparisonReporter reporter = new TreeComparisonReporter();
+        TreeComparisonContext context = new TreeComparisonContext();
+        AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
+        EqualityComparer anyOrderComparer = new AnyOrderCollectionEqualityComparer(
+            new TreeComparer(
+                new ConstraintNodeComparer(
+                    context,
+                    defaultAnyOrderCollectionEqualityComparer,
+                    new DecisionComparer(),
+                    defaultAnyOrderCollectionEqualityComparer,
+                    new AnyOrderCollectionEqualityComparer(new DecisionComparer())),
+                new ProfileFieldComparer(context, defaultAnyOrderCollectionEqualityComparer, defaultAnyOrderCollectionEqualityComparer),
+                context
+            )
         );
+
+        boolean match = anyOrderComparer.equals(
+            partitionedTrees,
+            Arrays.asList(decisionTrees));
+
+        if (!match) {
+            reporter.reportMessages(context);
+            Assert.fail("Trees do not match");
+        }
     }
 }

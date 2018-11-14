@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
@@ -33,7 +34,7 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields) ->
                         new IsEqualToConstantConstraint(
                                 fields.getByName(dto.field),
-                                dto.value));
+                                potentialUnwrapDate(dto.value)));
 
         add(AtomicConstraintType.ISINSET.toString(),
                 (dto, fields) ->
@@ -88,25 +89,25 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields) ->
                         new IsBeforeConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                parseDate(dto.value.toString())));
+                                unwrapDate(dto.value)));
 
         add(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsBeforeOrEqualToConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                parseDate(dto.value.toString())));
+                                unwrapDate(dto.value)));
 
         add(AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsAfterConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                parseDate(dto.value.toString())));
+                                unwrapDate(dto.value)));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields) ->
                         new IsAfterOrEqualToConstantDateTimeConstraint(
                                 fields.getByName(dto.field),
-                                parseDate(dto.value.toString())));
+                                unwrapDate(dto.value)));
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields) ->
@@ -175,6 +176,29 @@ public class AtomicConstraintReaderLookup {
 
     private static void add(String typeCode, IConstraintReader func) {
         typeCodeToSpecificReader.put(typeCode, func);
+    }
+
+    private static Object potentialUnwrapDate(Object value) throws InvalidProfileException {
+        if (value == null || !(value instanceof Map))
+            return value;
+
+        Map objectMap = (Map) value;
+        if (!objectMap.containsKey("date"))
+            throw new InvalidProfileException(String.format("Object found but no 'date' property exists, found %s", Objects.toString(objectMap.keySet())));
+
+        Object date = objectMap.get("date");
+        if (!(date instanceof String))
+            throw new InvalidProfileException(String.format("Date on date object must be a string, found %s", date));
+
+        return parseDate((String)date);
+    }
+
+    private static LocalDateTime unwrapDate(Object value) throws InvalidProfileException {
+        Object date = potentialUnwrapDate(value);
+        if (date instanceof LocalDateTime)
+            return (LocalDateTime) date;
+
+        throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
     }
 
     private static LocalDateTime parseDate(String value) throws InvalidProfileException {

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,5 +45,9 @@ public class DegTestHelper {
 
     public boolean hasDataBeenGenerated() {
         return generatedData != null && generatedData.size() > 0;
+    }
+
+    public Collection<Exception> getThrownExceptions(){
+        return state.testExceptions;
     }
 }
