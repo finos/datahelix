@@ -13,21 +13,17 @@ import java.util.*;
 public class DecisionIterator implements IDecisionIterator {
 
     private IDecisionIterator nextDecision;
-    private List<IConstraintIterator> options = new ArrayList<>();
+    private List<IConstraintIterator> options;
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
     private IConstraintIterator currentOptionIterator() { return options.get(currentOption); }
 
-    public DecisionIterator(Queue<DecisionNode> decisionNodes){
-        int count = 0;
-        for (ConstraintNode constraintNode: decisionNodes.remove().getOptions()) {
-            options.add(ConstraintBuilder.build(constraintNode, count));
-            count++;
-        }
-        currentOptionsSubroute = currentOptionIterator().next();
+    public DecisionIterator(List<IConstraintIterator> options, IDecisionIterator nextDecision){
+        this.options = options;
+        this.nextDecision = nextDecision;
 
-        nextDecision = DecisionBuilder.build(decisionNodes);
+        currentOptionsSubroute = currentOptionIterator().next();
     }
 
     @Override

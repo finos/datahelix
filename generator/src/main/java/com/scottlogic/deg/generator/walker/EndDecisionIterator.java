@@ -10,15 +10,11 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import java.util.*;
 
 public class EndDecisionIterator implements IDecisionIterator {
-    private List<IConstraintIterator> options = new ArrayList<>();
+    private List<IConstraintIterator> options;
     private int currentOption;
 
-    public EndDecisionIterator(DecisionNode decisionNode){
-        int count = 0;
-        for (ConstraintNode constraintNode: decisionNode.getOptions()) {
-            options.add(ConstraintBuilder.build(constraintNode, count));
-            count++;
-        }
+    public EndDecisionIterator(List<IConstraintIterator> options){
+        this.options = options;
     }
 
     @Override

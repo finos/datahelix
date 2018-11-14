@@ -12,8 +12,8 @@ public class ConstraintIterator implements IConstraintIterator {
     private int decisionIndexFromParent;
     private IDecisionIterator decisions;
 
-    public ConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
-        decisions = DecisionBuilder.build(constraintNode.getDecisions());
+    public ConstraintIterator(IDecisionIterator decisions, int decisionIndexFromParent){
+        this.decisions = decisions;
         this.decisionIndexFromParent = decisionIndexFromParent;
     }
 
