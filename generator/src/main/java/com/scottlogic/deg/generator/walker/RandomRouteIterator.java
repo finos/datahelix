@@ -34,8 +34,6 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
         return rootRoute;
     }
 
-
-
     private RowSpecRoute[] produceRoute(ConstraintNode constraint) {
         Collection<DecisionNode> decisions = constraint.getDecisions();
 
@@ -43,7 +41,6 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
     }
 
     private RowSpecRoute produceRoute(DecisionNode decision) {
-
         int decisionIndex = rand.nextInt(decision.getOptions().size());
         ConstraintNode decisionOption = new ArrayList<>(decision.getOptions()).get(decisionIndex);
 

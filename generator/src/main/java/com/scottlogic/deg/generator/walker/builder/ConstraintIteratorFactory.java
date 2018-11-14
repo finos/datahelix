@@ -13,27 +13,27 @@ import java.util.List;
 public class ConstraintIteratorFactory {
 
     public static IConstraintIterator create(ConstraintNode constraintNode){
-        return buildConstraintIterator(constraintNode, 0);
+        return createConstraintIterator(constraintNode, 0);
     }
 
-    public static IConstraintIterator buildConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
+    private static IConstraintIterator createConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
         if (constraintNode.getDecisions().isEmpty()){
             return new LeafConstraintIterator(decisionIndexFromParent);
         }
 
-        IDecisionIterator decisions = buildDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
+        IDecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
         return new ConstraintIterator(decisions, decisionIndexFromParent);
     }
 
 
-    public static IDecisionIterator buildDecisionIterator(List<DecisionNode> decisionNodes){
+    private static IDecisionIterator createDecisionIterator(List<DecisionNode> decisionNodes){
         if (decisionNodes == null || decisionNodes.isEmpty())
             return null;
 
         List<IConstraintIterator> options = new ArrayList<>();
         int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.get(0).getOptions()) {
-            options.add(buildConstraintIterator(constraintNode, count));
+            options.add(createConstraintIterator(constraintNode, count));
             count++;
         }
 
@@ -42,7 +42,7 @@ public class ConstraintIteratorFactory {
         }
 
         List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
-        IDecisionIterator nextDecision = buildDecisionIterator(nextDecisionNodes);
+        IDecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
         return new DecisionIterator(options, nextDecision);
     }
 
