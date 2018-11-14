@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.BaseMatcher;
@@ -64,12 +65,11 @@ public class GeneralTestStep {
             parsedValue = Integer.parseInt(value);
         }
 
-        try {
-            this.state.addConstraint(fieldName, constraint, parsedValue);
-            Assert.fail("Expected invalid profile");
-        } catch (Exception e) {
-            this.state.addException(e);
-        }
+        this.state.addConstraint(fieldName, constraint, parsedValue);
+        Assert.assertThat(
+            "Expected invalid profile",
+            this.testHelper.getThrownExceptions(),
+            hasItem(isA(InvalidProfileException.class)));
     }
 
     @Then("^I am presented with an error message$")
