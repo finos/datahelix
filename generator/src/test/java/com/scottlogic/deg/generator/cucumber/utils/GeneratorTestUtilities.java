@@ -30,8 +30,12 @@ public class GeneratorTestUtilities {
      * Runs the data generator and returns list of generated result data.
      * @return Generated data
      */
-    static List <List<Object>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy)
+    static List <List<Object>> getDEGGeneratedData(
+        List<Field> profileFields,
+        List<IConstraint> constraints,
+        GenerationConfig.DataGenerationType generationStrategy,
+        GenerationConfig.TreeWalkerType walkerType) {
+        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType)
             .stream()
             .map(genObj ->
                 genObj.values
@@ -46,7 +50,11 @@ public class GeneratorTestUtilities {
             ).collect(Collectors.toList());
     }
 
-    private static List<GeneratedObject> getGeneratedDataAsList(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
+    private static List<GeneratedObject> getGeneratedDataAsList(
+        List<Field> profileFields,
+        List<IConstraint> constraints,
+        GenerationConfig.DataGenerationType generationStrategy,
+        GenerationConfig.TreeWalkerType walkerType) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
             Collections.singleton(new Rule("TEST_RULE", constraints)));
@@ -61,7 +69,7 @@ public class GeneratorTestUtilities {
                 new RowSpecMerger(
                     new FieldSpecMerger())));
 
-        final GenerationConfig config = new GenerationConfig(generationStrategy, new FieldExhaustiveCombinationStrategy());
+        final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, new FieldExhaustiveCombinationStrategy());
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.forEach(allActualRows::add);
