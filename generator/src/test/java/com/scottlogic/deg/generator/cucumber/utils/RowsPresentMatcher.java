@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
-    private final List<List<Object>> expectedRows;
+    protected final List<List<Object>> expectedRows;
 
     public RowsPresentMatcher(List<List<Object>> expectedRows) {
         if (expectedRows == null)
@@ -21,9 +21,10 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
     @Override
     public boolean matches(Object o) {
         Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
+        List<List<Objects>> actualRows = (List<List<Objects>>) o;
 
-        for (List<Object> actualRow : (List<List<Object>>) o){
-            if (!expectedMatchers.stream().anyMatch(matcher -> matcher.matches(actualRow))){
+        for (RowMatcher expectedMatcher : expectedMatchers){
+            if (!actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
                 return false;
             }
         }

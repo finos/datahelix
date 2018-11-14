@@ -20,10 +20,11 @@ public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public boolean matches(Object o) {
-        Collection<RowMatcher> expectedMatches = getExpectedMatchers();
+        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
+        List<List<Objects>> actualRows = (List<List<Objects>>) o;
 
-        for (List<Object> actualRow : (List<List<Object>>) o){
-            if (expectedMatches.stream().anyMatch(matcher -> matcher.matches(actualRow))){
+        for (RowMatcher expectedMatcher : expectedMatchers){
+            if (actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
                 return false;
             }
         }
