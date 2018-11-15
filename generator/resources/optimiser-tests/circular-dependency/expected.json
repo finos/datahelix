@@ -2,6 +2,7 @@
 	"description": "Circular Dependency Optimiser test",
 	"rootNode": {
 		"atomicConstraints": [],
+
 		"decisions": [
 			{
 				"options": [
@@ -72,10 +73,14 @@
 		]
 	},
 	"fields": {
-		"fields": [{
-			"name": "A"
-		},{
-			"name": "B"
-		}]
+		"fields": 
+		[
+			{
+				"name": "A"
+			},
+			{
+				"name": "B"
+			}
+		]
 	}
 }]
