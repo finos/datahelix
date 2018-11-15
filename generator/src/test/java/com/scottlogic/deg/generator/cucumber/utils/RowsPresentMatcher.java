@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,21 +21,49 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public boolean matches(Object o) {
-        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
         List<List<Objects>> actualRows = (List<List<Objects>>) o;
-
-        for (RowMatcher expectedMatcher : expectedMatchers){
-            if (!actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
-                return false;
-            }
-        }
-
-        return true;
+        return getMissingRowMatchers(actualRows).isEmpty();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText(Objects.toString(getExpectedMatchers()));
+        description.appendText(
+            String.join(
+                ", ",
+                getExpectedMatchers()
+                    .stream()
+                    .map(matcher -> matcher.toString())
+                    .collect(Collectors.toList())));
+    }
+
+    @Override
+    public void describeMismatch(Object item, Description description) {
+        List<List<Objects>> actualRows = (List<List<Objects>>) item;
+        Collection<RowMatcher> missingRowMatchers = getMissingRowMatchers(actualRows);
+
+        description.appendText(
+            String.join(
+                ", ",
+                actualRows
+                    .stream()
+                    .map(row -> row.toString())
+                    .collect(Collectors.toList())));
+
+        description.appendText("\n");
+        description.appendList(" missing: ",", ", "", missingRowMatchers);
+    }
+
+    private Collection<RowMatcher> getMissingRowMatchers(List<List<Objects>> actualRows) {
+        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
+        ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
+
+        for (RowMatcher expectedMatcher : expectedMatchers){
+            if (!actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
+                missingRowMatchers.add(expectedMatcher);
+            }
+        }
+
+        return missingRowMatchers;
     }
 
     private List<RowMatcher> getExpectedMatchers() {
