@@ -25,18 +25,17 @@ public class DecisionIterator implements IDecisionIterator {
 
     @Override
     public List<RowSpecRoute> next() {
-        IConstraintIterator currentOptionIterator = options.get(currentOption);
         if (currentOptionsSubroute == null){
-            currentOptionsSubroute = currentOptionIterator.next();
+            currentOptionsSubroute = getCurrentOptionsIterator().next();
         }
 
         if (!nextDecision.hasNext()) {
             nextDecision.reset();
 
-            if (!currentOptionIterator.hasNext()) {
+            if (!getCurrentOptionsIterator().hasNext()) {
                 currentOption++;
             }
-            currentOptionsSubroute = currentOptionIterator.next();
+            currentOptionsSubroute = getCurrentOptionsIterator().next();
         }
 
         List<RowSpecRoute> sideRoutes;
@@ -54,4 +53,6 @@ public class DecisionIterator implements IDecisionIterator {
         currentOption = 0;
         currentOptionsSubroute = null;
     }
+
+    private IConstraintIterator getCurrentOptionsIterator() { return options.get(currentOption); }
 }
