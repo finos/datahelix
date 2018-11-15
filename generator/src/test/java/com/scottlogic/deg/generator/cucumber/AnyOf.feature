@@ -77,6 +77,7 @@ Scenario: User requires to create a field with numbers that conform to one or ma
      Then the following data should be generated:
        | foo  |
        | null |
+       | 1    |
        | 2    |
        | 3    |
        | 4    |
@@ -132,7 +133,7 @@ Scenario: User requires to create a field with dates that conform to one or many
        """
        And foo is of type "temporal"
        And foo is before 2018-10-10T00:00:00.000
-     Then the following data should be generated:
+     Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
        | 2018-10-01T00:00:00.000 |
@@ -163,7 +164,7 @@ Scenario: User requires to create a field with dates that conform to multiple se
        """
        And foo is of type "temporal"
        And foo is before 2018-10-09T00:00:00.000
-     Then the following data should be generated:
+     Then the following data should be included in what is generated:
        | foo                     |
        | null                    |
        | 2018-10-03T00:00:00.000 |
