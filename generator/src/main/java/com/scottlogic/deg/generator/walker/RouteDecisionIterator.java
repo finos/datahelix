@@ -1,19 +1,19 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
-import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
+import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
+import com.scottlogic.deg.generator.walker.factory.DecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 import java.util.*;
 
-public class RouteDecisionIterator implements IDecisionIterator {
+public class RouteDecisionIterator implements DecisionIterator {
 
-    private IDecisionIterator nextDecision;
-    private List<IConstraintIterator> options;
+    private DecisionIterator nextDecision;
+    private List<ConstraintIterator> options;
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public RouteDecisionIterator(List<IConstraintIterator> options, IDecisionIterator nextDecision){
+    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision){
         this.options = options;
         this.nextDecision = nextDecision;
     }
@@ -47,12 +47,12 @@ public class RouteDecisionIterator implements IDecisionIterator {
     @Override
     public void reset(){
         nextDecision.reset();
-        for (IConstraintIterator option: options) {
+        for (ConstraintIterator option: options) {
             option.reset();
         }
         currentOption = 0;
         currentOptionsSubroute = null;
     }
 
-    private IConstraintIterator getCurrentOptionsIterator() { return options.get(currentOption); }
+    private ConstraintIterator getCurrentOptionsIterator() { return options.get(currentOption); }
 }

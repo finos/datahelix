@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.walker.builder;
+package com.scottlogic.deg.generator.walker.factory;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -12,25 +12,25 @@ import java.util.List;
 
 public class ConstraintIteratorFactory {
 
-    public static IConstraintIterator create(ConstraintNode constraintNode){
+    public static ConstraintIterator create(ConstraintNode constraintNode){
         return createConstraintIterator(constraintNode, 0);
     }
 
-    private static IConstraintIterator createConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
+    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
         if (constraintNode.getDecisions().isEmpty()){
             return new LeafConstraintIterator(decisionIndexFromParent);
         }
 
-        IDecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
+        DecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
         return new RouteConstraintIterator(decisions, decisionIndexFromParent);
     }
 
 
-    private static IDecisionIterator createDecisionIterator(List<DecisionNode> decisionNodes){
+    private static DecisionIterator createDecisionIterator(List<DecisionNode> decisionNodes){
         if (decisionNodes == null || decisionNodes.isEmpty())
             return null;
 
-        List<IConstraintIterator> options = new ArrayList<>();
+        List<ConstraintIterator> options = new ArrayList<>();
         int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.get(0).getOptions()) {
             options.add(createConstraintIterator(constraintNode, count));
@@ -42,7 +42,7 @@ public class ConstraintIteratorFactory {
         }
 
         List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
-        IDecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
+        DecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
         return new RouteDecisionIterator(options, nextDecision);
     }
 

@@ -1,16 +1,16 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.walker.builder.IConstraintIterator;
-import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
+import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
+import com.scottlogic.deg.generator.walker.factory.DecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import java.util.List;
 
-public class RouteConstraintIterator implements IConstraintIterator {
+public class RouteConstraintIterator implements ConstraintIterator {
 
     private int decisionIndexFromParent;
-    private IDecisionIterator subDecisions;
+    private DecisionIterator subDecisions;
 
-    public RouteConstraintIterator(IDecisionIterator subDecisions, int decisionIndexFromParent){
+    public RouteConstraintIterator(DecisionIterator subDecisions, int decisionIndexFromParent){
         this.subDecisions = subDecisions;
         this.decisionIndexFromParent = decisionIndexFromParent;
     }
