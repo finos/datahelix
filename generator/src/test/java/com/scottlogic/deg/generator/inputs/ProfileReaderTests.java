@@ -414,8 +414,8 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
-                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": \"2019-01-01T00:00:00.000\"}," +
-                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": \"2019-01-03T00:00:00.000\"}" +
+                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": { \"date\": \"2019-01-01T00:00:00.000\" } }," +
+                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": { \"date\": \"2019-01-03T00:00:00.000\" } }" +
                 "    ]" +
                 "}");
 

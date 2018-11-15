@@ -16,9 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -55,7 +53,10 @@ public class AtomicConstraintTests {
 
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
-        dateValueDto.value = "2020-01-01T01:02:03.456";
+
+        Map date = new HashMap();
+        date.put("date", "2020-01-01T01:02:03.456");
+        dateValueDto.value = date;
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
