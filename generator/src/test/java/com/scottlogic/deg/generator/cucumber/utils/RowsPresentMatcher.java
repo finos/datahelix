@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
-    private final List<List<Object>> expectedRows;
+    protected final List<List<Object>> expectedRows;
 
     public RowsPresentMatcher(List<List<Object>> expectedRows) {
         if (expectedRows == null)
@@ -20,20 +21,49 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public boolean matches(Object o) {
-        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
-
-        for (List<Object> actualRow : (List<List<Object>>) o){
-            if (!expectedMatchers.stream().anyMatch(matcher -> matcher.matches(actualRow))){
-                return false;
-            }
-        }
-
-        return true;
+        List<List<Objects>> actualRows = (List<List<Objects>>) o;
+        return getMissingRowMatchers(actualRows).isEmpty();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText(Objects.toString(getExpectedMatchers()));
+        description.appendText(
+            String.join(
+                ", ",
+                getExpectedMatchers()
+                    .stream()
+                    .map(matcher -> matcher.toString())
+                    .collect(Collectors.toList())));
+    }
+
+    @Override
+    public void describeMismatch(Object item, Description description) {
+        List<List<Objects>> actualRows = (List<List<Objects>>) item;
+        Collection<RowMatcher> missingRowMatchers = getMissingRowMatchers(actualRows);
+
+        description.appendText(
+            String.join(
+                ", ",
+                actualRows
+                    .stream()
+                    .map(row -> row.toString())
+                    .collect(Collectors.toList())));
+
+        description.appendText("\n");
+        description.appendList(" missing: ",", ", "", missingRowMatchers);
+    }
+
+    private Collection<RowMatcher> getMissingRowMatchers(List<List<Objects>> actualRows) {
+        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
+        ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
+
+        for (RowMatcher expectedMatcher : expectedMatchers){
+            if (!actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
+                missingRowMatchers.add(expectedMatcher);
+            }
+        }
+
+        return missingRowMatchers;
     }
 
     private List<RowMatcher> getExpectedMatchers() {
