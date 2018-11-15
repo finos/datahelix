@@ -9,7 +9,8 @@ import cucumber.api.junit.Cucumber;
     plugin = {"pretty"},
     features = {"src/test/java/com/scottlogic/deg/generator/cucumber"},
     glue={"com.scottlogic.deg.generator.cucumber.steps"},
-    monochrome = true
+    monochrome = true,
+    tags = "not @ignore"
 )
 
 public class TestRunner {
