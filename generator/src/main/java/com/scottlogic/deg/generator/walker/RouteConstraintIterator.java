@@ -5,12 +5,12 @@ import com.scottlogic.deg.generator.walker.builder.IDecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import java.util.List;
 
-public class ConstraintIterator implements IConstraintIterator {
+public class RouteConstraintIterator implements IConstraintIterator {
 
     private int decisionIndexFromParent;
     private IDecisionIterator subDecisions;
 
-    public ConstraintIterator(IDecisionIterator subDecisions, int decisionIndexFromParent){
+    public RouteConstraintIterator(IDecisionIterator subDecisions, int decisionIndexFromParent){
         this.subDecisions = subDecisions;
         this.decisionIndexFromParent = decisionIndexFromParent;
     }

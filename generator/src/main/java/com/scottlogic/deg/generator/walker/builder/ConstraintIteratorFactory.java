@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.walker.builder;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.walker.ConstraintIterator;
-import com.scottlogic.deg.generator.walker.DecisionIterator;
+import com.scottlogic.deg.generator.walker.RouteConstraintIterator;
+import com.scottlogic.deg.generator.walker.RouteDecisionIterator;
 import com.scottlogic.deg.generator.walker.EndDecisionIterator;
 import com.scottlogic.deg.generator.walker.LeafConstraintIterator;
 
@@ -22,7 +22,7 @@ public class ConstraintIteratorFactory {
         }
 
         IDecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
-        return new ConstraintIterator(decisions, decisionIndexFromParent);
+        return new RouteConstraintIterator(decisions, decisionIndexFromParent);
     }
 
 
@@ -43,7 +43,7 @@ public class ConstraintIteratorFactory {
 
         List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
         IDecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
-        return new DecisionIterator(options, nextDecision);
+        return new RouteDecisionIterator(options, nextDecision);
     }
 
 }

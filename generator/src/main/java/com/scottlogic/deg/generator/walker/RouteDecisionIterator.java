@@ -6,14 +6,14 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 import java.util.*;
 
-public class DecisionIterator implements IDecisionIterator {
+public class RouteDecisionIterator implements IDecisionIterator {
 
     private IDecisionIterator nextDecision;
     private List<IConstraintIterator> options;
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public DecisionIterator(List<IConstraintIterator> options, IDecisionIterator nextDecision){
+    public RouteDecisionIterator(List<IConstraintIterator> options, IDecisionIterator nextDecision){
         this.options = options;
         this.nextDecision = nextDecision;
     }

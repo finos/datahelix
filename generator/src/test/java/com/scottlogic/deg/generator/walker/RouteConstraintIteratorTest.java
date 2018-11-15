@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
-class ConstraintIteratorTest {
+class RouteConstraintIteratorTest {
 
     @Test
     void noSubDecisions_hasNext() {
