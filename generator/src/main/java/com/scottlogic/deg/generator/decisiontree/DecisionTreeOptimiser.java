@@ -194,12 +194,21 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         /**
-         * Check if this decision contains any constraint nodes that can be factorised by the most prolific constraint
+         * Check if this decision is factorisable using the most prolific constraint
          * @return true is decision contains constraints that are factorisable
          */
         boolean decisionIsFactorisable(){
-            return decision.getOptions().stream()
-                .anyMatch(option -> option.atomicConstraintExists(factorisingConstraint) || option.atomicConstraintExists(negatedFactorisingConstraint));
+            // The decision should contain ONE option with the MPC
+            boolean optionWithMPCExists = decision.getOptions().stream()
+                .filter(option -> option.atomicConstraintExists(factorisingConstraint))
+                .count() == 1;
+
+            // The decision should contain ONE separate option with the negated MPC (which is atomic).
+            boolean optionWithNegatedMPCExists = decision.getOptions().stream()
+                .filter(option -> option.atomicConstraintExists(negatedFactorisingConstraint) && option.getAtomicConstraints().size() == 1)
+                .count() == 1;
+
+            return optionWithMPCExists && optionWithNegatedMPCExists;
         }
 
         private void markOptionForFactorisation(IConstraint factorisingConstraint, ConstraintNode node, List<ConstraintNode> options, Set<IConstraint> constraints){
