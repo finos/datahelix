@@ -72,12 +72,17 @@ public class TreePartitioner implements ITreePartitioner {
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
-                    new TreeConstraintNode(),
+                    TreeConstraintNode.empty,
                     new ProfileFields(Collections.singletonList(field)),
                     "Tree with Unpartitioned Fields"
                 ))
             );
     }
+
+    private static final TreeConstraintNode emptyConstraint
+        = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
+
+
 
     class Partition {
         final Integer id;
