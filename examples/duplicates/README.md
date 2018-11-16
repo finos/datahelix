@@ -1,1 +1,1 @@
-A profile that, if we're not careful, will yield duplicate rows
+A profile that containts duplicate constraints, should be possible to process by removing the duplicates
