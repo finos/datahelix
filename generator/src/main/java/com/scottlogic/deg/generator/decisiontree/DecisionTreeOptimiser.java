@@ -89,7 +89,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             // Perform movement of options
             addOptionsAsDecisionUnderConstraintNode(factorisingConstraintNode, result.optionsToFactorise);
             addOptionsAsDecisionUnderConstraintNode(negatedFactorisingConstraintNode, result.negatedOptionsToFactorise);
-            factorisedDecisionNode = factorisedDecisionNode.addOptions(result.adjacentOptions);
+            otherOptions.addAll(result.adjacentOptions);
             decisionsToRemove.add(decision);
         }
 
