@@ -79,7 +79,7 @@ public class Visualise implements Runnable {
         try {
             if (treePartitions.size() == 1) {
                 writeTreeTo(
-                    mergedTree,
+                    treePartitions.get(0),
                     title,
                     outputDir.resolve(profileBaseName + ".gv"));
             } else {
@@ -90,7 +90,7 @@ public class Visualise implements Runnable {
 
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
-                        mergedTree,
+                        treePartitions.get(i),
                         title != null
                             ? title + " (partition " + (i + 1) + ")"
                             : null,
