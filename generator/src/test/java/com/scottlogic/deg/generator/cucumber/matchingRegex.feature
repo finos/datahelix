@@ -559,6 +559,7 @@ Scenario: Running a 'matchingRegex' request with a not constraint should be succ
        | "0"  |
        | "1"  |
 
+@ignore
 Scenario: Running a 'matchingRegex' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a field foo
        And there is a constraint:
