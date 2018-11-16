@@ -30,9 +30,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
     private void optimiseLevelOfTree(ConstraintNode rootNode, int depth){
         Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (depth > this.maxDepth)
-            return;
-        if (decisions.size() <= 1)
+        if (decisions.size() <= 1 || depth > this.maxDepth)
             return; //not worth optimising
 
         int iteration = 0;

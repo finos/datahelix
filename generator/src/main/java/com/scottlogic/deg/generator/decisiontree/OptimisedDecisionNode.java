@@ -15,11 +15,6 @@ public class OptimisedDecisionNode implements DecisionNode, OptimisedNode{
     }
 
     @Override
-    public DecisionNode addOption(ConstraintNode newConstraint) {
-        return new OptimisedDecisionNode(underlying.addOption(newConstraint));
-    }
-
-    @Override
     public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
         return new OptimisedDecisionNode(underlying.addOptions(newOptions));
     }
