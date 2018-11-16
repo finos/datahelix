@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNode{
+public class OptimisedConstraintNode implements ConstraintNode, OptimisedNode{
     private final ConstraintNode underlying;
 
-    public OptimisedTreeConstraintNode(ConstraintNode underlying) {
+    public OptimisedConstraintNode(ConstraintNode underlying) {
         this.underlying = underlying;
     }
 
@@ -31,7 +31,7 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
 
     @Override
     public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
-        return new OptimisedTreeConstraintNode(underlying.removeDecisions(decisionsToRemove));
+        return new OptimisedConstraintNode(underlying.removeDecisions(decisionsToRemove));
     }
 
     @Override
@@ -46,18 +46,18 @@ public class OptimisedTreeConstraintNode implements ConstraintNode, OptimisedNod
 
     @Override
     public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
-        return new OptimisedTreeConstraintNode(underlying.addAtomicConstraints(constraints));
+        return new OptimisedConstraintNode(underlying.addAtomicConstraints(constraints));
     }
 
     @Override
     public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
-        return new OptimisedTreeConstraintNode(underlying.addDecisions(decisions));
+        return new OptimisedConstraintNode(underlying.addDecisions(decisions));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof OptimisedTreeConstraintNode)
-            o = ((OptimisedTreeConstraintNode)o).underlying;
+        if (o instanceof OptimisedConstraintNode)
+            o = ((OptimisedConstraintNode)o).underlying;
 
         return underlying.equals(o);
     }

@@ -74,9 +74,9 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new OptimisedTreeConstraintNode(
+        ConstraintNode factorisingConstraintNode = new OptimisedConstraintNode(
             new TreeConstraintNode(mostProlificAtomicConstraint));
-        ConstraintNode negatedFactorisingConstraintNode = new OptimisedTreeConstraintNode(
+        ConstraintNode negatedFactorisingConstraintNode = new OptimisedConstraintNode(
             new TreeConstraintNode(negatedMostProlificConstraint));
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
@@ -124,7 +124,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                         .addAtomicConstraints(firstOption.getAtomicConstraints())
                         .addDecisions(firstOption.getDecisions());
                 },
-                (node1, node2) -> new OptimisedTreeConstraintNode(
+                (node1, node2) -> new OptimisedConstraintNode(
                     new TreeConstraintNode(
                         Stream
                             .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
