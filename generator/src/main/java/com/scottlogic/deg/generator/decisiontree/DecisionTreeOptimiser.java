@@ -41,7 +41,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         int iteration = 0;
         int prevDecisionCount = decisions.size();
         ConstraintNode newRootNode;
-        while (iteration < this.maxIterations && (newRootNode = optimiseDecisions(rootNode, rootNode.getDecisions(), depth)) != null)
+        while (iteration < this.maxIterations && (newRootNode = optimiseDecisions(rootNode, depth)) != null)
         {
             rootNode = newRootNode;
 
@@ -58,8 +58,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         return rootNode;
     }
 
-    private ConstraintNode optimiseDecisions(ConstraintNode rootNode, Collection<DecisionNode> decisions, int depth){
-        IConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(decisions);
+    private ConstraintNode optimiseDecisions(ConstraintNode rootNode, int depth){
+        IConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
         if (mostProlificAtomicConstraint == null){
             return null;
         }
