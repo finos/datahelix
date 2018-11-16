@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.test_utils.OptimiseTestStrategy;
+import com.scottlogic.deg.generator.decisiontree.test_utils.PartitionTestStrategy;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeTransformationTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.DecisionTreeMapper;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -24,70 +25,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class TreeTransformationIntegrationTests {
-    private enum XUT { // Transformation Under Test
-        TREE_PARTITION ("partitioning-tests"),
-        TREE_OPTIMISE ("optimiser-tests");
-        
-        private String testsDirName;
-
-        public String getTestsDirName() {
-            return testsDirName;
-        }
-
-        private XUT(String testDirsName) {
-            this.testsDirName = testDirsName;
-        }
-    }
-
     private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
-    @Disabled
+    /*
+     * FIXME -- wait until @steve-tennantsl renames his expected JSON files before we
+     * re-enable this TestFactory
+     */
+    @Disabled  
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
-    	return doTest(XUT.TREE_PARTITION);
+    	return doTest(new PartitionTestStrategy());
     }
     
     @TestFactory
     Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
-    	return doTest(XUT.TREE_OPTIMISE);
+    	return doTest(new OptimiseTestStrategy());
     }
     
-    private List<DecisionTree> transformTree(DecisionTree beforeTree, XUT xut) {
-        List<DecisionTree> actualTrees = null;
-        
-        switch (xut) {
-        case TREE_PARTITION:
-            ITreePartitioner treePartitioner = new TreePartitioner();
-            actualTrees = treePartitioner
-                .splitTreeIntoPartitions(beforeTree)
-                .collect(Collectors.toList());            
-            break;
-        case TREE_OPTIMISE:
-            IDecisionTreeOptimiser treeOptimiser = new DecisionTreeOptimiser();            
-            DecisionTree afterTree = treeOptimiser.optimiseTree(beforeTree);
-            actualTrees = Collections.singletonList(afterTree);
-            break;
-        default:
-            throw new UnsupportedOperationException("Illegal transformation under test: " 
-                        + xut.name());
-        }
-        
-        return actualTrees;
-    }
-    
-    private Collection<DynamicTest> doTest(XUT xut) {
+    private Collection<DynamicTest> doTest(TreeTransformationTestStrategy strategy) {
         final String FS = File.separator;
         final String testsDirPathPrefix = ".." + FS + "generator" + FS + "resources" + FS;
-        String testsDirPathName = testsDirPathPrefix + FS + xut.getTestsDirName() + FS;
+        String testsDirPathName = testsDirPathPrefix + FS + strategy.getTestsDirName() + FS;
         TreeComparisonReporter reporter = new TreeComparisonReporter();
 
         return getTestFiles(testsDirPathName).map(directory -> {
@@ -98,7 +64,7 @@ class TreeTransformationIntegrationTests {
 
                 DecisionTree beforeTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
                 
-                final List<DecisionTree> actualTrees = transformTree(beforeTree, xut);
+                final List<DecisionTree> actualTrees = strategy.transformTree(beforeTree);
                 
                 List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(outputFile);
                 final List<DecisionTree> expectedTrees = expectedTreeDto.stream()
