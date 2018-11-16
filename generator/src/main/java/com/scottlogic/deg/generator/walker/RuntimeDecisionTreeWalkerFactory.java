@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
+import com.scottlogic.deg.generator.walker.routes.RandomisedProducer;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
@@ -24,16 +26,19 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
         switch (config.getWalkerType()){
             case Routed:
-                throw new UnsupportedOperationException("RouteProducer isn't implemented yet");
-/*
                 return new DecisionTreeRoutesTreeWalker(
                     constraintReducer,
                     rowSpecMerger,
-                    <the producer>);*/
+                    new ExhaustiveProducer());
             case Exhaustive:
                 return new ExhaustiveDecisionTreeWalker(
                     constraintReducer,
                     rowSpecMerger);
+            case Random:
+                return new DecisionTreeRoutesTreeWalker(
+                    constraintReducer,
+                    rowSpecMerger,
+                    new RandomisedProducer(50000));
         }
 
         throw new UnsupportedOperationException(
