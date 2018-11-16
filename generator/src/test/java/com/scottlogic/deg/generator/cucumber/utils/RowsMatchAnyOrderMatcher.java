@@ -23,4 +23,13 @@ public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
 
         return super.matches(o);
     }
+
+    @Override
+    public void describeMismatch(Object item, Description description) {
+        List<List<Objects>> actualRows = (List<List<Objects>>) item;
+
+        super.describeMismatch(item, description);
+
+        description.appendText(String.format("\n  counts: expected %d, but got %d", expectedRows.size(), actualRows.size()));
+    }
 }
