@@ -87,8 +87,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             DecisionAnalysisResult result = analyser.performAnalysis();
 
             // Perform movement of options
-            addOptionsAsDecisionUnderConstraintNode(factorisingConstraintNode, result.optionsToFactorise);
-            addOptionsAsDecisionUnderConstraintNode(negatedFactorisingConstraintNode, result.negatedOptionsToFactorise);
+            factorisingConstraintNode = addOptionsAsDecisionUnderConstraintNode(factorisingConstraintNode, result.optionsToFactorise);
+            negatedFactorisingConstraintNode = addOptionsAsDecisionUnderConstraintNode(negatedFactorisingConstraintNode, result.negatedOptionsToFactorise);
             otherOptions.addAll(result.adjacentOptions);
             decisionsToRemove.add(decision);
         }
@@ -109,7 +109,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
         return rootNode
             .removeDecisions(decisionsToRemove)
-            .addDecisions(Arrays.asList(factorisedDecisionNode));
+            .addDecisions(Collections.singletonList(factorisedDecisionNode));
     }
 
     private ConstraintNode simplifyConstraint(ConstraintNode node) {
@@ -149,7 +149,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
-        return newNode.addDecisions(Arrays.asList(decisionUnderFactorisedNode));
+        return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
     private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){
