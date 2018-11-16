@@ -1,5 +1,5 @@
 [{
-	"description": "Circular Dependency Optimiser test",
+	"description": "TestFactorCircular",
 	"rootNode": {
 		"atomicConstraints": [],
 
