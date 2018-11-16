@@ -20,13 +20,10 @@ public final class TreeDecisionNode implements DecisionNode {
         return new HashSet<>(options);
     }
 
-    public DecisionNode addOption(ConstraintNode newConstraint) {
-        return new TreeDecisionNode(
-            Stream
-                .concat(
-                    this.options.stream(),
-                    Stream.of(newConstraint))
-                .collect(Collectors.toList()));
+    public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
+        return new TreeDecisionNode(Stream.concat(
+            this.options.stream(),
+            newOptions.stream()).collect(Collectors.toList()));
     }
 
     public String toString(){
