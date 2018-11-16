@@ -102,8 +102,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
-                    optimiseLevelOfTree(factorisingConstraintNode, depth + 1),
-                    optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1)),
+                    coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
+                    coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
                 otherOptions.stream())
             .collect(Collectors.toList())));
 
@@ -185,6 +185,15 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .count() == 1;
 
         return optionWithMPCExists && optionWithNegatedMPCExists;
+    }
+
+    private static <T> T coalesce(T... items){
+        for (T item : items) {
+            if (item != null)
+                return item;
+        }
+
+        throw new UnsupportedOperationException("Unable to find a non-null value");
     }
 
     class DecisionAnalyser {
