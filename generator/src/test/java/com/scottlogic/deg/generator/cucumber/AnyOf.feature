@@ -74,7 +74,7 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        And foo is of type "numeric"
        And foo is less than 11
        And foo is granular to 1
-     Then the following data should be generated:
+     Then the following data should be included in what is generated:
        | foo  |
        | null |
        | 1    |
@@ -107,7 +107,7 @@ Scenario: User requires to create a field with numbers that conform to multiple 
     And foo is of type "numeric"
     And foo is less than 20
     And foo is granular to 1
-    Then the following data should be generated:
+    Then the following data should be included in what is generated:
       | foo  |
       | null |
       | 9    |
