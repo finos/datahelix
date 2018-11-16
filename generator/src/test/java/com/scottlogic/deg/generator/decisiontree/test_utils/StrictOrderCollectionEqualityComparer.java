@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
+package com.scottlogic.deg.generator.decisiontree.test_utils;
 
 import java.util.Collection;
 import java.util.Iterator;
