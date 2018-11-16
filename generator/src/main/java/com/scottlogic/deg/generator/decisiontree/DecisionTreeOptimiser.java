@@ -122,7 +122,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
                     ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                     return parentConstraint
                         .addAtomicConstraints(firstOption.getAtomicConstraints())
-                        .addDecisions(firstOption.getDecisions());
+                        .addDecisions(firstOption.getDecisions())
+                        .removeDecisions(Arrays.asList(decisionNode));
                 },
                 (node1, node2) -> new OptimisedConstraintNode(
                     new TreeConstraintNode(
