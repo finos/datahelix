@@ -9,13 +9,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RowsMatchAnyOrderMatcher extends BaseMatcher<List<List<Object>>> {
-    private final List<List<Object>> expectedRows;
-
+public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
     public RowsMatchAnyOrderMatcher(List<List<Object>> expectedRows) {
-        if (expectedRows == null)
-            expectedRows = new ArrayList<>();
-        this.expectedRows = expectedRows;
+        super(expectedRows);
     }
 
     @Override
@@ -25,27 +21,15 @@ public class RowsMatchAnyOrderMatcher extends BaseMatcher<List<List<Object>>> {
         if (expectedRows.size() != actualRows.size())
             return false;
 
-        //check that every expected row exists in the actual rows
-        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
-        for (List<Object> actualRow : actualRows){
-            if (!expectedMatchers.stream().anyMatch(matcher -> matcher.matches(actualRow))){
-                return false;
-            }
-        }
-
-        return true;
+        return super.matches(o);
     }
 
     @Override
-    public void describeTo(Description description) {
-        Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
-        description.appendText(Objects.toString(expectedMatchers));
-    }
+    public void describeMismatch(Object item, Description description) {
+        List<List<Objects>> actualRows = (List<List<Objects>>) item;
 
-    private List<RowMatcher> getExpectedMatchers() {
-        return expectedRows
-            .stream()
-            .map(expectedRow -> new RowMatcher(expectedRow))
-            .collect(Collectors.toList());
+        super.describeMismatch(item, description);
+
+        description.appendText(String.format("\n  counts: expected %d, but got %d", expectedRows.size(), actualRows.size()));
     }
 }

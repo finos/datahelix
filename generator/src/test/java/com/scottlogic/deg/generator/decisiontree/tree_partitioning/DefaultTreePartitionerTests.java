@@ -5,6 +5,14 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.ProfileFieldComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +23,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class DefaultTreePartitionerTests {
+    private static final TreeConstraintNode emptyConstraint
+        = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
+
     @Test
     void shouldSplitTreeIntoPartitions() {
         givenTree(
@@ -182,19 +193,19 @@ class DefaultTreePartitionerTests {
             tree(fields("A"),
                 constraint("A")),
             tree(fields("B"),
-                new TreeConstraintNode()));
+                emptyConstraint));
     }
 
     @Test
     void shouldNotErrorIfNoFieldsConstrained() {
         givenTree(
             tree(fields("A", "B", "C"),
-                new TreeConstraintNode()));
+                emptyConstraint));
 
         expectTrees(
-            tree(fields("A"), new TreeConstraintNode()),
-            tree(fields("B"), new TreeConstraintNode()),
-            tree(fields("C"), new TreeConstraintNode()));
+            tree(fields("A"), emptyConstraint),
+            tree(fields("B"), emptyConstraint),
+            tree(fields("C"), emptyConstraint));
     }
 
     private ConstraintNode constraint(String... fieldNames) {

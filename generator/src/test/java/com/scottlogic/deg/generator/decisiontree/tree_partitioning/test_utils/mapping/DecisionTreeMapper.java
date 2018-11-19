@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.ConstraintNodeDto;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.DecisionNodeDto;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.DecisionTreeDto;
+import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeDto;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionNodeDto;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionTreeDto;
 
 import java.util.Collection;
 import java.util.Collections;

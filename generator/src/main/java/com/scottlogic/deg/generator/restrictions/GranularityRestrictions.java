@@ -23,4 +23,9 @@ public class GranularityRestrictions {
         return new GranularityRestrictions(
             Math.min(left.numericScale, right.numericScale));
     }
+
+    @Override
+    public String toString() {
+        return String.format("granular-to %d", this.numericScale);
+    }
 }

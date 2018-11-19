@@ -43,6 +43,12 @@ public class Visualise implements Runnable {
             hidden = true)
     private boolean dontOptimise;
 
+    @picocli.CommandLine.Option(
+        names = {"--no-simplify"},
+        description = "Prevents tree simplification",
+        hidden = true)
+    private boolean dontSimplify;
+
     @Override
     public void run() {
         final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
@@ -66,8 +72,9 @@ public class Visualise implements Runnable {
 
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
                 .splitTreeIntoPartitions(mergedTree)
-                .map(tree -> treeOptimiser.optimiseTree(tree))
-                        .collect(Collectors.toList());
+                .map(treeOptimiser::optimiseTree)
+                .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
+                .collect(Collectors.toList());
 
         final String title = shouldHideTitle
             ? null
@@ -79,7 +86,7 @@ public class Visualise implements Runnable {
         try {
             if (treePartitions.size() == 1) {
                 writeTreeTo(
-                    mergedTree,
+                    treePartitions.get(0),
                     title,
                     outputDir.resolve(profileBaseName + ".gv"));
             } else {
@@ -90,7 +97,7 @@ public class Visualise implements Runnable {
 
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
-                        mergedTree,
+                        treePartitions.get(i),
                         title != null
                             ? title + " (partition " + (i + 1) + ")"
                             : null,

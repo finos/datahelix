@@ -37,7 +37,7 @@ public class DecisionTreeToRowSpecsTests {
     private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
 
     private ConstraintNode reduceRules(DecisionTreeCollection profile) {
-        return TreeConstraintNode.merge(
+        return ConstraintNode.merge(
             profile.getDecisionTrees()
                 .stream()
                 .map(DecisionTree::getRootNode)
