@@ -5,7 +5,7 @@ package com.scottlogic.deg.generator.restrictions;
  * Details every column's atomic constraints
  */
 public class SetRestrictionsMerger {
-    public SetRestrictions merge(SetRestrictions left, SetRestrictions right) {
+    public MergeResult<SetRestrictions> merge(SetRestrictions left, SetRestrictions right) {
         return SetRestrictions.merge(left, right);
     }
 }
