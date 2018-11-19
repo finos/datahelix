@@ -76,7 +76,7 @@ public class SetRestrictions {
             return new MergeResult<>();
         }
 
-        return new MergeResult(new SetRestrictions(newWhitelist, newBlacklist));
+        return new MergeResult<>(new SetRestrictions(newWhitelist, newBlacklist));
     }
 
     private static <T> T coalesce(T preferred, T fallback) {
