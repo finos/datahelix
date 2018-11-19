@@ -17,9 +17,9 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         StringRestrictions stringRestrictions = mergeResult.restrictions;
 
         if (stringRestrictions != null) {
-            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
             if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
+                merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
             } else {
                 return false;
             }

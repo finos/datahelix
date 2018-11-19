@@ -11,9 +11,9 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (dateTimeRestrictions != null) {
-            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
             if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
-                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
+                merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
             } else {
                 return false;
             }

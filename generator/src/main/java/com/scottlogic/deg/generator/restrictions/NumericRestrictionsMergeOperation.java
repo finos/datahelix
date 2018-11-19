@@ -16,9 +16,9 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;
         if (numberRestrictions != null) {
-            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
             if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
+                merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
             } else {
                 return false;
             }

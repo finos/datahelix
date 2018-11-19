@@ -92,12 +92,12 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        final ITypeRestrictions typeRestrictions;
+        final TypeRestrictions typeRestrictions;
 
         if (negate) {
-            typeRestrictions = TypeRestrictions.all.except(constraint.requiredType);
+            typeRestrictions = DataTypeRestrictions.all.except(constraint.requiredType);
         } else {
-            typeRestrictions = TypeRestrictions.createFromWhiteList(constraint.requiredType);
+            typeRestrictions = DataTypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
 
         return createFieldSpec(fs -> fs.setTypeRestrictions(typeRestrictions));

@@ -28,7 +28,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             !setRestrictions.getWhitelist().isEmpty()) {
 
             Stream<?> filterStream = setRestrictions.getWhitelist().stream();
-            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
                 filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
