@@ -64,12 +64,5 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
         merged.setSetRestrictions(setRestrictions);
         return true;
     }
-
-    private <T> Set<T> filter(Set<T> source, Predicate<? super T> predicate) {
-        return source
-            .stream()
-            .filter(predicate)
-            .collect(Collectors.toCollection(HashSet::new));
-    }
 }
 
