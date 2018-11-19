@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.sun.scenario.effect.Merge;
-
 import java.util.Optional;
 
 /**
