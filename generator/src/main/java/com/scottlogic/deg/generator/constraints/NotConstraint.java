@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.constraints;
 
+import com.scottlogic.deg.generator.Field;
+
 import java.util.Objects;
 
 public class NotConstraint implements IConstraint {
@@ -35,6 +37,11 @@ public class NotConstraint implements IConstraint {
     public String toDotLabel() {
         /*Use the encoded character code for the NOT (¬) symbol; leaving it un-encoded causes issues with visualisers*/
         return String.format("&#x00AC;(%s)", negatedConstraint.toDotLabel());
+    }
+
+    @Override
+    public Field getField() {
+        return negatedConstraint.getField();
     }
 
     public String toString(){

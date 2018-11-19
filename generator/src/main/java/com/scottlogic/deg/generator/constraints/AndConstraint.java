@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.constraints;
 
+import com.scottlogic.deg.generator.Field;
+
 import java.util.*;
 
 public class AndConstraint implements IConstraint
@@ -12,6 +14,11 @@ public class AndConstraint implements IConstraint
 
     public AndConstraint(IConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
+    }
+
+    @Override
+    public Field getField() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -16,4 +16,9 @@ public class MatchesStandardConstraint implements IConstraint {
     public String toDotLabel(){
         return String.format("%s is a %s", field.name, standard.getClass().getName());
     }
+
+    @Override
+    public Field getField() {
+        return field;
+    }
 }

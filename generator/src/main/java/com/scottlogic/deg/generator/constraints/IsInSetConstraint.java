@@ -36,6 +36,11 @@ public class IsInSetConstraint implements IConstraint {
             legalValues.size());
     }
 
+    @Override
+    public Field getField() {
+        return field;
+    }
+
     public String toString(){
         return String.format(
                 "`%s` in %s",

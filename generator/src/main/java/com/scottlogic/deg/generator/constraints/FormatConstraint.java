@@ -17,4 +17,9 @@ public class FormatConstraint implements IConstraint {
         return String.format("%s has format '%s'", field.name, format);
     }
 
+    @Override
+    public Field getField() {
+        return field;
+    }
+
 }

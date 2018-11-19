@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
-    private final ConstraintFieldSniffer constraintFieldSniffer = new ConstraintFieldSniffer();
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
 
@@ -31,7 +30,7 @@ public class ConstraintReducer {
     public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
         final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
-            .map(constraintFieldSniffer::generateTuple)
+            .map(this::generateTuple)
             .collect(
                 Collectors.groupingBy(
                     ConstraintAndFieldTuple::getField, // map from field...
@@ -59,6 +58,10 @@ public class ConstraintReducer {
             map -> new RowSpec(
                 fields,
                 map));
+    }
+
+    private ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
+        return new ConstraintAndFieldTuple(constraint, constraint.getField());
     }
 
     private Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {

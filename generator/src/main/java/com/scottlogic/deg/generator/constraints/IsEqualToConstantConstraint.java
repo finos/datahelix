@@ -19,6 +19,11 @@ public class IsEqualToConstantConstraint implements IConstraint {
     }
 
     @Override
+    public Field getField() {
+        return field;
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
