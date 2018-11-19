@@ -9,7 +9,9 @@ Scenario: if constraint is not satisfied, else constraint is
        | price |
        And foo is of type "string"
        And price is of type "numeric"
-       And foo is in set ["a", "b"]
+       And foo is in set:
+        | "a" |
+        | "b" |
        And there is a constraint:
        """
          {
@@ -29,8 +31,12 @@ Scenario: User requires both if and then constraint to be satisfied
        | priceTest   |
        And productCode is of type "string"
        And priceTest is of type "numeric"
-       And productCode is in set ["a", "b"]
-       And priceTest is in set [10, 20]
+       And productCode is in set:
+          | "a" |
+          | "b" |
+       And priceTest is in set:
+         | 10 |
+         | 20 |
        And there is a constraint:
        """
          {

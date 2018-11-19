@@ -303,7 +303,9 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo co
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given there is a field foo
        And foo is matching regex /[a]{1,3}/
-       And foo is in set [ "a", "aaa" ]
+       And foo is in set:
+         | "a" |
+         | "aaa" |
      Then the following data should be generated:
        | foo   |
        | "a"   |
@@ -313,7 +315,9 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet 
 Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should fail with an error message
      Given there is a field foo
        And foo is matching regex /[a]{1,3}/
-       And foo is in set [ "b", "bbb" ]
+       And foo is in set:
+         | "b" |
+         | "bbb" |
      Then I am presented with an error message
        And no data is created
 
