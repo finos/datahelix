@@ -9,16 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
-    private final boolean simplify;
     private final int maxIterations;
     private final int maxDepth;
 
     public DecisionTreeOptimiser() {
-        this(true, 50, 10000000);
+        this(50, 10000000);
     }
 
-    public DecisionTreeOptimiser(boolean simplify, int maxIterations, int maxDepth) {
-        this.simplify = simplify;
+    public DecisionTreeOptimiser(int maxIterations, int maxDepth) {
         this.maxIterations = maxIterations;
         this.maxDepth = maxDepth;
     }
@@ -93,11 +91,6 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             decisionsToRemove.add(decision);
         }
 
-        if (this.simplify){
-            factorisingConstraintNode = simplifyConstraint(factorisingConstraintNode);
-            negatedFactorisingConstraintNode = simplifyConstraint(negatedFactorisingConstraintNode);
-        }
-
         // Add new decision node
         DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
             Stream.concat(
@@ -110,30 +103,6 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         return rootNode
             .removeDecisions(decisionsToRemove)
             .addDecisions(Collections.singletonList(factorisedDecisionNode));
-    }
-
-    private ConstraintNode simplifyConstraint(ConstraintNode node) {
-        return node.getDecisions()
-            .stream()
-            .filter(decisionNode -> decisionNode.getOptions().size() == 1)
-            .reduce(
-                node,
-                (parentConstraint, decisionNode) -> {
-                    ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
-                    return parentConstraint
-                        .addAtomicConstraints(firstOption.getAtomicConstraints())
-                        .addDecisions(firstOption.getDecisions())
-                        .removeDecisions(Arrays.asList(decisionNode));
-                },
-                (node1, node2) -> new OptimisedConstraintNode(
-                    new TreeConstraintNode(
-                        Stream
-                            .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
-                            .collect(Collectors.toList()),
-                        Stream
-                            .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
-                            .collect(Collectors.toList())
-                    )));
     }
 
     private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<IConstraint> constraints){
