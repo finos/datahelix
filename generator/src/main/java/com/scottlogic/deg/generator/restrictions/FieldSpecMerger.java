@@ -1,26 +1,23 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
-
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-    private final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
-    private final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
-    private final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
-    private final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
-    private final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
-    private final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
-    private final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
-    private final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
+    private static final RestrictionMergeOperation initialMergeOperation = new TypesRestrictionMergeOperation();
+
+    private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
+        new StringRestrictionsMergeOperation(),
+        new NumericRestrictionsMergeOperation(),
+        new DateTimeRestrictionsMergeOperation(),
+        new NullRestrictionsMergeOperation(),
+        new FormatRestrictionsMergeOperation(),
+        new GranularityRestrictionsMergeOperation()
+    };
+
+    private static final RestrictionMergeOperation finalMergeOperation = new SetRestrictionsMergeOperation();
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -38,119 +35,24 @@ public class FieldSpecMerger {
             return Optional.of(left);
         }
         final FieldSpec merged = new FieldSpec();
-        try {
-            ITypeRestrictions typeRestrictions = typeRestrictionsMerger.merge(
-                    left.getTypeRestrictions(), right.getTypeRestrictions());
 
-            if (typeRestrictions == null) {
-                typeRestrictions = TypeRestrictions.all;
-            }
-
-            SetRestrictions setRestrictions =
-                    setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions());
-
-            // Strings
-            StringRestrictions stringRestrictions = stringRestrictionsMerger.merge(
-                    left.getStringRestrictions(), right.getStringRestrictions());
-            merged.setStringRestrictions(stringRestrictions);
-
-            if (stringRestrictions != null) {
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String);
-                } else {
-                    throw new UnmergeableRestrictionException("Cannot merge string restriction");
-                }
-            }
-
-            // Numeric
-            NumericRestrictions numberRestrictions = numericRestrictionsMerger.merge(
-                    left.getNumericRestrictions(), right.getNumericRestrictions());
-            merged.setNumericRestrictions(numberRestrictions);
-
-            if (numberRestrictions != null) {
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric);
-                } else {
-                    throw new UnmergeableRestrictionException("Cannot merge numeric restriction");
-                }
-            }
-
-            // Temporal (Dates and times)
-            DateTimeRestrictions dateTimeRestrictions = dateTimeRestrictionsMerger.merge(
-                    left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
-            merged.setDateTimeRestrictions(dateTimeRestrictions);
-
-            if (dateTimeRestrictions != null) {
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
-                    typeRestrictions = TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal);
-                } else {
-                    throw new UnmergeableRestrictionException("Cannot merge date restriction");
-                }
-            }
-
-            // Filter the set to match any new restrictions
-            if (setRestrictions != null &&
-                    setRestrictions.getWhitelist() != null &&
-                    !setRestrictions.getWhitelist().isEmpty()) {
-
-                Stream<?> filterStream = setRestrictions.getWhitelist().stream();
-
-                if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                    filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
-                }
-
-                if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                    filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
-                }
-
-                if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
-                    filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
-                }
-
-                if(stringRestrictions != null){
-                    filterStream = filterStream.filter(x -> stringRestrictions.match(x));
-                }
-
-                if(numberRestrictions != null){
-                    filterStream = filterStream.filter(x -> numberRestrictions.match(x));
-                }
-
-                if(dateTimeRestrictions != null){
-                    filterStream = filterStream.filter(x -> dateTimeRestrictions.match(x));
-                }
-
-                setRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
-                        setRestrictions.getBlacklist()) ;
-            }
-
-            merged.setNullRestrictions(
-                    nullRestrictionsMerger.merge(left.getNullRestrictions(), right.getNullRestrictions()));
-
-            merged.setSetRestrictions(setRestrictions);
-
-            merged.setFormatRestrictions(
-                    formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
-
-            merged.setGranularityRestrictions(
-                granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
-
-            // If one or more restrictions have provided a type (e.g. less than) add it as a restriction
-
-            merged.setTypeRestrictions(typeRestrictions);
-
-        } catch (UnmergeableRestrictionException e) {
+        //operation/s that must happen first
+        if (!initialMergeOperation.applyMergeOperation(left, right, merged)){
             return Optional.empty();
         }
+
+        //operations that can happen in any order
+        for (RestrictionMergeOperation operation : mergeOperations){
+            if (!operation.applyMergeOperation(left, right, merged)){
+                return Optional.empty();
+            }
+        }
+
+        //operation/s that must happen last
+        if (!finalMergeOperation.applyMergeOperation(left, right, merged)){
+            return Optional.empty();
+        }
+
         return Optional.of(merged);
     }
-
-
-    private <T> Set<T> filter(Set<T> source, Predicate<? super T> predicate) {
-        return source
-                .stream()
-                .filter(predicate)
-                .collect(Collectors.toCollection(HashSet::new));
-    }
-
-
 }
