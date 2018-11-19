@@ -16,16 +16,17 @@ public final class TreeDecisionNode implements DecisionNode {
         this.options = Collections.unmodifiableCollection(Arrays.asList(options));
     }
 
+    @Override
     public Collection<ConstraintNode> getOptions() {
         return new HashSet<>(options);
     }
 
-    public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
-        return new TreeDecisionNode(Stream.concat(
-            this.options.stream(),
-            newOptions.stream()).collect(Collectors.toList()));
+    @Override
+    public DecisionNode setOptions(Collection<ConstraintNode> options){
+        return new TreeDecisionNode(options);
     }
 
+    @Override
     public String toString(){
         return this.options.size() >= 5
             ? String.format("Options: %d", this.options.size())
