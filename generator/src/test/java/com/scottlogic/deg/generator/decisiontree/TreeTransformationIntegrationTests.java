@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.ma
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -43,11 +42,6 @@ class TreeTransformationIntegrationTests {
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
-    /*
-     * FIXME -- wait until @steve-tennantsl renames his expected JSON files before we
-     * re-enable this TestFactory
-     */
-    @Disabled  
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
     	return doTest(new PartitionTestStrategy());
