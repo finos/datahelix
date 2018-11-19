@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
+package com.scottlogic.deg.generator.decisiontree;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,18 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
+import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionTreeDto;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.OptimiseTestStrategy;
+import com.scottlogic.deg.generator.decisiontree.test_utils.PartitionTestStrategy;
+import com.scottlogic.deg.generator.decisiontree.test_utils.ProfileFieldComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
+import com.scottlogic.deg.generator.decisiontree.test_utils.TreeTransformationTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.DecisionTreeMapper;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -26,32 +37,39 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
-class DecisionTreePartitionerIntegrationTests {
-    private static final String treePartitionerTestsDirectory = "../generator/resources/partitioning-tests/";
-
+class TreeTransformationIntegrationTests {
     private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
-    private final ITreePartitioner treePartitioner = new TreePartitioner();
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
     @TestFactory
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
+    	return doTest(new PartitionTestStrategy());
+    }
+    
+    @TestFactory
+    Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
+    	return doTest(new OptimiseTestStrategy());
+    }
+    
+    private Collection<DynamicTest> doTest(TreeTransformationTestStrategy strategy) {
+        final String FS = File.separator;
+        final String testsDirPathPrefix = ".." + FS + "generator" + FS + "resources" + FS;
+        String testsDirPathName = testsDirPathPrefix + FS + strategy.getTestsDirName() + FS;
         TreeComparisonReporter reporter = new TreeComparisonReporter();
 
-        return getPartitioningTestsDirectory().map(directory -> {
+        return getTestFiles(testsDirPathName).map(directory -> {
             try {
-                File inputFile = new File(directory.getPath() + "/profile.json");
-                File outputFile = new File(directory.getPath() + "/expected-partitioning.json");
+                File inputFile = new File(directory.getPath() + FS + "profile.json");
+                File outputFile = new File(directory.getPath() + FS + "expected.json");
                 Profile inputProfile = getProfile(inputFile.toPath());
 
-                DecisionTree decisionTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
-                final List<DecisionTree> actualPartitionedTrees = treePartitioner
-                    .splitTreeIntoPartitions(decisionTree)
-                    .collect(Collectors.toList());
-
+                DecisionTree beforeTree = decisionTreeGenerator.analyse(inputProfile).getMergedTree();
+                
+                final List<DecisionTree> actualTrees = strategy.transformTree(beforeTree);
+                
                 List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(outputFile);
-                final List<DecisionTree> expectedPartitionedTrees = expectedTreeDto.stream()
+                final List<DecisionTree> expectedTrees = expectedTreeDto.stream()
                     .map(decisionTreeMapper::map)
                     .collect(Collectors.toList());
 
@@ -72,8 +90,8 @@ class DecisionTreePartitionerIntegrationTests {
                     );
 
                     boolean match = anyOrderComparer.equals(
-                        expectedPartitionedTrees,
-                        actualPartitionedTrees);
+                        expectedTrees,
+                        actualTrees);
 
                     if (!match) {
                         reporter.reportMessages(context);
@@ -88,9 +106,9 @@ class DecisionTreePartitionerIntegrationTests {
         }).collect(Collectors.toList());
     }
 
-    private Stream<File> getPartitioningTestsDirectory() {
+    private Stream<File> getTestFiles(String testsDirectory) {
         return
-            Stream.of(Objects.requireNonNull(Paths.get(treePartitionerTestsDirectory)
+            Stream.of(Objects.requireNonNull(Paths.get(testsDirectory)
                 .toFile()
                 .listFiles(File::isDirectory)));
     }

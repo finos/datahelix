@@ -1,8 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,15 +9,15 @@ public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
 
     public TreeDecisionNode(Collection<ConstraintNode> options) {
-        this.options = new ArrayList<>(options);
+        this.options = Collections.unmodifiableCollection(options);
     }
 
     public TreeDecisionNode(ConstraintNode... options) {
-        this.options = new ArrayList<>(Arrays.asList(options));
+        this.options = Collections.unmodifiableCollection(Arrays.asList(options));
     }
 
     public Collection<ConstraintNode> getOptions() {
-        return new ArrayList<>(options);
+        return new HashSet<>(options);
     }
 
     public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
@@ -35,5 +34,18 @@ public final class TreeDecisionNode implements DecisionNode {
                 String.join(
                     " OR ",
                     this.options.stream().map(o -> o.toString()).collect(Collectors.toList())));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TreeDecisionNode that = (TreeDecisionNode) o;
+        return Objects.equals(options, that.options);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(options);
     }
 }

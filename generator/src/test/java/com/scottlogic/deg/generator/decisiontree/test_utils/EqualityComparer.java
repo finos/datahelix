@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils;
+package com.scottlogic.deg.generator.decisiontree.test_utils;
 
 public interface EqualityComparer {
     int getHashCode(Object item);
