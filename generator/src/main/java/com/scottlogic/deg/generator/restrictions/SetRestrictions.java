@@ -73,7 +73,6 @@ public class SetRestrictions {
         }
 
         if (newWhitelist != null && newWhitelist.size() == 0) {
-            // TODO: We shouldn't really have exceptions thrown in non-anomalous circumstances (this condition can happen in valid profiles)
             return new MergeResult<>();
         }
 
