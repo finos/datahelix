@@ -7,14 +7,8 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
     @Override
     public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        MergeResult<DateTimeRestrictions> mergeResult = dateTimeRestrictionsMerger.merge(
+        DateTimeRestrictions dateTimeRestrictions = dateTimeRestrictionsMerger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
-
-        if (!mergeResult.successful) {
-            return false;
-        }
-
-        DateTimeRestrictions dateTimeRestrictions = mergeResult.restrictions;
 
         if (dateTimeRestrictions != null) {
             ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
