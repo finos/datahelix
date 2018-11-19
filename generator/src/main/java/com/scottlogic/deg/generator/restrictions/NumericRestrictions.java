@@ -34,4 +34,13 @@ public class NumericRestrictions {
 
         return true;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "%s%s%s",
+            min != null ? min.toString(">") : "",
+            min != null && max != null ? " and " : "",
+            max != null ? max.toString("<") : "");
+    }
 }

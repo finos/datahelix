@@ -29,4 +29,13 @@ public class NumericLimit<T extends Number> {
             decimalLimit.limit.intValue(),
             decimalLimit.isInclusive);
     }
+
+    public String toString(String operator) {
+        return String.format(
+            "%s%s %s",
+            operator,
+            this.isInclusive ? "=" : "",
+            this.limit.toString()
+        );
+    }
 }
