@@ -88,12 +88,12 @@ public class SetRestrictions {
         if ((whitelist == null || whitelist.isEmpty()) && (blacklist == null || blacklist.isEmpty()))
             return null;
 
-        if (whitelist.isEmpty())
+        if (whitelist == null || whitelist.isEmpty())
             return String.format(
                     "NOT IN %s",
                     Objects.toString(blacklist));
 
-        if (blacklist.isEmpty())
+        if (blacklist == null || blacklist.isEmpty())
             return String.format(
                     "IN %s",
                     Objects.toString(whitelist));
