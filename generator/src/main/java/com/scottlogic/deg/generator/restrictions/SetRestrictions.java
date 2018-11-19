@@ -86,7 +86,7 @@ public class SetRestrictions {
 
     @Override
     public String toString() {
-        if (whitelist.isEmpty() && blacklist.isEmpty())
+        if ((whitelist == null || whitelist.isEmpty()) && (blacklist == null || blacklist.isEmpty()))
             return null;
 
         if (whitelist.isEmpty())
