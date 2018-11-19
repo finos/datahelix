@@ -6,25 +6,27 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
     private static final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
 
     @Override
-    public boolean successful(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        try {
-            StringRestrictions stringRestrictions = stringRestrictionsMerger.merge(
-                left.getStringRestrictions(), right.getStringRestrictions());
+    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        MergeResult<StringRestrictions> mergeResult = stringRestrictionsMerger.merge(
+            left.getStringRestrictions(), right.getStringRestrictions());
 
-            if (stringRestrictions != null) {
-                ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
-                    merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
-                } else {
-                    return false;
-                }
-            }
-
-            merged.setStringRestrictions(stringRestrictions);
-            return true;
-        } catch (UnmergeableRestrictionException e) {
+        if (!mergeResult.successful) {
             return false;
         }
+
+        StringRestrictions stringRestrictions = mergeResult.restrictions;
+
+        if (stringRestrictions != null) {
+            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
+            } else {
+                return false;
+            }
+        }
+
+        merged.setStringRestrictions(mergeResult.restrictions);
+        return true;
     }
 }
 

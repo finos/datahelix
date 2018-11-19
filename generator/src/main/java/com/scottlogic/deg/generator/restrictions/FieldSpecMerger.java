@@ -1,13 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
-
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Returns a FieldSpec that permits only data permitted by all of its inputs
@@ -44,19 +37,19 @@ public class FieldSpecMerger {
         final FieldSpec merged = new FieldSpec();
 
         //operation/s that must happen first
-        if (!initialMergeOperation.successful(left, right, merged)){
+        if (!initialMergeOperation.applyMergeOperation(left, right, merged)){
             return Optional.empty();
         }
 
         //operations that can happen in any order
         for (RestrictionMergeOperation operation : mergeOperations){
-            if (!operation.successful(left, right, merged)){
+            if (!operation.applyMergeOperation(left, right, merged)){
                 return Optional.empty();
             }
         }
 
         //operation/s that must happen last
-        if (!finalMergeOperation.successful(left, right, merged)){
+        if (!finalMergeOperation.applyMergeOperation(left, right, merged)){
             return Optional.empty();
         }
 

@@ -37,9 +37,9 @@ public class SetRestrictions {
         return new SetRestrictions(null, blacklist);
     }
 
-    public static SetRestrictions merge(SetRestrictions a, SetRestrictions b) {
+    public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
         if (a == null && b == null)
-            return null;
+            return new MergeResult<>(null);
 
         a = coalesce(a, neutral);
         b = coalesce(b, neutral);
@@ -74,10 +74,10 @@ public class SetRestrictions {
 
         if (newWhitelist != null && newWhitelist.size() == 0) {
             // TODO: We shouldn't really have exceptions thrown in non-anomalous circumstances (this condition can happen in valid profiles)
-            throw new UnmergeableRestrictionException("An empty whitelist was formed");
+            return new MergeResult<>();
         }
 
-        return new SetRestrictions(newWhitelist, newBlacklist);
+        return new MergeResult(new SetRestrictions(newWhitelist, newBlacklist));
     }
 
     private static <T> T coalesce(T preferred, T fallback) {

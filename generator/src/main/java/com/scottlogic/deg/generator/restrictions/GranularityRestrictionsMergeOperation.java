@@ -4,14 +4,10 @@ public class GranularityRestrictionsMergeOperation implements RestrictionMergeOp
     private static final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
 
     @Override
-    public boolean successful(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        try {
-            merged.setGranularityRestrictions(
-                granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
+    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        merged.setGranularityRestrictions(
+            granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
 
-            return true;
-        } catch (UnmergeableRestrictionException e) {
-            return false;
-        }
+        return true;
     }
 }

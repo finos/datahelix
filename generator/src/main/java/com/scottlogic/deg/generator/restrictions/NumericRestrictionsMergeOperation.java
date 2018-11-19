@@ -6,25 +6,26 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
     private static final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
 
     @Override
-    public boolean successful(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        try {
-            NumericRestrictions numberRestrictions = numericRestrictionsMerger.merge(
-                left.getNumericRestrictions(), right.getNumericRestrictions());
+    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        MergeResult<NumericRestrictions> mergeResult = numericRestrictionsMerger.merge(
+            left.getNumericRestrictions(), right.getNumericRestrictions());
 
-            if (numberRestrictions != null) {
-                ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                    merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
-                } else {
-                    throw new UnmergeableRestrictionException("Cannot merge numeric restriction");
-                }
-            }
-
-            merged.setNumericRestrictions(numberRestrictions);
-            return true;
-        } catch (UnmergeableRestrictionException e) {
+        if (!mergeResult.successful) {
             return false;
         }
+
+        NumericRestrictions numberRestrictions = mergeResult.restrictions;
+        if (numberRestrictions != null) {
+            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
+            } else {
+                return false;
+            }
+        }
+
+        merged.setNumericRestrictions(numberRestrictions);
+        return true;
     }
 }
 

@@ -1,21 +1,20 @@
 package com.scottlogic.deg.generator.restrictions;
 
 public class TypeRestrictionsMerger {
-    public ITypeRestrictions merge(ITypeRestrictions left, ITypeRestrictions right) {
+    public MergeResult<ITypeRestrictions> merge(ITypeRestrictions left, ITypeRestrictions right) {
         if (left == null && right == null)
-            return null;
+            return new MergeResult<>(null);
         if (left == null)
-            return right;
+            return new MergeResult<>(right);
         if (right == null)
-            return left;
+            return new MergeResult<>(left);
 
         final ITypeRestrictions merged = left.intersect(right);
 
         if (merged == null) {
-            throw new UnmergeableRestrictionException(
-                    "Unable to merge type restrictions - two or more conflicting types found");
+            return new MergeResult();
         }
 
-        return merged;
+        return new MergeResult<>(merged);
     }
 }

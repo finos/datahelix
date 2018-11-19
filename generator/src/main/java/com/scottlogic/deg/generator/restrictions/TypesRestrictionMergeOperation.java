@@ -4,21 +4,21 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
     private static final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
 
     @Override
-    public boolean successful(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        try {
-            ITypeRestrictions typeRestrictions = typeRestrictionsMerger.merge(
-                left.getTypeRestrictions(),
-                right.getTypeRestrictions());
+    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        MergeResult<ITypeRestrictions> mergeResult = typeRestrictionsMerger.merge(
+            left.getTypeRestrictions(),
+            right.getTypeRestrictions());
 
-            if (typeRestrictions == null) {
-                typeRestrictions = TypeRestrictions.all;
-            }
-
-            merged.setTypeRestrictions(typeRestrictions);
-            return true;
-        } catch (UnmergeableRestrictionException e) {
+        if (!mergeResult.successful) {
             return false;
         }
+
+        ITypeRestrictions restrictions = mergeResult.restrictions != null
+            ? mergeResult.restrictions
+            : TypeRestrictions.all;
+
+        merged.setTypeRestrictions(restrictions);
+        return true;
     }
 }
 

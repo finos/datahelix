@@ -6,25 +6,27 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
     private static final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
 
     @Override
-    public boolean successful(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        try {
-            DateTimeRestrictions dateTimeRestrictions = dateTimeRestrictionsMerger.merge(
-                left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
+    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        MergeResult<DateTimeRestrictions> mergeResult = dateTimeRestrictionsMerger.merge(
+            left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
-            if (dateTimeRestrictions != null) {
-                ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-                if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
-                    merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
-                } else {
-                    throw new UnmergeableRestrictionException("Cannot merge date restriction");
-                }
-            }
-
-            merged.setDateTimeRestrictions(dateTimeRestrictions);
-            return true;
-        } catch (UnmergeableRestrictionException e) {
+        if (!mergeResult.successful) {
             return false;
         }
+
+        DateTimeRestrictions dateTimeRestrictions = mergeResult.restrictions;
+
+        if (dateTimeRestrictions != null) {
+            ITypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+                merged.setTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
+            } else {
+                return false;
+            }
+        }
+
+        merged.setDateTimeRestrictions(dateTimeRestrictions);
+        return true;
     }
 }
 
