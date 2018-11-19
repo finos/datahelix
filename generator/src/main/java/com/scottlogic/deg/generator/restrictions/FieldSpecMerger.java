@@ -26,7 +26,7 @@ public class FieldSpecMerger {
      */
     public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
         if (left == null && right == null) {
-            return Optional.of(new FieldSpec());
+            return Optional.of(FieldSpec.Empty);
         }
         if (left == null) {
             return Optional.of(right);
@@ -34,25 +34,29 @@ public class FieldSpecMerger {
         if (right == null) {
             return Optional.of(left);
         }
-        final FieldSpec merged = new FieldSpec();
+
+        Optional<FieldSpec> merged = Optional.of(FieldSpec.Empty);
 
         //operation/s that must happen first
-        if (!initialMergeOperation.applyMergeOperation(left, right, merged)){
-            return Optional.empty();
+        merged = initialMergeOperation.applyMergeOperation(left, right, merged.get());
+        if (!merged.isPresent()){
+            return merged;
         }
 
         //operations that can happen in any order
         for (RestrictionMergeOperation operation : mergeOperations){
-            if (!operation.applyMergeOperation(left, right, merged)){
-                return Optional.empty();
+            merged = operation.applyMergeOperation(left, right, merged.get());
+            if (!merged.isPresent()){
+                return merged;
             }
         }
 
         //operation/s that must happen last
-        if (!finalMergeOperation.applyMergeOperation(left, right, merged)){
-            return Optional.empty();
+        merged = finalMergeOperation.applyMergeOperation(left, right, merged.get());
+        if (!merged.isPresent()){
+            return merged;
         }
 
-        return Optional.of(merged);
+        return merged;
     }
 }

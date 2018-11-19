@@ -74,11 +74,10 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
-        return createFieldSpec(fs ->
-            fs.setSetRestrictions(
+        return FieldSpec.Empty.setSetRestrictions(
                 negate
                     ? SetRestrictions.fromBlacklist(constraint.legalValues)
-                    : SetRestrictions.fromWhitelist(constraint.legalValues)));
+                    : SetRestrictions.fromWhitelist(constraint.legalValues));
     }
 
     private FieldSpec constructIsNull(boolean negate) {
@@ -88,7 +87,7 @@ public class FieldSpecFactory {
             ? NullRestrictions.Nullness.MustNotBeNull
             : NullRestrictions.Nullness.MustBeNull;
 
-        return createFieldSpec(fs -> fs.setNullRestrictions(nullRestrictions));
+        return FieldSpec.Empty.setNullRestrictions(nullRestrictions);
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
@@ -100,7 +99,7 @@ public class FieldSpecFactory {
             typeRestrictions = DataTypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
 
-        return createFieldSpec(fs -> fs.setTypeRestrictions(typeRestrictions));
+        return FieldSpec.Empty.setTypeRestrictions(typeRestrictions);
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {
@@ -125,7 +124,7 @@ public class FieldSpecFactory {
                 inclusive);
         }
 
-        return createFieldSpec(fs -> fs.setNumericRestrictions(numericRestrictions));
+        return FieldSpec.Empty.setNumericRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate) {
@@ -149,17 +148,16 @@ public class FieldSpecFactory {
                 inclusive);
         }
 
-        return createFieldSpec(fs -> fs.setNumericRestrictions(numericRestrictions));
+        return FieldSpec.Empty.setNumericRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
         if (negate) {
             // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
-            return new FieldSpec();
+            return FieldSpec.Empty;
         }
 
-        return createFieldSpec(fs -> fs.setGranularityRestrictions(
-            new GranularityRestrictions(constraint.granularity)));
+        return FieldSpec.Empty.setGranularityRestrictions(new GranularityRestrictions(constraint.granularity));
     }
 
     private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -179,7 +177,7 @@ public class FieldSpecFactory {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
 
-        return createFieldSpec(fs -> fs.setDateTimeRestrictions(dateTimeRestrictions));
+        return FieldSpec.Empty.setDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
@@ -199,7 +197,7 @@ public class FieldSpecFactory {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
 
-        return createFieldSpec(fs -> fs.setDateTimeRestrictions(dateTimeRestrictions));
+        return FieldSpec.Empty.setDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
@@ -217,13 +215,13 @@ public class FieldSpecFactory {
     private FieldSpec construct(FormatConstraint constraint, boolean negate) {
         if (negate) {
             // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
-            return new FieldSpec();
+            return FieldSpec.Empty;
         }
 
         final FormatRestrictions formatRestrictions = new FormatRestrictions();
         formatRestrictions.formatString = constraint.format;
 
-        return createFieldSpec(fs -> fs.setFormatRestrictions(formatRestrictions));
+        return FieldSpec.Empty.setFormatRestrictions(formatRestrictions);
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
@@ -252,12 +250,6 @@ public class FieldSpecFactory {
             ? generator.complement()
             : generator;
 
-        return createFieldSpec(fs -> fs.setStringRestrictions(stringRestrictions));
-    }
-
-    private FieldSpec createFieldSpec(Consumer<FieldSpec> mutateSpec) {
-        final FieldSpec fieldSpec = new FieldSpec();
-        mutateSpec.accept(fieldSpec);
-        return fieldSpec;
+        return FieldSpec.Empty.setStringRestrictions(stringRestrictions);
     }
 }

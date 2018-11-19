@@ -1,20 +1,21 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 public class NullRestrictionsMergeOperation implements RestrictionMergeOperation {
     private static final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
 
     @Override
-    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
         MergeResult<NullRestrictions> mergeResult = nullRestrictionsMerger.merge(
             left.getNullRestrictions(),
             right.getNullRestrictions());
 
         if (!mergeResult.successful){
-            return false;
+            return Optional.empty();
         }
 
-        merged.setNullRestrictions(mergeResult.restrictions);
-        return true;
+        return Optional.of(merged.setNullRestrictions(mergeResult.restrictions));
     }
 }
 

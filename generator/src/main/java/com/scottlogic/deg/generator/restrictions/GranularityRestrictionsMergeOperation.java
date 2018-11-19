@@ -1,13 +1,15 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 public class GranularityRestrictionsMergeOperation implements RestrictionMergeOperation{
     private static final GranularityRestrictionsMerger granularityRestrictionsMerger = new GranularityRestrictionsMerger();
 
     @Override
-    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        merged.setGranularityRestrictions(
-            granularityRestrictionsMerger.merge(left.getGranularityRestrictions(), right.getGranularityRestrictions()));
-
-        return true;
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        return Optional.of(merged.setGranularityRestrictions(
+            granularityRestrictionsMerger.merge(
+                left.getGranularityRestrictions(),
+                right.getGranularityRestrictions())));
     }
 }
