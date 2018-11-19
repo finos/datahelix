@@ -18,6 +18,7 @@ public interface ConstraintNode{
     boolean atomicConstraintExists(IConstraint constraint);
     ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints);
     ConstraintNode addDecisions(Collection<DecisionNode> decisions);
+    ConstraintNode setDecisions(Collection<DecisionNode> decisions);
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<IConstraint> atomicConstraints = new ArrayList<>();

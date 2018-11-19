@@ -127,6 +127,11 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     @Override
+    public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
+        return new TreeConstraintNode(this.atomicConstraints, decisions);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
