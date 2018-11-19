@@ -22,13 +22,6 @@ public final class TreeDecisionNode implements DecisionNode {
     }
 
     @Override
-    public DecisionNode addOptions(Collection<ConstraintNode> newOptions){
-        return new TreeDecisionNode(Stream.concat(
-            this.options.stream(),
-            newOptions.stream()).collect(Collectors.toList()));
-    }
-
-    @Override
     public DecisionNode setOptions(Collection<ConstraintNode> options){
         return new TreeDecisionNode(options);
     }
