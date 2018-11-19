@@ -26,6 +26,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
             return false;
         }
 
+        merged.setStringRestrictions(stringRestrictions);
         merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
         return true;
     }

@@ -20,6 +20,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             return false;
         }
 
+        merged.setDateTimeRestrictions(dateTimeRestrictions);
         merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
         return true;
     }

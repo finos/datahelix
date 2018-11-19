@@ -25,6 +25,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
             return false;
         }
 
+        merged.setNumericRestrictions(numberRestrictions);
         merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
         return true;
     }
