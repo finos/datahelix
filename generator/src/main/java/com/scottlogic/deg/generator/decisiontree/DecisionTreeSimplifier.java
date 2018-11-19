@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DecisionTreeSimplifier {
     public DecisionTree simplify(DecisionTree originalTree) {
@@ -12,15 +12,15 @@ public class DecisionTreeSimplifier {
             originalTree.getDescription());
     }
 
-    public ConstraintNode simplify(ConstraintNode node) {
+    private ConstraintNode simplify(ConstraintNode node) {
         if (node.getDecisions().isEmpty())
             return node;
 
-        return new TreeConstraintNode(
-            node.getAtomicConstraints(),
-            node.getDecisions().stream()
-                .map(this::simplify)
-                .collect(Collectors.toList()));
+        ConstraintNode transformedNode = this.simplifySingleOptionDecisions(node);
+        Collection<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
+            .map(this::simplify)
+            .collect(Collectors.toList());
+        return transformedNode.setDecisions(simplifiedDecisions);
     }
 
     private DecisionNode simplify(DecisionNode decision) {
@@ -41,6 +41,30 @@ public class DecisionTreeSimplifier {
             }
         }
 
-        return new TreeDecisionNode(newNodes);
+        return decision.setOptions(newNodes);
+    }
+
+    private ConstraintNode simplifySingleOptionDecisions(ConstraintNode node) {
+        return node.getDecisions()
+            .stream()
+            .filter(decisionNode -> decisionNode.getOptions().size() == 1)
+            .reduce(
+                node,
+                (parentConstraint, decisionNode) -> {
+                    ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
+                    return parentConstraint
+                        .addAtomicConstraints(firstOption.getAtomicConstraints())
+                        .addDecisions(firstOption.getDecisions())
+                        .removeDecisions(Collections.singletonList(decisionNode));
+                },
+                (node1, node2) -> new OptimisedConstraintNode(
+                    new TreeConstraintNode(
+                        Stream
+                            .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
+                            .collect(Collectors.toList()),
+                        Stream
+                            .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
+                            .collect(Collectors.toList())
+                    )));
     }
 }

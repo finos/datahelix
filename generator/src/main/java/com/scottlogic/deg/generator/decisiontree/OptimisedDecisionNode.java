@@ -20,6 +20,11 @@ public class OptimisedDecisionNode implements DecisionNode, OptimisedNode{
     }
 
     @Override
+    public DecisionNode setOptions(Collection<ConstraintNode> constraints) {
+        return new OptimisedDecisionNode(underlying.setOptions(constraints));
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof OptimisedDecisionNode)
             o = ((OptimisedDecisionNode)o).underlying;
