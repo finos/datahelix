@@ -15,16 +15,17 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
         }
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;
-        if (numberRestrictions != null) {
-            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-                merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
-            } else {
-                return false;
-            }
+        if (numberRestrictions == null) {
+            merged.setNumericRestrictions(null);
+            return true;
         }
 
-        merged.setNumericRestrictions(numberRestrictions);
+        TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+            return false;
+        }
+
+        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
         return true;
     }
 }
