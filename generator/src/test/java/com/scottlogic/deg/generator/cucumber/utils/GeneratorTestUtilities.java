@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -23,7 +22,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.sun.javaws.exceptions.InvalidArgumentException;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -86,7 +85,7 @@ public class GeneratorTestUtilities {
         return allActualRows;
     }
 
-    public static Object parseInput(String input) {
+    public static Object parseInput(String input) throws JsonParseException {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)) {
@@ -100,15 +99,20 @@ public class GeneratorTestUtilities {
         return input;
     }
 
-    public static Object parseNumber(String input) {
+    public static Object parseNumber(String input) throws JsonParseException {
         try {
             return mapper.readerFor(Number.class).readValue(input);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("Unable to parse \"%s\" as a number\n%s", input, e.getMessage()));
+        }
+        catch (JsonParseException e){
+            throw e;
+        }
+        catch (IOException e) {
+            Assert.fail("Unexpected IO exception " + e.toString());
+            return "<unexpected IO exception>";
         }
     }
 
-    public static Object parseExpected(String input) {
+    public static Object parseExpected(String input) throws JsonParseException {
         if (input.matches(DateValueStep.DATE_REGEX)) {
             return LocalDateTime.parse(input);
         }
