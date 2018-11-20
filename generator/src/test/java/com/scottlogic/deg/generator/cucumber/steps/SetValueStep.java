@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.When;
@@ -29,7 +30,14 @@ public class SetValueStep {
     private Collection<Object> getSetValues(List<String> values) {
         return values.stream()
             .map(String::trim)
-            .map(GeneratorTestUtilities::parseInput)
+            .map(value -> {
+                try {
+                    return GeneratorTestUtilities.parseInput(value);
+                } catch (JsonParseException e) {
+                    this.state.addException(e);
+                    return "<exception thrown: " + e.getMessage() + ">";
+                }
+            })
             .collect(Collectors.toSet());
     }
 
