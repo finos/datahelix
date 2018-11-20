@@ -13,7 +13,6 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.ProfileFieldComparer
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class DefaultTreePartitionerTests {
+class StandardTreePartitionerTests {
     private static final TreeConstraintNode emptyConstraint
         = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
 
@@ -266,7 +265,7 @@ class DefaultTreePartitionerTests {
     }
 
     private void partitionTrees() {
-        partitionedTrees = new DefaultTreePartitioner()
+        partitionedTrees = new StandardTreePartitioner()
             .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }
