@@ -7,6 +7,8 @@ import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
 import io.cucumber.cucumberexpressions.Transformer;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,18 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"dateString", DateValueStep.DATE_REGEX);
         this.defineParameterType(tr,"regex", "/(.+)/$");
+
+        tr.defineParameterType(new ParameterType<>(
+            "number",
+            "(-?\\d+(\\.\\d+)?)$",
+            Number.class,
+            (Transformer<Number>) value -> {
+                if (value.contains(".")){
+                    return new BigDecimal(value);
+                }
+
+                return new BigInteger(value);
+            }));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){
