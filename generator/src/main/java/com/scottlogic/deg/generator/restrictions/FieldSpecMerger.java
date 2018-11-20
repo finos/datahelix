@@ -53,9 +53,6 @@ public class FieldSpecMerger {
 
         //operation/s that must happen last
         merged = finalMergeOperation.applyMergeOperation(left, right, merged.get());
-        if (!merged.isPresent()){
-            return merged;
-        }
 
         return merged;
     }
