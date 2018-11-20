@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
 
-public class ExhaustiveDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
+public class SmokeTestsDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
     @Override
     public DecisionTreeWalker getDecisionTreeWalker() {

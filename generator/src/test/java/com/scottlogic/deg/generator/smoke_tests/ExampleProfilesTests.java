@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesTests {
-    private static final DecisionTreeWalkerFactory walkerFactory = new ExhaustiveDecisionTreeWalkerFactory();
+    private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
