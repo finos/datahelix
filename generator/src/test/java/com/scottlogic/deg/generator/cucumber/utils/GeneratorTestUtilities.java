@@ -80,9 +80,9 @@ public class GeneratorTestUtilities {
             return DateValueStep.dateObject(input);
         } else if (input.equals("null")) {
             return null;
-        } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")) {
+        } else if (input.matches("-?(\\d+\\.\\d+)")) {
             return new BigDecimal(input);
-        } else if (input.matches("(-)?[0-9]+")) {
+        } else if (input.matches("-?\\d+")) {
             return new BigInteger(input);
         }
 
