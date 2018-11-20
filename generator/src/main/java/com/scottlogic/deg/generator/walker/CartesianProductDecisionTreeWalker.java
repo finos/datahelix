@@ -17,11 +17,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ExhaustiveDecisionTreeWalker implements DecisionTreeWalker {
+public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
     private final ConstraintReducer constraintReducer;
     private final RowSpecMerger rowSpecMerger;
 
-    public ExhaustiveDecisionTreeWalker(
+    public CartesianProductDecisionTreeWalker(
         ConstraintReducer constraintReducer,
         RowSpecMerger rowSpecMerger) {
         this.constraintReducer = constraintReducer;

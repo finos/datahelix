@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.ExhaustiveDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 
 public class SmokeTestsDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
@@ -18,7 +18,7 @@ public class SmokeTestsDecisionTreeWalkerFactory implements DecisionTreeWalkerFa
             new FieldSpecFactory(),
             fieldSpecMerger);
 
-        return new ExhaustiveDecisionTreeWalker(
+        return new CartesianProductDecisionTreeWalker(
             constraintReducer,
             rowSpecMerger);
     }

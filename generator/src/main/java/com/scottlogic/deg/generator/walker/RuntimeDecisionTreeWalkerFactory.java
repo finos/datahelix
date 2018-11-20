@@ -31,7 +31,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     <the producer>);*/
             case Exhaustive:
-                return new ExhaustiveDecisionTreeWalker(
+                return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
                     rowSpecMerger);
         }
