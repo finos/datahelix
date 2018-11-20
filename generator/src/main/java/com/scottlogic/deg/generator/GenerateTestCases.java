@@ -43,7 +43,7 @@ public class GenerateTestCases implements Runnable {
     public void run() {
         GenerationConfig config = new GenerationConfig(
             generationType,
-            GenerationConfig.TreeWalkerType.Exhaustive,
+            walkerType,
             new FieldExhaustiveCombinationStrategy());
 
         DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
