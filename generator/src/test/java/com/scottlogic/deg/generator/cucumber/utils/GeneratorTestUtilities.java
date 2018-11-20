@@ -30,9 +30,10 @@ public class GeneratorTestUtilities {
 
     /**
      * Runs the data generator and returns list of generated result data.
+     *
      * @return Generated data
      */
-    static List <List<Object>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
+    static List<List<Object>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy)
             .stream()
             .map(genObj ->
@@ -74,17 +75,23 @@ public class GeneratorTestUtilities {
     public static Object parseInput(String input) {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
-        } else if (input.matches(DateValueStep.DATE_REGEX)){
-            return LocalDateTime.parse(input);
-        } else if (input.equals("null")){
+        } else if (input.matches(DateValueStep.DATE_REGEX)) {
+            return DateValueStep.dateObject(input);
+        } else if (input.equals("null")) {
             return null;
-        } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")){
+        } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")) {
             return new BigDecimal(input);
-        } else if (input.matches("(-)?[0-9]+")){
+        } else if (input.matches("(-)?[0-9]+")) {
             return Integer.parseInt(input);
         }
 
         return input;
     }
 
+    public static Object parseExpected(String input) {
+        if (input.matches(DateValueStep.DATE_REGEX)) {
+            return LocalDateTime.parse(input);
+        }
+        return parseInput(input);
+    }
 }
