@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +51,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode singleDecisionOption = constraint("decision");
         ConstraintNode rootNode = constraint(
             "root",
-            new TreeDecisionNode(singleDecisionOption));
+            new OrderedDecisionNode(singleDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         RowSpec expectedRowSpec = rowSpec("single decision");
         ConstraintReducer reducer = new TestConstraintReducer(
@@ -85,8 +86,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new TreeDecisionNode(leftDecisionOption),
-            new TreeDecisionNode(rightDecisionOption)
+            new OrderedDecisionNode(leftDecisionOption),
+            new OrderedDecisionNode(rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         ConstraintReducer reducer = new TestConstraintReducer(
@@ -121,8 +122,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode conflictingOption = constraint("conflicting");
         ConstraintNode rootNode = constraint(
             "root",
-            new TreeDecisionNode(leftDecisionOption),
-            new TreeDecisionNode(conflictingOption)
+            new OrderedDecisionNode(leftDecisionOption),
+            new OrderedDecisionNode(conflictingOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         ConstraintReducer reducer = new TestConstraintReducer(
@@ -158,7 +159,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new TreeDecisionNode(leftDecisionOption, rightDecisionOption)
+            new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         ConstraintReducer reducer = new TestConstraintReducer(
@@ -195,7 +196,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new TreeDecisionNode(leftDecisionOption, rightDecisionOption)
+            new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         ConstraintReducer reducer = new TestConstraintReducer(
@@ -234,8 +235,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         return route;
     }
 
-    private static ConstraintNode constraint(String name, DecisionNode... decisions){
-        return new TreeConstraintNode(
+    private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
+        return new OrderedConstraintNode(
             Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
             Arrays.asList(decisions));
     }
@@ -318,6 +319,79 @@ class DecisionTreeRoutesTreeWalkerTest {
         @Override
         public String toString() {
             return name;
+        }
+    }
+
+    private static class OrderedConstraintNode implements ConstraintNode {
+        private final List<IConstraint> atomicConstraints;
+        private final List<DecisionNode> decisions;
+
+        public OrderedConstraintNode(List<IConstraint> atomicConstraints, List<DecisionNode> decisions) {
+            this.atomicConstraints = atomicConstraints;
+            this.decisions = decisions;
+        }
+
+        @Override
+        public Collection<IConstraint> getAtomicConstraints() {
+            return atomicConstraints;
+        }
+
+        @Override
+        public Collection<DecisionNode> getDecisions() {
+            return decisions;
+        }
+
+        @Override
+        public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public boolean atomicConstraintExists(IConstraint constraint) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+    }
+
+    private static class OrderedDecisionNode implements DecisionNode {
+        private final List<ConstraintNode> options;
+
+        public OrderedDecisionNode(ConstraintNode... options) {
+            this.options = Arrays.asList(options);
+        }
+
+        @Override
+        public Collection<ConstraintNode> getOptions() {
+            return options;
+        }
+
+        @Override
+        public DecisionNode setOptions(Collection<ConstraintNode> options) {
+            throw new UnsupportedOperationException("Not supported");
         }
     }
 }
