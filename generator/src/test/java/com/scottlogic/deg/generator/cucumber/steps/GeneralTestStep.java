@@ -56,12 +56,7 @@ public class GeneralTestStep {
 
     @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        Object parsedValue;
-        if (value.matches(DateValueStep.DATE_REGEX)){
-            parsedValue = DateValueStep.dateObject(value);
-        } else {
-            parsedValue = GeneratorTestUtilities.parseInput(value);
-        }
+        Object parsedValue = GeneratorTestUtilities.parseInput(value);
 
         this.state.addConstraint(fieldName, constraint, parsedValue);
         Assert.assertThat(
@@ -130,7 +125,7 @@ public class GeneralTestStep {
         return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
-            .map(row -> row.stream().map(GeneratorTestUtilities::parseInput).collect(Collectors.toList()))
+            .map(row -> row.stream().map(GeneratorTestUtilities::parseExpected).collect(Collectors.toList()))
             .collect(Collectors.toList());
     }
 
