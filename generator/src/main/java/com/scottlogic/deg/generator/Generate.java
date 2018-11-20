@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.StandardTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -71,7 +71,7 @@ public class Generate implements Runnable {
                     treeWalker,
                     dontPartitionTrees
                         ? new NoopTreePartitioner()
-                        : new StandardTreePartitioner(),
+                        : new RelatedFieldTreePartitioner(),
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
                         : new DecisionTreeOptimiser()))

@@ -15,11 +15,11 @@ import java.util.stream.Stream;
 /**
  * Given a decision tress, split it into multiple trees based on which constraints and decisions affect which fields
  */
-public class StandardTreePartitioner implements TreePartitioner {
+public class RelatedFieldTreePartitioner implements TreePartitioner {
     private final ConstraintToFieldMapper fieldMapper;
     private static Integer partitionIndex = 0;
 
-    public StandardTreePartitioner() {
+    public RelatedFieldTreePartitioner() {
         fieldMapper = new ConstraintToFieldMapper();
     }
 

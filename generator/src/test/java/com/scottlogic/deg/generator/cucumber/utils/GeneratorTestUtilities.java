@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.StandardTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -85,7 +85,7 @@ public class GeneratorTestUtilities {
                     new FieldSpecMerger()),
                 new RowSpecMerger(
                     new FieldSpecMerger())),
-            new StandardTreePartitioner(),
+            new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser());
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, new FieldExhaustiveCombinationStrategy());
