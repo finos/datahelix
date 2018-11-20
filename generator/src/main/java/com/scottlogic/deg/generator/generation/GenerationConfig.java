@@ -52,6 +52,7 @@ public class GenerationConfig {
 
     public enum TreeWalkerType {
         Exhaustive("exhaustive"),
+        Random("random"),
         Routed("routed");
 
         private final String text;

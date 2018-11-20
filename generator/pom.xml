@@ -102,13 +102,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
+            <artifactId>junit-platform-runner</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -126,6 +121,13 @@
             <artifactId>junit-jupiter-params</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
+        </dependency><!-- https://mvnrepository.com/artifact/com.shazam/shazamcrest -->
+        <dependency>
+            <groupId>com.shazam</groupId>
+            <artifactId>shazamcrest</artifactId>
+            <version>0.11</version>
+            <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>
