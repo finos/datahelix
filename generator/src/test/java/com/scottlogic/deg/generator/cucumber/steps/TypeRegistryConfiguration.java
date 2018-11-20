@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
@@ -7,6 +8,8 @@ import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
 import io.cucumber.cucumberexpressions.Transformer;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,12 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"dateString", DateValueStep.DATE_REGEX);
         this.defineParameterType(tr,"regex", "/(.+)/$");
+
+        tr.defineParameterType(new ParameterType<>(
+            "number",
+            "(-?\\d+(\\.\\d+)?)$",
+            Number.class,
+            (Transformer<Number>) value -> (Number) GeneratorTestUtilities.parseNumber(value)));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){

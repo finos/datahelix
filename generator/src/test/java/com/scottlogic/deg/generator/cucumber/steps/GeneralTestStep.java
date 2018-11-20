@@ -1,15 +1,17 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -56,13 +58,19 @@ public class GeneralTestStep {
 
     @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        Object parsedValue = GeneratorTestUtilities.parseInput(value);
+        try {
+            Object parsedValue = GeneratorTestUtilities.parseInput(value);
+            this.state.addConstraint(fieldName, constraint, parsedValue);
+        } catch (Exception e) {
+            this.state.addException(e);
+        }
 
-        this.state.addConstraint(fieldName, constraint, parsedValue);
         Assert.assertThat(
             "Expected invalid profile",
             this.testHelper.getThrownExceptions(),
-            hasItem(isA(InvalidProfileException.class)));
+            hasItem(
+                either((Matcher)isA(InvalidProfileException.class))
+                    .or(isA(JsonParseException.class))));
     }
 
     @Then("^I am presented with an error message$")
@@ -121,11 +129,18 @@ public class GeneralTestStep {
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
+    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
-            .map(row -> row.stream().map(GeneratorTestUtilities::parseExpected).collect(Collectors.toList()))
+            .map(row -> row.stream().map(cell -> {
+                try {
+                    return GeneratorTestUtilities.parseExpected(cell);
+                } catch (JsonParseException e) {
+                    this.state.addException(e);
+                    return "<exception thrown: " + e.getMessage() + ">";
+                }
+            }).collect(Collectors.toList()))
             .collect(Collectors.toList());
     }
 
