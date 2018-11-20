@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
@@ -33,13 +34,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "number",
             "(-?\\d+(\\.\\d+)?)$",
             Number.class,
-            (Transformer<Number>) value -> {
-                if (value.contains(".")){
-                    return new BigDecimal(value);
-                }
-
-                return new BigInteger(value);
-            }));
+            (Transformer<Number>) value -> (Number) GeneratorTestUtilities.parseNumber(value)));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){
