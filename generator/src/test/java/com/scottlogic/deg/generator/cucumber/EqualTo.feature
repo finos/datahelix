@@ -273,8 +273,8 @@ Scenario: Running an 'equalTo' request that includes a decimal number with trail
      Given there is a field foo
        And foo is equal to 1.001000
      Then the following data should be generated:
-       | foo   |
-       | 1.001 |
+       | foo      |
+       | 1.001000 |
 
 Scenario: Running an 'equalTo' request that includes the number zero should be successful
      Given there is a field foo
