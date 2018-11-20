@@ -19,7 +19,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             ? mergeResult.restrictions
             : DataTypeRestrictions.all;
 
-        return Optional.of(merged.setTypeRestrictions(restrictions));
+        return Optional.of(merged.withTypeRestrictions(restrictions));
     }
 }
 

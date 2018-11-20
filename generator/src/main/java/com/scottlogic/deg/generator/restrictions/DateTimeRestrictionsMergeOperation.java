@@ -13,7 +13,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (dateTimeRestrictions == null) {
-            return Optional.of(merged.setDateTimeRestrictions(null));
+            return Optional.of(merged.withDateTimeRestrictions(null));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
@@ -21,7 +21,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             return Optional.empty();
         }
 
-        return Optional.of(merged.setDateTimeRestrictions(dateTimeRestrictions).setTypeRestrictions(
+        return Optional.of(merged.withDateTimeRestrictions(dateTimeRestrictions).withTypeRestrictions(
             DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal)));
     }
 }

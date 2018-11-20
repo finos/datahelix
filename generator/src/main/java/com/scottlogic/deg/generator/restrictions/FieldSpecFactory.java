@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.utils.NumberUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
@@ -74,7 +73,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
-        return FieldSpec.Empty.setSetRestrictions(
+        return FieldSpec.Empty.withSetRestrictions(
                 negate
                     ? SetRestrictions.fromBlacklist(constraint.legalValues)
                     : SetRestrictions.fromWhitelist(constraint.legalValues));
@@ -87,7 +86,7 @@ public class FieldSpecFactory {
             ? NullRestrictions.Nullness.MustNotBeNull
             : NullRestrictions.Nullness.MustBeNull;
 
-        return FieldSpec.Empty.setNullRestrictions(nullRestrictions);
+        return FieldSpec.Empty.withNullRestrictions(nullRestrictions);
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
@@ -99,7 +98,7 @@ public class FieldSpecFactory {
             typeRestrictions = DataTypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
 
-        return FieldSpec.Empty.setTypeRestrictions(typeRestrictions);
+        return FieldSpec.Empty.withTypeRestrictions(typeRestrictions);
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {
@@ -124,7 +123,7 @@ public class FieldSpecFactory {
                 inclusive);
         }
 
-        return FieldSpec.Empty.setNumericRestrictions(numericRestrictions);
+        return FieldSpec.Empty.withNumericRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate) {
@@ -148,7 +147,7 @@ public class FieldSpecFactory {
                 inclusive);
         }
 
-        return FieldSpec.Empty.setNumericRestrictions(numericRestrictions);
+        return FieldSpec.Empty.withNumericRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
@@ -157,7 +156,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.setGranularityRestrictions(new GranularityRestrictions(constraint.granularity));
+        return FieldSpec.Empty.withGranularityRestrictions(new GranularityRestrictions(constraint.granularity));
     }
 
     private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -177,7 +176,7 @@ public class FieldSpecFactory {
             dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
 
-        return FieldSpec.Empty.setDateTimeRestrictions(dateTimeRestrictions);
+        return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
@@ -197,7 +196,7 @@ public class FieldSpecFactory {
             dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
         }
 
-        return FieldSpec.Empty.setDateTimeRestrictions(dateTimeRestrictions);
+        return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
@@ -221,7 +220,7 @@ public class FieldSpecFactory {
         final FormatRestrictions formatRestrictions = new FormatRestrictions();
         formatRestrictions.formatString = constraint.format;
 
-        return FieldSpec.Empty.setFormatRestrictions(formatRestrictions);
+        return FieldSpec.Empty.withFormatRestrictions(formatRestrictions);
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
@@ -250,6 +249,6 @@ public class FieldSpecFactory {
             ? generator.complement()
             : generator;
 
-        return FieldSpec.Empty.setStringRestrictions(stringRestrictions);
+        return FieldSpec.Empty.withStringRestrictions(stringRestrictions);
     }
 }

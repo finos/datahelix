@@ -19,7 +19,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         StringRestrictions stringRestrictions = mergeResult.restrictions;
 
         if (stringRestrictions == null) {
-            return Optional.of(merged.setStringRestrictions(null));
+            return Optional.of(merged.withStringRestrictions(null));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
@@ -27,7 +27,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
             return Optional.empty();
         }
 
-        return Optional.of(merged.setStringRestrictions(stringRestrictions).setTypeRestrictions(
+        return Optional.of(merged.withStringRestrictions(stringRestrictions).withTypeRestrictions(
             DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String)));
     }
 }

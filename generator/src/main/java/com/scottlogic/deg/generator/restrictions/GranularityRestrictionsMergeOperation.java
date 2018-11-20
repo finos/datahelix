@@ -7,7 +7,7 @@ public class GranularityRestrictionsMergeOperation implements RestrictionMergeOp
 
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        return Optional.of(merged.setGranularityRestrictions(
+        return Optional.of(merged.withGranularityRestrictions(
             granularityRestrictionsMerger.merge(
                 left.getGranularityRestrictions(),
                 right.getGranularityRestrictions())));

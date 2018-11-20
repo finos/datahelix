@@ -15,7 +15,7 @@ public class NullRestrictionsMergeOperation implements RestrictionMergeOperation
             return Optional.empty();
         }
 
-        return Optional.of(merged.setNullRestrictions(mergeResult.restrictions));
+        return Optional.of(merged.withNullRestrictions(mergeResult.restrictions));
     }
 }
 
