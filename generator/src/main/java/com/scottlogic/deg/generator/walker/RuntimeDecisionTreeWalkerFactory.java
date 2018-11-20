@@ -37,6 +37,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
         }
 
         throw new UnsupportedOperationException(
-            String.format("Walker type %s", config.getWalkerType()));
+            String.format("Walker type %s is not supported", config.getWalkerType()));
     }
 }
