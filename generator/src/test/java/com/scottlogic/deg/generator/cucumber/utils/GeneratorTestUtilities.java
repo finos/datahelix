@@ -19,6 +19,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,7 +83,7 @@ public class GeneratorTestUtilities {
         } else if (input.matches("(-)?([0-9]+\\.[0-9]+)")) {
             return new BigDecimal(input);
         } else if (input.matches("(-)?[0-9]+")) {
-            return Integer.parseInt(input);
+            return new BigInteger(input);
         }
 
         return input;
