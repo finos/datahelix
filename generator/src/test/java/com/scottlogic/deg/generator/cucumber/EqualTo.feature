@@ -262,19 +262,16 @@ Scenario: Running an 'equalTo' request that includes a negative number value sho
        | foo |
        | -1  |
 
-Scenario: Running an 'equalTo' request that includes a number with Preceding zeros should be successful
+Scenario: Running an 'equalTo' request that includes a number with Preceding zeros should be unsuccessful
      Given there is a field foo
-       And foo is equal to 001
-     Then the following data should be generated:
-       | foo |
-       | 1   |
+       But the profile is invalid as foo can't be equal to 001
 
 Scenario: Running an 'equalTo' request that includes a decimal number with trailing zeros should be successful
      Given there is a field foo
        And foo is equal to 1.001000
      Then the following data should be generated:
-       | foo   |
-       | 1.001 |
+       | foo      |
+       | 1.001000 |
 
 Scenario: Running an 'equalTo' request that includes the number zero should be successful
      Given there is a field foo
