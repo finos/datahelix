@@ -25,7 +25,8 @@ public class DegTestHelper {
                 generatedData = GeneratorTestUtilities.getDEGGeneratedData(
                     state.profileFields,
                     state.constraints,
-                    state.generationStrategy
+                    state.generationStrategy,
+                    state.walkerType
                 );
             } catch (Exception e) {
                 state.testExceptions.add(e);
