@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
@@ -11,7 +10,6 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -38,22 +36,14 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
         return routes
             .map(route -> {
                 RowSpec accumulatedSpec = getRootRowSpec(fields, rootNode);
-                return getRowSpec(fields, accumulatedSpec, rootNode, route.subRoutes);
+                return getRowSpec(fields, accumulatedSpec, route.subRoutes);
             })
             .filter(rowSpec -> rowSpec != null);
     }
 
-    private RowSpec getRowSpec(ProfileFields fields, RowSpec accumulatedSpec, ConstraintNode rootNode, RowSpecRoute[] routes) {
-        Collection<DecisionNode> decisions = rootNode.getDecisions();
-
-        if (decisions.size() != routes.length) {
-            throw new UnsupportedOperationException("Invalid collection of routes; should be same size as number of decisions");
-        }
-
-        int index = 0;
-        for (DecisionNode decision : decisions) {
-            RowSpecRoute route = routes[index++]; //decision index
-            ConstraintNode decisionOption = getOption(decision, route.decisionIndex);
+    private RowSpec getRowSpec(ProfileFields fields, RowSpec accumulatedSpec, RowSpecRoute[] routes) {
+        for (RowSpecRoute route : routes) {
+            ConstraintNode decisionOption = route.chosenOption;
 
             accumulatedSpec = getMergedRowSpec(fields, accumulatedSpec, decisionOption, route);
 
@@ -63,11 +53,6 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
         }
 
         return accumulatedSpec;
-    }
-
-    private ConstraintNode getOption(DecisionNode decision, int index){
-        Collection<ConstraintNode> options = decision.getOptions();
-        return (ConstraintNode)options.toArray()[index];
     }
 
     private RowSpec getMergedRowSpec(ProfileFields fields, RowSpec accumulatedSpec, ConstraintNode decisionOption, RowSpecRoute route) {
@@ -97,7 +82,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
             return rowSpec; //at a leaf node; return
         }
 
-        return getRowSpec(fields, rowSpec, decisionOption, route.subRoutes);
+        return getRowSpec(fields, rowSpec, route.subRoutes);
     }
 
     private RowSpec getRootRowSpec(ProfileFields fields, ConstraintNode rootNode) {
