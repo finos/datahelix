@@ -354,32 +354,6 @@ Scenario: Running an 'inSet' request that includes a negative number value shoul
        | -0.0000089  |
        | -9999999999 |
 
-Scenario: Running an 'inSet' request that includes a number with Preceding zeros (01, 00010) should be successful
-     Given there is a field foo
-       And foo is in set:
-       | 00.0000       |
-       | 000.000001    |
-       | 0100          |
-       | 0000000000056 |
-     Then the following data should be generated:
-       | foo           |
-       | 00.0000       |
-       | 000.000001    |
-       | 0100          |
-       | 0000000000056 |
-
-Scenario: Running an 'inSet' request that includes a decimal number with trailing zeros should be successful
-     Given there is a field foo
-       And foo is in set:
-       | 00.1000       |
-       | 000.000001000 |
-       | 1.100000      |
-     Then the following data should be generated:
-       | foo           |
-       | 00.1000       |
-       | 000.000001000 |
-       | 1.100000      |
-
 Scenario: Running an 'inSet' request that includes the number zero should be successful
      Given there is a field foo
        And foo is in set:
@@ -496,6 +470,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting equalTo constr
        | foo      |
        | "Test 1" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting equalTo constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -520,6 +495,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting inSet constrai
        | foo      |
        | "Test 3" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting inSet constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -533,6 +509,7 @@ Scenario: Running a 'inSet' request alongside a contradicting inSet constraint s
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a null constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -556,6 +533,7 @@ Scenario: Running a 'inSet' request alongside an ofType = string should be succe
        | "Test 2" |
        | "Test 3" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = string should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -579,6 +557,7 @@ Scenario: Running a 'inSet' request alongside an ofType = numeric should be succ
        | 2   |
        | 3   |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = numeric should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -602,6 +581,7 @@ Scenario: Running a 'inSet' request alongside an ofType = temporal should be suc
        | 2010-01-01T00:00:00.001 |
        | 2011-01-01T00:00:00.000 |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -624,6 +604,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex 
        | foo    |
        | "test" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting matchingRegex constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -647,6 +628,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex 
        | "test"  |
        | "Testt" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting matchingRegex constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -671,6 +653,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting ofLength const
        | "Test"  |
        | "test"  |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofLength (too short) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -682,6 +665,7 @@ Scenario: Running a 'inSet' request alongside a contradicting ofLength (too shor
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofLength (too long) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -706,6 +690,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting longerThan con
        | "Testt" |
        | "Test7" |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting longerThan (equal) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -717,6 +702,7 @@ Scenario: Running a 'inSet' request alongside a contradicting longerThan (equal)
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting longerThan (too long) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -741,6 +727,7 @@ Scenario: Running a 'inSet' request alongside a non-contradicting shorterThan co
        | "Test"  |
        | "test"  |
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting shorterThan (too short) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -752,6 +739,7 @@ Scenario: Running a 'inSet' request alongside a contradicting shorterThan (too s
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a contradicting shorterThan (equal) constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -763,6 +751,7 @@ Scenario: Running a 'inSet' request alongside a contradicting shorterThan (equal
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a greaterThan constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -774,6 +763,7 @@ Scenario: Running a 'inSet' request alongside a greaterThan constraint should fa
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -785,6 +775,7 @@ Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint 
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a lessThan constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -796,6 +787,7 @@ Scenario: Running a 'inSet' request alongside a lessThan constraint should fail 
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -807,6 +799,7 @@ Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint sho
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a granularTo constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -818,6 +811,7 @@ Scenario: Running a 'inSet' request alongside a granularTo constraint should fai
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a after constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -829,6 +823,7 @@ Scenario: Running a 'inSet' request alongside a after constraint should fail wit
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a afterOrAt constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -840,6 +835,7 @@ Scenario: Running a 'inSet' request alongside a afterOrAt constraint should fail
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a before constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -851,6 +847,7 @@ Scenario: Running a 'inSet' request alongside a before constraint should fail wi
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should fail with an error message
      Given there is a field foo
        And foo is in set:
@@ -880,8 +877,8 @@ Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constra
        And there is a constraint:
        """
        { "anyOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2 ] },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 3", "Test 4 ] }
+         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
+         { "field": "foo", "is": "inSet", "value": "[ "Test 3", "Test 4" ]" }
        ]}
        """
      Then the following data should be generated:
@@ -897,8 +894,8 @@ Scenario: Running a 'inSet' request as part of a non-contradicting allOf constra
        And there is a constraint:
        """
        { "allOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2 ] },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2 ] }
+         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
+         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" }
        ]}
        """
      Then the following data should be generated:
@@ -906,17 +903,42 @@ Scenario: Running a 'inSet' request as part of a non-contradicting allOf constra
        | "Test 1" |
        | "Test 2" |
 
-  @ignore
-  Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
-    Given there is a field foo
-    And there is a constraint:
+@ignore
+Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should fail with an error message
+     Given there is a field foo
+       And there is a constraint:
        """
        { "allOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2 ] },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2 ] }
+         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
+         { "field": "foo", "is": "inSet", "value": "[ "Test 3", "Test 4" ]" }
        ]}
        """
-    Then the following data should be generated:
-      | foo      |
-      | "Test 1" |
-      | "Test 2" |
+     Then I am presented with an error message
+       And no data is created
+
+@ignore
+Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
+     Given the following fields exist:
+       | foo   |
+       | price |
+       And foo is in set:
+       | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
+       And there is a constraint:
+       """
+       {
+         "if": { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
+         "then": { "field": "price", "is": "equalTo", "value": 1 },
+         "else": { "field": "price", "is": "equalTo", "value": 2 }
+         }
+       """
+     Then the following data should be generated:
+       | foo     | price |
+       | null    | 1     |
+       | "Test1" | 1     |
+       | "Test2" | 1     |
+       | null    | 2     |
+       | "Test3" | 2     |
+       | "Test4" | 2     |
