@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -46,8 +47,12 @@ public class GeneratorTestUtilities {
      *
      * @return Generated data
      */
-    static List<List<Object>> getDEGGeneratedData(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy)
+    static List<List<Object>> getDEGGeneratedData(
+        List<Field> profileFields,
+        List<IConstraint> constraints,
+        GenerationConfig.DataGenerationType generationStrategy,
+        GenerationConfig.TreeWalkerType walkerType) {
+        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType)
             .stream()
             .map(genObj ->
                 genObj.values
@@ -62,7 +67,11 @@ public class GeneratorTestUtilities {
             ).collect(Collectors.toList());
     }
 
-    private static List<GeneratedObject> getGeneratedDataAsList(List<Field> profileFields, List<IConstraint> constraints, GenerationConfig.DataGenerationType generationStrategy) {
+    private static List<GeneratedObject> getGeneratedDataAsList(
+        List<Field> profileFields,
+        List<IConstraint> constraints,
+        GenerationConfig.DataGenerationType generationStrategy,
+        GenerationConfig.TreeWalkerType walkerType) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
             Collections.singleton(new Rule("TEST_RULE", constraints)));
@@ -70,15 +79,16 @@ public class GeneratorTestUtilities {
         final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
 
         final IDataGenerator dataGenerator = new DataGenerator(
-            new RowSpecMerger(
-                new FieldSpecMerger()),
-            new ConstraintReducer(
-                new FieldSpecFactory(),
-                new FieldSpecMerger()),
-            new TreePartitioner(),
+            new CartesianProductDecisionTreeWalker(
+                new ConstraintReducer(
+                    new FieldSpecFactory(),
+                    new FieldSpecMerger()),
+                new RowSpecMerger(
+                    new FieldSpecMerger())),
+            new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser());
 
-        final GenerationConfig config = new GenerationConfig(generationStrategy, new FieldExhaustiveCombinationStrategy());
+        final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, new FieldExhaustiveCombinationStrategy());
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.forEach(allActualRows::add);

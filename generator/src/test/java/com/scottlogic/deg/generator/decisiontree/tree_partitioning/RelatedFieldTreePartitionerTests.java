@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class TreePartitionerTests {
+class RelatedFieldTreePartitionerTests {
     private static final TreeConstraintNode emptyConstraint
         = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
 
@@ -258,7 +258,7 @@ class TreePartitionerTests {
     }
 
     private void partitionTrees() {
-        partitionedTrees = new TreePartitioner()
+        partitionedTrees = new RelatedFieldTreePartitioner()
             .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }

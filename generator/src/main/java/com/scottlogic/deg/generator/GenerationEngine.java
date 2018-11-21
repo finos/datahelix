@@ -4,8 +4,6 @@ import com.scottlogic.deg.generator.constraints.AndConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -15,10 +13,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,24 +24,13 @@ import java.util.stream.Stream;
 
 public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final IDataGenerator dataGenerator;
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter, boolean optimiseTree, boolean partitionTrees) {
+    public GenerationEngine(IOutputTarget outputter, DataGenerator dataGenerator) {
         this.outputter = outputter;
-        dataGenerator = new DataGenerator(
-                new RowSpecMerger(fieldSpecMerger),
-                new ConstraintReducer(
-                        new FieldSpecFactory(),
-                        fieldSpecMerger),
-                partitionTrees
-                    ? new TreePartitioner()
-                    : new NoopTreePartitioner(),
-                optimiseTree
-                    ? new DecisionTreeOptimiser()
-                    : new NoopDecisionTreeOptimiser());
+        this.dataGenerator = dataGenerator;
     }
 
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
