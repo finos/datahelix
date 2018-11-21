@@ -133,13 +133,17 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .flatMap(option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
+        Comparator<Map.Entry<IConstraint, Long>> comparator = Comparator.comparing(Map.Entry::getValue);
+        comparator = comparator.reversed();
+        comparator = comparator.thenComparing(this::disfavourNotConstraints);
+        comparator = comparator.thenComparing(entry -> entry.getKey().toString());
+
         return decisionConstraints.entrySet()
             .stream()
-            .sorted(Comparator
-                .comparing(this::disfavourNotConstraints))
-            .max(Comparator.comparing(Map.Entry::getValue)) //order by the number of occurrences
-            .filter(constraint -> constraint.getValue() > 1) //where the number of occurrences > 1
+            .filter(constraint -> constraint.getValue() > 1) // where the number of occurrences > 1
+            .sorted(comparator)
             .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
+            .findFirst()
             .orElse(null); //otherwise return null
     }
 
