@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public class DegTestState {
 
     public GenerationConfig.DataGenerationType generationStrategy;
+    public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.Exhaustive;
+
     final List<Field> profileFields = new ArrayList<>();
     final List<IConstraint> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
