@@ -20,7 +20,8 @@ public class RouteDecisionIterator implements DecisionIterator {
 
     @Override
     public boolean hasNext() {
-        return currentOption < options.size()-1 || nextDecision.hasNext();
+        return currentOption < options.size()-1 || nextDecision.hasNext()
+            || (currentOption == options.size()-1 && options.get(currentOption).hasNext());
     }
 
     @Override
