@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public interface ConstraintNode{
+public interface ConstraintNode extends Node {
     Collection<IConstraint> getAtomicConstraints();
     Collection<DecisionNode> getDecisions();
     Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);

@@ -3,6 +3,11 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.validators.StaticDecisionTreeValidator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,16 +69,23 @@ public class Visualise implements Runnable {
 
         final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+        final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
         final IDecisionTreeOptimiser treeOptimiser = dontOptimise
                 ? new NoopDecisionTreeOptimiser()
                 : new DecisionTreeOptimiser();
 
+        StaticDecisionTreeValidator treeValidator = new StaticDecisionTreeValidator(
+            profile.fields,
+            new RowSpecMerger(fieldSpecMerger),
+            new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
+
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
                 .splitTreeIntoPartitions(mergedTree)
                 .map(treeOptimiser::optimiseTree)
                 .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
+                .map(treeValidator::validate)
                 .collect(Collectors.toList());
 
         final String title = shouldHideTitle

@@ -107,11 +107,7 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(DecisionNode decisionNode, String id) throws IOException {
-        String optimised = decisionNode instanceof OptimisedNode
-                ? "[color=\"blue\"]"
-                : "";
-
-        writeLine("  " + id + optimised + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
+        writeLine("  " + id + determineColour(decisionNode) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
     }
 
     private void declareConstraintNode(String id, ConstraintNode constraintNode, TreeInfo treeInfo) throws IOException {
@@ -120,16 +116,20 @@ public class DecisionTreeVisualisationWriter {
             .map(IConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
         treeInfo.atomicConstraints += constraintNode.getAtomicConstraints().size();
-
-        String optimised = constraintNode instanceof OptimisedNode
-                ? "[color=\"blue\"]"
-                : "";
-
-        writeLine("  " + id + optimised + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
+        writeLine("  " + id + determineColour(constraintNode) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
     }
 
     private void declareParenthood(String parentNodeId, String childNodeId) throws IOException {
         writeLine("  " + parentNodeId + " -- " + childNodeId);
+    }
+
+    private String determineColour(Node node){
+        if (node instanceof ContradictoryNode) {
+            return "[color=\"red\"]";
+        } else if (node instanceof OptimisedNode){
+            return "[color=\"blue\"]";
+        }
+        return "";
     }
 
     private void writeTreeInfo(TreeInfo info, String parentNodeId, String fontColour) throws IOException {
