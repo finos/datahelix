@@ -229,7 +229,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate) {
-        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue + 1));
+        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue - 1));
         return constructPattern(regex, negate, true);
     }
 
