@@ -27,7 +27,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "is": "inSet", "values": [ "X_092", "X_094" ] }
+{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, { "date": "2001-02-03T04:05:06.007" } ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
