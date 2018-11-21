@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
 import com.scottlogic.deg.generator.walker.factory.DecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
@@ -8,14 +9,16 @@ import java.util.*;
 
 public class RouteDecisionIterator implements DecisionIterator {
 
+    private DecisionNode decisionNode;
     private DecisionIterator nextDecision;
     private List<ConstraintIterator> options;
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision){
+    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision, DecisionNode decisionNode){
         this.options = options;
         this.nextDecision = nextDecision;
+        this.decisionNode = decisionNode;
     }
 
     @Override

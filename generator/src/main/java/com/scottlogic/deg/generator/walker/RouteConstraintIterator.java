@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
 import com.scottlogic.deg.generator.walker.factory.DecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
@@ -8,11 +9,13 @@ import java.util.List;
 public class RouteConstraintIterator implements ConstraintIterator {
 
     private int decisionIndexFromParent;
+    ConstraintNode constraintNode;
     private DecisionIterator subDecisions;
 
-    public RouteConstraintIterator(DecisionIterator subDecisions, int decisionIndexFromParent){
+    public RouteConstraintIterator(DecisionIterator subDecisions, int decisionIndexFromParent, ConstraintNode constraintNode){
         this.subDecisions = subDecisions;
         this.decisionIndexFromParent = decisionIndexFromParent;
+        this.constraintNode = constraintNode;
     }
 
     @Override
@@ -24,8 +27,7 @@ public class RouteConstraintIterator implements ConstraintIterator {
     public RowSpecRoute next() {
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
         rowSpecRoute.decisionIndex = decisionIndexFromParent;
-        List<RowSpecRoute> subroutes = subDecisions.next();
-        rowSpecRoute.subRoutes = subroutes.toArray(new RowSpecRoute[subroutes.size()]);
+        rowSpecRoute.subRoutes = subDecisions.next();
 
         return rowSpecRoute;
     }

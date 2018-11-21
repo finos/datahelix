@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -41,7 +42,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
             .filter(rowSpec -> rowSpec != null);
     }
 
-    private RowSpec getRowSpec(ProfileFields fields, RowSpec accumulatedSpec, RowSpecRoute[] routes) {
+    private RowSpec getRowSpec(ProfileFields fields, RowSpec accumulatedSpec, Collection<RowSpecRoute> routes) {
         for (RowSpecRoute route : routes) {
             ConstraintNode decisionOption = route.chosenOption;
 
@@ -77,7 +78,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
 
         RowSpec rowSpec = mergedRowSpecOpt.get();
 
-        boolean hasSubRoutes = route.subRoutes != null && route.subRoutes.length > 0;
+        boolean hasSubRoutes = route.subRoutes != null && !route.subRoutes.isEmpty();
         if (!hasSubRoutes && decisionOption.getDecisions().isEmpty()) {
             return rowSpec; //at a leaf node; return
         }

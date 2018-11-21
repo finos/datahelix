@@ -18,11 +18,11 @@ public class ConstraintIteratorFactory {
 
     private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
         if (constraintNode.getDecisions().isEmpty()){
-            return new LeafConstraintIterator(decisionIndexFromParent);
+            return new LeafConstraintIterator(decisionIndexFromParent, constraintNode);
         }
 
         DecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
-        return new RouteConstraintIterator(decisions, decisionIndexFromParent);
+        return new RouteConstraintIterator(decisions, decisionIndexFromParent, constraintNode);
     }
 
 
@@ -38,12 +38,12 @@ public class ConstraintIteratorFactory {
         }
 
         if(decisionNodes.size() == 1) {
-            return new EndDecisionIterator(options);
+            return new EndDecisionIterator(options, decisionNodes.get(0));
         }
 
         List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
         DecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
-        return new RouteDecisionIterator(options, nextDecision);
+        return new RouteDecisionIterator(options, nextDecision, decisionNodes.get(0));
     }
 
 }
