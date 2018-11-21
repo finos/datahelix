@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OrConstraint implements IConstraint {
     public final Collection<IConstraint> subConstraints;
@@ -27,8 +28,10 @@ public class OrConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        throw new UnsupportedOperationException();
+    public Collection<Field> getFields() {
+        return subConstraints.stream()
+            .flatMap(constraint -> constraint.getFields().stream())
+            .collect(Collectors.toList());
     }
 
     @Override

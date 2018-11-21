@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public class IsStringShorterThanConstraint implements IConstraint {
@@ -20,8 +22,8 @@ public class IsStringShorterThanConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        return field;
+    public Collection<Field> getFields() {
+        return Collections.singletonList(field);
     }
 
     @Override

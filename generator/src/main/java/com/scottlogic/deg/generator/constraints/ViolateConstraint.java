@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+
 public class ViolateConstraint implements IConstraint {
     public final IConstraint violatedConstraint;
 
@@ -15,7 +17,7 @@ public class ViolateConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        throw new UnsupportedOperationException();
+    public Collection<Field> getFields() {
+        return violatedConstraint.getFields();
     }
 }

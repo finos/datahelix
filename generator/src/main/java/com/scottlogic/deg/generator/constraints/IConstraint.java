@@ -19,7 +19,7 @@ public interface IConstraint
 
     String toDotLabel();
 
-    Field getField();
+    Collection<Field> getFields();
 
     default public IConstraint or(IConstraint... others)
     {

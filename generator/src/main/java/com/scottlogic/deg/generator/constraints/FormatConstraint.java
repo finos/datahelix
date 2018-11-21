@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class FormatConstraint implements IConstraint {
 
     public final Field field;
@@ -18,8 +21,8 @@ public class FormatConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        return field;
+    public Collection<Field> getFields() {
+        return Collections.singletonList(field);
     }
 
 }

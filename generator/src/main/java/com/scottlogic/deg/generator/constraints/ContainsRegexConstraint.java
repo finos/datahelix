@@ -2,8 +2,11 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ContainsRegexConstraint implements IConstraint {
     public final Field field;
@@ -20,8 +23,8 @@ public class ContainsRegexConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        return field;
+    public Collection<Field> getFields() {
+        return Collections.singletonList(field);
     }
 
     @Override

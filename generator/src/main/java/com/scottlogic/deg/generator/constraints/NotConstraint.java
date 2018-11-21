@@ -2,7 +2,10 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class NotConstraint implements IConstraint {
     public final IConstraint negatedConstraint;
@@ -40,8 +43,8 @@ public class NotConstraint implements IConstraint {
     }
 
     @Override
-    public Field getField() {
-        return negatedConstraint.getField();
+    public Collection<Field> getFields() {
+        return negatedConstraint.getFields();
     }
 
     public String toString(){

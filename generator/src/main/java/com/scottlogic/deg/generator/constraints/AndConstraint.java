@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AndConstraint implements IConstraint
 {
@@ -17,8 +19,10 @@ public class AndConstraint implements IConstraint
     }
 
     @Override
-    public Field getField() {
-        throw new UnsupportedOperationException();
+    public Collection<Field> getFields() {
+        return subConstraints.stream()
+            .flatMap(constraint -> constraint.getFields().stream())
+            .collect(Collectors.toList());
     }
 
     @Override
