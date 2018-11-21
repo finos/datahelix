@@ -51,8 +51,8 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        Exhaustive("exhaustive"),
-        Routed("routed");
+        cartesianProduct("cartesianProduct"),
+        routed("routed");
 
         private final String text;
 
