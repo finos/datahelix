@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhau
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +16,8 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
-        GenerationConfig.DataGenerationType.Interesting,
+        GenerationConfig.DataGenerationType.INTERESTING,
+        GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
         new FieldExhaustiveCombinationStrategy());
 
     @Test

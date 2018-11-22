@@ -2,12 +2,16 @@ package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -22,10 +26,14 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesTests {
+    private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
+
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+            GenerationConfig config = new GenerationConfig(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 
             generationEngine.generateTestCases(profileFile.toPath(), config);
@@ -35,7 +43,9 @@ class ExampleProfilesTests {
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
+            GenerationConfig config = new GenerationConfig(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 
             generationEngine.generateDataSet(profileFile.toPath(), config);
@@ -57,8 +67,10 @@ class ExampleProfilesTests {
                 consumer.generate(
                     new GenerationEngine(
                         new NullOutputTarget(),
-                        false,
-                        true),
+                        new DataGenerator(
+                            walkerFactory.getDecisionTreeWalker(),
+                            new RelatedFieldTreePartitioner(),
+                            new DecisionTreeOptimiser())),
                     profileFile);
             });
 
@@ -92,3 +104,4 @@ class ExampleProfilesTests {
         void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }
+

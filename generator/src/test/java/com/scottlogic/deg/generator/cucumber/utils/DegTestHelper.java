@@ -1,7 +1,18 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.MainConstraintReader;
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Responsible for controlling the generation of data from the DEG.
@@ -20,19 +31,39 @@ public class DegTestHelper {
             throw new RuntimeException("Gherkin error: Please specify the data strategy");
         }
 
-        if (!this.generatorHasRun()){
-            try {
-                generatedData = GeneratorTestUtilities.getDEGGeneratedData(
-                    state.profileFields,
-                    state.constraints,
-                    state.generationStrategy
-                );
-            } catch (Exception e) {
-                state.testExceptions.add(e);
-            }
+        if (this.generatorHasRun()) {
+            return generatedData;
         }
 
-        return generatedData;
+        try {
+            MainConstraintReader constraintReader = new MainConstraintReader();
+            ProfileFields profileFields = new ProfileFields(state.profileFields);
+            AtomicBoolean exceptionInMapping = new AtomicBoolean();
+
+            List<IConstraint> mappedConstraints = state.constraints.stream().map(dto -> {
+                try {
+                    return constraintReader.apply(dto, profileFields);
+                } catch (InvalidProfileException e) {
+                    state.testExceptions.add(e);
+                    exceptionInMapping.set(true);
+                    return null;
+                }
+            }).collect(Collectors.toList());
+
+            if (exceptionInMapping.get()){
+                return null;
+            }
+
+            return generatedData = GeneratorTestUtilities.getDEGGeneratedData(
+                state.profileFields,
+                mappedConstraints,
+                state.generationStrategy,
+                state.walkerType
+            );
+        } catch (Exception e) {
+            state.testExceptions.add(e);
+            return null;
+        }
     }
 
     public boolean generatorHasRun(){

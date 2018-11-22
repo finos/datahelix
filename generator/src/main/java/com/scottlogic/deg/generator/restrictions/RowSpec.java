@@ -59,7 +59,7 @@ public class RowSpec {
                                         .stream()
                                         .map(x -> x.getSpecForField(field))
                                         .reduce(
-                                                Optional.of(new FieldSpec()),
+                                                Optional.of(FieldSpec.Empty),
                                                 (acc, next) -> acc.flatMap(fieldSpec -> fieldSpecMerger.merge(fieldSpec, next)),
                                                 (opt1, opt2) -> opt1.flatMap(
                                                         fieldSpec1 -> opt2.flatMap(

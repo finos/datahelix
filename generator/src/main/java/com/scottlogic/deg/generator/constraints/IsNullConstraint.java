@@ -23,7 +23,7 @@ public class IsNullConstraint implements IConstraint
     public String toString(){
         return String.format(
                 "`%s`: %s",
-                NullRestrictions.Nullness.MustBeNull,
+                NullRestrictions.Nullness.MUST_BE_NULL,
                 field.toString());
     }
 
