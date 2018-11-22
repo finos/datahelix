@@ -53,13 +53,11 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "Identifier"
-		},{
-			"name": "Event"
-		}]
-	}
+	"fields": [{
+		"name": "Identifier"
+	},{
+		"name": "Event"
+	}]
 },{
 	"description": "TestProfile1[1]",
 	"rootNode": {
@@ -165,11 +163,9 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "Type"
-		},{
-			"name": "Level"
-		}]
-	}
+	"fields": [{
+		"name": "Type"
+	},{
+		"name": "Level"
+	}]
 }]

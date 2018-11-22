@@ -146,15 +146,13 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "EventType"
-		},{
-			"name": "Parameter"
-		},{
-			"name": "GraphType"
-		}]
-	}
+	"fields": [{
+		"name": "EventType"
+	},{
+		"name": "Parameter"
+	},{
+		"name": "GraphType"
+	}]
 },{
 	"description": "TestProfile2[1]",
 	"rootNode": {
@@ -264,11 +262,9 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "User"
-		},{
-			"name": "UserType"
-		}]
-	}
+	"fields": [{
+		"name": "User"
+	},{
+		"name": "UserType"
+	}]
 }]
