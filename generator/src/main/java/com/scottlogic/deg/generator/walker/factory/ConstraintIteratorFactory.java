@@ -13,16 +13,16 @@ import java.util.List;
 public class ConstraintIteratorFactory {
 
     public static ConstraintIterator create(ConstraintNode constraintNode){
-        return createConstraintIterator(constraintNode, null);
+        return createConstraintIterator(constraintNode);
     }
 
-    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode, DecisionNode parentDecision){
+    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode){
         if (constraintNode.getDecisions().isEmpty()){
-            return new LeafConstraintIterator(constraintNode, parentDecision);
+            return new LeafConstraintIterator(constraintNode);
         }
 
         DecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
-        return new RouteConstraintIterator(decisions, constraintNode, parentDecision);
+        return new RouteConstraintIterator(decisions, constraintNode);
     }
 
 
@@ -32,7 +32,7 @@ public class ConstraintIteratorFactory {
 
         List<ConstraintIterator> options = new ArrayList<>();
         for (ConstraintNode constraintNode: decisionNodes.get(0).getOptions()) {
-            options.add(createConstraintIterator(constraintNode, decisionNodes.get(0)));
+            options.add(createConstraintIterator(constraintNode));
         }//
 
         if(decisionNodes.size() == 1) {

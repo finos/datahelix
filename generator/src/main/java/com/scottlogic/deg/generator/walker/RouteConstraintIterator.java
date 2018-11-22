@@ -10,13 +10,11 @@ import java.util.List;
 public class RouteConstraintIterator implements ConstraintIterator {
 
     ConstraintNode constraintNode;
-    DecisionNode parentDecision;
     private DecisionIterator subDecisions;
 
-    public RouteConstraintIterator(DecisionIterator subDecisions, ConstraintNode constraintNode, DecisionNode parentDecision){
+    public RouteConstraintIterator(DecisionIterator subDecisions, ConstraintNode constraintNode){
         this.subDecisions = subDecisions;
         this.constraintNode = constraintNode;
-        this.parentDecision = parentDecision;
     }
 
     @Override
@@ -28,7 +26,6 @@ public class RouteConstraintIterator implements ConstraintIterator {
     public RowSpecRoute next() {
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
         rowSpecRoute.chosenOption = constraintNode;
-        rowSpecRoute.thisDecision = parentDecision;
         rowSpecRoute.subRoutes = subDecisions.next();
 
         return rowSpecRoute;

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class IteratorTestHelper {
-    static ConstraintNode endConstraint(String name) { return constraint(name + " leaf"); }
+    static ConstraintNode endConstraint(String name) { return constraint(name); }
     static DecisionNode singleDecision() { return new TreeDecisionNode(endConstraint("single")); }
     static DecisionNode doubleDecision(String name) {
         return new TreeDecisionNode(
@@ -24,7 +24,7 @@ public class IteratorTestHelper {
         singleDecision(), doubleDecision("right")); }
 
     static ConstraintNode constraintDoubleDouble(String name) { return constraint(name,
-        doubleDecision(name + " left"), doubleDecision(name + " right")); }
+        doubleDecision(" left"), doubleDecision(" right")); }
 
     static ConstraintNode constraintTripleDouble() { return constraint("constraintTripleDouble",
         doubleDecision("left"), doubleDecision("middle"), doubleDecision("right")); }

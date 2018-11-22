@@ -229,7 +229,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static RowSpecRoute route(int decisionOptionIndex, RowSpecRoute... subRoutes){
         RowSpecRoute route = new RowSpecRoute();
-        route.decisionIndex = decisionOptionIndex;
+        //route.decisionIndex = decisionOptionIndex;
         route.subRoutes = Arrays.asList(subRoutes);
 
         return route;

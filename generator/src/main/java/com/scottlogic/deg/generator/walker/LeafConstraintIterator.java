@@ -10,13 +10,11 @@ import java.util.Collections;
 public class LeafConstraintIterator implements ConstraintIterator {
 
     private ConstraintNode constraintNode;
-    DecisionNode parentDecision;
 
     private boolean hasNext = true;
 
-    public LeafConstraintIterator(ConstraintNode constraintNode, DecisionNode parentDecision){
+    public LeafConstraintIterator(ConstraintNode constraintNode){
         this.constraintNode = constraintNode;
-        this.parentDecision = parentDecision;
     }
 
     @Override
@@ -28,7 +26,6 @@ public class LeafConstraintIterator implements ConstraintIterator {
     public RowSpecRoute next() {
         hasNext = false;
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
-        rowSpecRoute.thisDecision = parentDecision;
         rowSpecRoute.chosenOption = constraintNode;
         rowSpecRoute.subRoutes = Collections.emptyList();
         return rowSpecRoute;
