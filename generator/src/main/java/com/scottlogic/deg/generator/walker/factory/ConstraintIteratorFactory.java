@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.walker.LeafConstraintIterator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstraintIteratorFactory {
 
@@ -30,10 +31,9 @@ public class ConstraintIteratorFactory {
         if (decisionNodes == null || decisionNodes.isEmpty())
             return null;
 
-        List<ConstraintIterator> options = new ArrayList<>();
-        for (ConstraintNode constraintNode: decisionNodes.get(0).getOptions()) {
-            options.add(createConstraintIterator(constraintNode));
-        }//
+        List<ConstraintIterator> options = decisionNodes.get(0).getOptions().stream()
+            .map(ConstraintIteratorFactory::createConstraintIterator)
+            .collect(Collectors.toList());
 
         if(decisionNodes.size() == 1) {
             return new EndDecisionIterator(options);
