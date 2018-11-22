@@ -232,11 +232,7 @@ class DecisionTreeRoutesTreeWalkerTest {
     }
 
     private static RowSpecRoute route(ConstraintNode decisionOption, RowSpecRoute... subRoutes){
-        RowSpecRoute route = new RowSpecRoute();
-        route.chosenOption = decisionOption;
-        route.subRoutes = Arrays.asList(subRoutes);
-
-        return route;
+        return new RowSpecRoute(decisionOption, Arrays.asList(subRoutes));
     }
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){

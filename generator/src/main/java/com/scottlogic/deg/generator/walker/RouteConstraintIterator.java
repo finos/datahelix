@@ -22,11 +22,7 @@ public class RouteConstraintIterator implements ConstraintIterator {
 
     @Override
     public RowSpecRoute next() {
-        RowSpecRoute rowSpecRoute = new RowSpecRoute();
-        rowSpecRoute.chosenOption = constraintNode;
-        rowSpecRoute.subRoutes = subDecisions.next();
-
-        return rowSpecRoute;
+        return new RowSpecRoute(constraintNode, subDecisions.next());
     }
 
     public void reset(){

@@ -213,22 +213,22 @@ class RouteConstraintIteratorTest {
         ConstraintNode node = IteratorTestHelper.constraintDoubleLayered();
         ConstraintIterator iterator = ConstraintIteratorFactory.create(node);
 
-        RowSpecRoute leftDecision = new RowSpecRoute();
-        leftDecision.subRoutes = Collections.emptyList();
-
-        RowSpecRoute lowerLeftDecision = new RowSpecRoute();
-        lowerLeftDecision.subRoutes = Collections.emptyList();
-
-        RowSpecRoute lowerRightDecision = new RowSpecRoute();
-        lowerRightDecision.subRoutes = Collections.emptyList();
-
-        RowSpecRoute rightOuterDecision = new RowSpecRoute();
-//        rightOuterDecision.decisionIndex = 0;
-        rightOuterDecision.subRoutes = Arrays.asList(lowerLeftDecision, lowerRightDecision);
-
-        RowSpecRoute expected = new RowSpecRoute();
-//        expected.decisionIndex = 0;
-        expected.subRoutes = Arrays.asList(leftDecision, rightOuterDecision);
+//        RowSpecRoute leftDecision = new RowSpecRoute();
+//        leftDecision.subRoutes = Collections.emptyList();
+//
+//        RowSpecRoute lowerLeftDecision = new RowSpecRoute();
+//        lowerLeftDecision.subRoutes = Collections.emptyList();
+//
+//        RowSpecRoute lowerRightDecision = new RowSpecRoute();
+//        lowerRightDecision.subRoutes = Collections.emptyList();
+//
+//        RowSpecRoute rightOuterDecision = new RowSpecRoute();
+////        rightOuterDecision.decisionIndex = 0;
+//        rightOuterDecision.subRoutes = Arrays.asList(lowerLeftDecision, lowerRightDecision);
+//
+//        RowSpecRoute expected = new RowSpecRoute();
+////        expected.decisionIndex = 0;
+//        expected.subRoutes = Arrays.asList(leftDecision, rightOuterDecision);
 
         assertThat(iterator.hasNext(), is(true));
         RowSpecRoute actual = iterator.next();

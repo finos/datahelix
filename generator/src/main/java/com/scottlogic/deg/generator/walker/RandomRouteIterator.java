@@ -30,9 +30,7 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
     @Override
     public RowSpecRoute next() {
         currentIteration++;
-        RowSpecRoute rootRoute = new RowSpecRoute();
-        rootRoute.subRoutes = produceRoute(initialNode);
-        return rootRoute;
+        return new RowSpecRoute(null, produceRoute(initialNode));
     }
 
     private Collection<RowSpecRoute> produceRoute(ConstraintNode constraint) {
@@ -45,9 +43,6 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
         int decisionIndex = rand.nextInt(decision.getOptions().size());
         ConstraintNode decisionOption = new ArrayList<>(decision.getOptions()).get(decisionIndex);
 
-        RowSpecRoute route = new RowSpecRoute();
-        route.chosenOption = decisionOption;
-        route.subRoutes = produceRoute(decisionOption);
-        return route;
+        return new RowSpecRoute(decisionOption, produceRoute(decisionOption));
     }
 }
