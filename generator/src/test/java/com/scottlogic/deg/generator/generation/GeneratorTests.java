@@ -664,7 +664,7 @@
 //    private FieldSpec getFieldSpecThatMustBeNull(FieldSpec fieldSpec)
 //    {
 //        NullRestrictions nullRestrictions = new NullRestrictions();
-//        nullRestrictions.nullness = NullRestrictions.Nullness.MustBeNull;
+//        nullRestrictions.nullness = NullRestrictions.Nullness.MUST_BE_NULL;
 //        fieldSpec.setNullRestrictions(nullRestrictions);
 //        return fieldSpec;
 //    }

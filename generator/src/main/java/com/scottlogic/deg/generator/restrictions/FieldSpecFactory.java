@@ -85,8 +85,8 @@ public class FieldSpecFactory {
         final NullRestrictions nullRestrictions = new NullRestrictions();
 
         nullRestrictions.nullness = negate
-            ? NullRestrictions.Nullness.MustNotBeNull
-            : NullRestrictions.Nullness.MustBeNull;
+            ? NullRestrictions.Nullness.MUST_NOT_BE_NULL
+            : NullRestrictions.Nullness.MUST_BE_NULL;
 
         return createFieldSpec(fs -> fs.setNullRestrictions(nullRestrictions));
     }
