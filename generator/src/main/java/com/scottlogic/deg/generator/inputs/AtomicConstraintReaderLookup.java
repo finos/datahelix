@@ -122,15 +122,15 @@ public class AtomicConstraintReaderLookup {
                     final IsOfTypeConstraint.Types type;
                     switch ((String) dto.value) {
                         case "numeric":
-                            type = IsOfTypeConstraint.Types.Numeric;
+                            type = IsOfTypeConstraint.Types.NUMERIC;
                             break;
 
                         case "string":
-                            type = IsOfTypeConstraint.Types.String;
+                            type = IsOfTypeConstraint.Types.STRING;
                             break;
 
                         case "temporal":
-                            type = IsOfTypeConstraint.Types.Temporal;
+                            type = IsOfTypeConstraint.Types.TEMPORAL;
                             break;
 
                         default:

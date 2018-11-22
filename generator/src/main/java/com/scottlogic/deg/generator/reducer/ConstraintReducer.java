@@ -63,14 +63,14 @@ public class ConstraintReducer {
 
     private Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
         if (constraints == null) {
-            return Optional.of(new FieldSpec());
+            return Optional.of(FieldSpec.Empty);
         }
 
         return StreamSupport
             .stream(constraints.spliterator(), false)
             .map(fieldSpecFactory::construct)
             .reduce(
-                Optional.of(new FieldSpec()),
+                Optional.of(FieldSpec.Empty),
                 (optAcc, next) ->
                     optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
                 (optAcc1, optAcc2) -> optAcc1.flatMap(

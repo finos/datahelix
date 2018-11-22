@@ -552,8 +552,8 @@ class DecisionTreeGeneratorTests {
 
     private final IConstraint aIsNull = new IsNullConstraint(new Field("A"));
     private final IConstraint bEquals10 = new IsEqualToConstantConstraint(new Field("B"), 10);
-    private final IConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.Numeric);
-    private final IConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.String);
+    private final IConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC);
+    private final IConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING);
 
     @Test
     void whenViolatingPositiveAtomic() {
