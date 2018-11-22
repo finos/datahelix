@@ -67,7 +67,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
                 ? spec.getTypeRestrictions()
                 : DataTypeRestrictions.all;
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             NumericRestrictions restrictions = spec.getNumericRestrictions() == null
                 ? new NumericRestrictions()
                 : spec.getNumericRestrictions();
@@ -90,7 +90,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
 
             StringRestrictions stringRestrictions = spec.getStringRestrictions();
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
@@ -113,7 +113,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
 
             DateTimeRestrictions restrictions = spec.getDateTimeRestrictions();
             validSources.add(new TemporalFieldValueSource(

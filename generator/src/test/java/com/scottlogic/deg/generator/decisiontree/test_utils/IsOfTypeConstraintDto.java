@@ -16,11 +16,11 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     private IsOfTypeConstraint.Types getTypesFromTypesDto() {
         switch (requiredType) {
             case Numeric:
-                return IsOfTypeConstraint.Types.Numeric;
+                return IsOfTypeConstraint.Types.NUMERIC;
             case String:
-                return IsOfTypeConstraint.Types.String;
+                return IsOfTypeConstraint.Types.STRING;
             case Temporal:
-                return IsOfTypeConstraint.Types.Temporal;
+                return IsOfTypeConstraint.Types.TEMPORAL;
         }
 
         return null;

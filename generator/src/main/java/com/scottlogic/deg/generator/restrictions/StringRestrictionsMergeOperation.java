@@ -22,12 +22,12 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
             return false;
         }
 
         merged.setStringRestrictions(stringRestrictions);
-        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.String));
+        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING));
         return true;
     }
 }

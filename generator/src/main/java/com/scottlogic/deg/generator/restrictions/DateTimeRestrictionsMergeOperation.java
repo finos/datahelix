@@ -16,12 +16,12 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
             return false;
         }
 
         merged.setDateTimeRestrictions(dateTimeRestrictions);
-        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal));
+        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.TEMPORAL));
         return true;
     }
 }

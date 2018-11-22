@@ -14,9 +14,9 @@ public class IsOfTypeConstraint implements IConstraint {
     }
 
     public enum Types {
-        Numeric,
-        String,
-        Temporal
+        NUMERIC,
+        STRING,
+        TEMPORAL
     }
 
     @Override
