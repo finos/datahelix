@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import com.scottlogic.deg.generator.walker.routes.RandomisedProducer;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
