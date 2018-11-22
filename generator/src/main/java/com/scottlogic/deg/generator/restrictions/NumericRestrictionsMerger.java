@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  */
 public class NumericRestrictionsMerger {
     private enum MergeLimit {
-        Min, Max
+        MIN, MAX
     }
 
     public MergeResult<NumericRestrictions> merge(NumericRestrictions left, NumericRestrictions right) {
@@ -21,8 +21,8 @@ public class NumericRestrictionsMerger {
 
         final NumericRestrictions merged = new NumericRestrictions();
 
-        merged.min = getMergedLimitStructure(MergeLimit.Min, left.min, right.min);
-        merged.max = getMergedLimitStructure(MergeLimit.Max, left.max, right.max);
+        merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
+        merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
         return new MergeResult<>(merged);
     }
@@ -43,11 +43,11 @@ public class NumericRestrictionsMerger {
                 left.getLimit(),
                 left.isInclusive() && right.isInclusive());
         switch(mergeLimit) {
-            case Min:
+            case MIN:
                 if (left.getLimit().compareTo(right.getLimit()) > 0)
                     return left;
                 return right;
-            case Max:
+            case MAX:
                 if (left.getLimit().compareTo(right.getLimit()) < 0)
                     return left;
                 return right;
