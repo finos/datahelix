@@ -22,12 +22,12 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             return Optional.empty();
         }
 
         return Optional.of(merged.withNumericRestrictions(numberRestrictions).withTypeRestrictions(
-            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric)));
+            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC)));
     }
 }
 

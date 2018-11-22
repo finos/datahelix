@@ -4,15 +4,15 @@ public class NullRestrictions {
     public Nullness nullness;
 
     public enum Nullness {
-        MustBeNull,
-        MustNotBeNull
+        MUST_BE_NULL,
+        MUST_NOT_BE_NULL
     }
 
     public String toString() {
         switch (nullness){
-            case MustBeNull:
+            case MUST_BE_NULL:
                 return "null";
-            case MustNotBeNull:
+            case MUST_NOT_BE_NULL:
                 return "NOT null";
         }
 

@@ -17,12 +17,12 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
             return Optional.empty();
         }
 
         return Optional.of(merged.withDateTimeRestrictions(dateTimeRestrictions).withTypeRestrictions(
-            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Temporal)));
+            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.TEMPORAL)));
     }
 }
 

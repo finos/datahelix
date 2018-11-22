@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.Generate;
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
 
 public class GenerationConfig {
@@ -34,9 +35,9 @@ public class GenerationConfig {
     public long getMaxRows() { return maxRows; }
 
     public enum DataGenerationType {
-        FullSequential("full"),
-        Interesting("interesting"),
-        Random("random");
+        FULL_SEQUENTIAL("full"),
+        INTERESTING("interesting"),
+        RANDOM("random");
 
         private final String text;
 
@@ -51,8 +52,8 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        Exhaustive("exhaustive"),
-        Routed("routed");
+        CARTESIAN_PRODUCT(Generate.defaultTreeWalkerType),
+        ROUTED("routed");
 
         private final String text;
 
