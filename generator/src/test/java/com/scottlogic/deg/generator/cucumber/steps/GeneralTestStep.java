@@ -65,12 +65,16 @@ public class GeneralTestStep {
             this.state.addException(e);
         }
 
+        testHelper.generateAndGetData();
+
         Assert.assertThat(
             "Expected invalid profile",
             this.testHelper.getThrownExceptions(),
             hasItem(
                 either((Matcher)isA(InvalidProfileException.class))
-                    .or(isA(JsonParseException.class))));
+                    .or(isA(JsonParseException.class))
+                    .or(isA(IllegalArgumentException.class))
+                    .or(isA(ClassCastException.class))));
     }
 
     @Then("^I am presented with an error message$")
