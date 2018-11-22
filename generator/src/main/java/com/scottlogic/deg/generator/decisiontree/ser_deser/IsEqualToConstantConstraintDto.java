@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.test_utils;
+package com.scottlogic.deg.generator.decisiontree.ser_deser;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.IConstraint;

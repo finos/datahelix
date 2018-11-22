@@ -1,8 +1,7 @@
-package com.scottlogic.deg.generator.decisiontree.test_utils;
+package com.scottlogic.deg.generator.decisiontree.ser_deser;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.IConstraintMapper;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({

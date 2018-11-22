@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping;
+package com.scottlogic.deg.generator.decisiontree.ser_deser;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
 

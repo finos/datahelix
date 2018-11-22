@@ -6,10 +6,11 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.ser_deser.DecisionTreeDto;
+import com.scottlogic.deg.generator.decisiontree.ser_deser.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
-import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.OptimiseTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.PartitionTestStrategy;
@@ -18,7 +19,6 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeTransformationTestStrategy;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.DecisionTreeMapper;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import org.junit.Assert;
@@ -70,7 +70,7 @@ class TreeTransformationIntegrationTests {
                 
                 List<DecisionTreeDto> expectedTreeDto = getMappedExpectedOutput(outputFile);
                 final List<DecisionTree> expectedTrees = expectedTreeDto.stream()
-                    .map(decisionTreeMapper::map)
+                    .map(decisionTreeMapper::fromDto)
                     .collect(Collectors.toList());
 
                 return DynamicTest.dynamicTest(directory.getName(), () -> {

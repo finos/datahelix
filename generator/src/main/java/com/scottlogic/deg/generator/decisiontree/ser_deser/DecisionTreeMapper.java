@@ -1,12 +1,9 @@
-package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping;
+package com.scottlogic.deg.generator.decisiontree.ser_deser;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeDto;
-import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionNodeDto;
-import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionTreeDto;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,11 +11,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DecisionTreeMapper {
-    public DecisionTree map(DecisionTreeDto decisionTreeDto) {
+    public DecisionTree fromDto(DecisionTreeDto decisionTreeDto) {
         return new DecisionTree(
             dtoToConstraintNode(decisionTreeDto.rootNode),
             getMappedProfileFields(decisionTreeDto),
             decisionTreeDto.description);
+    }
+    
+    public DecisionTreeDto toDto(DecisionTree tree) {
+        DecisionTreeDto dto = new DecisionTreeDto();
+        dto.rootNode = toDto(tree.getRootNode());
+        return null;
+    }
+    
+    private ConstraintNodeDto toDto(ConstraintNode node) {
+        if (node.getDecisions()==null) {
+            ConstraintNodeDto dto = new ConstraintNodeDto();
+            dto.atomicConstraints = getConstraintsDto(node);
+            return dto;
+        }
+        return null;
     }
 
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
@@ -55,5 +67,9 @@ public class DecisionTreeMapper {
                     .stream()
                     .map(IConstraintMapper::map)
                     .collect(Collectors.toList());
+    }
+    
+    private List<ConstraintDto> getConstraintsDto(ConstraintNode constraint) {
+        return null; // FIXME
     }
 }
