@@ -7,9 +7,8 @@ import com.scottlogic.deg.generator.walker.RouteDecisionIterator;
 import com.scottlogic.deg.generator.walker.EndDecisionIterator;
 import com.scottlogic.deg.generator.walker.LeafConstraintIterator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public class ConstraintIteratorFactory {
@@ -23,26 +22,25 @@ public class ConstraintIteratorFactory {
             return new LeafConstraintIterator(constraintNode);
         }
 
-        DecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
+        DecisionIterator decisions = createDecisionIterator(constraintNode.getDecisions().iterator());
         return new RouteConstraintIterator(decisions, constraintNode);
     }
 
 
-    private static DecisionIterator createDecisionIterator(List<DecisionNode> decisionNodes){
-        if (decisionNodes == null || decisionNodes.isEmpty())
+    private static DecisionIterator createDecisionIterator(Iterator<DecisionNode> decisionNodes){
+        if (decisionNodes == null || !decisionNodes.hasNext())
             return null;
 
-        Collection<ConstraintIterator> options = decisionNodes.get(0).getOptions().stream()
+        Collection<ConstraintIterator> options = decisionNodes.next()
+            .getOptions().stream()
             .map(ConstraintIteratorFactory::createConstraintIterator)
             .collect(Collectors.toSet());
 
-        if(decisionNodes.size() == 1) {
+        if(!decisionNodes.hasNext()) {
             return new EndDecisionIterator(options);
         }
 
-        List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
-        DecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
-        return new RouteDecisionIterator(options, nextDecision);
+        return new RouteDecisionIterator(options, createDecisionIterator(decisionNodes));
     }
 
 }
