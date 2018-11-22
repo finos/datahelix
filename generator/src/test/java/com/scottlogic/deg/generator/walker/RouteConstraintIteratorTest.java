@@ -1,19 +1,12 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.walker.factory.ConstraintIteratorFactory;
-import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class RouteConstraintIteratorTest {
 

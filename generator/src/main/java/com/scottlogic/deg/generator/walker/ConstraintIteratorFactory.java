@@ -1,11 +1,7 @@
-package com.scottlogic.deg.generator.walker.factory;
+package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.walker.RouteConstraintIterator;
-import com.scottlogic.deg.generator.walker.RouteDecisionIterator;
-import com.scottlogic.deg.generator.walker.EndDecisionIterator;
-import com.scottlogic.deg.generator.walker.LeafConstraintIterator;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -35,6 +31,10 @@ public class ConstraintIteratorFactory {
             .getOptions().stream()
             .map(ConstraintIteratorFactory::createConstraintIterator)
             .collect(Collectors.toSet());
+
+        if (options.isEmpty() || !options.iterator().next().hasNext()){
+            throw new IllegalArgumentException("Decision with no valid options was supplied");
+        }
 
         if(!decisionNodes.hasNext()) {
             return new EndDecisionIterator(options);
