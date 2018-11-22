@@ -16,10 +16,13 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     private IsOfTypeConstraint.Types getTypesFromTypesDto() {
         switch (requiredType) {
             case Numeric:
+            case numeric:
                 return IsOfTypeConstraint.Types.NUMERIC;
             case String:
+            case string:
                 return IsOfTypeConstraint.Types.STRING;
             case Temporal:
+            case temporal:
                 return IsOfTypeConstraint.Types.TEMPORAL;
         }
 
@@ -27,8 +30,14 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     }
 
     public enum TypesDto {
+        //TODO: Retire these editions, leave the lower case editions
         Numeric,
         String,
-        Temporal
+        Temporal,
+
+        //These should remain to match the profile type names (i.e. lowercase 'temporal', etc.)
+        numeric,
+        string,
+        temporal,
     }
 }
