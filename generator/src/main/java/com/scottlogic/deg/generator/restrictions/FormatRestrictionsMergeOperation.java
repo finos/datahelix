@@ -1,13 +1,14 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 public class FormatRestrictionsMergeOperation implements RestrictionMergeOperation {
     private static final FormatRestrictionsMerger formatRestrictionMerger = new FormatRestrictionsMerger();
 
     @Override
-    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
-        merged.setFormatRestrictions(
-            formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()));
-        return true;
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+        return Optional.of(merged.withFormatRestrictions(
+            formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions())));
     }
 }
 

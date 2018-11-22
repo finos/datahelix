@@ -665,7 +665,7 @@
 //    {
 //        NullRestrictions nullRestrictions = new NullRestrictions();
 //        nullRestrictions.nullness = NullRestrictions.Nullness.MustBeNull;
-//        fieldSpec.setNullRestrictions(nullRestrictions);
+//        fieldSpec.withNullRestrictions(nullRestrictions);
 //        return fieldSpec;
 //    }
 //
@@ -682,7 +682,7 @@
 //        if (notMembers != null) {
 //            restrictions.blacklist = new HashSet<>(notMembers);
 //        }
-//        fieldSpec.setSetRestrictions(restrictions);
+//        fieldSpec.withSetRestrictions(restrictions);
 //        return fieldSpec;
 //    }
 //
@@ -697,7 +697,7 @@
 //        NumericRestrictions restrictions = new NumericRestrictions();
 //        restrictions.min = min;
 //        restrictions.max = max;
-//        fieldSpec.setNumericRestrictions(restrictions);
+//        fieldSpec.withNumericRestrictions(restrictions);
 //        return fieldSpec;
 //    }
 //
@@ -712,11 +712,11 @@
 //        Automaton stringGenerator = new RegExp(simplePattern).toAutomaton();
 //        StringRestrictions restrictions = new StringRestrictions();
 //        restrictions.stringGenerator = stringGenerator;
-//        fieldSpec.setStringRestrictions(restrictions);
+//        fieldSpec.withStringRestrictions(restrictions);
 //        if (blacklist != null) {
 //            SetRestrictions setRestrictions = new SetRestrictions();
 //            setRestrictions.blacklist = new HashSet<>(blacklist);
-//            fieldSpec.setSetRestrictions(setRestrictions);
+//            fieldSpec.withSetRestrictions(setRestrictions);
 //        }
 //        return fieldSpec;
 //    }

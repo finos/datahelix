@@ -42,7 +42,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
 
         private RowSpec getIdentityRowSpec() {
             final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
-                    .collect(Collectors.toMap(Function.identity(), field -> new FieldSpec()));
+                    .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
 
             return new RowSpec(profileFields, fieldToFieldSpec);
         }
