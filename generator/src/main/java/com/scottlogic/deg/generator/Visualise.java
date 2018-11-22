@@ -2,12 +2,13 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.validators.StaticDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,7 +77,7 @@ public class Visualise implements Runnable {
                 ? new NoopDecisionTreeOptimiser()
                 : new DecisionTreeOptimiser();
 
-        StaticDecisionTreeValidator treeValidator = new StaticDecisionTreeValidator(
+        StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
             profile.fields,
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
@@ -85,7 +86,7 @@ public class Visualise implements Runnable {
                 .splitTreeIntoPartitions(mergedTree)
                 .map(treeOptimiser::optimiseTree)
                 .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
-                .map(treeValidator::validate)
+                .map(treeValidator::markContradictions)
                 .collect(Collectors.toList());
 
         final String title = shouldHideTitle

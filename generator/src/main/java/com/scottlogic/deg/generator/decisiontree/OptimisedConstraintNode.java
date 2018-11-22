@@ -71,4 +71,14 @@ public class OptimisedConstraintNode implements ConstraintNode, OptimisedNode{
     public int hashCode() {
         return underlying.hashCode();
     }
+
+    @Override
+    public ConstraintNode markNode(NodeMarking marking) {
+        return null;
+    }
+
+    @Override
+    public boolean hasMarking(NodeMarking detail) {
+        return detail == NodeMarking.OPTIMISED;
+    }
 }

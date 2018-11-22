@@ -19,6 +19,7 @@ public interface ConstraintNode extends Node {
     ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints);
     ConstraintNode addDecisions(Collection<DecisionNode> decisions);
     ConstraintNode setDecisions(Collection<DecisionNode> decisions);
+    ConstraintNode markNode(NodeMarking marking);
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<IConstraint> atomicConstraints = new ArrayList<>();

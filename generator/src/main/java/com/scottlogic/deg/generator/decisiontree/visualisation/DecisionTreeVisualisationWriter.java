@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.decisiontree;
+package com.scottlogic.deg.generator.decisiontree.visualisation;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -18,6 +19,7 @@ public class DecisionTreeVisualisationWriter {
     private final boolean shouldWriteOptionInfo;
     private final boolean shouldWriteDecisionNodeInfo;
     private int nextId = 0;
+    private final NodeVisualiser nodeWriter = new NodeVisualiser();
 
     public DecisionTreeVisualisationWriter(Writer stringWriter) {
         this(stringWriter, true, false, false);
@@ -64,7 +66,7 @@ public class DecisionTreeVisualisationWriter {
         treeInfo.constraintNodes = 1;
         treeInfo.rowSpecs = BigInteger.valueOf(1);
 
-        declareConstraintNode(nodeId, constraintNode, treeInfo);
+        declareConstraintNode(constraintNode, nodeId, treeInfo);
 
         if (parentNodeId != null) {
             declareParenthood(parentNodeId, nodeId);
@@ -107,29 +109,16 @@ public class DecisionTreeVisualisationWriter {
     }
 
     private void declareDecisionNode(DecisionNode decisionNode, String id) throws IOException {
-        writeLine("  " + id + determineColour(decisionNode) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]");
+        writeLine(nodeWriter.renderNode(id, decisionNode));
     }
 
-    private void declareConstraintNode(String id, ConstraintNode constraintNode, TreeInfo treeInfo) throws IOException {
-        String label = constraintNode.getAtomicConstraints()
-            .stream()
-            .map(IConstraint::toDotLabel)
-            .collect(Collectors.joining("\r\n"));
+    private void declareConstraintNode(ConstraintNode constraintNode, String id, TreeInfo treeInfo) throws IOException {
         treeInfo.atomicConstraints += constraintNode.getAtomicConstraints().size();
-        writeLine("  " + id + determineColour(constraintNode) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]");
+        writeLine(nodeWriter.renderNode(id, constraintNode));
     }
 
     private void declareParenthood(String parentNodeId, String childNodeId) throws IOException {
         writeLine("  " + parentNodeId + " -- " + childNodeId);
-    }
-
-    private String determineColour(Node node){
-        if (node instanceof ContradictoryNode) {
-            return "[color=\"red\"]";
-        } else if (node instanceof OptimisedNode){
-            return "[color=\"blue\"]";
-        }
-        return "";
     }
 
     private void writeTreeInfo(TreeInfo info, String parentNodeId, String fontColour) throws IOException {
@@ -175,5 +164,28 @@ public class DecisionTreeVisualisationWriter {
                 DecimalFormatSymbols.getInstance(Locale.ROOT));
             return formatter.format(decimal);
         }
+    }
+}
+
+class NodeVisualiser {
+    String renderNode(String id, DecisionNode node){
+        return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]";
+    }
+
+    String renderNode(String id, ConstraintNode node){
+        String label = node.getAtomicConstraints()
+            .stream()
+            .map(IConstraint::toDotLabel)
+            .collect(Collectors.joining("\r\n"));
+        return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
+    }
+
+    private String determineNodeColour(Node node){
+        if (node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY)) {
+            return "[color=\"red\"]";
+        } else if (node instanceof OptimisedNode){
+            return "[color=\"blue\"]";
+        }
+        return "";
     }
 }

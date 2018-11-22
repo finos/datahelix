@@ -10,44 +10,34 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Check whether there are any breaking contradictions for leaf nodes that
- */
-public class StaticDecisionTreeValidator {
+public class StaticContradictionDecisionTreeValidator {
 
     private final ProfileFields profileFields;
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
 
-    public StaticDecisionTreeValidator(ProfileFields profileFields, RowSpecMerger rowSpecMerger, ConstraintReducer constraintReducer){
+    public StaticContradictionDecisionTreeValidator(ProfileFields profileFields, RowSpecMerger rowSpecMerger, ConstraintReducer constraintReducer){
         this.profileFields = profileFields;
         this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
     }
 
-    private RowSpec getIdentityRowSpec() {
-        final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
-            .collect(Collectors.toMap(Function.identity(), field -> new FieldSpec()));
-
-        return new RowSpec(profileFields, fieldToFieldSpec);
+    public DecisionTree markContradictions(DecisionTree tree) {
+        return new DecisionTree(markContradictions(tree.rootNode), tree.fields, tree.description);
     }
 
-    public DecisionTree validate(DecisionTree tree) {
-        return new DecisionTree(validate(tree.rootNode), tree.fields, tree.description);
+    public ConstraintNode markContradictions(ConstraintNode node){
+        return markContradictions(node, getIdentityRowSpec());
     }
 
-    public ConstraintNode validate(ConstraintNode node){
-        return validate(node, getIdentityRowSpec());
-    }
-
-    public ConstraintNode validate(ConstraintNode node, RowSpec accumulatedSpec){
+    public ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec){
         final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
             profileFields,
             node.getAtomicConstraints()
         ));
 
         if (!nominalRowSpec.isPresent()) {
-            return new ContradictoryConstraintNode(node);
+            return node.markNode(NodeMarking.STATICALLY_CONTRADICTORY);
         }
 
         final Optional<RowSpec> mergedRowSpecOpt = rowSpecMerger.merge(
@@ -58,7 +48,7 @@ public class StaticDecisionTreeValidator {
         );
 
         if (!mergedRowSpecOpt.isPresent()) {
-            return new ContradictoryConstraintNode(node);
+            return node.markNode(NodeMarking.STATICALLY_CONTRADICTORY);
         }
 
         if (node.getDecisions().isEmpty()) {
@@ -66,33 +56,39 @@ public class StaticDecisionTreeValidator {
         } else {
             Collection<DecisionNode> decisions = node.getDecisions()
                 .stream()
-                .map(d -> validate(d, mergedRowSpecOpt.get()))
+                .map(d -> markContradictions(d, mergedRowSpecOpt.get()))
                 .collect(Collectors.toList());
             boolean nodeIsContradictory = decisions.stream().allMatch(this::isNodeContradictory);
             ConstraintNode transformed = node.setDecisions(decisions);
-            return nodeIsContradictory ? new ContradictoryConstraintNode(transformed) : transformed;
+            return nodeIsContradictory ? transformed.markNode(NodeMarking.STATICALLY_CONTRADICTORY) : transformed;
         }
-
     }
 
-    public DecisionNode validate(DecisionNode node, RowSpec accumulatedSpec){
+    public DecisionNode markContradictions(DecisionNode node, RowSpec accumulatedSpec){
         if (node.getOptions().isEmpty()){
             return node;
         }
         Collection<ConstraintNode> options = node.getOptions().stream()
-            .map(c -> validate(c, accumulatedSpec))
+            .map(c -> markContradictions(c, accumulatedSpec))
             .collect(Collectors.toList());
 
         boolean decisionIsContradictory = options.stream().allMatch(this::isNodeContradictory);
         DecisionNode transformed = node.setOptions(options);
         if (decisionIsContradictory) {
-            return new ContradictoryDecisionNode(transformed);
+            return transformed.markNode(NodeMarking.STATICALLY_CONTRADICTORY);
         }
         return transformed;
     }
 
+    private RowSpec getIdentityRowSpec() {
+        final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
+            .collect(Collectors.toMap(Function.identity(), field -> new FieldSpec()));
+
+        return new RowSpec(profileFields, fieldToFieldSpec);
+    }
+
     private boolean isNodeContradictory(Node node){
-        return node instanceof ContradictoryNode;
+        return node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY);
     }
 
 

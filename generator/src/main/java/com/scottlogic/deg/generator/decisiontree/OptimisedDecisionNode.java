@@ -31,4 +31,15 @@ public class OptimisedDecisionNode implements DecisionNode, OptimisedNode{
     public int hashCode() {
         return underlying.hashCode();
     }
+
+    @Override
+    public DecisionNode markNode(NodeMarking marking) {
+        return null;
+    }
+
+    @Override
+    public boolean hasMarking(NodeMarking detail) {
+        return detail == NodeMarking.OPTIMISED;
+    }
+
 }
