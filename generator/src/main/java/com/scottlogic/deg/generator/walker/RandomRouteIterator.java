@@ -38,7 +38,7 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
     private Collection<RowSpecRoute> produceRoute(ConstraintNode constraint) {
         Collection<DecisionNode> decisions = constraint.getDecisions();
 
-        return decisions.stream().map(d -> produceRoute(d)).collect(Collectors.toList());
+        return decisions.stream().map(d -> produceRoute(d)).collect(Collectors.toSet());
     }
 
     private RowSpecRoute produceRoute(DecisionNode decision) {
