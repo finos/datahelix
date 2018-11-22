@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.walker.EndDecisionIterator;
 import com.scottlogic.deg.generator.walker.LeafConstraintIterator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,9 @@ public class ConstraintIteratorFactory {
         if (decisionNodes == null || decisionNodes.isEmpty())
             return null;
 
-        List<ConstraintIterator> options = decisionNodes.get(0).getOptions().stream()
+        Collection<ConstraintIterator> options = decisionNodes.get(0).getOptions().stream()
             .map(ConstraintIteratorFactory::createConstraintIterator)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
 
         if(decisionNodes.size() == 1) {
             return new EndDecisionIterator(options);

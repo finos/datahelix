@@ -10,49 +10,52 @@ import java.util.*;
 public class RouteDecisionIterator implements DecisionIterator {
 
     private DecisionIterator nextDecision;
-    private List<ConstraintIterator> options;
-    private int currentOption;
+    private Collection<ConstraintIterator> optionsCache;
+    private Iterator<ConstraintIterator> options;
+    private ConstraintIterator currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision){
-        this.options = options;
+    public RouteDecisionIterator(Collection<ConstraintIterator> options, DecisionIterator nextDecision){
+        this.optionsCache = options;
+        this.options = this.optionsCache.iterator();
+        this.currentOption = this.options.next();
         this.nextDecision = nextDecision;
     }
 
     @Override
     public boolean hasNext() {
-        return currentOption < options.size()-1 || nextDecision.hasNext()
-            || (currentOption == options.size()-1 && options.get(currentOption).hasNext());
+        return options.hasNext()|| nextDecision.hasNext() || currentOption.hasNext();
     }
 
     @Override
     public Collection<RowSpecRoute> next() {
         if (currentOptionsSubroute == null){
-            currentOptionsSubroute = getCurrentOptionsIterator().next();
+            currentOptionsSubroute = currentOption.next();
         }
 
         if (!nextDecision.hasNext()) {
             nextDecision.reset();
 
-            if (!getCurrentOptionsIterator().hasNext()) {
-                currentOption++;
+            if (!currentOption.hasNext()) {
+                currentOption = options.next();
             }
-            currentOptionsSubroute = getCurrentOptionsIterator().next();
+            currentOptionsSubroute = currentOption.next();
         }
+
         return new ImmutableSet.Builder<RowSpecRoute>()
+            .add(currentOptionsSubroute)
             .addAll(nextDecision.next())
-            .add(currentOptionsSubroute).build();
+            .build();
     }
 
     @Override
     public void reset(){
         nextDecision.reset();
-        for (ConstraintIterator option: options) {
+        for (ConstraintIterator option: optionsCache) {
             option.reset();
         }
-        currentOption = 0;
+        options = optionsCache.iterator();
+        currentOption = options.next();
         currentOptionsSubroute = null;
     }
-
-    private ConstraintIterator getCurrentOptionsIterator() { return options.get(currentOption); }
 }
