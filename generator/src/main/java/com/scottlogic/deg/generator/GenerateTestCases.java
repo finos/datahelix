@@ -35,9 +35,9 @@ public class GenerateTestCases implements Runnable {
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = "cartesianProduct",
+        defaultValue = "CARTESIAN_PRODUCT",
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.cartesianProduct;
+    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
 
     @Override
     public void run() {

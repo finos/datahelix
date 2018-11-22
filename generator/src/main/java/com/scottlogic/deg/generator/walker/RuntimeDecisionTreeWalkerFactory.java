@@ -23,14 +23,14 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
             fieldSpecMerger);
 
         switch (config.getWalkerType()){
-            case routed:
+            case ROUTED:
                 throw new UnsupportedOperationException("RouteProducer isn't implemented yet");
 /*
                 return new DecisionTreeRoutesTreeWalker(
                     constraintReducer,
                     rowSpecMerger,
                     <the producer>);*/
-            case cartesianProduct:
+            case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
                     rowSpecMerger);

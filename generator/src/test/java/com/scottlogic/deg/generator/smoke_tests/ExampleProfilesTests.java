@@ -33,7 +33,7 @@ class ExampleProfilesTests {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.Interesting,
-                GenerationConfig.TreeWalkerType.cartesianProduct,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 
             generationEngine.generateTestCases(profileFile.toPath(), config);
@@ -45,7 +45,7 @@ class ExampleProfilesTests {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.Interesting,
-                GenerationConfig.TreeWalkerType.cartesianProduct,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 
             generationEngine.generateDataSet(profileFile.toPath(), config);
