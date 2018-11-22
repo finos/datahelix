@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.walker.routes;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.walker.ConstraintIteratorFactory;
+import com.scottlogic.deg.generator.walker.iterator.ConstraintIteratorFactory;
 
 import java.util.Iterator;
 import java.util.stream.Stream;

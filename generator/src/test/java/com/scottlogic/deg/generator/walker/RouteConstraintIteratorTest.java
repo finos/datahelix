@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.walker.iterator.ConstraintIterator;
+import com.scottlogic.deg.generator.walker.iterator.ConstraintIteratorFactory;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import org.junit.jupiter.api.Test;
 

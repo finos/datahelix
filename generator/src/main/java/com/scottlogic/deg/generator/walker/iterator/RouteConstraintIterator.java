@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.walker;
+package com.scottlogic.deg.generator.walker.iterator;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
