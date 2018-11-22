@@ -46,7 +46,8 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
         ConstraintNode decisionOption = new ArrayList<>(decision.getOptions()).get(decisionIndex);
 
         RowSpecRoute route = new RowSpecRoute();
-        route.decisionIndex = decisionIndex;
+        route.thisDecision = decision;
+        route.chosenOption = decisionOption;
         route.subRoutes = produceRoute(decisionOption);
         return route;
     }

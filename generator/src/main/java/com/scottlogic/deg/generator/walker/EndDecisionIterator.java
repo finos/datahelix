@@ -11,11 +11,9 @@ import java.util.*;
 public class EndDecisionIterator implements DecisionIterator {
     private List<ConstraintIterator> options;
     private int currentOption;
-    private DecisionNode decisionNode;
 
-    public EndDecisionIterator(List<ConstraintIterator> options, DecisionNode decisionNode){
+    public EndDecisionIterator(List<ConstraintIterator> options){
         this.options = options;
-        this.decisionNode = decisionNode;
     }
 
     @Override

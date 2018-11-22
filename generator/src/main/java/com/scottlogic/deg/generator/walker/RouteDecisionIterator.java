@@ -9,16 +9,14 @@ import java.util.*;
 
 public class RouteDecisionIterator implements DecisionIterator {
 
-    private DecisionNode decisionNode;
     private DecisionIterator nextDecision;
     private List<ConstraintIterator> options;
     private int currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision, DecisionNode decisionNode){
+    public RouteDecisionIterator(List<ConstraintIterator> options, DecisionIterator nextDecision){
         this.options = options;
         this.nextDecision = nextDecision;
-        this.decisionNode = decisionNode;
     }
 
     @Override

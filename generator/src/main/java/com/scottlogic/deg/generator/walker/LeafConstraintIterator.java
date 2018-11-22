@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
@@ -8,14 +9,14 @@ import java.util.Collections;
 
 public class LeafConstraintIterator implements ConstraintIterator {
 
-    private int decisionIndexFromParent;
     private ConstraintNode constraintNode;
+    DecisionNode parentDecision;
 
     private boolean hasNext = true;
 
-    public LeafConstraintIterator(int decisionIndexFromParent, ConstraintNode constraintNode){
-        this.decisionIndexFromParent = decisionIndexFromParent;
+    public LeafConstraintIterator(ConstraintNode constraintNode, DecisionNode parentDecision){
         this.constraintNode = constraintNode;
+        this.parentDecision = parentDecision;
     }
 
     @Override
@@ -27,7 +28,8 @@ public class LeafConstraintIterator implements ConstraintIterator {
     public RowSpecRoute next() {
         hasNext = false;
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
-        rowSpecRoute.decisionIndex = decisionIndexFromParent;
+        rowSpecRoute.thisDecision = parentDecision;
+        rowSpecRoute.chosenOption = constraintNode;
         rowSpecRoute.subRoutes = Collections.emptyList();
         return rowSpecRoute;
     }

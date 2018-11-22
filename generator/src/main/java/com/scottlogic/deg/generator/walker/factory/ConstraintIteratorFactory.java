@@ -13,16 +13,16 @@ import java.util.List;
 public class ConstraintIteratorFactory {
 
     public static ConstraintIterator create(ConstraintNode constraintNode){
-        return createConstraintIterator(constraintNode, 0);
+        return createConstraintIterator(constraintNode, null);
     }
 
-    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode, int decisionIndexFromParent){
+    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode, DecisionNode parentDecision){
         if (constraintNode.getDecisions().isEmpty()){
-            return new LeafConstraintIterator(decisionIndexFromParent, constraintNode);
+            return new LeafConstraintIterator(constraintNode, parentDecision);
         }
 
         DecisionIterator decisions = createDecisionIterator(new ArrayList<>(constraintNode.getDecisions()));
-        return new RouteConstraintIterator(decisions, decisionIndexFromParent, constraintNode);
+        return new RouteConstraintIterator(decisions, constraintNode, parentDecision);
     }
 
 
@@ -31,19 +31,17 @@ public class ConstraintIteratorFactory {
             return null;
 
         List<ConstraintIterator> options = new ArrayList<>();
-        int count = 0;
         for (ConstraintNode constraintNode: decisionNodes.get(0).getOptions()) {
-            options.add(createConstraintIterator(constraintNode, count));
-            count++;
-        }
+            options.add(createConstraintIterator(constraintNode, decisionNodes.get(0)));
+        }//
 
         if(decisionNodes.size() == 1) {
-            return new EndDecisionIterator(options, decisionNodes.get(0));
+            return new EndDecisionIterator(options);
         }
 
         List<DecisionNode> nextDecisionNodes = decisionNodes.subList(1, decisionNodes.size());
         DecisionIterator nextDecision = createDecisionIterator(nextDecisionNodes);
-        return new RouteDecisionIterator(options, nextDecision, decisionNodes.get(0));
+        return new RouteDecisionIterator(options, nextDecision);
     }
 
 }

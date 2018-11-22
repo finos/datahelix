@@ -19,7 +19,7 @@ class RouteConstraintIteratorTest {
 
     @Test
     void noSubDecisions_hasNext() {
-        ConstraintNode node = IteratorTestHelper.endConstraint();
+        ConstraintNode node = IteratorTestHelper.endConstraint("");
         ConstraintIterator iterator = ConstraintIteratorFactory.create(node);
 
         assertThat(iterator.hasNext(), is(true));
@@ -27,7 +27,7 @@ class RouteConstraintIteratorTest {
 
     @Test
     void noSubDecisions_next_then_hasNextIsFalse() {
-        ConstraintNode node = IteratorTestHelper.endConstraint();
+        ConstraintNode node = IteratorTestHelper.endConstraint("");
         ConstraintIterator iterator = ConstraintIteratorFactory.create(node);
 
         RowSpecRoute route = iterator.next();
@@ -172,7 +172,7 @@ class RouteConstraintIteratorTest {
 
     @Test
     void twoSubDecisions_bothHaveTwoOptions(){
-        ConstraintNode node = IteratorTestHelper.constraintDoubleDouble();
+        ConstraintNode node = IteratorTestHelper.constraintDoubleDouble("");
         ConstraintIterator iterator = ConstraintIteratorFactory.create(node);
 
         assertThat(iterator.hasNext(), is(true));
