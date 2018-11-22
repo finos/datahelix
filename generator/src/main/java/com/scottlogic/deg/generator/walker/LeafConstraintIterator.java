@@ -26,7 +26,7 @@ public class LeafConstraintIterator implements ConstraintIterator {
         hasNext = false;
         RowSpecRoute rowSpecRoute = new RowSpecRoute();
         rowSpecRoute.chosenOption = constraintNode;
-        rowSpecRoute.subRoutes = Collections.emptyList();
+        rowSpecRoute.subRoutes = Collections.emptySet();
         return rowSpecRoute;
     }
 

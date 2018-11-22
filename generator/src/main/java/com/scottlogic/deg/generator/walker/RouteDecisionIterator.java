@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.common.collect.ImmutableSet;
 import com.scottlogic.deg.generator.walker.factory.ConstraintIterator;
 import com.scottlogic.deg.generator.walker.factory.DecisionIterator;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
@@ -25,7 +26,7 @@ public class RouteDecisionIterator implements DecisionIterator {
     }
 
     @Override
-    public List<RowSpecRoute> next() {
+    public Collection<RowSpecRoute> next() {
         if (currentOptionsSubroute == null){
             currentOptionsSubroute = getCurrentOptionsIterator().next();
         }
@@ -38,11 +39,9 @@ public class RouteDecisionIterator implements DecisionIterator {
             }
             currentOptionsSubroute = getCurrentOptionsIterator().next();
         }
-
-        List<RowSpecRoute> sideRoutes;
-        sideRoutes = nextDecision.next();
-        sideRoutes.add(0, currentOptionsSubroute);
-        return sideRoutes;
+        return new ImmutableSet.Builder<RowSpecRoute>()
+            .addAll(nextDecision.next())
+            .add(currentOptionsSubroute).build();
     }
 
     @Override

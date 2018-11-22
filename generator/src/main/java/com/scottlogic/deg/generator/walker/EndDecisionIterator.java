@@ -7,33 +7,35 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import java.util.*;
 
 public class EndDecisionIterator implements DecisionIterator {
-    private List<ConstraintIterator> options;
-    private int currentOption;
+    private Collection<ConstraintIterator> optionsCache;
+    private Iterator<ConstraintIterator> options;
+    private ConstraintIterator currentOption;
 
     public EndDecisionIterator(List<ConstraintIterator> options){
-        this.options = options;
+        this.optionsCache = options;
+        this.options = optionsCache.iterator();
+        this.currentOption = this.options.next();
     }
 
     @Override
     public boolean hasNext() {
-        return currentOption < options.size();
+        return options.hasNext() || currentOption.hasNext();
     }
 
     @Override
-    public List<RowSpecRoute> next() {
-        ConstraintIterator currentOptionIterator = options.get(currentOption);
-        RowSpecRoute nextOption = currentOptionIterator.next();
-
-        if (!currentOptionIterator.hasNext()){
-            currentOption++;
+    public Collection<RowSpecRoute> next() {
+        if (!currentOption.hasNext()){
+            currentOption = options.next();
         }
-        return new ArrayList<>(Arrays.asList(nextOption));
+
+        return Collections.singleton(currentOption.next());
     }
 
     @Override
     public void reset(){
-        currentOption = 0;
-        for (ConstraintIterator option: options) {
+        options = optionsCache.iterator();
+        currentOption = options.next();
+        for (ConstraintIterator option: optionsCache) {
             option.reset();
         }
     }
