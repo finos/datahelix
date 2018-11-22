@@ -11,7 +11,7 @@ public class LeafConstraintIterator implements ConstraintIterator {
 
     private boolean hasNext = true;
 
-    public LeafConstraintIterator(ConstraintNode constraintNode){
+    LeafConstraintIterator(ConstraintNode constraintNode){
         this.constraintNode = constraintNode;
     }
 

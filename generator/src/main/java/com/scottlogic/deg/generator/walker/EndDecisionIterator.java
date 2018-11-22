@@ -9,7 +9,7 @@ public class EndDecisionIterator implements DecisionIterator {
     private Iterator<ConstraintIterator> options;
     private ConstraintIterator currentOption;
 
-    public EndDecisionIterator(Collection<ConstraintIterator> options){
+    EndDecisionIterator(Collection<ConstraintIterator> options){
         this.optionsCache = options;
         this.options = optionsCache.iterator();
         this.currentOption = this.options.next();

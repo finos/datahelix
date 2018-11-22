@@ -10,15 +10,18 @@ public class RouteDecisionIterator implements DecisionIterator {
 
     private DecisionIterator nextDecision;
     private Collection<ConstraintIterator> optionsCache;
+
     private Iterator<ConstraintIterator> options;
     private ConstraintIterator currentOption;
     private RowSpecRoute currentOptionsSubroute;
 
-    public RouteDecisionIterator(Collection<ConstraintIterator> options, DecisionIterator nextDecision){
-        this.optionsCache = options;
+    RouteDecisionIterator(Collection<ConstraintIterator> optionsCache, DecisionIterator nextDecision){
+        this.nextDecision = nextDecision;
+        this.optionsCache = optionsCache;
+
         this.options = this.optionsCache.iterator();
         this.currentOption = this.options.next();
-        this.nextDecision = nextDecision;
+        this.currentOptionsSubroute = this.currentOption.next();
     }
 
     @Override
@@ -28,18 +31,16 @@ public class RouteDecisionIterator implements DecisionIterator {
 
     @Override
     public Collection<RowSpecRoute> next() {
-        if (currentOptionsSubroute == null){
-            currentOptionsSubroute = currentOption.next();
-        }
-
         if (!nextDecision.hasNext()) {
             nextDecision.reset();
 
             if (!currentOption.hasNext()) {
                 currentOption = options.next();
             }
+
             currentOptionsSubroute = currentOption.next();
         }
+
         return Stream.concat(
             Stream.of(currentOptionsSubroute),
             nextDecision.next().stream())
@@ -52,8 +53,9 @@ public class RouteDecisionIterator implements DecisionIterator {
         for (ConstraintIterator option: optionsCache) {
             option.reset();
         }
+
         options = optionsCache.iterator();
         currentOption = options.next();
-        currentOptionsSubroute = null;
+        currentOptionsSubroute = currentOption.next();
     }
 }

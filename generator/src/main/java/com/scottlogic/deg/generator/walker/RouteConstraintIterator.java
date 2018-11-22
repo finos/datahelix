@@ -8,7 +8,7 @@ public class RouteConstraintIterator implements ConstraintIterator {
     ConstraintNode constraintNode;
     private DecisionIterator subDecisions;
 
-    public RouteConstraintIterator(DecisionIterator subDecisions, ConstraintNode constraintNode){
+    RouteConstraintIterator(DecisionIterator subDecisions, ConstraintNode constraintNode){
         this.subDecisions = subDecisions;
         this.constraintNode = constraintNode;
     }
