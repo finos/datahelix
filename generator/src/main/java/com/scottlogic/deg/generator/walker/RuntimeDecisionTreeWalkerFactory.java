@@ -34,11 +34,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
                     rowSpecMerger);
-            case Random:
-                return new DecisionTreeRoutesTreeWalker(
-                    constraintReducer,
-                    rowSpecMerger,
-                    new RandomisedProducer(50000));
         }
 
         throw new UnsupportedOperationException(
