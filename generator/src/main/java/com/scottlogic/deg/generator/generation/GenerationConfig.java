@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.Generate;
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
 
 public class GenerationConfig {
@@ -51,7 +52,7 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        CARTESIAN_PRODUCT("cartesianProduct"),
+        CARTESIAN_PRODUCT(Generate.defaultTreeWalkerType),
         ROUTED("routed");
 
         private final String text;

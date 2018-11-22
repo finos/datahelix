@@ -25,6 +25,8 @@ import java.nio.file.Path;
     mixinStandardHelpOptions = true,
     version = "1.0")
 public class Generate implements Runnable {
+    public static final String defaultTreeWalkerType = "cartesian_product";
+
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -50,7 +52,7 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = "CARTESIAN_PRODUCT",
+        defaultValue = defaultTreeWalkerType,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
 
