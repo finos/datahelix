@@ -72,10 +72,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(mostProlificAtomicConstraint));
-        ConstraintNode negatedFactorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(negatedMostProlificConstraint));
+        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint).markNode(NodeMarking.OPTIMISED);
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);;
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -92,13 +90,13 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
+        DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
                     coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
                     coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList())));
+            .collect(Collectors.toList())).markNode(NodeMarking.OPTIMISED);
 
         return rootNode
             .removeDecisions(decisionsToRemove)
@@ -118,7 +116,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
+        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd).markNode(NodeMarking.OPTIMISED);
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
