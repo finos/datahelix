@@ -29,9 +29,9 @@ public class GenerateTestCases implements Runnable {
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
-        defaultValue = "Interesting")
-    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
+        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
+        defaultValue = "INTERESTING")
+    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",

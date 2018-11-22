@@ -8,8 +8,6 @@ import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
 import io.cucumber.cucumberexpressions.Transformer;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,7 +56,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         Transformer<GenerationConfig.DataGenerationType> transformer = strategyString ->
             Arrays.stream(GenerationConfig.DataGenerationType.values())
             .filter(val -> val.toString().equals(strategyString))
-            .findFirst().orElse(GenerationConfig.DataGenerationType.FullSequential);
+            .findFirst().orElse(GenerationConfig.DataGenerationType.FULL_SEQUENTIAL);
 
         tr.defineParameterType(new ParameterType<>(
             "generationStrategy",

@@ -34,9 +34,9 @@ public class GenerationConfig {
     public long getMaxRows() { return maxRows; }
 
     public enum DataGenerationType {
-        FullSequential("full"),
-        Interesting("interesting"),
-        Random("random");
+        FULL_SEQUENTIAL("full"),
+        INTERESTING("interesting"),
+        RANDOM("random");
 
         private final String text;
 

@@ -32,7 +32,7 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
-                GenerationConfig.DataGenerationType.Interesting,
+                GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 
@@ -44,7 +44,7 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
-                GenerationConfig.DataGenerationType.Interesting,
+                GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 new FieldExhaustiveCombinationStrategy());
 

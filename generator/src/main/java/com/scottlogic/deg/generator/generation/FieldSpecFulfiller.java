@@ -126,12 +126,12 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
-            case FullSequential:
+            case FULL_SEQUENTIAL:
             default:
                 return source.generateAllValues();
-            case Interesting:
+            case INTERESTING:
                 return source.generateInterestingValues();
-            case Random:
+            case RANDOM:
                 return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
         }
     }
