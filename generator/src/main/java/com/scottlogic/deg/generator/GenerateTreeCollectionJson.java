@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.ser_deser.DecisionTreeDto;
+import com.scottlogic.deg.generator.decisiontree.ser_deser.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
@@ -74,12 +76,18 @@ public class GenerateTreeCollectionJson implements Runnable {
                     .splitTreeIntoPartitions(mergedTree)
                         .map(treeOptimiser::optimiseTree)
                     .collect(Collectors.toList());
+        
+        final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
+        
+        List<DecisionTreeDto> listOfDto = listOfTree.stream()
+                .map(decisionTreeMapper::toDto)
+                .collect(Collectors.toList());
             
         ObjectMapper om = new ObjectMapper();
         
         om.enable(SerializationFeature.INDENT_OUTPUT);
         try (BufferedWriter bw = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
-            String s = om.writeValueAsString(listOfTree);
+            String s = om.writeValueAsString(listOfDto);
             bw.write(s);
         } catch (JsonProcessingException e2) {
             System.err.format("JSON error%n");

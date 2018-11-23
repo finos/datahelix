@@ -3,6 +3,13 @@ package com.scottlogic.deg.generator.decisiontree.ser_deser;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
+import com.scottlogic.deg.generator.constraints.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.constraints.IsNullConstraint;
+import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.constraints.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.util.Collection;
@@ -11,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DecisionTreeMapper {
+    // Pair A1
     public DecisionTree fromDto(DecisionTreeDto decisionTreeDto) {
         return new DecisionTree(
             dtoToConstraintNode(decisionTreeDto.rootNode),
@@ -18,30 +26,17 @@ public class DecisionTreeMapper {
             decisionTreeDto.description);
     }
     
+    // Pair A2 
     public DecisionTreeDto toDto(DecisionTree tree) {
         DecisionTreeDto dto = new DecisionTreeDto();
         dto.rootNode = toDto(tree.getRootNode());
-        return null;
+        dto.fields = tree
+                .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
+        dto.description = tree.description;
+        return dto;
     }
     
-    private ConstraintNodeDto toDto(ConstraintNode node) {
-        if (node.getDecisions()==null) {
-            ConstraintNodeDto dto = new ConstraintNodeDto();
-            dto.atomicConstraints = getConstraintsDto(node);
-            return dto;
-        }
-        return null;
-    }
-
-    private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
-        final List<Field> mappedFields = decisionTreeDto.fields
-                .stream()
-                .map(f -> new Field(f.name))
-                .collect(Collectors.toList());
-
-        return new ProfileFields(mappedFields);
-    }
-
+    // Pair B1
     private ConstraintNode dtoToConstraintNode(ConstraintNodeDto constraintNodeDto) {
         if (constraintNodeDto.decisions == null) {
             // Base case when no more decisions on a constraint node
@@ -54,14 +49,37 @@ public class DecisionTreeMapper {
         return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), nodes);
     }
 
-    private DecisionNode dtoToDecisionNode(DecisionNodeDto decisionNodeDto){
-        Collection<ConstraintNode> options = decisionNodeDto.options.stream()
-                .map(this::dtoToConstraintNode)
-                .collect(Collectors.toList());
+    // Pair B2 
+    static private ConstraintNodeDto toDto(ConstraintNode node) {
+        if (node.getDecisions()==null) {
+            // Base case when no more decisions on a constraint node
+            ConstraintNodeDto dto = new ConstraintNodeDto();
+            dto.atomicConstraints = getAtomicConstraintsDtos(node);
+            return dto;
+        }
+        
+        List<DecisionNodeDto> dtos = node
+                                        .getDecisions()
+                                        .stream()
+                                        .map(d -> DecisionTreeMapper.toDto(d))
+                                        .collect(Collectors.toList());
+        ConstraintNodeDto dto = new ConstraintNodeDto();
+        dto.atomicConstraints = getAtomicConstraintsDtos(node);
+        dto.decisions = dtos;
 
-        return new TreeDecisionNode(options);
+        return dto;
     }
 
+    private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
+        final List<Field> mappedFields = decisionTreeDto.fields
+                .stream()
+                .map(f -> new Field(f.name))
+                .collect(Collectors.toList());
+        
+        return new ProfileFields(mappedFields);
+    }
+
+    // Pair C1
     private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
         return constraintNodeDto.atomicConstraints
                     .stream()
@@ -69,7 +87,57 @@ public class DecisionTreeMapper {
                     .collect(Collectors.toList());
     }
     
-    private List<ConstraintDto> getConstraintsDto(ConstraintNode constraint) {
-        return null; // FIXME
+    // Pair C2
+    static private List<ConstraintDto> getAtomicConstraintsDtos(ConstraintNode node) {
+        return node
+                .getAtomicConstraints()
+                .stream()
+                .map(c->DecisionTreeMapper.toDto(c))
+                .collect(Collectors.toList());
     }
+    
+    // Pair D1
+    private DecisionNode dtoToDecisionNode(DecisionNodeDto decisionNodeDto){
+        Collection<ConstraintNode> options = decisionNodeDto.options.stream()
+                .map(this::dtoToConstraintNode)
+                .collect(Collectors.toList());
+
+        return new TreeDecisionNode(options);
+    }
+    
+    // Pair D2  
+    static private DecisionNodeDto toDto(DecisionNode node) {
+        DecisionNodeDto dto = new DecisionNodeDto();
+        dto.options = node
+                        .getOptions()
+                        .stream()
+                        .map(c -> DecisionTreeMapper.toDto(c))
+                        .collect(Collectors.toList());
+        
+        return dto;
+    }
+
+    // Parallel to IConstraintMapper.map(), but a different design
+    static public ConstraintDto toDto(IConstraint constraint) {
+        if (constraint instanceof IsInSetConstraint) {
+            return IsInSetConstraintDto.toDto((IsInSetConstraint) constraint);
+        } else if (constraint instanceof IsEqualToConstantConstraint) {
+            return IsEqualToConstantConstraintDto.toDto((IsEqualToConstantConstraint) constraint);
+        } else if (constraint instanceof IsStringShorterThanConstraint) {
+            return IsStringShorterThanConstraintDto.toDto((IsStringShorterThanConstraint) constraint);
+        } else if (constraint instanceof IsOfTypeConstraint) {
+            return IsOfTypeConstraintDto.toDto((IsOfTypeConstraint) constraint);
+        } else if (constraint instanceof NotConstraint) {
+            return NotConstraintDto.toDto((NotConstraint) constraint);
+        } else if (constraint instanceof IsNullConstraint) {
+            return IsNullConstraintDto.toDto((IsNullConstraint) constraint);
+        } else if (constraint instanceof IsLessThanConstantConstraint) {
+            return IsLessThanConstantConstraintDto.toDto((IsLessThanConstantConstraint) constraint);
+        } else {
+            throw new UnsupportedOperationException("Unsupported Constraint: " 
+                        + constraint.getClass().getName());
+        }
+    }
+    
+    
 }
