@@ -10,6 +10,6 @@ public class RowSpecRoute {
         this.subRoutes = subroutes;
     }
 
-    public ConstraintNode chosenOption;
-    public Collection<RowSpecRoute> subRoutes;
+    public final ConstraintNode chosenOption;
+    public final Collection<RowSpecRoute> subRoutes;
 }

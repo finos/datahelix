@@ -5,8 +5,8 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 
 public class RouteConstraintIterator implements ConstraintIterator {
 
-    ConstraintNode constraintNode;
-    private DecisionIterator subDecisions;
+    private final ConstraintNode constraintNode;
+    private final DecisionIterator subDecisions;
 
     RouteConstraintIterator(DecisionIterator subDecisions, ConstraintNode constraintNode){
         this.subDecisions = subDecisions;

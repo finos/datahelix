@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 
 public class RouteDecisionIterator implements DecisionIterator {
 
-    private DecisionIterator nextDecision;
-    private Collection<ConstraintIterator> optionsCache;
+    private final DecisionIterator nextDecision;
+    private final Collection<ConstraintIterator> optionsCache;
 
     private Iterator<ConstraintIterator> options;
     private ConstraintIterator currentOption;

@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class LeafConstraintIterator implements ConstraintIterator {
 
-    private ConstraintNode constraintNode;
+    private final ConstraintNode constraintNode;
 
     private boolean hasNext = true;
 

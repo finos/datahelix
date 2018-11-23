@@ -5,7 +5,8 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import java.util.*;
 
 public class EndDecisionIterator implements DecisionIterator {
-    private Collection<ConstraintIterator> optionsCache;
+    private final Collection<ConstraintIterator> optionsCache;
+
     private Iterator<ConstraintIterator> options;
     private ConstraintIterator currentOption;
 

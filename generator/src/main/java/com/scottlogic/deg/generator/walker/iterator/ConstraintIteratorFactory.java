@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 public class ConstraintIteratorFactory {
 
-    public static ConstraintIterator create(ConstraintNode constraintNode){
+    public ConstraintIterator create(ConstraintNode constraintNode){
         return createConstraintIterator(constraintNode);
     }
 
-    private static ConstraintIterator createConstraintIterator(ConstraintNode constraintNode){
+    private ConstraintIterator createConstraintIterator(ConstraintNode constraintNode){
         if (constraintNode.getDecisions().isEmpty()){
             return new LeafConstraintIterator(constraintNode);
         }
@@ -23,13 +23,13 @@ public class ConstraintIteratorFactory {
     }
 
 
-    private static DecisionIterator createDecisionIterator(Iterator<DecisionNode> decisionNodes){
+    private DecisionIterator createDecisionIterator(Iterator<DecisionNode> decisionNodes){
         if (decisionNodes == null || !decisionNodes.hasNext())
             return null;
 
         Collection<ConstraintIterator> options = decisionNodes.next()
             .getOptions().stream()
-            .map(ConstraintIteratorFactory::createConstraintIterator)
+            .map(this::createConstraintIterator)
             .collect(Collectors.toSet());
 
         if (options.isEmpty() || !options.iterator().next().hasNext()){
