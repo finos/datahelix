@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public class IsOfTypeConstraint implements IConstraint {
@@ -22,6 +24,11 @@ public class IsOfTypeConstraint implements IConstraint {
     @Override
     public String toDotLabel() {
         return String.format("%s is %s", field.name, requiredType.name());
+    }
+
+    @Override
+    public Collection<Field> getFields() {
+        return Collections.singletonList(field);
     }
 
     @Override
