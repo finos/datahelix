@@ -14,7 +14,9 @@ public class ConstraintFieldSniffer {
 
     public Field detectField(IConstraint constraint) {
         final Collection<Field> fields = constraint.getFields();
-        if (fields.size() == 1) fields.iterator().next();
+        if (fields.size() == 1) {
+          return fields.iterator().next();
+        }
         throw new UnsupportedOperationException();
     }
 }
