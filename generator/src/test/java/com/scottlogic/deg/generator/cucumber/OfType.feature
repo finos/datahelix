@@ -319,13 +319,13 @@ Scenario: Running an 'ofType' = string request that includes a null entry (null)
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should be successful
+@ignore
+Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should fail with an error
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo |
-       | ""  |
+     Then I am presented with an error message
+       And no data is created
 
 Scenario: Running an 'ofType' = numeric request that includes a null entry (null) characters should be successful
      Given there is a field foo
@@ -335,13 +335,13 @@ Scenario: Running an 'ofType' = numeric request that includes a null entry (null
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should be successful
+@ignore
+Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should fail with an error
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo |
-       | ""  |
+     Then I am presented with an error message
+       And no data is created
 
 Scenario: Running an 'ofType' = temporal request that includes a null entry (null) characters should be successful
      Given there is a field foo
