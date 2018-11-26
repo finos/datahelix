@@ -57,7 +57,7 @@ public class DecisionTreeSimplifier {
                         .addDecisions(firstOption.getDecisions())
                         .removeDecisions(Collections.singletonList(decisionNode));
                 },
-                (node1, node2) -> new OptimisedConstraintNode(
+                (node1, node2) ->
                     new TreeConstraintNode(
                         Stream
                             .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
@@ -65,6 +65,6 @@ public class DecisionTreeSimplifier {
                         Stream
                             .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
                             .collect(Collectors.toList())
-                    )));
+                    )).markNode(NodeMarking.OPTIMISED);
     }
 }

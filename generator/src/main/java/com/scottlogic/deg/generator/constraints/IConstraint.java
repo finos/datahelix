@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.constraints;
 
+import com.scottlogic.deg.generator.Field;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,6 +40,8 @@ public interface IConstraint
     }
 
     String toDotLabel();
+
+    Collection<Field> getFields();
 
     default public IConstraint or(IConstraint... others)
     {
