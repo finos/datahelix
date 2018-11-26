@@ -15,6 +15,7 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.OptimiseTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.PartitionTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ProfileFieldComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.SerialisationOnlyTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
@@ -50,6 +51,11 @@ class TreeTransformationIntegrationTests {
     @TestFactory
     Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
     	return doTest(new OptimiseTestStrategy());
+    }
+    
+    @TestFactory
+    Collection<DynamicTest> givenProfileInputs_resultEqualsSerialisedOutputs() {
+        return doTest(new SerialisationOnlyTestStrategy());
     }
     
     private Collection<DynamicTest> doTest(TreeTransformationTestStrategy strategy) {
