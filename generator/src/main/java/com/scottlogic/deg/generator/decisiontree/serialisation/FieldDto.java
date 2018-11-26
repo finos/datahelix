@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.ser_deser;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 public class FieldDto {
     public FieldDto(String name) {

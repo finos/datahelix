@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.ser_deser;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import java.util.Collection;
 

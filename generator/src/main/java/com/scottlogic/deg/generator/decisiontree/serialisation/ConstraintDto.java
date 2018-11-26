@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.ser_deser;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
