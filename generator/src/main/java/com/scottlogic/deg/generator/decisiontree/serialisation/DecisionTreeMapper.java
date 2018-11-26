@@ -21,7 +21,7 @@ public class DecisionTreeMapper {
     // Pair A1
     public DecisionTree fromDto(DecisionTreeDto decisionTreeDto) {
         return new DecisionTree(
-            dtoToConstraintNode(decisionTreeDto.rootNode),
+            fromDto(decisionTreeDto.rootNode),
             getMappedProfileFields(decisionTreeDto),
             decisionTreeDto.description);
     }
@@ -36,15 +36,25 @@ public class DecisionTreeMapper {
         return dto;
     }
     
+    // Used by A1
+    private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
+        final List<Field> mappedFields = decisionTreeDto.fields
+                .stream()
+                .map(f -> new Field(f.name))
+                .collect(Collectors.toList());
+        
+        return new ProfileFields(mappedFields);
+    }
+
     // Pair B1
-    private ConstraintNode dtoToConstraintNode(ConstraintNodeDto constraintNodeDto) {
+    private ConstraintNode fromDto(ConstraintNodeDto constraintNodeDto) {
         if (constraintNodeDto.decisions == null) {
             // Base case when no more decisions on a constraint node
             return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), Collections.emptyList());
         }
 
         List<DecisionNode> nodes = constraintNodeDto.decisions.stream()
-                .map(this::dtoToDecisionNode).collect(Collectors.toList());
+                .map(this::fromDto).collect(Collectors.toList());
 
         return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), nodes);
     }
@@ -70,15 +80,6 @@ public class DecisionTreeMapper {
         return dto;
     }
 
-    private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
-        final List<Field> mappedFields = decisionTreeDto.fields
-                .stream()
-                .map(f -> new Field(f.name))
-                .collect(Collectors.toList());
-        
-        return new ProfileFields(mappedFields);
-    }
-
     // Pair C1
     private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
         return constraintNodeDto.atomicConstraints
@@ -97,9 +98,9 @@ public class DecisionTreeMapper {
     }
     
     // Pair D1
-    private DecisionNode dtoToDecisionNode(DecisionNodeDto decisionNodeDto){
+    private DecisionNode fromDto(DecisionNodeDto decisionNodeDto){
         Collection<ConstraintNode> options = decisionNodeDto.options.stream()
-                .map(this::dtoToConstraintNode)
+                .map(this::fromDto)
                 .collect(Collectors.toList());
 
         return new TreeDecisionNode(options);
@@ -138,6 +139,4 @@ public class DecisionTreeMapper {
                         + constraint.getClass().getName());
         }
     }
-    
-    
 }
