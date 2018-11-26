@@ -10,6 +10,7 @@ public class App implements Runnable {
         .addSubcommand("generate", new Generate())
         .addSubcommand("generateTestCases", new GenerateTestCases())
         .addSubcommand("visualise", new Visualise())
+        .addSubcommand("genTreeJson", new GenerateTreeCollectionJson())
         .setCaseInsensitiveEnumValuesAllowed(true);
 
     public static void main(String[] args) {

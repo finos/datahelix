@@ -22,7 +22,7 @@ public class DecisionTreeMapper {
     }
 
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
-        final List<Field> mappedFields = decisionTreeDto.fields.fields
+        final List<Field> mappedFields = decisionTreeDto.fields
                 .stream()
                 .map(f -> new Field(f.name))
                 .collect(Collectors.toList());
