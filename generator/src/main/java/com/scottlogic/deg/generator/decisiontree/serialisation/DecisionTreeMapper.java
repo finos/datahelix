@@ -11,7 +11,9 @@ import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.constraints.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.serialisation.IsOfTypeConstraintDto.TypesDto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -122,24 +124,84 @@ public class DecisionTreeMapper {
     }
 
     // Parallel to IConstraintMapper.map(), but a different design
-    static public ConstraintDto toDto(IConstraint constraint) {
+    static private ConstraintDto toDto(IConstraint constraint) {
         if (constraint instanceof IsInSetConstraint) {
-            return IsInSetConstraintDto.toDto((IsInSetConstraint) constraint);
+            return toDto((IsInSetConstraint) constraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
-            return IsEqualToConstantConstraintDto.toDto((IsEqualToConstantConstraint) constraint);
+            return toDto((IsEqualToConstantConstraint) constraint);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
-            return IsStringShorterThanConstraintDto.toDto((IsStringShorterThanConstraint) constraint);
+            return toDto((IsStringShorterThanConstraint) constraint);
         } else if (constraint instanceof IsOfTypeConstraint) {
-            return IsOfTypeConstraintDto.toDto((IsOfTypeConstraint) constraint);
+            return toDto((IsOfTypeConstraint) constraint);
         } else if (constraint instanceof NotConstraint) {
-            return NotConstraintDto.toDto((NotConstraint) constraint);
+            return toDto((NotConstraint) constraint);
         } else if (constraint instanceof IsNullConstraint) {
-            return IsNullConstraintDto.toDto((IsNullConstraint) constraint);
+            return toDto((IsNullConstraint) constraint);
         } else if (constraint instanceof IsLessThanConstantConstraint) {
-            return IsLessThanConstantConstraintDto.toDto((IsLessThanConstantConstraint) constraint);
+            return toDto((IsLessThanConstantConstraint) constraint);
         } else {
             throw new UnsupportedOperationException("Unsupported Constraint: " 
                         + constraint.getClass().getName());
         }
     }
+    
+    static private IsEqualToConstantConstraintDto toDto(IsEqualToConstantConstraint constraint) {
+        IsEqualToConstantConstraintDto dto = new IsEqualToConstantConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        dto.requiredValue = constraint.requiredValue.toString();
+        return dto;
+    }
+
+    static private IsInSetConstraintDto toDto(IsInSetConstraint constraint) {
+        IsInSetConstraintDto dto = new IsInSetConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        dto.legalValues = new ArrayList<>(constraint.legalValues);
+        return dto;
+    }
+    
+    static private IsLessThanConstantConstraintDto toDto(IsLessThanConstantConstraint constraint) {
+        IsLessThanConstantConstraintDto dto = new IsLessThanConstantConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        dto.referenceValue = constraint.referenceValue;
+        return dto;
+    }
+    
+    static private IsNullConstraintDto toDto(IsNullConstraint constraint) {
+        IsNullConstraintDto dto = new IsNullConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        return dto;
+    }
+    
+    static private IsOfTypeConstraintDto toDto(IsOfTypeConstraint constraint) {
+        IsOfTypeConstraintDto dto = new IsOfTypeConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        switch (constraint.requiredType) {
+        case NUMERIC:
+            dto.requiredType = TypesDto.numeric;
+            break;
+        case STRING:
+            dto.requiredType = TypesDto.string;
+            break;
+        case TEMPORAL:
+            dto.requiredType = TypesDto.temporal;
+            break;
+        default:
+            throw new UnsupportedOperationException("Unsupported type: " + constraint.requiredType);
+        }
+        return dto;
+    }
+    
+    static private NotConstraintDto toDto(NotConstraint constraint) {
+        NotConstraintDto dto = new NotConstraintDto();
+        dto.negatedConstraint = DecisionTreeMapper.toDto(constraint.negatedConstraint);
+        return dto;
+    }
+    
+    static private IsStringShorterThanConstraintDto toDto(IsStringShorterThanConstraint constraint) {
+        IsStringShorterThanConstraintDto dto = new IsStringShorterThanConstraintDto();
+        dto.field = new FieldDto(constraint.field.name);
+        dto.referenceValue = constraint.referenceValue;
+        return dto;
+    }
+    
 }
