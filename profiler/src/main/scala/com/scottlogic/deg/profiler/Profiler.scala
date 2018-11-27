@@ -24,7 +24,7 @@ object Profiler {
       }
 
       (semanticType match {
-        case DoubleType | FloatType | IntegerType => new NaiveNumericAnalyser(df, field)
+        case DoubleType | FloatType | LongType => new NaiveNumericAnalyser(df, field)
         case TimeStampType => new NaiveTimestampAnalyser(df, field)
         case StringType | EnumType => new NaiveStringAnalyser(df, field)
         case CountryCodeType | CurrencyType => new InSetAnalyser(df, field)

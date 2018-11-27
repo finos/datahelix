@@ -35,9 +35,9 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val result = IntegerClassifier.classify(value)
+      val result = LongClassifier.classify(value)
       // Assert
-      assertEquals(IntegerType, result.get)
+      assertEquals(LongType, result.get)
     })
   }
 
@@ -48,7 +48,7 @@ class Classifier {
 
     values.foreach(value => {
       // Act
-      val result = IntegerClassifier.classify(value)
+      val result = LongClassifier.classify(value)
       // Assert
       assertEquals(None, result)
     })
