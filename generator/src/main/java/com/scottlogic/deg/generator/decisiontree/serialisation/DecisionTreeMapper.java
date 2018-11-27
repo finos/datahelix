@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.constraints.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.serialisation.IsOfTypeConstraintDto.TypesDto;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -201,19 +200,7 @@ public class DecisionTreeMapper {
     static private IsOfTypeConstraintDto toDto(IsOfTypeConstraint constraint) {
         IsOfTypeConstraintDto dto = new IsOfTypeConstraintDto();
         dto.field = new FieldDto(constraint.field.name);
-        switch (constraint.requiredType) {
-        case NUMERIC:
-            dto.requiredType = TypesDto.numeric;
-            break;
-        case STRING:
-            dto.requiredType = TypesDto.string;
-            break;
-        case TEMPORAL:
-            dto.requiredType = TypesDto.temporal;
-            break;
-        default:
-            throw new UnsupportedOperationException("Unsupported type: " + constraint.requiredType);
-        }
+        dto.requiredTypeString = constraint.requiredType.name().toLowerCase();
         return dto;
     }
     
