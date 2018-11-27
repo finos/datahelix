@@ -48,7 +48,7 @@ public class DecisionTreeMapper {
 
     // Pair B1
     private ConstraintNode fromDto(ConstraintNodeDto constraintNodeDto) {
-        if (constraintNodeDto.decisions == null) {
+        if (constraintNodeDto.decisions == null || constraintNodeDto.decisions.isEmpty()) {
             // Base case when no more decisions on a constraint node
             return new TreeConstraintNode(getAtomicConstraints(constraintNodeDto), Collections.emptyList());
         }
@@ -61,23 +61,23 @@ public class DecisionTreeMapper {
 
     // Pair B2 
     static private ConstraintNodeDto toDto(ConstraintNode node) {
-        if (node.getDecisions()==null) {
+        if (node.getDecisions()==null || node.getDecisions().isEmpty()) {
             // Base case when no more decisions on a constraint node
-            ConstraintNodeDto dto = new ConstraintNodeDto();
-            dto.atomicConstraints = getAtomicConstraintsDtos(node);
-            return dto;
+            ConstraintNodeDto constraintNodeDto = new ConstraintNodeDto();
+            constraintNodeDto.atomicConstraints = getAtomicConstraintsDtos(node);
+            return constraintNodeDto;
         }
         
-        List<DecisionNodeDto> dtos = node
+        List<DecisionNodeDto> decisionNodeDtos = node
                                         .getDecisions()
                                         .stream()
                                         .map(d -> DecisionTreeMapper.toDto(d))
                                         .collect(Collectors.toList());
-        ConstraintNodeDto dto = new ConstraintNodeDto();
-        dto.atomicConstraints = getAtomicConstraintsDtos(node);
-        dto.decisions = dtos;
+        ConstraintNodeDto constraintNodeDto = new ConstraintNodeDto();
+        constraintNodeDto.atomicConstraints = getAtomicConstraintsDtos(node);
+        constraintNodeDto.decisions = decisionNodeDtos;
 
-        return dto;
+        return constraintNodeDto;
     }
 
     // Pair C1
