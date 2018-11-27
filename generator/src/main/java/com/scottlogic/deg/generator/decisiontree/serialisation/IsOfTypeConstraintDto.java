@@ -1,19 +1,12 @@
-package com.scottlogic.deg.generator.decisiontree.test_utils;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
 public class IsOfTypeConstraintDto implements ConstraintDto {
     public FieldDto field;
     public TypesDto requiredType;
 
-    @Override
-    public IConstraint map() {
-        return new IsOfTypeConstraint(new Field(field.name), getTypesFromTypesDto());
-    }
-
-    private IsOfTypeConstraint.Types getTypesFromTypesDto() {
+    public IsOfTypeConstraint.Types getTypesFromTypesDto() {
         switch (requiredType) {
             case Numeric:
             case numeric:
@@ -24,9 +17,9 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
             case Temporal:
             case temporal:
                 return IsOfTypeConstraint.Types.TEMPORAL;
+            default:
+                throw new UnsupportedOperationException("Unsupported type: " + requiredType);
         }
-
-        return null;
     }
 
     public enum TypesDto {
