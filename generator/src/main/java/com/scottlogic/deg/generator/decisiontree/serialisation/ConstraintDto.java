@@ -13,5 +13,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = IsNullConstraintDto.class, name = "IsNullConstraint"),
         @JsonSubTypes.Type(value = IsLessThanConstantConstraintDto.class, name = "IsLessThanConstantConstraint")
 })
-public interface ConstraintDto extends IConstraintMapper {
+public interface ConstraintDto {
 }

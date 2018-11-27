@@ -1,17 +1,10 @@
 package com.scottlogic.deg.generator.decisiontree.serialisation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
 public class IsOfTypeConstraintDto implements ConstraintDto {
     public FieldDto field;
     public TypesDto requiredType;
-
-    @Override
-    public IConstraint fromDto() {
-        return new IsOfTypeConstraint(new Field(field.name), getTypesFromTypesDto());
-    }
 
     public IsOfTypeConstraint.Types getTypesFromTypesDto() {
         switch (requiredType) {

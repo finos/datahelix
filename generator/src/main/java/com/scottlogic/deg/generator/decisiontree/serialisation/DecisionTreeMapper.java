@@ -250,7 +250,7 @@ public class DecisionTreeMapper {
     }
     
     private static IConstraint fromDto(NotConstraintDto dto) {
-        return new NotConstraint(dto.negatedConstraint.fromDto());
+        return new NotConstraint(DecisionTreeMapper.fromDto(dto.negatedConstraint));
     }
     
     private static IConstraint fromDto(IsNullConstraintDto dto) {
