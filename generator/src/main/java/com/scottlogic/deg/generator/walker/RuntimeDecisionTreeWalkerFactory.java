@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import com.scottlogic.deg.generator.walker.routes.RandomisedProducer;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
@@ -34,11 +33,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
                     rowSpecMerger);
-            case Random:
-                return new DecisionTreeRoutesTreeWalker(
-                    constraintReducer,
-                    rowSpecMerger,
-                    new RandomisedProducer(50000));
         }
 
         throw new UnsupportedOperationException(

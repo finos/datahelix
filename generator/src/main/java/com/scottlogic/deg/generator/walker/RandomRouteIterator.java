@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class RandomRouteIterator implements Iterator<RowSpecRoute> {
 
@@ -29,24 +30,19 @@ public class RandomRouteIterator implements Iterator<RowSpecRoute> {
     @Override
     public RowSpecRoute next() {
         currentIteration++;
-        RowSpecRoute rootRoute = new RowSpecRoute();
-        rootRoute.subRoutes = produceRoute(initialNode);
-        return rootRoute;
+        return new RowSpecRoute(null, produceRoute(initialNode));
     }
 
-    private RowSpecRoute[] produceRoute(ConstraintNode constraint) {
+    private Collection<RowSpecRoute> produceRoute(ConstraintNode constraint) {
         Collection<DecisionNode> decisions = constraint.getDecisions();
 
-        return decisions.stream().map(d -> produceRoute(d)).toArray(RowSpecRoute[]::new);
+        return decisions.stream().map(d -> produceRoute(d)).collect(Collectors.toSet());
     }
 
     private RowSpecRoute produceRoute(DecisionNode decision) {
         int decisionIndex = rand.nextInt(decision.getOptions().size());
         ConstraintNode decisionOption = new ArrayList<>(decision.getOptions()).get(decisionIndex);
 
-        RowSpecRoute route = new RowSpecRoute();
-        route.decisionIndex = decisionIndex;
-        route.subRoutes = produceRoute(decisionOption);
-        return route;
+        return new RowSpecRoute(decisionOption, produceRoute(decisionOption));
     }
 }

@@ -128,6 +128,5 @@
             <version>0.11</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 </project>

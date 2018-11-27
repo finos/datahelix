@@ -11,24 +11,31 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class IteratorTestHelper {
-    static ConstraintNode endConstraint() { return constraint("endConstraint"); }
-    static DecisionNode singleDecision() { return new TreeDecisionNode(endConstraint()); }
-    static DecisionNode doubleDecision() { return new TreeDecisionNode(endConstraint(), endConstraint()); }
+    static ConstraintNode endConstraint(String name) { return constraint(name); }
+    static DecisionNode singleDecision() { return new TreeDecisionNode(endConstraint("single")); }
+    static DecisionNode doubleDecision(String name) {
+        return new TreeDecisionNode(
+            endConstraint(name + " left"), endConstraint(name + " right")); }
     static ConstraintNode constraintSingle() {
         return constraint("constraintSingle", singleDecision()); }
-    static ConstraintNode constraintDouble() { return constraint("constraintDouble", doubleDecision()); }
+    static ConstraintNode constraintDouble() { return constraint("constraintDouble", doubleDecision("")); }
+
     static ConstraintNode constraintSingleDouble() { return constraint("constraintSingleDouble",
-        singleDecision(), doubleDecision()); }
-    static ConstraintNode constraintDoubleDouble() { return constraint("constraintDoubleDouble",
-        doubleDecision(), doubleDecision()); }
+        singleDecision(), doubleDecision("right")); }
+
+    static ConstraintNode constraintDoubleDouble(String name) { return constraint(name,
+        doubleDecision(" left"), doubleDecision(" right")); }
+
     static ConstraintNode constraintTripleDouble() { return constraint("constraintTripleDouble",
-        doubleDecision(), doubleDecision(), doubleDecision()); }
+        doubleDecision("left"), doubleDecision("middle"), doubleDecision("right")); }
+
     static ConstraintNode constraintDoubleLayered(){return constraint("constraintDoubleLayered",
-            doubleDecision(), new TreeDecisionNode(constraintDoubleDouble()));
+            doubleDecision("left"), new TreeDecisionNode(constraintDoubleDouble("right")));
     }
+
     static ConstraintNode constraintBiggy(){ return constraint("constraintBiggy",
-            new TreeDecisionNode(constraintDoubleDouble(), endConstraint()),
-            new TreeDecisionNode(constraintDoubleDouble(), endConstraint()));
+            new TreeDecisionNode(constraintDoubleDouble("left left"), endConstraint("left right")),
+            new TreeDecisionNode(constraintDoubleDouble("right left"), endConstraint("right right")));
     }
 
 
