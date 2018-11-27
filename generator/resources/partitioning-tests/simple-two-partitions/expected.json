@@ -22,7 +22,7 @@
 			"field": {
 				"name": "Event"
 			},
-			"requiredType": "String"
+			"requiredType": "string"
 		}],
 		"decisions": [{
 			"options": [{

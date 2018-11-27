@@ -49,7 +49,7 @@
 			"field": {
 				"name": "EventType"
 			},
-			"requiredType": "Numeric"
+			"requiredType": "numeric"
 		}],
 		"decisions": [{
 			"options": [{
@@ -161,7 +161,7 @@
 			"field": {
 				"name": "User"
 			},
-			"requiredType": "String"
+			"requiredType": "string"
 		},{
 			"type": "NotConstraint",
 			"negatedConstraint": {
