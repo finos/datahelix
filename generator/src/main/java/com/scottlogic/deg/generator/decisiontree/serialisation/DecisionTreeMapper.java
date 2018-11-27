@@ -15,7 +15,9 @@ import com.scottlogic.deg.generator.decisiontree.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DecisionTreeMapper {
     // Pair A1
@@ -82,17 +84,18 @@ public class DecisionTreeMapper {
 
     // Pair C1
     private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
-        return constraintNodeDto.atomicConstraints
-                    .stream()
+        return Optional.ofNullable(constraintNodeDto.atomicConstraints)
+                    .map(Collection::stream)
+                    .orElseGet(Stream::empty)
                     .map(IConstraintMapper::map)
                     .collect(Collectors.toList());
     }
     
     // Pair C2
     static private List<ConstraintDto> getAtomicConstraintsDtos(ConstraintNode node) {
-        return node
-                .getAtomicConstraints()
-                .stream()
+        return Optional.ofNullable(node.getAtomicConstraints())
+                .map(Collection::stream)
+                .orElseGet(Stream::empty)
                 .map(c->DecisionTreeMapper.toDto(c))
                 .collect(Collectors.toList());
     }
