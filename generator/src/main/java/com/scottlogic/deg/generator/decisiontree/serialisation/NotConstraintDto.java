@@ -7,7 +7,7 @@ public class NotConstraintDto implements ConstraintDto {
     public ConstraintDto negatedConstraint;
   
     @Override
-    public IConstraint map() {
-        return new NotConstraint(negatedConstraint.map());
+    public IConstraint fromDto() {
+        return new NotConstraint(negatedConstraint.fromDto());
     }
 }

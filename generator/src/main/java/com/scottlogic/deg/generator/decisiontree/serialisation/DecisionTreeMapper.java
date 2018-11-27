@@ -16,6 +16,7 @@ import com.scottlogic.deg.generator.decisiontree.serialisation.IsOfTypeConstrain
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,7 +90,7 @@ public class DecisionTreeMapper {
         return Optional.ofNullable(constraintNodeDto.atomicConstraints)
                     .map(Collection::stream)
                     .orElseGet(Stream::empty)
-                    .map(IConstraintMapper::map)
+                    .map(dto-> DecisionTreeMapper.fromDto(dto))
                     .collect(Collectors.toList());
     }
     
@@ -123,7 +124,7 @@ public class DecisionTreeMapper {
         return dto;
     }
 
-    // Parallel to IConstraintMapper.map(), but a different design
+    // Pair E1
     static private ConstraintDto toDto(IConstraint constraint) {
         if (constraint instanceof IsInSetConstraint) {
             return toDto((IsInSetConstraint) constraint);
@@ -144,7 +145,32 @@ public class DecisionTreeMapper {
                         + constraint.getClass().getName());
         }
     }
+
+    // Pair E2
+    static private IConstraint fromDto(ConstraintDto constraintDto) {
+        if (constraintDto instanceof IsInSetConstraintDto) {
+            return fromDto((IsInSetConstraintDto) constraintDto);
+        } else if (constraintDto instanceof IsEqualToConstantConstraintDto) {
+            return fromDto((IsEqualToConstantConstraintDto) constraintDto);
+        } else if (constraintDto instanceof IsStringShorterThanConstraintDto) {
+            return fromDto((IsStringShorterThanConstraintDto) constraintDto);
+        } else if (constraintDto instanceof IsOfTypeConstraintDto) {
+            return fromDto((IsOfTypeConstraintDto) constraintDto);
+        } else if (constraintDto instanceof NotConstraintDto) {
+            return fromDto((NotConstraintDto) constraintDto);
+        } else if (constraintDto instanceof IsNullConstraintDto) {
+            return fromDto((IsNullConstraintDto) constraintDto);
+        } else if (constraintDto instanceof IsLessThanConstantConstraintDto) {
+            return fromDto((IsLessThanConstantConstraintDto) constraintDto);
+        } else {
+            throw new UnsupportedOperationException("Unsupported Constraint: " 
+                        + constraintDto.getClass().getName());
+        }
+    }
     
+    /*
+     * Pair F1: 
+     */
     static private IsEqualToConstantConstraintDto toDto(IsEqualToConstantConstraint constraint) {
         IsEqualToConstantConstraintDto dto = new IsEqualToConstantConstraintDto();
         dto.field = new FieldDto(constraint.field.name);
@@ -204,4 +230,35 @@ public class DecisionTreeMapper {
         return dto;
     }
     
+    /*
+     * Pair F2 
+     */
+    private static IConstraint fromDto(IsInSetConstraintDto dto) {
+        return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues));
+    }
+    
+    private static IConstraint fromDto(IsEqualToConstantConstraintDto dto) {
+        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue);
+    }
+    
+    private static IConstraint fromDto(IsStringShorterThanConstraintDto dto) {
+        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue);
+    }
+    
+    private static IConstraint fromDto(IsOfTypeConstraintDto dto) {
+        return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto());
+    }
+    
+    private static IConstraint fromDto(NotConstraintDto dto) {
+        return new NotConstraint(dto.negatedConstraint.fromDto());
+    }
+    
+    private static IConstraint fromDto(IsNullConstraintDto dto) {
+        return new IsNullConstraint(new Field(dto.field.name));
+    }
+
+    private static IConstraint fromDto(IsLessThanConstantConstraintDto dto) {
+        return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue);
+    }
+
 }

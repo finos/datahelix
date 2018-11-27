@@ -8,7 +8,7 @@ public class IsNullConstraintDto implements ConstraintDto {
     public FieldDto field;
     
     @Override
-    public IConstraint map() {
+    public IConstraint fromDto() {
         return new IsNullConstraint(new Field(field.name));
     }
 }

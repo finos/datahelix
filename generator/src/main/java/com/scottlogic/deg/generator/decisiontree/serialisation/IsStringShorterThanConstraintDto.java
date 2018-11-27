@@ -9,7 +9,7 @@ public class IsStringShorterThanConstraintDto implements ConstraintDto {
     public int referenceValue;
     
     @Override
-    public IConstraint map() {
+    public IConstraint fromDto() {
         return new IsStringShorterThanConstraint(new Field(field.name), referenceValue);
     }
 }

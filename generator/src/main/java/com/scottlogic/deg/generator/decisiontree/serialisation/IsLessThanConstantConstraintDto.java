@@ -9,7 +9,7 @@ public class IsLessThanConstantConstraintDto implements ConstraintDto {
     public Number referenceValue;
     
     @Override
-    public IConstraint map() {
+    public IConstraint fromDto() {
         return new IsLessThanConstantConstraint(new Field(field.name), referenceValue);
     }
 }

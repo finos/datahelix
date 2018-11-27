@@ -11,7 +11,7 @@ public class IsInSetConstraintDto implements ConstraintDto {
     public List<Object> legalValues;
     
     @Override
-    public IConstraint map() {
+    public IConstraint fromDto() {
         return new IsInSetConstraint(new Field(field.name), new HashSet<>(legalValues));
     }
 }

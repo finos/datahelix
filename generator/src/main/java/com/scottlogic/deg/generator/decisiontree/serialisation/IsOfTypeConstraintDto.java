@@ -9,11 +9,11 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     public TypesDto requiredType;
 
     @Override
-    public IConstraint map() {
+    public IConstraint fromDto() {
         return new IsOfTypeConstraint(new Field(field.name), getTypesFromTypesDto());
     }
 
-    private IsOfTypeConstraint.Types getTypesFromTypesDto() {
+    public IsOfTypeConstraint.Types getTypesFromTypesDto() {
         switch (requiredType) {
             case Numeric:
             case numeric:
