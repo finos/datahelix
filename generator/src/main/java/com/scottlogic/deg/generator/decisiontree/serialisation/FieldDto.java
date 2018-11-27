@@ -4,7 +4,6 @@ public class FieldDto {
     public FieldDto() {}
     
     public FieldDto(String name) {
-        super();
         this.name = name;
     }
 
