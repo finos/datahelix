@@ -60,10 +60,8 @@ public class DataGenerator implements IDataGenerator {
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
-        dataRows = dataRows
+        return dataRows
             .limit(generationConfig.getMaxRows());
-
-        return dataRows;
 
     }
 }
