@@ -136,7 +136,9 @@ public class DecisionTreeVisualisationWriter {
                 info.decisions,
                 info.atomicConstraints,
                 info.constraintNodes,
-                info.getRowSpecCountInScientificNotation())));
+                info.rowSpecs.compareTo(BigInteger.valueOf(1000)) > 0
+                    ? info.getRowSpecCountInScientificNotation()
+                    : info.rowSpecs.longValue())));
     }
 
     private void writeLine(String line) throws IOException {
