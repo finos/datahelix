@@ -12,7 +12,7 @@ public class DecisionTreeSimplifier {
             originalTree.getDescription());
     }
 
-    private ConstraintNode simplify(ConstraintNode node) {
+    public ConstraintNode simplify(ConstraintNode node) {
         if (node.getDecisions().isEmpty())
             return node;
 

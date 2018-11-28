@@ -1,10 +1,12 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.walker.reductive.*;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
@@ -16,10 +18,11 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
     @Override
     public DecisionTreeWalker getDecisionTreeWalker() {
+        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);
         ConstraintReducer constraintReducer = new ConstraintReducer(
-            new FieldSpecFactory(),
+            fieldSpecFactory,
             fieldSpecMerger);
 
         switch (config.getWalkerType()){
@@ -30,6 +33,23 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     constraintReducer,
                     rowSpecMerger,
                     <the producer>);*/
+            case REDUCTIVE:
+                ConstraintFieldSniffer fieldSniffer = new ConstraintFieldSniffer();
+                ReductiveDecisionTreeAdapter treeAdapter = new ReductiveDecisionTreeAdapter();
+                IterationVisualiser visualiser = new ReductiveIterationVisualiser();
+                FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy(fieldSniffer);
+
+                return new ReductiveDecisionTreeWalker(
+                    visualiser,
+                    new FieldCollectionFactory(
+                        config,
+                        constraintReducer,
+                        fieldSpecMerger,
+                        fieldSpecFactory,
+                        fieldSniffer,
+                        treeAdapter,
+                        fixFieldStrategy
+                    ));
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

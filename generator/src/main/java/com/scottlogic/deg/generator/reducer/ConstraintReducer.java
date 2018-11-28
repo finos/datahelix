@@ -61,7 +61,7 @@ public class ConstraintReducer {
                 map));
     }
 
-    private Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
+    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
         if (constraints == null) {
             return Optional.of(FieldSpec.Empty);
         }

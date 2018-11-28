@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combination_strategies.ExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
@@ -36,7 +37,7 @@ public class Generate implements Runnable {
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
         defaultValue = "INTERESTING")
-    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
+    private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(
             names = {"--no-optimise"},
@@ -54,14 +55,14 @@ public class Generate implements Runnable {
         description = "Determines the tree walker that should be used.",
         defaultValue = defaultTreeWalkerType,
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
+    private GenerationConfig.TreeWalkerType walkerType;
 
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(
             generationType,
             walkerType,
-            new FieldExhaustiveCombinationStrategy());
+            new ExhaustiveCombinationStrategy());
 
         try {
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
