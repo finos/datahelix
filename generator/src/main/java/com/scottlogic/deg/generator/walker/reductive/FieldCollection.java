@@ -117,13 +117,13 @@ public class FieldCollection {
         FixedField fixedFieldValue = getFixedField(field);
         if (fixedFieldValue == null){
             //field isn't fixed
-            return AtomicConstraintFixedFieldBehaviour.INCLUDE;
+            return AtomicConstraintFixedFieldBehaviour.FIELD_NOT_FIXED;
         }
 
         //field is fixed, work out if it is contradictory
         return fixedValueConflictsWithAtomicConstraint(fixedFieldValue, atomicConstraint)
-            ? AtomicConstraintFixedFieldBehaviour.CONSTRAINT_INVALID
-            : AtomicConstraintFixedFieldBehaviour.LEAVE;
+            ? AtomicConstraintFixedFieldBehaviour.CONSTRAINT_CONTRADICTS
+            : AtomicConstraintFixedFieldBehaviour.NON_CONTRADICTORY;
     }
 
     //work out if the field is contradictory

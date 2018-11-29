@@ -12,11 +12,11 @@ import java.util.function.Supplier;
 
 public class ReductiveConstraintNode implements ConstraintNode {
     private final ConstraintNode underlying;
-    private final Collection<IConstraint> includedConstraints;
+    private final Collection<IConstraint> unfixedAtomicConstraints;
 
-    public ReductiveConstraintNode(ConstraintNode underlying, Collection<IConstraint> includedConstraints) {
+    public ReductiveConstraintNode(ConstraintNode underlying, Collection<IConstraint> unfixedAtomicConstraints) {
         this.underlying = underlying;
-        this.includedConstraints = includedConstraints;
+        this.unfixedAtomicConstraints = unfixedAtomicConstraints;
     }
 
     @Override
@@ -38,14 +38,14 @@ public class ReductiveConstraintNode implements ConstraintNode {
     public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
         return new ReductiveConstraintNode(
             underlying.removeDecisions(decisionsToRemove),
-            this.includedConstraints);
+            this.unfixedAtomicConstraints);
     }
 
     @Override
     public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
         return new ReductiveConstraintNode(
             underlying.cloneWithoutAtomicConstraint(excludeAtomicConstraint),
-            this.includedConstraints);
+            this.unfixedAtomicConstraints);
     }
 
     @Override
@@ -57,21 +57,21 @@ public class ReductiveConstraintNode implements ConstraintNode {
     public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
         return new ReductiveConstraintNode(
             underlying.addAtomicConstraints(constraints),
-            this.includedConstraints);
+            this.unfixedAtomicConstraints);
     }
 
     @Override
     public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
         return new ReductiveConstraintNode(
             underlying.addDecisions(decisions),
-            this.includedConstraints);
+            this.unfixedAtomicConstraints);
     }
 
     @Override
     public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
         return new ReductiveConstraintNode(
             underlying.setDecisions(decisions),
-            this.includedConstraints);
+            this.unfixedAtomicConstraints);
     }
 
     @Override
@@ -79,15 +79,15 @@ public class ReductiveConstraintNode implements ConstraintNode {
         return underlying.toString();
     }
 
-    public Collection<IConstraint> getAllIncludedConstraints(){
-        return this.includedConstraints;
+    public Collection<IConstraint> getAllUnfixedAtomicConstraints(){
+        return this.unfixedAtomicConstraints;
     }
 
     @Override
     public ConstraintNode markNode(NodeMarking marking) {
         return new ReductiveConstraintNode(
             underlying.markNode(marking),
-            this.includedConstraints
+            this.unfixedAtomicConstraints
         );
     }
 

@@ -21,7 +21,7 @@ public class ReductiveDecisionTreeAdapter {
 
         return new ReductiveConstraintNode(
             this.simplifier.simplify(node),
-            context.getAllRemainingAtomicConstraints());
+            context.getAllUnfixedAtomicConstraints());
     }
 
     private ConstraintNode adapt(ConstraintNode rootNode, FieldCollection fixedFields, AdapterContext context){
@@ -49,13 +49,13 @@ public class ReductiveDecisionTreeAdapter {
             .filter(atomicConstraint -> {
                 AtomicConstraintFixedFieldBehaviour behaviour = fixedFields.shouldIncludeAtomicConstraint(atomicConstraint);
                 switch (behaviour) {
-                    case LEAVE:
+                    case NON_CONTRADICTORY:
                         context.addNonContradictoryAtomicConstraint(atomicConstraint);
                         return true;
-                    case INCLUDE:
-                        context.addRemainingAtomicConstraint(atomicConstraint);
+                    case FIELD_NOT_FIXED:
+                        context.addUnfixedAtomicConstraint(atomicConstraint);
                         return true;
-                    case CONSTRAINT_INVALID:
+                    case CONSTRAINT_CONTRADICTS:
                         context.addConflictingAtomicConstraint(atomicConstraint);
                         context.setIsInvalid();
                         return false;
