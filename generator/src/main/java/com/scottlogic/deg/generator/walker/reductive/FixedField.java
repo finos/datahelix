@@ -37,11 +37,9 @@ public class FixedField {
 
     @Override
     public String toString() {
-        if (this.current == NOT_ITERATED){
-            return this.field.name;
-        }
-
-        return String.format("[%s] = %s", this.field.name, this.current);
+        return this.current == NOT_ITERATED
+            ? this.field.name
+            : String.format("[%s] = %s", this.field.name, this.current);
     }
 
     FieldSpec getFieldSpec(){
@@ -49,11 +47,9 @@ public class FixedField {
             return this.fieldSpec;
         }
 
-        if (current == null){
-            return this.fieldSpec = getNullRequiredFieldSpec();
-        }
-
-        return this.fieldSpec = getFixedValueFieldSpec();
+        return this.fieldSpec = current == null
+            ? getNullRequiredFieldSpec()
+            : getFixedValueFieldSpec();
     }
 
     private FieldSpec getFixedValueFieldSpec() {

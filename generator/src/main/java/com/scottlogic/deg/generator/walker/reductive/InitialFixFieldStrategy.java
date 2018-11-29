@@ -27,14 +27,15 @@ public class InitialFixFieldStrategy implements FixFieldStrategy {
     */
     @Override
     public FieldAndConstraintMapping getFieldAndConstraintMapToFixNext(ReductiveConstraintNode rootNode) {
-        Map<Field, List<IConstraint>> constraints = rootNode.getAllIncludedConstraints()
+        return rootNode.getAllIncludedConstraints()
             .stream()
-            .collect(Collectors.groupingBy(this.fieldSniffer::detectField));
+            .collect(Collectors.groupingBy(this.fieldSniffer::detectField))
 
-        return constraints.entrySet()
+            .entrySet()
             .stream()
             .map(entry -> new FieldAndConstraintMapping(entry.getKey(), entry.getValue()))
             .max(Comparator.comparing(FieldAndConstraintMapping::getPriority))
+
             .filter(c -> !c.getConstraints().isEmpty())
             .orElse(null);
     }

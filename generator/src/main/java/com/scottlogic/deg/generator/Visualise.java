@@ -123,7 +123,7 @@ public class Visualise implements Runnable {
         }
     }
 
-    public void writeTreeTo(
+    private void writeTreeTo(
         DecisionTree decisionTree,
         String description,
         Path outputFilePath)

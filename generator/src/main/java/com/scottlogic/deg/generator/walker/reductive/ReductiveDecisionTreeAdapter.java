@@ -49,8 +49,8 @@ public class ReductiveDecisionTreeAdapter {
             .filter(atomicConstraint -> {
                 AtomicConstraintFixedFieldBehaviour behaviour = fixedFields.shouldIncludeAtomicConstraint(atomicConstraint);
                 switch (behaviour) {
-                    case REMOVE:
-                        context.addRemovedAtomicConstraint(atomicConstraint);
+                    case LEAVE:
+                        context.addNonContradictoryAtomicConstraint(atomicConstraint);
                         return true;
                     case INCLUDE:
                         context.addRemainingAtomicConstraint(atomicConstraint);

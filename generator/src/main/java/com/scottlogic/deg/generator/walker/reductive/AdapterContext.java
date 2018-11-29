@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class AdapterContext {
     private final HashSet<IConstraint> remainingAtomicConstraints = new HashSet<>();
-    private final HashSet<IConstraint> removedAtomicConstraints = new HashSet<>();
+    private final HashSet<IConstraint> nonContradictoryAtomicConstraints = new HashSet<>();
     private final HashSet<IConstraint> conflictingAtomicConstraints = new HashSet<>();
 
     private boolean valid = true;
@@ -26,8 +26,8 @@ public class AdapterContext {
         return remainingAtomicConstraints;
     }
 
-    Collection<IConstraint> getAllRemovedAtomicConstraints() {
-        return removedAtomicConstraints;
+    Collection<IConstraint> getAllNonContradictoryAtomicConstraints() {
+        return nonContradictoryAtomicConstraints;
     }
 
     Collection<IConstraint> getAllConflictingAtomicConstraints() {
@@ -52,10 +52,10 @@ public class AdapterContext {
             this.parent.addRemainingAtomicConstraint(atomicConstraint);
     }
 
-    void addRemovedAtomicConstraint(IConstraint atomicConstraint) {
-        this.removedAtomicConstraints.add(atomicConstraint);
+    void addNonContradictoryAtomicConstraint(IConstraint atomicConstraint) {
+        this.nonContradictoryAtomicConstraints.add(atomicConstraint);
         if (this.parent != null)
-            this.parent.addRemovedAtomicConstraint(atomicConstraint);
+            this.parent.addNonContradictoryAtomicConstraint(atomicConstraint);
     }
 
     void addConflictingAtomicConstraint(IConstraint atomicConstraint) {

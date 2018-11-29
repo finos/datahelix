@@ -1,11 +1,14 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Visualise;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,15 +20,21 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
     public void visualise(ConstraintNode rootNode, FieldCollection fieldCollection) {
         int iteration = currentIteration.getAndIncrement();
 
-        Visualise vis = new Visualise();
         ProfileFields profileFields = fieldCollection.getFields();
         String description = String.format("Iteration %d\n%s", iteration, fieldCollection.toString(true));
         Path outputPath = FileSystems.getDefault().getPath("reductive-walker", String.format("Reduced-tree-%03d.gv", iteration));
 
-        try {
-            vis.writeTreeTo(new DecisionTree(rootNode, profileFields, description), description, outputPath);
+        //copy of Visualise.writeTreeTo()
+        try (OutputStreamWriter outWriter = new OutputStreamWriter(
+            new FileOutputStream(outputPath.toString()),
+            StandardCharsets.UTF_8)) {
+
+            new DecisionTreeVisualisationWriter(outWriter).writeDot(
+                new DecisionTree(rootNode, profileFields, description),
+                "tree",
+                description);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

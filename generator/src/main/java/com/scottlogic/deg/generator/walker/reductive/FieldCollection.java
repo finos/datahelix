@@ -67,6 +67,7 @@ public class FieldCollection {
         return noOfFixedFields == this.fields.size();
     }
 
+    //get a stream of all possible values for the field that was fixed on the last iteration
     public Stream<Object> getValuesFromLastFixedField(){
         if (this.lastFixedField == null)
             throw new NullPointerException("Field has not been fixed yet");
@@ -74,6 +75,7 @@ public class FieldCollection {
         return this.lastFixedField.getStream();
     }
 
+    //produce a stream of RowSpecs for each value in the permitted set of values for the field fixed on the last iteration
     public Stream<RowSpec> createRowSpecFromFixedValues(ConstraintNode constraintNode) {
         //create a row spec where every field is set to this.fixedFields & field=value
         if (this.lastFixedField == null) {
@@ -91,12 +93,25 @@ public class FieldCollection {
             .filter(Objects::nonNull);
     }
 
-    public FieldCollection getNextFixedField(ReductiveConstraintNode node) {
-        FixedField field = getNextFieldToFix(node);
+    //work out the next field to fix and return a new FieldCollection with this field fixed
+    public FieldCollection getNextFixedField(ReductiveConstraintNode rootNode) {
+        FieldAndConstraintMapping fieldToFix = this.fixFieldStrategy.getFieldAndConstraintMapToFixNext(rootNode);
+
+        if (fieldToFix == null){
+            throw new UnsupportedOperationException(
+                String.format(
+                    "Unable to find a field to fix, no finite constraints\nUnfixed fields: %s",
+                    Objects.toString(this.getUnfixedFields())));
+        }
+
+        FixedField field = new FixedField(
+            fieldToFix.getField(),
+            getStreamOfValuesForConstraints(fieldToFix.getField(), originalRootNode));
 
         return this.fieldCollectionFactory.create(this, field);
     }
 
+    //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
     AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(IConstraint atomicConstraint) {
         //is the field for this atomic constraint fixed?
         //does the constraint complement or conflict with the fixed field?
@@ -108,11 +123,13 @@ public class FieldCollection {
             return AtomicConstraintFixedFieldBehaviour.INCLUDE;
         }
 
+        //field is fixed, work out if it is contradictory
         return fixedValueConflictsWithAtomicConstraint(fixedFieldValue, atomicConstraint)
             ? AtomicConstraintFixedFieldBehaviour.CONSTRAINT_INVALID
-            : AtomicConstraintFixedFieldBehaviour.REMOVE;
+            : AtomicConstraintFixedFieldBehaviour.LEAVE;
     }
 
+    //work out if the field is contradictory
     private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, IConstraint atomicConstraint) {
         FieldSpec fieldSpec = fieldSpecFactory.construct(atomicConstraint);
         FieldSpec fixedValueFieldSpec = fixedField.getFieldSpec();
@@ -121,6 +138,7 @@ public class FieldCollection {
         return !merged.isPresent(); //no conflicts
     }
 
+    //get a copy of the current fixed field for the given field, will return null if the field isn't fixed
     private FixedField getFixedField(Field field) {
         if (lastFixedField != null && lastFixedField.field.equals(field)){
             return lastFixedField;
@@ -129,6 +147,7 @@ public class FieldCollection {
         return this.fixedFields.getOrDefault(field, null);
     }
 
+    //create a mapping of field->fieldspec for each fixed field - efficiency
     private Map<Field, FieldSpec> getParentFieldSpecMapping(ConstraintNode constraintNode){
         Map<Field, List<IConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
             .stream()
@@ -147,11 +166,12 @@ public class FieldCollection {
             ));
     }
 
+    //create a row spec for the given state
     private RowSpec createRowSpec(ConstraintNode inputNode, Map<Field, FieldSpec> parentFieldSpecMapping){
         ReductiveConstraintNode constraintNode = this.nodeAdapter.adapt(inputNode, this); //to take into account the change to lastFixedField
 
         if (constraintNode == null) {
-            return null; //value isn't permitted
+            return null; //value isn't permitted, contradicts somewhere, somehow. Not entirely sure why this can happen
         }
 
         List<IConstraint> fieldToConstraints = constraintNode.getAtomicConstraints()
@@ -160,8 +180,6 @@ public class FieldCollection {
             .collect(Collectors.toList());
 
         FieldSpec fieldSpec = getFieldSpec(this.lastFixedField, fieldToConstraints);
-        if (fieldSpec == null)
-            return null;
 
         return new RowSpec(
             this.fields,
@@ -174,36 +192,25 @@ public class FieldCollection {
         );
     }
 
-    private FixedField getNextFieldToFix(ReductiveConstraintNode rootNode) {
-        FieldAndConstraintMapping fieldToFix = this.fixFieldStrategy.getFieldAndConstraintMapToFixNext(rootNode);
-
-        if (fieldToFix == null){
-            throw new UnsupportedOperationException(
-                String.format(
-                    "Unable to find a field to fix, no finite constraints\nUnfixed fields: %s",
-                    Objects.toString(this.getUnfixedFields())));
-        }
-
-        return new FixedField(
-            fieldToFix.getField(),
-            getStreamOfValuesForConstraints(fieldToFix.getField()));
-    }
-
-    private Stream<Object> getStreamOfValuesForConstraints(
-        Field field) {
-        Set<IConstraint> constraintsForOriginalRootNode = originalRootNode.getAtomicConstraints()
+    //for the given field get a stream of possible values
+    private Stream<Object> getStreamOfValuesForConstraints(Field field, ConstraintNode rootNode) {
+        //from the original tree, get all atomic constraints that match the given field
+        Set<IConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
             .stream()
             .filter(c -> this.fieldSniffer.detectField(c).equals(field))
             .collect(Collectors.toSet());
 
-        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForOriginalRootNode)
+        //produce a fieldspec for all the atomic constraints
+        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
             .orElse(FieldSpec.Empty);
 
+        //use the FieldSpecFulfiller to emit all possible values given the generation mode, interesting or full-sequential
         return new FieldSpecFulfiller(field, rootConstraintsFieldSpec)
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
     }
 
+    //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
     private FieldSpec getFieldSpec(FixedField fixedField, Collection<IConstraint> constraintsForField) {
         FieldSpec fixedFieldSpec = fixedField.getFieldSpec();
         Optional<FieldSpec> constrainedFieldSpecOpt = this.reducer.reduceConstraintsToFieldSpec(constraintsForField);
