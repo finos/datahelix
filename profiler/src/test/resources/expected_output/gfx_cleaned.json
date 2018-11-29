@@ -55,11 +55,11 @@
     }, {
       "field" : "Memory",
       "is" : "greaterThanOrEqualTo",
-      "value" : "1"
+      "value" : 1
     }, {
       "field" : "Memory",
       "is" : "lessThan",
-      "value" : "16"
+      "value" : 16
     }, {
       "field" : "Memory",
       "is" : "granularTo",
@@ -74,11 +74,11 @@
     }, {
       "field" : "Core Clock",
       "is" : "greaterThanOrEqualTo",
-      "value" : "0.954"
+      "value" : 0.954
     }, {
       "field" : "Core Clock",
       "is" : "lessThan",
-      "value" : "1.72"
+      "value" : 1.72
     } ]
   }, {
     "rule" : "Numeric field Price rule",
@@ -89,11 +89,11 @@
     }, {
       "field" : "Price",
       "is" : "greaterThanOrEqualTo",
-      "value" : "63.48"
+      "value" : 63.48
     }, {
       "field" : "Price",
       "is" : "lessThan",
-      "value" : "5558.71"
+      "value" : 5558.71
     } ]
   } ]
 }

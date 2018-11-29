@@ -38,11 +38,11 @@
     }, {
       "field" : "id",
       "is" : "greaterThanOrEqualTo",
-      "value" : "1"
+      "value" : 1
     }, {
       "field" : "id",
       "is" : "lessThan",
-      "value" : "1000"
+      "value" : 1000
     }, {
       "field" : "id",
       "is" : "granularTo",
@@ -134,11 +134,11 @@
     }, {
       "field" : "someNumber",
       "is" : "greaterThanOrEqualTo",
-      "value" : "2.32"
+      "value" : 2.32
     }, {
       "field" : "someNumber",
       "is" : "lessThan",
-      "value" : "996.3"
+      "value" : 996.3
     } ]
   }, {
     "rule" : "Numeric field someIntNumber rule",
@@ -149,11 +149,11 @@
     }, {
       "field" : "someIntNumber",
       "is" : "greaterThanOrEqualTo",
-      "value" : "2"
+      "value" : 2
     }, {
       "field" : "someIntNumber",
       "is" : "lessThan",
-      "value" : "1000"
+      "value" : 1000
     }, {
       "field" : "someIntNumber",
       "is" : "granularTo",
@@ -200,12 +200,16 @@
       "value" : "temporal"
     }, {
       "field" : "randomDate",
-      "is" : "greaterThanOrEqualTo",
-      "value" : "2017-08-11 00:00:00.0"
+      "is" : "afterOrAt",
+      "value" : {
+        "date" : "2017-08-11T00:00:00.000"
+      }
     }, {
       "field" : "randomDate",
-      "is" : "lessThan",
-      "value" : "2019-09-14 00:00:00.0"
+      "is" : "before",
+      "value" : {
+        "date" : "2019-09-14T00:00:00.000"
+      }
     } ]
   } ]
 }
