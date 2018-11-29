@@ -18,6 +18,13 @@ public class InitialFixFieldStrategy implements FixFieldStrategy {
         this.fieldSniffer = fieldSniffer;
     }
 
+    /*
+    1. Get all the atomic constraints in the tree, group them by field
+    2. Rank each constraint by it's precision (e.g. an equalTo is precise, a set of 2 values is half as precise)
+    2.1. should also include number of decisions influenced by the constraint?
+    3. Pick the constraint with the highest rank (greatest precision)
+    4. Yield detail of the constraint and its related field
+    */
     @Override
     public FieldAndConstraintMapping getFieldAndConstraintMapToFixNext(ReductiveConstraintNode rootNode) {
         Map<Field, List<IConstraint>> constraints = rootNode.getAllIncludedConstraints()
