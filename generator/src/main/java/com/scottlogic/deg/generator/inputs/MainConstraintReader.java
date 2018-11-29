@@ -17,6 +17,10 @@ public class MainConstraintReader implements IConstraintReader {
         ProfileFields fields)
         throws InvalidProfileException {
 
+        if (dto == null) {
+            throw new InvalidProfileException("Constraint is null");
+        }
+
         if (dto.is != null) {
             IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
 
