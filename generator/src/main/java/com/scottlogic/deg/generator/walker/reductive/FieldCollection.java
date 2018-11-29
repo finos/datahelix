@@ -30,11 +30,9 @@ public class FieldCollection {
     private final ConstraintFieldSniffer fieldSniffer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDecisionTreeAdapter nodeAdapter;
-    private final ConstraintNode originalRootNode;
 
     FieldCollection(
         ProfileFields fields,
-        ConstraintNode rootNode,
         FieldCollectionFactory fieldCollectionFactory,
         GenerationConfig config,
         ConstraintReducer constraintReducer,
@@ -46,7 +44,6 @@ public class FieldCollection {
         Map<Field, FixedField> fixedFields,
         FixedField lastFixedField) {
         this.fields = fields;
-        this.originalRootNode = rootNode;
         this.fieldCollectionFactory = fieldCollectionFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.fieldSpecFactory = fieldSpecFactory;
@@ -106,7 +103,7 @@ public class FieldCollection {
 
         FixedField field = new FixedField(
             fieldToFix.getField(),
-            getStreamOfValuesForConstraints(fieldToFix.getField(), originalRootNode));
+            getStreamOfValuesForConstraints(fieldToFix.getField(), rootNode));
 
         return this.fieldCollectionFactory.create(this, field);
     }
@@ -234,10 +231,6 @@ public class FieldCollection {
 
     public Map<Field, FixedField> getFixedFields(){
         return this.fixedFields;
-    }
-
-    ConstraintNode getOriginalRootNode(){
-        return this.originalRootNode;
     }
 
     Map.Entry<Field, FixedField> getLastFixedField(){

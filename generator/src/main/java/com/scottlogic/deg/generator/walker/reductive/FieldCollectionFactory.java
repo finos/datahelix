@@ -42,7 +42,6 @@ public class FieldCollectionFactory {
     public FieldCollection create(DecisionTree tree){
         return new FieldCollection(
             tree.getFields(),
-            tree.getRootNode(),
             this,
             this.config,
             this.constraintReducer,
@@ -67,7 +66,6 @@ public class FieldCollectionFactory {
 
         return new FieldCollection(
             fieldCollection.getFields(),
-            fieldCollection.getOriginalRootNode(),
             this,
             this.config,
             this.constraintReducer,
