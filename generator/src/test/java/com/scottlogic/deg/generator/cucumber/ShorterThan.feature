@@ -273,19 +273,6 @@ Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constrai
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'shorterThan' request with a not constraint should be successful
-     Given there is a field foo
-       And foo is anything but shorter than 5
-       And foo is shorter than 7
-       And foo is containing regex /[x]{5}/
-     Then the following data should be included in what is generated:
-       | foo      |
-       | "xxxxxx" |
-     And the following data should not be included in what is generated:
-       | foo      |
-       | "xxxxx"  |
-       | "xxxx"   |
-
 @ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a field foo
