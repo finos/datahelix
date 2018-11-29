@@ -216,14 +216,16 @@ As per the argument defined in the launch configuration, you should find an outp
 `test-output.json` in your current directory (which is 
 `data-engineering-generator\profiler`)
 
-## Test input files and expected output files (temporary solution)
+## Test input files and expected output files 
 
-For now we keep track of some input files and their expected output file under these two folders
+We keep track of some input files and their expected output file under these two folders
 
 - `profiler\src\test\resources\`
 - `profiler\src\test\resources\expected_output\`
 
-This is only a temporary solution.  Please refer to the `README.md` file in `profiler\src\test\resources\expected_output\` for more details.
+During build time we run Integration tests that compare the profiles currently generated to the expected outputs.
+
+Please refer to the `README.md` file in `profiler\src\test\resources\expected_output\` for more details.
 
 ## Submitting a Spark job
 
