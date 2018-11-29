@@ -17,12 +17,12 @@ class IntegrationTest {
     val expected = mapper.readTree(new File(getClass.getResource("/expected_output/email.json").getPath))
 
     // Act
-    val inputPath = getClass.getResource("/email.csv").getPath;
-    val outputDir = getClass.getResource("/actual_output").getPath;
+    val inputPath = getClass.getResource("/email.csv").getPath
+    val outputDir = getClass.getResource("").getPath+"/actual_output"
     val injector = Guice.createInjector(new TestModule, new SharedModule)
     injector.getInstance(classOf[DEGApp]).run(Params(inputPath = inputPath, outputDir = outputDir))
 
-    val actual = mapper.readTree(new File(getClass.getResource("/actual_output/email.json").getPath))
+    val actual = mapper.readTree(new File(outputDir+"/email.json"))
 
     // Assert
     assert(expected == actual)
