@@ -3,9 +3,7 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.constraints.AndConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
@@ -15,10 +13,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,17 +24,13 @@ import java.util.stream.Stream;
 
 public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final IDataGenerator dataGenerator = new DataGenerator(
-        new RowSpecMerger(fieldSpecMerger),
-        new ConstraintReducer(
-            new FieldSpecFactory(),
-            fieldSpecMerger));
+    private final IDataGenerator dataGenerator;
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter) {
+    public GenerationEngine(IOutputTarget outputter, DataGenerator dataGenerator) {
         this.outputter = outputter;
+        this.dataGenerator = dataGenerator;
     }
 
     public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {

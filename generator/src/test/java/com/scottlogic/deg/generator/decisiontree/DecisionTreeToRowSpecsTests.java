@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class DecisionTreeToRowSpecsTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final DecisionTreeWalker dTreeWalker = new DecisionTreeWalker(
+    private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
             new ConstraintReducer(
                     new FieldSpecFactory(),
                     fieldSpecMerger
@@ -48,7 +48,7 @@ public class DecisionTreeToRowSpecsTests {
     @Test
     public void test() {
         final DecisionTreeCollection dTree = dTreeGenerator.analyse(makeProfile());
-        final List<RowSpec> rowSpecs = dTreeWalker.walk(new DecisionTree(reduceRules(dTree), dTree.getFields()))
+        final List<RowSpec> rowSpecs = dTreeWalker.walk(new DecisionTree(reduceRules(dTree), dTree.getFields(), "DecisionTreeToRowSpecsTests"))
                 .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }

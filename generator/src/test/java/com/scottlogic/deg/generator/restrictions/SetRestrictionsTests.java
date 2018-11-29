@@ -69,9 +69,9 @@ class SetRestrictionsTests {
     private Set<Object> secondInputWhitelist = null;
     private Set<Object> secondInputBlacklist = null;
 
-    private SetRestrictions actualOutput = null;
+    private MergeResult<SetRestrictions> actualOutput = null;
 
-    private SetRestrictions getActualOutput() {
+    private MergeResult<SetRestrictions> getActualOutput() {
         if (actualOutput == null) {
             actualOutput = SetRestrictions.merge(
                 new SetRestrictions(firstInputWhitelist, firstInputBlacklist),
@@ -95,20 +95,28 @@ class SetRestrictionsTests {
     }
 
     private void expectOutputWhitelist(Object... expectedValues) {
+        MergeResult<SetRestrictions> actualOutput = getActualOutput();
+
+        Assert.assertTrue(actualOutput.successful);
+
         Assert.assertThat(
-            getActualOutput().getWhitelist(),
+            actualOutput.restrictions.getWhitelist(),
             equalTo(new HashSet<>(Arrays.asList(expectedValues))));
     }
 
     private void expectOutputBlacklist(Object... expectedValues) {
+        MergeResult<SetRestrictions> actualOutput = getActualOutput();
+
+        Assert.assertTrue(actualOutput.successful);
+
         Assert.assertThat(
-            getActualOutput().getBlacklist(),
+            actualOutput.restrictions.getBlacklist(),
             equalTo(new HashSet<>(Arrays.asList(expectedValues))));
     }
 
     private void expectUnsatisfiable() {
-        Assertions.assertThrows(
-            UnmergeableRestrictionException.class,
-            () -> getActualOutput());
+        MergeResult<SetRestrictions> actualOutput = getActualOutput();
+
+        Assert.assertFalse(actualOutput.successful);
     }
 }

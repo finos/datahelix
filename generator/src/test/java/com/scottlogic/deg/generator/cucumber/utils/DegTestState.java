@@ -3,12 +3,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.IConstraintReader;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.io.IOException;
@@ -21,28 +16,26 @@ import java.util.stream.Collectors;
 public class DegTestState {
 
     public GenerationConfig.DataGenerationType generationStrategy;
+    public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
+
     final List<Field> profileFields = new ArrayList<>();
-    final List<IConstraint> constraints = new ArrayList<>();
+    final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
 
-    public void addConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    public void addConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(dto);
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, Object value) throws Exception {
+    public void addNotConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO notDto = new ConstraintDTO();
         notDto.not = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(notDto);
     }
 
-    public void addConstraintsFromJson(String constraintProfile) throws IOException, InvalidProfileException {
-        IConstraintReader reader = new MainConstraintReader();
-        ProfileFields pf = new ProfileFields(this.profileFields);
+    public void addConstraintsFromJson(String constraintProfile) throws IOException {
         ConstraintHolder holder = this.deserialise(constraintProfile);
-        for(ConstraintDTO cd : holder.constraints){
-            this.constraints.add(reader.apply(cd, pf));
-        }
+        this.constraints.addAll(holder.constraints);
     }
 
     public void clearState(){
@@ -82,11 +75,8 @@ public class DegTestState {
             .collect(Collectors.joining());
     }
 
-    private void addConstraintToList(ConstraintDTO constraintDTO) throws Exception {
-        IConstraint constraint = new MainConstraintReader().apply(
-            constraintDTO,
-            new ProfileFields(this.profileFields));
-        this.constraints.add(constraint);
+    private void addConstraintToList(ConstraintDTO constraintDTO) {
+        this.constraints.add(constraintDTO);
     }
 
     private ConstraintHolder deserialise(String json) throws IOException {

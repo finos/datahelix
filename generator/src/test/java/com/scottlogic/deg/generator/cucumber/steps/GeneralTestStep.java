@@ -1,11 +1,12 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.cucumber.utils.DegTestHelper;
-import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
-import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -55,23 +56,25 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
-    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|([0-9]+(.[0-9]+){1}))+)")
+    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)")
     public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        Object parsedValue;
-        if (value.startsWith("\"") && value.endsWith("\"")) {
-            parsedValue = value.substring(1, value.length() - 1);
-        }  else if (value.contains(".")){
-            parsedValue = Double.parseDouble(value);
-        } else {
-            parsedValue = Integer.parseInt(value);
-        }
-
         try {
+            Object parsedValue = GeneratorTestUtilities.parseInput(value);
             this.state.addConstraint(fieldName, constraint, parsedValue);
-            Assert.fail("Expected invalid profile");
         } catch (Exception e) {
             this.state.addException(e);
         }
+
+        testHelper.generateAndGetData();
+
+        Assert.assertThat(
+            "Expected invalid profile",
+            this.testHelper.getThrownExceptions(),
+            hasItem(
+                either((Matcher)isA(InvalidProfileException.class))
+                    .or(isA(JsonParseException.class))
+                    .or(isA(IllegalArgumentException.class))
+                    .or(isA(ClassCastException.class))));
     }
 
     @Then("^I am presented with an error message$")
@@ -89,40 +92,59 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        Assert.assertThat(data.generatedData, containsInAnyOrder(data.expectedData.toArray()));
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.getThrownExceptions(),
+            empty());
+        Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        Assert.assertThat(data.generatedData, contains(data.expectedData.toArray()));
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.getThrownExceptions(),
+            empty());
+        Assert.assertThat(data.generatedData, contains(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        data.expectedData
-            .forEach(row -> {
-                boolean match = data.generatedData.stream().anyMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue("TEST ERROR", match);
-            });
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.getThrownExceptions(),
+            empty());
+        Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-        data.expectedData
-            .forEach(row -> {
-                boolean match = data.generatedData.stream().noneMatch(actualRow -> actualRow.equals(row));
-                Assert.assertTrue(match);
-            });
+
+        Assert.assertThat(
+            "Exceptions thrown during generation",
+            testHelper.getThrownExceptions(),
+            empty());
+        Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable){
+    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
-            .map(row -> row.stream().map(GeneratorTestUtilities::parseInput).collect(Collectors.toList()))
+            .map(row -> row.stream().map(cell -> {
+                try {
+                    return GeneratorTestUtilities.parseExpected(cell);
+                } catch (JsonParseException e) {
+                    this.state.addException(e);
+                    return "<exception thrown: " + e.getMessage() + ">";
+                }
+            }).collect(Collectors.toList()))
             .collect(Collectors.toList());
     }
 
@@ -141,5 +163,4 @@ public class GeneralTestStep {
             this.generatedData = generatedData;
         }
     }
-
 }

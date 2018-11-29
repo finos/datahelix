@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -64,11 +63,11 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        ITypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
+        TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()
-                : TypeRestrictions.all;
+                : DataTypeRestrictions.all;
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             NumericRestrictions restrictions = spec.getNumericRestrictions() == null
                 ? new NumericRestrictions()
                 : spec.getNumericRestrictions();
@@ -91,7 +90,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
 
             StringRestrictions stringRestrictions = spec.getStringRestrictions();
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
@@ -114,7 +113,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
 
             DateTimeRestrictions restrictions = spec.getDateTimeRestrictions();
             validSources.add(new TemporalFieldValueSource(
@@ -127,12 +126,12 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
-            case FullSequential:
+            case FULL_SEQUENTIAL:
             default:
                 return source.generateAllValues();
-            case Interesting:
+            case INTERESTING:
                 return source.generateInterestingValues();
-            case Random:
+            case RANDOM:
                 return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
         }
     }
@@ -141,11 +140,11 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (spec.getNullRestrictions() != null) {
-            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
+            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {
                 // if *always* null, add a null-only source and signal that no other sources are needed
                 fieldValueSources.add(nullOnlySource);
                 return true;
-            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustNotBeNull) {
+            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_NOT_BE_NULL) {
                 // if *never* null, add nothing and signal that source generation should continue
                 return false;
             }

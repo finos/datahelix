@@ -41,7 +41,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
         return Collections.singleton(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 constraints,
                 Collections.emptyList()));
     }
@@ -52,7 +52,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
         return Collections.singleton(
-            new ConstraintNode(
+            new TreeConstraintNode(
                 Collections.emptyList(),
                 Collections.singleton(decision)));
     }
@@ -62,7 +62,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return new DecisionTreeCollection(
             profile.fields,
             profile.rules.stream()
-                .map(rule -> new DecisionTree(convertRule(rule), profile.fields))
+                .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
                 .map(decisionTreeSimplifier::simplify)
                 .collect(Collectors.toList()));
     }
@@ -190,7 +190,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         else if (constraintToConvert instanceof OrConstraint) {
             Collection<IConstraint> subConstraints = ((OrConstraint) constraintToConvert).subConstraints;
 
-            DecisionNode decisionPoint = new DecisionNode(
+            DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()
                     .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
@@ -200,46 +200,6 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             return convertConstraint(reduceConditionalConstraint(constraintToConvert));
         } else {
             return asConstraintNodeList(constraintToConvert);
-        }
-    }
-
-    class DecisionTreeSimplifier {
-        public DecisionTree simplify(DecisionTree originalTree) {
-            return new DecisionTree(
-                simplify(originalTree.getRootNode()),
-                originalTree.getFields());
-        }
-
-        public ConstraintNode simplify(ConstraintNode node) {
-            if (node.getDecisions().isEmpty())
-                return node;
-
-            return new ConstraintNode(
-                node.getAtomicConstraints(),
-                node.getDecisions().stream()
-                    .map(this::simplify)
-                    .collect(Collectors.toList()));
-        }
-
-        private DecisionNode simplify(DecisionNode decision) {
-            List<ConstraintNode> newNodes = new ArrayList<>();
-
-            for (ConstraintNode existingOption : decision.getOptions()) {
-                ConstraintNode simplifiedNode = simplify(existingOption);
-
-                // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
-                // this helps simplify the sorts of trees that come from eg A OR (B OR C)
-                if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getDecisions().size() == 1) {
-                    newNodes.addAll(
-                        simplifiedNode.getDecisions()
-                            .iterator().next() //get only member
-                            .getOptions());
-                } else {
-                    newNodes.add(simplifiedNode);
-                }
-            }
-
-            return new DecisionNode(newNodes);
         }
     }
 }
