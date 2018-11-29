@@ -375,6 +375,16 @@ class DecisionTreeRoutesTreeWalkerTest {
         public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public ConstraintNode markNode(NodeMarking marking) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public boolean hasMarking(NodeMarking detail) {
+            throw new UnsupportedOperationException("Not supported");
+        }
     }
 
     private static class OrderedDecisionNode implements DecisionNode {
@@ -391,6 +401,16 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         @Override
         public DecisionNode setOptions(Collection<ConstraintNode> options) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public DecisionNode markNode(NodeMarking marking) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
     }

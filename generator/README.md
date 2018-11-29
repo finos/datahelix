@@ -14,6 +14,10 @@ Generates data to a specified endpoint.
 
 Generates data to a specified directory, including both valid and [invalid data](./docs/DeliberateViolation.md).
 
+### `genTreeJson`
+
+Generates a JSON file representing the in-memory decision tree.  This is a utility to assist the creation of `expected.json` files for `TreeTransformationIntegrationTest`
+
 ### `visualise`
 
 Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection.
