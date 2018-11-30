@@ -101,11 +101,28 @@ public class FieldCollection {
                     Objects.toString(this.getUnfixedFields())));
         }
 
-        FixedField field = new FixedField(
-            fieldToFix.getField(),
-            getStreamOfValuesForConstraints(fieldToFix.getField(), rootNode));
-
+        FixedField field = getFixedFieldWithValuesForField(fieldToFix.getField(), rootNode);
         return this.fieldCollectionFactory.create(this, field);
+    }
+
+    //for the given field get a stream of possible values
+    private FixedField getFixedFieldWithValuesForField(Field field, ConstraintNode rootNode) {
+        //from the original tree, get all atomic constraints that match the given field
+        Set<IConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
+            .stream()
+            .filter(c -> this.fieldSniffer.detectField(c).equals(field))
+            .collect(Collectors.toSet());
+
+        //produce a fieldspec for all the atomic constraints
+        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
+            .orElse(FieldSpec.Empty);
+
+        //use the FieldSpecFulfiller to emit all possible values given the generation mode, interesting or full-sequential
+        Stream<Object> values = new FieldSpecFulfiller(field, rootConstraintsFieldSpec)
+            .generate(this.generationConfig)
+            .map(dataBag -> dataBag.getValue(field));
+
+        return new FixedField(field, values, rootConstraintsFieldSpec);
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
@@ -129,7 +146,7 @@ public class FieldCollection {
     //work out if the field is contradictory
     private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, IConstraint atomicConstraint) {
         FieldSpec fieldSpec = fieldSpecFactory.construct(atomicConstraint);
-        FieldSpec fixedValueFieldSpec = fixedField.getFieldSpec();
+        FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
 
         Optional<FieldSpec> merged = fieldSpecMerger.merge(fixedValueFieldSpec, fieldSpec);
         return !merged.isPresent(); //no conflicts
@@ -189,27 +206,9 @@ public class FieldCollection {
         );
     }
 
-    //for the given field get a stream of possible values
-    private Stream<Object> getStreamOfValuesForConstraints(Field field, ConstraintNode rootNode) {
-        //from the original tree, get all atomic constraints that match the given field
-        Set<IConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
-            .stream()
-            .filter(c -> this.fieldSniffer.detectField(c).equals(field))
-            .collect(Collectors.toSet());
-
-        //produce a fieldspec for all the atomic constraints
-        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
-            .orElse(FieldSpec.Empty);
-
-        //use the FieldSpecFulfiller to emit all possible values given the generation mode, interesting or full-sequential
-        return new FieldSpecFulfiller(field, rootConstraintsFieldSpec)
-            .generate(this.generationConfig)
-            .map(dataBag -> dataBag.getValue(field));
-    }
-
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
     private FieldSpec getFieldSpec(FixedField fixedField, Collection<IConstraint> constraintsForField) {
-        FieldSpec fixedFieldSpec = fixedField.getFieldSpec();
+        FieldSpec fixedFieldSpec = fixedField.getFieldSpecForCurrentValue();
         Optional<FieldSpec> constrainedFieldSpecOpt = this.reducer.reduceConstraintsToFieldSpec(constraintsForField);
 
         if (!constrainedFieldSpecOpt.isPresent()){

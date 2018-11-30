@@ -15,14 +15,18 @@ public class FixedField {
     public final Field field;
 
     private final Stream<Object> values;
+    private final FieldSpec valuesFieldSpec;
+
     private Object current = NOT_ITERATED;
     private FieldSpec fieldSpec;
 
     FixedField(
         Field field,
-        Stream<Object> values) {
+        Stream<Object> values,
+        FieldSpec valuesFieldSpec) {
         this.field = field;
         this.values = values;
+        this.valuesFieldSpec = valuesFieldSpec;
     }
 
     public Stream<Object> getStream() {
@@ -35,6 +39,10 @@ public class FixedField {
             });
     }
 
+    public FieldSpec getFieldSpecForValues(){
+        return this.valuesFieldSpec;
+    }
+
     @Override
     public String toString() {
         return this.current == NOT_ITERATED
@@ -42,23 +50,23 @@ public class FixedField {
             : String.format("[%s] = %s", this.field.name, this.current);
     }
 
-    FieldSpec getFieldSpec(){
+    FieldSpec getFieldSpecForCurrentValue(){
         if (this.fieldSpec != null) {
             return this.fieldSpec;
         }
 
         return this.fieldSpec = current == null
             ? getNullRequiredFieldSpec()
-            : getFixedValueFieldSpec();
+            : getFieldSpecForCurrentValue(current);
     }
 
-    private FieldSpec getFixedValueFieldSpec() {
-        if (current == NOT_ITERATED){
+    private static FieldSpec getFieldSpecForCurrentValue(Object currentValue) {
+        if (currentValue == NOT_ITERATED){
             throw new UnsupportedOperationException("FixedField has not iterated yet");
         }
 
         return new FieldSpec(
-            new SetRestrictions(new HashSet<>(Collections.singletonList(current)), null),
+            new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), null),
             null,
             null,
             null,
