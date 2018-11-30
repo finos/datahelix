@@ -24,7 +24,7 @@ public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
     public void rowEmitted(GeneratedObject row) {
         rowsSinceLastSample++;
 
-        if (rowsSinceLastSample > 10){
+        if (rowsSinceLastSample >= 1000){
             Instant newSampleTime = Instant.now();
             reportVelocity(rowsSinceLastSample, lastSampleTime, newSampleTime);
             lastSampleTime = newSampleTime;
@@ -35,8 +35,8 @@ public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
 
     private void reportVelocity(float rowsEmittedInDuration, Instant lastSampleTime, Instant newSampleTime) {
         Duration duration = Duration.between(lastSampleTime, newSampleTime);
-        long secondsToProduceRows = duration.getSeconds();
-        float rowsPerSecond = rowsEmittedInDuration / secondsToProduceRows;
+        double fractionOfSecondToProduceRows = duration.getNano() / 1_000_000_000.0;
+        double rowsPerSecond = rowsEmittedInDuration / fractionOfSecondToProduceRows;
 
         System.out.println(
             String.format(
