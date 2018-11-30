@@ -38,6 +38,11 @@ public class Generate implements Runnable {
         defaultValue = "INTERESTING")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
+    @CommandLine.Option(names = {"-c", "--c"},
+        description = "Determines the type of combination strategy used (field, exhaustive, minimal).",
+        defaultValue = "FIELD_EXHAUSTIVE")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE;
+
     @CommandLine.Option(
             names = {"--no-optimise"},
             description = "Prevents tree optimisation",
@@ -61,7 +66,7 @@ public class Generate implements Runnable {
         GenerationConfig config = new GenerationConfig(
             generationType,
             walkerType,
-            new FieldExhaustiveCombinationStrategy());
+            combinationType);
 
         try {
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config);

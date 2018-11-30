@@ -1,19 +1,22 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Generate;
+import com.scottlogic.deg.generator.generation.combination_strategies.ExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
+import com.scottlogic.deg.generator.generation.combination_strategies.MinimalCombinationStrategy;
 
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
-    private final ICombinationStrategy combinationStrategy;
+    private final CombinationStrategyType combinationStrategy;
     private final long maxRows = 10_000_000;
 
     public GenerationConfig(
         DataGenerationType dataGenerationType,
         TreeWalkerType walkerType,
-        ICombinationStrategy combinationStrategy) {
+        CombinationStrategyType combinationStrategy) {
 
         this.dataGenerationType = dataGenerationType;
         this.walkerType = walkerType;
@@ -25,7 +28,14 @@ public class GenerationConfig {
     }
 
     public ICombinationStrategy getCombinationStrategy() {
-        return combinationStrategy;
+        switch(this.combinationStrategy){
+            case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
+            case FIELD_EXHAUSTIVE: return new FieldExhaustiveCombinationStrategy();
+            case MINIMAL: return new MinimalCombinationStrategy();
+            default:
+                throw new UnsupportedOperationException(
+                    "$Combination strategy {this.combinationStrategy} is unsupported.");
+        }
     }
 
     public TreeWalkerType getWalkerType() {
@@ -66,4 +76,22 @@ public class GenerationConfig {
             return text;
         }
     }
+
+    public enum CombinationStrategyType {
+
+        EXHAUSTIVE("exhaustive"),
+        FIELD_EXHAUSTIVE("field"),
+        MINIMAL("minimal");
+        private final String text;
+
+        CombinationStrategyType(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
 }

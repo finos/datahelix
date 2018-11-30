@@ -33,6 +33,11 @@ public class GenerateTestCases implements Runnable {
         defaultValue = "INTERESTING")
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
+    @CommandLine.Option(names = {"-c", "--c"},
+         description = "Determines the type of combination strategy used (field, exhaustive, minimal).",
+         defaultValue = "FIELD_EXHAUSTIVE")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE;
+
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
         defaultValue = "CARTESIAN_PRODUCT",
@@ -44,7 +49,7 @@ public class GenerateTestCases implements Runnable {
         GenerationConfig config = new GenerationConfig(
             generationType,
             walkerType,
-            new FieldExhaustiveCombinationStrategy());
+            combinationType);
 
         DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
 

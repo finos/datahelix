@@ -18,7 +18,7 @@ class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         GenerationConfig.DataGenerationType.INTERESTING,
         GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-        new FieldExhaustiveCombinationStrategy());
+        GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE);
 
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {

@@ -34,7 +34,7 @@ class ExampleProfilesTests {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE);
 
             generationEngine.generateTestCases(profileFile.toPath(), config);
         }));
@@ -46,7 +46,7 @@ class ExampleProfilesTests {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE);
 
             generationEngine.generateDataSet(profileFile.toPath(), config);
         }));
