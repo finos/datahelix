@@ -731,8 +731,29 @@ Feature: User can specify the length of generated string data using 'ofLength'
     And no data is created
 
 
+  Scenario: Running an 'ofLength' request as part of a non-contradicting anyOf constraint should be successful
+    Given there is a field foo
+    And foo is in set:
+      | "1"   |
+      | "22"  |
+      | "333" |
+    And there is a constraint:
+       """
+       { "anyOf": [
+         { "field": "foo", "is": "inSet", "values": ["22"] },
+         { "field": "foo", "is": "ofLength", "value": 1 }
+       ]}
+       """
+    Then the following data should be included in what is generated:
+      | foo   |
+      | "1"   |
+      | "22"  |
+    And the following data should not be included in what is generated:
+      | foo   |
+      | "333" |
+
+
   Scenario: Running an 'ofLength' request as part of a non-contradicting allOf constraint should be successful
-    Given the generation strategy is interesting
     Given there is a field foo
     And there is a constraint:
        """
@@ -751,7 +772,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
 
   @ignore
   Scenario: Running an 'ofLength' request as part of a contradicting allOf constraint should fail with an error message
-    Given the generation strategy is interesting
     Given there is a field foo
     And there is a constraint:
        """
