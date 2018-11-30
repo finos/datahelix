@@ -16,6 +16,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -86,7 +87,8 @@ public class GeneratorTestUtilities {
                 new RowSpecMerger(
                     new FieldSpecMerger())),
             new RelatedFieldTreePartitioner(),
-            new NoopDecisionTreeOptimiser());
+            new NoopDecisionTreeOptimiser(),
+            new NoopDataGeneratorMonitor());
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, new FieldExhaustiveCombinationStrategy());
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);

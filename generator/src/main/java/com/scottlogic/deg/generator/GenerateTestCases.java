@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
@@ -54,7 +55,8 @@ public class GenerateTestCases implements Runnable {
                 new DataGenerator(
                     walkerFactory.getDecisionTreeWalker(),
                     new NoopTreePartitioner(),
-                    new NoopDecisionTreeOptimiser()))
+                    new NoopDecisionTreeOptimiser(),
+                    new NoopDataGeneratorMonitor()))
                 .generateTestCases(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -70,7 +71,8 @@ class ExampleProfilesTests {
                         new DataGenerator(
                             walkerFactory.getDecisionTreeWalker(),
                             new RelatedFieldTreePartitioner(),
-                            new DecisionTreeOptimiser())),
+                            new DecisionTreeOptimiser(),
+                            new NoopDataGeneratorMonitor())),
                     profileFile);
             });
 

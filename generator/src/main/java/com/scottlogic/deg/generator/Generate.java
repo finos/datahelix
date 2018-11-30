@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.SystemOutDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination_strategies.ExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -77,7 +78,8 @@ public class Generate implements Runnable {
                         : new RelatedFieldTreePartitioner(),
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
-                        : new DecisionTreeOptimiser()))
+                        : new DecisionTreeOptimiser(),
+                    new SystemOutDataGeneratorMonitor()))
                 .generateDataSet(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

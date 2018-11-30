@@ -18,16 +18,19 @@ import java.util.stream.Stream;
 
 public class DataGenerator implements IDataGenerator {
     private final DecisionTreeWalker treeWalker;
+    private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
     private final IDecisionTreeOptimiser treeOptimiser;
 
     public DataGenerator(
             DecisionTreeWalker treeWalker,
             TreePartitioner treePartitioner,
-            IDecisionTreeOptimiser optimiser) {
+            IDecisionTreeOptimiser optimiser,
+            DataGeneratorMonitor monitor) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
+        this.monitor = monitor;
     }
 
     @Override
@@ -60,8 +63,11 @@ public class DataGenerator implements IDataGenerator {
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
+        monitor.generationStarting();
+
         return dataRows
-            .limit(generationConfig.getMaxRows());
+            .limit(generationConfig.getMaxRows())
+            .peek(this.monitor::rowEmitted);
 
     }
 }
