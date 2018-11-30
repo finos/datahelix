@@ -29,7 +29,6 @@ public class FieldCollection {
     private final FixedField lastFixedField;
     private final ConstraintFieldSniffer fieldSniffer;
     private final FixFieldStrategy fixFieldStrategy;
-    private final ReductiveDecisionTreeAdapter nodeAdapter;
 
     FieldCollection(
         ProfileFields fields,
@@ -53,7 +52,6 @@ public class FieldCollection {
         this.lastFixedField = lastFixedField;
         this.generationConfig = config;
         this.reducer = constraintReducer;
-        this.nodeAdapter = treeAdapter;
     }
 
     public boolean allFieldsAreFixed() {
@@ -79,15 +77,26 @@ public class FieldCollection {
             throw new UnsupportedOperationException("Field has not been fixed yet");
         }
 
-        Map<Field, FieldSpec> parentFieldSpecMapping = getParentFieldSpecMapping(constraintNode);
+        Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(constraintNode);
 
-        if (parentFieldSpecMapping.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
+        if (fieldSpecsPerField.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
             return Stream.empty();
         }
 
-        return this.lastFixedField.getStream()
-            .map(unused -> this.createRowSpec(constraintNode, parentFieldSpecMapping))
-            .filter(Objects::nonNull);
+
+        FieldSpec fieldSpecForValuesInLastFixedField = this.lastFixedField.getFieldSpecForValues();
+        fieldSpecsPerField.put(this.lastFixedField.field, fieldSpecForValuesInLastFixedField);
+
+        RowSpec rowSpecWithAllValuesForLastFixedField = new RowSpec(
+            this.fields,
+            fieldSpecsPerField
+        );
+
+        System.out.println(String.format(
+            "%s %s",
+            this.lastFixedField.field.name,
+            fieldSpecForValuesInLastFixedField.toString()));
+        return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
 
     //work out the next field to fix and return a new FieldCollection with this field fixed
@@ -162,7 +171,7 @@ public class FieldCollection {
     }
 
     //create a mapping of field->fieldspec for each fixed field - efficiency
-    private Map<Field, FieldSpec> getParentFieldSpecMapping(ConstraintNode constraintNode){
+    private Map<Field, FieldSpec> getFieldSpecsForAllFixedFieldsExceptLast(ConstraintNode constraintNode){
         Map<Field, List<IConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(this.fieldSniffer::detectField));
@@ -178,32 +187,6 @@ public class FieldCollection {
                         : fieldSpec;
                 }
             ));
-    }
-
-    //create a row spec for the given state
-    private RowSpec createRowSpec(ConstraintNode inputNode, Map<Field, FieldSpec> parentFieldSpecMapping){
-        ReductiveConstraintNode constraintNode = this.nodeAdapter.adapt(inputNode, this); //to take into account the change to lastFixedField
-
-        if (constraintNode == null) {
-            return null; //value isn't permitted, contradicts somewhere, somehow. Not entirely sure why this can happen
-        }
-
-        List<IConstraint> fieldToConstraints = constraintNode.getAtomicConstraints()
-            .stream()
-            .filter(c -> this.fieldSniffer.detectField(c).equals(this.lastFixedField.field))
-            .collect(Collectors.toList());
-
-        FieldSpec fieldSpec = getFieldSpec(this.lastFixedField, fieldToConstraints);
-
-        return new RowSpec(
-            this.fields,
-            Stream.concat(
-                parentFieldSpecMapping.entrySet().stream(),
-                Stream.of(new HashMap.SimpleEntry<>(this.lastFixedField.field, fieldSpec)))
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                Map.Entry::getValue))
-        );
     }
 
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
