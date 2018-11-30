@@ -9,10 +9,7 @@ import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,9 +84,10 @@ public class FieldCollection {
         FieldSpec fieldSpecForValuesInLastFixedField = this.lastFixedField.getFieldSpecForValues();
         fieldSpecsPerField.put(this.lastFixedField.field, fieldSpecForValuesInLastFixedField);
 
-        RowSpec rowSpecWithAllValuesForLastFixedField = new RowSpec(
+        RowSpec rowSpecWithAllValuesForLastFixedField = new ReductiveRowSpec(
             this.fields,
-            fieldSpecsPerField
+            fieldSpecsPerField,
+            this.lastFixedField.field
         );
 
         System.out.println(String.format(
