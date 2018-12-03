@@ -44,7 +44,7 @@ class ConstraintReducerTest {
                 new IsGreaterThanConstantConstraint(quantityField, 0),
                 new NotConstraint(new IsGreaterThanConstantConstraint(quantityField, 5)),
                 new IsInSetConstraint(countryField, countryAmong),
-                new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.String));
+                new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.STRING));
 
         // ACT
         final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
@@ -61,7 +61,7 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 quantityFieldSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Quantity fieldspec has no datetime restrictions",
                 quantityFieldSpec.getDateTimeRestrictions(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Quantity fieldspec has numeric restrictions", quantityFieldSpec.getNumericRestrictions(),
@@ -82,7 +82,7 @@ class ConstraintReducerTest {
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 quantityFieldSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Country fieldspec has no datetime restrictions",
                 countryFieldSpec.getDateTimeRestrictions(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Country fieldspec has no numeric restrictions",
@@ -116,7 +116,7 @@ class ConstraintReducerTest {
         Assert.assertThat(
                 "City fieldspec has string type restriction",
                 cityFieldSpec.getTypeRestrictions().getAllowedTypes(),
-                IsEqual.equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                IsEqual.equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
     }
 
     @Test
@@ -132,7 +132,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -167,7 +167,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -201,7 +201,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a numeric type restriction", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -236,7 +236,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -271,7 +271,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -305,7 +305,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -340,7 +340,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -374,7 +374,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Numeric)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.NUMERIC)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -409,7 +409,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a temporal type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -444,7 +444,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a temporal type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -479,7 +479,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -515,7 +515,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Temporal type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -551,7 +551,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Temporal type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -586,7 +586,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a temporal type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -622,7 +622,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Temporal type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -657,7 +657,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a temporal type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -695,7 +695,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Temporal type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.Temporal)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.TEMPORAL)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -735,7 +735,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a String type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -769,9 +769,9 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has a String type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
                 containsInAnyOrder(
-                        IsOfTypeConstraint.Types.Temporal,
-                        IsOfTypeConstraint.Types.String,
-                        IsOfTypeConstraint.Types.Numeric));
+                        IsOfTypeConstraint.Types.TEMPORAL,
+                        IsOfTypeConstraint.Types.STRING,
+                        IsOfTypeConstraint.Types.NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -822,7 +822,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a String type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -852,7 +852,7 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a string constrint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -882,10 +882,10 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec has a String type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
         Assert.assertThat("Fieldspec has a String type constraint",
                 outputSpec.getTypeRestrictions().getAllowedTypes(),
-                equalTo(Collections.singleton(IsOfTypeConstraint.Types.String)));
+                equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
                 Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
@@ -907,7 +907,7 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<IConstraint> constraints = Arrays.asList(
                 new StringHasLengthConstraint(field, 5),
-                new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.Temporal)
+                new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.TEMPORAL)
         );
 
         Optional<RowSpec> satisfyingRowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -939,7 +939,7 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<IConstraint> constraints = Arrays.asList(
-                new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.Numeric),
+                new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC),
                 new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)))
         );
 

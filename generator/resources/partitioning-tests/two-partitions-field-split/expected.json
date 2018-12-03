@@ -49,7 +49,7 @@
 			"field": {
 				"name": "EventType"
 			},
-			"requiredType": "Numeric"
+			"requiredType": "numeric"
 		}],
 		"decisions": [{
 			"options": [{
@@ -146,15 +146,13 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "EventType"
-		},{
-			"name": "Parameter"
-		},{
-			"name": "GraphType"
-		}]
-	}
+	"fields": [{
+		"name": "EventType"
+	},{
+		"name": "Parameter"
+	},{
+		"name": "GraphType"
+	}]
 },{
 	"description": "TestProfile2[1]",
 	"rootNode": {
@@ -163,7 +161,7 @@
 			"field": {
 				"name": "User"
 			},
-			"requiredType": "String"
+			"requiredType": "string"
 		},{
 			"type": "NotConstraint",
 			"negatedConstraint": {
@@ -264,11 +262,9 @@
 			}]
 		}]
 	},
-	"fields": {
-		"fields": [{
-			"name": "User"
-		},{
-			"name": "UserType"
-		}]
-	}
+	"fields": [{
+		"name": "User"
+	},{
+		"name": "UserType"
+	}]
 }]

@@ -72,15 +72,13 @@
 			}
 		]
 	},
-	"fields": {
-		"fields": 
-		[
-			{
-				"name": "A"
-			},
-			{
-				"name": "B"
-			}
-		]
-	}
+	"fields": 
+	[
+		{
+			"name": "A"
+		},
+		{
+			"name": "B"
+		}
+	]
 }]

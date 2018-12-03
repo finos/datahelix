@@ -82,9 +82,9 @@ public class TreeComparisonContext {
     }
 
     public enum TreeElementType {
-        Decision,
-        AtomicConstraint,
-        Fields
+        DECISION,
+        ATOMIC_CONSTRAINT,
+        FIELDS
     }
 }
 

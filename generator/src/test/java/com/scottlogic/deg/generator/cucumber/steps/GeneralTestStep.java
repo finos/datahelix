@@ -46,6 +46,11 @@ public class GeneralTestStep {
         this.state.generationStrategy = strategy;
     }
 
+    @When("the combination strategy is {combinationStrategy}")
+    public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
+        this.state.combinationStrategy = strategy;
+    }
+
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
         this.state.addConstraint(fieldName, "null", null);
@@ -65,12 +70,16 @@ public class GeneralTestStep {
             this.state.addException(e);
         }
 
+        testHelper.generateAndGetData();
+
         Assert.assertThat(
             "Expected invalid profile",
             this.testHelper.getThrownExceptions(),
             hasItem(
                 either((Matcher)isA(InvalidProfileException.class))
-                    .or(isA(JsonParseException.class))));
+                    .or(isA(JsonParseException.class))
+                    .or(isA(IllegalArgumentException.class))
+                    .or(isA(ClassCastException.class))));
     }
 
     @Then("^I am presented with an error message$")
