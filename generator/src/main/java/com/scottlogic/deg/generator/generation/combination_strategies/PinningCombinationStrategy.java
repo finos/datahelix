@@ -10,11 +10,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldExhaustiveCombinationStrategy implements ICombinationStrategy {
+public class PinningCombinationStrategy implements ICombinationStrategy {
 
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-        Iterable<DataBag> iterable = new FieldExhaustiveCombinationStrategy
+        Iterable<DataBag> iterable = new PinningCombinationStrategy
                 .InternalIterable(dataBagSequences);
 
         return StreamSupport.stream(iterable.spliterator(), true);
