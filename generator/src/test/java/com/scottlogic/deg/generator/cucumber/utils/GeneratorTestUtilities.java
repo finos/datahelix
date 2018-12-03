@@ -16,7 +16,6 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;

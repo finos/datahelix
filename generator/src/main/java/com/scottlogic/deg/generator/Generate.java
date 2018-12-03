@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
@@ -39,9 +38,9 @@ public class Generate implements Runnable {
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
     @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (field, exhaustive, minimal).",
-        defaultValue = "FIELD_EXHAUSTIVE")
-    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE;
+        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
+        defaultValue = "PINNING")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
 
     @CommandLine.Option(
             names = {"--no-optimise"},

@@ -33,7 +33,7 @@ public class DegTestHelper {
         }
         
         if (state.combinationStrategy == null) {
-            state.combinationStrategy = GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE;
+            state.combinationStrategy = GenerationConfig.CombinationStrategyType.PINNING;
         }
 
         if (this.generatorHasRun()) {

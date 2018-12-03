@@ -70,7 +70,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         Transformer<GenerationConfig.CombinationStrategyType> transformer = strategyString ->
             Arrays.stream(GenerationConfig.CombinationStrategyType.values())
                 .filter(val -> val.toString().equals(strategyString))
-                .findFirst().orElse(GenerationConfig.CombinationStrategyType.FIELD_EXHAUSTIVE);
+                .findFirst().orElse(GenerationConfig.CombinationStrategyType.PINNING);
 
         tr.defineParameterType(new ParameterType<>(
             "combinationStrategy",
