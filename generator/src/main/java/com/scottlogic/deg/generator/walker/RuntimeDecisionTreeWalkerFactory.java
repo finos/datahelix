@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
@@ -11,9 +11,11 @@ import com.scottlogic.deg.generator.walker.reductive.*;
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
     private final GenerationConfig config;
+    private final DataGeneratorMonitor monitor;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor) {
         this.config = config;
+        this.monitor = monitor;
     }
 
     @Override
@@ -37,6 +39,9 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                 ConstraintFieldSniffer fieldSniffer = new ConstraintFieldSniffer();
                 IterationVisualiser visualiser = new ReductiveIterationVisualiser();
                 FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy(fieldSniffer);
+                ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
+                    ? (ReductiveDataGeneratorMonitor) this.monitor
+                    : new NoopDataGeneratorMonitor();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
@@ -46,8 +51,9 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         fieldSpecMerger,
                         fieldSpecFactory,
                         fieldSniffer,
-                        fixFieldStrategy
-                    ));
+                        fixFieldStrategy,
+                        reductiveMonitor),
+                    reductiveMonitor);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

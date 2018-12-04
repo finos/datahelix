@@ -1,12 +1,17 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.restrictions.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
+import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
 
-public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
+public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
     private Instant startedGenerating;
     private long rowsSinceLastSample;
     private Instant lastSampleTime;
@@ -50,6 +55,29 @@ public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
                 this.rowsEmitted.toString(),
                 this.startedGenerating.toString(),
                 rowsPerSecond));
+    }
+
+    @Override
+    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
+        System.out.println(
+            String.format(
+                "%s %s",
+                lastFixedField.field.name,
+                fieldSpecForValuesInLastFixedField.toString()));
+    }
+
+    @Override
+    public void fieldFixedToValue(Field field, Object current) {
+        System.out.println(String.format("Field [%s] = %s", field.name, current));
+    }
+
+    @Override
+    public void unableToStepFurther(FieldCollection fieldCollection) {
+        System.out.println(
+            String.format(
+                "%d: Unable to step further %s ",
+                fieldCollection.getFixedFields().size(),
+                fieldCollection.toString(true)));
     }
 }
 

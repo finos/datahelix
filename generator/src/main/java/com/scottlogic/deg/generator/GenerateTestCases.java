@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -51,7 +52,8 @@ public class GenerateTestCases implements Runnable {
             walkerType,
             combinationType);
 
-        DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
+        DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
+        DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor);
 
         try {
             new GenerationEngine(

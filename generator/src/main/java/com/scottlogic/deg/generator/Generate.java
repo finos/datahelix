@@ -4,9 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.SystemOutDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
@@ -69,7 +67,8 @@ public class Generate implements Runnable {
             combinationType);
 
         try {
-            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
+            DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
+            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor);
             DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
 
             new GenerationEngine(
@@ -82,7 +81,7 @@ public class Generate implements Runnable {
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
                         : new DecisionTreeOptimiser(),
-                    new SystemOutDataGeneratorMonitor()))
+                    monitor))
                 .generateDataSet(profileFile.toPath(), config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

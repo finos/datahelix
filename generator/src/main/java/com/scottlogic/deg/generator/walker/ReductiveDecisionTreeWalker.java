@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
@@ -16,12 +17,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     private final IterationVisualiser iterationVisualiser;
     private final FieldCollectionFactory fieldCollectionFactory;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FieldCollectionFactory fieldCollectionFactory) {
+        FieldCollectionFactory fieldCollectionFactory,
+        ReductiveDataGeneratorMonitor monitor) {
         this.iterationVisualiser = iterationVisualiser;
         this.fieldCollectionFactory = fieldCollectionFactory;
+        this.monitor = monitor;
     }
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
@@ -56,8 +60,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
-            System.out.println(String.format("%d: Unable to step further %s ", fieldCollection.getFixedFields().size(), fieldCollection.toString(true)));
-
+            this.monitor.unableToStepFurther(fieldCollection);
             return Stream.empty();
         }
 

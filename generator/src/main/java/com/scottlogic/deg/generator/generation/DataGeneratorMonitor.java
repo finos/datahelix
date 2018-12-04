@@ -6,3 +6,4 @@ public interface DataGeneratorMonitor {
     void generationStarting(GenerationConfig generationConfig);
     void rowEmitted(GeneratedObject row);
 }
+
