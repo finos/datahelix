@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FieldCollection {
+
     private final GenerationConfig generationConfig;
     private final ConstraintReducer reducer;
     private final FieldCollectionFactory fieldCollectionFactory;
@@ -38,7 +39,8 @@ public class FieldCollection {
         ReductiveDecisionTreeAdapter treeAdapter,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
-        FixedField lastFixedField) {
+        FixedField lastFixedField
+    ) {
         this.fields = fields;
         this.fieldCollectionFactory = fieldCollectionFactory;
         this.fieldSpecMerger = fieldSpecMerger;
@@ -57,6 +59,11 @@ public class FieldCollection {
             : this.fixedFields.size() + 1;
 
         return noOfFixedFields == this.fields.size();
+    }
+
+    boolean fieldIsFixed(Field field) {
+        return (this.lastFixedField != null && this.lastFixedField.field.equals(field)) || this.fixedFields.containsKey(field);
+
     }
 
     //get a stream of all possible values for the field that was fixed on the last iteration
@@ -99,7 +106,7 @@ public class FieldCollection {
 
     //work out the next field to fix and return a new FieldCollection with this field fixed
     public FieldCollection getNextFixedField(ReductiveConstraintNode rootNode) {
-        FieldAndConstraintMapping fieldToFix = this.fixFieldStrategy.getFieldAndConstraintMapToFixNext(rootNode);
+        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(this, rootNode);
 
         if (fieldToFix == null){
             throw new UnsupportedOperationException(
@@ -108,7 +115,7 @@ public class FieldCollection {
                     Objects.toString(this.getUnfixedFields())));
         }
 
-        FixedField field = getFixedFieldWithValuesForField(fieldToFix.getField(), rootNode);
+        FixedField field = getFixedFieldWithValuesForField(fieldToFix, rootNode);
         return this.fieldCollectionFactory.create(this, field);
     }
 

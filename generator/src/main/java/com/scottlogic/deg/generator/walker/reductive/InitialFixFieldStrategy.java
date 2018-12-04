@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
@@ -22,7 +23,7 @@ public class InitialFixFieldStrategy implements FixFieldStrategy {
     4. Yield detail of the constraint and its related field
     */
     @Override
-    public FieldAndConstraintMapping getFieldAndConstraintMapToFixNext(ReductiveConstraintNode rootNode) {
+    public Field getNextFieldToFix(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
         return rootNode.getAllUnfixedAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(this.fieldSniffer::detectField))
@@ -33,6 +34,7 @@ public class InitialFixFieldStrategy implements FixFieldStrategy {
             .max(Comparator.comparing(FieldAndConstraintMapping::getPriority))
 
             .filter(c -> !c.getConstraints().isEmpty())
+            .map(FieldAndConstraintMapping::getField)
             .orElse(null);
     }
 }

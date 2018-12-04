@@ -10,9 +10,11 @@ import com.scottlogic.deg.generator.walker.reductive.*;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
+    private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, FixFieldStrategy fixFieldStrategy) {
+        this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
     }
 
@@ -37,7 +39,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                 ConstraintFieldSniffer fieldSniffer = new ConstraintFieldSniffer();
                 ReductiveDecisionTreeAdapter treeAdapter = new ReductiveDecisionTreeAdapter();
                 IterationVisualiser visualiser = new ReductiveIterationVisualiser();
-                FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy(fieldSniffer);
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,

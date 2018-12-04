@@ -7,10 +7,12 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.reductive.HierarchicalDependencyFixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -47,9 +49,11 @@ public class GenerateTestCases implements Runnable {
             walkerType,
             new FieldExhaustiveCombinationStrategy());
 
-        DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
 
         try {
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, new HierarchicalDependencyFixFieldStrategy(profile));
+
             new GenerationEngine(
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
                 new DataGenerator(
@@ -57,7 +61,7 @@ public class GenerateTestCases implements Runnable {
                     new NoopTreePartitioner(),
                     new NoopDecisionTreeOptimiser(),
                     new NoopDataGeneratorMonitor()))
-                .generateTestCases(profileFile.toPath(), config);
+                .generateTestCases(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
