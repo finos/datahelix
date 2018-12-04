@@ -18,6 +18,8 @@ public class FieldSpecFactory {
     private FieldSpec construct(IConstraint constraint, boolean negate) {
         if (constraint instanceof NotConstraint) {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
+        } else if (constraint instanceof AtomicNotConstraint) {
+            return construct(((AtomicNotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
