@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class MatchesRegexConstraint implements IConstraint {
+public class MatchesRegexConstraint implements AtomicConstraint {
     public final Field field;
     public final Pattern regex;
 

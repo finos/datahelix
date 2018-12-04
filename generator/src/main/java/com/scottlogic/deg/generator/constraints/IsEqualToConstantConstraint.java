@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsEqualToConstantConstraint implements IConstraint {
+public class IsEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
     public final Object requiredValue;
 

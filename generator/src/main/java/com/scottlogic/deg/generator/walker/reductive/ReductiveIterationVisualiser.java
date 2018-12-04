@@ -22,7 +22,7 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
 
         ProfileFields profileFields = fieldCollection.getFields();
         String description = String.format("Iteration %d\n%s", iteration, fieldCollection.toString(true));
-        Path outputPath = FileSystems.getDefault().getPath("reductive-walker", String.format("Reduced-tree-%03d.gv", iteration));
+        Path outputPath = FileSystems.getDefault().getPath("C:\\Users\\pdaulby\\Downloads", String.format("Reduced-tree-%03d.gv", iteration));
 
         //copy of Visualise.writeTreeTo()
         try (OutputStreamWriter outWriter = new OutputStreamWriter(

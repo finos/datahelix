@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.generation.IStringGenerator;
 import java.util.Collection;
 import java.util.Collections;
 
-public class MatchesStandardConstraint implements IConstraint {
+public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
     public final IStringGenerator standard; // TODO: Change this to an enum member; string generators shouldn't exist on this level
 

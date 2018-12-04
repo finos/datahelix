@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConditionalConstraint implements IConstraint
+public class ConditionalConstraint implements AtomicConstraint
 {
     public final IConstraint condition;
     public final IConstraint whenConditionIsTrue;

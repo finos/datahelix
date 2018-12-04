@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsBeforeConstantDateTimeConstraint implements IConstraint {
+public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
     public final Field field;
     public final LocalDateTime referenceValue;
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class IsInSetConstraint implements IConstraint {
+public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
     public final Set<Object> legalValues;
 

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsNullConstraint implements IConstraint
+public class IsNullConstraint implements AtomicConstraint
 {
     public final Field field;
 

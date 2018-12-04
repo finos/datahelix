@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsOfTypeConstraint implements IConstraint {
+public class IsOfTypeConstraint implements AtomicConstraint {
     public final Field field;
     public final Types requiredType;
 

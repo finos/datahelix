@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class StringHasLengthConstraint implements IConstraint {
+public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;
     public final Number referenceValue;
 

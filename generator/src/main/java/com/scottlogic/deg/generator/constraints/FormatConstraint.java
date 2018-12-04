@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.Field;
 import java.util.Collection;
 import java.util.Collections;
 
-public class FormatConstraint implements IConstraint {
+public class FormatConstraint implements AtomicConstraint {
 
     public final Field field;
     public final String format;

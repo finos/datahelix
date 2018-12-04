@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class ContainsRegexConstraint implements IConstraint {
+public class ContainsRegexConstraint implements AtomicConstraint {
     public final Field field;
     public final Pattern regex;
 

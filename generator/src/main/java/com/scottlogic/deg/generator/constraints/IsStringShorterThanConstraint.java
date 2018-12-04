@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsStringShorterThanConstraint implements IConstraint {
+public class IsStringShorterThanConstraint implements AtomicConstraint {
     public final Field field;
     public final int referenceValue;
 

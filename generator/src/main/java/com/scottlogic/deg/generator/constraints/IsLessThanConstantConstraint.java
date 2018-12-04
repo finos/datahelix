@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsLessThanConstantConstraint implements IConstraint {
+public class IsLessThanConstantConstraint implements AtomicConstraint {
     public final Field field;
     public final Number referenceValue;
 
