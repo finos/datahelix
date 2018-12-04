@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
@@ -21,11 +22,59 @@ public class TestHierarchicalDependencyFixFieldStrategy {
             .build();
         List<FixFieldPriority> priorities = getPriorities(fields, constraints);
         Assert.assertEquals(priorities.size(), 1);
-        Assert.assertEquals(priorities.get(0).getPriority(), 0, 0.001);
+        Assert.assertEquals(priorities.get(0).getPriority(), 0, 0);
     }
 
     @Test
-    public void testDependencyOfFieldsWithSameSetSizes(){
+    public void testScoreForFieldWithSetConstraintAndNoDependency(){
+        String TEST_FIELD_1 = "Field";
+        List<Field> fields = getFields(TEST_FIELD_1);
+        List<IConstraint> constraints = new ConstraintBuilder(fields)
+            .addInSetConstraint(TEST_FIELD_1, Collections.singletonList("CO"))
+            .build();
+        List<FixFieldPriority> priorities = getPriorities(fields, constraints);
+        Assert.assertEquals(priorities.size(), 1);
+        Assert.assertEquals(priorities.get(0).getPriority(), 10, 0);
+    }
+
+    @Test
+    public void testScoreForFieldWithNoSetConstraintAndOneDependentField(){
+        String TEST_FIELD_1 = "Controlling Field";
+        String TEST_FIELD_2 = "Dependent Field";
+        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
+        List<IConstraint> constraints = new ConstraintBuilder(fields)
+            .addEqualToConstraint(TEST_FIELD_1, "ABC")
+            .addConditionalConstraint(
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "ABC").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "DEF").build()
+            )
+            .build();
+        List<FixFieldPriority> priorities = getPriorities(fields, constraints);
+        Assert.assertEquals(priorities.size(), 2);
+        Assert.assertEquals(priorities.get(0).getPriority(), 100, 0);
+        Assert.assertEquals(priorities.get(1).getPriority(), 0, 0);
+    }
+
+    @Test
+    public void testScoreForFieldWithSetConstraintAndOneDependentField() {
+        String TEST_FIELD_1 = "Controlling Field";
+        String TEST_FIELD_2 = "Dependent Field";
+        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
+        List<IConstraint> constraints = new ConstraintBuilder(fields)
+            .addInSetConstraint(TEST_FIELD_1, Collections.singletonList("ABC"))
+            .addConditionalConstraint(
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "ABC").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "DEF").build()
+            )
+            .build();
+        List<FixFieldPriority> priorities = getPriorities(fields, constraints);
+        Assert.assertEquals(priorities.size(), 2);
+        Assert.assertEquals(priorities.get(0).getPriority(), 110, 0);
+        Assert.assertEquals(priorities.get(1).getPriority(), 0, 0);
+    }
+
+    @Test
+    public void testDependencyOfFieldsWithSameSetSizes() {
         String TEST_FIELD_1 = "Controlling Field";
         String TEST_FIELD_2 = "Dependent Field";
 
@@ -44,7 +93,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     @Test
-    public void testBiasedDependencyOfFieldsWithDifferingSetSizes(){
+    public void testBiasedDependencyOfFieldsWithDifferingSetSizes() {
         String TEST_FIELD_1 = "Controlling Field 1";
         String TEST_FIELD_2 = "Controlling Field 2";
         String TEST_FIELD_3 = "Dependent Field";
@@ -76,7 +125,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     @Test
-    public void testAlphabeticalOrdering(){
+    public void testAlphabeticalOrdering() {
         String TEST_FIELD_1 = "Z";
         String TEST_FIELD_2 = "A";
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
@@ -89,47 +138,20 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         Assert.assertEquals(priorities.get(1).getField().name, TEST_FIELD_1);
     }
 
-    private List<Field> getFields(String ...names){
+    private List<Field> getFields(String ...names) {
         return Arrays.stream(names)
             .map(Field::new)
             .collect(Collectors.toList());
     }
 
-    private List<FixFieldPriority> getPriorities(List<Field> fields, List<IConstraint> constraints){
+    private List<FixFieldPriority> getPriorities(List<Field> fields, List<IConstraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule("Test rule", constraints));
         Profile profile = new Profile(fields, rules);
         HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile);
         return strategy.getFieldFixingPriorityList();
     }
 
-    class ConstraintBuilder {
-        private final List<IConstraint> constraints =  new ArrayList<>();
-        private final Map<String, Field> fields;
 
-        public ConstraintBuilder(List<Field> fields){
-            this.fields = fields.stream().collect(Collectors.toMap(f -> f.name, f -> f));
-        }
-
-        public List<IConstraint> build() {
-            return constraints;
-        }
-
-        public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values){
-            constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values)));
-            return this;
-        }
-
-        public ConstraintBuilder addEqualToConstraint(String fieldname, Object value){
-            constraints.add(new IsEqualToConstantConstraint(fields.get(fieldname), value));
-            return this;
-        }
-
-        public ConstraintBuilder addConditionalConstraint(List<IConstraint> predicates, List<IConstraint> consequences){
-            constraints.add(new ConditionalConstraint(new AndConstraint(predicates), new AndConstraint(consequences)));
-            return this;
-        }
-
-    }
 
 
 }
