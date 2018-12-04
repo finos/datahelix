@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.Collection;
 import java.util.Objects;
 
 public class AtomicNotConstraint implements AtomicConstraint {
@@ -38,8 +37,8 @@ public class AtomicNotConstraint implements AtomicConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return negatedConstraint.getFields();
+    public Field getField() {
+        return negatedConstraint.getField();
     }
 
     public String toString(){

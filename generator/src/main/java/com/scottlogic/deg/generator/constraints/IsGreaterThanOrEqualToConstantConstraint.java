@@ -2,8 +2,6 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
 public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
@@ -21,8 +19,8 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override

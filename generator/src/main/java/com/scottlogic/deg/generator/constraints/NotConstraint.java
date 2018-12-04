@@ -1,8 +1,5 @@
 package com.scottlogic.deg.generator.constraints;
 
-import com.scottlogic.deg.generator.Field;
-
-import java.util.Collection;
 import java.util.Objects;
 
 public class NotConstraint implements LogicalConstraint {
@@ -35,11 +32,6 @@ public class NotConstraint implements LogicalConstraint {
     public String toDotLabel() {
         /*Use the encoded character code for the NOT (¬) symbol; leaving it un-encoded causes issues with visualisers*/
         return String.format("&#x00AC;(%s)", negatedConstraint.toDotLabel());
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return negatedConstraint.getFields();
     }
 
     public String toString(){

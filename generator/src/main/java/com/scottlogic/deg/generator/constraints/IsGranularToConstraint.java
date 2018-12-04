@@ -3,8 +3,6 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
 public class IsGranularToConstraint implements AtomicConstraint {
@@ -22,8 +20,8 @@ public class IsGranularToConstraint implements AtomicConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override

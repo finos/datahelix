@@ -3,8 +3,6 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
 public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstraint {
@@ -22,8 +20,8 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstr
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override

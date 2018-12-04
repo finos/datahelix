@@ -1,9 +1,8 @@
 package com.scottlogic.deg.generator.constraints;
 
-import com.scottlogic.deg.generator.Field;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
 
 public class AndConstraint implements LogicalConstraint
 {
@@ -15,13 +14,6 @@ public class AndConstraint implements LogicalConstraint
 
     public AndConstraint(LogicalConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return subConstraints.stream()
-            .flatMap(constraint -> constraint.getFields().stream())
-            .collect(Collectors.toList());
     }
 
     @Override

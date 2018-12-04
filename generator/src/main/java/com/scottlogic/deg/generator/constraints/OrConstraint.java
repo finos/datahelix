@@ -1,11 +1,8 @@
 package com.scottlogic.deg.generator.constraints;
 
-import com.scottlogic.deg.generator.Field;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class OrConstraint implements LogicalConstraint {
     public final Collection<LogicalConstraint> subConstraints;
@@ -24,13 +21,6 @@ public class OrConstraint implements LogicalConstraint {
 
 //        return String.format("Or (%s)", subConstraints.stream()
 //            .map(x -> x.toDotLabel()).collect(Collectors.joining(", ")));
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return subConstraints.stream()
-            .flatMap(constraint -> constraint.getFields().stream())
-            .collect(Collectors.toList());
     }
 
     @Override

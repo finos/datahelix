@@ -1,13 +1,11 @@
 package com.scottlogic.deg.generator.constraints;
 
-import com.scottlogic.deg.generator.Field;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /*
  * The following JsonTypeInfo is needed for the utility program GenTreeJson.java
@@ -40,8 +38,6 @@ public interface LogicalConstraint
     }
 
     String toDotLabel();
-
-    Collection<Field> getFields();
 
     default LogicalConstraint or(LogicalConstraint... others)
     {
