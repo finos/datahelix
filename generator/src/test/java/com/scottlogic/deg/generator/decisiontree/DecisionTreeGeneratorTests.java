@@ -383,7 +383,7 @@ class DecisionTreeGeneratorTests {
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        NotConstraint notConstraint = (NotConstraint) conditionalConstraint.negate();
+        IConstraint notConstraint = conditionalConstraint.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
