@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 
 public interface IConstraintMapper {
-    IConstraint map();
+    AtomicConstraint map();
 }

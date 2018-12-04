@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
@@ -132,7 +133,7 @@ public class FieldCollection {
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
-    AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(IConstraint atomicConstraint) {
+    AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(AtomicConstraint atomicConstraint) {
         //is the field for this atomic constraint fixed?
         //does the constraint complement or conflict with the fixed field?
 
@@ -150,7 +151,7 @@ public class FieldCollection {
     }
 
     //work out if the field is contradictory
-    private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, IConstraint atomicConstraint) {
+    private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, AtomicConstraint atomicConstraint) {
         FieldSpec fieldSpec = fieldSpecFactory.construct(atomicConstraint);
         FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
 

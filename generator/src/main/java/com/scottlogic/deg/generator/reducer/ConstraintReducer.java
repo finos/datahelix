@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -28,15 +28,14 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
-        final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport
+    //TODO tidy up
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
+        final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
-            .map(constraintFieldSniffer::generateTuple)
             .collect(
                 Collectors.groupingBy(
-                    ConstraintAndFieldTuple::getField, // map from field...
-                    Collectors.mapping( // ...to a list of constraints
-                        ConstraintAndFieldTuple::getConstraint,
+                    AtomicConstraint::getField,
+                    Collectors.mapping(atomicConstraint->atomicConstraint,
                         Collectors.toList())));
 
         final Map<Field, Optional<FieldSpec>> fieldToFieldSpec = fields.stream()
@@ -61,7 +60,7 @@ public class ConstraintReducer {
                 map));
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
+    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
         if (constraints == null) {
             return Optional.of(FieldSpec.Empty);
         }

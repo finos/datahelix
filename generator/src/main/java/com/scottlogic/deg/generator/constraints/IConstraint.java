@@ -43,18 +43,21 @@ public interface IConstraint
 
     Collection<Field> getFields();
 
-    default public IConstraint or(IConstraint... others)
+    default IConstraint or(IConstraint... others)
     {
         return new OrConstraint(combine(this, others));
     }
 
-    default public IConstraint and(IConstraint... others)
+    default IConstraint and(IConstraint... others)
     {
         return new AndConstraint(combine(this, others));
     }
 
-    default public IConstraint isFalse()
+    default IConstraint negate()
     {
+        if (this instanceof AtomicConstraint)
+            return new AtomicNotConstraint((AtomicConstraint) this);
+
         return new NotConstraint(this);
     }
 }

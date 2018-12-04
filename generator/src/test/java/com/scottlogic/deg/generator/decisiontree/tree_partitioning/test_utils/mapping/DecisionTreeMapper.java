@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.m
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeDto;
@@ -50,7 +51,7 @@ public class DecisionTreeMapper {
         return new TreeDecisionNode(options);
     }
 
-    private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
+    private List<AtomicConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
         return constraintNodeDto.atomicConstraints
                     .stream()
                     .map(IConstraintMapper::map)

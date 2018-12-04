@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.reductive;
 
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -12,15 +13,15 @@ import java.util.function.Supplier;
 
 public class ReductiveConstraintNode implements ConstraintNode {
     private final ConstraintNode underlying;
-    private final Collection<IConstraint> unfixedAtomicConstraints;
+    private final Collection<AtomicConstraint> unfixedAtomicConstraints;
 
-    public ReductiveConstraintNode(ConstraintNode underlying, Collection<IConstraint> unfixedAtomicConstraints) {
+    public ReductiveConstraintNode(ConstraintNode underlying, Collection<AtomicConstraint> unfixedAtomicConstraints) {
         this.underlying = underlying;
         this.unfixedAtomicConstraints = unfixedAtomicConstraints;
     }
 
     @Override
-    public Collection<IConstraint> getAtomicConstraints() {
+    public Collection<AtomicConstraint> getAtomicConstraints() {
         return underlying.getAtomicConstraints();
     }
 
@@ -42,19 +43,19 @@ public class ReductiveConstraintNode implements ConstraintNode {
     }
 
     @Override
-    public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
+    public ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint) {
         return new ReductiveConstraintNode(
             underlying.cloneWithoutAtomicConstraint(excludeAtomicConstraint),
             this.unfixedAtomicConstraints);
     }
 
     @Override
-    public boolean atomicConstraintExists(IConstraint constraint) {
+    public boolean atomicConstraintExists(AtomicConstraint constraint) {
         return underlying.atomicConstraintExists(constraint);
     }
 
     @Override
-    public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+    public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
         return new ReductiveConstraintNode(
             underlying.addAtomicConstraints(constraints),
             this.unfixedAtomicConstraints);
@@ -79,7 +80,7 @@ public class ReductiveConstraintNode implements ConstraintNode {
         return underlying.toString();
     }
 
-    public Collection<IConstraint> getAllUnfixedAtomicConstraints(){
+    public Collection<AtomicConstraint> getAllUnfixedAtomicConstraints(){
         return this.unfixedAtomicConstraints;
     }
 

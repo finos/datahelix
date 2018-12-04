@@ -8,16 +8,13 @@ import java.util.Objects;
 public class NotConstraint implements IConstraint {
     public final IConstraint negatedConstraint;
 
-    public NotConstraint(IConstraint negatedConstraint) {
+    protected NotConstraint(IConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
-
-    public static IConstraint negate(IConstraint constraint) {
-        if (constraint instanceof NotConstraint)
-            return ((NotConstraint) constraint).negatedConstraint;
-
-        return new NotConstraint(constraint);
+    @Override
+    public IConstraint negate() {
+        return this.negatedConstraint;
     }
 
     private IConstraint getBaseConstraint(){

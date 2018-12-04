@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.*;
@@ -12,28 +12,28 @@ import java.util.stream.Stream;
 public final class TreeConstraintNode implements ConstraintNode {
     public static final ConstraintNode empty = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
-    private final Collection<IConstraint> atomicConstraints;
+    private final Collection<AtomicConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
-    public TreeConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
+    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
         this(atomicConstraints, decisions, Collections.emptySet());
     }
 
-    public TreeConstraintNode(Collection<IConstraint> atomicConstraints, Collection<DecisionNode> decisions, Set<NodeMarking> nodeMarkings) {
+    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions, Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
         this.decisions = Collections.unmodifiableCollection(decisions);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
-    public TreeConstraintNode(IConstraint... atomicConstraints) {
+    public TreeConstraintNode(AtomicConstraint... atomicConstraints) {
         this(
             Arrays.asList(atomicConstraints),
             Collections.emptySet(),
             Collections.emptySet());
     }
 
-    public TreeConstraintNode(IConstraint singleAtomicConstraint) {
+    public TreeConstraintNode(AtomicConstraint singleAtomicConstraint) {
         this(
             Collections.singletonList(singleAtomicConstraint),
             Collections.emptySet(),
@@ -47,7 +47,7 @@ public final class TreeConstraintNode implements ConstraintNode {
             Collections.emptySet());
     }
 
-    public Collection<IConstraint> getAtomicConstraints() {
+    public Collection<AtomicConstraint> getAtomicConstraints() {
         return new HashSet<>(atomicConstraints);
     }
 
@@ -98,7 +98,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         );
     }
 
-    public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
+    public ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint) {
         return new TreeConstraintNode(
             this.atomicConstraints
                 .stream()
@@ -108,13 +108,13 @@ public final class TreeConstraintNode implements ConstraintNode {
             this.nodeMarkings);
     }
 
-    public boolean atomicConstraintExists(IConstraint constraint) {
+    public boolean atomicConstraintExists(AtomicConstraint constraint) {
         return atomicConstraints
             .stream()
             .anyMatch(c -> c.equals(constraint));
     }
 
-    public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+    public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
         return new TreeConstraintNode(
             Stream
                 .concat(

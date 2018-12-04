@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
@@ -9,7 +10,7 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     public TypesDto requiredType;
 
     @Override
-    public IConstraint map() {
+    public AtomicConstraint map() {
         return new IsOfTypeConstraint(new Field(field.name), getTypesFromTypesDto());
     }
 

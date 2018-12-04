@@ -1,22 +1,18 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 
 import java.util.Collection;
 
 public class ConstraintFieldSniffer {
 
-    ConstraintAndFieldTuple generateTuple(IConstraint constraint) {
-        final Field field = detectField(constraint);
-        return new ConstraintAndFieldTuple(constraint, field);
+    ConstraintAndFieldTuple generateTuple(AtomicConstraint constraint) {
+        return new ConstraintAndFieldTuple(constraint, constraint.getField());
     }
 
-    public Field detectField(IConstraint constraint) {
-        final Collection<Field> fields = constraint.getFields();
-        if (fields.size() == 1) {
-          return fields.iterator().next();
-        }
-        throw new UnsupportedOperationException();
+    public Field detectField(AtomicConstraint constraint) {
+        return constraint.getField();
     }
 }

@@ -6,21 +6,18 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class AtomicNotConstraint implements AtomicConstraint {
-    public final IConstraint negatedConstraint;
+    public final AtomicConstraint negatedConstraint;
 
-    public AtomicNotConstraint(IConstraint negatedConstraint) {
+    public AtomicNotConstraint(AtomicConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
-
-    public static IConstraint negate(IConstraint constraint) {
-        if (constraint instanceof AtomicNotConstraint)
-            return ((AtomicNotConstraint) constraint).negatedConstraint;
-
-        return new AtomicNotConstraint(constraint);
+    @Override
+    public AtomicConstraint negate() {
+        return this.negatedConstraint;
     }
 
-    private IConstraint getBaseConstraint(){
+    private AtomicConstraint getBaseConstraint(){
         if (negatedConstraint instanceof AtomicNotConstraint){
             return ((AtomicNotConstraint) negatedConstraint).getBaseConstraint();
         }

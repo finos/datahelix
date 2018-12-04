@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
 
@@ -12,7 +13,7 @@ public class IsInSetConstraintDto implements ConstraintDto {
     public List<Object> legalValues;
 
     @Override
-    public IConstraint map() {
+    public AtomicConstraint map() {
         return new IsInSetConstraint(new Field(field.name), new HashSet<>(legalValues));
     }
 }

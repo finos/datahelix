@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -89,7 +90,7 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
             this.constraints = constraints;
         }
 
-        Set<IConstraint> getAtomicConstraints() {
+        Set<AtomicConstraint> getAtomicConstraints() {
             return constraints
                 .stream()
                 .map(RootLevelConstraint::getAtomicConstraint)

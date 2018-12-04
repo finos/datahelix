@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 public class FieldAndConstraintMapping {
     private final Field field;
-    private final Collection<IConstraint> constraints;
+    private final Collection<AtomicConstraint> constraints;
     private final int priority;
 
     public Field getField() {
         return field;
     }
 
-    public Collection<IConstraint> getConstraints() {
+    public Collection<AtomicConstraint> getConstraints() {
         return constraints;
     }
 
@@ -24,13 +24,13 @@ public class FieldAndConstraintMapping {
         return priority;
     }
 
-    FieldAndConstraintMapping(Field field, Collection<IConstraint> constraints) {
+    FieldAndConstraintMapping(Field field, Collection<AtomicConstraint> constraints) {
         this.field = field;
         this.constraints = constraints;
         this.priority = getConstraintPriority(constraints);
     }
 
-    private static int getConstraintPriority(Collection<IConstraint> constraints) {
+    private static int getConstraintPriority(Collection<AtomicConstraint> constraints) {
         Set<Object> allLegalValuesForField = constraints
             .stream()
             .filter(c -> (c instanceof IsInSetConstraint))
@@ -48,7 +48,7 @@ public class FieldAndConstraintMapping {
             .reduce(setConstraintPriority, (prev, c) -> prev + getConstraintPriority(c), (a, b) -> a + b);
     }
 
-    private static int getConstraintPriority(IConstraint constraint) {
+    private static int getConstraintPriority(AtomicConstraint constraint) {
         if (constraint instanceof IsEqualToConstantConstraint
             || constraint instanceof IsNullConstraint) {
             return 20000;

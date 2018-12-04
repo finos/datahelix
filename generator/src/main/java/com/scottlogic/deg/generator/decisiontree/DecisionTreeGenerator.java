@@ -19,7 +19,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     private static Collection<IConstraint> negateEach(Collection<IConstraint> constraints) {
-        return wrapEach(constraints, NotConstraint::new);
+        return wrapEach(constraints, constraint->constraint.negate());
     }
 
     private static Collection<IConstraint> violateEach(Collection<IConstraint> constraints) {
@@ -35,18 +35,18 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return new OrConstraint(
             ifConstraint.and(thenConstraint),
             elseConstraint != null
-                ? ifConstraint.isFalse().and(elseConstraint)
-                : ifConstraint.isFalse());
+                ? ifConstraint.negate().and(elseConstraint)
+                : ifConstraint.negate());
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(Collection<IConstraint> constraints) {
+    private static Collection<ConstraintNode> asConstraintNodeList(Collection<AtomicConstraint> constraints) {
         return Collections.singleton(
             new TreeConstraintNode(
                 constraints,
                 Collections.emptyList()));
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(IConstraint constraint) {
+    private static Collection<ConstraintNode> asConstraintNodeList(AtomicConstraint constraint) {
         return asConstraintNodeList(Collections.singleton(constraint));
     }
 
@@ -131,7 +131,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             }
 
             // we've got an atomic constraint
-            return convertConstraint(new NotConstraint(violatedConstraint));
+            return convertConstraint(violatedConstraint.negate());
         } else if (constraintToConvert instanceof NotConstraint) {
             IConstraint negatedConstraint = ((NotConstraint) constraintToConvert).negatedConstraint;
 
@@ -160,13 +160,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
                 IConstraint positiveNegation = new AndConstraint(
                     conditional.condition,
-                    new NotConstraint(conditional.whenConditionIsTrue));
+                    conditional.whenConditionIsTrue.negate());
 
                 IConstraint negativeNegation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
-                    new NotConstraint(conditional.condition),
-                    new NotConstraint(conditional.whenConditionIsFalse));
+                    conditional.condition.negate(),
+                    conditional.whenConditionIsFalse).negate();
 
                 return convertConstraint(
                     negativeNegation != null
@@ -175,7 +175,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             }
             // if we got this far, it must be an atomic constraint
             else {
-                return asConstraintNodeList(constraintToConvert);
+                return asConstraintNodeList((AtomicConstraint) constraintToConvert);
             }
         }
         // AND(X, Y, Z) becomes a flattened list of constraint nodes
@@ -199,7 +199,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConstraint(reduceConditionalConstraint(constraintToConvert));
         } else {
-            return asConstraintNodeList(constraintToConvert);
+            return asConstraintNodeList((AtomicConstraint) constraintToConvert);
         }
     }
 }

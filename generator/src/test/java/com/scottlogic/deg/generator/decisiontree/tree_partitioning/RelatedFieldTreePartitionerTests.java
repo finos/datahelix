@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -216,8 +217,8 @@ class RelatedFieldTreePartitionerTests {
             Arrays.asList(decisions));
     }
 
-    private IConstraint atomicConstraint(String fieldName) {
-        IConstraint constraint = this.constraints.get(fieldName);
+    private AtomicConstraint atomicConstraint(String fieldName) {
+        AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
             constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value");
@@ -249,7 +250,7 @@ class RelatedFieldTreePartitionerTests {
         partitionedTrees = null;
     }
 
-    private Map<String, IConstraint> constraints;
+    private Map<String, AtomicConstraint> constraints;
     private List<DecisionTree> partitionedTrees;
     private DecisionTree decisionTree;
 
