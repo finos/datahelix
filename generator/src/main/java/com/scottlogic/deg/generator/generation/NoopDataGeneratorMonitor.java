@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 public class NoopDataGeneratorMonitor implements DataGeneratorMonitor {
 
     @Override
-    public void generationStarting() { }
+    public void generationStarting(GenerationConfig generationConfig) { }
 
     @Override
     public void rowEmitted(GeneratedObject row) { }

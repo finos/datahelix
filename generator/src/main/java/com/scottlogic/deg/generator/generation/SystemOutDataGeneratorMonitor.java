@@ -11,25 +11,31 @@ public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
     private long rowsSinceLastSample;
     private Instant lastSampleTime;
     private BigInteger rowsEmitted;
+    private BigInteger maxRows;
 
     @Override
-    public void generationStarting() {
-        startedGenerating = Instant.now();
-        lastSampleTime = startedGenerating;
-        rowsSinceLastSample = 0;
-        rowsEmitted = BigInteger.ZERO;
+    public void generationStarting(GenerationConfig generationConfig) {
+        this.startedGenerating = Instant.now();
+        this.lastSampleTime = this.startedGenerating;
+        this.rowsSinceLastSample = 0;
+        this.rowsEmitted = BigInteger.ZERO;
+        this.maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
     }
 
     @Override
     public void rowEmitted(GeneratedObject row) {
-        rowsSinceLastSample++;
+        this.rowsSinceLastSample++;
+        this.rowsEmitted = rowsEmitted.add(BigInteger.ONE);
 
-        if (rowsSinceLastSample >= 1000){
+        if (this.rowsSinceLastSample >= 1000){
             Instant newSampleTime = Instant.now();
-            reportVelocity(rowsSinceLastSample, lastSampleTime, newSampleTime);
-            lastSampleTime = newSampleTime;
-            rowsEmitted = rowsEmitted.add(BigInteger.valueOf(rowsSinceLastSample));
-            rowsSinceLastSample = 0;
+            reportVelocity(this.rowsSinceLastSample, this.lastSampleTime, newSampleTime);
+            this.lastSampleTime = newSampleTime;
+            this.rowsSinceLastSample = 0;
+        }
+
+        if (this.rowsEmitted.compareTo(this.maxRows) >= 0){
+            System.out.println("\n\n\nAll rows emitted\n\n\n");
         }
     }
 

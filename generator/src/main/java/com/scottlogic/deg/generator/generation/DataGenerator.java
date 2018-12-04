@@ -62,7 +62,7 @@ public class DataGenerator implements IDataGenerator {
                     .map(dataBag::getValueAndFormat)
                     .collect(Collectors.toList())));
 
-        monitor.generationStarting();
+        monitor.generationStarting(generationConfig);
 
         return dataRows
             .limit(generationConfig.getMaxRows())
