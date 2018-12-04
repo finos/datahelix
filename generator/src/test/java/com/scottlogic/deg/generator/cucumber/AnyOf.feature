@@ -294,8 +294,3 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
   """
   Then I am presented with an error message
   And no data is created
-
-
-Scenario: Running an 'anyOf' request that contains a contradictory nested allOf request should fail with an error message
-
-
