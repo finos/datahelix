@@ -19,7 +19,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     private static Collection<IConstraint> negateEach(Collection<IConstraint> constraints) {
-        return wrapEach(constraints, constraint->constraint.negate());
+        return wrapEach(constraints, constraint->constraint.not());
     }
 
     private static Collection<IConstraint> violateEach(Collection<IConstraint> constraints) {
@@ -35,8 +35,8 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return new OrConstraint(
             ifConstraint.and(thenConstraint),
             elseConstraint != null
-                ? ifConstraint.negate().and(elseConstraint)
-                : ifConstraint.negate());
+                ? ifConstraint.not().and(elseConstraint)
+                : ifConstraint.not());
     }
 
     private static Collection<ConstraintNode> asConstraintNodeList(Collection<AtomicConstraint> constraints) {
@@ -131,7 +131,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             }
 
             // we've got an atomic constraint
-            return convertConstraint(violatedConstraint.negate());
+            return convertConstraint(violatedConstraint.not());
         } else if (constraintToConvert instanceof NotConstraint) {
             IConstraint negatedConstraint = ((NotConstraint) constraintToConvert).negatedConstraint;
 
@@ -160,13 +160,13 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
                 IConstraint positiveNegation = new AndConstraint(
                     conditional.condition,
-                    conditional.whenConditionIsTrue.negate());
+                    conditional.whenConditionIsTrue.not());
 
                 IConstraint negativeNegation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
-                    conditional.condition.negate(),
-                    conditional.whenConditionIsFalse).negate();
+                    conditional.condition.not(),
+                    conditional.whenConditionIsFalse).not();
 
                 return convertConstraint(
                     negativeNegation != null

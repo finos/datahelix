@@ -53,7 +53,7 @@ public interface IConstraint
         return new AndConstraint(combine(this, others));
     }
 
-    default IConstraint negate()
+    default IConstraint not()
     {
         if (this instanceof AtomicConstraint)
             return new AtomicNotConstraint((AtomicConstraint) this);

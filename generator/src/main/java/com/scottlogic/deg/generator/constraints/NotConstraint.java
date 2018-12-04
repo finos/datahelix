@@ -13,7 +13,7 @@ public class NotConstraint implements IConstraint {
     }
 
     @Override
-    public IConstraint negate() {
+    public IConstraint not() {
         return this.negatedConstraint;
     }
 

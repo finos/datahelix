@@ -6,6 +6,6 @@ public interface AtomicConstraint extends IConstraint {
 
     default Field getField() { return getFields().iterator().next(); }
 
-    default AtomicConstraint negate() {
-        return new AtomicNotConstraint( this);}
+    default AtomicConstraint not() {
+        return new AtomicNotConstraint(this);}
 }
