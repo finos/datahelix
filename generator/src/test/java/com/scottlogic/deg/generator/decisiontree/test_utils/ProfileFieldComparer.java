@@ -43,7 +43,7 @@ public class ProfileFieldComparer implements EqualityComparer {
                     secondProfileFieldsCollection,
                     firstProfileFieldsCollection
                 ),
-                TreeComparisonContext.TreeElementType.Fields
+                TreeComparisonContext.TreeElementType.FIELDS
             );
         }
 

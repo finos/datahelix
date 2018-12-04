@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 public class IsNullConstraint implements IConstraint
@@ -21,8 +23,13 @@ public class IsNullConstraint implements IConstraint
     public String toString(){
         return String.format(
                 "`%s`: %s",
-                NullRestrictions.Nullness.MustBeNull,
+                NullRestrictions.Nullness.MUST_BE_NULL,
                 field.toString());
+    }
+
+    @Override
+    public Collection<Field> getFields() {
+        return Collections.singletonList(field);
     }
 
     @Override

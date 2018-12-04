@@ -34,6 +34,16 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
           .appendIs(AtomicConstraintType.ISLESSTHANCONSTANT.toString)
           .appendValue(instance.Value)
           .Build;
+      case instance: IsAfterOrEqualToConstantDateTimeConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString)
+          .appendValue(instance.Value)
+          .Build;
+      case instance: IsBeforeConstantDateTimeConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISBEFORECONSTANTDATETIME.toString)
+          .appendValue(instance.Value)
+          .Build;
       case instance: MatchesRegexConstraint =>
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.MATCHESREGEX.toString)

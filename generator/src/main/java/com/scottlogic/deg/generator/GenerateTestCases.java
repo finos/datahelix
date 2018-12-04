@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
@@ -29,22 +28,27 @@ public class GenerateTestCases implements Runnable {
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
-        defaultValue = "Interesting")
-    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
+        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
+        defaultValue = "INTERESTING")
+    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
+
+    @CommandLine.Option(names = {"-c", "--c"},
+        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
+        defaultValue = "PINNING")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = "Exhaustive",
+        defaultValue = "CARTESIAN_PRODUCT",
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.Exhaustive;
+    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
 
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(
             generationType,
             walkerType,
-            new FieldExhaustiveCombinationStrategy());
+            combinationType);
 
         DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
 
