@@ -35,7 +35,6 @@ public class FieldCollection {
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
         ConstraintFieldSniffer fieldSniffer,
-        ReductiveDecisionTreeAdapter treeAdapter,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
         FixedField lastFixedField) {
