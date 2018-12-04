@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
-    private final ConstraintFieldSniffer constraintFieldSniffer = new ConstraintFieldSniffer();
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
 
