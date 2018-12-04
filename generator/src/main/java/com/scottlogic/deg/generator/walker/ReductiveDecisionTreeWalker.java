@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
@@ -47,8 +48,9 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
-        return fieldCollection.getValuesFromLastFixedField()
-            .flatMap(fieldValue -> getRowSpecsForFixedField(constraintNode, fieldCollection));
+        return FlatMappingSpliterator.flatMap(
+            fieldCollection.getValuesFromLastFixedField(),
+            fieldValue -> getRowSpecsForFixedField(constraintNode, fieldCollection));
     }
 
     private Stream<RowSpec> getRowSpecsForFixedField(
