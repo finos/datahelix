@@ -24,23 +24,25 @@ public class CsvDataSetWriter implements IDataSetWriter {
                 .toArray(String[]::new))
             .print(filePath, StandardCharsets.UTF_8)) {
 
-            dataset.forEach(row -> {
-                try {
-                    writer.printRecord(row.values.stream().map(cell -> {
-                        if (cell.value == null)
-                            return null;
+            dataset.forEach(row -> WriteRowToOutput(writer, row));
+        }
+    }
 
-                        if (cell.format == null)
-                            return cell.value;
+    private void WriteRowToOutput(CSVPrinter writer, GeneratedObject row) {
+        try {
+            writer.printRecord(row.values.stream().map(cell -> {
+                if (cell.value == null)
+                    return null;
 
-                        return String.format(cell.format, cell.value);
-                    }).collect(Collectors.toList()));
+                if (cell.format == null)
+                    return cell.value;
 
-                    writer.flush();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+                return String.format(cell.format, cell.value);
+            }).collect(Collectors.toList()));
+
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
