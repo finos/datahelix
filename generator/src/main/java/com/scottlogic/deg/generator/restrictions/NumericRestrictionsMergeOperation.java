@@ -2,32 +2,32 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
 
+import java.util.Optional;
+
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
     private static final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
 
     @Override
-    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
         MergeResult<NumericRestrictions> mergeResult = numericRestrictionsMerger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
-            return false;
+            return Optional.empty();
         }
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;
         if (numberRestrictions == null) {
-            merged.setNumericRestrictions(null);
-            return true;
+            return Optional.of(merged.withNumericRestrictions(null));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
-            return false;
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+            return Optional.empty();
         }
 
-        merged.setNumericRestrictions(numberRestrictions);
-        merged.setTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.Numeric));
-        return true;
+        return Optional.of(merged.withNumericRestrictions(numberRestrictions).withTypeRestrictions(
+            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC)));
     }
 }
 

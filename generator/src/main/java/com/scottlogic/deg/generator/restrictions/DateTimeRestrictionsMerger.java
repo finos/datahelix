@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 public class DateTimeRestrictionsMerger {
     private enum MergeLimit {
-        Min, Max
+        MIN, MAX
     }
 
     public DateTimeRestrictions merge(DateTimeRestrictions left, DateTimeRestrictions right) {
@@ -15,8 +15,8 @@ public class DateTimeRestrictionsMerger {
 
         final DateTimeRestrictions merged = new DateTimeRestrictions();
 
-        merged.min = getMergedLimitStructure(MergeLimit.Min, left.min, right.min);
-        merged.max = getMergedLimitStructure(MergeLimit.Max, left.max, right.max);
+        merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
+        merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
         return merged;
     }
@@ -38,11 +38,11 @@ public class DateTimeRestrictionsMerger {
         if (left.getLimit().compareTo(right.getLimit()) == 0)
             return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), left.isInclusive() && right.isInclusive());
         switch(mergeLimit) {
-            case Min:
+            case MIN:
                 if (left.getLimit().compareTo(right.getLimit()) > 0)
                     return left;
                 return right;
-            case Max:
+            case MAX:
                 if (left.getLimit().compareTo(right.getLimit()) < 0)
                     return left;
                 return right;

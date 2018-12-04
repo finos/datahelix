@@ -2,18 +2,25 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import java.util.*;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class TreeDecisionNode implements DecisionNode {
     private final Collection<ConstraintNode> options;
-
-    public TreeDecisionNode(Collection<ConstraintNode> options) {
-        this.options = Collections.unmodifiableCollection(options);
-    }
+    private final Set<NodeMarking> nodeMarkings;
 
     public TreeDecisionNode(ConstraintNode... options) {
-        this.options = Collections.unmodifiableCollection(Arrays.asList(options));
+        this(Collections.unmodifiableCollection(Arrays.asList(options)));
+    }
+
+    public TreeDecisionNode(Collection<ConstraintNode> options) {
+        this(options, Collections.emptySet());
+    }
+
+    public TreeDecisionNode(Collection<ConstraintNode> options, Set<NodeMarking> nodeMarkings) {
+        this.options = Collections.unmodifiableCollection(options);
+        this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
     @Override
@@ -24,6 +31,19 @@ public final class TreeDecisionNode implements DecisionNode {
     @Override
     public DecisionNode setOptions(Collection<ConstraintNode> options){
         return new TreeDecisionNode(options);
+    }
+
+    @Override
+    public boolean hasMarking(NodeMarking detail) {
+        return this.nodeMarkings.contains(detail);
+    }
+
+    @Override
+    public DecisionNode markNode(NodeMarking marking) {
+        Set<NodeMarking> newMarkings = Stream.of(Collections.singleton(marking), this.nodeMarkings)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
+        return new TreeDecisionNode(this.options, newMarkings);
     }
 
     @Override
