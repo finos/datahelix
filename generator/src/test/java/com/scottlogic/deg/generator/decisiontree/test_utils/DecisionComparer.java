@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.LogicalConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.Collection;
@@ -36,13 +36,13 @@ public class DecisionComparer implements EqualityComparer {
         if (decision1 == null || decision2 == null)
             return false; //either decision1 XOR decision2 is null
 
-        Collection<IConstraint> decision1AtomicConstraints = decision1
+        Collection<LogicalConstraint> decision1AtomicConstraints = decision1
             .getOptions()
             .stream()
             .flatMap(o -> o.getAtomicConstraints().stream())
             .collect(Collectors.toList());
 
-        Collection<IConstraint> decision2AtomicConstraints = decision2
+        Collection<LogicalConstraint> decision2AtomicConstraints = decision2
             .getOptions()
             .stream()
             .flatMap(o -> o.getAtomicConstraints().stream())

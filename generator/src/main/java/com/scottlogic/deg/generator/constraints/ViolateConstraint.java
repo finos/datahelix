@@ -4,10 +4,10 @@ import com.scottlogic.deg.generator.Field;
 
 import java.util.Collection;
 
-public class ViolateConstraint implements IConstraint {
-    public final IConstraint violatedConstraint;
+public class ViolateConstraint implements LogicalConstraint {
+    public final LogicalConstraint violatedConstraint;
 
-    public ViolateConstraint(IConstraint violatedConstraint) {
+    public ViolateConstraint(LogicalConstraint violatedConstraint) {
         this.violatedConstraint = violatedConstraint;
     }
 

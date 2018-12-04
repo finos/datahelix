@@ -28,9 +28,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = IsNullConstraint.class, name = "IsNullConstraint"),
     @JsonSubTypes.Type(value = IsLessThanConstantConstraint.class, name = "IsLessThanConstantConstraint")
 })
-public interface IConstraint
+public interface LogicalConstraint
 {
-    static Collection<IConstraint> combine(IConstraint self, IConstraint[] others)
+    static Collection<LogicalConstraint> combine(LogicalConstraint self, LogicalConstraint[] others)
     {
         return Stream
             .concat(
@@ -43,17 +43,17 @@ public interface IConstraint
 
     Collection<Field> getFields();
 
-    default IConstraint or(IConstraint... others)
+    default LogicalConstraint or(LogicalConstraint... others)
     {
         return new OrConstraint(combine(this, others));
     }
 
-    default IConstraint and(IConstraint... others)
+    default LogicalConstraint and(LogicalConstraint... others)
     {
         return new AndConstraint(combine(this, others));
     }
 
-    default IConstraint not()
+    default LogicalConstraint not()
     {
         if (this instanceof AtomicConstraint)
             return new AtomicNotConstraint((AtomicConstraint) this);

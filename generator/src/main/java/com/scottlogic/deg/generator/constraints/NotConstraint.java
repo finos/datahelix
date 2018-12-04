@@ -5,19 +5,19 @@ import com.scottlogic.deg.generator.Field;
 import java.util.Collection;
 import java.util.Objects;
 
-public class NotConstraint implements IConstraint {
-    public final IConstraint negatedConstraint;
+public class NotConstraint implements LogicalConstraint {
+    public final LogicalConstraint negatedConstraint;
 
-    protected NotConstraint(IConstraint negatedConstraint) {
+    protected NotConstraint(LogicalConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
     @Override
-    public IConstraint not() {
+    public LogicalConstraint not() {
         return this.negatedConstraint;
     }
 
-    private IConstraint getBaseConstraint(){
+    private LogicalConstraint getBaseConstraint(){
         if (negatedConstraint instanceof NotConstraint){
             return ((NotConstraint) negatedConstraint).getBaseConstraint();
         }

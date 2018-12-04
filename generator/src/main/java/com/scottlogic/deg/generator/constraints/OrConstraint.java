@@ -4,18 +4,17 @@ import com.scottlogic.deg.generator.Field;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class OrConstraint implements IConstraint {
-    public final Collection<IConstraint> subConstraints;
+public class OrConstraint implements LogicalConstraint {
+    public final Collection<LogicalConstraint> subConstraints;
 
-    public OrConstraint(Collection<IConstraint> subConstraints) {
+    public OrConstraint(Collection<LogicalConstraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public OrConstraint(IConstraint... subConstraints) {
+    public OrConstraint(LogicalConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 

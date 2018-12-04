@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.AndConstraint;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.LogicalConstraint;
 import com.scottlogic.deg.generator.constraints.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.generation.DataGenerator;
@@ -89,7 +89,7 @@ public class GenerationEngine {
     }
 
     private Rule violateRule(Rule rule) {
-        IConstraint violateConstraint =
+        LogicalConstraint violateConstraint =
             rule.constraints.size() == 1
                 ? new ViolateConstraint(
                 rule.constraints.iterator().next())

@@ -6,22 +6,22 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConditionalConstraint implements IConstraint
+public class ConditionalConstraint implements LogicalConstraint
 {
-    public final IConstraint condition;
-    public final IConstraint whenConditionIsTrue;
-    public final IConstraint whenConditionIsFalse;
+    public final LogicalConstraint condition;
+    public final LogicalConstraint whenConditionIsTrue;
+    public final LogicalConstraint whenConditionIsFalse;
 
     public ConditionalConstraint(
-        IConstraint condition,
-        IConstraint whenConditionIsTrue) {
+        LogicalConstraint condition,
+        LogicalConstraint whenConditionIsTrue) {
         this(condition, whenConditionIsTrue, null);
     }
 
     public ConditionalConstraint(
-        IConstraint condition,
-        IConstraint whenConditionIsTrue,
-        IConstraint whenConditionIsFalse) {
+        LogicalConstraint condition,
+        LogicalConstraint whenConditionIsTrue,
+        LogicalConstraint whenConditionIsFalse) {
         this.condition = condition;
         this.whenConditionIsTrue = whenConditionIsTrue;
         this.whenConditionIsFalse = whenConditionIsFalse;

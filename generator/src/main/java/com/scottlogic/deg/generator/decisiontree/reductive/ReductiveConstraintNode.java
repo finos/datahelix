@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.reductive;
 
 import com.scottlogic.deg.generator.constraints.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.IConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;

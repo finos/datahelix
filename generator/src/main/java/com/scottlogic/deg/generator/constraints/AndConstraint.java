@@ -4,17 +4,16 @@ import com.scottlogic.deg.generator.Field;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class AndConstraint implements IConstraint
+public class AndConstraint implements LogicalConstraint
 {
-    public final Collection<IConstraint> subConstraints;
+    public final Collection<LogicalConstraint> subConstraints;
 
-    public AndConstraint(Collection<IConstraint> subConstraints) {
+    public AndConstraint(Collection<LogicalConstraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public AndConstraint(IConstraint... subConstraints) {
+    public AndConstraint(LogicalConstraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 

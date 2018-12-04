@@ -12,7 +12,7 @@ public class MainConstraintReader implements IConstraintReader {
     }
 
     @Override
-    public IConstraint apply(
+    public LogicalConstraint apply(
         ConstraintDTO dto,
         ProfileFields fields)
         throws InvalidProfileException {
