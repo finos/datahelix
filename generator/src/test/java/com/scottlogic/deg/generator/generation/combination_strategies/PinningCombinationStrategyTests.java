@@ -7,16 +7,16 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.generation.combination_strategies.CombinationStrategyTester.bag;
 
-class FieldExhaustiveCombinationStrategyTests {
+class PinningCombinationStrategyTests {
     private CombinationStrategyTester tester;
 
     @BeforeEach
     void beforeEach() {
-        tester = new CombinationStrategyTester(new FieldExhaustiveCombinationStrategy());
+        tester = new CombinationStrategyTester(new PinningCombinationStrategy());
     }
 
     @Test
-    void shouldCombineFieldExhaustively() {
+    void shouldCombineUsingPinning() {
         tester.given(
             Stream.of(bag("A"), bag("B"), bag("C")),
             Stream.of(bag("1"), bag("2"), bag("3")));

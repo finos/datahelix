@@ -22,7 +22,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
 
     @Override
     public void configureTypeRegistry(TypeRegistry tr) {
-        this.defineStrategyType(tr);
+        this.defineDataGenerationStrategyType(tr);
+        this.defineCombinationStrategyType(tr);
         this.defineOperationParameterType(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"dateString", DateValueStep.DATE_REGEX);
@@ -52,7 +53,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             (Transformer<String>)fieldName -> fieldName));
     }
 
-    private void defineStrategyType(TypeRegistry tr){
+    private void defineDataGenerationStrategyType(TypeRegistry tr){
         Transformer<GenerationConfig.DataGenerationType> transformer = strategyString ->
             Arrays.stream(GenerationConfig.DataGenerationType.values())
             .filter(val -> val.toString().equals(strategyString))
@@ -62,6 +63,19 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "generationStrategy",
             "(.*)$",
             GenerationConfig.DataGenerationType.class,
+            transformer));
+    }
+
+    private void defineCombinationStrategyType(TypeRegistry tr){
+        Transformer<GenerationConfig.CombinationStrategyType> transformer = strategyString ->
+            Arrays.stream(GenerationConfig.CombinationStrategyType.values())
+                .filter(val -> val.toString().equals(strategyString))
+                .findFirst().orElse(GenerationConfig.CombinationStrategyType.PINNING);
+
+        tr.defineParameterType(new ParameterType<>(
+            "combinationStrategy",
+            "(.*)$",
+            GenerationConfig.CombinationStrategyType.class,
             transformer));
     }
 
