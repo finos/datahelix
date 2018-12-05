@@ -45,11 +45,11 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
     static class TracingDto {
         public static final Collection<TracingDto> empty = Collections.emptySet();
 
-        public Set<IConstraint> constraints;
+        public Set<TracingConstraintDto> constraints;
         public String rule;
         public String field;
 
-        TracingDto(Set<IConstraint> constraints, String rule, String field) {
+        TracingDto(Set<TracingConstraintDto> constraints, String rule, String field) {
             this.constraints = constraints;
             this.rule = rule;
             this.field = field;
@@ -63,7 +63,20 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
         }
 
         private static TracingDto fromCellSource(CellSource cellSource) {
-            return new TracingDto(cellSource.getConstraints(), cellSource.getRule(), cellSource.field.name);
+            return new TracingDto(
+                cellSource.getConstraints().stream().map(TracingConstraintDto::new).collect(Collectors.toSet()),
+                cellSource.getRule(),
+                cellSource.field.name);
+        }
+    }
+
+    private static class TracingConstraintDto {
+        public String type;
+        public String value;
+
+        TracingConstraintDto(IConstraint constraint) {
+            type = constraint.getClass().getSimpleName();
+            value = constraint.toString();
         }
     }
 
