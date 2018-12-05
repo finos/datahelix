@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.visualisation;
 
 import com.scottlogic.deg.generator.constraints.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.LogicalConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.io.IOException;

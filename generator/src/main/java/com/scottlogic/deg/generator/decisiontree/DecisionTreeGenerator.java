@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
-    private static Collection<LogicalConstraint> wrapEach(Collection<LogicalConstraint> constraints,
-                                                          Function<LogicalConstraint, LogicalConstraint> wrapFunc) {
+    private static Collection<LogicalConstraint> wrapEach(
+        Collection<LogicalConstraint> constraints,
+        Function<LogicalConstraint, LogicalConstraint> wrapFunc) {
+
         return constraints.stream()
             .map(wrapFunc)
             .collect(Collectors.toList());
@@ -26,11 +28,10 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return wrapEach(constraints, ViolateConstraint::new);
     }
 
-    private static LogicalConstraint reduceConditionalConstraint(LogicalConstraint constraint) {
-        ConditionalConstraint constraintAsCondition = ((ConditionalConstraint) constraint);
-        LogicalConstraint ifConstraint = constraintAsCondition.condition;
-        LogicalConstraint thenConstraint = constraintAsCondition.whenConditionIsTrue;
-        LogicalConstraint elseConstraint = constraintAsCondition.whenConditionIsFalse;
+    private static LogicalConstraint reduceConditionalConstraint(ConditionalConstraint constraint) {
+        LogicalConstraint ifConstraint = constraint.condition;
+        LogicalConstraint thenConstraint = constraint.whenConditionIsTrue;
+        LogicalConstraint elseConstraint = constraint.whenConditionIsFalse;
 
         return new OrConstraint(
             ifConstraint.and(thenConstraint),
@@ -197,7 +198,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             return asConstraintNodeList(decisionPoint);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
-            return convertConstraint(reduceConditionalConstraint(constraintToConvert));
+            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert));
         } else {
             return asConstraintNodeList((AtomicConstraint) constraintToConvert);
         }

@@ -11,14 +11,12 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
-    public FieldSpec construct(LogicalConstraint constraint) {
+    public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false);
     }
 
-    private FieldSpec construct(LogicalConstraint constraint, boolean negate) {
-        if (constraint instanceof NotConstraint) {
-            return construct(((NotConstraint) constraint).negatedConstraint, !negate);
-        } else if (constraint instanceof AtomicNotConstraint) {
+    private FieldSpec construct(AtomicConstraint constraint, boolean negate) {
+        if (constraint instanceof AtomicNotConstraint) {
             return construct(((AtomicNotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate);
