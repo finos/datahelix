@@ -2,19 +2,19 @@ package com.scottlogic.deg.generator.constraints;
 
 import java.util.Objects;
 
-public class NotConstraint implements LogicalConstraint {
-    public final LogicalConstraint negatedConstraint;
+public class NotConstraint implements Constraint {
+    public final Constraint negatedConstraint;
 
-    protected NotConstraint(LogicalConstraint negatedConstraint) {
+    protected NotConstraint(Constraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
     @Override
-    public LogicalConstraint negate() {
+    public Constraint negate() {
         return this.negatedConstraint;
     }
 
-    private LogicalConstraint getBaseConstraint(){
+    private Constraint getBaseConstraint(){
         if (negatedConstraint instanceof NotConstraint){
             return ((NotConstraint) negatedConstraint).getBaseConstraint();
         }

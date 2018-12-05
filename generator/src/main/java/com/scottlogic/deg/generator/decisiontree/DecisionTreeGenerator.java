@@ -11,27 +11,27 @@ import java.util.stream.Collectors;
 public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
-    private static Collection<LogicalConstraint> wrapEach(
-        Collection<LogicalConstraint> constraints,
-        Function<LogicalConstraint, LogicalConstraint> wrapFunc) {
+    private static Collection<Constraint> wrapEach(
+        Collection<Constraint> constraints,
+        Function<Constraint, Constraint> wrapFunc) {
 
         return constraints.stream()
             .map(wrapFunc)
             .collect(Collectors.toList());
     }
 
-    private static Collection<LogicalConstraint> negateEach(Collection<LogicalConstraint> constraints) {
+    private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
         return wrapEach(constraints, constraint->constraint.negate());
     }
 
-    private static Collection<LogicalConstraint> violateEach(Collection<LogicalConstraint> constraints) {
+    private static Collection<Constraint> violateEach(Collection<Constraint> constraints) {
         return wrapEach(constraints, ViolateConstraint::new);
     }
 
-    private static LogicalConstraint reduceConditionalConstraint(ConditionalConstraint constraint) {
-        LogicalConstraint ifConstraint = constraint.condition;
-        LogicalConstraint thenConstraint = constraint.whenConditionIsTrue;
-        LogicalConstraint elseConstraint = constraint.whenConditionIsFalse;
+    private static Constraint reduceConditionalConstraint(ConditionalConstraint constraint) {
+        Constraint ifConstraint = constraint.condition;
+        Constraint thenConstraint = constraint.whenConditionIsTrue;
+        Constraint elseConstraint = constraint.whenConditionIsFalse;
 
         return new OrConstraint(
             ifConstraint.and(thenConstraint),
@@ -76,9 +76,9 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
-    private Collection<ConstraintNode> convertConstraint(LogicalConstraint constraintToConvert) {
+    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
         if (constraintToConvert instanceof ViolateConstraint) {
-            LogicalConstraint violatedConstraint = ((ViolateConstraint) constraintToConvert).violatedConstraint;
+            Constraint violatedConstraint = ((ViolateConstraint) constraintToConvert).violatedConstraint;
 
             // VIOLATE(AND(X, Y, Z)) reduces to
             //   OR(
@@ -86,9 +86,9 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             //     AND(X, VIOLATE(Y), Z),
             //     AND(X, Y, VIOLATE(Z)))
             if (violatedConstraint instanceof AndConstraint) {
-                Collection<LogicalConstraint> subConstraints = ((AndConstraint) violatedConstraint).subConstraints;
+                Collection<Constraint> subConstraints = ((AndConstraint) violatedConstraint).subConstraints;
 
-                Collection<LogicalConstraint> possibleFulfilments =
+                Collection<Constraint> possibleFulfilments =
                     subConstraints.stream()
                         // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
                         .map(constraintToViolate ->
@@ -105,7 +105,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             }
             // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
             else if (violatedConstraint instanceof OrConstraint) {
-                Collection<LogicalConstraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
+                Collection<Constraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
 
                 return convertConstraint(
                     new AndConstraint(violateEach(subConstraints)));
@@ -115,11 +115,11 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             else if (violatedConstraint instanceof ConditionalConstraint) {
                 ConditionalConstraint conditional = ((ConditionalConstraint) violatedConstraint);
 
-                LogicalConstraint positiveViolation = new AndConstraint(
+                Constraint positiveViolation = new AndConstraint(
                     conditional.condition,
                     new ViolateConstraint(conditional.whenConditionIsTrue));
 
-                LogicalConstraint negativeViolation = conditional.whenConditionIsFalse == null
+                Constraint negativeViolation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
                     new ViolateConstraint(conditional.condition),
@@ -134,7 +134,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             // we've got an atomic constraint
             return convertConstraint(violatedConstraint.negate());
         } else if (constraintToConvert instanceof NotConstraint) {
-            LogicalConstraint negatedConstraint = ((NotConstraint) constraintToConvert).negatedConstraint;
+            Constraint negatedConstraint = ((NotConstraint) constraintToConvert).negatedConstraint;
 
             // ¬¬X reduces to X
             if (negatedConstraint instanceof NotConstraint) {
@@ -142,14 +142,14 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             }
             // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
             else if (negatedConstraint instanceof AndConstraint) {
-                Collection<LogicalConstraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
+                Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
                     new OrConstraint(negateEach(subConstraints)));
             }
             // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
             else if (negatedConstraint instanceof OrConstraint) {
-                Collection<LogicalConstraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
+                Collection<Constraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
                     new AndConstraint(negateEach(subConstraints)));
@@ -159,11 +159,11 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             else if (negatedConstraint instanceof ConditionalConstraint) {
                 ConditionalConstraint conditional = (ConditionalConstraint) negatedConstraint;
 
-                LogicalConstraint positiveNegation = new AndConstraint(
+                Constraint positiveNegation = new AndConstraint(
                     conditional.condition,
                     conditional.whenConditionIsTrue.negate());
 
-                LogicalConstraint negativeNegation = conditional.whenConditionIsFalse == null
+                Constraint negativeNegation = conditional.whenConditionIsFalse == null
                     ? null
                     : new AndConstraint(
                     conditional.condition.negate(),
@@ -181,7 +181,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         }
         // AND(X, Y, Z) becomes a flattened list of constraint nodes
         else if (constraintToConvert instanceof AndConstraint) {
-            Collection<LogicalConstraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
+            Collection<Constraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
 
             return subConstraints.stream()
                 .flatMap(c -> convertConstraint(c).stream())
@@ -189,7 +189,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         }
         // OR(X, Y, Z) becomes a decision node
         else if (constraintToConvert instanceof OrConstraint) {
-            Collection<LogicalConstraint> subConstraints = ((OrConstraint) constraintToConvert).subConstraints;
+            Collection<Constraint> subConstraints = ((OrConstraint) constraintToConvert).subConstraints;
 
             DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()

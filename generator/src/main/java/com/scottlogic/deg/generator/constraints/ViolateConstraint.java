@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.constraints;
 
-public class ViolateConstraint implements LogicalConstraint {
-    public final LogicalConstraint violatedConstraint;
+public class ViolateConstraint implements Constraint {
+    public final Constraint violatedConstraint;
 
-    public ViolateConstraint(LogicalConstraint violatedConstraint) {
+    public ViolateConstraint(Constraint violatedConstraint) {
         this.violatedConstraint = violatedConstraint;
     }
 }

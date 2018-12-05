@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.LogicalConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
@@ -49,7 +49,7 @@ public class GeneratorTestUtilities {
      */
     static List<List<Object>> getDEGGeneratedData(
         List<Field> profileFields,
-        List<LogicalConstraint> constraints,
+        List<Constraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
         GenerationConfig.TreeWalkerType walkerType,
         GenerationConfig.CombinationStrategyType combinationStrategy) {
@@ -70,7 +70,7 @@ public class GeneratorTestUtilities {
 
     private static List<GeneratedObject> getGeneratedDataAsList(
         List<Field> profileFields,
-        List<LogicalConstraint> constraints,
+        List<Constraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
         GenerationConfig.TreeWalkerType walkerType,
         GenerationConfig.CombinationStrategyType combinationStrategy) {

@@ -55,11 +55,11 @@ public class ProfileReaderTests {
         return rule -> Assert.assertThat(rule.description, equalTo(expectedDescription));
     }
 
-    private Consumer<Rule> ruleWithConstraints(Consumer<LogicalConstraint>... constraintAsserters) {
+    private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
         return rule -> expectMany(rule.constraints, constraintAsserters);
     }
 
-    private <T> Consumer<LogicalConstraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
+    private <T> Consumer<Constraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
         return constraint -> {
             Assert.assertThat(constraint, instanceOf(constraintType));
 

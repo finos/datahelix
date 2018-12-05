@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 
-public interface AtomicConstraint extends LogicalConstraint {
+public interface AtomicConstraint extends Constraint {
 
     Field getField();
 

@@ -121,7 +121,7 @@ public class AtomicConstraintTests {
         IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            LogicalConstraint constraint = reader.apply(dto, profileFields);
+            Constraint constraint = reader.apply(dto, profileFields);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

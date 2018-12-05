@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class OrConstraint implements LogicalConstraint {
-    public final Collection<LogicalConstraint> subConstraints;
+public class OrConstraint implements Constraint {
+    public final Collection<Constraint> subConstraints;
 
-    public OrConstraint(Collection<LogicalConstraint> subConstraints) {
+    public OrConstraint(Collection<Constraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public OrConstraint(LogicalConstraint... subConstraints) {
+    public OrConstraint(Constraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 

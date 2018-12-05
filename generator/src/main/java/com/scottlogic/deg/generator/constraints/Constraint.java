@@ -26,9 +26,9 @@ import java.util.stream.Stream;
     @JsonSubTypes.Type(value = IsNullConstraint.class, name = "IsNullConstraint"),
     @JsonSubTypes.Type(value = IsLessThanConstantConstraint.class, name = "IsLessThanConstantConstraint")
 })
-public interface LogicalConstraint
+public interface Constraint
 {
-    static Collection<LogicalConstraint> combine(LogicalConstraint self, LogicalConstraint[] others)
+    static Collection<Constraint> combine(Constraint self, Constraint[] others)
     {
         return Stream
             .concat(
@@ -37,17 +37,17 @@ public interface LogicalConstraint
             .collect(Collectors.toList());
     }
 
-    default LogicalConstraint or(LogicalConstraint... others)
+    default Constraint or(Constraint... others)
     {
         return new OrConstraint(combine(this, others));
     }
 
-    default LogicalConstraint and(LogicalConstraint... others)
+    default Constraint and(Constraint... others)
     {
         return new AndConstraint(combine(this, others));
     }
 
-    default LogicalConstraint negate()
+    default Constraint negate()
     {
         if (this instanceof AtomicConstraint)
             return new AtomicNotConstraint((AtomicConstraint) this);

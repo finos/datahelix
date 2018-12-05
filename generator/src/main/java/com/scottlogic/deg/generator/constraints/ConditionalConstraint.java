@@ -1,21 +1,21 @@
 package com.scottlogic.deg.generator.constraints;
 
-public class ConditionalConstraint implements LogicalConstraint
+public class ConditionalConstraint implements Constraint
 {
-    public final LogicalConstraint condition;
-    public final LogicalConstraint whenConditionIsTrue;
-    public final LogicalConstraint whenConditionIsFalse;
+    public final Constraint condition;
+    public final Constraint whenConditionIsTrue;
+    public final Constraint whenConditionIsFalse;
 
     public ConditionalConstraint(
-        LogicalConstraint condition,
-        LogicalConstraint whenConditionIsTrue) {
+        Constraint condition,
+        Constraint whenConditionIsTrue) {
         this(condition, whenConditionIsTrue, null);
     }
 
     public ConditionalConstraint(
-        LogicalConstraint condition,
-        LogicalConstraint whenConditionIsTrue,
-        LogicalConstraint whenConditionIsFalse) {
+        Constraint condition,
+        Constraint whenConditionIsTrue,
+        Constraint whenConditionIsFalse) {
         this.condition = condition;
         this.whenConditionIsTrue = whenConditionIsTrue;
         this.whenConditionIsFalse = whenConditionIsFalse;

@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class AndConstraint implements LogicalConstraint
+public class AndConstraint implements Constraint
 {
-    public final Collection<LogicalConstraint> subConstraints;
+    public final Collection<Constraint> subConstraints;
 
-    public AndConstraint(Collection<LogicalConstraint> subConstraints) {
+    public AndConstraint(Collection<Constraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public AndConstraint(LogicalConstraint... subConstraints) {
+    public AndConstraint(Constraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 

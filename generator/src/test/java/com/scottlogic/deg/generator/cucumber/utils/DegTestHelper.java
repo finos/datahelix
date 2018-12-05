@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.LogicalConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
@@ -41,7 +41,7 @@ public class DegTestHelper {
             ProfileFields profileFields = new ProfileFields(state.profileFields);
             AtomicBoolean exceptionInMapping = new AtomicBoolean();
 
-            List<LogicalConstraint> mappedConstraints = state.constraints.stream().map(dto -> {
+            List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
                 try {
                     return constraintReader.apply(dto, profileFields);
                 } catch (InvalidProfileException e) {
