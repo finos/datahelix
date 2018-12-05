@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class AndConstraint implements Constraint
+public class AndConstraint implements LogicalConstraint
 {
     public final Collection<Constraint> subConstraints;
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.constraints;
 
-public class ConditionalConstraint implements Constraint
+public class ConditionalConstraint implements LogicalConstraint
 {
     public final Constraint condition;
     public final Constraint whenConditionIsTrue;

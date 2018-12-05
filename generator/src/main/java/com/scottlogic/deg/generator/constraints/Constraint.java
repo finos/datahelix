@@ -47,11 +47,5 @@ public interface Constraint
         return new AndConstraint(combine(this, others));
     }
 
-    default Constraint negate()
-    {
-        if (this instanceof AtomicConstraint)
-            return new AtomicNotConstraint((AtomicConstraint) this);
-
-        return new NotConstraint(this);
-    }
+    Constraint negate();
 }

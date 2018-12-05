@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class OrConstraint implements Constraint {
+public class OrConstraint implements LogicalConstraint {
     public final Collection<Constraint> subConstraints;
 
     public OrConstraint(Collection<Constraint> subConstraints) {
