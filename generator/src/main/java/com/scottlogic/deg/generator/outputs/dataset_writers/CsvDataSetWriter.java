@@ -23,11 +23,13 @@ public class CsvDataSetWriter implements IDataSetWriter<CSVPrinter> {
 
     public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
         writer.printRecord(row.values.stream().map(cell -> {
-            if (cell.value == null)
+            if (cell.value == null) {
                 return null;
+            }
 
-            if (cell.format == null)
+            if (cell.format == null) {
                 return cell.value;
+            }
 
             return String.format(cell.format, cell.value);
         }).collect(Collectors.toList()));
