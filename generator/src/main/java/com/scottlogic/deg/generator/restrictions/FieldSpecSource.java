@@ -1,9 +1,12 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
+import com.scottlogic.deg.generator.constraints.NotConstraint;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,10 +21,13 @@ public class FieldSpecSource {
         this.constraints = constraints;
     }
 
-    static FieldSpecSource fromConstraint(IConstraint constraint) {
+    static FieldSpecSource fromConstraint(IConstraint constraint, boolean negate) {
         return new FieldSpecSource(
             Collections.emptySet(),
-            Collections.singleton(constraint));
+            Collections.singleton(
+                negate
+                    ? new NotConstraint(constraint)
+                    : constraint));
     }
 
     static FieldSpecSource fromFieldSpecs(FieldSpec left, FieldSpec right) {

@@ -77,7 +77,7 @@ public class FieldSpecFactory {
                 negate
                     ? SetRestrictions.fromBlacklist(constraint.legalValues)
                     : SetRestrictions.fromWhitelist(constraint.legalValues),
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec constructIsNull(boolean negate, IConstraint constraint) {
@@ -89,7 +89,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNullRestrictions(
             nullRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
@@ -103,7 +103,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withTypeRestrictions(
             typeRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {
@@ -130,7 +130,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNumericRestrictions(
             numericRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate) {
@@ -156,7 +156,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNumericRestrictions(
             numericRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
@@ -167,7 +167,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withGranularityRestrictions(
             new GranularityRestrictions(constraint.granularity),
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, false));
     }
 
     private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -189,7 +189,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withDateTimeRestrictions(
             dateTimeRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
@@ -211,7 +211,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withDateTimeRestrictions(
             dateTimeRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
@@ -237,7 +237,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withFormatRestrictions(
             formatRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, false));
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
@@ -268,6 +268,6 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withStringRestrictions(
             stringRestrictions,
-            FieldSpecSource.fromConstraint(constraint));
+            FieldSpecSource.fromConstraint(constraint, negate));
     }
 }
