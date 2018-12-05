@@ -81,6 +81,10 @@ class DEGApp @Inject()(
       .writeValueAsString(profileDTO)
 
     val fileWriter = new FileWriter()
+    val outDirectory = new File(params.outputDir)
+    if(!outDirectory.exists()) {
+      outDirectory.mkdirs()
+    }
     fileWriter.write(outFile, marshalled)
 
     spark.stop()

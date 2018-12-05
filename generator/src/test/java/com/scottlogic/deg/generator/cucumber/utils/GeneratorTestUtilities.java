@@ -17,7 +17,6 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
@@ -52,8 +51,9 @@ public class GeneratorTestUtilities {
         List<Field> profileFields,
         List<LogicalConstraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType)
+        GenerationConfig.TreeWalkerType walkerType,
+        GenerationConfig.CombinationStrategyType combinationStrategy) {
+        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
             .map(genObj ->
                 genObj.values
@@ -72,7 +72,8 @@ public class GeneratorTestUtilities {
         List<Field> profileFields,
         List<LogicalConstraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType) {
+        GenerationConfig.TreeWalkerType walkerType,
+        GenerationConfig.CombinationStrategyType combinationStrategy) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
             Collections.singleton(new Rule("TEST_RULE", constraints)));
@@ -90,7 +91,7 @@ public class GeneratorTestUtilities {
             new NoopDecisionTreeOptimiser(),
             new NoopDataGeneratorMonitor());
 
-        final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, new FieldExhaustiveCombinationStrategy());
+        final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.forEach(allActualRows::add);

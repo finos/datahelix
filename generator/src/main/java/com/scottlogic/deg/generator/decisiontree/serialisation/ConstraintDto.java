@@ -1,8 +1,7 @@
-package com.scottlogic.deg.generator.decisiontree.test_utils;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.mapping.IConstraintMapper;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
@@ -14,5 +13,5 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.test_utils.ma
         @JsonSubTypes.Type(value = IsNullConstraintDto.class, name = "IsNullConstraint"),
         @JsonSubTypes.Type(value = IsLessThanConstantConstraintDto.class, name = "IsLessThanConstantConstraint")
 })
-public interface ConstraintDto extends IConstraintMapper {
+public interface ConstraintDto {
 }

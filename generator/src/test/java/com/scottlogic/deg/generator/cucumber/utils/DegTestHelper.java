@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.LogicalConstraint;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 
@@ -25,6 +26,10 @@ public class DegTestHelper {
     public List <List<Object>> generateAndGetData() {
         if (state.generationStrategy == null) {
             throw new RuntimeException("Gherkin error: Please specify the data strategy");
+        }
+        
+        if (state.combinationStrategy == null) {
+            state.combinationStrategy = GenerationConfig.CombinationStrategyType.PINNING;
         }
 
         if (this.generatorHasRun()) {
@@ -54,7 +59,8 @@ public class DegTestHelper {
                 state.profileFields,
                 mappedConstraints,
                 state.generationStrategy,
-                state.walkerType
+                state.walkerType,
+                state.combinationStrategy
             );
         } catch (Exception e) {
             state.testExceptions.add(e);
