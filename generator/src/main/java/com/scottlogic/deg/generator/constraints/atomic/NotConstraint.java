@@ -4,10 +4,10 @@ import com.scottlogic.deg.generator.Field;
 
 import java.util.Objects;
 
-public class AtomicNotConstraint implements AtomicConstraint {
+public class NotConstraint implements AtomicConstraint {
     public final AtomicConstraint negatedConstraint;
 
-    protected AtomicNotConstraint(AtomicConstraint negatedConstraint) {
+    protected NotConstraint(AtomicConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
@@ -41,7 +41,7 @@ public class AtomicNotConstraint implements AtomicConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AtomicNotConstraint otherConstraint = (AtomicNotConstraint) o;
+        NotConstraint otherConstraint = (NotConstraint) o;
         return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
 

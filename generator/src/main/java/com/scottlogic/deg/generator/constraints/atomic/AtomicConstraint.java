@@ -10,5 +10,5 @@ public interface AtomicConstraint extends Constraint {
     String toDotLabel();
 
     default AtomicConstraint negate() {
-        return new AtomicNotConstraint(this);}
+        return new NotConstraint(this);}
 }

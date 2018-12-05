@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.gramatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.gramatical.NotConstraint;
 import com.scottlogic.deg.generator.constraints.gramatical.OrConstraint;
 
 import java.util.Collection;

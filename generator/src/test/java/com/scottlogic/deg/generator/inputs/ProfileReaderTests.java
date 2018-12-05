@@ -228,7 +228,7 @@ public class ProfileReaderTests {
         expectRules(
                 ruleWithConstraints(
                         typedConstraint(
-                                AtomicNotConstraint.class,
+                                NotConstraint.class,
                                 c -> {
                                     Assert.assertThat(
                                             c.negatedConstraint,

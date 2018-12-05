@@ -126,8 +126,8 @@ public class DecisionTreeMapper {
             return toDto((IsStringShorterThanConstraint) constraint);
         } else if (constraint instanceof IsOfTypeConstraint) {
             return toDto((IsOfTypeConstraint) constraint);
-        } else if (constraint instanceof AtomicNotConstraint) {
-            return toDto((AtomicNotConstraint) constraint);
+        } else if (constraint instanceof NotConstraint) {
+            return toDto((NotConstraint) constraint);
         } else if (constraint instanceof IsNullConstraint) {
             return toDto((IsNullConstraint) constraint);
         } else if (constraint instanceof IsLessThanConstantConstraint) {
@@ -197,7 +197,7 @@ public class DecisionTreeMapper {
         return dto;
     }
     
-    static private NotConstraintDto toDto(AtomicNotConstraint constraint) {
+    static private NotConstraintDto toDto(NotConstraint constraint) {
         NotConstraintDto dto = new NotConstraintDto();
         dto.negatedConstraint = DecisionTreeMapper.toDto(constraint.negatedConstraint);
         return dto;
