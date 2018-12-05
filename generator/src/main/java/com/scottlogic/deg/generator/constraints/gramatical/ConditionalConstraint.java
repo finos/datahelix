@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.constraints.gramatical;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
 
-public class ConditionalConstraint implements LogicalConstraint
+public class ConditionalConstraint implements GramaticalConstraint
 {
     public final Constraint condition;
     public final Constraint whenConditionIsTrue;

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class OrConstraint implements LogicalConstraint {
+public class OrConstraint implements GramaticalConstraint {
     public final Collection<Constraint> subConstraints;
 
     public OrConstraint(Collection<Constraint> subConstraints) {

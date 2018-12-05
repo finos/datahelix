@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class AndConstraint implements LogicalConstraint
+public class AndConstraint implements GramaticalConstraint
 {
     public final Collection<Constraint> subConstraints;
 

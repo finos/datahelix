@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 
 import java.util.Objects;
 
-public class NotConstraint implements LogicalConstraint {
+public class NotConstraint implements GramaticalConstraint {
     public final Constraint negatedConstraint;
 
     protected NotConstraint(Constraint negatedConstraint) {
