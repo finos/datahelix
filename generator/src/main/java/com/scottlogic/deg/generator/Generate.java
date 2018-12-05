@@ -15,8 +15,8 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.reductive.HierarchicalDependencyFixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;

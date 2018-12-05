@@ -1,8 +1,9 @@
-package com.scottlogic.deg.generator.walker.reductive;
+package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
+import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;

@@ -35,4 +35,9 @@ public class ConstraintBuilder {
         return this;
     }
 
+    public ConstraintBuilder addNullConstraint(String fieldName){
+        constraints.add(new IsNullConstraint(fields.get(fieldName)));
+        return this;
+    }
+
 }

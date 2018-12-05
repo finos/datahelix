@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class FieldCollection {
         return noOfFixedFields == this.fields.size();
     }
 
-    boolean fieldIsFixed(Field field) {
+    public boolean fieldIsFixed(Field field) {
         return (this.lastFixedField != null && this.lastFixedField.field.equals(field)) || this.fixedFields.containsKey(field);
 
     }

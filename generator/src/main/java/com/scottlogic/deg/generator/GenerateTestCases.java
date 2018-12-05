@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.reductive.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;

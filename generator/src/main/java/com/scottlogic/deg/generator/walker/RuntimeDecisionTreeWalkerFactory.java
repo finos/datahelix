@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
