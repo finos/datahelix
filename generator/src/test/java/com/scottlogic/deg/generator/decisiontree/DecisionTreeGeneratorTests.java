@@ -365,8 +365,8 @@ class DecisionTreeGeneratorTests {
                                         new TreeConstraintNode(aGreaterThan10)))),
                             /* OPTION 2: AND(¬A, ¬B)  */
                             new TreeConstraintNode(
-                                new AtomicNotConstraint(aEquals10),
-                                new AtomicNotConstraint(aGreaterThan10)
+                                aEquals10.negate(),
+                                aGreaterThan10.negate()
                             )
                         )
                     )
@@ -400,14 +400,14 @@ class DecisionTreeGeneratorTests {
                         new TreeConstraintNode(
                             Arrays.asList(
                                 constraintA,
-                                new AtomicNotConstraint(constraintB)
+                                constraintB.negate()
                             ),
                             Collections.emptySet()
                         ),
                         new TreeConstraintNode(
                             Arrays.asList(
-                                new AtomicNotConstraint(constraintA),
-                                new AtomicNotConstraint(constraintC)
+                                constraintA.negate(),
+                                constraintC.negate()
                             ),
                             Collections.emptySet()
                         )
@@ -487,11 +487,11 @@ class DecisionTreeGeneratorTests {
                 Arrays.asList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
-                            Arrays.asList(new AtomicNotConstraint(constraintA)),
+                            Arrays.asList(constraintA.negate()),
                             Collections.emptySet()
                         ),
                         new TreeConstraintNode(
-                            Arrays.asList(new AtomicNotConstraint(constraintB)),
+                            Arrays.asList(constraintB.negate()),
                             Collections.emptySet()
                         )
                     )
@@ -563,8 +563,7 @@ class DecisionTreeGeneratorTests {
 
         treeRootShouldMatch(
             new TreeConstraintNode(
-                new AtomicNotConstraint(
-                    aIsNull)));
+                aIsNull.negate()));
     }
 
     @Test
@@ -586,8 +585,8 @@ class DecisionTreeGeneratorTests {
 
         treeRootShouldMatch(
             new TreeConstraintNode(
-                new AtomicNotConstraint(aIsNull),
-                new AtomicNotConstraint(cIsNumeric)));
+                aIsNull.negate(),
+                cIsNumeric.negate()));
     }
 
     @Test
@@ -600,17 +599,17 @@ class DecisionTreeGeneratorTests {
             new TreeConstraintNode(
                 new TreeDecisionNode(
                     new TreeConstraintNode(
-                        new AtomicNotConstraint(aIsNull),
+                        aIsNull.negate(),
                         cIsNumeric,
                         eIsString),
                     new TreeConstraintNode(
                         aIsNull,
-                        new AtomicNotConstraint(cIsNumeric),
+                        cIsNumeric.negate(),
                         eIsString),
                     new TreeConstraintNode(
                         aIsNull,
                         cIsNumeric,
-                        new AtomicNotConstraint(eIsString)))));
+                        eIsString.negate()))));
     }
 
     @Test

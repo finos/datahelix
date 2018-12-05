@@ -15,17 +15,7 @@ public class NotConstraint implements LogicalConstraint {
     }
 
     private Constraint getBaseConstraint(){
-        if (negatedConstraint instanceof NotConstraint){
-            return ((NotConstraint) negatedConstraint).getBaseConstraint();
-        }
         return negatedConstraint;
-    }
-
-    private int getNegationLevel(){
-        if (negatedConstraint instanceof NotConstraint){
-            return ((NotConstraint) negatedConstraint).getNegationLevel() + 1;
-        }
-        return 1;
     }
 
     public String toString(){
@@ -39,8 +29,7 @@ public class NotConstraint implements LogicalConstraint {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NotConstraint otherConstraint = (NotConstraint) o;
-        return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint())
-            && Objects.equals(getNegationLevel() % 2, otherConstraint.getNegationLevel() % 2);
+        return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
 
     @Override

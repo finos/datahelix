@@ -230,7 +230,7 @@ public class DecisionTreeMapper {
     }
     
     private static AtomicConstraint fromDto(NotConstraintDto dto) {
-        return new AtomicNotConstraint(DecisionTreeMapper.fromDto(dto.negatedConstraint));
+        return DecisionTreeMapper.fromDto(dto.negatedConstraint).negate();
     }
     
     private static AtomicConstraint fromDto(IsNullConstraintDto dto) {

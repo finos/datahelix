@@ -7,7 +7,7 @@ import java.util.Objects;
 public class AtomicNotConstraint implements AtomicConstraint {
     public final AtomicConstraint negatedConstraint;
 
-    public AtomicNotConstraint(AtomicConstraint negatedConstraint) {
+    protected AtomicNotConstraint(AtomicConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
@@ -17,17 +17,7 @@ public class AtomicNotConstraint implements AtomicConstraint {
     }
 
     private AtomicConstraint getBaseConstraint(){
-        if (negatedConstraint instanceof AtomicNotConstraint){
-            return ((AtomicNotConstraint) negatedConstraint).getBaseConstraint();
-        }
         return negatedConstraint;
-    }
-
-    private int getNegationLevel(){
-        if (negatedConstraint instanceof AtomicNotConstraint){
-            return ((AtomicNotConstraint) negatedConstraint).getNegationLevel() + 1;
-        }
-        return 1;
     }
 
     @Override
@@ -52,8 +42,7 @@ public class AtomicNotConstraint implements AtomicConstraint {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AtomicNotConstraint otherConstraint = (AtomicNotConstraint) o;
-        return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint())
-            && Objects.equals(getNegationLevel() % 2, otherConstraint.getNegationLevel() % 2);
+        return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
 
     @Override
