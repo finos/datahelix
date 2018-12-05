@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
+import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import gherkin.lexer.Da;
@@ -46,7 +48,7 @@ class CombinationStrategyTester {
         DataBag.DataBagBuilder builder = DataBag.startBuilding();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName), "whatever");
+            builder.set(new Field(fieldName), "whatever", DataBagValueSource.Empty);
         }
 
         return builder.build();

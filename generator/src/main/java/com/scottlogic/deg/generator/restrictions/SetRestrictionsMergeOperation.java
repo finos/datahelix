@@ -60,7 +60,9 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 setRestrictions.getBlacklist());
         }
 
-        return Optional.of(merged.withSetRestrictions(setRestrictions));
+        return Optional.of(merged.withSetRestrictions(
+            setRestrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

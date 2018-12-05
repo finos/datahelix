@@ -15,7 +15,8 @@ public class FieldSpec {
         null,
         null,
         null,
-        null);
+        null,
+        FieldSpecSource.Empty);
 
     private final SetRestrictions setRestrictions;
     private final NumericRestrictions numericRestrictions;
@@ -25,6 +26,7 @@ public class FieldSpec {
     private final DateTimeRestrictions dateTimeRestrictions;
     private final FormatRestrictions formatRestrictions;
     private final GranularityRestrictions granularityRestrictions;
+    private final FieldSpecSource source;
 
     public FieldSpec(
         SetRestrictions setRestrictions,
@@ -34,7 +36,8 @@ public class FieldSpec {
         TypeRestrictions typeRestrictions,
         DateTimeRestrictions dateTimeRestrictions,
         FormatRestrictions formatRestrictions,
-        GranularityRestrictions granularityRestrictions) {
+        GranularityRestrictions granularityRestrictions,
+        FieldSpecSource source) {
         this.setRestrictions = setRestrictions;
         this.numericRestrictions = numericRestrictions;
         this.stringRestrictions = stringRestrictions;
@@ -43,6 +46,7 @@ public class FieldSpec {
         this.dateTimeRestrictions = dateTimeRestrictions;
         this.formatRestrictions = formatRestrictions;
         this.granularityRestrictions = granularityRestrictions;
+        this.source = source;
     }
 
     public SetRestrictions getSetRestrictions() {
@@ -69,7 +73,7 @@ public class FieldSpec {
 
     public GranularityRestrictions getGranularityRestrictions() { return granularityRestrictions; }
 
-    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions) {
+    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             setRestrictions,
             this.numericRestrictions,
@@ -78,10 +82,11 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
+    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             numericRestrictions,
@@ -90,10 +95,11 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
+    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -102,10 +108,11 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
+    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -114,10 +121,11 @@ public class FieldSpec {
             typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions) {
+    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -126,10 +134,11 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
+    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -138,10 +147,11 @@ public class FieldSpec {
             this.typeRestrictions,
             dateTimeRestrictions,
             this.formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
     }
 
-    public FieldSpec withGranularityRestrictions(GranularityRestrictions granularityRestrictions) {
+    public FieldSpec withGranularityRestrictions(GranularityRestrictions granularityRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -150,7 +160,8 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             this.formatRestrictions,
-            granularityRestrictions);
+            granularityRestrictions,
+            this.source.combine(source));
     }
 
     @Override
@@ -173,7 +184,7 @@ public class FieldSpec {
         return formatRestrictions;
     }
 
-    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions) {
+    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
             this.numericRestrictions,
@@ -182,6 +193,12 @@ public class FieldSpec {
             this.typeRestrictions,
             this.dateTimeRestrictions,
             formatRestrictions,
-            this.granularityRestrictions);
+            this.granularityRestrictions,
+            this.source.combine(source));
+    }
+
+    public FieldSpecSource getFieldSpecSource() {
+        return this.source;
     }
 }
+

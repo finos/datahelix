@@ -64,33 +64,22 @@ public class FixedField {
             : getFieldSpecForCurrentValue(current);
     }
 
-    private static FieldSpec getFieldSpecForCurrentValue(Object currentValue) {
+    private FieldSpec getFieldSpecForCurrentValue(Object currentValue) {
         if (currentValue == NOT_ITERATED){
             throw new UnsupportedOperationException("FixedField has not iterated yet");
         }
 
-        return new FieldSpec(
+        return FieldSpec.Empty.withSetRestrictions(
             new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), null),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            this.valuesFieldSpec.getFieldSpecSource()
         );
     }
 
     private FieldSpec getNullRequiredFieldSpec() {
-        return new FieldSpec(
-            null,
-            null,
-            null,
+        return FieldSpec.Empty
+        .withNullRestrictions(
             new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
-            null,
-            null,
-            null,
-            null
+            this.valuesFieldSpec.getFieldSpecSource()
         );
     }
 
