@@ -23,10 +23,7 @@ public class DirectoryOutputTarget implements IOutputTarget {
 
     @Override
     public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
-        Path outputPath = this.directoryPath
-            .resolve(this.dataSetWriter.makeFilename("output"));
-
-        try (Closeable writer = this.dataSetWriter.openWriter(outputPath, profileFields)) {
+        try (Closeable writer = this.dataSetWriter.openWriter(this.directoryPath, "output", profileFields)) {
             generatedObjects.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row);

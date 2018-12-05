@@ -11,12 +11,14 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 public class CsvDataSetWriter implements IDataSetWriter<CSVPrinter> {
-    public CSVPrinter openWriter(Path filePath, ProfileFields profileFields) throws IOException {
+    public CSVPrinter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
         return CSVFormat.RFC4180
             .withHeader(profileFields.stream()
                 .map(f -> f.name)
                 .toArray(String[]::new))
-            .print(filePath, StandardCharsets.UTF_8);
+            .print(
+                directory.resolve(filenameWithoutExtension + ".csv"),
+                StandardCharsets.UTF_8);
     }
 
     public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
@@ -31,10 +33,5 @@ public class CsvDataSetWriter implements IDataSetWriter<CSVPrinter> {
         }).collect(Collectors.toList()));
 
         writer.flush();
-    }
-
-    @Override
-    public String makeFilename(String filenameWithoutExtension) {
-        return filenameWithoutExtension + ".csv";
     }
 }

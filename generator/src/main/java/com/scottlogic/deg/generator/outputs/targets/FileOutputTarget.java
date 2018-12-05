@@ -25,7 +25,10 @@ public class FileOutputTarget implements IOutputTarget {
         ProfileFields profileFields)
         throws IOException {
 
-        try (Closeable writer = this.dataSetWriter.openWriter(filePath, profileFields)) {
+        Path directoryPath = this.filePath.getParent();
+        String fileNameWithoutExtension = this.filePath.getFileName().toString();
+
+        try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileNameWithoutExtension, profileFields)) {
             generatedObjects.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row);

@@ -36,18 +36,15 @@ public class TestCaseGenerationResultWriter {
         for (TestCaseDataSet dataset : result.datasets) {
             String filenameWithoutExtension = intFormatter.format(index);
 
-            String filename = this.datasetWriter.makeFilename(filenameWithoutExtension);
-
-            Path fileAbsolutePath = directoryPath.resolve(filename);
-
-            System.out.println("  " + filename);
+            System.out.println("  " + filenameWithoutExtension);
             write(result.profile.fields,
                 dataset.stream(),
-                fileAbsolutePath);
+                directoryPath,
+                filenameWithoutExtension);
 
             testCaseDtos.add(
                 new TestCaseDTO(
-                    filename,
+                    filenameWithoutExtension,
                     dataset.violation == null
                         ? Collections.emptyList()
                         : Collections.singleton(dataset.violation)));
@@ -66,8 +63,8 @@ public class TestCaseGenerationResultWriter {
         System.out.println("Complete");
     }
 
-    private void write(ProfileFields fields, Stream<GeneratedObject> dataSet, Path outputPath) throws IOException {
-        try (Closeable writer = this.datasetWriter.openWriter(outputPath, fields)) {
+    private void write(ProfileFields fields, Stream<GeneratedObject> dataSet, Path directory, String filenameWithoutExtension) throws IOException {
+        try (Closeable writer = this.datasetWriter.openWriter(directory, filenameWithoutExtension, fields)) {
             dataSet.forEach(row -> {
                 try {
                     this.datasetWriter.writeRow(writer, row);
