@@ -96,7 +96,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     @Test
-    public void testIndependentHierarchicalDependency() {
+    public void testIndependentHierarchicalDependencies() {
         String TEST_FIELD_1 = "Controlling Field Bravo";
         String TEST_FIELD_2 = "Controlling Field Alpha";
         String TEST_FIELD_3 = "Dependent Field Charlie";
@@ -122,6 +122,37 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
         Assert.assertEquals(priorities.get(0).name, TEST_FIELD_2);
         Assert.assertEquals(priorities.get(1).name, TEST_FIELD_1);
+        Assert.assertEquals(priorities.get(2).name, TEST_FIELD_3);
+        Assert.assertEquals(priorities.get(3).name, TEST_FIELD_4);
+    }
+
+    @Test
+    public void testHierarchicalDependencyAndOneIndependentField() {
+        String TEST_FIELD_1 = "Controlling Field";
+        String TEST_FIELD_2 = "Independent Field";
+        String TEST_FIELD_3 = "Dependent Field 1";
+        String TEST_FIELD_4 = "Dependent Field 2";
+        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3, TEST_FIELD_4);
+
+        // TEST_FIELD_1 affects TEST_FIELD_3 and TEST_FIELD_4, TEST_FIELD_2 is independent
+        List<IConstraint> constraints = new ConstraintBuilder(fields)
+            .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
+            .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
+            .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
+            .addInSetConstraint(TEST_FIELD_4, Arrays.asList("D", "E", "F"))
+            .addConditionalConstraint(
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "B").build()
+            )
+            .addConditionalConstraint(
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_4, "D").build()
+            )
+            .build();
+        List<Field> priorities = getPriorities(fields, constraints);
+
+        Assert.assertEquals(priorities.get(0).name, TEST_FIELD_1);
+        Assert.assertEquals(priorities.get(1).name, TEST_FIELD_2);
         Assert.assertEquals(priorities.get(2).name, TEST_FIELD_3);
         Assert.assertEquals(priorities.get(3).name, TEST_FIELD_4);
     }
