@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.gramatical.*;
 
 import java.util.*;
 import java.util.function.Function;

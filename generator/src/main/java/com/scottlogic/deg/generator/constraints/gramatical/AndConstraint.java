@@ -1,17 +1,20 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.gramatical;
+
+import com.scottlogic.deg.generator.constraints.Constraint;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class OrConstraint implements LogicalConstraint {
+public class AndConstraint implements LogicalConstraint
+{
     public final Collection<Constraint> subConstraints;
 
-    public OrConstraint(Collection<Constraint> subConstraints) {
+    public AndConstraint(Collection<Constraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public OrConstraint(Constraint... subConstraints) {
+    public AndConstraint(Constraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 
@@ -19,12 +22,12 @@ public class OrConstraint implements LogicalConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrConstraint otherConstraint = (OrConstraint) o;
+        AndConstraint otherConstraint = (AndConstraint) o;
         return Objects.equals(subConstraints, otherConstraint.subConstraints);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash("OR", subConstraints);
+        return Objects.hash("AND", subConstraints);
     }
 }

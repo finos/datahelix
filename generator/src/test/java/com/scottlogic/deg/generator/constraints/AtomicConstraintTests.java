@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
 import com.scottlogic.deg.generator.inputs.IConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;

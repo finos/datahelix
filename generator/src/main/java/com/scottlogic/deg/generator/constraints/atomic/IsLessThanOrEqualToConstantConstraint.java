@@ -1,21 +1,21 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
 import java.util.Objects;
 
-public class IsLessThanConstantConstraint implements AtomicConstraint {
+public class IsLessThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
     public final Number referenceValue;
 
-    public IsLessThanConstantConstraint(Field field, Number referenceValue) {
+    public IsLessThanOrEqualToConstantConstraint(Field field, Number referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
 
     @Override
     public String toDotLabel() {
-        return String.format("%s < %s", field.name, referenceValue);
+        return String.format("%s <= %s", field.name, referenceValue);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IsLessThanConstantConstraint constraint = (IsLessThanConstantConstraint) o;
+        IsLessThanOrEqualToConstantConstraint constraint = (IsLessThanOrEqualToConstantConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -37,5 +37,7 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` < %s", field.name, referenceValue); }
+    public String toString() {
+        return String.format("`%s` <= %s", field.name, referenceValue);
+    }
 }

@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.util.ArrayList;

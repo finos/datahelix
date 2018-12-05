@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.constraints.gramatical.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;

@@ -1,22 +1,21 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
+public class IsGreaterThanConstantConstraint implements AtomicConstraint {
     public final Field field;
-    public final LocalDateTime referenceValue;
+    public final Number referenceValue;
 
-    public IsBeforeConstantDateTimeConstraint(Field field, LocalDateTime referenceValue) {
-        this.field = field;
+    public IsGreaterThanConstantConstraint(Field field, Number referenceValue) {
         this.referenceValue = referenceValue;
+        this.field = field;
     }
 
     @Override
     public String toDotLabel() {
-        return String.format("%s < %s", field.name, referenceValue);
+        return String.format("%s > %s", field.name, referenceValue);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IsBeforeConstantDateTimeConstraint constraint = (IsBeforeConstantDateTimeConstraint) o;
+        IsGreaterThanConstantConstraint constraint = (IsGreaterThanConstantConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -39,6 +38,6 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("`%s` < %s", field.name, referenceValue);
+        return String.format("`%s` > %s", field.name, referenceValue);
     }
 }

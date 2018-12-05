@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
-import com.scottlogic.deg.generator.constraints.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.Objects;

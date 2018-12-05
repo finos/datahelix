@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.constraints.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.AtomicNotConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicNotConstraint;
 
 import java.util.*;
 import java.util.function.Function;

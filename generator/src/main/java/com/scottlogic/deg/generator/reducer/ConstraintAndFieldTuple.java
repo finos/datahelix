@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 class ConstraintAndFieldTuple {
     private final Field field;

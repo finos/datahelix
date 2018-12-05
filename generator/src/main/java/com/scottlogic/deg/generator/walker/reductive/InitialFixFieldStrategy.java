@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.constraints.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 
 import java.util.Comparator;

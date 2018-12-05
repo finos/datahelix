@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.AndConstraint;
+import com.scottlogic.deg.generator.constraints.gramatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.ViolateConstraint;
+import com.scottlogic.deg.generator.constraints.gramatical.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;

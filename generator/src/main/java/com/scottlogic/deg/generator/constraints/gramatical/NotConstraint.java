@@ -1,4 +1,6 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.gramatical;
+
+import com.scottlogic.deg.generator.constraints.Constraint;
 
 import java.util.Objects;
 
