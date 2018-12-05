@@ -72,10 +72,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(mostProlificAtomicConstraint));
-        ConstraintNode negatedFactorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(negatedMostProlificConstraint));
+        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint).markNode(NodeMarking.OPTIMISED);
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);;
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -92,13 +90,13 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
+        DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
                     coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
                     coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList())));
+            .collect(Collectors.toList())).markNode(NodeMarking.OPTIMISED);
 
         return rootNode
             .removeDecisions(decisionsToRemove)
@@ -118,7 +116,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
+        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd).markNode(NodeMarking.OPTIMISED);
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
@@ -133,13 +131,17 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             .flatMap(option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
+        Comparator<Map.Entry<IConstraint, Long>> comparator = Comparator.comparing(Map.Entry::getValue);
+        comparator = comparator.reversed();
+        comparator = comparator.thenComparing(this::disfavourNotConstraints);
+        comparator = comparator.thenComparing(entry -> entry.getKey().toString());
+
         return decisionConstraints.entrySet()
             .stream()
-            .sorted(Comparator
-                .comparing(this::disfavourNotConstraints))
-            .max(Comparator.comparing(Map.Entry::getValue)) //order by the number of occurrences
-            .filter(constraint -> constraint.getValue() > 1) //where the number of occurrences > 1
+            .filter(constraint -> constraint.getValue() > 1) // where the number of occurrences > 1
+            .sorted(comparator)
             .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
+            .findFirst()
             .orElse(null); //otherwise return null
     }
 

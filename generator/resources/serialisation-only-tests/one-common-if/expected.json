@@ -1,0 +1,129 @@
+[ {
+  "rootNode" : {
+    "atomicConstraints" : [ {
+      "type" : "IsInSetConstraint",
+      "field" : {
+        "name" : "A"
+      },
+      "legalValues" : [ "a1", "a2" ]
+    }, {
+      "type" : "IsInSetConstraint",
+      "field" : {
+        "name" : "E"
+      },
+      "legalValues" : [ "e1", "e2" ]
+    }, {
+      "type" : "IsInSetConstraint",
+      "field" : {
+        "name" : "D"
+      },
+      "legalValues" : [ "d1", "d2" ]
+    }, {
+      "type" : "IsInSetConstraint",
+      "field" : {
+        "name" : "C"
+      },
+      "legalValues" : [ "c1", "c2" ]
+    }, {
+      "type" : "IsInSetConstraint",
+      "field" : {
+        "name" : "B"
+      },
+      "legalValues" : [ "b2", "b1" ]
+    } ],
+    "decisions" : [ {
+      "options" : [ {
+        "atomicConstraints" : [ {
+          "type" : "IsEqualToConstantConstraint",
+          "field" : {
+            "name" : "A"
+          },
+          "requiredValue" : "a1"
+        } ],
+        "decisions" : [ {
+          "options" : [ {
+            "atomicConstraints" : [ {
+              "type" : "IsEqualToConstantConstraint",
+              "field" : {
+                "name" : "D"
+              },
+              "requiredValue" : "d1"
+            }, {
+              "type" : "IsEqualToConstantConstraint",
+              "field" : {
+                "name" : "B"
+              },
+              "requiredValue" : "b1"
+            } ],
+            "decisions" : [ ]
+          }, {
+            "atomicConstraints" : [ {
+              "type" : "NotConstraint",
+              "negatedConstraint" : {
+                "type" : "IsEqualToConstantConstraint",
+                "field" : {
+                  "name" : "B"
+                },
+                "requiredValue" : "b1"
+              }
+            } ],
+            "decisions" : [ ]
+          } ]
+        }, {
+          "options" : [ {
+            "atomicConstraints" : [ {
+              "type" : "IsEqualToConstantConstraint",
+              "field" : {
+                "name" : "E"
+              },
+              "requiredValue" : "e1"
+            }, {
+              "type" : "IsEqualToConstantConstraint",
+              "field" : {
+                "name" : "C"
+              },
+              "requiredValue" : "c1"
+            } ],
+            "decisions" : [ ]
+          }, {
+            "atomicConstraints" : [ {
+              "type" : "NotConstraint",
+              "negatedConstraint" : {
+                "type" : "IsEqualToConstantConstraint",
+                "field" : {
+                  "name" : "C"
+                },
+                "requiredValue" : "c1"
+              }
+            } ],
+            "decisions" : [ ]
+          } ]
+        } ]
+      }, {
+        "atomicConstraints" : [ {
+          "type" : "NotConstraint",
+          "negatedConstraint" : {
+            "type" : "IsEqualToConstantConstraint",
+            "field" : {
+              "name" : "A"
+            },
+            "requiredValue" : "a1"
+          }
+        } ],
+        "decisions" : [ ]
+      } ]
+    } ]
+  },
+  "fields" : [ {
+    "name" : "A"
+  }, {
+    "name" : "B"
+  }, {
+    "name" : "C"
+  }, {
+    "name" : "D"
+  }, {
+    "name" : "E"
+  } ],
+  "description" : "One common if constraint: before"
+} ]

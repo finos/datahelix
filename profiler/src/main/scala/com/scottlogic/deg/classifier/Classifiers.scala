@@ -5,7 +5,7 @@ import org.apache.spark.rdd.RDD
 
 object Classifiers {
   val classifiers: List[Classifier] = List(
-    CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, IntegerClassifier, NameClassifier,
+    CountryCodeClassifier, CurrencyClassifier,EmailClassifier, FloatClassifier, LongClassifier, NameClassifier,
     RicClassifier, IsinClassifier, SedolClassifier, StringClassifier, TimeStampClassifier
   )
 

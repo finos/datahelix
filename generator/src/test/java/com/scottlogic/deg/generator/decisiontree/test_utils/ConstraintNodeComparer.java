@@ -72,7 +72,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
                         constraint2.getAtomicConstraints(),
                         constraint1.getAtomicConstraints()
                     ),
-                    TreeComparisonContext.TreeElementType.AtomicConstraint);
+                    TreeComparisonContext.TreeElementType.ATOMIC_CONSTRAINT);
                 return false;
             }
 
@@ -87,7 +87,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
                         constraint2.getDecisions(),
                         constraint1.getDecisions()
                     ),
-                    TreeComparisonContext.TreeElementType.Decision);
+                    TreeComparisonContext.TreeElementType.DECISION);
                 return false;
             }
 

@@ -1,5 +1,7 @@
 package com.scottlogic.deg.analyser.field_analyser.timestamp_analyser
 
+import java.text.SimpleDateFormat
+
 import com.scottlogic.deg.models._
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructField
@@ -18,8 +20,10 @@ class NaiveTimestampAnalyser(val df: DataFrame, val field: StructField) extends 
         ).as(inputField).head()
 
         val fieldTypeConstraint = new IsOfTypeConstraint(inputField,"temporal")
-        val higherThanOrEqualConstraint = new IsGreaterThanOrEqualToConstantConstraint(inputField, dateAnalysis.getAs[Int]("min").toString)
-        val lowerThanConstraint = new IsLowerThanConstraint(inputField, dateAnalysis.getAs[Int]("max").toString)
+        var dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+
+        val higherThanOrEqualConstraint = new IsAfterOrEqualToConstantDateTimeConstraint(inputField, Map("date" -> dateFormat.format(dateAnalysis.getAs("min"))))
+        val lowerThanConstraint = new IsBeforeConstantDateTimeConstraint(inputField, Map("date" -> dateFormat.format(dateAnalysis.getAs("max"))))
 
         val allConstraints = ListBuffer[IConstraint]()
         allConstraints += fieldTypeConstraint

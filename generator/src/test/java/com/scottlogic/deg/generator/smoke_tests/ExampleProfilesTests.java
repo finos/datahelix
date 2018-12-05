@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -32,9 +31,9 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
-                GenerationConfig.DataGenerationType.Interesting,
-                GenerationConfig.TreeWalkerType.Exhaustive,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING);
 
             generationEngine.generateTestCases(profileFile.toPath(), config);
         }));
@@ -44,9 +43,9 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
-                GenerationConfig.DataGenerationType.Interesting,
-                GenerationConfig.TreeWalkerType.Exhaustive,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING);
 
             generationEngine.generateDataSet(profileFile.toPath(), config);
         }));

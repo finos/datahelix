@@ -168,7 +168,7 @@ public class ProfileReaderTests {
                                 IsOfTypeConstraint.class,
                                 c -> Assert.assertThat(
                                         c.requiredType,
-                                        equalTo(IsOfTypeConstraint.Types.String)))));
+                                        equalTo(IsOfTypeConstraint.Types.STRING)))));
     }
 
     @Test
