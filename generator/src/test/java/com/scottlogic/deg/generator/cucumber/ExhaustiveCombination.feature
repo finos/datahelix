@@ -118,6 +118,7 @@ Scenario: Running an exhaustive combination strategy with valid number values sh
        | 999 | 0     |
        | -12 | 0     |
 
+@ignore
 Scenario: Running an exhaustive combination strategy with invalid number values should fail with an appropriate error message
      Given the following fields exist:
        | foo |
@@ -167,6 +168,7 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running an exhaustive combination strategy with invalid date formats should fail with an appropriate error message
      Given the following fields exist:
        | foo |
