@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -48,6 +49,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     private List<IFieldValueSource> getAllApplicableValueSources() {
         List<IFieldValueSource> validSources = new ArrayList<>();
+        MustContainRestriction mustContainRestriction = spec.getMustContainRestriction();
 
         // check nullability...
         if (determineNullabilityAndDecideWhetherToHalt(validSources))
@@ -55,12 +57,30 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
         // if there's a whitelist, we can just output that
         if (spec.getSetRestrictions() != null) {
-            Set<?> whitelist = spec.getSetRestrictions().getWhitelist();
+            Set<Object> whitelist = spec.getSetRestrictions().getWhitelist();
             if (whitelist != null) {
+                // If we have values that must be included we need to check that those values are included in the whitelist
+                if (mustContainRestriction != null) {
+                    whitelist.addAll(
+                        getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                            .map(o -> o.getSetRestrictions().getWhitelist())
+                            .collect(Collectors.toSet())
+                    );
+                }
+
                 return Collections.singletonList(
                     new CannedValuesFieldValueSource(
-                        new ArrayList<>(whitelist)));
+                        new ArrayList<>(whitelist)
+                    )
+                );
             }
+        } else if (mustContainRestriction != null) {
+            getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                .forEach(o -> validSources.add(
+                    new CannedValuesFieldValueSource(
+                        new ArrayList<>(o.getSetRestrictions().getWhitelist())
+                    )
+                ));
         }
 
         TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
@@ -160,5 +180,11 @@ public class FieldSpecFulfiller implements IDataBagSource {
             return Collections.emptySet();
 
         return new HashSet<>(spec.getSetRestrictions().getBlacklist());
+    }
+
+    private Stream<FieldSpec> getNotNullSetRestrictionFilterOnMustContainRestriction(MustContainRestriction restriction) {
+        return restriction.getRequiredObjects()
+            .stream()
+            .filter(o -> o.getSetRestrictions() != null);
     }
 }

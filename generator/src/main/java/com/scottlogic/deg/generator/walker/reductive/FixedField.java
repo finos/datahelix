@@ -73,6 +73,7 @@ public class FixedField {
             null,
             null,
             null,
+            null,
             null
         );
     }
@@ -83,6 +84,7 @@ public class FixedField {
             null,
             null,
             new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
+            null,
             null,
             null,
             null,

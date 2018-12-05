@@ -3,7 +3,9 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -113,15 +115,22 @@ public class FieldCollection {
     }
 
     //for the given field get a stream of possible values
-    private FixedField getFixedFieldWithValuesForField(Field field, ConstraintNode rootNode) {
+    private FixedField getFixedFieldWithValuesForField(Field field, ReductiveConstraintNode rootNode) {
         //from the original tree, get all atomic constraints that match the given field
         Set<IConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
             .stream()
             .filter(c -> this.fieldSniffer.detectField(c).equals(field))
             .collect(Collectors.toSet());
+        Set<IConstraint> constraintsForDecisions = rootNode.getDecisions()
+            .stream()
+            .flatMap(d -> d.getOptions().stream())
+            .flatMap(o -> o.getAtomicConstraints().stream())
+            .filter(c -> !(c instanceof NotConstraint) && this.fieldSniffer.detectField(c).equals(field))
+            .collect(Collectors.toSet());
 
         //produce a fieldspec for all the atomic constraints
-        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
+        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(
+            constraintsForRootNode, constraintsForDecisions)
             .orElse(FieldSpec.Empty);
 
         //use the FieldSpecFulfiller to emit all possible values given the generation mode, interesting or full-sequential

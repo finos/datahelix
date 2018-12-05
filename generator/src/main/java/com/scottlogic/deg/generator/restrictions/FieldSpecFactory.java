@@ -7,12 +7,22 @@ import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     public FieldSpec construct(IConstraint constraint) {
         return construct(constraint, false);
+    }
+
+    public FieldSpec toMustContainRestrictionFieldSpec(Collection<IConstraint> constraints) {
+        return FieldSpec.Empty.withMustContainRestriction(
+            new MustContainRestriction(
+                constraints.stream().map(this::construct).collect(Collectors.toSet())
+            )
+        );
     }
 
     private FieldSpec construct(IConstraint constraint, boolean negate) {
