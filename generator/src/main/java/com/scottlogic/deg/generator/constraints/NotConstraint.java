@@ -28,12 +28,6 @@ public class NotConstraint implements LogicalConstraint {
         return 1;
     }
 
-    @Override
-    public String toDotLabel() {
-        /*Use the encoded character code for the NOT (¬) symbol; leaving it un-encoded causes issues with visualisers*/
-        return String.format("&#x00AC;(%s)", negatedConstraint.toDotLabel());
-    }
-
     public String toString(){
         return String.format(
                 "NOT(%s)",

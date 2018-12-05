@@ -4,7 +4,9 @@ import com.scottlogic.deg.generator.Field;
 
 public interface AtomicConstraint extends LogicalConstraint {
 
-     Field getField();
+    Field getField();
+
+    String toDotLabel();
 
     default AtomicConstraint negate() {
         return new AtomicNotConstraint(this);}

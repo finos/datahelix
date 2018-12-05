@@ -37,8 +37,6 @@ public interface LogicalConstraint
             .collect(Collectors.toList());
     }
 
-    String toDotLabel();
-
     default LogicalConstraint or(LogicalConstraint... others)
     {
         return new OrConstraint(combine(this, others));

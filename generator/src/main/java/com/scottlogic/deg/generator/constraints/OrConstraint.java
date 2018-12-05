@@ -16,14 +16,6 @@ public class OrConstraint implements LogicalConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        throw new UnsupportedOperationException("OR constraints should be consumed during conversion to decision trees");
-
-//        return String.format("Or (%s)", subConstraints.stream()
-//            .map(x -> x.toDotLabel()).collect(Collectors.joining(", ")));
-    }
-
-    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

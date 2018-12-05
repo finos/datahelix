@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.visualisation;
 
+import com.scottlogic.deg.generator.constraints.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.LogicalConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
@@ -177,7 +178,7 @@ class NodeVisualiser {
     String renderNode(String id, ConstraintNode node){
         String label = node.getAtomicConstraints()
             .stream()
-            .map(LogicalConstraint::toDotLabel)
+            .map(AtomicConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
     }

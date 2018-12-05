@@ -17,14 +17,6 @@ public class AndConstraint implements LogicalConstraint
     }
 
     @Override
-    public String toDotLabel(){
-        throw new UnsupportedOperationException("AND constraints should be consumed during conversion to decision trees");
-
-//        return String.format("And (%s)", subConstraints.stream()
-//            .map(x -> x.toDotLabel()).collect(Collectors.joining(", ")));
-    }
-
-    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
