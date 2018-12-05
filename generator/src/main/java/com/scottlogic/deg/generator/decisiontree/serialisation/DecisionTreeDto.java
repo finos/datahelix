@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.test_utils;
+package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import java.util.List;
 

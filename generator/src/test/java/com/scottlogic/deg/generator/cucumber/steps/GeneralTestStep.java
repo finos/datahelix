@@ -46,6 +46,11 @@ public class GeneralTestStep {
         this.state.generationStrategy = strategy;
     }
 
+    @When("the combination strategy is {combinationStrategy}")
+    public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
+        this.state.combinationStrategy = strategy;
+    }
+
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
         this.state.addConstraint(fieldName, "null", null);

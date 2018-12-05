@@ -23,9 +23,9 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"numeric");
 
-    val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min").toString);
+    val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min"));
 
-    val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max").toString);
+    val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max"));
 
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += minLengthConstraint;
