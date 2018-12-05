@@ -1,4 +1,4 @@
-Feature: User can specify that a value is equalTo a required value
+Feature: User can create data across multiple fields for all combinations available.
 
 Background:
      Given the generation strategy is full
