@@ -21,7 +21,7 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
 
     public SourceTracingDataSetWriter() {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
-        writer = jsonObjectMapper.writer();
+        writer = jsonObjectMapper.writerWithDefaultPrettyPrinter();
     }
 
     @Override
