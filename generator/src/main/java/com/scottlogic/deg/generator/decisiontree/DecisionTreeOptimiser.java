@@ -62,7 +62,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return null;
         }
         // Add negation of most prolific constraint to new decision node
-        AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.not();
+        AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.negate();
 
         List<DecisionNode> factorisableDecisionNodes = rootNode.getDecisions().stream()
             .filter(node -> this.decisionIsFactorisable(node, mostProlificAtomicConstraint, negatedMostProlificConstraint))
@@ -105,7 +105,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
     private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<AtomicConstraint> constraints){
         return node.getAtomicConstraints().stream()
-            .map(AtomicConstraint::not)
+            .map(AtomicConstraint::negate)
             .allMatch(constraints::contains);
     }
 
@@ -178,7 +178,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         DecisionAnalyser(DecisionNode decisionNode, AtomicConstraint factorisingConstraint){
             this.decision = decisionNode;
             this.factorisingConstraint = factorisingConstraint;
-            this.negatedFactorisingConstraint = factorisingConstraint.not();
+            this.negatedFactorisingConstraint = factorisingConstraint.negate();
         }
 
         /**

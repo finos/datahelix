@@ -326,7 +326,7 @@ class DecisionTreeGeneratorTests {
                         ),
                         new TreeConstraintNode(
                             Arrays.asList(
-                                constraintA.not(),
+                                constraintA.negate(),
                                 constraintC
                             ),
                             Collections.emptySet()
@@ -383,7 +383,7 @@ class DecisionTreeGeneratorTests {
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        LogicalConstraint notConstraint = conditionalConstraint.not();
+        LogicalConstraint notConstraint = conditionalConstraint.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
@@ -428,11 +428,11 @@ class DecisionTreeGeneratorTests {
         AtomicConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
         AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
-        LogicalConstraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).not();
+        LogicalConstraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
         ConstraintNode expectedOutput = new TreeConstraintNode(
             aEqualTo10,
-            bGreaterThan20.not());
+            bGreaterThan20.negate());
 
         givenRule(inputRule);
 
@@ -448,8 +448,8 @@ class DecisionTreeGeneratorTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        LogicalConstraint notConstraint0 = constraintA.not();
-        LogicalConstraint notConstraint1 = notConstraint0.not();
+        LogicalConstraint notConstraint0 = constraintA.negate();
+        LogicalConstraint notConstraint1 = notConstraint0.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
@@ -472,7 +472,7 @@ class DecisionTreeGeneratorTests {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
-        NotConstraint notConstraint = (NotConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).not();
+        NotConstraint notConstraint = (NotConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();
@@ -571,7 +571,7 @@ class DecisionTreeGeneratorTests {
     void whenViolatingNegativeAtomic() {
         givenRule(
             new ViolateConstraint(
-                aIsNull.not()));
+                aIsNull.negate()));
 
         treeRootShouldMatch(
             new TreeConstraintNode(
@@ -627,10 +627,10 @@ class DecisionTreeGeneratorTests {
             new TreeDecisionNode(
                 new TreeConstraintNode(
                     aIsNull,
-                    bEquals10.not()),
+                    bEquals10.negate()),
                 new TreeConstraintNode(
-                    aIsNull.not(),
-                    eIsString.not())));
+                    aIsNull.negate(),
+                    eIsString.negate())));
     }
 
     private void assertOptionContainsSingleConstraint(ConstraintNode option, LogicalConstraint constraint) {

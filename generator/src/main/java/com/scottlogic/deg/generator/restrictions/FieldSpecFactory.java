@@ -154,7 +154,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
         if (negate) {
-            // it's not worth much effort to figure out how to not a formatting constraint - let's just make it a no-op
+            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
             return FieldSpec.Empty;
         }
 
@@ -215,7 +215,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate) {
         if (negate) {
-            // it's not worth much effort to figure out how to not a formatting constraint - let's just make it a no-op
+            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
             return FieldSpec.Empty;
         }
 

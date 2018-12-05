@@ -32,7 +32,7 @@ public class MainConstraintReader implements IConstraintReader {
         }
 
         if (dto.not != null) {
-            return this.apply(dto.not, fields).not();
+            return this.apply(dto.not, fields).negate();
         }
 
         if (dto.allOf != null) {

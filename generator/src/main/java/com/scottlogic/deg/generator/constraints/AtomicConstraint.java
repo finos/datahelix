@@ -6,6 +6,6 @@ public interface AtomicConstraint extends LogicalConstraint {
 
      Field getField();
 
-    default AtomicConstraint not() {
+    default AtomicConstraint negate() {
         return new AtomicNotConstraint(this);}
 }

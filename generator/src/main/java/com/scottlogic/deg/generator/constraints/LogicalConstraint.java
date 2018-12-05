@@ -49,7 +49,7 @@ public interface LogicalConstraint
         return new AndConstraint(combine(this, others));
     }
 
-    default LogicalConstraint not()
+    default LogicalConstraint negate()
     {
         if (this instanceof AtomicConstraint)
             return new AtomicNotConstraint((AtomicConstraint) this);

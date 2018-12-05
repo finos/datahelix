@@ -12,7 +12,7 @@ public class AtomicNotConstraint implements AtomicConstraint {
     }
 
     @Override
-    public AtomicConstraint not() {
+    public AtomicConstraint negate() {
         return this.negatedConstraint;
     }
 

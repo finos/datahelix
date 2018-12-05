@@ -10,7 +10,7 @@ public class NotConstraint implements LogicalConstraint {
     }
 
     @Override
-    public LogicalConstraint not() {
+    public LogicalConstraint negate() {
         return this.negatedConstraint;
     }
 
