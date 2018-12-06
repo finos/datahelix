@@ -46,20 +46,26 @@ _example of a trace output file for a output file with 1 row and 2 fields_
   } ],
   "rule" : null,
   "field" : "field 1"
-}, {
-  "constraints" : [ {
-    "type" : "IsInSetConstraint",
-    "value" : "`field 2` in [A, B]"
-  }, {
-    "type" : "IsNullConstraint",
-    "value" : "`MUST_BE_NULL`: field 2"
-  } ],
-  "rule" : null,
-  "field" : "field 2"
-}
-]
+ }, {
+   "constraints" : [ {
+     "type" : "IsInSetConstraint",
+     "value" : "`field 2` in [A, B]"
+   }, {
+     "type" : "IsNullConstraint",
+     "value" : "`MUST_BE_NULL`: field 2"
+   } ],
+   "rule" : null,
+   "field" : "field 2"
+ } ]
 ]
 ```
+
+#### Explanation
+* Array of _row information_ instances, same number as number of rows in output file
+  * Array of _field value information_ instances, each instance contains information about the row in the output file at the same position. Each _field value information_ should be in the same order as in the output row, but this is not guarenteed, check the `field` property.
+    * An array of _constraint information_ that influenced the generation of the value in this field in the given row
+    * The name of the rule* that contained the constraint/s
+    * The name of the field that this _field value information_ relates to
 
 ## Future changes
 In future this file will also contain information on violated rules, etc. The structure/shape of the file may change to support reporting sufficient information in these cases.
