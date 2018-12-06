@@ -165,7 +165,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                     ? null
                     : new AndConstraint(
                     conditional.condition.negate(),
-                    conditional.whenConditionIsFalse).negate();
+                    conditional.whenConditionIsFalse.negate());
 
                 return convertConstraint(
                     negativeNegation != null
