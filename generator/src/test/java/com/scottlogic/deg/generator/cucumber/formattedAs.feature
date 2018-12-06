@@ -15,13 +15,14 @@ Feature: User can specify that a value is so formatted
       | <expected> |
     Examples:
       | input                    | format       | expected                       |
-#      | 1.0                      | "%a"         | "0x1.0p0"                      |
-#      | 1.5                      | "%a"         | "0x1.8p0"                      |
+      | 1.0                      | "%a"         | "0x1.0p0"                      |
+#      | 1.5                      | "%a"         | "0x1.8p0"                      | no way to specify float over double
       | null                     | "%a"         | null                           |
       | 1                        | "%b"         | true                           |
       | "1"                      | "%b"         | true                           |
       | 2018-10-10T00:00:00.000  | "%b"         | true                           |
-#      | null                     | "%b"         | null                           |
+#      | null                     | "%b"         | true                           | this should be true
+      |                          | "%b"         | true                           |
       | 32                       | "%c"         | " "                            |
       | 33                       | "%c"         | "!"                            |
       | 34                       | "%c"         | """                            |
@@ -101,17 +102,11 @@ Feature: User can specify that a value is so formatted
       | 123456789.123456789      | "%g"         | "1.23457e+08"                  |
       | null                     | "%g"         | null                           |
       | ""                       | "%h"         | "0"                            |
-#      | 1                        | "%h"         | "3f800000"                     |
-#      | 1.0                      | "%h"         | "3f000000"                     |
-#      | -1                       | "%h"         | "bff00000"                     |
-      | "1"                      | "%h"         | "31"                           |
-#      | 2018-10-10T00:00:00.000  | "%h"         | "???"                          |
-      | null                     | "%h"         | null                           |
-#      |                          | "%n"         | "\n"                           |
-#      | 1                        | "%n"         | "\n"                           |
-#      | "1"                      | "%n"         | "\n"                           |
-#      | 2018-10-10T00:00:00.000  | "%n"         | "\n"                           |
-#      | null                     | "%n"         | "\n"                            |
+#      |                          | "%n"         | "\n"                           | struggling to display the correct kind of newline
+#      | 1                        | "%n"         | "\n"                           | struggling to display the correct kind of newline
+#      | "1"                      | "%n"         | "\n"                           | struggling to display the correct kind of newline
+#      | 2018-10-10T00:00:00.000  | "%n"         | "\n"                           | struggling to display the correct kind of newline
+#      | null                     | "%n"         | "\n"                           | struggling to display the correct kind of newline
       | 0                        | "%o"         | "0"                            |
       | 1                        | "%o"         | "1"                            |
       | 123456789                | "%o"         | "726746425"                    |
