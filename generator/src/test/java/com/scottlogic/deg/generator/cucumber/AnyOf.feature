@@ -208,7 +208,6 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
     | "4444" |
 
 
-@ignore @bug # bug relating to shorterThan not function correctly, see bug #251
 Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
   Given there is a constraint:
     """
