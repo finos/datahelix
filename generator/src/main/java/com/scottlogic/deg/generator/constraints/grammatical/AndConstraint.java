@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.constraints.gramatical;
+package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
 
@@ -6,14 +6,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-public class OrConstraint implements GramaticalConstraint {
+public class AndConstraint implements GrammaticalConstraint
+{
     public final Collection<Constraint> subConstraints;
 
-    public OrConstraint(Collection<Constraint> subConstraints) {
+    public AndConstraint(Collection<Constraint> subConstraints) {
         this.subConstraints = subConstraints;
     }
 
-    public OrConstraint(Constraint... subConstraints) {
+    public AndConstraint(Constraint... subConstraints) {
         this(Arrays.asList(subConstraints));
     }
 
@@ -21,12 +22,12 @@ public class OrConstraint implements GramaticalConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrConstraint otherConstraint = (OrConstraint) o;
+        AndConstraint otherConstraint = (AndConstraint) o;
         return Objects.equals(subConstraints, otherConstraint.subConstraints);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash("OR", subConstraints);
+        return Objects.hash("AND", subConstraints);
     }
 }

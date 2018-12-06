@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.gramatical.*;
+import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
@@ -474,7 +474,7 @@ class DecisionTreeGeneratorTests {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
-        NegatedGramaticalConstraint notConstraint = (NegatedGramaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
+        NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         DecisionTreeGenerator testObject = new DecisionTreeGenerator();

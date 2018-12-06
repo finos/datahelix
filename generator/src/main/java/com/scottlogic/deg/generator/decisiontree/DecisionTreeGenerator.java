@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.gramatical.*;
+import com.scottlogic.deg.generator.constraints.grammatical.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -135,8 +135,8 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             // we've got an atomic constraint
             return convertConstraint(violatedConstraint.negate());
-        } else if (constraintToConvert instanceof NegatedGramaticalConstraint) {
-            Constraint negatedConstraint = ((NegatedGramaticalConstraint) constraintToConvert).negatedConstraint;
+        } else if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
+            Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).negatedConstraint;
 
             // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
             if (negatedConstraint instanceof AndConstraint) {

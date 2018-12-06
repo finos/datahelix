@@ -1,8 +1,8 @@
-package com.scottlogic.deg.generator.constraints.gramatical;
+package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
 
-public class ConditionalConstraint implements GramaticalConstraint
+public class ConditionalConstraint implements GrammaticalConstraint
 {
     public final Constraint condition;
     public final Constraint whenConditionIsTrue;

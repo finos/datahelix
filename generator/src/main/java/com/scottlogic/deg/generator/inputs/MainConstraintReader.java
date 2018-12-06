@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.constraints.gramatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.gramatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.gramatical.OrConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 public class MainConstraintReader implements IConstraintReader {
