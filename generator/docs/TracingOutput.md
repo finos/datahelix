@@ -1,10 +1,8 @@
 # Output tracing
 
-This faciliy will permit analysis of which rules* and constraints from the profile have been employed to emit the value for each field in each row. Each _atomic constraint_ will be emitted. Logical constraints (i.e. _AND_, _OR_, _IF_, _allOf_ and _anyOf_) are not included, however the negation-constraint (_NOT_) will be.
+This facility will permit analysis of which rules* and constraints from the profile have been employed to emit the value for each field in each row. Each _atomic constraint_ will be emitted. Logical constraints (i.e. _AND_, _OR_, _IF_, _allOf_ and _anyOf_) are not included, however the negation-constraint (_NOT_) will be.
 
 It is normal for there to be multiple constraints to be emitted per field value, none of these should be contradictory, see the example below for a view of what the file could look like.
-
-__\*\*__ Note: this facility is not currently configurable, it requires a rebuild with the `SourceTracingDataSetWriter` used with the `MultiDataSetWriter` in  `Generate.java`.
 
 Enabling this facility when generating data will:
 * Generate the data as per normal
@@ -12,6 +10,7 @@ Enabling this facility when generating data will:
 
 ## Notes on output
 __\*__ Rules are not currently emitted  
+__\*\*__ Note: this facility is not currently configurable, it requires a rebuild with the `SourceTracingDataSetWriter` used with the `MultiDataSetWriter` in  `Generate.java`.   
 __\*\*\*__ This JSON file is generated progressively, as such you can read the file with a text-editor during generation but it will not be valid JSON until the generator has exited. In the above example the final `]` will only be emitted after rows have been emitted.
 
 ## JSON structure
