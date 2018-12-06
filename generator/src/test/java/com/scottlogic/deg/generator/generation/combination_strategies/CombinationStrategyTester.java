@@ -38,6 +38,21 @@ class CombinationStrategyTester {
         Assert.assertThat(results, IsArrayContainingInAnyOrder.arrayContainingInAnyOrder(bagArray));
     }
 
+    void expectIllegalState(){
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            strategy.permute(dataBags).count(); //to exhaust the stream
+
+            Assert.fail("IllegalStateException was not thrown");
+        } catch (IllegalStateException e) {
+            if (e.getMessage().equals("stream has already been operated upon or closed")){
+                return;
+            }
+
+            throw e; //an unexpected 'type' of illegal state was thrown
+        }
+    }
+
     void expectEmpty() {
         Stream<DataBag> results = strategy.permute(dataBags);
 
