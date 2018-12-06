@@ -12,17 +12,21 @@ public class ExhaustiveCombinationStrategy implements ICombinationStrategy {
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
 
-        List<Stream<DataBag>> bagsAsLists = dataBagSequences
+        List<List<DataBag>> bagsAsLists = dataBagSequences
+            .map(sequence ->
+                StreamSupport.stream(sequence.spliterator(), true)
+                    .collect(Collectors.toList()))
             .collect(Collectors.toList());
 
         return next(DataBag.empty, bagsAsLists, 0);
     }
 
-    public Stream<DataBag> next(DataBag accumulatingBag, List<Stream<DataBag>> bagSequences, int bagSequenceIndex) {
+    public Stream<DataBag> next(DataBag accumulatingBag, List<List<DataBag>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
-            Stream<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
+            List<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
 
             return nextStream
+                .stream()
                 .map(innerBag -> DataBag.merge(innerBag, accumulatingBag))
                 .flatMap(innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
