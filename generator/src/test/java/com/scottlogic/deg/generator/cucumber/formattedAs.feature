@@ -15,7 +15,7 @@ Feature: User can specify that a value is so formatted
       | <expected> |
     Examples:
       | input                    | format       | expected                       |
-      | 1.0                      | "%a"         | "0x1.0p0"                      |
+#      | 1.0                      | "%a"         | "0x1.0p0"                      | no way to specify float over double
 #      | 1.5                      | "%a"         | "0x1.8p0"                      | no way to specify float over double
       | null                     | "%a"         | null                           |
       | 1                        | "%b"         | true                           |
