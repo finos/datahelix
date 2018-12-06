@@ -135,12 +135,12 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             // we've got an atomic constraint
             return convertConstraint(violatedConstraint.negate());
-        } else if (constraintToConvert instanceof GramaticalNotConstraint) {
-            Constraint negatedConstraint = ((GramaticalNotConstraint) constraintToConvert).negatedConstraint;
+        } else if (constraintToConvert instanceof NegatedGramaticalConstraint) {
+            Constraint negatedConstraint = ((NegatedGramaticalConstraint) constraintToConvert).negatedConstraint;
 
             // ¬¬X reduces to X
-            if (negatedConstraint instanceof GramaticalNotConstraint) {
-                return convertConstraint(((GramaticalNotConstraint) negatedConstraint).negatedConstraint);
+            if (negatedConstraint instanceof NegatedGramaticalConstraint) {
+                return convertConstraint(((NegatedGramaticalConstraint) negatedConstraint).negatedConstraint);
             }
             // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
             else if (negatedConstraint instanceof AndConstraint) {

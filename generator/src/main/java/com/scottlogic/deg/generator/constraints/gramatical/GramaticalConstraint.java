@@ -5,6 +5,6 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 public interface GramaticalConstraint extends Constraint {
     default Constraint negate()
     {
-        return new GramaticalNotConstraint(this);
+        return new NegatedGramaticalConstraint(this);
     }
 }

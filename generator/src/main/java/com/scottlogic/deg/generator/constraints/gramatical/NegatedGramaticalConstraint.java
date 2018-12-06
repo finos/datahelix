@@ -2,10 +2,10 @@ package com.scottlogic.deg.generator.constraints.gramatical;
 
 import java.util.Objects;
 
-public class GramaticalNotConstraint implements GramaticalConstraint {
+public class NegatedGramaticalConstraint implements GramaticalConstraint {
     public final GramaticalConstraint negatedConstraint;
 
-    protected GramaticalNotConstraint(GramaticalConstraint negatedConstraint) {
+    protected NegatedGramaticalConstraint(GramaticalConstraint negatedConstraint) {
         this.negatedConstraint = negatedConstraint;
     }
 
@@ -28,7 +28,7 @@ public class GramaticalNotConstraint implements GramaticalConstraint {
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GramaticalNotConstraint otherConstraint = (GramaticalNotConstraint) o;
+        NegatedGramaticalConstraint otherConstraint = (NegatedGramaticalConstraint) o;
         return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
 
