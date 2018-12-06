@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.SystemOutDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.combination_strategies.ExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
@@ -42,6 +41,11 @@ public class Generate implements Runnable {
         defaultValue = "INTERESTING")
     private GenerationConfig.DataGenerationType generationType;
 
+    @CommandLine.Option(names = {"-c", "--c"},
+        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
+        defaultValue = "PINNING")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
+
     @CommandLine.Option(
             names = {"--no-optimise"},
             description = "Prevents tree optimisation",
@@ -65,7 +69,7 @@ public class Generate implements Runnable {
         GenerationConfig config = new GenerationConfig(
             generationType,
             walkerType,
-            new ExhaustiveCombinationStrategy());
+            combinationType);
 
         try {
             final Profile profile = new ProfileReader().read(profileFile.toPath());

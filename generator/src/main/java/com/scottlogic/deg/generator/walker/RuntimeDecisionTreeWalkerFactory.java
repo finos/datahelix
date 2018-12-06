@@ -38,7 +38,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     <the producer>);*/
             case REDUCTIVE:
                 ConstraintFieldSniffer fieldSniffer = new ConstraintFieldSniffer();
-                ReductiveDecisionTreeAdapter treeAdapter = new ReductiveDecisionTreeAdapter();
                 IterationVisualiser visualiser = new ReductiveIterationVisualiser();
 
                 return new ReductiveDecisionTreeWalker(
@@ -49,7 +48,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         fieldSpecMerger,
                         fieldSpecFactory,
                         fieldSniffer,
-                        treeAdapter,
                         fixFieldStrategy
                     ));
             case CARTESIAN_PRODUCT:

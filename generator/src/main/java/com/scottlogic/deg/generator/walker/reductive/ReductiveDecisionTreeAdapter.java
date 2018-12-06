@@ -31,7 +31,7 @@ public class ReductiveDecisionTreeAdapter {
         );
 
         return context.isValid()
-            ? node
+            ? this.simplifier.simplify(node)
             : null;
     }
 

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class DegTestState {
 
     public GenerationConfig.DataGenerationType generationStrategy;
+    public GenerationConfig.CombinationStrategyType combinationStrategy;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
 
     final List<Field> profileFields = new ArrayList<>();

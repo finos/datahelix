@@ -37,7 +37,6 @@ public class FieldCollection {
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
         ConstraintFieldSniffer fieldSniffer,
-        ReductiveDecisionTreeAdapter treeAdapter,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
         FixedField lastFixedField
@@ -201,10 +200,7 @@ public class FieldCollection {
         Optional<FieldSpec> constrainedFieldSpecOpt = this.reducer.reduceConstraintsToFieldSpec(constraintsForField);
 
         if (!constrainedFieldSpecOpt.isPresent()){
-            throw new UnsupportedOperationException(String.format(
-                "Unable to create constraint field-spec for %s with constraints %s",
-                fixedField.field.name,
-                Objects.toString(constraintsForField)));
+            return null; //this shouldn't happen: caused by constraints for one of the fixed fields contradicting each other (issue in optimising and/or reducing) - see issue #250
         }
 
         return this.fieldSpecMerger

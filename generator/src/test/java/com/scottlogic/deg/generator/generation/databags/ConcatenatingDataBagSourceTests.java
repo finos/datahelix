@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         GenerationConfig.DataGenerationType.INTERESTING,
         GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-        new FieldExhaustiveCombinationStrategy());
+        GenerationConfig.CombinationStrategyType.PINNING);
 
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {

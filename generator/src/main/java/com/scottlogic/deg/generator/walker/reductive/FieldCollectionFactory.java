@@ -20,7 +20,6 @@ public class FieldCollectionFactory {
     private final FieldSpecMerger fieldSpecMerger;
     private final FieldSpecFactory fieldSpecFactory;
     private final ConstraintFieldSniffer fieldSniffer;
-    private final ReductiveDecisionTreeAdapter treeAdapter;
     private final FixFieldStrategy fixFieldStrategy;
 
     public FieldCollectionFactory(
@@ -29,14 +28,12 @@ public class FieldCollectionFactory {
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
         ConstraintFieldSniffer fieldSniffer,
-        ReductiveDecisionTreeAdapter treeAdapter,
         FixFieldStrategy fixFieldStrategy) {
         this.config = config;
         this.constraintReducer = constraintReducer;
         this.fieldSpecMerger = fieldSpecMerger;
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSniffer = fieldSniffer;
-        this.treeAdapter = treeAdapter;
         this.fixFieldStrategy = fixFieldStrategy;
     }
 
@@ -49,7 +46,6 @@ public class FieldCollectionFactory {
             this.fieldSpecMerger,
             this.fieldSpecFactory,
             this.fieldSniffer,
-            this.treeAdapter,
             this.fixFieldStrategy,
             new HashMap<>(),
             null);
@@ -73,7 +69,6 @@ public class FieldCollectionFactory {
             this.fieldSpecMerger,
             this.fieldSpecFactory,
             this.fieldSniffer,
-            this.treeAdapter,
             this.fixFieldStrategy,
             newFixedFieldsMap,
             fixedField);
