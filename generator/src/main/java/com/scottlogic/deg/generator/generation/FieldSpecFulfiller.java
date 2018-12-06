@@ -74,6 +74,14 @@ public class FieldSpecFulfiller implements IDataBagSource {
                     )
                 );
             }
+            else {
+                getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                    .forEach(o -> validSources.add(
+                        new CannedValuesFieldValueSource(
+                            new ArrayList<>(o.getSetRestrictions().getWhitelist())
+                        )
+                    ));
+            }
         } else if (mustContainRestriction != null) {
             getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
                 .forEach(o -> validSources.add(
