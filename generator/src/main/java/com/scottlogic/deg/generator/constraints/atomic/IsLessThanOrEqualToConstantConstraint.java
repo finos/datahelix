@@ -1,19 +1,16 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
-public class IsBeforeOrEqualToConstantDateTimeConstraint implements IConstraint {
+public class IsLessThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
-    public final LocalDateTime referenceValue;
+    public final Number referenceValue;
 
-    public IsBeforeOrEqualToConstantDateTimeConstraint(Field field, LocalDateTime referenceValue) {
-        this.field = field;
+    public IsLessThanOrEqualToConstantConstraint(Field field, Number referenceValue) {
         this.referenceValue = referenceValue;
+        this.field = field;
     }
 
     @Override
@@ -22,15 +19,15 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements IConstraint 
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IsBeforeOrEqualToConstantDateTimeConstraint constraint = (IsBeforeOrEqualToConstantDateTimeConstraint) o;
+        IsLessThanOrEqualToConstantConstraint constraint = (IsLessThanOrEqualToConstantConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 

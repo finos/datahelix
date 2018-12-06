@@ -1,35 +1,31 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.Constraint;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConditionalConstraint implements IConstraint
+public class ConditionalConstraint implements GrammaticalConstraint
 {
-    public final IConstraint condition;
-    public final IConstraint whenConditionIsTrue;
-    public final IConstraint whenConditionIsFalse;
+    public final Constraint condition;
+    public final Constraint whenConditionIsTrue;
+    public final Constraint whenConditionIsFalse;
 
     public ConditionalConstraint(
-        IConstraint condition,
-        IConstraint whenConditionIsTrue) {
+        Constraint condition,
+        Constraint whenConditionIsTrue) {
         this(condition, whenConditionIsTrue, null);
     }
 
     public ConditionalConstraint(
-        IConstraint condition,
-        IConstraint whenConditionIsTrue,
-        IConstraint whenConditionIsFalse) {
+        Constraint condition,
+        Constraint whenConditionIsTrue,
+        Constraint whenConditionIsFalse) {
         this.condition = condition;
         this.whenConditionIsTrue = whenConditionIsTrue;
         this.whenConditionIsFalse = whenConditionIsFalse;
-    }
-
-    @Override
-    public String toDotLabel() {
-        throw new UnsupportedOperationException("IF constraints should be consumed during conversion to decision trees");
     }
 
     @Override

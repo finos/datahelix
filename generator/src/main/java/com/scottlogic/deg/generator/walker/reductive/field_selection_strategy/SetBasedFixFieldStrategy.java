@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,7 +38,7 @@ final class SetBasedFixFieldStrategy extends ProfileBasedFixFieldStrategy {
             .size();
     }
 
-    private Stream<IConstraint> constraintsFromProfile(){
+    private Stream<Constraint> constraintsFromProfile(){
         return profile.rules.stream()
             .flatMap(rule -> rule.constraints.stream());
     }

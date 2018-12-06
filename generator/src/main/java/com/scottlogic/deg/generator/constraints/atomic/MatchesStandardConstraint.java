@@ -1,12 +1,9 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public class MatchesStandardConstraint implements IConstraint {
+public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
     public final IStringGenerator standard; // TODO: Change this to an enum member; string generators shouldn't exist on this level
 
@@ -21,7 +18,7 @@ public class MatchesStandardConstraint implements IConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 }

@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         String TEST_FIELD_2 = "Dependent Field";
 
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("A", "B", "C"))
             .addConditionalConstraint(
@@ -42,7 +42,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3);
 
         // TEST_FIELD_1 affects TEST_FIELD_2 affects TEST_FIELD_3
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU", "EQ"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
             .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
@@ -74,7 +74,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3);
 
         // TEST_FIELD_1 and TEST_FIELD_2 affect TEST_FIELD_3
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU", "EQ"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
             .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
@@ -104,7 +104,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3, TEST_FIELD_4);
 
         // TEST_FIELD_1 affects TEST_FIELD_3, TEST_FIELD_2 affects TEST_FIELD_4
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
             .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
@@ -135,7 +135,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3, TEST_FIELD_4);
 
         // TEST_FIELD_1 affects TEST_FIELD_3 and TEST_FIELD_4, TEST_FIELD_2 is independent
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
             .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
@@ -162,7 +162,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         String TEST_FIELD_1 = "Z";
         String TEST_FIELD_2 = "A";
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU", "EQ"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N", "X"))
             .build();
@@ -177,7 +177,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         String TEST_FIELD_2 = "Circular Field A";
         List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2);
 
-        List<IConstraint> constraints = new ConstraintBuilder(fields)
+        List<Constraint> constraints = new ConstraintBuilder(fields)
             .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
             .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
             .addConditionalConstraint(
@@ -202,7 +202,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
             .collect(Collectors.toList());
     }
 
-    private List<Field> getPriorities(List<Field> fields, List<IConstraint> constraints) {
+    private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule("Test rule", constraints));
         Profile profile = new Profile(fields, rules);
         HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile);

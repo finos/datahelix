@@ -5,6 +5,10 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,11 +59,11 @@ public class ProfileReaderTests {
         return rule -> Assert.assertThat(rule.description, equalTo(expectedDescription));
     }
 
-    private Consumer<Rule> ruleWithConstraints(Consumer<IConstraint>... constraintAsserters) {
+    private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
         return rule -> expectMany(rule.constraints, constraintAsserters);
     }
 
-    private <T> Consumer<IConstraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
+    private <T> Consumer<Constraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
         return constraint -> {
             Assert.assertThat(constraint, instanceOf(constraintType));
 

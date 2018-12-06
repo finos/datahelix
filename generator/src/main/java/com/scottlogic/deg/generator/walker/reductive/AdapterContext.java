@@ -1,15 +1,15 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 
 import java.util.Collection;
 import java.util.HashSet;
 
 public class AdapterContext {
-    private final HashSet<IConstraint> unfixedAtomicConstraints = new HashSet<>();
-    private final HashSet<IConstraint> nonContradictoryAtomicConstraints = new HashSet<>();
-    private final HashSet<IConstraint> conflictingAtomicConstraints = new HashSet<>();
+    private final HashSet<AtomicConstraint> unfixedAtomicConstraints = new HashSet<>();
+    private final HashSet<AtomicConstraint> nonContradictoryAtomicConstraints = new HashSet<>();
+    private final HashSet<AtomicConstraint> conflictingAtomicConstraints = new HashSet<>();
 
     private boolean valid = true;
     private final AdapterContext parent;
@@ -22,15 +22,15 @@ public class AdapterContext {
         this.parent = parent;
     }
 
-    Collection<IConstraint> getAllUnfixedAtomicConstraints() {
+    Collection<AtomicConstraint> getAllUnfixedAtomicConstraints() {
         return unfixedAtomicConstraints;
     }
 
-    Collection<IConstraint> getAllNonContradictoryAtomicConstraints() {
+    Collection<AtomicConstraint> getAllNonContradictoryAtomicConstraints() {
         return nonContradictoryAtomicConstraints;
     }
 
-    Collection<IConstraint> getAllConflictingAtomicConstraints() {
+    Collection<AtomicConstraint> getAllConflictingAtomicConstraints() {
         return conflictingAtomicConstraints;
     }
 
@@ -46,19 +46,19 @@ public class AdapterContext {
         this.valid = false;
     }
 
-    void addUnfixedAtomicConstraint(IConstraint atomicConstraint) {
+    void addUnfixedAtomicConstraint(AtomicConstraint atomicConstraint) {
         unfixedAtomicConstraints.add(atomicConstraint);
         if (this.parent != null)
             this.parent.addUnfixedAtomicConstraint(atomicConstraint);
     }
 
-    void addNonContradictoryAtomicConstraint(IConstraint atomicConstraint) {
+    void addNonContradictoryAtomicConstraint(AtomicConstraint atomicConstraint) {
         this.nonContradictoryAtomicConstraints.add(atomicConstraint);
         if (this.parent != null)
             this.parent.addNonContradictoryAtomicConstraint(atomicConstraint);
     }
 
-    void addConflictingAtomicConstraint(IConstraint atomicConstraint) {
+    void addConflictingAtomicConstraint(AtomicConstraint atomicConstraint) {
         this.conflictingAtomicConstraints.add(atomicConstraint);
         if (this.parent != null)
             this.parent.addConflictingAtomicConstraint(atomicConstraint);
