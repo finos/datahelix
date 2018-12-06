@@ -365,30 +365,34 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     And no data is created
 
 
+  @ignore
   Scenario: Running an 'aValid' request alongside an after constraint should fail with an error message
     Given foo is a valid "ISIN"
-    And foo is after "2018-09-01T00:00:00.000"
+    And foo is after 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
 
+  @ignore
   Scenario: Running an 'aValid' request alongside an afterOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
-    And foo is after or at "2018-09-01T00:00:00.000"
+    And foo is after or at 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
 
+  @ignore
   Scenario: Running an 'aValid' request alongside a before constraint should fail with an error message
     Given foo is a valid "ISIN"
-    And foo is before "2018-09-01T00:00:00.000"
+    And foo is before 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
 
+  @ignore
   Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
-    And foo is before or at "2018-09-01T00:00:00.000"
+    And foo is before or at 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
@@ -399,13 +403,13 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     And foo is in set:
       | "333"                     |
       | 123                       |
-      | "2018-09-01T00:00:00.000" |
+      | 2018-09-01T00:00:00.000   |
       | "GB0002634946"            |
     Then the following data should be generated:
       | foo                       |
       | "333"                     |
       | 123                       |
-      | "2018-09-01T00:00:00.000" |
+      | 2018-09-01T00:00:00.000   |
     And the following data should not be included in what is generated:
       | foo            |
       | "GB0002634946" |
