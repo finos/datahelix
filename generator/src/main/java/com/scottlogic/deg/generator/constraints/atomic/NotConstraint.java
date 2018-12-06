@@ -8,6 +8,8 @@ public class NotConstraint implements AtomicConstraint {
     public final AtomicConstraint negatedConstraint;
 
     protected NotConstraint(AtomicConstraint negatedConstraint) {
+        if (negatedConstraint instanceof NotConstraint)
+            throw new IllegalArgumentException("Nested NotConstraint not allowed");
         this.negatedConstraint = negatedConstraint;
     }
 

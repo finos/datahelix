@@ -6,6 +6,8 @@ public class NegatedGramaticalConstraint implements GramaticalConstraint {
     public final GramaticalConstraint negatedConstraint;
 
     protected NegatedGramaticalConstraint(GramaticalConstraint negatedConstraint) {
+        if (negatedConstraint instanceof NegatedGramaticalConstraint)
+            throw new IllegalArgumentException("nested NegatedGrammatical constraint not allowed");
         this.negatedConstraint = negatedConstraint;
     }
 
