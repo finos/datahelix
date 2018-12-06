@@ -36,7 +36,6 @@ public class TestCaseGenerationResultWriter {
         for (TestCaseDataSet dataset : result.datasets) {
             String filenameWithoutExtension = intFormatter.format(index);
 
-            System.out.println("  " + filenameWithoutExtension);
             write(result.profile.fields,
                 dataset.stream(),
                 directoryPath,
