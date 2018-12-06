@@ -1,6 +1,6 @@
 # Output tracing
 
-This facility will permit analysis of which rules* and constraints from the profile have been employed to emit the value for each field in each row. Each _atomic constraint_ will be emitted. Logical constraints (i.e. _AND_, _OR_, _IF_, _allOf_ and _anyOf_) are not included, however the negation-constraint (_NOT_) will be.
+This facility will permit analysis of which rules* and constraints from the profile have been employed to emit the value for each field in each row. Each _atomic constraint_ will be emitted. Gramatical constraints (i.e. _AND_, _OR_, _IF_, _allOf_ and _anyOf_) are not included, however the negation-constraint (_NOT_) will be.
 
 It is normal for there to be multiple constraints to be emitted per field value, none of these should be contradictory, see the example below for a view of what the file could look like.
 
