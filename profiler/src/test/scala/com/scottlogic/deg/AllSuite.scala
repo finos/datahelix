@@ -9,7 +9,8 @@ import org.junit.runner.RunWith
   classOf[Classifier],
   classOf[FileReaderInt],
   classOf[JsonTest],
-  classOf[SemanticInferenceTest]
+  classOf[SemanticInferenceTest],
+  classOf[IntegrationTest]
 ))
 class AllSuite {
 
