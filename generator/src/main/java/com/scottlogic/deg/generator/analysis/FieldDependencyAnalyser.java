@@ -19,9 +19,9 @@ public class FieldDependencyAnalyser {
 
     public FieldDependencyAnalysisResult analyse() {
         List<FieldDependencyNode> graph = getFieldDependencyGraph();
-        Map<Field, Set<Field>> dependants = graph.stream()
+        Map<Field, Set<FieldDependency>> dependants = graph.stream()
             .collect(Collectors.toMap(fdn -> fdn.field, this::getAllDependentFields));
-        Map<Field, Set<Field>> influencers = graph.stream()
+        Map<Field, Set<FieldDependency>> influencers = graph.stream()
             .collect(Collectors.toMap(fdn -> fdn.field, this::getAllInfluencingFields));
         return new FieldDependencyAnalysisResult(influencers, dependants);
     }
@@ -72,41 +72,39 @@ public class FieldDependencyAnalyser {
         return nodeList;
     }
 
-    private Set<Field> getAllDependentFields(FieldDependencyNode node) {
+    private Set<FieldDependency> getAllDependentFields(FieldDependencyNode node) {
         if (node.dependantNodes.isEmpty()) {
             return Collections.emptySet();
         }
-        Set<Field> dependentFields = new HashSet<>();
-        getAllDependentFields(node, dependentFields);
-        dependentFields.remove(node.field);
-        return dependentFields;
+        Set<FieldDependency> dependentFields = new HashSet<>();
+        getAllDependentFields(node, dependentFields, 1);
+        return dependentFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toSet());
     }
 
-    private void getAllDependentFields(FieldDependencyNode node, Set<Field> dependants){
+    private void getAllDependentFields(FieldDependencyNode node, Set<FieldDependency> dependants, int depth){
         node.dependantNodes.stream()
-            .filter(dependantNode -> !dependants.contains(dependantNode.field)) // Make sure not already processed
+            .filter(dependantNode -> dependants.stream().noneMatch(fd -> fd.getField().equals(dependantNode.field))) // Make sure not already processed
             .forEach(unprocessedDependantNode-> {
-                dependants.add(unprocessedDependantNode.field);
-                getAllDependentFields(unprocessedDependantNode, dependants);
+                dependants.add(new FieldDependency(unprocessedDependantNode.field, depth));
+                getAllDependentFields(unprocessedDependantNode, dependants, depth + 1);
             });
     }
 
-    private Set<Field> getAllInfluencingFields(FieldDependencyNode node) {
+    private Set<FieldDependency> getAllInfluencingFields(FieldDependencyNode node) {
         if (node.dependencyNodes.isEmpty()) {
             return Collections.emptySet();
         }
-        Set<Field> influencingFields = new HashSet<>();
-        getAllInfluencingFields(node, influencingFields);
-        influencingFields.remove(node.field);
-        return influencingFields;
+        Set<FieldDependency> influencingFields = new HashSet<>();
+        getAllInfluencingFields(node, influencingFields, 1);
+        return influencingFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toSet());
     }
 
-    private void getAllInfluencingFields(FieldDependencyNode node, Set<Field> influencers){
+    private void getAllInfluencingFields(FieldDependencyNode node, Set<FieldDependency> influencers, int depth){
         node.dependencyNodes.stream()
-            .filter(dependancyNode -> !influencers.contains(dependancyNode.field)) // Make sure not already processed
-            .forEach(unprocessedDependantNode-> {
-                influencers.add(unprocessedDependantNode.field);
-                getAllInfluencingFields(unprocessedDependantNode, influencers);
+            .filter(influencingNode -> influencers.stream().noneMatch(fd -> fd.getField().equals(influencingNode.field))) // Make sure not already processed
+            .forEach(unprocessedInfluencingNode-> {
+                influencers.add(new FieldDependency(unprocessedInfluencingNode.field, depth));
+                getAllInfluencingFields(unprocessedInfluencingNode, influencers, depth + 1);
             });
     }
 
