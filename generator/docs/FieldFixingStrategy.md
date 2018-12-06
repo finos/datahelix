@@ -10,12 +10,12 @@ One area that _could_ affect performance is the order in which we pick fields to
 
 Our current default is the **hierarchical dependency** strategy.
 
-## Hierarchical Dependency
+##Hierarchical Dependency
 
-This strategy picks fields to fix using a combination of factors. It sort a list of fields into an order as follows: 
+This strategy picks fields to fix using a combination of factors. It sorts a list of fields into an order as follows: 
 - **First** favour picking fields that are **not dependent** on other fields
 - **Then**  favour picking fields that **constrain** other fields
-- **Then** use the set based strategy
+- **Then** use the [set based strategy](#set-based)
 - **Then** compare fields alphabetically by name
 
 If a field is **independent** of any other fields they can _co-vary_. This means that the field's value cannot cause another fields value to contradict.
@@ -28,7 +28,7 @@ The idea behind this is that:
 
 ### Examples
 Consider the following statements:
-- There are 3 fields in a profile A, B, C and D
+- There are 4 fields in a profile A, B, C and D
 - Field B's value is dependent on Field A
 - Field C and D's values are dependent on Field B
 
@@ -40,6 +40,11 @@ In this example fields would be picked in the following order:
 2. B
 3. C
 4. D
+
+#### Explanation
+- A is picked first as it has no dependencies on other fields, but directly constrains B and indirectly constrains C and D
+- B is picked next as it constrains C and D, but is dependent upon A
+- Neither C and D constrain any other field and are both constrained equally by B. Therefore C is only chosen over D because of alphabetical ordering 
 
 ## Set Based
 

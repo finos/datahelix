@@ -8,7 +8,7 @@ import java.util.Objects;
 public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     public final GrammaticalConstraint negatedConstraint;
 
-    protected NegatedGrammaticalConstraint(GrammaticalConstraint negatedConstraint) {
+    NegatedGrammaticalConstraint(GrammaticalConstraint negatedConstraint) {
         if (negatedConstraint instanceof NegatedGrammaticalConstraint)
             throw new IllegalArgumentException("nested NegatedGrammatical constraint not allowed");
         this.negatedConstraint = negatedConstraint;
