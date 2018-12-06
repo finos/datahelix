@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -95,6 +96,11 @@ public class GeneratorTestUtilities {
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
         dataSet.forEach(allActualRows::add);
+
+        if (allActualRows.stream().anyMatch(Objects::isNull)) {
+            throw new IllegalStateException("Some of the rows are null");
+        }
+
         return allActualRows;
     }
 
