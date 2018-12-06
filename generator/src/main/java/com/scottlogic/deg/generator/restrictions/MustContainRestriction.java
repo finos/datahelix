@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class MustContainRestriction {
@@ -11,5 +12,10 @@ public class MustContainRestriction {
 
     public Set<FieldSpec> getRequiredObjects() {
         return requiredObjects;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toString(this.requiredObjects);
     }
 }
