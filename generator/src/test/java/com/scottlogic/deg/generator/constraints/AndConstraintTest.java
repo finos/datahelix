@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import org.junit.Assert;
 import org.junit.Test;
 

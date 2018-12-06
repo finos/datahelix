@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
@@ -11,11 +11,11 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
-    public FieldSpec construct(IConstraint constraint) {
+    public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false);
     }
 
-    private FieldSpec construct(IConstraint constraint, boolean negate) {
+    private FieldSpec construct(AtomicConstraint constraint, boolean negate) {
         if (constraint instanceof NotConstraint) {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {

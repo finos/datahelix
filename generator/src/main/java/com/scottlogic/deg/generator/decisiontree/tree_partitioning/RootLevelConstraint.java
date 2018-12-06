@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.Objects;
@@ -12,7 +12,7 @@ class RootLevelConstraint {
         constraint = decisionNode;
     }
 
-    RootLevelConstraint(IConstraint atomicConstraint) {
+    RootLevelConstraint(AtomicConstraint atomicConstraint) {
         constraint = atomicConstraint;
     }
 
@@ -22,9 +22,9 @@ class RootLevelConstraint {
             : null;
     }
 
-    IConstraint getAtomicConstraint() {
-        return constraint instanceof IConstraint
-            ? (IConstraint)constraint
+    AtomicConstraint getAtomicConstraint() {
+        return constraint instanceof AtomicConstraint
+            ? (AtomicConstraint)constraint
             : null;
     }
 

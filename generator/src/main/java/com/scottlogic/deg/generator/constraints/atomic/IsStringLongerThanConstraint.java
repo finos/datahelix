@@ -1,12 +1,10 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
-public class IsStringLongerThanConstraint implements IConstraint {
+public class IsStringLongerThanConstraint implements AtomicConstraint {
     public final Field field;
     public final int referenceValue;
 
@@ -21,8 +19,8 @@ public class IsStringLongerThanConstraint implements IConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override

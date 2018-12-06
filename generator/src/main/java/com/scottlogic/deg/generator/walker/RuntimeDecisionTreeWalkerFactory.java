@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -34,9 +33,8 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     <the producer>);*/
             case REDUCTIVE:
-                ConstraintFieldSniffer fieldSniffer = new ConstraintFieldSniffer();
                 IterationVisualiser visualiser = new ReductiveIterationVisualiser();
-                FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy(fieldSniffer);
+                FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
@@ -45,7 +43,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         constraintReducer,
                         fieldSpecMerger,
                         fieldSpecFactory,
-                        fieldSniffer,
                         fixFieldStrategy
                     ));
             case CARTESIAN_PRODUCT:
