@@ -5,7 +5,7 @@ Feature: User can specify that a value is so formatted
     And there is a field foo
 
 
-
+    
   Scenario Outline: Running a valid 'formattedAs' request should be successful
     Given foo is in set:
       | <input> |
@@ -201,3 +201,94 @@ Feature: User can specify that a value is so formatted
       | 2018-02-01T16:17:08.199  | "%ty"        | "18"                           |
 #      | 2018-02-01T16:17:08.199  | "%tZ"        | "08"                           | requires timezone information
 #      | 2018-02-01T16:17:08.199  | "%tz"        | "08"                           | requires timezone information
+
+
+
+  Scenario Outline: Running an invalid 'formattedAs' request should fail with an error message
+    Given foo is in set:
+      | <input> |
+    And foo is formatted as <format>
+    Then I am presented with an error message
+    And no data is created
+    Examples:
+      | input                    | format      |
+      | "1"                      | "%20d"      |
+      | 2018-02-01T16:17:18.199  | "%20d"      |
+      | "1"                      | "%-20d"     |
+      | 2018-02-01T16:17:18.199  | "%-20d"     |
+      | "1"                      | "%020d"     |
+      | 2018-02-01T16:17:18.199  | "%020d"     |
+      | "1"                      | "\|%020d\|" |
+      | 2018-02-01T16:17:18.199  | "\|%020d\|" |
+      | "1"                      | "% d"       |
+      | 2018-02-01T16:17:18.199  | "% d"       |
+      | "1"                      | "%,d"       |
+      | 2018-02-01T16:17:18.199  | "%,d"       |
+      | "1"                      | "%(d"       |
+      | 2018-02-01T16:17:18.199  | "%(d"       |
+      | "1"                      | "%o"        |
+      | 2018-02-01T16:17:18.199  | "%o"        |
+      | "1"                      | "%x"        |
+      | 2018-02-01T16:17:18.199  | "%x"        |
+      | "1"                      | "%t"        |
+      | 1                        | "%t"        |
+      | "1"                      | "%tA"       |
+      | 1                        | "%tA"       |
+      | "1"                      | "%ta"       |
+      | 1                        | "%ta"       |
+      | "1"                      | "%tB"       |
+      | 1                        | "%tB"       |
+      | "1"                      | "%tb"       |
+      | 1                        | "%tb"       |
+      | "1"                      | "%tC"       |
+      | 1                        | "%tC"       |
+      | "1"                      | "%tc"       |
+      | 1                        | "%tc"       |
+      | "1"                      | "%tD"       |
+      | 1                        | "%tD"       |
+      | "1"                      | "%td"       |
+      | 1                        | "%td"       |
+      | "1"                      | "%te"       |
+      | 1                        | "%te"       |
+      | "1"                      | "%tF"       |
+      | 1                        | "%tF"       |
+      | "1"                      | "%tH"       |
+      | 1                        | "%tH"       |
+      | "1"                      | "%th"       |
+      | 1                        | "%th"       |
+      | "1"                      | "%tI"       |
+      | 1                        | "%tI"       |
+      | "1"                      | "%tj"       |
+      | 1                        | "%tj"       |
+      | "1"                      | "%tk"       |
+      | 1                        | "%tk"       |
+      | "1"                      | "%tl"       |
+      | 1                        | "%tl"       |
+      | "1"                      | "%tM"       |
+      | 1                        | "%tM"       |
+      | "1"                      | "%tm"       |
+      | 1                        | "%tm"       |
+      | "1"                      | "%tN"       |
+      | 1                        | "%tN"       |
+      | "1"                      | "%tp"       |
+      | 1                        | "%tp"       |
+      | "1"                      | "%tQ"       |
+      | 1                        | "%tQ"       |
+      | "1"                      | "%tR"       |
+      | 1                        | "%tR"       |
+      | "1"                      | "%tr"       |
+      | 1                        | "%tr"       |
+      | "1"                      | "%tS"       |
+      | 1                        | "%tS"       |
+      | "1"                      | "%ts"       |
+      | 1                        | "%ts"       |
+      | "1"                      | "%tT"       |
+      | 1                        | "%tT"       |
+      | "1"                      | "%tY"       |
+      | 1                        | "%tY"       |
+      | "1"                      | "%ty"       |
+      | 1                        | "%ty"       |
+      | "1"                      | "%tZ"       |
+      | 1                        | "%tZ"       |
+      | "1"                      | "%tz"       |
+      | 1                        | "%tz"       |
