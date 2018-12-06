@@ -1,18 +1,12 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class InitialFixFieldStrategy implements FixFieldStrategy {
-
-    private final ConstraintFieldSniffer fieldSniffer;
-
-    public InitialFixFieldStrategy(ConstraintFieldSniffer fieldSniffer) {
-        this.fieldSniffer = fieldSniffer;
-    }
 
     /*
     1. Get all the atomic constraints in the tree, group them by field
@@ -25,7 +19,7 @@ public class InitialFixFieldStrategy implements FixFieldStrategy {
     public FieldAndConstraintMapping getFieldAndConstraintMapToFixNext(ReductiveConstraintNode rootNode) {
         return rootNode.getAllUnfixedAtomicConstraints()
             .stream()
-            .collect(Collectors.groupingBy(this.fieldSniffer::detectField))
+            .collect(Collectors.groupingBy(AtomicConstraint::getField))
 
             .entrySet()
             .stream()

@@ -2,13 +2,12 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
 
@@ -25,7 +24,6 @@ public class FieldCollection {
     private final ProfileFields fields;
     private final Map<Field, FixedField> fixedFields;
     private final FixedField lastFixedField;
-    private final ConstraintFieldSniffer fieldSniffer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
 
@@ -36,7 +34,6 @@ public class FieldCollection {
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
-        ConstraintFieldSniffer fieldSniffer,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
         FixedField lastFixedField,
@@ -45,7 +42,6 @@ public class FieldCollection {
         this.fieldCollectionFactory = fieldCollectionFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.fieldSpecFactory = fieldSpecFactory;
-        this.fieldSniffer = fieldSniffer;
         this.fixFieldStrategy = fixFieldStrategy;
         this.fixedFields = fixedFields;
         this.lastFixedField = lastFixedField;
@@ -117,9 +113,9 @@ public class FieldCollection {
     //for the given field get a stream of possible values
     private FixedField getFixedFieldWithValuesForField(Field field, ConstraintNode rootNode) {
         //from the original tree, get all atomic constraints that match the given field
-        Set<IConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
+        Set<AtomicConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
             .stream()
-            .filter(c -> this.fieldSniffer.detectField(c).equals(field))
+            .filter(c -> c.getField().equals(field))
             .collect(Collectors.toSet());
 
         //produce a fieldspec for all the atomic constraints
@@ -135,11 +131,11 @@ public class FieldCollection {
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
-    AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(IConstraint atomicConstraint) {
+    AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(AtomicConstraint atomicConstraint) {
         //is the field for this atomic constraint fixed?
         //does the constraint complement or conflict with the fixed field?
 
-        Field field = fieldSniffer.detectField(atomicConstraint);
+        Field field = atomicConstraint.getField();
         FixedField fixedFieldValue = getFixedField(field);
         if (fixedFieldValue == null){
             //field isn't fixed
@@ -153,7 +149,7 @@ public class FieldCollection {
     }
 
     //work out if the field is contradictory
-    private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, IConstraint atomicConstraint) {
+    private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, AtomicConstraint atomicConstraint) {
         FieldSpec fieldSpec = fieldSpecFactory.construct(atomicConstraint);
         FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
 
@@ -172,9 +168,9 @@ public class FieldCollection {
 
     //create a mapping of field->fieldspec for each fixed field - efficiency
     private Map<Field, FieldSpec> getFieldSpecsForAllFixedFieldsExceptLast(ConstraintNode constraintNode){
-        Map<Field, List<IConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
+        Map<Field, List<AtomicConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
             .stream()
-            .collect(Collectors.groupingBy(this.fieldSniffer::detectField));
+            .collect(Collectors.groupingBy(AtomicConstraint::getField));
 
         return this.fixedFields.values()
             .stream()
@@ -190,7 +186,7 @@ public class FieldCollection {
     }
 
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
-    private FieldSpec getFieldSpec(FixedField fixedField, Collection<IConstraint> constraintsForField) {
+    private FieldSpec getFieldSpec(FixedField fixedField, Collection<AtomicConstraint> constraintsForField) {
         FieldSpec fixedFieldSpec = fixedField.getFieldSpecForCurrentValue();
         Optional<FieldSpec> constrainedFieldSpecOpt = this.reducer.reduceConstraintsToFieldSpec(constraintsForField);
 

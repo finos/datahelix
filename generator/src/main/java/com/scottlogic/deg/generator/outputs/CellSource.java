@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.outputs;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 import java.util.Set;
 
@@ -20,7 +20,7 @@ public class CellSource {
         return source != null ? source.getRule() : null;
     }
 
-    public Set<IConstraint> getConstraints(){
+    public Set<AtomicConstraint> getConstraints(){
         return source != null ? source.getConstraints() : null;
     }
 }

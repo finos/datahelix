@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
@@ -11,11 +11,11 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
-    public FieldSpec construct(IConstraint constraint) {
+    public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false);
     }
 
-    private FieldSpec construct(IConstraint constraint, boolean negate) {
+    private FieldSpec construct(AtomicConstraint constraint, boolean negate) {
         if (constraint instanceof NotConstraint) {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
@@ -80,7 +80,7 @@ public class FieldSpecFactory {
             FieldSpecSource.fromConstraint(constraint, negate));
     }
 
-    private FieldSpec constructIsNull(boolean negate, IConstraint constraint) {
+    private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint) {
         final NullRestrictions nullRestrictions = new NullRestrictions();
 
         nullRestrictions.nullness = negate
@@ -114,7 +114,7 @@ public class FieldSpecFactory {
         return constructGreaterThanConstraint(constraint.referenceValue, true, negate, constraint);
     }
 
-    private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate, IConstraint constraint) {
+    private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint) {
         final NumericRestrictions numericRestrictions = new NumericRestrictions();
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
@@ -141,7 +141,7 @@ public class FieldSpecFactory {
         return constructLessThanConstraint(constraint.referenceValue, true, negate, constraint);
     }
 
-    private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate, IConstraint constraint) {
+    private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint) {
         final NumericRestrictions numericRestrictions = new NumericRestrictions();
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
@@ -178,7 +178,7 @@ public class FieldSpecFactory {
         return constructIsAfterConstraint(constraint.referenceValue, true, negate, constraint);
     }
 
-    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate, IConstraint constraint) {
+    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
@@ -200,7 +200,7 @@ public class FieldSpecFactory {
         return constructIsBeforeConstraint(constraint.referenceValue, true, negate, constraint);
     }
 
-    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate, IConstraint constraint) {
+    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
@@ -255,11 +255,11 @@ public class FieldSpecFactory {
         return constructPattern(regex, negate, true, constraint);
     }
 
-    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, IConstraint constraint) {
+    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint) {
         return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint);
     }
 
-    private FieldSpec constructGenerator(IStringGenerator generator, boolean negate, IConstraint constraint) {
+    private FieldSpec constructGenerator(IStringGenerator generator, boolean negate, AtomicConstraint constraint) {
         final StringRestrictions stringRestrictions = new StringRestrictions();
 
         stringRestrictions.stringGenerator = negate

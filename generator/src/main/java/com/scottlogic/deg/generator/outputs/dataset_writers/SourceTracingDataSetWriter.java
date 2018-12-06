@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;
@@ -74,7 +74,7 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
         public String type;
         public String value;
 
-        TracingConstraintDto(IConstraint constraint) {
+        TracingConstraintDto(AtomicConstraint constraint) {
             type = constraint.getClass().getSimpleName();
             value = constraint.toString();
         }

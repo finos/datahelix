@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,19 +13,19 @@ public class FieldSpecSource {
     final static FieldSpecSource Empty = new FieldSpecSource(Collections.emptySet(), Collections.emptySet());
 
     private final Set<String> rules;
-    private final Set<IConstraint> constraints;
+    private final Set<AtomicConstraint> constraints;
 
-    private FieldSpecSource(Set<String> rules, Set<IConstraint> constraints) {
+    private FieldSpecSource(Set<String> rules, Set<AtomicConstraint> constraints) {
         this.rules = rules;
         this.constraints = constraints;
     }
 
-    static FieldSpecSource fromConstraint(IConstraint constraint, boolean negate) {
+    static FieldSpecSource fromConstraint(AtomicConstraint constraint, boolean negate) {
         return new FieldSpecSource(
             Collections.emptySet(),
             Collections.singleton(
                 negate
-                    ? new NotConstraint(constraint)
+                    ? constraint.negate()
                     : constraint));
     }
 
@@ -48,7 +47,7 @@ public class FieldSpecSource {
             : Objects.toString(this.rules);
     }
 
-    public Set<IConstraint> getConstraints() {
+    public Set<AtomicConstraint> getConstraints() {
         return this.constraints;
     }
 

@@ -1,13 +1,11 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
-public class IsGranularToConstraint implements IConstraint {
+public class IsGranularToConstraint implements AtomicConstraint {
     public final Field field;
     public final ParsedGranularity granularity;
 
@@ -22,8 +20,8 @@ public class IsGranularToConstraint implements IConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     @Override

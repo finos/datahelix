@@ -1,11 +1,8 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public class FormatConstraint implements IConstraint {
+public class FormatConstraint implements AtomicConstraint {
 
     public final Field field;
     public final String format;
@@ -21,8 +18,7 @@ public class FormatConstraint implements IConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
-
 }

@@ -1,14 +1,12 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class IsInSetConstraint implements IConstraint {
+public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
     public final Set<Object> legalValues;
 
@@ -39,8 +37,8 @@ public class IsInSetConstraint implements IConstraint {
     }
 
     @Override
-    public Collection<Field> getFields() {
-        return Collections.singletonList(field);
+    public Field getField() {
+        return field;
     }
 
     public String toString(){
