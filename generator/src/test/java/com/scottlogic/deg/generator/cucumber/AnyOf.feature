@@ -2,10 +2,11 @@ Feature: Values can be specified by using any of to set multiple constraints
 
 Background:
      Given the generation strategy is full
+     And there is a field foo
 
 Scenario: User requires to create a field with strings that conform to one or many constraints
-     Given there is a field foo
-       And there is a constraint:
+
+       Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "equalTo", "value": "Test0" },
@@ -41,8 +42,8 @@ Scenario: User requires to create a field with strings that conform to one or ma
        | "bbab"  |
 
 Scenario: User requires to create a field with strings that conform to multiple sets of one or many constraints
-     Given there is a field foo
-       And there is a constraint:
+
+       Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "equalTo", "value": "Test0" },
@@ -63,8 +64,8 @@ Scenario: User requires to create a field with strings that conform to multiple 
 
 
 Scenario: User requires to create a field with numbers that conform to one or many constraints
-     Given there is a field foo
-       And there is a constraint:
+
+       Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "greaterThan", "value": 0 },
@@ -89,8 +90,8 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        | 10   |
 
 Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
-    Given there is a field foo
-       And there is a constraint:
+
+      Givend there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "greaterThan", "value": 8 },
@@ -123,8 +124,8 @@ Scenario: User requires to create a field with numbers that conform to multiple 
       | 19   |
 
 Scenario: User requires to create a field with dates that conform to one or many constraints
-     Given there is a field foo
-       And there is a constraint:
+
+       Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
@@ -147,8 +148,8 @@ Scenario: User requires to create a field with dates that conform to one or many
        | 2018-10-09T00:00:00.000 |
 
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
-     Given there is a field foo
-       And there is a constraint:
+
+       Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
@@ -173,3 +174,122 @@ Scenario: User requires to create a field with dates that conform to multiple se
        | 2018-10-06T00:00:00.000 |
        | 2018-10-07T00:00:00.000 |
        | 2018-10-08T00:00:00.000 |
+
+
+
+Scenario: Running an 'anyOf' request that contains a valid nested anyOf request should be successful
+  Given there is a constraint:
+    """
+      { "anyOf": [
+        {
+          "field": "foo", "is": "ofLength", "value": 1
+        },
+        {
+          "anyOf":  [
+            { "field": "foo", "is": "ofLength", "value": 3 },
+            { "field": "foo", "is": "ofLength", "value": 5 }
+          ]
+        }
+      ]}
+    """
+  And foo is in set:
+    | "1"     |
+    | "22"    |
+    | "333"   |
+    | "4444"  |
+    | "55555" |
+  Then the following data should be generated:
+    | foo     |
+    | "1"     |
+    | "333"   |
+    | "55555" |
+  And the following data should not be included in what is generated:
+    | "22"   |
+    | "4444" |
+
+
+Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
+  Given there is a constraint:
+    """
+      { "anyOf": [
+        {
+          "field": "foo", "is": "ofLength", "value": 1
+        },
+        {
+          "allOf":  [
+            { "field": "foo", "is": "longerThan", "value": 3 },
+            { "field": "foo", "is": "shorterThan", "value": 5 }
+          ]
+        }
+      ]}
+    """
+  And foo is in set:
+    | "1"     |
+    | "22"    |
+    | "333"   |
+    | "4444"  |
+    | "55555" |
+  Then the following data should be generated:
+    | foo    |
+    | "1"    |
+    | "4444" |
+  And the following data should not be included in what is generated:
+    | "22"    |
+    | "333"   |
+    | "55555" |
+
+
+
+Scenario: Running an 'anyOf' request that contains an invalid nested anyOf request should fail with an error message
+  Given there is a constraint:
+  """
+    { "anyOf": [
+      {
+        "field": "foo", "is": "ofLength", "value": 1
+      },
+      {
+        "anyOf":  [
+          { "field": "foo", "is": "ofLength", "value": -1 }
+        ]
+      }
+    ]}
+  """
+  Then I am presented with an error message
+  And no data is created
+
+
+Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
+  Given there is a constraint:
+  """
+    { "anyOf": [
+      {
+        "field": "foo", "is": "ofLength", "value": 1
+      },
+      {
+        "allOf":  [
+          { "field": "foo", "is": "ofLength", "value": -1 }
+        ]
+      }
+    ]}
+  """
+  Then I am presented with an error message
+  And no data is created
+
+
+Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
+  Given there is a constraint:
+  """
+    { "anyOf": [
+      {
+        "field": "foo", "is": "ofLength", "value": 1
+      },
+      {
+        "allOf":  [
+          { "field": "foo", "is": "longerThan", "value": 3 },
+          { "field": "foo", "is": "shorterThan", "value": 2 }
+        ]
+      }
+    ]}
+  """
+  Then I am presented with an error message
+  And no data is created

@@ -1,10 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Generate;
-import com.scottlogic.deg.generator.generation.combination_strategies.ExhaustiveCombinationStrategy;
-import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
-import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
-import com.scottlogic.deg.generator.generation.combination_strategies.MinimalCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combination_strategies.*;
 
 public class GenerationConfig {
 
@@ -28,6 +25,10 @@ public class GenerationConfig {
     }
 
     public ICombinationStrategy getCombinationStrategy() {
+        if (this.walkerType == TreeWalkerType.REDUCTIVE){
+            return new ReductiveCombinationStrategy();
+        }
+
         switch(this.combinationStrategy){
             case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
             case PINNING: return new PinningCombinationStrategy();
