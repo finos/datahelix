@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -34,7 +33,7 @@ class ExampleProfilesTests {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.CombinationStrategyType.PINNING);
 
             generationEngine.generateTestCases(profileFile.toPath(), config);
         }));
@@ -46,7 +45,7 @@ class ExampleProfilesTests {
             GenerationConfig config = new GenerationConfig(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                new FieldExhaustiveCombinationStrategy());
+                GenerationConfig.CombinationStrategyType.PINNING);
 
             generationEngine.generateDataSet(profileFile.toPath(), config);
         }));
