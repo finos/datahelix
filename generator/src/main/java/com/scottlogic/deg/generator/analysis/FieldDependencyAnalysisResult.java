@@ -2,17 +2,17 @@ package com.scottlogic.deg.generator.analysis;
 
 import com.scottlogic.deg.generator.Field;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FieldDependencyAnalysisResult {
 
-    private final Map<Field, Set<FieldDependency>> fieldDependencies;
-    private final Map<Field, Set<FieldDependency>> fieldDependants;
+    private final Map<Field, Collection<FieldDependency>> fieldDependencies;
+    private final Map<Field, Collection<FieldDependency>> fieldDependants;
 
-    public FieldDependencyAnalysisResult(Map<Field, Set<FieldDependency>> fieldDependencies, Map<Field, Set<FieldDependency>> fieldDependants){
+    public FieldDependencyAnalysisResult(Map<Field, Collection<FieldDependency>> fieldDependencies, Map<Field, Collection<FieldDependency>> fieldDependants){
         this.fieldDependencies = fieldDependencies;
         this.fieldDependants = fieldDependants;
     }
@@ -25,7 +25,7 @@ public class FieldDependencyAnalysisResult {
         return getFieldDependencyObjectStream(field, fieldDependencies);
     }
 
-    private Set<Field> getFieldDependencyObjectStream(Field field, Map<Field, Set<FieldDependency>> relationMap) {
+    private Set<Field> getFieldDependencyObjectStream(Field field, Map<Field, Collection<FieldDependency>> relationMap) {
         return relationMap.get(field).stream().map(FieldDependency::getField).collect(Collectors.toSet());
     }
 

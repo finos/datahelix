@@ -19,9 +19,9 @@ public class FieldDependencyAnalyser {
 
     public FieldDependencyAnalysisResult analyse() {
         List<FieldDependencyNode> graph = getFieldDependencyGraph();
-        Map<Field, Set<FieldDependency>> dependants = graph.stream()
+        Map<Field, Collection<FieldDependency>> dependants = graph.stream()
             .collect(Collectors.toMap(fdn -> fdn.field, this::getAllDependentFields));
-        Map<Field, Set<FieldDependency>> influencers = graph.stream()
+        Map<Field, Collection<FieldDependency>> influencers = graph.stream()
             .collect(Collectors.toMap(fdn -> fdn.field, this::getAllInfluencingFields));
         return new FieldDependencyAnalysisResult(influencers, dependants);
     }
@@ -72,13 +72,13 @@ public class FieldDependencyAnalyser {
         return nodeList;
     }
 
-    private Set<FieldDependency> getAllDependentFields(FieldDependencyNode node) {
+    private Collection<FieldDependency> getAllDependentFields(FieldDependencyNode node) {
         if (node.dependantNodes.isEmpty()) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
         Set<FieldDependency> dependentFields = new HashSet<>();
         getAllDependentFields(node, dependentFields, 1);
-        return dependentFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toSet());
+        return dependentFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toList());
     }
 
     private void getAllDependentFields(FieldDependencyNode node, Set<FieldDependency> dependants, int depth){
@@ -90,13 +90,13 @@ public class FieldDependencyAnalyser {
             });
     }
 
-    private Set<FieldDependency> getAllInfluencingFields(FieldDependencyNode node) {
+    private Collection<FieldDependency> getAllInfluencingFields(FieldDependencyNode node) {
         if (node.dependencyNodes.isEmpty()) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
         Set<FieldDependency> influencingFields = new HashSet<>();
         getAllInfluencingFields(node, influencingFields, 1);
-        return influencingFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toSet());
+        return influencingFields.stream().filter(fd -> !fd.getField().equals(node.field)).collect(Collectors.toList());
     }
 
     private void getAllInfluencingFields(FieldDependencyNode node, Set<FieldDependency> influencers, int depth){
