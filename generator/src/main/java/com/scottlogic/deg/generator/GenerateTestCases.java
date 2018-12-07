@@ -65,6 +65,11 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
         hidden = true)
     private boolean dontPartitionTrees;
 
+    @CommandLine.Option(
+        names = {"-n", "--n", "--max-rows"},
+        description = "Defines the maximum number of rows that should be generated")
+    private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
@@ -108,6 +113,6 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
 
     @Override
     public long getMaxRows() {
-        return GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+        return maxRows;
     }
 }
