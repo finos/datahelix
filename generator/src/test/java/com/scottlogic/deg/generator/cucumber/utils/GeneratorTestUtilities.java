@@ -27,9 +27,11 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GeneratorTestUtilities {
     private static final ObjectMapper mapper = createMapper();
@@ -53,8 +55,13 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
-            .map(genObj ->
-                genObj.values
+            .map(genObj ->{
+
+                if (genObj == null){
+                    throw new IllegalStateException("GeneratedObject is null");
+                }
+
+                return genObj.values
                     .stream()
                     .map(obj -> {
                         if (obj.value != null && obj.format != null) {
@@ -62,8 +69,8 @@ public class GeneratorTestUtilities {
                         }
                         return obj.value;
                     })
-                    .collect(Collectors.toList())
-            ).collect(Collectors.toList());
+                    .collect(Collectors.toList());
+            }).collect(Collectors.toList());
     }
 
     private static List<GeneratedObject> getGeneratedDataAsList(
@@ -90,7 +97,16 @@ public class GeneratorTestUtilities {
             new NoopDataGeneratorMonitor());
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
-        return dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config).collect(Collectors.toList());
+        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
+        List<GeneratedObject> allActualRows = new ArrayList<>();
+        dataSet.forEach(generatedObject -> {
+            if (generatedObject == null){
+                throw new IllegalStateException("GeneratedObject is null");
+            }
+
+            allActualRows.add(generatedObject);
+        });
+        return allActualRows;
     }
 
     public static Object parseInput(String input) throws JsonParseException {
