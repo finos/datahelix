@@ -35,18 +35,24 @@ public class GenerateTestCases implements Runnable {
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = Generate.interesting_generation_type)
+        description = "Determines the type of data generation performed (" +
+            GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
+            ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
+            ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
+        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
-        defaultValue = Generate.pinning_combination_strategy)
+        description = "Determines the type of combination strategy used (" +
+            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
+            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
+            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
+        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
     private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = Generate.cartestian_product_walker_type,
+        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 

@@ -28,10 +28,6 @@ import java.nio.file.Path;
     mixinStandardHelpOptions = true,
     version = "1.0")
 public class Generate implements Runnable {
-    public static final String cartestian_product_walker_type = "CARTESIAN_PRODUCT";
-    public static final String pinning_combination_strategy = "PINNING";
-    public static final String interesting_generation_type = "INTERESTING";
-
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -39,13 +35,19 @@ public class Generate implements Runnable {
     private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = interesting_generation_type)
+        description = "Determines the type of data generation performed (" +
+            GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
+            ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
+            ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
+        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
-        defaultValue = pinning_combination_strategy)
+        description = "Determines the type of combination strategy used (" +
+            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
+            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
+            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
+        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
     private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(
@@ -62,7 +64,7 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = cartestian_product_walker_type,
+        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 
