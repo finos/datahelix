@@ -21,10 +21,17 @@ class ExhaustiveCombinationStrategyTests {
             Stream.of(bag("A"), bag("B"), bag("C")),
             Stream.of(bag("1"), bag("2"), bag("3")));
 
-        tester.expectIllegalState();
-        /*The implementation has changed to keep streams of values, but a list of fields, as such streams are re-read
-        * in the implementation, which throws. The previous implementation would exhaust the stream of each field before
-        * emitting a value, which isn't a viable option for production */
+        tester.expect(
+            Stream.of(
+                bag("A","1"),
+                bag("B","1"),
+                bag("C","1"),
+                bag("A","2"),
+                bag("B","2"),
+                bag("C","2"),
+                bag("A","3"),
+                bag("B","3"),
+                bag("C","3")));
     }
 
     @Test
@@ -34,10 +41,23 @@ class ExhaustiveCombinationStrategyTests {
             Stream.of(bag("A"), bag("B"), bag("C")),
             Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
 
-        tester.expectIllegalState();
-        /*The implementation has changed to keep streams of values, but a list of fields, as such streams are re-read
-         * in the implementation, which throws. The previous implementation would exhaust the stream of each field before
-         * emitting a value, which isn't a viable option for production */
+        tester.expect(
+            Stream.of(
+                bag("X", "A", "1"),
+                bag("X", "B", "1"),
+                bag("X", "C", "1"),
+                bag("X", "A", "2"),
+                bag("X", "B", "2"),
+                bag("X", "C", "2"),
+                bag("X", "A", "3"),
+                bag("X", "B", "3"),
+                bag("X", "C", "3"),
+                bag("X", "A", "4"),
+                bag("X", "B", "4"),
+                bag("X", "C", "4"),
+                bag("X", "A", "5"),
+                bag("X", "B", "5"),
+                bag("X", "C", "5")));
     }
 
     @Test
@@ -48,23 +68,11 @@ class ExhaustiveCombinationStrategyTests {
     }
 
     @Test
-    void shouldGiveNoResultsForEmptySequenceLast() {
+    void shouldGiveNoResultsForSingleEmptySequence() {
         tester.given(
             Stream.of(bag("A"), bag("B"), bag("C")),
             Stream.of());
 
         tester.expectEmpty();
-    }
-
-    @Test
-    void shouldGiveNoResultsForEmptySequenceFirst() {
-        tester.given(
-            Stream.of(),
-            Stream.of(bag("A"), bag("B"), bag("C")));
-
-        tester.expectIllegalState();
-        /*The implementation has changed to keep streams of values, but a list of fields, as such streams are re-read
-         * in the implementation, which throws. The previous implementation would exhaust the stream of each field before
-         * emitting a value, which isn't a viable option for production */
     }
 }
