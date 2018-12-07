@@ -34,7 +34,7 @@ public class GenerateTestCases implements Runnable {
     @CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
     private Path outputDir;
 
-    @CommandLine.Option(names = {"-t", "--t"},
+    @CommandLine.Option(names = {"-t", "--t", "--generation-type"},
         description = "Determines the type of data generation performed (" +
             GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
             ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
@@ -42,7 +42,7 @@ public class GenerateTestCases implements Runnable {
         defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
     private GenerationConfig.DataGenerationType generationType;
 
-    @CommandLine.Option(names = {"-c", "--c"},
+    @CommandLine.Option(names = {"-c", "--c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (" +
             GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
             GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
@@ -50,7 +50,7 @@ public class GenerateTestCases implements Runnable {
         defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
     private GenerationConfig.CombinationStrategyType combinationType;
 
-    @CommandLine.Option(names = {"-w", "--w"},
+    @CommandLine.Option(names = {"-w", "--w", "--walker-type"},
         description = "Determines the tree walker that should be used.",
         defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
