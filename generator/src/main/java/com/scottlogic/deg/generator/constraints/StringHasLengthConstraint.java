@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.visitor.IConstraintValidatorVisitor;
+import com.scottlogic.deg.generator.inputs.visitor.ValidationAlert;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 public class StringHasLengthConstraint implements IConstraint {
     public final Field field;
@@ -27,6 +27,11 @@ public class StringHasLengthConstraint implements IConstraint {
     @Override
     public Collection<Field> getFields() {
         return Collections.singletonList(field);
+    }
+
+    @Override
+    public List<ValidationAlert> accept(IConstraintValidatorVisitor visitor) {
+        return new ArrayList<>();
     }
 
     @Override

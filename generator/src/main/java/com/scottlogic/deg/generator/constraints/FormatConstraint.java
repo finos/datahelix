@@ -1,9 +1,13 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.visitor.IConstraintValidatorVisitor;
+import com.scottlogic.deg.generator.inputs.visitor.ValidationAlert;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class FormatConstraint implements IConstraint {
 
@@ -23,6 +27,11 @@ public class FormatConstraint implements IConstraint {
     @Override
     public Collection<Field> getFields() {
         return Collections.singletonList(field);
+    }
+
+    @Override
+    public List<ValidationAlert> accept(IConstraintValidatorVisitor visitor) {
+        return new ArrayList<>();
     }
 
 }

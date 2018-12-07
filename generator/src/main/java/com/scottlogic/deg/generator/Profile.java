@@ -1,9 +1,11 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.inputs.visitor.IProfileVisitor;
+
 import java.util.Collection;
 import java.util.List;
 
-public class Profile {
+public class Profile  {
     public final ProfileFields fields;
     public final Collection<Rule> rules;
     public final String description;
@@ -24,5 +26,11 @@ public class Profile {
         this.fields = fields;
         this.rules = rules;
         this.description = description;
+
+
+    }
+
+    public void accept(IProfileVisitor visitor){
+        visitor.visit(rules);
     }
 }

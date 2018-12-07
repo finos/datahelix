@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.inputs.visitor.ProfileValidationVisitor;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
 import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 
@@ -20,7 +21,11 @@ public class ProfileReader {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, Charset.forName("UTF-8"));
 
-        return this.read(profileJson);
+        Profile profile =  this.read(profileJson);
+
+
+        profile.accept(new ProfileValidationVisitor());
+        return profile;
     }
 
     public Profile read(String profileJson) throws IOException, InvalidProfileException {

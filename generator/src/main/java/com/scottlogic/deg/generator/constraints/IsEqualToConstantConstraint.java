@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.visitor.IConstraintValidatorVisitor;
+import com.scottlogic.deg.generator.inputs.visitor.ValidationAlert;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 public class IsEqualToConstantConstraint implements IConstraint {
     public final Field field;
@@ -26,6 +26,11 @@ public class IsEqualToConstantConstraint implements IConstraint {
     }
 
     @Override
+    public List<ValidationAlert> accept(IConstraintValidatorVisitor visitor) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -42,4 +47,5 @@ public class IsEqualToConstantConstraint implements IConstraint {
     public String toString() {
         return String.format("`%s` = %s", field.name, requiredValue);
     }
+    
 }
