@@ -6,14 +6,17 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 import java.nio.file.Path;
 
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
+    private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, FixFieldStrategy fixFieldStrategy) {
+        this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
     }
 
@@ -36,7 +39,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     <the producer>);*/
             case REDUCTIVE:
                 IterationVisualiser visualiser = new ReductiveIterationVisualiser(outputPath.getParent());
-                FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,

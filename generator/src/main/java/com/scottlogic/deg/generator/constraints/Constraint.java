@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
@@ -51,4 +52,6 @@ public interface Constraint
     }
 
     Constraint negate();
+
+    Collection<Field> getFields();
 }
