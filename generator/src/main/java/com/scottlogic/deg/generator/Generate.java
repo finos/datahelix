@@ -69,7 +69,7 @@ public class Generate implements Runnable {
         try {
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor);
-            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
+            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker(outputPath.getParent());
 
             new GenerationEngine(
                 new FileOutputTarget(outputPath, new CsvDataSetWriter()),
