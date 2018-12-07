@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreeParti
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.SystemOutDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
@@ -15,8 +15,8 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -88,7 +88,7 @@ public class Generate implements Runnable {
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
                         : new DecisionTreeOptimiser(),
-                    new SystemOutDataGeneratorMonitor()))
+                    new NoopDataGeneratorMonitor()))
                 .generateDataSet(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

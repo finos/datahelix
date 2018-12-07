@@ -38,7 +38,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     <the producer>);*/
             case REDUCTIVE:
-                IterationVisualiser visualiser = new ReductiveIterationVisualiser(outputPath.getParent());
+                IterationVisualiser visualiser = new NoOpIterationVisualiser();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
