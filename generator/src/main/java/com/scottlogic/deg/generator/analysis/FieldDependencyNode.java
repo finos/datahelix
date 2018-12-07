@@ -2,15 +2,15 @@ package com.scottlogic.deg.generator.analysis;
 
 import com.scottlogic.deg.generator.Field;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class FieldDependencyNode {
     public final Field field;
     final FieldDependencyAnalyser.FieldDirectDependency directDependencies;
-    Set<FieldDependencyNode> dependencyNodes = new HashSet<>();
-    Set<FieldDependencyNode> dependantNodes = new HashSet<>();
+    Collection<FieldDependencyNode> dependencyNodes = new ArrayList<>();
+    Collection<FieldDependencyNode> dependantNodes = new ArrayList<>();
 
     FieldDependencyNode(FieldDependencyAnalyser.FieldDirectDependency directDependencies){
         this.field = directDependencies.representedField;
