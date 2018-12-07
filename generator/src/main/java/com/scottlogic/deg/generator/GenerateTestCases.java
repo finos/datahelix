@@ -34,7 +34,7 @@ public class GenerateTestCases implements Runnable {
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = "INTERESTING")
+        defaultValue = Generate.defaultGenerationType)
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
     @CommandLine.Option(names = {"-c", "--c"},

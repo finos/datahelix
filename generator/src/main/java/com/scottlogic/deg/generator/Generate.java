@@ -30,6 +30,7 @@ import java.nio.file.Path;
 public class Generate implements Runnable {
     public static final String defaultTreeWalkerType = "cartesian_product";
     public static final String defaultCombinationStrategy = "PINNING";
+    public static final String defaultGenerationType = "INTERESTING";
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
@@ -39,7 +40,7 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = "INTERESTING")
+        defaultValue = defaultGenerationType)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
