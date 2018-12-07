@@ -10,12 +10,14 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FieldCollection {
+
     private final GenerationConfig generationConfig;
     private final ConstraintReducer reducer;
     private final FieldCollectionFactory fieldCollectionFactory;
@@ -58,6 +60,10 @@ public class FieldCollection {
         return noOfFixedFields == this.fields.size();
     }
 
+    public boolean isFieldFixed(Field field) {
+        return getFixedField(field) != null;
+    }
+
     //get a stream of all possible values for the field that was fixed on the last iteration
     public Stream<Object> getValuesFromLastFixedField(){
         if (this.lastFixedField == null)
@@ -97,7 +103,7 @@ public class FieldCollection {
 
     //work out the next field to fix and return a new FieldCollection with this field fixed
     public FieldCollection getNextFixedField(ReductiveConstraintNode rootNode) {
-        FieldAndConstraintMapping fieldToFix = this.fixFieldStrategy.getFieldAndConstraintMapToFixNext(rootNode);
+        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(this, rootNode);
 
         if (fieldToFix == null){
             throw new UnsupportedOperationException(
@@ -106,7 +112,7 @@ public class FieldCollection {
                     Objects.toString(this.getUnfixedFields())));
         }
 
-        FixedField field = getFixedFieldWithValuesForField(fieldToFix.getField(), rootNode);
+        FixedField field = getFixedFieldWithValuesForField(fieldToFix, rootNode);
         return this.fieldCollectionFactory.create(this, field);
     }
 

@@ -1,16 +1,20 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -67,8 +71,11 @@ public class Generate implements Runnable {
             combinationType);
 
         try {
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+
+            FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor);
+            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, fixFieldStrategy);
             DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker(outputPath.getParent());
 
             new GenerationEngine(
@@ -82,7 +89,7 @@ public class Generate implements Runnable {
                         ? new NoopDecisionTreeOptimiser()
                         : new DecisionTreeOptimiser(),
                     monitor))
-                .generateDataSet(profileFile.toPath(), config);
+                .generateDataSet(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
