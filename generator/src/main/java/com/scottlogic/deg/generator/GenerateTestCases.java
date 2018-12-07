@@ -38,8 +38,8 @@ public class GenerateTestCases implements Runnable {
     private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
 
     @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
-        defaultValue = "PINNING")
+        description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
+        defaultValue = Generate.defaultCombinationStrategy)
     private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
 
     @CommandLine.Option(names = {"-w", "--w"},

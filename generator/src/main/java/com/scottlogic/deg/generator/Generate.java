@@ -29,6 +29,7 @@ import java.nio.file.Path;
     version = "1.0")
 public class Generate implements Runnable {
     public static final String defaultTreeWalkerType = "cartesian_product";
+    public static final String defaultCombinationStrategy = "PINNING";
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
@@ -42,8 +43,8 @@ public class Generate implements Runnable {
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
-        defaultValue = "PINNING")
+        description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
+        defaultValue = defaultCombinationStrategy)
     private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
 
     @CommandLine.Option(
