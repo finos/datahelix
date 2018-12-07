@@ -1,12 +1,13 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class AndConstraint implements IConstraint
+public class AndConstraint implements IConstraint, VisitableProfileElement
 {
     public final Collection<IConstraint> subConstraints;
 
@@ -23,6 +24,11 @@ public class AndConstraint implements IConstraint
         return subConstraints.stream()
             .flatMap(constraint -> constraint.getFields().stream())
             .collect(Collectors.toList());
+    }
+
+    public void accept(ProfileVisitor visitor){
+        subConstraints.forEach(visitor::visit);
+        visitor.visit(this);
     }
 
     @Override

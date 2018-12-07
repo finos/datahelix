@@ -1,10 +1,13 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ProfileFields implements Iterable<Field> {
+public class ProfileFields implements Iterable<Field>, VisitableProfileElement {
     private final List<Field> fields;
 
     public ProfileFields(List<Field> fields) {
@@ -29,5 +32,10 @@ public class ProfileFields implements Iterable<Field> {
 
     public Stream<Field> stream() {
         return this.fields.stream();
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+
     }
 }

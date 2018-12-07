@@ -1,18 +1,26 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsOfTypeConstraint implements IConstraint {
+public class IsOfTypeConstraint implements IConstraint, VisitableProfileElement {
     public final Field field;
     public final Types requiredType;
 
     public IsOfTypeConstraint(Field field, Types requiredType) {
         this.field = field;
         this.requiredType = requiredType;
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+       visitor.visit(this);
+
     }
 
     public enum Types {

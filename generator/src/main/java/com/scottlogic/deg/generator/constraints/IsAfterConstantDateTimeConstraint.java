@@ -1,13 +1,15 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-public class IsAfterConstantDateTimeConstraint implements IConstraint {
+public class IsAfterConstantDateTimeConstraint implements IConstraint, VisitableProfileElement {
     public final Field field;
     public final LocalDateTime referenceValue;
 
@@ -42,5 +44,10 @@ public class IsAfterConstantDateTimeConstraint implements IConstraint {
     @Override
     public String toString(){
         return String.format("`%s` > %s", field.name, referenceValue);
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+        visitor.visit(this);
     }
 }
