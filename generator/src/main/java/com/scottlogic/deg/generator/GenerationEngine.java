@@ -17,7 +17,6 @@ import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +42,7 @@ public class GenerationEngine {
 
         System.out.println("Valid cases generated, starting violation generation...");
 
-        final List<TestCaseDataSet> violatingCases = profile.rules.stream()
+        final Stream<TestCaseDataSet> violatingCases = profile.rules.stream()
             .map(rule ->
             {
                 Collection<Rule> violatedRule = profile.rules.stream()
@@ -59,15 +58,12 @@ public class GenerationEngine {
                     generate(
                         violatingProfile,
                         config));
-            })
-            .collect(Collectors.toList());
+            });
 
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
-            Stream.concat(
-                Stream.of(validCase),
-                violatingCases.stream())
+            Stream.concat(Stream.of(validCase), violatingCases)
                 .collect(Collectors.toList()));
 
         this.outputter.outputTestCases(generationResult);
