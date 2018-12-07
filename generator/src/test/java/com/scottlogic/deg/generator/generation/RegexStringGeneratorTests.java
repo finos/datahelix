@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,6 +61,7 @@ public class RegexStringGeneratorTests {
         expectNoMatch("testtest", true);
     }
 
+    @Disabled
     @Test
     void shouldGenerateStringsInLexicographicalOrder() {
         givenRegex("^aa(bb|cc)d?$");

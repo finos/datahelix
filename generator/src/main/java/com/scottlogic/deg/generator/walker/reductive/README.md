@@ -11,6 +11,7 @@ If the tree has been invalidated (see below), then the process will revert back 
 If there is only one node in the tree, then either every other field has been 'fixed' to a constant value **or all other fields are unconstraint??**. Eitherway the process can use the produce rows of data repeating the fixed values for the fixed fields for every field that has not been fixed yet.
 
 For example the state:
+
 | | Field 1 | Field 2 | Field 3 |
 | ---- | ---- | ---- | ---- |
 | Constraint | > 10 & < 20 | in [A, B, C] | [ab]{2} |
@@ -62,6 +63,7 @@ The two above demonstrate an important relationship with the data that is emitte
 | value 1 | value 2 |
 
 The following can be observed:
+
 | Strategy A | Strategy B |
 | ---- | ---- |
 | Emits all values of Field 2 soner | Emits all values of Field 1 sooner |
