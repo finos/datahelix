@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
-    private final ConstraintFieldSniffer constraintFieldSniffer = new ConstraintFieldSniffer();
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
 
@@ -30,15 +29,13 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> constraints) {
-        final Map<Field, List<IConstraint>> fieldToConstraints = StreamSupport
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
+        final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
-            .map(constraintFieldSniffer::generateTuple)
             .collect(
                 Collectors.groupingBy(
-                    ConstraintAndFieldTuple::getField, // map from field...
-                    Collectors.mapping( // ...to a list of constraints
-                        ConstraintAndFieldTuple::getConstraint,
+                    AtomicConstraint::getField,
+                    Collectors.mapping(Function.identity(),
                         Collectors.toList())));
 
         final Map<Field, Optional<FieldSpec>> fieldToFieldSpec = fields.stream()
@@ -63,12 +60,12 @@ public class ConstraintReducer {
                 map));
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> constraints) {
+    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
         return reduceConstraintsToFieldSpec(constraints, Collections.emptySet());
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<IConstraint> rootConstraints,
-                                                            Iterable<IConstraint> decisionConstraints) {
+    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
+                                                            Iterable<AtomicConstraint> decisionConstraints) {
         if (rootConstraints == null) {
             return Optional.of(FieldSpec.Empty);
         }

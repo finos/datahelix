@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -18,8 +17,6 @@ public class FieldCollectionFactory {
     private final ConstraintReducer constraintReducer;
     private final FieldSpecMerger fieldSpecMerger;
     private final FieldSpecFactory fieldSpecFactory;
-    private final ConstraintFieldSniffer fieldSniffer;
-    private final ReductiveDecisionTreeAdapter treeAdapter;
     private final FixFieldStrategy fixFieldStrategy;
 
     public FieldCollectionFactory(
@@ -27,15 +24,11 @@ public class FieldCollectionFactory {
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
-        ConstraintFieldSniffer fieldSniffer,
-        ReductiveDecisionTreeAdapter treeAdapter,
         FixFieldStrategy fixFieldStrategy) {
         this.config = config;
         this.constraintReducer = constraintReducer;
         this.fieldSpecMerger = fieldSpecMerger;
         this.fieldSpecFactory = fieldSpecFactory;
-        this.fieldSniffer = fieldSniffer;
-        this.treeAdapter = treeAdapter;
         this.fixFieldStrategy = fixFieldStrategy;
     }
 
@@ -47,8 +40,6 @@ public class FieldCollectionFactory {
             this.constraintReducer,
             this.fieldSpecMerger,
             this.fieldSpecFactory,
-            this.fieldSniffer,
-            this.treeAdapter,
             this.fixFieldStrategy,
             new HashMap<>(),
             null);
@@ -71,8 +62,6 @@ public class FieldCollectionFactory {
             this.constraintReducer,
             this.fieldSpecMerger,
             this.fieldSpecFactory,
-            this.fieldSniffer,
-            this.treeAdapter,
             this.fixFieldStrategy,
             newFixedFieldsMap,
             fixedField);

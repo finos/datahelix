@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
@@ -56,40 +56,29 @@ public class FieldSpecFulfiller implements IDataBagSource {
             return validSources;
 
         // if there's a whitelist, we can just output that
-        if (spec.getSetRestrictions() != null) {
+        if (spec.getSetRestrictions() != null && spec.getSetRestrictions().getWhitelist() != null) {
             Set<Object> whitelist = spec.getSetRestrictions().getWhitelist();
-            if (whitelist != null) {
-                // If we have values that must be included we need to check that those values are included in the whitelist
-                if (mustContainRestriction != null) {
-                    whitelist.addAll(
-                        getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                            .map(o -> o.getSetRestrictions().getWhitelist())
-                            .collect(Collectors.toSet())
-                    );
-                }
-
-                return Collections.singletonList(
-                    new CannedValuesFieldValueSource(
-                        new ArrayList<>(whitelist)
-                    )
+            // If we have values that must be included we need to check that those values are included in the whitelist
+            if (mustContainRestriction != null) {
+                whitelist.addAll(
+                    getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                        .map(o -> o.getSetRestrictions().getWhitelist())
+                        .collect(Collectors.toSet())
                 );
             }
-            else {
-                getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                    .forEach(o -> validSources.add(
-                        new CannedValuesFieldValueSource(
-                            new ArrayList<>(o.getSetRestrictions().getWhitelist())
-                        )
-                    ));
-            }
-        } else if (mustContainRestriction != null) {
-            getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                .forEach(o -> validSources.add(
-                    new CannedValuesFieldValueSource(
-                        new ArrayList<>(o.getSetRestrictions().getWhitelist())
-                    )
-                ));
+
+            return Collections.singletonList(
+                new CannedValuesFieldValueSource(
+                    new ArrayList<>(whitelist)
+                )
+            );
         }
+        getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+            .forEach(o -> validSources.add(
+                new CannedValuesFieldValueSource(
+                    new ArrayList<>(o.getSetRestrictions().getWhitelist())
+                )
+            ));
 
         TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
 import com.scottlogic.deg.generator.inputs.IConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -121,7 +122,7 @@ public class AtomicConstraintTests {
         IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            IConstraint constraint = reader.apply(dto, profileFields);
+            Constraint constraint = reader.apply(dto, profileFields);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

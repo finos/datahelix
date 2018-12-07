@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 
@@ -31,7 +31,7 @@ public class ReductiveDecisionTreeAdapter {
         );
 
         return context.isValid()
-            ? node
+            ? this.simplifier.simplify(node)
             : null;
     }
 
@@ -43,8 +43,8 @@ public class ReductiveDecisionTreeAdapter {
             .collect(Collectors.toList()));
     }
 
-    private static Collection<IConstraint> getAtomicConstraints(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
-        Collection<IConstraint> potentialResult = constraint
+    private static Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
+        Collection<AtomicConstraint> potentialResult = constraint
             .getAtomicConstraints().stream()
             .filter(atomicConstraint -> {
                 AtomicConstraintFixedFieldBehaviour behaviour = fixedFields.shouldIncludeAtomicConstraint(atomicConstraint);

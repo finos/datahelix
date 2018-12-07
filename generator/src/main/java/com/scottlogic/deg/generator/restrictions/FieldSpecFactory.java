@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
-    public FieldSpec construct(IConstraint constraint) {
+    public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false);
     }
 
-    public FieldSpec toMustContainRestrictionFieldSpec(Collection<IConstraint> constraints) {
+    public FieldSpec toMustContainRestrictionFieldSpec(Collection<AtomicConstraint> constraints) {
         return FieldSpec.Empty.withMustContainRestriction(
             new MustContainRestriction(
                 constraints.stream().map(this::construct).collect(Collectors.toSet())
@@ -25,7 +25,7 @@ public class FieldSpecFactory {
         );
     }
 
-    private FieldSpec construct(IConstraint constraint, boolean negate) {
+    private FieldSpec construct(AtomicConstraint constraint, boolean negate) {
         if (constraint instanceof NotConstraint) {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
