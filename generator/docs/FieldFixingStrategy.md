@@ -52,4 +52,18 @@ This strategy picks fields based on the following:
  - **First** favour picking fields that are always **constrained** by a finite set
  - **Then**  favour picking fields where the sets are smaller
  
- Currently this is also used as a further step within the Hierarchical Dependency strategy
+Currently this is also used as a further step within the Hierarchical Dependency strategy
+ 
+## Ranked Constraint
+ 
+This strategy does the following:
+1. Get all the atomic constraints in the tree and group them by field
+2. Score each constraint by it's precision (e.g. an equalTo is precise, a set of 2 values is half as precise)
+3. Sort the fields by score into a ranking
+4. Pick the field with the highest rank (greatest precision)
+
+This differs in implementation to the above strategies in that it is **tree based** and not **profile based**.
+
+This means two things:
+- It runs based on a Decision Tree rather than a Profile object
+- It is dynamic and can run multiple times within the generation run time

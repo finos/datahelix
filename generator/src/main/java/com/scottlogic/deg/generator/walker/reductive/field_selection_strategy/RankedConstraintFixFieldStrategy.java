@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-public class InitialFixFieldStrategy implements FixFieldStrategy {
+public class RankedConstraintFixFieldStrategy implements FixFieldStrategy {
 
     /*
     1. Get all the atomic constraints in the tree, group them by field
