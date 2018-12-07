@@ -57,9 +57,8 @@ public class FieldCollection {
         return noOfFixedFields == this.fields.size();
     }
 
-    public boolean fieldIsFixed(Field field) {
-        return (this.lastFixedField != null && this.lastFixedField.field.equals(field)) || this.fixedFields.containsKey(field);
-
+    public boolean isFieldFixed(Field field) {
+        return getFixedField(field) != null;
     }
 
     //get a stream of all possible values for the field that was fixed on the last iteration

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
@@ -73,7 +74,7 @@ public class Generate implements Runnable {
 
         try {
             final Profile profile = new ProfileReader().read(profileFile.toPath());
-            FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile);
+            FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, fixFieldStrategy);
             DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
 

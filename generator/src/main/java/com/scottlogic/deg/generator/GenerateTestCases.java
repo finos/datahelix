@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
@@ -56,7 +57,7 @@ public class GenerateTestCases implements Runnable {
 
         try {
             final Profile profile = new ProfileReader().read(profileFile.toPath());
-            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, new HierarchicalDependencyFixFieldStrategy(profile));
+            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
 
             new GenerationEngine(
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),

@@ -9,16 +9,17 @@ import java.util.Comparator;
 
 public final class HierarchicalDependencyFixFieldStrategy extends ProfileBasedFixFieldStrategy {
 
-    private SetBasedFixFieldStrategy setBasedFixFieldStrategy;
+    private final SetBasedFixFieldStrategy setBasedFixFieldStrategy;
+    private final FieldDependencyAnalyser analyser;
 
-    public HierarchicalDependencyFixFieldStrategy(Profile profile) {
+    public HierarchicalDependencyFixFieldStrategy(Profile profile, FieldDependencyAnalyser analyser) {
         super(profile);
-        setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(profile);
+        this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(profile);
+        this.analyser = analyser;
     }
 
     Comparator<Field> getFieldOrderingStrategy() {
-        FieldDependencyAnalyser analyser = new FieldDependencyAnalyser(profile);
-        FieldDependencyAnalysisResult result = analyser.analyse();
+        FieldDependencyAnalysisResult result = this.analyser.analyse(profile);
         Comparator<Field> firstComparison = Comparator.comparingInt(field -> result.getDependenciesOf(field).size());
         Comparator<Field> secondComparison = Comparator.comparingInt((Field field) -> result.getDependentsOf(field).size()).reversed();
         return firstComparison.thenComparing(secondComparison)

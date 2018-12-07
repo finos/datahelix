@@ -11,14 +11,8 @@ import java.util.stream.Stream;
 
 public class FieldDependencyAnalyser {
 
-    private final Profile profile;
-
-    public FieldDependencyAnalyser(Profile profile){
-        this.profile = profile;
-    }
-
-    public FieldDependencyAnalysisResult analyse() {
-        List<FieldDependencyNode> graph = getFieldDependencyGraph();
+    public FieldDependencyAnalysisResult analyse(Profile profile) {
+        List<FieldDependencyNode> graph = getFieldDependencyGraph(profile);
         Map<Field, Collection<FieldDependency>> dependants = graph.stream()
             .collect(Collectors.toMap(fdn -> fdn.field, this::getAllDependentFields));
         Map<Field, Collection<FieldDependency>> influencers = graph.stream()
@@ -26,13 +20,13 @@ public class FieldDependencyAnalyser {
         return new FieldDependencyAnalysisResult(influencers, dependants);
     }
 
-    private List<FieldDependencyNode> getFieldDependencyGraph(){
+    private List<FieldDependencyNode> getFieldDependencyGraph(Profile profile){
         Map<Field, Set<Field>> dependencyMapping = new HashMap<>();
 
         // First make a map of all fields to their directly dependent fields
-        this.profile.fields.forEach(field -> {
+        profile.fields.forEach(field -> {
             dependencyMapping.putIfAbsent(field, new HashSet<>());
-            findFieldInPredicate(field).forEach(cc -> {
+            findFieldInPredicate(profile, field).forEach(cc -> {
                 dependencyMapping.get(field).addAll(cc.whenConditionIsTrue.getFields());
                 if (cc.whenConditionIsFalse != null) {
                     dependencyMapping.get(field).addAll(cc.whenConditionIsFalse.getFields());
@@ -108,19 +102,19 @@ public class FieldDependencyAnalyser {
             });
     }
 
-    private Stream<Constraint> constraintsFromProfile(){
+    private Stream<Constraint> constraintsFromProfile(Profile profile){
         return profile.rules.stream()
             .flatMap(rule -> rule.constraints.stream());
     }
 
-    private Stream<ConditionalConstraint> conditionalConstraintsFromProfile(){
-        return constraintsFromProfile()
+    private Stream<ConditionalConstraint> conditionalConstraintsFromProfile(Profile profile){
+        return constraintsFromProfile(profile)
             .filter(constraint -> constraint instanceof ConditionalConstraint)
             .map(constraint -> (ConditionalConstraint) constraint);
     }
 
-    private Stream<ConditionalConstraint> findFieldInPredicate(Field field){
-        return conditionalConstraintsFromProfile()
+    private Stream<ConditionalConstraint> findFieldInPredicate(Profile profile, Field field){
+        return conditionalConstraintsFromProfile(profile)
             .filter(constraint -> constraint.condition.getFields().contains(field));
     }
 

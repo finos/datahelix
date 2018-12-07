@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import org.junit.Assert;
 import org.junit.Test;
@@ -205,7 +206,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule("Test rule", constraints));
         Profile profile = new Profile(fields, rules);
-        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile);
+        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
         return strategy.getFieldFixingPriorityList();
     }
 

@@ -22,7 +22,7 @@ public abstract class ProfileBasedFixFieldStrategy implements FixFieldStrategy {
     @Override
     public Field getNextFieldToFix(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
         return getFieldFixingPriorityList().stream()
-            .filter(field -> !fieldCollection.fieldIsFixed(field) && fieldCollection.getFields().stream().anyMatch(pf -> pf.equals(field)))
+            .filter(field -> !fieldCollection.isFieldFixed(field) && fieldCollection.getFields().stream().anyMatch(pf -> pf.equals(field)))
             .findFirst()
             .orElse(null);
     }
