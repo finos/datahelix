@@ -71,7 +71,7 @@ class ExampleProfilesTests {
                     new GenerationEngine(
                         new NullOutputTarget(),
                         new DataGenerator(
-                            walkerFactory.getDecisionTreeWalker(),
+                            walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
                             new DecisionTreeOptimiser(),
                             new NoopDataGeneratorMonitor())),

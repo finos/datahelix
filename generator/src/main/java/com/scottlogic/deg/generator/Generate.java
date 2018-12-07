@@ -76,7 +76,7 @@ public class Generate implements Runnable {
             final Profile profile = new ProfileReader().read(profileFile.toPath());
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, fixFieldStrategy);
-            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
+            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker(outputPath);
 
             new GenerationEngine(
                 new FileOutputTarget(outputPath, new CsvDataSetWriter()),
