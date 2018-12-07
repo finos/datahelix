@@ -21,7 +21,7 @@ Feature: User can specify that a value is so formatted
       | 1                        | "%b"         | true                           |
       | "1"                      | "%b"         | true                           |
       | 2018-10-10T00:00:00.000  | "%b"         | true                           |
-#      | null                     | "%b"         | true                           | this should be true
+#      | null                     | "%b"         | false                           | this should be false
       |                          | "%b"         | true                           |
       | 32                       | "%c"         | " "                            |
       | 33                       | "%c"         | "!"                            |
