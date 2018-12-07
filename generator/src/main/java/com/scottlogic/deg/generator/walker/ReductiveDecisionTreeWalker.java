@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeAdapter;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
@@ -33,7 +34,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ConstraintNode rootNode = tree.getRootNode();
         FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
 
-        iterationVisualiser.visualise(rootNode, fieldCollection);
+        visualise(rootNode, fieldCollection);
 
         //calculate a field to fix and start processing
         return process(rootNode, fieldCollection.getNextFixedField(nodeAdapter.adapt(rootNode, fieldCollection)));
@@ -65,9 +66,17 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         //visualise the tree now
-        this.iterationVisualiser.visualise(adaptedNode, fieldCollection);
+        visualise(adaptedNode, fieldCollection);
 
         //find the next fixed field and continue
         return process(adaptedNode, fieldCollection.getNextFixedField(adaptedNode));
+    }
+
+    private void visualise(ConstraintNode rootNode, FieldCollection fieldCollection){
+        try {
+            iterationVisualiser.visualise(rootNode, fieldCollection);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

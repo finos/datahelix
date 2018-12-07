@@ -7,6 +7,8 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
+import java.nio.file.Path;
+
 public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
 
     private final GenerationConfig config;
@@ -18,7 +20,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
     }
 
     @Override
-    public DecisionTreeWalker getDecisionTreeWalker() {
+    public DecisionTreeWalker getDecisionTreeWalker(Path outputPath) {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);
@@ -35,7 +37,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     <the producer>);*/
             case REDUCTIVE:
-                IterationVisualiser visualiser = new ReductiveIterationVisualiser();
+                IterationVisualiser visualiser = new ReductiveIterationVisualiser(outputPath.getParent());
                 FixFieldStrategy fixFieldStrategy = new InitialFixFieldStrategy();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor

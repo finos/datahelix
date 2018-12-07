@@ -59,7 +59,7 @@ public class GenerateTestCases implements Runnable {
             new GenerationEngine(
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
                 new DataGenerator(
-                    walkerFactory.getDecisionTreeWalker(),
+                    walkerFactory.getDecisionTreeWalker(outputDir),
                     new NoopTreePartitioner(),
                     new NoopDecisionTreeOptimiser(),
                     new NoopDataGeneratorMonitor()))

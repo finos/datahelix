@@ -54,8 +54,13 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
-            .map(genObj ->
-                genObj.values
+            .map(genObj ->{
+
+                if (genObj == null){
+                    throw new IllegalStateException("GeneratedObject is null");
+                }
+
+                return genObj.values
                     .stream()
                     .map(obj -> {
                         if (obj.value != null && obj.format != null) {
@@ -63,8 +68,8 @@ public class GeneratorTestUtilities {
                         }
                         return obj.value;
                     })
-                    .collect(Collectors.toList())
-            ).collect(Collectors.toList());
+                    .collect(Collectors.toList());
+            }).collect(Collectors.toList());
     }
 
     private static List<GeneratedObject> getGeneratedDataAsList(
