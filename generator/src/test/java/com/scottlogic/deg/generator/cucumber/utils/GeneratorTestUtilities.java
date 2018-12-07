@@ -55,8 +55,13 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
-            .map(genObj ->
-                genObj.values
+            .map(genObj ->{
+
+                if (genObj == null){
+                    throw new IllegalStateException("GeneratedObject is null");
+                }
+
+                return genObj.values
                     .stream()
                     .map(obj -> {
                         if (obj.value != null && obj.format != null) {
@@ -64,8 +69,8 @@ public class GeneratorTestUtilities {
                         }
                         return obj.value;
                     })
-                    .collect(Collectors.toList())
-            ).collect(Collectors.toList());
+                    .collect(Collectors.toList());
+            }).collect(Collectors.toList());
     }
 
     private static List<GeneratedObject> getGeneratedDataAsList(
@@ -94,7 +99,13 @@ public class GeneratorTestUtilities {
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
         List<GeneratedObject> allActualRows = new ArrayList<>();
-        dataSet.forEach(allActualRows::add);
+        dataSet.forEach(generatedObject -> {
+            if (generatedObject == null){
+                throw new IllegalStateException("GeneratedObject is null");
+            }
+
+            allActualRows.add(generatedObject);
+        });
         return allActualRows;
     }
 
