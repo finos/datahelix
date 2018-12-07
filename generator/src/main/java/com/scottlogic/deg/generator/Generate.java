@@ -28,9 +28,9 @@ import java.nio.file.Path;
     mixinStandardHelpOptions = true,
     version = "1.0")
 public class Generate implements Runnable {
-    public static final String defaultTreeWalkerType = "cartesian_product";
-    public static final String defaultCombinationStrategy = "PINNING";
-    public static final String defaultGenerationType = "INTERESTING";
+    public static final String cartestian_product_walker_type = "CARTESIAN_PRODUCT";
+    public static final String pinning_combination_strategy = "PINNING";
+    public static final String interesting_generation_type = "INTERESTING";
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
@@ -40,13 +40,13 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = defaultGenerationType)
+        defaultValue = interesting_generation_type)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
         description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
-        defaultValue = defaultCombinationStrategy)
-    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
+        defaultValue = pinning_combination_strategy)
+    private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(
             names = {"--no-optimise"},
@@ -62,7 +62,7 @@ public class Generate implements Runnable {
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = defaultTreeWalkerType,
+        defaultValue = cartestian_product_walker_type,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 

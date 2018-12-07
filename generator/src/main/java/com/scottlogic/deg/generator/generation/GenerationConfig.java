@@ -63,7 +63,7 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        CARTESIAN_PRODUCT(Generate.defaultTreeWalkerType),
+        CARTESIAN_PRODUCT(Generate.cartestian_product_walker_type),
         ROUTED("routed"),
         REDUCTIVE("reductive");
 

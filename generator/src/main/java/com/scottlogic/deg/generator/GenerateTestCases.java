@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -34,19 +36,31 @@ public class GenerateTestCases implements Runnable {
 
     @CommandLine.Option(names = {"-t", "--t"},
         description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = Generate.defaultGenerationType)
-    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
+        defaultValue = Generate.interesting_generation_type)
+    private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c"},
         description = "Determines the type of combination strategy used (PINNING, EXHAUSTIVE, MINIMAL).",
-        defaultValue = Generate.defaultCombinationStrategy)
-    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
+        defaultValue = Generate.pinning_combination_strategy)
+    private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = Generate.defaultTreeWalkerType,
+        defaultValue = Generate.cartestian_product_walker_type,
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
+    private GenerationConfig.TreeWalkerType walkerType;
+
+    @CommandLine.Option(
+        names = {"--no-optimise"},
+        description = "Prevents tree optimisation",
+        hidden = true)
+    private boolean dontOptimise;
+
+    @CommandLine.Option(
+        names = {"--no-partition"},
+        description = "Prevents tree partitioning",
+        hidden = true)
+    private boolean dontPartitionTrees;
 
     @Override
     public void run() {
@@ -54,7 +68,6 @@ public class GenerateTestCases implements Runnable {
             generationType,
             walkerType,
             combinationType);
-
 
         try {
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
@@ -65,9 +78,13 @@ public class GenerateTestCases implements Runnable {
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
                 new DataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
-                    new NoopTreePartitioner(),
-                    new NoopDecisionTreeOptimiser(),
-                    new NoopDataGeneratorMonitor()))
+                    dontPartitionTrees
+                        ? new NoopTreePartitioner()
+                        : new RelatedFieldTreePartitioner(),
+                    dontOptimise
+                        ? new NoopDecisionTreeOptimiser()
+                        : new DecisionTreeOptimiser(),
+                    monitor))
                 .generateTestCases(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
