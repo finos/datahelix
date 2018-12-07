@@ -8,16 +8,13 @@ public class GenerationConfig {
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
-    private final long maxRows = 10_000_000;
+    private final long maxRows;
 
-    public GenerationConfig(
-        DataGenerationType dataGenerationType,
-        TreeWalkerType walkerType,
-        CombinationStrategyType combinationStrategy) {
-
-        this.dataGenerationType = dataGenerationType;
-        this.walkerType = walkerType;
-        this.combinationStrategy = combinationStrategy;
+    public GenerationConfig(GenerationConfigSource source) {
+        this.dataGenerationType = source.getGenerationType();
+        this.walkerType = source.getWalkerType();
+        this.combinationStrategy = source.getCombinationStrategyType();
+        this.maxRows = source.getMaxRows();
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -120,5 +117,7 @@ public class GenerationConfig {
 
             public static final String DEFAULT = INTERESTING;
         }
+
+        public static final long DEFAULT_MAX_ROWS = 10_000_000;
     }
 }

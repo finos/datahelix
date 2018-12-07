@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -27,7 +28,7 @@ import java.nio.file.Path;
     description = "Generates data using a profile file.",
     mixinStandardHelpOptions = true,
     version = "1.0")
-public class Generate implements Runnable {
+public class Generate implements Runnable, GenerationConfigSource {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -70,10 +71,7 @@ public class Generate implements Runnable {
 
     @Override
     public void run() {
-        GenerationConfig config = new GenerationConfig(
-            generationType,
-            walkerType,
-            combinationType);
+        GenerationConfig config = new GenerationConfig(this);
 
         try {
             final Profile profile = new ProfileReader().read(profileFile.toPath());
@@ -98,5 +96,25 @@ public class Generate implements Runnable {
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public GenerationConfig.DataGenerationType getGenerationType() {
+        return generationType;
+    }
+
+    @Override
+    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+        return combinationType;
+    }
+
+    @Override
+    public GenerationConfig.TreeWalkerType getWalkerType() {
+        return walkerType;
+    }
+
+    @Override
+    public long getMaxRows() {
+        return GenerationConfig.Constants.DEFAULT_MAX_ROWS;
     }
 }
