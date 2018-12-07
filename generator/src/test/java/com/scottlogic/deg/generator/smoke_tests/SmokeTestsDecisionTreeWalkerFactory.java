@@ -8,10 +8,12 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 
+import java.nio.file.Path;
+
 public class SmokeTestsDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
     @Override
-    public DecisionTreeWalker getDecisionTreeWalker() {
+    public DecisionTreeWalker getDecisionTreeWalker(Path outputPath) {
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);
         ConstraintReducer constraintReducer = new ConstraintReducer(

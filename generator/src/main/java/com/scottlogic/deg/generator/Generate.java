@@ -70,7 +70,7 @@ public class Generate implements Runnable {
 
         try {
             DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config);
-            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
+            DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker(outputPath);
 
             new GenerationEngine(
                 new FileOutputTarget(outputPath, new CsvDataSetWriter()),
