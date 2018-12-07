@@ -191,16 +191,16 @@ Feature: User can specify that a value is so formatted
       | 2018-02-01T16:17:18.199  | "%tm"        | "02"                           |
       | 2018-02-01T16:17:18.099  | "%tN"        | "099000000"                    |
       | 2018-02-01T16:17:18.199  | "%tp"        | "pm"                           |
-#      | 2018-02-01T16:17:18.199  | "%tQ"        | "02"                           | requires timezone information
+#      | 2018-02-01T16:17:18.199Z  | "%tQ"        | "02"                           | requires timezone information
       | 2018-02-01T16:17:18.199  | "%tR"        | "16:17"                        |
       | 2018-02-01T16:17:18.199  | "%tr"        | "04:17:18 PM"                  |
       | 2018-02-01T16:17:08.199  | "%tS"        | "08"                           |
-#      | 2018-02-01T16:17:18.199  | "%ts"        | "02"                           | requires timezone information
+#      | 2018-02-01T16:17:18.199Z  | "%ts"        | "02"                           | requires timezone information
       | 2018-02-01T16:17:18.199  | "%tT"        | "16:17:18"                     |
       | 2018-02-01T16:17:08.199  | "%tY"        | "2018"                         |
       | 2018-02-01T16:17:08.199  | "%ty"        | "18"                           |
-#      | 2018-02-01T16:17:08.199  | "%tZ"        | "08"                           | requires timezone information
-#      | 2018-02-01T16:17:08.199  | "%tz"        | "08"                           | requires timezone information
+#      | 2018-02-01T16:17:08.199Z  | "%tZ"        | "08"                           | requires timezone information
+#      | 2018-02-01T16:17:08.199Z  | "%tz"        | "08"                           | requires timezone information
 
 
 
