@@ -5,7 +5,7 @@ Feature: User can specify that a value is so formatted
     And there is a field foo
 
 
-    
+
   Scenario Outline: Running a valid 'formattedAs' request should be successful
     Given foo is in set:
       | <input> |
@@ -193,7 +193,7 @@ Feature: User can specify that a value is so formatted
       | 2018-02-01T16:17:18.199  | "%tp"        | "pm"                           |
 #      | 2018-02-01T16:17:18.199  | "%tQ"        | "02"                           | requires timezone information
       | 2018-02-01T16:17:18.199  | "%tR"        | "16:17"                        |
-#      | 2018-02-01T16:17:18.199  | "%tr"        | "04:17:18 pm"                  | pm is being capitalised
+      | 2018-02-01T16:17:18.199  | "%tr"        | "04:17:18 PM"                  |
       | 2018-02-01T16:17:08.199  | "%tS"        | "08"                           |
 #      | 2018-02-01T16:17:18.199  | "%ts"        | "02"                           | requires timezone information
       | 2018-02-01T16:17:18.199  | "%tT"        | "16:17:18"                     |
