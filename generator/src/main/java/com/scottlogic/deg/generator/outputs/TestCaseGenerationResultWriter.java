@@ -19,10 +19,11 @@ import java.util.stream.Stream;
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
     private final IDataSetWriter datasetWriter;
+    private final String profileFileNameWithoutExtension;
 
-    public TestCaseGenerationResultWriter(IDataSetWriter datasetWriter) {
+    public TestCaseGenerationResultWriter(IDataSetWriter datasetWriter, String profileFileNameWithoutExtension) {
+        this.profileFileNameWithoutExtension = profileFileNameWithoutExtension;
         this.manifestWriter = new ManifestWriter();
-
         this.datasetWriter = datasetWriter;
     }
 
@@ -31,9 +32,11 @@ public class TestCaseGenerationResultWriter {
 
         List<TestCaseDTO> testCaseDtos = new ArrayList<>();
 
-        int index = 1;
+        int index = 0;
         for (TestCaseDataSet dataset : result.datasets) {
-            String filenameWithoutExtension = intFormatter.format(index);
+            String filenameWithoutExtension = index == 0
+                ? this.profileFileNameWithoutExtension
+                : intFormatter.format(index);
 
             write(result.profile.fields,
                 dataset.stream(),

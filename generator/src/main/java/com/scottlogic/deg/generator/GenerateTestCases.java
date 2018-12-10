@@ -89,7 +89,10 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
             DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
 
             new GenerationEngine(
-                new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
+                new DirectoryOutputTarget(
+                    outputDir,
+                    getFilenameWithoutExtension(profileFile.getName()),
+                    new CsvDataSetWriter()),
                 new DataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
                     dontPartitionTrees
@@ -104,6 +107,10 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getFilenameWithoutExtension(String fileNameWithExtension) {
+        return fileNameWithExtension.replaceFirst("[.][^.]+$", "");
     }
 
     @Override
