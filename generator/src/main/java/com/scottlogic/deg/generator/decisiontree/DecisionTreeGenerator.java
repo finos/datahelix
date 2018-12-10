@@ -23,7 +23,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
-        return wrapEach(constraints, constraint->constraint.negate());
+        return wrapEach(constraints, Constraint::negate);
     }
 
     private static Collection<Constraint> violateEach(Collection<Constraint> constraints) {
