@@ -26,9 +26,11 @@ import java.nio.file.Path;
     version = "1.0")
 public class GenerateTestCases implements Runnable, GenerationConfigSource {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
+    @SuppressWarnings("unused")
     private File profileFile;
 
     @CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
+    @SuppressWarnings("unused")
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t", "--generation-type"},
@@ -37,6 +39,7 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
             ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
             ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
         defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
+    @SuppressWarnings("unused")
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--c", "--combination-strategy"},
@@ -45,29 +48,34 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
             GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
             GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
         defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
+    @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(names = {"-w", "--w", "--walker-type"},
         description = "Determines the tree walker that should be used.",
         defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
+    @SuppressWarnings("unused")
     private GenerationConfig.TreeWalkerType walkerType;
 
     @CommandLine.Option(
         names = {"--no-optimise"},
         description = "Prevents tree optimisation",
         hidden = true)
+    @SuppressWarnings("unused")
     private boolean dontOptimise;
 
     @CommandLine.Option(
         names = {"--no-partition"},
         description = "Prevents tree partitioning",
         hidden = true)
+    @SuppressWarnings("unused")
     private boolean dontPartitionTrees;
 
     @CommandLine.Option(
         names = {"-n", "--n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
     @Override
