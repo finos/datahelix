@@ -43,8 +43,6 @@ public class GenerationEngine {
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
         final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
 
-        System.out.println("Valid cases generated, starting violation generation...");
-
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));

@@ -31,7 +31,6 @@ public class TestCaseGenerationResultWriter {
 
         List<TestCaseDTO> testCaseDtos = new ArrayList<>();
 
-        System.out.println("Writing test case files");
         int index = 1;
         for (TestCaseDataSet dataset : result.datasets) {
             String filenameWithoutExtension = intFormatter.format(index);
@@ -40,6 +39,10 @@ public class TestCaseGenerationResultWriter {
                 dataset.stream(),
                 directoryPath,
                 filenameWithoutExtension);
+
+            if (index == 1){
+                System.out.println("Valid cases generated, starting violation generation...");
+            }
 
             testCaseDtos.add(
                 new TestCaseDTO(
