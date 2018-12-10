@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 
@@ -214,19 +215,19 @@ public class DecisionTreeMapper {
      * Pair F2 
      */
     private static AtomicConstraint fromDto(IsInSetConstraintDto dto) {
-        return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues));
+        return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues), rule(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsEqualToConstantConstraintDto dto) {
-        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue);
+        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue, rule(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsStringShorterThanConstraintDto dto) {
-        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue);
+        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue, rule(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsOfTypeConstraintDto dto) {
-        return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto());
+        return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto(), rule(dto.rule));
     }
     
     private static AtomicConstraint fromDto(NotConstraintDto dto) {
@@ -234,11 +235,14 @@ public class DecisionTreeMapper {
     }
     
     private static AtomicConstraint fromDto(IsNullConstraintDto dto) {
-        return new IsNullConstraint(new Field(dto.field.name));
+        return new IsNullConstraint(new Field(dto.field.name), rule(dto.rule));
     }
 
     private static AtomicConstraint fromDto(IsLessThanConstantConstraintDto dto) {
-        return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue);
+        return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue, rule(dto.rule));
     }
 
+    private static ConstraintRule rule(String rule){
+        return ConstraintRule.fromDescription(rule);
+    }
 }

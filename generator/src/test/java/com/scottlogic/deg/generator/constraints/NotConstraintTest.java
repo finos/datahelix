@@ -14,8 +14,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1).negate();
-        Constraint constraint2 = new IsNullConstraint(field2).negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -23,8 +23,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqualRecursively() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1).negate();
-        Constraint constraint2 = new IsNullConstraint(field2).negate().negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate().negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -32,8 +32,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqualRecursivelySameLevel() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1).negate().negate().negate();
-        Constraint constraint2 = new IsNullConstraint(field2).negate().negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate().negate().negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate().negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -41,8 +41,8 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        Constraint constraint1 = new IsNullConstraint(field1).negate();
-        Constraint constraint2 = new IsNullConstraint(field2).negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -50,8 +50,8 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsEqualToConstantConstraint(field1, "abc").negate();
-        Constraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd").negate();
+        Constraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rule()).negate();
+        Constraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd", rule()).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -59,9 +59,12 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualRecursively() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1).negate();
-        Constraint constraint2 = new IsNullConstraint(field2).negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
+    }
 }

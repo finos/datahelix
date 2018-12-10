@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 public class MainConstraintReader implements IConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
@@ -17,7 +18,8 @@ public class MainConstraintReader implements IConstraintReader {
     @Override
     public Constraint apply(
         ConstraintDTO dto,
-        ProfileFields fields)
+        ProfileFields fields,
+        ConstraintRule rule)
         throws InvalidProfileException {
 
         if (dto == null) {
@@ -31,11 +33,11 @@ public class MainConstraintReader implements IConstraintReader {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
             }
 
-            return subReader.apply(dto, fields);
+            return subReader.apply(dto, fields, rule);
         }
 
         if (dto.not != null) {
-            return this.apply(dto.not, fields).negate();
+            return this.apply(dto.not, fields, rule).negate();
         }
 
         if (dto.allOf != null) {
@@ -44,7 +46,8 @@ public class MainConstraintReader implements IConstraintReader {
                     dto.allOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields)));
+                        fields,
+                        rule)));
         }
 
         if (dto.anyOf != null) {
@@ -53,21 +56,25 @@ public class MainConstraintReader implements IConstraintReader {
                     dto.anyOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields)));
+                        fields,
+                        rule)));
         }
 
         if (dto.if_ != null) {
             return new ConditionalConstraint(
                 this.apply(
                     dto.if_,
-                    fields),
+                    fields,
+                    rule),
                 this.apply(
                     dto.then,
-                    fields),
+                    fields,
+                    rule),
                 dto.else_ != null
                     ? this.apply(
                         dto.else_,
-                        fields)
+                        fields,
+                        rule)
                     : null);
         }
 

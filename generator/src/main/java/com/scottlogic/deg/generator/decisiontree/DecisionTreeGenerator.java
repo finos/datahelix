@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 
 import java.util.*;
@@ -42,15 +43,26 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 : ifConstraint.negate());
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(Collection<AtomicConstraint> constraints) {
+    private static Collection<ConstraintNode> asConstraintNodeList(
+        Collection<AtomicConstraint> constraints,
+        boolean violated) {
+
         return Collections.singleton(
             new TreeConstraintNode(
-                constraints,
+                constraints
+                    .stream()
+                    .map(c -> violated
+                        ? new ViolatedAtomicConstraint(c)
+                        : c)
+                    .collect(Collectors.toList()),
                 Collections.emptyList()));
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(AtomicConstraint constraint) {
-        return asConstraintNodeList(Collections.singleton(constraint));
+    private static Collection<ConstraintNode> asConstraintNodeList(
+        AtomicConstraint constraint,
+        boolean violated) {
+
+        return asConstraintNodeList(Collections.singleton(constraint), violated);
     }
 
     private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
@@ -72,70 +84,77 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private ConstraintNode convertRule(Rule rule) {
         Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
-            .flatMap(c -> convertConstraint(c).stream())
+            .flatMap(c -> convertConstraint(c, false).stream())
             .iterator();
 
         return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
-    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
+    private Collection<ConstraintNode> convertConstraint(ViolateConstraint constraintToConvert){
+        Constraint violatedConstraint = constraintToConvert.violatedConstraint;
+
+        // VIOLATE(AND(X, Y, Z)) reduces to
+        //   OR(
+        //     AND(VIOLATE(X), Y, Z),
+        //     AND(X, VIOLATE(Y), Z),
+        //     AND(X, Y, VIOLATE(Z)))
+        if (violatedConstraint instanceof AndConstraint) {
+            Collection<Constraint> subConstraints = ((AndConstraint) violatedConstraint).subConstraints;
+
+            Collection<Constraint> possibleFulfilments =
+                subConstraints.stream()
+                    // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
+                    .map(constraintToViolate ->
+                        subConstraints.stream()
+                            .map(c -> c == constraintToViolate
+                                ? new ViolateConstraint(c)
+                                : c)
+                            .collect(Collectors.toList()))
+                    // make an AndConstraint out of each of the new lists
+                    .map(AndConstraint::new)
+                    .collect(Collectors.toList());
+
+            return convertConstraint(new OrConstraint(possibleFulfilments), false);
+        }
+        // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
+        else if (violatedConstraint instanceof OrConstraint) {
+            Collection<Constraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
+
+            return convertConstraint(
+                new AndConstraint(violateEach(subConstraints)), false);
+        }
+        // VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
+        // VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
+        else if (violatedConstraint instanceof ConditionalConstraint) {
+            ConditionalConstraint conditional = ((ConditionalConstraint) violatedConstraint);
+
+            Constraint positiveViolation = new AndConstraint(
+                conditional.condition,
+                new ViolateConstraint(conditional.whenConditionIsTrue));
+
+            Constraint negativeViolation = conditional.whenConditionIsFalse == null
+                ? null
+                : new AndConstraint(
+                new ViolateConstraint(conditional.condition),
+                new ViolateConstraint(conditional.whenConditionIsFalse));
+
+            return convertConstraint(
+                negativeViolation != null
+                    ? positiveViolation.or(negativeViolation)
+                    : positiveViolation,
+                false);
+        }
+
+        // we've got an atomic constraint
+        return convertConstraint(violatedConstraint.negate(), true);
+    }
+
+    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert, boolean violated) {
         if (constraintToConvert instanceof ViolateConstraint) {
-            Constraint violatedConstraint = ((ViolateConstraint) constraintToConvert).violatedConstraint;
+            return convertConstraint((ViolateConstraint)constraintToConvert);
+        }
 
-            // VIOLATE(AND(X, Y, Z)) reduces to
-            //   OR(
-            //     AND(VIOLATE(X), Y, Z),
-            //     AND(X, VIOLATE(Y), Z),
-            //     AND(X, Y, VIOLATE(Z)))
-            if (violatedConstraint instanceof AndConstraint) {
-                Collection<Constraint> subConstraints = ((AndConstraint) violatedConstraint).subConstraints;
-
-                Collection<Constraint> possibleFulfilments =
-                    subConstraints.stream()
-                        // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
-                        .map(constraintToViolate ->
-                            subConstraints.stream()
-                                .map(c -> c == constraintToViolate
-                                    ? new ViolateConstraint(c)
-                                    : c)
-                                .collect(Collectors.toList()))
-                        // make an AndConstraint out of each of the new lists
-                        .map(AndConstraint::new)
-                        .collect(Collectors.toList());
-
-                return convertConstraint(new OrConstraint(possibleFulfilments));
-            }
-            // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
-            else if (violatedConstraint instanceof OrConstraint) {
-                Collection<Constraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
-
-                return convertConstraint(
-                    new AndConstraint(violateEach(subConstraints)));
-            }
-            // VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
-            // VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
-            else if (violatedConstraint instanceof ConditionalConstraint) {
-                ConditionalConstraint conditional = ((ConditionalConstraint) violatedConstraint);
-
-                Constraint positiveViolation = new AndConstraint(
-                    conditional.condition,
-                    new ViolateConstraint(conditional.whenConditionIsTrue));
-
-                Constraint negativeViolation = conditional.whenConditionIsFalse == null
-                    ? null
-                    : new AndConstraint(
-                    new ViolateConstraint(conditional.condition),
-                    new ViolateConstraint(conditional.whenConditionIsFalse));
-
-                return convertConstraint(
-                    negativeViolation != null
-                        ? positiveViolation.or(negativeViolation)
-                        : positiveViolation);
-            }
-
-            // we've got an atomic constraint
-            return convertConstraint(violatedConstraint.negate());
-        } else if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
+        if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
             Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).negatedConstraint;
 
             // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
@@ -143,14 +162,14 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
-                    new OrConstraint(negateEach(subConstraints)));
+                    new OrConstraint(negateEach(subConstraints)), violated);
             }
             // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
             else if (negatedConstraint instanceof OrConstraint) {
                 Collection<Constraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
-                    new AndConstraint(negateEach(subConstraints)));
+                    new AndConstraint(negateEach(subConstraints)), violated);
             }
             // ¬IF(X, then: Y) reduces to AND(X, ¬Y)
             // ¬IF(X, then: Y, else: Z) reduces to OR(AND(X, ¬Y), AND(¬X, ¬Z))
@@ -170,11 +189,12 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
                 return convertConstraint(
                     negativeNegation != null
                         ? positiveNegation.or(negativeNegation)
-                        : positiveNegation);
+                        : positiveNegation,
+                    violated);
             }
             // if we got this far, it must be an atomic constraint
             else {
-                return asConstraintNodeList((AtomicConstraint) constraintToConvert);
+                return asConstraintNodeList((AtomicConstraint) constraintToConvert, violated);
             }
         }
         // AND(X, Y, Z) becomes a flattened list of constraint nodes
@@ -182,7 +202,7 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
             Collection<Constraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
 
             return subConstraints.stream()
-                .flatMap(c -> convertConstraint(c).stream())
+                .flatMap(c -> convertConstraint(c, violated).stream())
                 .collect(Collectors.toList());
         }
         // OR(X, Y, Z) becomes a decision node
@@ -191,14 +211,14 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
             DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()
-                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
+                    .map(c -> ConstraintNode.merge(convertConstraint(c, violated).stream().iterator()))
                     .collect(Collectors.toList()));
 
             return asConstraintNodeList(decisionPoint);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
-            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert));
+            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert), violated);
         } else {
-            return asConstraintNodeList((AtomicConstraint) constraintToConvert);
+            return asConstraintNodeList((AtomicConstraint) constraintToConvert, violated);
         }
     }
 }

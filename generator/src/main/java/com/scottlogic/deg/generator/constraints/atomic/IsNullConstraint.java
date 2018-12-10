@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 
 import java.util.Objects;
@@ -8,9 +9,11 @@ import java.util.Objects;
 public class IsNullConstraint implements AtomicConstraint
 {
     public final Field field;
+    private final ConstraintRule rule;
 
-    public IsNullConstraint(Field field) {
+    public IsNullConstraint(Field field, ConstraintRule rule) {
         this.field = field;
+        this.rule = rule;
     }
 
     @Override
@@ -41,5 +44,10 @@ public class IsNullConstraint implements AtomicConstraint
     @Override
     public int hashCode(){
         return Objects.hash(field);
+    }
+
+    @Override
+    public ConstraintRule getRule() {
+        return rule;
     }
 }

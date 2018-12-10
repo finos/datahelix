@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.inputs.IConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -122,7 +123,7 @@ public class AtomicConstraintTests {
         IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            Constraint constraint = reader.apply(dto, profileFields);
+            Constraint constraint = reader.apply(dto, profileFields, ConstraintRule.fromDescription("rule"));
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

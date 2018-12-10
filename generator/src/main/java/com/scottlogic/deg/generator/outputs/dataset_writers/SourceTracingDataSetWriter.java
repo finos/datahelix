@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -46,12 +47,12 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
         public static final Collection<TracingDto> empty = Collections.emptySet();
 
         public Set<TracingConstraintDto> constraints;
-        public String rule;
+        //public Set<TracingRuleDto> rules;
         public String field;
 
-        TracingDto(Set<TracingConstraintDto> constraints, String rule, String field) {
+        TracingDto(Set<TracingConstraintDto> constraints, Set<TracingRuleDto> rules, String field) {
             this.constraints = constraints;
-            this.rule = rule;
+            //this.rules = rules;
             this.field = field;
         }
 
@@ -65,18 +66,32 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
         private static TracingDto fromCellSource(CellSource cellSource) {
             return new TracingDto(
                 cellSource.getConstraints().stream().map(TracingConstraintDto::new).collect(Collectors.toSet()),
-                cellSource.getRule(),
+                cellSource.getRules().stream().map(TracingRuleDto::new).collect(Collectors.toSet()),
                 cellSource.field.name);
+        }
+    }
+
+    private static class TracingRuleDto{
+        public String rule;
+        public boolean violated;
+
+        TracingRuleDto(ConstraintRule rule) {
+            this.rule = rule.getDescription();
+            this.violated = rule.isViolated();
         }
     }
 
     private static class TracingConstraintDto {
         public String type;
         public String value;
+        public String rule;
+        public boolean violated;
 
         TracingConstraintDto(AtomicConstraint constraint) {
             type = constraint.getClass().getSimpleName();
             value = constraint.toString();
+            rule = constraint.getRule().getDescription();
+            violated = constraint.getRule().isViolated();
         }
     }
 

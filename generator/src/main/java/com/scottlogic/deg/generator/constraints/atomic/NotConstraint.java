@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 
 import java.util.Objects;
 
@@ -50,5 +51,10 @@ public class NotConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash("NOT", negatedConstraint.hashCode());
+    }
+
+    @Override
+    public ConstraintRule getRule() {
+        return negatedConstraint.getRule();
     }
 }

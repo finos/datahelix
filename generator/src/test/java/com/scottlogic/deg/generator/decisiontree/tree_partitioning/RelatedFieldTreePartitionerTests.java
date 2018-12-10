@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -220,7 +221,7 @@ class RelatedFieldTreePartitionerTests {
         AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
-            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value");
+            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value", rule());
             this.constraints.put(fieldName, constraint);
         }
 
@@ -290,5 +291,9 @@ class RelatedFieldTreePartitionerTests {
             reporter.reportMessages(context);
             Assert.fail("Trees do not match");
         }
+    }
+
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
     }
 }

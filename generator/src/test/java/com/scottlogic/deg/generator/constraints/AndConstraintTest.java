@@ -17,8 +17,8 @@ public class AndConstraintTest {
 
         Field field3 = new Field("TestField");
         Field field4 = new Field("TestField");
-        AndConstraint constraint1 = new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2));
-        AndConstraint constraint2 = new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4));
+        AndConstraint constraint1 = new AndConstraint(new IsNullConstraint(field1, rule()), new IsNullConstraint(field2, rule()));
+        AndConstraint constraint2 = new AndConstraint(new IsNullConstraint(field3, rule()), new IsNullConstraint(field4, rule()));
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -29,9 +29,12 @@ public class AndConstraintTest {
 
         Field field3 = new Field("TestField");
         Field field4 = new Field("TestField");
-        AndConstraint constraint1 = new AndConstraint(new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2)));
-        AndConstraint constraint2 = new AndConstraint(new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4)));
+        AndConstraint constraint1 = new AndConstraint(new AndConstraint(new IsNullConstraint(field1, rule()), new IsNullConstraint(field2, rule())));
+        AndConstraint constraint2 = new AndConstraint(new AndConstraint(new IsNullConstraint(field3, rule()), new IsNullConstraint(field4, rule())));
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
+    }
 }

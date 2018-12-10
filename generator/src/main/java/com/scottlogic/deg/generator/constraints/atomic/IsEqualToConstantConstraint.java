@@ -1,16 +1,19 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 
 import java.util.Objects;
 
 public class IsEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
     public final Object requiredValue;
+    private final ConstraintRule rule;
 
-    public IsEqualToConstantConstraint(Field field, Object requiredValue) {
+    public IsEqualToConstantConstraint(Field field, Object requiredValue, ConstraintRule rule) {
         this.field = field;
         this.requiredValue = requiredValue;
+        this.rule = rule;
     }
 
     @Override
@@ -39,5 +42,10 @@ public class IsEqualToConstantConstraint implements AtomicConstraint {
     @Override
     public String toString() {
         return String.format("`%s` = %s", field.name, requiredValue);
+    }
+
+    @Override
+    public ConstraintRule getRule() {
+        return rule;
     }
 }

@@ -59,7 +59,7 @@ public class ConstraintReducer {
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
-        if (constraints == null) {
+        if (constraints == null || !constraints.iterator().hasNext()) {
             return Optional.of(FieldSpec.Empty);
         }
 

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 
 import java.util.Objects;
 import java.util.Set;
@@ -9,10 +10,12 @@ import java.util.stream.Collectors;
 public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
     public final Set<Object> legalValues;
+    private final ConstraintRule rule;
 
-    public IsInSetConstraint(Field field, Set<Object> legalValues) {
+    public IsInSetConstraint(Field field, Set<Object> legalValues, ConstraintRule rule) {
         this.field = field;
         this.legalValues = legalValues;
+        this.rule = rule;
 
         if (legalValues.isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
@@ -59,5 +62,10 @@ public class IsInSetConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash(field, legalValues);
+    }
+
+    @Override
+    public ConstraintRule getRule() {
+        return rule;
     }
 }

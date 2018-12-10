@@ -62,7 +62,10 @@ public class GenerationEngine {
                 : r)
             .collect(Collectors.toList());
 
-        Profile violatingProfile = new Profile(profile.fields, violatedRule);
+        Profile violatingProfile = new Profile(
+            profile.fields,
+            violatedRule,
+            String.format("%s -- Violating: %s", profile.description, rule.description));
 
         return new TestCaseDataSet(
             rule.description,
@@ -81,11 +84,12 @@ public class GenerationEngine {
     }
 
     private Rule violateRule(Rule rule) {
-        Constraint violateConstraint =
+        Constraint constraintToViolate =
             rule.constraints.size() == 1
-                ? new ViolateConstraint(rule.constraints.iterator().next())
-                : new ViolateConstraint(new AndConstraint(rule.constraints));
+                ? rule.constraints.iterator().next()
+                : new AndConstraint(rule.constraints);
 
-        return new Rule(rule.description, Collections.singleton(violateConstraint));
+        ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
+        return new Rule(rule.description, Collections.singleton(violatedConstraint));
     }
 }

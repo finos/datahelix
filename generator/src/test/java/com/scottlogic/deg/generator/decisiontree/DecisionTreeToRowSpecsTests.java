@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
@@ -58,69 +59,81 @@ public class DecisionTreeToRowSpecsTests {
         final Field currency = new Field("currency");
         final Field city = new Field("city");
         return new Profile(
-                Arrays.asList(country, currency, city),
-                Arrays.asList(
-                        new Rule(
-                                "US country constrains city",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "US"
-                                                ),
-                                                new IsInSetConstraint(
-                                                        city,
-                                                        new HashSet<>(Arrays.asList("New York", "Washington DC"))
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "GB country constrains city",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "GB"
-                                                ),
-                                                new IsInSetConstraint(
-                                                        city,
-                                                        new HashSet<>(Arrays.asList("Bristol", "London"))
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "US country constrains currency",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "US"
-                                                ),
-                                                new IsEqualToConstantConstraint(
-                                                        currency,
-                                                        "USD"
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "GB country constrains currency",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "GB"
-                                                ),
-                                                new IsEqualToConstantConstraint(
-                                                        currency,
-                                                        "GBP"
-                                                )
-                                        )
-                                )
+            Arrays.asList(country, currency, city),
+            Arrays.asList(
+                new Rule(
+                    "US country constrains city",
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "US",
+                                rule()
+                            ),
+                            new IsInSetConstraint(
+                                city,
+                                new HashSet<>(Arrays.asList("New York", "Washington DC")),
+                                rule()
+                            )
                         )
+                    )
+                ),
+                new Rule(
+                    "GB country constrains city",
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "GB",
+                                rule()
+                            ),
+                            new IsInSetConstraint(
+                                city,
+                                new HashSet<>(Arrays.asList("Bristol", "London")),
+                                rule()
+                            )
+                        )
+                    )
+                ),
+                new Rule(
+                    "US country constrains currency",
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "US",
+                                rule()
+                            ),
+                            new IsEqualToConstantConstraint(
+                                currency,
+                                "USD",
+                                rule()
+                            )
+                        )
+                    )
+                ),
+                new Rule(
+                    "GB country constrains currency",
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "GB",
+                                rule()
+                            ),
+                            new IsEqualToConstantConstraint(
+                                currency,
+                                "GBP",
+                                rule()
+                            )
+                        )
+                    )
                 )
+            )
         );
+    }
+
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
     }
 }

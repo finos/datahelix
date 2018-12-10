@@ -3,9 +3,11 @@ package com.scottlogic.deg.generator.constraints;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -54,4 +56,7 @@ public interface Constraint
     Constraint negate();
 
     Collection<Field> getFields();
+
+    ConstraintRule getRule();
 }
+

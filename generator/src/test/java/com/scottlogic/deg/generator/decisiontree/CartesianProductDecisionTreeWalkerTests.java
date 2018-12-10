@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
@@ -49,40 +50,48 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsEqualToConstantConstraint(
                             country,
-                            "US"),
+                            "US",
+                            rule()),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("New York", "Washington DC")))))),
+                            new HashSet<>(Arrays.asList("New York", "Washington DC")),
+                            rule())))),
             new Rule(
                 "GB country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsEqualToConstantConstraint(
                             country,
-                            "GB"),
+                            "GB",
+                            rule()),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("Bristol", "London")))))),
+                            new HashSet<>(Arrays.asList("Bristol", "London")),
+                            rule())))),
             new Rule(
                 "US country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsEqualToConstantConstraint(
                             country,
-                            "US"),
+                            "US",
+                            rule()),
                         new IsEqualToConstantConstraint(
                             currency,
-                            "USD")))),
+                            "USD",
+                            rule())))),
             new Rule(
                 "GB country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsEqualToConstantConstraint(
                             country,
-                            "GB"),
+                            "GB",
+                            rule()),
                         new IsEqualToConstantConstraint(
                             currency,
-                            "GBP")))));
+                            "GBP",
+                            rule())))));
 
         Profile profile = new Profile(fields, dummyRules);
 
@@ -95,5 +104,9 @@ class CartesianProductDecisionTreeWalkerTests {
             .collect(Collectors.toList());
 
         Assert.assertThat(rowSpecs, notNullValue());
+    }
+
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
     }
 }

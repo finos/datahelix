@@ -15,8 +15,8 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"));
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rule());
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -24,8 +24,8 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"));
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rule());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -33,8 +33,12 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abcd]"));
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abcd]"), rule());
         Assert.assertNotEquals(constraint1, constraint2);
+    }
+
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
     }
 }

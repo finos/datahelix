@@ -16,8 +16,8 @@ public class IsGranularToConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
-        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)));
+        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)), rule());
+        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)), rule());
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -25,8 +25,8 @@ public class IsGranularToConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
-        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)));
+        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)), rule());
+        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)), rule());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -34,9 +34,12 @@ public class IsGranularToConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
-        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(1.0)));
+        IsGranularToConstraint constraint1 = new IsGranularToConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)), rule());
+        IsGranularToConstraint constraint2 = new IsGranularToConstraint(field2, new ParsedGranularity(new BigDecimal(1.0)), rule());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
+    }
 }

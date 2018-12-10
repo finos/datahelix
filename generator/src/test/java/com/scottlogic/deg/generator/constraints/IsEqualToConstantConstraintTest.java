@@ -12,8 +12,8 @@ public class IsEqualToConstantConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc");
-        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abc");
+        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rule());
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abc", rule());
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -21,8 +21,8 @@ public class IsEqualToConstantConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc");
-        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abc");
+        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rule());
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abc", rule());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -30,9 +30,12 @@ public class IsEqualToConstantConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc");
-        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd");
+        IsEqualToConstantConstraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rule());
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd", rule());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
+    }
 }

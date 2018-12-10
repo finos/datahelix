@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -237,7 +238,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
         return new OrderedConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rule())),
             Arrays.asList(decisions));
     }
 
@@ -413,5 +414,9 @@ class DecisionTreeRoutesTreeWalkerTest {
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
+    }
+
+    private static ConstraintRule rule(){
+        return ConstraintRule.fromDescription("rule");
     }
 }
