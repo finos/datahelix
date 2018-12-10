@@ -21,14 +21,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+    private final IDecisionTreeGenerator decisionTreeGenerator;
     private final IDataGenerator dataGenerator;
-
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter, DataGenerator dataGenerator) {
+    public GenerationEngine(
+        IOutputTarget outputter,
+        DataGenerator dataGenerator,
+        DecisionTreeGenerator decisionTreeGenerator) {
         this.outputter = outputter;
         this.dataGenerator = dataGenerator;
+        this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
     void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
@@ -42,24 +45,9 @@ public class GenerationEngine {
 
         System.out.println("Valid cases generated, starting violation generation...");
 
-        final Stream<TestCaseDataSet> violatingCases = profile.rules.stream()
-            .map(rule ->
-            {
-                Collection<Rule> violatedRule = profile.rules.stream()
-                    .map(r -> r == rule
-                        ? violateRule(rule)
-                        : r)
-                    .collect(Collectors.toList());
-
-                Profile violatingProfile = new Profile(profile.fields, violatedRule);
-
-                return new TestCaseDataSet(
-                    rule.description,
-                    generate(
-                        violatingProfile,
-                        config));
-            });
-
+        final Stream<TestCaseDataSet> violatingCases = profile.rules
+            .stream()
+            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
@@ -69,9 +57,24 @@ public class GenerationEngine {
         this.outputter.outputTestCases(generationResult);
     }
 
-    private Stream<GeneratedObject> generate(Profile profile, GenerationConfig config) {
+    private TestCaseDataSet getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
+        Collection<Rule> violatedRule = profile.rules.stream()
+            .map(r -> r == rule
+                ? violateRule(rule)
+                : r)
+            .collect(Collectors.toList());
 
-        final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
+        Profile violatingProfile = new Profile(profile.fields, violatedRule);
+
+        return new TestCaseDataSet(
+            rule.description,
+            generate(
+                violatingProfile,
+                config));
+    }
+
+    private Stream<GeneratedObject> generate(Profile profile, GenerationConfig config) {
+        final DecisionTreeCollection analysedProfile = this.decisionTreeGenerator.analyse(profile);
 
         return this.dataGenerator.generateData(
             profile,
@@ -82,11 +85,8 @@ public class GenerationEngine {
     private Rule violateRule(Rule rule) {
         Constraint violateConstraint =
             rule.constraints.size() == 1
-                ? new ViolateConstraint(
-                rule.constraints.iterator().next())
-                : new ViolateConstraint(
-                new AndConstraint(
-                    rule.constraints));
+                ? new ViolateConstraint(rule.constraints.iterator().next())
+                : new ViolateConstraint(new AndConstraint(rule.constraints));
 
         return new Rule(rule.description, Collections.singleton(violateConstraint));
     }

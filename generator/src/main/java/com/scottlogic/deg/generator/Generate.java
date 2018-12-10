@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
@@ -104,7 +105,8 @@ public class Generate implements Runnable, GenerationConfigSource {
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
                         : new DecisionTreeOptimiser(),
-                    monitor))
+                    monitor),
+                new DecisionTreeGenerator())
                 .generateDataSet(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
