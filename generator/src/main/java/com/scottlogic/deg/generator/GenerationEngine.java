@@ -1,13 +1,14 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.IDataGenerator;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -31,13 +32,13 @@ public class GenerationEngine {
         this.dataGenerator = dataGenerator;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
+    void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
         final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
         this.outputter.outputDataset(generatedDataItems, profile.fields);
     }
 
-    public void generateTestCases(Profile profile, GenerationConfig config) throws IOException, InvalidProfileException {
+    public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
         final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
 
         System.out.println("Valid cases generated, starting violation generation...");
