@@ -19,7 +19,9 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             ? mergeResult.restrictions
             : DataTypeRestrictions.all;
 
-        return Optional.of(merged.withTypeRestrictions(restrictions));
+        return Optional.of(merged.withTypeRestrictions(
+            restrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

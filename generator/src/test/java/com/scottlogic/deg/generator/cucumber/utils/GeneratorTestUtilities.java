@@ -27,7 +27,6 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,15 +97,8 @@ public class GeneratorTestUtilities {
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-        List<GeneratedObject> allActualRows = new ArrayList<>();
-        dataSet.forEach(generatedObject -> {
-            if (generatedObject == null){
-                throw new IllegalStateException("GeneratedObject is null");
-            }
 
-            allActualRows.add(generatedObject);
-        });
-        return allActualRows;
+        return dataSet.collect(Collectors.toList());
     }
 
     public static Object parseInput(String input) throws JsonParseException {

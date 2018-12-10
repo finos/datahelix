@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
@@ -26,6 +27,7 @@ public class FieldCollection {
     private final Map<Field, FixedField> fixedFields;
     private final FixedField lastFixedField;
     private final FixFieldStrategy fixFieldStrategy;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     FieldCollection(
         ProfileFields fields,
@@ -36,8 +38,8 @@ public class FieldCollection {
         FieldSpecFactory fieldSpecFactory,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
-        FixedField lastFixedField
-    ) {
+        FixedField lastFixedField,
+        ReductiveDataGeneratorMonitor monitor) {
         this.fields = fields;
         this.fieldCollectionFactory = fieldCollectionFactory;
         this.fieldSpecMerger = fieldSpecMerger;
@@ -47,6 +49,7 @@ public class FieldCollection {
         this.lastFixedField = lastFixedField;
         this.generationConfig = config;
         this.reducer = constraintReducer;
+        this.monitor = monitor;
     }
 
     public boolean allFieldsAreFixed() {
@@ -82,7 +85,6 @@ public class FieldCollection {
             return Stream.empty();
         }
 
-
         FieldSpec fieldSpecForValuesInLastFixedField = this.lastFixedField.getFieldSpecForValues();
         fieldSpecsPerField.put(this.lastFixedField.field, fieldSpecForValuesInLastFixedField);
 
@@ -92,10 +94,10 @@ public class FieldCollection {
             this.lastFixedField.field
         );
 
-        System.out.println(String.format(
-            "%s %s",
-            this.lastFixedField.field.name,
-            fieldSpecForValuesInLastFixedField.toString()));
+        this.monitor.rowSpecEmitted(
+            this.lastFixedField,
+            fieldSpecForValuesInLastFixedField,
+            rowSpecWithAllValuesForLastFixedField);
         return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
 
@@ -131,7 +133,7 @@ public class FieldCollection {
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
 
-        return new FixedField(field, values, rootConstraintsFieldSpec);
+        return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not

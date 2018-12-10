@@ -45,7 +45,7 @@ public class DegTestHelper {
                 try {
                     return constraintReader.apply(dto, profileFields);
                 } catch (InvalidProfileException e) {
-                    state.testExceptions.add(e);
+                    state.addException(e);
                     exceptionInMapping.set(true);
                     return null;
                 }
@@ -63,7 +63,7 @@ public class DegTestHelper {
                 state.combinationStrategy
             );
         } catch (Exception e) {
-            state.testExceptions.add(e);
+            state.addException(e);
             return null;
         }
     }

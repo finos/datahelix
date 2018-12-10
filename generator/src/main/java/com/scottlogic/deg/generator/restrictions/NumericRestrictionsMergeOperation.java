@@ -18,7 +18,9 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;
         if (numberRestrictions == null) {
-            return Optional.of(merged.withNumericRestrictions(null));
+            return Optional.of(merged.withNumericRestrictions(
+                null,
+                FieldSpecSource.Empty));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
@@ -26,8 +28,13 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
             return Optional.empty();
         }
 
-        return Optional.of(merged.withNumericRestrictions(numberRestrictions).withTypeRestrictions(
-            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC)));
+        return Optional.of(merged
+            .withNumericRestrictions(
+                numberRestrictions,
+                FieldSpecSource.fromFieldSpecs(left, right))
+            .withTypeRestrictions(
+                DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC),
+                FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

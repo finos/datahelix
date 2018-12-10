@@ -10,6 +10,7 @@ public class GranularityRestrictionsMergeOperation implements RestrictionMergeOp
         return Optional.of(merged.withGranularityRestrictions(
             granularityRestrictionsMerger.merge(
                 left.getGranularityRestrictions(),
-                right.getGranularityRestrictions())));
+                right.getGranularityRestrictions()),
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }

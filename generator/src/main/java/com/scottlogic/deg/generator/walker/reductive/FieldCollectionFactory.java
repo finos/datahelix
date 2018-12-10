@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -19,18 +20,21 @@ public class FieldCollectionFactory {
     private final FieldSpecMerger fieldSpecMerger;
     private final FieldSpecFactory fieldSpecFactory;
     private final FixFieldStrategy fixFieldStrategy;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     public FieldCollectionFactory(
         GenerationConfig config,
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
         FieldSpecFactory fieldSpecFactory,
-        FixFieldStrategy fixFieldStrategy) {
+        FixFieldStrategy fixFieldStrategy,
+        ReductiveDataGeneratorMonitor monitor) {
         this.config = config;
         this.constraintReducer = constraintReducer;
         this.fieldSpecMerger = fieldSpecMerger;
         this.fieldSpecFactory = fieldSpecFactory;
         this.fixFieldStrategy = fixFieldStrategy;
+        this.monitor = monitor;
     }
 
     public FieldCollection create(DecisionTree tree){
@@ -43,7 +47,8 @@ public class FieldCollectionFactory {
             this.fieldSpecFactory,
             this.fixFieldStrategy,
             new HashMap<>(),
-            null);
+            null,
+            this.monitor);
     }
 
     public FieldCollection create(FieldCollection fieldCollection, FixedField fixedField){
@@ -65,6 +70,7 @@ public class FieldCollectionFactory {
             this.fieldSpecFactory,
             this.fixFieldStrategy,
             newFixedFieldsMap,
-            fixedField);
+            fixedField,
+            this.monitor);
     }
 }
