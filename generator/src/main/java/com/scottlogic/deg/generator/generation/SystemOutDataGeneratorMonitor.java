@@ -38,10 +38,6 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
             this.lastSampleTime = newSampleTime;
             this.rowsSinceLastSample = 0;
         }
-
-        if (this.rowsEmitted.compareTo(this.maxRows) >= 0){
-            System.out.println("\n\n\nAll rows emitted\n\n\n");
-        }
     }
 
     private void reportVelocity(float rowsEmittedInDuration, Instant lastSampleTime, Instant newSampleTime) {
