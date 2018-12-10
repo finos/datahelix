@@ -8,7 +8,7 @@ Reductive tree processing is the term given to processing a tree of constraints 
 If the tree has been invalidated (see below), then the process will revert back to the previous state and pick a different constant value and continue. If the tree has been reduced to a single node, then data can be emitted.
 
 ## Emitting data
-If there is only one node in the tree, then either every other field has been 'fixed' to a constant value **or all other fields are unconstraint??**. Eitherway the process can use the produce rows of data repeating the fixed values for the fixed fields for every field that has not been fixed yet.
+Once all the fields have been fixed to a value, there should only be one node in the tree. It is possible for the tree to contain only one node earlier, if there are no decisions. Once all the fields except for the last one, rows can be produced. The fixed values for all fixed fields are repeated for every appropriate value in the final field.
 
 For example the state:
 
@@ -21,21 +21,21 @@ For example the state:
 Once all appropriate values for the last remaining un-fixed fields have been emitted, the process will proceed to switching to the next possible value for the previously fixed-field, until all possible options have been exhausted.
 
 ### Combination strategies
-The process effecively circumvents the process of combining value sources to produce rows, as a row has effectively been produced in memory up-to the un-fixed fields.
+The process effectively circumvents the process of combining value sources to produce rows, as a row has effectively been produced in memory up-to the un-fixed fields.
 
 #### Modifications
 Currently the process will emit a row for every appropriate value in the set of un-fixed fields. In the above example, 4 rows would be emitted. An alternative approach to combination strategies could be used here to ensure that all values for the set of un-fixed fields are emitted, but not on every iteration. 
 
-In the above example this could mean that aa, ab, ba, bb are emitted given the state above, but only the first appropriate value for Field 3 (aa) would be emitted when Field 1 and Field 2 change in future. The reverse could also be true, to emit all remaining non-emitted values for Field 3 when Field 1 & Field 2 have been exhausted, but this is a more difficult to determine the situation.
+In the above example this could mean that aa, ab, ba, bb are emitted given the state above, but only the first appropriate value for Field 3 (aa) would be emitted when Field 1 and Field 2 change in future. The reverse could also be true, to emit all remaining non-emitted values for Field 3 when Field 1 & Field 2 have been exhausted, but this is outcome is more difficult to implement.
 
 ## The problem with interesting values
-The facility of producing interesting values at present emits a values based on the boundary conditions for the constraints. There may be decisions which vary the output based on different values. As such the mode needs to emit these values also, otherwise the process will not miss possible rows of data from the output.
+The facility of producing interesting values at present will emit values based on the boundary conditions for the given constraints. There may be decisions which vary the output based on different values. As such the mode needs to emit these values also, otherwise the process will not miss possible rows of data from the output.
 
 ## Picking a constant value
 The first challenge for the process is to calculate the field to fix a value for, there are a number of different approaches, each will emit all the data for the given profiles, however can emit data at different rates in their entirety or for particular fields.
 
 The current strategies are:
-* Pick the field with the least variance (`InitialFixFieldStrategy`)
+* Pick the field with the least variance (`RankedConstraintFixFieldStrategy`)
 * Pick the field least impacted by other fields (`HierarchicalDependencyFixFieldStrategy`)
 
 The process will use the generally understood most efficient strategy, however it may be important to vary this given the use case of the tool, e.g.:
