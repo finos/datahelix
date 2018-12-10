@@ -82,7 +82,7 @@ public class TestCaseGenerationResultWriter {
 
     private static DecimalFormat getDecimalFormat(int numberOfDatasets)
     {
-        int maxNumberOfDigits = (int)Math.floor(Math.log10(numberOfDatasets));
+        int maxNumberOfDigits = (int)Math.ceil(Math.log10(numberOfDatasets));
 
         char[] zeroes = new char[maxNumberOfDigits];
         Arrays.fill(zeroes, '0');
