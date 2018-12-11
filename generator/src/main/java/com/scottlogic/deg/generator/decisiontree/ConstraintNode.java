@@ -20,7 +20,7 @@ public interface ConstraintNode extends Node {
     ConstraintNode addDecisions(Collection<DecisionNode> decisions);
     ConstraintNode setDecisions(Collection<DecisionNode> decisions);
     ConstraintNode markNode(NodeMarking marking);
-    void accept(NodeVisitor visitor);
+    ConstraintNode accept(NodeVisitor visitor);
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();

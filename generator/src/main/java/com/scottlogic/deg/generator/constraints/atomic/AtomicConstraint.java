@@ -21,7 +21,7 @@ public interface AtomicConstraint extends Constraint {
         return Collections.singleton(getField());
     }
 
-    default void accept(NodeVisitor visitor){
-        visitor.visit(this);
+    default AtomicConstraint accept(NodeVisitor visitor){
+        return visitor.visit(this);
     }
 }

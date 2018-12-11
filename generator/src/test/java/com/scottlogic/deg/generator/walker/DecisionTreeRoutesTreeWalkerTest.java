@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -387,10 +388,14 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
 
         @Override
-        public void accept(NodeVisitor visitor){
-            visitor.visit(this);
-            getAtomicConstraints().forEach(a->a.accept(visitor));
-            getDecisions().forEach(d->d.accept(visitor));
+        public ConstraintNode accept(NodeVisitor visitor){
+            Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
+            Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
+
+            return visitor.visit(
+                new OrderedConstraintNode(
+                    atomicConstraintStream.collect(Collectors.toList()),
+                    decisionNodeStream.collect(Collectors.toList())));
         }
     }
 
@@ -422,9 +427,13 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
 
         @Override
-        public void accept(NodeVisitor visitor){
-            visitor.visit(this);
-            getOptions().forEach(c->c.accept(visitor));
+        public DecisionNode accept(NodeVisitor visitor){
+            Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
+            return visitor.visit(
+                new TreeDecisionNode(
+                    options.collect(Collectors.toSet())
+                )
+            );
         }
     }
 }
