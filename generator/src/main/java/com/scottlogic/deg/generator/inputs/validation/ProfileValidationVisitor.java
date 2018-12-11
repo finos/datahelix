@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator.inputs.validation;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
 
     private Map<String, ConstraintRestrictions> allFieldsState;
     private List<ValidationAlert> alerts;
+    private IsOfTypeConstraint constraint;
 
     public ProfileValidationVisitor() {
         allFieldsState = new HashMap<>();
@@ -18,6 +20,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
 
     @Override
     public void visit(IsOfTypeConstraint constraint) {
+        this.constraint = constraint;
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
         alerts.addAll(state.typeConstraintRestrictions.IsOfType(constraint.field.name, constraint.requiredType));
@@ -52,7 +55,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     }
 
     @Override
-    public void visit(IConstraint constraint) {
+    public void visit(Constraint constraint) {
 
     }
 

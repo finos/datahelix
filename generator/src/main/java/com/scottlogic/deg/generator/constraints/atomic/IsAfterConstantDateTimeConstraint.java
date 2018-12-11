@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class IsAfterConstantDateTimeConstraint implements AtomicConstraint, VisitableProfileElement { {
+public class IsAfterConstantDateTimeConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     public final LocalDateTime referenceValue;
 

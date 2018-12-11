@@ -2,13 +2,14 @@ package com.scottlogic.deg.generator.inputs.validation;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
 
 public interface ProfileVisitor {
 
     void visit(ProfileFields fields);
     void visit(Rule rule);
-    void visit(IConstraint constraint);
+    void visit(Constraint constraint);
    // void visit(ComposedConstraint composedConstraint);
 
 
