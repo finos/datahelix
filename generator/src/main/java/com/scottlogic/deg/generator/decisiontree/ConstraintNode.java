@@ -21,6 +21,12 @@ public interface ConstraintNode extends Node {
     ConstraintNode setDecisions(Collection<DecisionNode> decisions);
     ConstraintNode markNode(NodeMarking marking);
 
+    default void accept(NodeVisitor visitor){
+        visitor.visit(this);
+        getAtomicConstraints().forEach(a->a.accept(visitor));
+        getDecisions().forEach(d->d.accept(visitor));
+    }
+
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
         Collection<DecisionNode> decisions = new ArrayList<>();
