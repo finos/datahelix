@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.visualisation;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.io.IOException;
@@ -136,7 +136,9 @@ public class DecisionTreeVisualisationWriter {
                 info.decisions,
                 info.atomicConstraints,
                 info.constraintNodes,
-                info.getRowSpecCountInScientificNotation())));
+                info.rowSpecs.compareTo(BigInteger.valueOf(1000)) > 0
+                    ? info.getRowSpecCountInScientificNotation()
+                    : info.rowSpecs.longValue())));
     }
 
     private void writeLine(String line) throws IOException {
@@ -175,7 +177,7 @@ class NodeVisualiser {
     String renderNode(String id, ConstraintNode node){
         String label = node.getAtomicConstraints()
             .stream()
-            .map(IConstraint::toDotLabel)
+            .map(AtomicConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
     }

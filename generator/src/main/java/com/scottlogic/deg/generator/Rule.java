@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 
@@ -9,9 +9,9 @@ import java.util.Collection;
 public class Rule implements VisitableProfileElement
 {
     public final String description;
-    public final Collection<IConstraint> constraints;
+    public final Collection<Constraint> constraints;
 
-    public Rule(String description, Collection<IConstraint> constraints)
+    public Rule(String description, Collection<Constraint> constraints)
     {
         this.description = description;
         this.constraints = constraints;

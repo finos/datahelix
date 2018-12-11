@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.Optional;
 
@@ -13,7 +13,9 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (dateTimeRestrictions == null) {
-            return Optional.of(merged.withDateTimeRestrictions(null));
+            return Optional.of(merged.withDateTimeRestrictions(
+                null,
+                FieldSpecSource.Empty));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
@@ -21,8 +23,13 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             return Optional.empty();
         }
 
-        return Optional.of(merged.withDateTimeRestrictions(dateTimeRestrictions).withTypeRestrictions(
-            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.TEMPORAL)));
+        return Optional.of(merged
+            .withDateTimeRestrictions(
+                dateTimeRestrictions,
+                FieldSpecSource.fromFieldSpecs(left, right))
+            .withTypeRestrictions(
+                DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.TEMPORAL),
+                FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

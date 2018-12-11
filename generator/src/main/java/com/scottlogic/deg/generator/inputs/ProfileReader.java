@@ -52,9 +52,15 @@ public class ProfileReader {
                     : "Unnamed rule",
                 mapDtos(
                     r.constraints,
-                    dto -> constraintReader.apply(
-                        dto,
-                        profileFields))));
+                    dto -> {
+                        try {
+                            return constraintReader.apply(
+                                dto,
+                                profileFields);
+                        } catch (InvalidProfileException e) {
+                            throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
+                        }
+                    })));
 
         return new Profile(profileFields, rules, profileDto.description);
     }

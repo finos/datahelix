@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 public class MainConstraintReader implements IConstraintReader {
@@ -12,10 +15,14 @@ public class MainConstraintReader implements IConstraintReader {
     }
 
     @Override
-    public IConstraint apply(
+    public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields)
         throws InvalidProfileException {
+
+        if (dto == null) {
+            throw new InvalidProfileException("Constraint is null");
+        }
 
         if (dto.is != null) {
             IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
@@ -28,7 +35,7 @@ public class MainConstraintReader implements IConstraintReader {
         }
 
         if (dto.not != null) {
-            return new NotConstraint(this.apply(dto.not, fields));
+            return this.apply(dto.not, fields).negate();
         }
 
         if (dto.allOf != null) {

@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartition
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
@@ -18,16 +17,19 @@ import java.util.stream.Stream;
 
 public class DataGenerator implements IDataGenerator {
     private final DecisionTreeWalker treeWalker;
+    private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
     private final IDecisionTreeOptimiser treeOptimiser;
 
     public DataGenerator(
             DecisionTreeWalker treeWalker,
             TreePartitioner treePartitioner,
-            IDecisionTreeOptimiser optimiser) {
+            IDecisionTreeOptimiser optimiser,
+            DataGeneratorMonitor monitor) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
+        this.monitor = monitor;
     }
 
     @Override
@@ -51,19 +53,21 @@ public class DataGenerator implements IDataGenerator {
                 .map(rowSpecs ->
                     new ConcatenatingDataBagSource(
                         rowSpecs
-                            .map(RowSpecDataBagSource::create)));
+                            .map(RowSpec::createDataBagSource)));
 
         Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
             .generate(generationConfig)
             .map(dataBag -> new GeneratedObject(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
-                    .collect(Collectors.toList())));
+                    .collect(Collectors.toList()),
+                dataBag.getRowSource(profile.fields)));
 
-        dataRows = dataRows
-            .limit(generationConfig.getMaxRows());
+        monitor.generationStarting(generationConfig);
 
-        return dataRows;
+        return dataRows
+            .limit(generationConfig.getMaxRows())
+            .peek(this.monitor::rowEmitted);
 
     }
 }

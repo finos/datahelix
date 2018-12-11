@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;

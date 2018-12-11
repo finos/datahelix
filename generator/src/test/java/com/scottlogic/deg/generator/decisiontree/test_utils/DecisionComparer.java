@@ -1,13 +1,13 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class DecisionComparer implements EqualityComparer {
-    private final static AnyOrderCollectionEqualityComparer constraintAnyOrderComparer = new AnyOrderCollectionEqualityComparer();
+    private final static AnyOrderCollectionEqualityComparer optionAnyOrderComparer
+        = new AnyOrderCollectionEqualityComparer(new OptionEqualityComparer());
 
     @Override
     public int getHashCode(Object decision){
@@ -36,18 +36,29 @@ public class DecisionComparer implements EqualityComparer {
         if (decision1 == null || decision2 == null)
             return false; //either decision1 XOR decision2 is null
 
-        Collection<IConstraint> decision1AtomicConstraints = decision1
-            .getOptions()
-            .stream()
-            .flatMap(o -> o.getAtomicConstraints().stream())
-            .collect(Collectors.toList());
+        return decision1.getOptions().size() == decision2.getOptions().size()
+            && optionAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
+    }
 
-        Collection<IConstraint> decision2AtomicConstraints = decision2
-            .getOptions()
-            .stream()
-            .flatMap(o -> o.getAtomicConstraints().stream())
-            .collect(Collectors.toList());
+    static class OptionEqualityComparer implements EqualityComparer{
 
-        return constraintAnyOrderComparer.equals(decision1AtomicConstraints, decision2AtomicConstraints);
+        private final AnyOrderCollectionEqualityComparer atomicConstraintComparer =
+            new AnyOrderCollectionEqualityComparer();
+
+        @Override
+        public int getHashCode(Object item) {
+            ConstraintNode option = (ConstraintNode) item;
+            return Objects.hash(option.getAtomicConstraints());
+        }
+
+        @Override
+        public boolean equals(Object item1, Object item2) {
+            ConstraintNode option1 = (ConstraintNode) item1;
+            ConstraintNode option2 = (ConstraintNode) item2;
+
+            return atomicConstraintComparer.equals(
+                option1.getAtomicConstraints(),
+                option2.getAtomicConstraints());
+        }
     }
 }
