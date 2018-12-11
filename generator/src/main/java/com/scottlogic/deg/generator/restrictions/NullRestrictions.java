@@ -8,6 +8,13 @@ public class NullRestrictions {
         MUST_NOT_BE_NULL
     }
 
+    public NullRestrictions() {
+    }
+
+    public NullRestrictions(Nullness nullness) {
+        this.nullness = nullness;
+    }
+
     public String toString() {
         switch (nullness){
             case MUST_BE_NULL:

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.Optional;
 
@@ -19,7 +19,9 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         StringRestrictions stringRestrictions = mergeResult.restrictions;
 
         if (stringRestrictions == null) {
-            return Optional.of(merged.withStringRestrictions(null));
+            return Optional.of(merged.withStringRestrictions(
+                null,
+                FieldSpecSource.Empty));
         }
 
         TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
@@ -27,8 +29,13 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
             return Optional.empty();
         }
 
-        return Optional.of(merged.withStringRestrictions(stringRestrictions).withTypeRestrictions(
-            DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING)));
+        return Optional.of(merged
+            .withStringRestrictions(
+                stringRestrictions,
+                FieldSpecSource.fromFieldSpecs(left, right))
+            .withTypeRestrictions(
+                DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING),
+                FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

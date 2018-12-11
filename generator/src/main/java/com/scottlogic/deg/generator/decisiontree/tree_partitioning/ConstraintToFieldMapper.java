@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.reducer.ConstraintFieldSniffer;
 
 import java.util.Collections;
 import java.util.Map;
@@ -31,13 +30,11 @@ class ConstraintToFieldMapper {
         }
     }
 
-    private final ConstraintFieldSniffer constraintSniffer = new ConstraintFieldSniffer();
-
     private Stream<ConstraintToFields> mapConstraintToFields(ConstraintNode node) {
         return Stream.concat(
             node.getAtomicConstraints()
                 .stream()
-                .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraintSniffer.detectField(constraint))),
+                .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField())),
             node.getDecisions()
                 .stream()
                 .map(decision -> new ConstraintToFields(

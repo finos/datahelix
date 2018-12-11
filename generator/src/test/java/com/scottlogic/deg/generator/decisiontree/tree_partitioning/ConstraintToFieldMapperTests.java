@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
@@ -21,7 +21,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindConstraintMappings() {
         givenFields("A");
 
-        final IConstraint constraint = new IsEqualToConstantConstraint(new Field("A"), "test-value");
+        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("A"), "test-value");
         givenConstraints(constraint);
         givenFields("A");
 
@@ -32,7 +32,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindRootDecisionNodeMapping() {
         givenFields("B");
 
-        final IConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value");
+        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value");
         final DecisionNode decision = new TreeDecisionNode(
             new TreeConstraintNode(constraint));
 
@@ -45,9 +45,9 @@ class ConstraintToFieldMapperTests {
     void shouldCreateCorrectNumberOfMappings() {
         givenFields("A", "B", "C");
 
-        final IConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
-        final IConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final IConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
+        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
+        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
+        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
 
         givenConstraints(constraintA, constraintB, constraintC);
 
@@ -58,12 +58,12 @@ class ConstraintToFieldMapperTests {
     void shouldMapTopLevelConstraintsToNestedFields() {
         givenFields("A", "B", "C", "D", "E", "F");
 
-        final IConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
-        final IConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final IConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
-        final IConstraint constraintD = new IsEqualToConstantConstraint(new Field("D"), "test-value");
-        final IConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
-        final IConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
+        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
+        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
+        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
+        final AtomicConstraint constraintD = new IsEqualToConstantConstraint(new Field("D"), "test-value");
+        final AtomicConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
+        final AtomicConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
 
         final DecisionNode decisionABC = new TreeDecisionNode(
             new TreeConstraintNode(
@@ -102,12 +102,12 @@ class ConstraintToFieldMapperTests {
         mappings = null;
     }
 
-    private List<IConstraint> constraintsList;
+    private List<AtomicConstraint> constraintsList;
     private List<DecisionNode> decisionsList;
     private ProfileFields fields;
     private Map<RootLevelConstraint, Set<Field>> mappings;
 
-    private void givenConstraints(IConstraint... constraints) {
+    private void givenConstraints(AtomicConstraint... constraints) {
         constraintsList = Arrays.asList(constraints);
     }
 
@@ -131,7 +131,7 @@ class ConstraintToFieldMapperTests {
             ));
     }
 
-    private void expectMapping(IConstraint constraint, String... fieldsAsString) {
+    private void expectMapping(AtomicConstraint constraint, String... fieldsAsString) {
         if (mappings == null)
             getMappings();
 

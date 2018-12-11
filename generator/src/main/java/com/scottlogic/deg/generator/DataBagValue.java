@@ -6,13 +6,17 @@ public class DataBagValue {
     public final Object value;
     public final String format;
 
-    public DataBagValue(Object value, String format){
+    public final DataBagValueSource source;
+
+    public DataBagValue(Object value, String format, DataBagValueSource source){
         this.value = value;
         this.format = format;
+        this.source = source;
     }
 
-    public DataBagValue(Object value){
+    public DataBagValue(Object value, DataBagValueSource source){
         this.value = value;
+        this.source = source;
         this.format = null;
     }
 
@@ -30,3 +34,4 @@ public class DataBagValue {
         return Objects.hash(value, format);
     }
 }
+

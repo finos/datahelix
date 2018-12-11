@@ -2,14 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.constraints.IsInSetConstraint;
-import com.scottlogic.deg.generator.constraints.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.IsNullConstraint;
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.constraints.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.util.ArrayList;
@@ -85,7 +78,7 @@ public class DecisionTreeMapper {
     }
 
     // Pair C1
-    private List<IConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
+    private List<AtomicConstraint> getAtomicConstraints(ConstraintNodeDto constraintNodeDto){
         return Optional.ofNullable(constraintNodeDto.atomicConstraints)
                     .map(Collection::stream)
                     .orElseGet(Stream::empty)
@@ -124,7 +117,7 @@ public class DecisionTreeMapper {
     }
 
     // Pair E1
-    static private ConstraintDto toDto(IConstraint constraint) {
+    static private ConstraintDto toDto(AtomicConstraint constraint) {
         if (constraint instanceof IsInSetConstraint) {
             return toDto((IsInSetConstraint) constraint);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
@@ -146,7 +139,7 @@ public class DecisionTreeMapper {
     }
 
     // Pair E2
-    static private IConstraint fromDto(ConstraintDto constraintDto) {
+    static private AtomicConstraint fromDto(ConstraintDto constraintDto) {
         if (constraintDto instanceof IsInSetConstraintDto) {
             return fromDto((IsInSetConstraintDto) constraintDto);
         } else if (constraintDto instanceof IsEqualToConstantConstraintDto) {
@@ -220,31 +213,31 @@ public class DecisionTreeMapper {
     /*
      * Pair F2 
      */
-    private static IConstraint fromDto(IsInSetConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsInSetConstraintDto dto) {
         return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues));
     }
     
-    private static IConstraint fromDto(IsEqualToConstantConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsEqualToConstantConstraintDto dto) {
         return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue);
     }
     
-    private static IConstraint fromDto(IsStringShorterThanConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsStringShorterThanConstraintDto dto) {
         return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue);
     }
     
-    private static IConstraint fromDto(IsOfTypeConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsOfTypeConstraintDto dto) {
         return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto());
     }
     
-    private static IConstraint fromDto(NotConstraintDto dto) {
-        return new NotConstraint(DecisionTreeMapper.fromDto(dto.negatedConstraint));
+    private static AtomicConstraint fromDto(NotConstraintDto dto) {
+        return DecisionTreeMapper.fromDto(dto.negatedConstraint).negate();
     }
     
-    private static IConstraint fromDto(IsNullConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsNullConstraintDto dto) {
         return new IsNullConstraint(new Field(dto.field.name));
     }
 
-    private static IConstraint fromDto(IsLessThanConstantConstraintDto dto) {
+    private static AtomicConstraint fromDto(IsLessThanConstantConstraintDto dto) {
         return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue);
     }
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -60,7 +60,9 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 setRestrictions.getBlacklist());
         }
 
-        return Optional.of(merged.withSetRestrictions(setRestrictions));
+        return Optional.of(merged.withSetRestrictions(
+            setRestrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 
