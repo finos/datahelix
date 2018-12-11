@@ -385,6 +385,13 @@ class DecisionTreeRoutesTreeWalkerTest {
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public void accept(NodeVisitor visitor){
+            visitor.visit(this);
+            getAtomicConstraints().forEach(a->a.accept(visitor));
+            getDecisions().forEach(d->d.accept(visitor));
+        }
     }
 
     private static class OrderedDecisionNode implements DecisionNode {
@@ -412,6 +419,12 @@ class DecisionTreeRoutesTreeWalkerTest {
         @Override
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public void accept(NodeVisitor visitor){
+            visitor.visit(this);
+            getOptions().forEach(c->c.accept(visitor));
         }
     }
 }

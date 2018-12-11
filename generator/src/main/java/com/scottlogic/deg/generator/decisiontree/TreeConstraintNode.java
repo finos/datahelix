@@ -170,4 +170,11 @@ public final class TreeConstraintNode implements ConstraintNode {
     public int hashCode() {
         return Objects.hash(atomicConstraints, decisions);
     }
+
+    @Override
+    public void accept(NodeVisitor visitor){
+        visitor.visit(this);
+        getAtomicConstraints().forEach(a->a.accept(visitor));
+        getDecisions().forEach(d->d.accept(visitor));
+    }
 }

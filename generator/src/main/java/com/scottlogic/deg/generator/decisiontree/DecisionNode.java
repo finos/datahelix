@@ -5,10 +5,6 @@ public interface DecisionNode extends Node {
     Collection<ConstraintNode> getOptions();
     DecisionNode setOptions(Collection<ConstraintNode> options);
     DecisionNode markNode(NodeMarking marking);
-
-    default void accept(NodeVisitor visitor){
-        visitor.visit(this);
-        getOptions().forEach(c->c.accept(visitor));
-    }
+    void accept(NodeVisitor visitor);
 }
 

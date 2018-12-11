@@ -69,4 +69,10 @@ public final class TreeDecisionNode implements DecisionNode {
     public int hashCode() {
         return Objects.hash(options);
     }
+
+    @Override
+    public void accept(NodeVisitor visitor){
+        visitor.visit(this);
+        getOptions().forEach(c->c.accept(visitor));
+    }
 }

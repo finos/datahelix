@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
+import com.scottlogic.deg.generator.decisiontree.NodeVisitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.Collection;
@@ -95,4 +96,7 @@ public class ReductiveConstraintNode implements ConstraintNode {
     public boolean hasMarking(NodeMarking detail) {
         return underlying.hasMarking(detail);
     }
+
+    @Override
+    public void accept(NodeVisitor nodeVisitor){ underlying.accept(nodeVisitor); }
 }
