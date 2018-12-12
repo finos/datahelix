@@ -4,6 +4,8 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 
+import java.util.Objects;
+
 public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
     public final IStringGenerator standard; // TODO: Change this to an enum member; string generators shouldn't exist on this level
@@ -28,5 +30,21 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     @Override
     public ConstraintRule getRule() {
         return rule;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o instanceof ViolatedAtomicConstraint) {
+            return o.equals(this);
+        }
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchesStandardConstraint constraint = (MatchesStandardConstraint) o;
+        return Objects.equals(field, constraint.field) && Objects.equals(standard, constraint.standard);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(field, standard);
     }
 }

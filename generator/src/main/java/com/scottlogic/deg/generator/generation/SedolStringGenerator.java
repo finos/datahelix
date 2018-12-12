@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -121,5 +122,19 @@ public class SedolStringGenerator implements IStringGenerator {
                     .map(digit -> sedolSansCheckDigit + digit)
                     .collect(Collectors.toList());
             });
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SedolStringGenerator that = (SedolStringGenerator) o;
+        return negate == that.negate;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(negate, getClass());
     }
 }

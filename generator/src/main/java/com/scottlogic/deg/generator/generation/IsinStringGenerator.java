@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.utils.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -227,5 +228,19 @@ public class IsinStringGenerator implements IStringGenerator {
             return new SedolStringGenerator();
         }
         return new RegexStringGenerator(GENERIC_NSIN_REGEX, true);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IsinStringGenerator that = (IsinStringGenerator) o;
+        return isNegated == that.isNegated;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isNegated, getClass());
     }
 }
