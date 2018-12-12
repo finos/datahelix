@@ -20,7 +20,7 @@ class TemporalConstraintRestrictions implements ConstraintValidation {
         this.alerts = new ArrayList<>();
     }
 
-    public  void IsAfter(String field, LocalDateTime referenceValue) {
+    public  void isAfter(String field, LocalDateTime referenceValue) {
 
         if(this.max.compareTo(referenceValue)<0) {
             logError(field, String.format("Is after %s is not allowed for this field.", referenceValue.toString()));
@@ -31,7 +31,7 @@ class TemporalConstraintRestrictions implements ConstraintValidation {
         }
     }
 
-    public void IsBefore(String field, LocalDateTime referenceValue) {
+    public void isBefore(String field, LocalDateTime referenceValue) {
 
         if(this.min.compareTo(referenceValue)>0) {
             logError(field, String.format("Is before %s is not allowed for this field.", referenceValue.toString()));

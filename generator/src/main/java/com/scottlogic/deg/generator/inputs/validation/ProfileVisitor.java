@@ -16,8 +16,10 @@ public interface ProfileVisitor {
     void visit(IsOfTypeConstraint constraint);
     void visit(IsAfterConstantDateTimeConstraint constraint);
     void visit(IsBeforeConstantDateTimeConstraint constraint);
-
     void visit(IsInSetConstraint constraint);
     void visit(IsStringShorterThanConstraint constraint);
     void visit(IsStringLongerThanConstraint constraint);
+    void visit(IsNullConstraint constraint);
+    void visit(NotConstraint constraint);
+    void visit(IsGranularToConstraint constraint);
 }

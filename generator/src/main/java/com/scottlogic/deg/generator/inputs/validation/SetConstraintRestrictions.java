@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 
-public class SetConstraintRestrictions implements  ConstraintValidation{
+public class SetConstraintRestrictions implements ConstraintValidation {
 
     public final ValidationAlert.ValidationType ValidationType = ValidationAlert.ValidationType.SET;
 
@@ -16,7 +16,7 @@ public class SetConstraintRestrictions implements  ConstraintValidation{
         alerts = new ArrayList<>();
     }
 
-    public void IsInSet(String field, Set<Object> values) {
+    public void isInSet(String field, Set<Object> values) {
 
         // TODO should empty set be allowed value?
         if (legalValues.size() == 0) {
@@ -27,6 +27,22 @@ public class SetConstraintRestrictions implements  ConstraintValidation{
             Set<Object> intersection = SetUtils.intersect(legalValues, values);
 
             if (intersection.size() < values.size()) {
+                logError(field, String.format("Set values %s do not meet the existing restrictions. Allowed values are: %s", values.toString(), legalValues.toString()));
+            } else {
+                legalValues = intersection;
+            }
+        }
+    }
+
+
+    public void mustNotBeInSet(String field, Set<Object> values) {
+
+        if (legalValues.size() == 0) {
+            return;
+        } else {
+            Set<Object> intersection = SetUtils.intersect(values, legalValues);
+
+            if (intersection.size() != values.size()) {
                 logError(field, String.format("Set values %s do not meet the existing restrictions. Allowed values are: %s", values.toString(), legalValues.toString()));
             } else {
                 legalValues = intersection;

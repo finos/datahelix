@@ -16,7 +16,7 @@ public class StringConstraintRestrictions implements ConstraintValidation {
         this.alerts = new ArrayList<>();
     }
 
-    public void IsShorterThan(String field, int length) {
+    public void isShorterThan(String field, int length) {
 
         if (length < 0) {
             logError(field, String.format("Is shorter than length must be a non-negative integer. Value %s is not allowed.", length));
@@ -37,7 +37,7 @@ public class StringConstraintRestrictions implements ConstraintValidation {
 
     }
 
-    public void IsLongerThan(String field, int length) {
+    public void isLongerThan(String field, int length) {
 
         if (length < 0) {
             logError(field, String.format("Is longer than length must be a non-negative integer. Value %s is not allowed.", length));

@@ -19,7 +19,7 @@ class TypeConstraintRestrictions implements ConstraintValidation {
 
     }
 
-    public void IsOfType(String field, IsOfTypeConstraint.Types type) {
+    public void isOfType(String field, IsOfTypeConstraint.Types type) {
 
         if (this.allowedTypes.contains(type)) {
             this.allowedTypes = new HashSet<>(Arrays.asList(type));

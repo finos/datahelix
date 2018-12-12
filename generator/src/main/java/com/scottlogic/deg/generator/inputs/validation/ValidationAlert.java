@@ -39,6 +39,8 @@ public class ValidationAlert {
         TEMPORAL,
         TYPE,
         SET,
-        STRING
+        STRING,
+        NULL,
+        GRANULARITY
     }}
 
