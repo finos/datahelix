@@ -43,6 +43,7 @@ class FieldSpecTests {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -61,6 +62,7 @@ class FieldSpecTests {
         boolean result = fieldSpec.equals(
             new FieldSpec(
                 new SetRestrictions(null, null),
+                null,
                 null,
                 null,
                 null,
@@ -94,6 +96,7 @@ class FieldSpecTests {
             null,
             null,
             null,
+            null,
             null
         );
 
@@ -105,6 +108,7 @@ class FieldSpecTests {
                     ),
                     null
                 ),
+                null,
                 null,
                 null,
                 null,
@@ -127,6 +131,7 @@ class FieldSpecTests {
         FieldSpec fieldSpec = new FieldSpec(
             null,
             new NumericRestrictions(),
+            null,
             null,
             null,
             null,

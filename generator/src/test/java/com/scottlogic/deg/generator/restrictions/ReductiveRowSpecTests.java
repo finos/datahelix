@@ -81,6 +81,7 @@ class ReductiveRowSpecTests {
                         null,
                         null,
                         null,
+                        null,
                         null
                     )
                 );
@@ -203,6 +204,7 @@ class ReductiveRowSpecTests {
                         null,
                         null,
                         null,
+                        null,
                         null
                     )
                 );
@@ -262,6 +264,7 @@ class ReductiveRowSpecTests {
                             null,
                             null,
                             null,
+                            null,
                             null
                         )
                     );
@@ -297,6 +300,7 @@ class ReductiveRowSpecTests {
                         null,
                         null,
                         null,
+                        null,
                         null
                     )
                 );
@@ -320,6 +324,7 @@ class ReductiveRowSpecTests {
                             null,
                             null,
                             new NullRestrictions(),
+                            null,
                             null,
                             null,
                             null,
@@ -359,6 +364,7 @@ class ReductiveRowSpecTests {
                         null,
                         null,
                         null,
+                        null,
                         null
                     )
                 );
@@ -382,6 +388,7 @@ class ReductiveRowSpecTests {
                             null,
                             null,
                             new NullRestrictions(),
+                            null,
                             null,
                             null,
                             null,

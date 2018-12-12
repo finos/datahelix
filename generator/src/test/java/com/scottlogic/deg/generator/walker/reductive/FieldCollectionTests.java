@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
@@ -26,10 +27,11 @@ class FieldCollectionTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null)
+            new FixedField(new Field("Second Field"), null, null, null)
         );
         FixedField lastFixedField = new FixedField(
             new Field("First Field"),
+            null,
             null,
             null
         );
@@ -49,11 +51,11 @@ class FieldCollectionTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("First Field"),
-            new FixedField(new Field("First Field"), null, null)
+            new FixedField(new Field("First Field"), null, null, null)
         );
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null)
+            new FixedField(new Field("Second Field"), null, null, null)
         );
         FieldCollection fieldCollection = getFieldCollection(
             Arrays.asList("First Field", "Second Field"),
@@ -71,10 +73,11 @@ class FieldCollectionTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null)
+            new FixedField(new Field("Second Field"), null, null, null)
         );
         FixedField lastFixedField = new FixedField(
             new Field("First Field"),
+            null,
             null,
             null
         );
@@ -94,7 +97,7 @@ class FieldCollectionTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null)
+            new FixedField(new Field("Second Field"), null, null, null)
         );
         FieldCollection fieldCollection = getFieldCollection(
             Arrays.asList("First Field", "Second Field"),
@@ -124,7 +127,11 @@ class FieldCollectionTests {
         FieldCollection fieldCollection = getFieldCollection(
             Arrays.asList("First Field", "Second Field"),
             null,
-            new FixedField(new Field("First Field"), Stream.of(values), null)
+            new FixedField(
+                new Field("First Field"),
+                Stream.of(values),
+                null,
+                mock(ReductiveDataGeneratorMonitor.class))
         );
 
         Stream<Object> result = fieldCollection.getValuesFromLastFixedField();
@@ -151,19 +158,30 @@ class FieldCollectionTests {
         when(reducer.reduceConstraintsToFieldSpec(Matchers.<Collection<AtomicConstraint>>any()))
             .thenReturn(Optional.empty());
 
-        FixedField fixedField = new FixedField(
-            new Field("Second Field"),
-            Stream.of(new String[] { "Test" }),
-            null
-        );
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
+        FixedField fixedField = new FixedField(
+            new Field("First Field"),
+            Collections.singleton(null).stream(),
+            FieldSpec.Empty,
+            mock(ReductiveDataGeneratorMonitor.class)
+        );
+        fixedFields.put(
+            new Field("First Field"),
+            fixedField
+        );
         FieldCollection fieldCollection = getFieldCollection(
             reducer,
-            null,
+            Collections.emptyList(),
             fixedFields,
-            new FixedField(new Field("Test"), Stream.of(Collections.emptyList()), null)
+            new FixedField(
+                new Field("Test"),
+                Stream.of(Collections.emptyList()),
+                null,
+                mock(ReductiveDataGeneratorMonitor.class)
+            )
         );
 
+        fixedField.getStream().collect(Collectors.toList());
         Stream<RowSpec> result = fieldCollection.createRowSpecFromFixedValues(
             new ReductiveConstraintNode(
                 new TreeConstraintNode(Collections.emptyList(), Collections.emptyList()),
@@ -185,6 +203,7 @@ class FieldCollectionTests {
             null,
             null,
             null,
+            null,
             null
         );
         ConstraintReducer reducer = mock(ConstraintReducer.class);
@@ -196,6 +215,7 @@ class FieldCollectionTests {
         FixedField fixedField = new FixedField(
             new Field("First Field"),
             Collections.singleton(null).stream(),
+            FieldSpec.Empty,
             null
         );
         fixedFields.put(
@@ -209,7 +229,8 @@ class FieldCollectionTests {
             new FixedField(
                 new Field("Second Field"),
                 Collections.singleton(null).stream(),
-                mustBeNullFieldSpec
+                mustBeNullFieldSpec,
+                null
             )
         );
 
@@ -272,7 +293,8 @@ class FieldCollectionTests {
             null,
             null,
             fixedFields,
-            lastFixedField
+            lastFixedField,
+            mock(ReductiveDataGeneratorMonitor.class)
         );
     }
 
@@ -289,7 +311,8 @@ class FieldCollectionTests {
             null,
             null,
             fixedFields,
-            lastFixedField
+            lastFixedField,
+            mock(ReductiveDataGeneratorMonitor.class)
         );
     }
 
