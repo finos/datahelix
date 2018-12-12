@@ -6,32 +6,29 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProfileValidationVisitor implements ProfileVisitor {
 
     private Map<String, ConstraintRestrictions> allFieldsState;
-    private List<ValidationAlert> alerts;
-    private IsOfTypeConstraint constraint;
 
     public ProfileValidationVisitor() {
         allFieldsState = new HashMap<>();
-        alerts = new ArrayList<>();
     }
 
     @Override
     public void visit(IsOfTypeConstraint constraint) {
-        this.constraint = constraint;
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        alerts.addAll(state.typeConstraintRestrictions.IsOfType(constraint.field.name, constraint.requiredType));
+        state.typeConstraintRestrictions.IsOfType(constraint.field.name, constraint.requiredType);
     }
 
     @Override
     public void visit(IsAfterConstantDateTimeConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        alerts.addAll(state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL));
-        alerts.addAll(state.temporalConstraintRestrictions.IsAfter(constraint.field.name, constraint.referenceValue));
+        state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.IsAfter(constraint.field.name, constraint.referenceValue);
 
     }
 
@@ -39,8 +36,36 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsBeforeConstantDateTimeConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        alerts.addAll(state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL));
-        alerts.addAll(state.temporalConstraintRestrictions.IsBefore(constraint.field.name, constraint.referenceValue));
+        state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.IsBefore(constraint.field.name, constraint.referenceValue);
+
+    }
+
+    @Override
+    public void visit(IsInSetConstraint constraint) {
+
+        ConstraintRestrictions state = getFieldState(constraint.field.name);
+        state.setConstraintRestrictions.IsInSet(constraint.field.name, constraint.legalValues);
+
+
+    }
+
+    @Override
+    public void visit(IsStringShorterThanConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.field.name);
+
+        state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
+        state.stringConstraintRestrictions.IsShorterThan(constraint.field.name, constraint.referenceValue);
+
+    }
+
+    @Override
+    public void visit(IsStringLongerThanConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.field.name);
+
+       state.typeConstraintRestrictions.IsOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
+       state.stringConstraintRestrictions.IsLongerThan(constraint.field.name, constraint.referenceValue);
+
 
     }
 
@@ -60,6 +85,9 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     }
 
     public void outputValidationResults() {
+        final List<ValidationAlert> alerts = new ArrayList<>();
+        allFieldsState.values().stream().map(state-> alerts.addAll(state.getValidationAlerts())).collect(Collectors.toList());
+
         if (alerts.size() > 0) {
             boolean hasErrors = false;
             for (ValidationAlert alert : alerts) {
@@ -85,7 +113,9 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         } else {
             ConstraintRestrictions noRestrictions = new ConstraintRestrictions(
                 new TypeConstraintRestrictions(),
-                new TemporalConstraintRestrictions());
+                new TemporalConstraintRestrictions(),
+                new SetConstraintRestrictions(),
+                new StringConstraintRestrictions());
 
             allFieldsState.put(fieldName, noRestrictions);
             return noRestrictions;
