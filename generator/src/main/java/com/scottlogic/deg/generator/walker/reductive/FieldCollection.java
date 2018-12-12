@@ -58,7 +58,7 @@ public class FieldCollection {
     //get a stream of all possible values for the field that was fixed on the last iteration
     public Stream<Object> getValuesFromLastFixedField(){
         if (this.lastFixedField == null)
-            throw new NullPointerException("Field has not been fixed yet");
+            throw new IllegalStateException("Field has not been fixed yet");
 
         return this.lastFixedField.getStream();
     }
@@ -67,7 +67,7 @@ public class FieldCollection {
     public Stream<RowSpec> createRowSpecFromFixedValues(ConstraintNode constraintNode) {
         //create a row spec where every field is set to this.fixedFields & field=value
         if (this.lastFixedField == null) {
-            throw new UnsupportedOperationException("Field has not been fixed yet");
+            throw new IllegalStateException("Field has not been fixed yet");
         }
 
         Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(constraintNode);
@@ -75,7 +75,6 @@ public class FieldCollection {
         if (fieldSpecsPerField.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
             return Stream.empty();
         }
-
 
         FieldSpec fieldSpecForValuesInLastFixedField = this.lastFixedField.getFieldSpecForValues();
         fieldSpecsPerField.put(this.lastFixedField.field, fieldSpecForValuesInLastFixedField);
