@@ -7,20 +7,3 @@ public interface NodeVisitor {
     DecisionNode visit(DecisionNode decisionNode);
     AtomicConstraint visit(AtomicConstraint atomicConstraint);
 }
-
-abstract class BaseVisitor implements NodeVisitor {
-    @Override
-    public ConstraintNode visit(ConstraintNode constraintNode) {
-        return constraintNode;
-    }
-
-    @Override
-    public DecisionNode visit(DecisionNode decisionNode) {
-        return decisionNode;
-    }
-
-    @Override
-    public AtomicConstraint visit(AtomicConstraint atomicConstraint) {
-        return atomicConstraint;
-    }
-}

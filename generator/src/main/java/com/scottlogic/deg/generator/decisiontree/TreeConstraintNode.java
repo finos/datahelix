@@ -179,6 +179,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         return visitor.visit(
             new TreeConstraintNode(
                 atomicConstraintStream.collect(Collectors.toSet()),
-                decisionNodeStream.collect(Collectors.toSet())));
+                decisionNodeStream.collect(Collectors.toSet()),
+                nodeMarkings));
     }
 }

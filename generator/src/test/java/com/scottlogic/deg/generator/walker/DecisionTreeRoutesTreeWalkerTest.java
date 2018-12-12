@@ -431,7 +431,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
             return visitor.visit(
                 new TreeDecisionNode(
-                    options.collect(Collectors.toSet())
+                    options.collect(Collectors.toList())
                 )
             );
         }
