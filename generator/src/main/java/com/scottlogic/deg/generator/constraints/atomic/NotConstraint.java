@@ -42,8 +42,15 @@ public class NotConstraint implements AtomicConstraint {
 
     @Override
     public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof ViolatedAtomicConstraint) {
+            return o.equals(this);
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         NotConstraint otherConstraint = (NotConstraint) o;
         return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
