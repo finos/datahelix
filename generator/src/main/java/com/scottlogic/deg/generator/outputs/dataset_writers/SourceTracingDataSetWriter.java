@@ -47,12 +47,12 @@ public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingD
         public static final Collection<TracingDto> empty = Collections.emptySet();
 
         public Set<TracingConstraintDto> constraints;
-        //public Set<TracingRuleDto> rules;
+        public Set<TracingRuleDto> rules;
         public String field;
 
         TracingDto(Set<TracingConstraintDto> constraints, Set<TracingRuleDto> rules, String field) {
             this.constraints = constraints;
-            //this.rules = rules;
+            this.rules = rules;
             this.field = field;
         }
 
