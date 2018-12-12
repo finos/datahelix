@@ -27,7 +27,6 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,8 +54,13 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
-            .map(genObj ->
-                genObj.values
+            .map(genObj ->{
+
+                if (genObj == null){
+                    throw new IllegalStateException("GeneratedObject is null");
+                }
+
+                return genObj.values
                     .stream()
                     .map(obj -> {
                         if (obj.value != null && obj.format != null) {
@@ -64,8 +68,8 @@ public class GeneratorTestUtilities {
                         }
                         return obj.value;
                     })
-                    .collect(Collectors.toList())
-            ).collect(Collectors.toList());
+                    .collect(Collectors.toList());
+            }).collect(Collectors.toList());
     }
 
     private static List<GeneratedObject> getGeneratedDataAsList(
@@ -93,9 +97,8 @@ public class GeneratorTestUtilities {
 
         final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-        List<GeneratedObject> allActualRows = new ArrayList<>();
-        dataSet.forEach(allActualRows::add);
-        return allActualRows;
+
+        return dataSet.collect(Collectors.toList());
     }
 
     public static Object parseInput(String input) throws JsonParseException {

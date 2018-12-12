@@ -9,43 +9,31 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class CsvDataSetWriter implements IDataSetWriter {
-    @Override
-    public void write(
-        ProfileFields profileFields,
-        Stream<GeneratedObject> dataset,
-        Path filePath) throws IOException {
-
-        try (CSVPrinter writer = CSVFormat.RFC4180
+public class CsvDataSetWriter implements IDataSetWriter<CSVPrinter> {
+    public CSVPrinter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
+        return CSVFormat.RFC4180
             .withHeader(profileFields.stream()
                 .map(f -> f.name)
                 .toArray(String[]::new))
-            .print(filePath, StandardCharsets.UTF_8)) {
-
-            dataset.forEach(row -> {
-                try {
-                    writer.printRecord(row.values.stream().map(cell -> {
-                        if (cell.value == null)
-                            return null;
-
-                        if (cell.format == null)
-                            return cell.value;
-
-                        return String.format(cell.format, cell.value);
-                    }).collect(Collectors.toList()));
-
-                    writer.flush();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
+            .print(
+                directory.resolve(filenameWithoutExtension + ".csv"),
+                StandardCharsets.UTF_8);
     }
 
-    @Override
-    public String makeFilename(String filenameWithoutExtension) {
-        return filenameWithoutExtension + ".csv";
+    public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
+        writer.printRecord(row.values.stream().map(cell -> {
+            if (cell.value == null) {
+                return null;
+            }
+
+            if (cell.format == null) {
+                return cell.value;
+            }
+
+            return String.format(cell.format, cell.value);
+        }).collect(Collectors.toList()));
+
+        writer.flush();
     }
 }

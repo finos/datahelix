@@ -60,9 +60,10 @@ public class DataGenerator implements IDataGenerator {
             .map(dataBag -> new GeneratedObject(
                 profile.fields.stream()
                     .map(dataBag::getValueAndFormat)
-                    .collect(Collectors.toList())));
+                    .collect(Collectors.toList()),
+                dataBag.getRowSource(profile.fields)));
 
-        monitor.generationStarting();
+        monitor.generationStarting(generationConfig);
 
         return dataRows
             .limit(generationConfig.getMaxRows())

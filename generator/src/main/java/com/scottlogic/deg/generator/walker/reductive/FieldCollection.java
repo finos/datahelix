@@ -8,14 +8,17 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FieldCollection {
+
     private final GenerationConfig generationConfig;
     private final ConstraintReducer reducer;
     private final FieldCollectionFactory fieldCollectionFactory;
@@ -25,6 +28,7 @@ public class FieldCollection {
     private final Map<Field, FixedField> fixedFields;
     private final FixedField lastFixedField;
     private final FixFieldStrategy fixFieldStrategy;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     FieldCollection(
         ProfileFields fields,
@@ -35,7 +39,8 @@ public class FieldCollection {
         FieldSpecFactory fieldSpecFactory,
         FixFieldStrategy fixFieldStrategy,
         Map<Field, FixedField> fixedFields,
-        FixedField lastFixedField) {
+        FixedField lastFixedField,
+        ReductiveDataGeneratorMonitor monitor) {
         this.fields = fields;
         this.fieldCollectionFactory = fieldCollectionFactory;
         this.fieldSpecMerger = fieldSpecMerger;
@@ -45,6 +50,7 @@ public class FieldCollection {
         this.lastFixedField = lastFixedField;
         this.generationConfig = config;
         this.reducer = constraintReducer;
+        this.monitor = monitor;
     }
 
     public boolean allFieldsAreFixed() {
@@ -53,6 +59,10 @@ public class FieldCollection {
             : this.fixedFields.size() + 1;
 
         return noOfFixedFields == this.fields.size();
+    }
+
+    public boolean isFieldFixed(Field field) {
+        return getFixedField(field) != null;
     }
 
     //get a stream of all possible values for the field that was fixed on the last iteration
@@ -85,16 +95,16 @@ public class FieldCollection {
             this.lastFixedField.field
         );
 
-        System.out.println(String.format(
-            "%s %s",
-            this.lastFixedField.field.name,
-            fieldSpecForValuesInLastFixedField.toString()));
+        this.monitor.rowSpecEmitted(
+            this.lastFixedField,
+            fieldSpecForValuesInLastFixedField,
+            rowSpecWithAllValuesForLastFixedField);
         return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
 
     //work out the next field to fix and return a new FieldCollection with this field fixed
     public FieldCollection getNextFixedField(ReductiveConstraintNode rootNode) {
-        FieldAndConstraintMapping fieldToFix = this.fixFieldStrategy.getFieldAndConstraintMapToFixNext(rootNode);
+        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(this, rootNode);
 
         if (fieldToFix == null){
             throw new UnsupportedOperationException(
@@ -103,7 +113,7 @@ public class FieldCollection {
                     Objects.toString(this.getUnfixedFields())));
         }
 
-        FixedField field = getFixedFieldWithValuesForField(fieldToFix.getField(), rootNode);
+        FixedField field = getFixedFieldWithValuesForField(fieldToFix, rootNode);
         return this.fieldCollectionFactory.create(this, field);
     }
 
@@ -131,7 +141,7 @@ public class FieldCollection {
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
 
-        return new FixedField(field, values, rootConstraintsFieldSpec);
+        return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not

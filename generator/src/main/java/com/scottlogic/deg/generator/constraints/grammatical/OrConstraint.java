@@ -1,10 +1,12 @@
 package com.scottlogic.deg.generator.constraints.grammatical;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OrConstraint implements GrammaticalConstraint {
     public final Collection<Constraint> subConstraints;
@@ -28,5 +30,10 @@ public class OrConstraint implements GrammaticalConstraint {
     @Override
     public int hashCode(){
         return Objects.hash("OR", subConstraints);
+    }
+
+    @Override
+    public Collection<Field> getFields() {
+        return subConstraints.stream().flatMap(c -> c.getFields().stream()).collect(Collectors.toSet());
     }
 }

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -16,6 +17,7 @@ public class FixedField {
 
     private final Stream<Object> values;
     private final FieldSpec valuesFieldSpec;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     private Object current = NOT_ITERATED;
     private FieldSpec fieldSpec;
@@ -23,19 +25,21 @@ public class FixedField {
     FixedField(
         Field field,
         Stream<Object> values,
-        FieldSpec valuesFieldSpec) {
+        FieldSpec valuesFieldSpec,
+        ReductiveDataGeneratorMonitor monitor) {
         this.field = field;
         this.values = values;
         this.valuesFieldSpec = valuesFieldSpec;
+        this.monitor = monitor;
     }
 
     public Stream<Object> getStream() {
         return this.values
             .peek(value -> {
-               this.current = value;
-               this.fieldSpec = null;
+                this.current = value;
+                this.fieldSpec = null;
 
-                System.out.println(String.format("Field [%s] = %s", this.field.name, this.current));
+                this.monitor.fieldFixedToValue(this.field, this.current);
             });
     }
 
@@ -60,35 +64,22 @@ public class FixedField {
             : getFieldSpecForCurrentValue(current);
     }
 
-    private static FieldSpec getFieldSpecForCurrentValue(Object currentValue) {
+    private FieldSpec getFieldSpecForCurrentValue(Object currentValue) {
         if (currentValue == NOT_ITERATED){
             throw new UnsupportedOperationException("FixedField has not iterated yet");
         }
 
-        return new FieldSpec(
+        return FieldSpec.Empty.withSetRestrictions(
             new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), null),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            this.valuesFieldSpec.getFieldSpecSource()
         );
     }
 
     private FieldSpec getNullRequiredFieldSpec() {
-        return new FieldSpec(
-            null,
-            null,
-            null,
+        return FieldSpec.Empty
+        .withNullRestrictions(
             new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
-            null,
-            null,
-            null,
-            null,
-            null
+            this.valuesFieldSpec.getFieldSpecSource()
         );
     }
 

@@ -7,10 +7,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
-import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
-import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
-import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
+import com.scottlogic.deg.generator.decisiontree.test_utils.*;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -549,7 +546,12 @@ class DecisionTreeGeneratorTests {
             defaultAnyOrderCollectionEqualityComparer,
             new AnyOrderCollectionEqualityComparer(new DecisionComparer()));
 
-        return constraintNodeComparer.equals(expected, actual);
+        boolean match = constraintNodeComparer.equals(expected, actual);
+        if (!match){
+            new TreeComparisonReporter().reportMessages(context);
+        }
+
+        return match;
     }
 
     private final AtomicConstraint aIsNull = new IsNullConstraint(new Field("A"));

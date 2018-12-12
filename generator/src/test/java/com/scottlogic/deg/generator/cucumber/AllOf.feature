@@ -8,7 +8,7 @@ Scenario: Running an 'allOf' request that contains a valid nested allOf request 
        And there is a constraint:
        """
          { "allOf": [
-           { "field": "foo", "allOf": [
+           { "allOf": [
              { "field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" },
              { "field": "foo", "is": "ofLength", "value": 3 }
            ]},
@@ -24,11 +24,11 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        And there is a constraint:
        """
          { "allOf": [
-           { "field": "foo", "anyOf": [
+           { "anyOf": [
              { "field": "foo", "is": "ofLength", "value": 1 },
              { "field": "foo", "is": "ofLength", "value": 2 }
            ]},
-           { "field": "foo", "is": "containingRegex", "value": "[1-9]{1}" }
+           { "field": "foo", "is": "containingRegex", "value": "[1]{1}" }
          ]}
        """
      Then the following data should be included in what is generated:
@@ -41,7 +41,7 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
        And there is a constraint:
        """
          { "allOf": [
-           { "field": "foo", "allOf": [
+           { "allOf": [
              {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" },
              {"field": "foo", "is": "matchingRegex", "value": "[1-5]{3}" }
            ]},
@@ -57,7 +57,7 @@ Scenario: Running an 'allOf' request that contains an invalid nested anyOf reque
        And there is a constraint:
        """
          { "allOf": [
-           { "field": "foo", "anyOf": [
+           { "anyOf": [
              {"field": "foo", "is": "matchingRegex", "value": "[a-z]{3}" },
              {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" }
            ]},

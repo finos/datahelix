@@ -1,11 +1,14 @@
 package com.scottlogic.deg.generator.constraints.grammatical;
 
+import com.scottlogic.deg.generator.Field;
+
+import java.util.Collection;
 import java.util.Objects;
 
 public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     public final GrammaticalConstraint negatedConstraint;
 
-    protected NegatedGrammaticalConstraint(GrammaticalConstraint negatedConstraint) {
+    NegatedGrammaticalConstraint(GrammaticalConstraint negatedConstraint) {
         if (negatedConstraint instanceof NegatedGrammaticalConstraint)
             throw new IllegalArgumentException("nested NegatedGrammatical constraint not allowed");
         this.negatedConstraint = negatedConstraint;
@@ -38,4 +41,10 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     public int hashCode(){
         return Objects.hash("NOT", negatedConstraint.hashCode());
     }
+
+    @Override
+    public Collection<Field> getFields() {
+        return negatedConstraint.getFields();
+    }
+
 }

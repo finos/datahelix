@@ -1,14 +1,17 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeAdapter;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
@@ -16,12 +19,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     private final IterationVisualiser iterationVisualiser;
     private final FieldCollectionFactory fieldCollectionFactory;
+    private final ReductiveDataGeneratorMonitor monitor;
 
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FieldCollectionFactory fieldCollectionFactory) {
+        FieldCollectionFactory fieldCollectionFactory,
+        ReductiveDataGeneratorMonitor monitor) {
         this.iterationVisualiser = iterationVisualiser;
         this.fieldCollectionFactory = fieldCollectionFactory;
+        this.monitor = monitor;
     }
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
@@ -29,7 +35,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ConstraintNode rootNode = tree.getRootNode();
         FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
 
-        iterationVisualiser.visualise(rootNode, fieldCollection);
+        visualise(rootNode, fieldCollection);
 
         //calculate a field to fix and start processing
         return process(rootNode, fieldCollection.getNextFixedField(nodeAdapter.adapt(rootNode, fieldCollection)));
@@ -42,8 +48,9 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
-        return fieldCollection.getValuesFromLastFixedField()
-            .flatMap(fieldValue -> getRowSpecsForFixedField(constraintNode, fieldCollection));
+        return FlatMappingSpliterator.flatMap(
+            fieldCollection.getValuesFromLastFixedField(),
+            fieldValue -> getRowSpecsForFixedField(constraintNode, fieldCollection));
     }
 
     private Stream<RowSpec> getRowSpecsForFixedField(
@@ -56,15 +63,22 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
-            System.out.println(String.format("%d: Unable to step further %s ", fieldCollection.getFixedFields().size(), fieldCollection.toString(true)));
-
+            this.monitor.unableToStepFurther(fieldCollection);
             return Stream.empty();
         }
 
         //visualise the tree now
-        this.iterationVisualiser.visualise(adaptedNode, fieldCollection);
+        visualise(adaptedNode, fieldCollection);
 
         //find the next fixed field and continue
         return process(adaptedNode, fieldCollection.getNextFixedField(adaptedNode));
+    }
+
+    private void visualise(ConstraintNode rootNode, FieldCollection fieldCollection){
+        try {
+            iterationVisualiser.visualise(rootNode, fieldCollection);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -8,6 +9,7 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
@@ -35,8 +37,8 @@ class ExampleProfilesTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING);
-
-            generationEngine.generateTestCases(profileFile.toPath(), config);
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
@@ -48,7 +50,8 @@ class ExampleProfilesTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING);
 
-            generationEngine.generateDataSet(profileFile.toPath(), config);
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
@@ -68,7 +71,7 @@ class ExampleProfilesTests {
                     new GenerationEngine(
                         new NullOutputTarget(),
                         new DataGenerator(
-                            walkerFactory.getDecisionTreeWalker(),
+                            walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
                             new DecisionTreeOptimiser(),
                             new NoopDataGeneratorMonitor())),

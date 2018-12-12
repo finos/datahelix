@@ -3,17 +3,15 @@ package com.scottlogic.deg.generator.outputs.dataset_writers;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 
-/** Something that can take a stream of data and persist it to a particular filepath; responsible for understanding specific file formats */
-public interface IDataSetWriter {
-    String makeFilename(
-        String filenameWithoutExtension);
+public interface IDataSetWriter<TWriter extends Closeable> {
+    TWriter openWriter(
+        Path directory,
+        String filenameWithoutExtension,
+        ProfileFields profileFields) throws IOException;
 
-    void write(
-        ProfileFields profileFields,
-        Stream<GeneratedObject> dataset,
-        Path filePath) throws IOException;
+    void writeRow(TWriter writer, GeneratedObject row) throws IOException;
 }
