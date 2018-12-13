@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -386,6 +387,17 @@ class DecisionTreeRoutesTreeWalkerTest {
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public ConstraintNode accept(NodeVisitor visitor){
+            Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
+            Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
+
+            return visitor.visit(
+                new OrderedConstraintNode(
+                    atomicConstraintStream.collect(Collectors.toList()),
+                    decisionNodeStream.collect(Collectors.toList())));
+        }
     }
 
     private static class OrderedDecisionNode implements DecisionNode {
@@ -413,6 +425,16 @@ class DecisionTreeRoutesTreeWalkerTest {
         @Override
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public DecisionNode accept(NodeVisitor visitor){
+            Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
+            return visitor.visit(
+                new TreeDecisionNode(
+                    options.collect(Collectors.toList())
+                )
+            );
         }
     }
 
