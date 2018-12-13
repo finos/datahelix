@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
