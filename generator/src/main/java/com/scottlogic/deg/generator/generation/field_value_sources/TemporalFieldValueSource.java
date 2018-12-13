@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-public class TemporalFieldValueSource implements IFieldValueSource {
+public class TemporalFieldValueSource implements FieldValueSource {
 
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;

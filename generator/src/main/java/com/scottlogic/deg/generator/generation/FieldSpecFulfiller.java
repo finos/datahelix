@@ -25,9 +25,9 @@ public class FieldSpecFulfiller implements DataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
+        List<FieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
-        IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
@@ -48,8 +48,8 @@ public class FieldSpecFulfiller implements DataBagSource {
             });
     }
 
-    private List<IFieldValueSource> getAllApplicableValueSources() {
-        List<IFieldValueSource> validSources = new ArrayList<>();
+    private List<FieldValueSource> getAllApplicableValueSources() {
+        List<FieldValueSource> validSources = new ArrayList<>();
 
         // check nullability...
         if (determineNullabilityAndDecideWhetherToHalt(validSources))
@@ -126,7 +126,7 @@ public class FieldSpecFulfiller implements DataBagSource {
         return validSources;
     }
 
-    private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+    private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
             default:
@@ -138,8 +138,8 @@ public class FieldSpecFulfiller implements DataBagSource {
         }
     }
 
-    private boolean determineNullabilityAndDecideWhetherToHalt(List<IFieldValueSource> fieldValueSources) {
-        IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+    private boolean determineNullabilityAndDecideWhetherToHalt(List<FieldValueSource> fieldValueSources) {
+        FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (spec.getNullRestrictions() != null) {
             if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {

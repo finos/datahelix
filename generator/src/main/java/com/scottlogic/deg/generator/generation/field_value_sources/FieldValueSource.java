@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
 
-public interface IFieldValueSource {
+public interface FieldValueSource {
     boolean isFinite();
     long getValueCount();
 

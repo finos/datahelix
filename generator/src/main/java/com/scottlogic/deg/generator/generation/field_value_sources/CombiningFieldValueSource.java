@@ -7,22 +7,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CombiningFieldValueSource implements IFieldValueSource {
-    private final List<IFieldValueSource> underlyingSources;
+public class CombiningFieldValueSource implements FieldValueSource {
+    private final List<FieldValueSource> underlyingSources;
 
-    public CombiningFieldValueSource(List<IFieldValueSource> underlyingSources) {
+    public CombiningFieldValueSource(List<FieldValueSource> underlyingSources) {
         this.underlyingSources = underlyingSources;
     }
 
     @Override
     public boolean isFinite() {
-        return underlyingSources.stream().allMatch(IFieldValueSource::isFinite);
+        return underlyingSources.stream().allMatch(FieldValueSource::isFinite);
     }
 
     @Override
     public long getValueCount() {
         return underlyingSources.stream()
-            .map(IFieldValueSource::getValueCount)
+            .map(FieldValueSource::getValueCount)
             .reduce(Long::sum)
             .get();
     }
@@ -31,7 +31,7 @@ public class CombiningFieldValueSource implements IFieldValueSource {
     public Iterable<Object> generateInterestingValues() {
         return new ConcatenatingIterable<>(
                 underlyingSources.stream()
-                        .map(IFieldValueSource::generateInterestingValues)
+                        .map(FieldValueSource::generateInterestingValues)
                         .collect(Collectors.toList()));
     }
 
@@ -39,7 +39,7 @@ public class CombiningFieldValueSource implements IFieldValueSource {
     public Iterable<Object> generateAllValues() {
         return new ConcatenatingIterable<>(
             underlyingSources.stream()
-                .map(IFieldValueSource::generateAllValues)
+                .map(FieldValueSource::generateAllValues)
                 .collect(Collectors.toList()));
     }
 

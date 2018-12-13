@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.field_value_sources.IFieldValueSource;
+import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
@@ -18,12 +18,12 @@ public interface IStringGenerator {
 
     Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
 
-    default IFieldValueSource asFieldValueSource() {
+    default FieldValueSource asFieldValueSource() {
         return new StringGeneratorAsFieldValueSource(this);
     }
 
     // Adapter
-    class StringGeneratorAsFieldValueSource implements IFieldValueSource {
+    class StringGeneratorAsFieldValueSource implements FieldValueSource {
         private final IStringGenerator underlyingGenerator;
 
         StringGeneratorAsFieldValueSource(IStringGenerator underlyingGenerator) {

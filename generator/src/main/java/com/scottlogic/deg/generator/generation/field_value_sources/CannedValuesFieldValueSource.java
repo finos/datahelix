@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import java.util.Arrays;
 import java.util.List;
 
-public class CannedValuesFieldValueSource implements IFieldValueSource {
+public class CannedValuesFieldValueSource implements FieldValueSource {
     private final List<Object> allValues;
     private final List<Object> interestingValues;
 
@@ -20,7 +20,7 @@ public class CannedValuesFieldValueSource implements IFieldValueSource {
         this.interestingValues = interestingValues;
     }
 
-    public static IFieldValueSource of(Object... values) {
+    public static FieldValueSource of(Object... values) {
         return new CannedValuesFieldValueSource(Arrays.asList(values));
     }
 
