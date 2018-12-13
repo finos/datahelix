@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
  * Typically created by combining choices over a decision tree.
  */
 public class RowSpec {
-    protected final ProfileFields fields;
-    protected final Map<Field, FieldSpec> fieldToFieldSpec;
+    private ProfileFields fields;
+    private Map<Field, FieldSpec> fieldToFieldSpec;
 
     public RowSpec(
         ProfileFields fields,
@@ -30,6 +30,8 @@ public class RowSpec {
     public ProfileFields getFields() {
         return fields;
     }
+
+    public Map<Field, FieldSpec> getFieldToFieldSpec() { return fieldToFieldSpec; }
 
     public FieldSpec getSpecForField(Field field) {
         FieldSpec ownFieldSpec = this.fieldToFieldSpec.get(field);
