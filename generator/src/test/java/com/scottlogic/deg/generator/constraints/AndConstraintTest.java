@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class AndConstraintTest {
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
-    private static ConstraintRule rule(){
-        return ConstraintRule.fromDescription("rule");
+    private static RuleInformation rule(){
+        return RuleInformation.fromDescription("rule");
     }
 }

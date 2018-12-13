@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -293,7 +293,7 @@ class RelatedFieldTreePartitionerTests {
         }
     }
 
-    private static ConstraintRule rule(){
-        return ConstraintRule.fromDescription("rule");
+    private static RuleInformation rule(){
+        return RuleInformation.fromDescription("rule");
     }
 }

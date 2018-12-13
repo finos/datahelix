@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.hamcrest.Matchers;
@@ -996,7 +996,7 @@ class ConstraintReducerTest {
                 Matchers.greaterThan(0L));
     }
 
-    private static ConstraintRule rule(){
-        return ConstraintRule.fromDescription("rule");
+    private static RuleInformation rule(){
+        return RuleInformation.fromDescription("rule");
     }
 }

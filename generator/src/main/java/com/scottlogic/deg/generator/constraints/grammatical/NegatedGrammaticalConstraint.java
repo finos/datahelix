@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     }
 
     @Override
-    public ConstraintRule getRule() {
+    public RuleInformation getRule() {
         return negatedConstraint.getRule();
     }
 }

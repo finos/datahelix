@@ -2,13 +2,12 @@ package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AndConstraint implements GrammaticalConstraint
 {
@@ -41,7 +40,7 @@ public class AndConstraint implements GrammaticalConstraint
     }
 
     @Override
-    public ConstraintRule getRule() {
-        return ConstraintRule.fromConstraints(subConstraints, " and ");
+    public RuleInformation getRule() {
+        return RuleInformation.fromConstraints(subConstraints, " and ");
     }
 }

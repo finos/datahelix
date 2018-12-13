@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -645,7 +646,7 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 
-    private static ConstraintRule rule(){
-        return ConstraintRule.fromDescription("rule");
+    private static RuleInformation rule(){
+        return RuleInformation.fromDescription("rule");
     }
 }

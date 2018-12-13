@@ -1,16 +1,16 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 
 public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;
     public final Number referenceValue;
-    private final ConstraintRule rule;
+    private final RuleInformation rule;
 
-    public StringHasLengthConstraint(Field field, Number referenceValue, ConstraintRule rule) {
+    public StringHasLengthConstraint(Field field, Number referenceValue, RuleInformation rule) {
         this.rule = rule;
         if (referenceValue == null) {
             throw new IllegalArgumentException("Argument 'referenceValue' cannot be null.");
@@ -50,7 +50,7 @@ public class StringHasLengthConstraint implements AtomicConstraint {
     public String toString() { return String.format("`%s` length = %s", field.name, referenceValue); }
 
     @Override
-    public ConstraintRule getRule() {
+    public RuleInformation getRule() {
         return rule;
     }
 }

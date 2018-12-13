@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
 
@@ -33,8 +33,8 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     }
 
     @Override
-    public ConstraintRule getRule() {
-        return this.violatedConstraint.getRule().violate();
+    public RuleInformation getRule() {
+        return this.violatedConstraint.getRule();
     }
 
     @Override

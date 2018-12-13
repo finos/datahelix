@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 
@@ -242,7 +242,7 @@ public class DecisionTreeMapper {
         return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue, rule(dto.rule));
     }
 
-    private static ConstraintRule rule(String rule){
-        return ConstraintRule.fromDescription(rule);
+    private static RuleInformation rule(String rule){
+        return RuleInformation.fromDescription(rule);
     }
 }

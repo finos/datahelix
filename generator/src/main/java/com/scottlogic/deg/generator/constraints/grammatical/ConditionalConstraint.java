@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -37,8 +37,8 @@ public class ConditionalConstraint implements GrammaticalConstraint
             .collect(Collectors.toList());
     }
     @Override
-    public ConstraintRule getRule() {
-        return ConstraintRule.fromConstraints(
+    public RuleInformation getRule() {
+        return RuleInformation.fromConstraints(
             Stream.of(condition, whenConditionIsTrue, whenConditionIsFalse)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()), ", ");

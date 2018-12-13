@@ -3,13 +3,12 @@ package com.scottlogic.deg.generator.outputs;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CellSource {
     public final Field field;
@@ -17,14 +16,27 @@ public class CellSource {
 
     public CellSource(DataBagValue value, Field field) {
         this.field = field;
-        this.source = value.source;
+        this.source = value.source != null ? value.source : DataBagValueSource.Empty;
     }
 
     public Set<AtomicConstraint> getConstraints(){
-        return source != null ? source.getConstraints() : null;
+        return this.source.getConstraints();
     }
 
-    public Set<ConstraintRule> getRules(){
-        return source != null ? source.getRules() : null;
+    public boolean isViolated(AtomicConstraint constraint){
+        return this.source.getViolatedConstraints().contains(constraint);
+    }
+
+    public boolean isViolated(RuleInformation rule){
+        return this.source.getViolatedConstraints()
+            .stream()
+            .anyMatch(c -> c.getRule().equals(rule));
+    }
+
+    public Set<RuleInformation> getRules(){
+        return this.source.getConstraints()
+            .stream()
+            .map(Constraint::getRule)
+            .collect(Collectors.toSet());
     }
 }

@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
 import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 
@@ -40,7 +39,7 @@ public class ProfileReader {
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
             r -> {
-                ConstraintRule constraintRule = new ConstraintRule(r);
+                RuleInformation constraintRule = new RuleInformation(r);
                 return new Rule(
                 r.rule != null
                     ? r.rule

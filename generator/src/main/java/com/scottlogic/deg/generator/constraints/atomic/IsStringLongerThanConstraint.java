@@ -1,16 +1,16 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 
 public class IsStringLongerThanConstraint implements AtomicConstraint {
     public final Field field;
-    private final ConstraintRule rule;
+    private final RuleInformation rule;
     public final int referenceValue;
 
-    public IsStringLongerThanConstraint(Field field, int referenceValue, ConstraintRule rule) {
+    public IsStringLongerThanConstraint(Field field, int referenceValue, RuleInformation rule) {
         this.referenceValue = referenceValue;
         this.field = field;
         this.rule = rule;
@@ -46,7 +46,7 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
     public String toString() { return String.format("`%s` length > %d", field.name, referenceValue); }
 
     @Override
-    public ConstraintRule getRule() {
+    public RuleInformation getRule() {
         return rule;
     }
 }

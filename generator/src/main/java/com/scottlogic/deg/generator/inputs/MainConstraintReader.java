@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 public class MainConstraintReader implements ConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
@@ -19,7 +18,7 @@ public class MainConstraintReader implements ConstraintReader {
     public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields,
-        ConstraintRule rule)
+        RuleInformation rule)
         throws InvalidProfileException {
 
         if (dto == null) {

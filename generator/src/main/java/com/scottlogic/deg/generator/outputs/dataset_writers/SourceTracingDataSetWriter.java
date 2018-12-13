@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;
@@ -65,8 +65,8 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
 
         private static TracingDto fromCellSource(CellSource cellSource) {
             return new TracingDto(
-                cellSource.getConstraints().stream().map(TracingConstraintDto::new).collect(Collectors.toSet()),
-                cellSource.getRules().stream().map(TracingRuleDto::new).collect(Collectors.toSet()),
+                cellSource.getConstraints().stream().map(c -> new TracingConstraintDto(c, cellSource.isViolated(c))).collect(Collectors.toSet()),
+                cellSource.getRules().stream().map(rule -> new TracingRuleDto(rule, cellSource.isViolated(rule))).collect(Collectors.toSet()),
                 cellSource.field.name);
         }
     }
@@ -75,9 +75,9 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
         public String rule;
         public boolean violated;
 
-        TracingRuleDto(ConstraintRule rule) {
+        TracingRuleDto(RuleInformation rule, boolean anyConstraintInRuleIsViolated) {
             this.rule = rule.getDescription();
-            this.violated = rule.isViolated();
+            this.violated = anyConstraintInRuleIsViolated;
         }
     }
 
@@ -87,11 +87,11 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
         public String rule;
         public boolean violated;
 
-        TracingConstraintDto(AtomicConstraint constraint) {
-            type = constraint.getClass().getSimpleName();
-            value = constraint.toString();
-            rule = constraint.getRule().getDescription();
-            violated = constraint.getRule().isViolated();
+        TracingConstraintDto(AtomicConstraint constraint, boolean violated) {
+            this.type = constraint.getClass().getSimpleName();
+            this.value = constraint.toString();
+            this.rule = constraint.getRule().getDescription();
+            this.violated = violated;
         }
     }
 

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.ContainsRegexConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class ContainsRegexConstraintTest {
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
-    private static ConstraintRule rule(){
-        return ConstraintRule.fromDescription("rule");
+    private static RuleInformation rule(){
+        return RuleInformation.fromDescription("rule");
     }
 }

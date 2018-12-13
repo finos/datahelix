@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
@@ -13,20 +12,22 @@ public class FieldSpecSource {
     final static FieldSpecSource Empty = new FieldSpecSource(Collections.emptySet(), Collections.emptySet());
 
     private final Set<AtomicConstraint> constraints;
-    private final Set<ConstraintRule> rules;
+    private final Set<AtomicConstraint> violatedConstraints;
 
-    private FieldSpecSource(Set<AtomicConstraint> constraints, Set<ConstraintRule> rules) {
+    private FieldSpecSource(Set<AtomicConstraint> constraints, Set<AtomicConstraint> violatedConstraints) {
         this.constraints = constraints;
-        this.rules = rules;
+        this.violatedConstraints = violatedConstraints;
     }
 
-    static FieldSpecSource fromConstraint(AtomicConstraint constraint, boolean negate, ConstraintRule rule) {
+    static FieldSpecSource fromConstraint(AtomicConstraint constraint, boolean negate, boolean violated) {
         return new FieldSpecSource(
             Collections.singleton(
                 negate
                     ? constraint.negate()
                     : constraint),
-            Collections.singleton(rule));
+            violated
+                ? Collections.singleton(constraint)
+                : Collections.emptySet());
     }
 
     static FieldSpecSource fromFieldSpecs(FieldSpec left, FieldSpec right) {
@@ -45,8 +46,8 @@ public class FieldSpecSource {
         return this.constraints;
     }
 
-    public Set<ConstraintRule> getRules() {
-        return rules;
+    public Set<AtomicConstraint> getViolatedConstraints() {
+        return this.violatedConstraints;
     }
 
     FieldSpecSource combine(FieldSpecSource source) {
@@ -60,7 +61,7 @@ public class FieldSpecSource {
 
         return new FieldSpecSource(
             concat(this.constraints, source.constraints),
-            concat(this.rules, source.rules)
+            concat(this.violatedConstraints, source.violatedConstraints)
         );
     }
 
