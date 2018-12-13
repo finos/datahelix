@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
-public class CsvDataSetWriter implements IDataSetWriter<CSVPrinter> {
+public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     public CSVPrinter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
         return CSVFormat.RFC4180
             .withHeader(profileFields.stream()

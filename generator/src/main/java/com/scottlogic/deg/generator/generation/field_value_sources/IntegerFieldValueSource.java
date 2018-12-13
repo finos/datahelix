@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class IntegerFieldValueSource implements IFieldValueSource {
+public class IntegerFieldValueSource implements FieldValueSource {
     private final Integer inclusiveLower;
     private final Integer exclusiveUpper;
     private final Set<Integer> blacklist;
@@ -135,7 +135,7 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->

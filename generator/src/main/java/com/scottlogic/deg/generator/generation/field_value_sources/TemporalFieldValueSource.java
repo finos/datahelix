@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 import java.time.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-public class TemporalFieldValueSource implements IFieldValueSource {
+public class TemporalFieldValueSource implements FieldValueSource {
 
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
@@ -119,7 +119,7 @@ public class TemporalFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
 
         LocalDateTime lower = inclusiveLower != null
                 ? inclusiveLower
@@ -187,9 +187,9 @@ public class TemporalFieldValueSource implements IFieldValueSource {
     private class RandomDateIterator implements Iterator<LocalDateTime> {
         private final LocalDateTime minDate;
         private final LocalDateTime maxDate;
-        private final IRandomNumberGenerator random;
+        private final RandomNumberGenerator random;
 
-        public RandomDateIterator(LocalDateTime minDate, LocalDateTime maxDate, IRandomNumberGenerator randomNumberGenerator) {
+        public RandomDateIterator(LocalDateTime minDate, LocalDateTime maxDate, RandomNumberGenerator randomNumberGenerator) {
             this.minDate = minDate;
             this.maxDate = maxDate;
             this.random = randomNumberGenerator;

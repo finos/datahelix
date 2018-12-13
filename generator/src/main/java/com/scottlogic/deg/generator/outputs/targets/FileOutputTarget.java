@@ -3,18 +3,18 @@ package com.scottlogic.deg.generator.outputs.targets;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class FileOutputTarget implements IOutputTarget {
+public class FileOutputTarget implements OutputTarget {
     private final Path filePath;
-    private final IDataSetWriter dataSetWriter;
+    private final DataSetWriter dataSetWriter;
 
-    public FileOutputTarget(Path filePath, IDataSetWriter dataSetWriter) {
+    public FileOutputTarget(Path filePath, DataSetWriter dataSetWriter) {
         this.filePath = filePath;
         this.dataSetWriter = dataSetWriter;
     }

@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
 
 public class OptimiseTestStrategy implements TreeTransformationTestStrategy {
 
@@ -16,7 +16,7 @@ public class OptimiseTestStrategy implements TreeTransformationTestStrategy {
 
     @Override
     public List<DecisionTree> transformTree(DecisionTree beforeTree) {
-        IDecisionTreeOptimiser treeOptimiser = new DecisionTreeOptimiser();            
+        DecisionTreeOptimiser treeOptimiser = new MostProlificConstraintOptimiser();
         DecisionTree afterTree = treeOptimiser.optimiseTree(beforeTree);
         return Collections.singletonList(afterTree);
     }

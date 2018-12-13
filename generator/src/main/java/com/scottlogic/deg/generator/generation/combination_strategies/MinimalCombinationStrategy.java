@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import java.util.*;
 import java.util.stream.*;
 
-public class MinimalCombinationStrategy implements ICombinationStrategy {
+public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {

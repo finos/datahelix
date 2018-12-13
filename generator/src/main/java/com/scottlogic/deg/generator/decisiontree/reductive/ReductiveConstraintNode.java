@@ -1,14 +1,14 @@
 package com.scottlogic.deg.generator.decisiontree.reductive;
 
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.NodeMarking;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReductiveConstraintNode implements ConstraintNode {
     private final ConstraintNode underlying;
@@ -94,5 +94,10 @@ public class ReductiveConstraintNode implements ConstraintNode {
     @Override
     public boolean hasMarking(NodeMarking detail) {
         return underlying.hasMarking(detail);
+    }
+
+    @Override
+    public ConstraintNode accept(NodeVisitor visitor){
+        return new ReductiveConstraintNode(underlying.accept(visitor), unfixedAtomicConstraints);
     }
 }
