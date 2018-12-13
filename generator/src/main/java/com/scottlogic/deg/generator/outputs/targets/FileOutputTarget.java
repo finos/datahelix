@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class FileOutputTarget implements IOutputTarget {
+public class FileOutputTarget implements OutputTarget {
     private final Path filePath;
     private final DataSetWriter dataSetWriter;
 

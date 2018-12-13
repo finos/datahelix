@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -24,9 +24,9 @@ public class GenerationEngine {
     private final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
     private final DataGenerator dataGenerator;
 
-    private final IOutputTarget outputter;
+    private final OutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter, DecisionTreeDataGenerator dataGenerator) {
+    public GenerationEngine(OutputTarget outputter, DecisionTreeDataGenerator dataGenerator) {
         this.outputter = outputter;
         this.dataGenerator = dataGenerator;
     }

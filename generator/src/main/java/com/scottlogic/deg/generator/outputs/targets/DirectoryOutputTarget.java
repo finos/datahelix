@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /** Output into a specific directory */
-public class DirectoryOutputTarget implements IOutputTarget {
+public class DirectoryOutputTarget implements OutputTarget {
     private final Path directoryPath;
     private final DataSetWriter dataSetWriter;
 
