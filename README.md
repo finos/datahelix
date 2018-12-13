@@ -40,21 +40,14 @@ The product is confirmed compatible with Microsoft Windows, and should be compat
 
 ### Profiler
 #### Generate a profile
-Edit the **run configuration** for App.scala:
+The profiler can be run using the following command line arguments:
 
-In **VM Options**, specify the folder in which the hadoop.dll lives:
+`profiler> App.scala "<path to data>" "<path to output directory>"`
 
-`-Djava.library.path="C:\hadoop-2.7.6\bin"`
+When the profiler is run it will produce a profile JSON file with the same name as the input file in the specified output location. The profiler will also print diagnostic information to the terminal.
 
-In **Program Arguments**, specify the path to an input csv for analysis, and an output path to a directory
+An example input (CSV) that can be used is here: [basic_classifier.csv](.\profiler\src\test\resources\basic_classifier.csv)
 
-`"<path to data>" "<path to output directory>"`
-
-When App.scala is run it will produce a text file in the specified output location and print classification results in the terminal
-
-**There is an example CSV file which can be found in:**
-
-`"C:<your-path>\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv"`
 ### Generator
 
 #### Generate valid data
