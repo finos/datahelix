@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ReductiveCombinationStrategy implements ICombinationStrategy {
+public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
 
