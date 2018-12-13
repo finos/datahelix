@@ -4,13 +4,15 @@
 
 This monorepo contains the different technological arms of Scott Logic's Data Generator project, which allows users to automatically analyse their real data to create a profile, and then use that profile to generate realistic dummy data.
 
-There are 2 discrete primary elements:
+There are 3 discrete primary elements:
 
 | Product | Description | Status | Notes |
 | ---- | ---- | ---- | ---- |
 | Profiler | Analyse a data source and generate a profile | Stable - Pre-alpha | Currently being developed |
 | Profile | A representation of the data schema and rules which can be used to generate data | Stable - alpha | |
 | Generator | A tool for generating data from a given profile | Stable - alpha | Supports data generation and generation of data that has been [delibrately violated](./generator/docs/DeliberateViolation.md). |
+
+See [overview](./docs/Profiles.md) and [schema](./docs/Schema.md) for details about profiles and how they work.
 
 ## Installation
 
@@ -54,6 +56,7 @@ When App.scala is run it will produce a text file in the specified output locati
 
 `"C:<your-path>\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv"`
 ### Generator
+
 #### Generate valid data
 `dg generate "<path to profile>" "<path to output directory or file>"`
 
