@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -14,9 +14,9 @@ import java.util.stream.Stream;
 /** Output into a specific directory */
 public class DirectoryOutputTarget implements IOutputTarget {
     private final Path directoryPath;
-    private final IDataSetWriter dataSetWriter;
+    private final DataSetWriter dataSetWriter;
 
-    public DirectoryOutputTarget(Path directoryPath, IDataSetWriter dataSetWriter) {
+    public DirectoryOutputTarget(Path directoryPath, DataSetWriter dataSetWriter) {
         this.directoryPath = directoryPath;
         this.dataSetWriter = dataSetWriter;
     }
