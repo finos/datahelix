@@ -55,7 +55,7 @@ class ExampleProfilesTests {
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(IGenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -104,7 +104,7 @@ class ExampleProfilesTests {
     }
 
     @FunctionalInterface
-    private interface IGenerateConsumer {
+    private interface GenerateConsumer {
         void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }
