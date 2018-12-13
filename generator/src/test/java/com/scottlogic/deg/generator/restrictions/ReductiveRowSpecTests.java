@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.test_utils.DefaultEqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -10,6 +12,9 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 class ReductiveRowSpecTests {
+    // TODO: Create reductive row spec comparer and apply to all tests
+    private EqualityComparer reductiveRowSpecComparer = new DefaultEqualityComparer();
+
     @Test
     void equals_objIsNull_returnsFalse() {
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(null, null, null);

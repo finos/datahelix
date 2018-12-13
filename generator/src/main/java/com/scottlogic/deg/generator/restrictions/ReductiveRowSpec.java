@@ -24,31 +24,6 @@ public class ReductiveRowSpec extends RowSpec {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-
-        ReductiveRowSpec otherRowSpec = (ReductiveRowSpec) obj;
-        if ((fields != null && !fields.equals(otherRowSpec.fields)) ||
-            (fields == null && otherRowSpec.fields != null)) {
-            return false;
-        }
-        if ((fieldToFieldSpec != null && !fieldToFieldSpec.equals(otherRowSpec.fieldToFieldSpec)) ||
-            (fieldToFieldSpec == null && otherRowSpec.fieldToFieldSpec != null)) {
-            return false;
-        }
-        if (!lastFixedField.equals(otherRowSpec.lastFixedField)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
     public IDataBagSource createDataBagSource() {
         List<IDataBagSource> fieldDataBagSources = new ArrayList<>(getFields().size() - 1);
 

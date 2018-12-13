@@ -228,31 +228,6 @@ public class FieldSpec {
             this.source);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-
-        FieldSpec otherFieldSpec = (FieldSpec) obj;
-        boolean areEqual = true;
-        if ((setRestrictions != null && otherFieldSpec.setRestrictions == null) ||
-            (setRestrictions == null && otherFieldSpec.setRestrictions != null)) {
-            areEqual = false;
-        }
-        else if (setRestrictions != null) {
-            areEqual = setRestrictions.equals(otherFieldSpec.setRestrictions);
-        }
-        if (numericRestrictions != null && otherFieldSpec.numericRestrictions == null) {
-            areEqual = false;
-        }
-
-        return areEqual;
-    }
-
     public FieldSpecSource getFieldSpecSource() {
         return this.source;
     }
