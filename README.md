@@ -37,8 +37,22 @@ The product is confirmed compatible with Microsoft Windows, and should be compat
 <!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
 
 ### Profiler
-_(To be added)_
+####Generate a profile
+Edit the **run configuration** for App.scala:
 
+In **VM Options**, specify the folder in which the hadoop.dll lives:
+
+`-Djava.library.path="C:\hadoop-2.7.6\bin"`
+
+In **Program Arguments**, specify the path to an input csv for analysis, and an output path to a directory
+
+`"<path to data>" "<path to output directory>"`
+
+When App.scala is run it will produce a text file in the specified output location and print classification results in the terminal
+
+**There is an example CSV file which can be found in:**
+
+`"C:<your-path>\data-engineering-generator\profiler\src\test\resources\gfx_cleaned.csv"`
 ### Generator
 #### Generate valid data
 `dg generate "<path to profile>" "<path to output directory or file>"`
