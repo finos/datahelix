@@ -81,7 +81,7 @@ public class Generate implements Runnable {
 
             new GenerationEngine(
                 new FileOutputTarget(outputPath, new CsvDataSetWriter()),
-                new DataGenerator(
+                new DecisionTreeDataGenerator(
                     treeWalker,
                     dontPartitionTrees
                         ? new NoopTreePartitioner()

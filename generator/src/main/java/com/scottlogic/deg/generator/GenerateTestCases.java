@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
@@ -63,7 +63,7 @@ public class GenerateTestCases implements Runnable {
 
             new GenerationEngine(
                 new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
-                new DataGenerator(
+                new DecisionTreeDataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
                     new NoopTreePartitioner(),
                     new NoopDecisionTreeOptimiser(),

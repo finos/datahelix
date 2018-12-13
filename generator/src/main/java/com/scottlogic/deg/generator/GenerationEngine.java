@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
@@ -22,11 +22,11 @@ import java.util.stream.Stream;
 
 public class GenerationEngine {
     private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final IDataGenerator dataGenerator;
+    private final DataGenerator dataGenerator;
 
     private final IOutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter, DataGenerator dataGenerator) {
+    public GenerationEngine(IOutputTarget outputter, DecisionTreeDataGenerator dataGenerator) {
         this.outputter = outputter;
         this.dataGenerator = dataGenerator;
     }

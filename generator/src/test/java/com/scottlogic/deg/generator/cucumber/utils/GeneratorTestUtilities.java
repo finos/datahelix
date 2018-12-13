@@ -13,9 +13,9 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -84,7 +84,7 @@ public class GeneratorTestUtilities {
 
         final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
 
-        final IDataGenerator dataGenerator = new DataGenerator(
+        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             new CartesianProductDecisionTreeWalker(
                 new ConstraintReducer(
                     new FieldSpecFactory(),

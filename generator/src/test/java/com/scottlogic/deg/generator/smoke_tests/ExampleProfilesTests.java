@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -70,7 +70,7 @@ class ExampleProfilesTests {
                 consumer.generate(
                     new GenerationEngine(
                         new NullOutputTarget(),
-                        new DataGenerator(
+                        new DecisionTreeDataGenerator(
                             walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
                             new DecisionTreeOptimiser(),
