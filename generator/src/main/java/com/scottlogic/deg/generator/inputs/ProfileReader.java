@@ -57,7 +57,6 @@ public class ProfileReader {
         return new Profile(profileFields, rules, profileDto.description);
     }
 
-    //* Because Java sucks at handling exceptions during stream operations */
     static <TInput, TOutput> Collection<TOutput> mapDtos(
         Collection<TInput> dtos,
         DtoConverterFunction<TInput, TOutput> mapFunc) throws InvalidProfileException {
