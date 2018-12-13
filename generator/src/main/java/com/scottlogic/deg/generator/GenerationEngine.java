@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+    private final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
     private final DataGenerator dataGenerator;
 
     private final IOutputTarget outputter;

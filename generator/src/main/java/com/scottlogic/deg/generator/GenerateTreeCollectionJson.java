@@ -49,7 +49,7 @@ public class GenerateTreeCollectionJson implements Runnable {
 
     @Override
     public void run() {
-        final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
         final Profile profile;
 
         try {
