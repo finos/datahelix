@@ -37,7 +37,7 @@ The product is confirmed compatible with Microsoft Windows, and should be compat
 <!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
 
 ### Profiler
-####Generate a profile
+#### Generate a profile
 Edit the **run configuration** for App.scala:
 
 In **VM Options**, specify the folder in which the hadoop.dll lives:
