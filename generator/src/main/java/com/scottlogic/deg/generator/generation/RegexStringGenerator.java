@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegexStringGenerator implements IStringGenerator {
+public class RegexStringGenerator implements StringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
     static {
@@ -76,7 +76,7 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator intersect(IStringGenerator stringGenerator) {
+    public StringGenerator intersect(StringGenerator stringGenerator) {
         if (!(stringGenerator instanceof RegexStringGenerator)) {
             return stringGenerator.intersect(this);
         }
@@ -90,7 +90,7 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator complement() {
+    public StringGenerator complement() {
         return new RegexStringGenerator(
                 this.automaton.clone().complement(),
                 String.format("COMPLEMENT-OF %s", this.regexRepresentation));

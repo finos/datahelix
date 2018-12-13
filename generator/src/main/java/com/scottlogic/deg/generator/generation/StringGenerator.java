@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSou
 import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
-public interface IStringGenerator {
-    IStringGenerator intersect(IStringGenerator stringGenerator);
-    IStringGenerator complement();
+public interface StringGenerator {
+    StringGenerator intersect(StringGenerator stringGenerator);
+    StringGenerator complement();
 
     boolean isFinite();
     long getValueCount();
@@ -24,9 +24,9 @@ public interface IStringGenerator {
 
     // Adapter
     class StringGeneratorAsFieldValueSource implements FieldValueSource {
-        private final IStringGenerator underlyingGenerator;
+        private final StringGenerator underlyingGenerator;
 
-        StringGeneratorAsFieldValueSource(IStringGenerator underlyingGenerator) {
+        StringGeneratorAsFieldValueSource(StringGenerator underlyingGenerator) {
             this.underlyingGenerator = underlyingGenerator;
         }
 

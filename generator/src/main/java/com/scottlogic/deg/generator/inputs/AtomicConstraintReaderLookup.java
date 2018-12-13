@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
@@ -16,7 +16,7 @@ public class AtomicConstraintReaderLookup {
     private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
-        Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
+        Map<String, StringGenerator> standardNameToStringGenerator = new HashMap<>();
         standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
 
         typeCodeToSpecificReader = new HashMap<>();

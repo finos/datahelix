@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // There's a lot of copy-paste in this class. We should address that before we make any significant changes to it
-public class SedolStringGenerator implements IStringGenerator {
+public class SedolStringGenerator implements StringGenerator {
 
     private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "00[B-DF-HJ-NP-TV-Z0-9]{6}";
 
@@ -31,12 +31,12 @@ public class SedolStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator intersect(IStringGenerator stringGenerator) {
+    public StringGenerator intersect(StringGenerator stringGenerator) {
         return this;
     }
 
     @Override
-    public IStringGenerator complement() {
+    public StringGenerator complement() {
         return new SedolStringGenerator(sedolSansCheckDigitGenerator, !negate);
     }
 

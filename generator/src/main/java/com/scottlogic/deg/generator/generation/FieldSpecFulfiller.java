@@ -98,7 +98,7 @@ public class FieldSpecFulfiller implements DataBagSource {
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
                 Set<Object> blacklist = getBlacklist();
 
-                final IStringGenerator generator;
+                final StringGenerator generator;
                 if (blacklist.size() > 0) {
                     RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
