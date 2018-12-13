@@ -4,15 +4,13 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -21,14 +19,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator decisionTreeGenerator;
-    private final IDataGenerator dataGenerator;
-    private final IOutputTarget outputter;
+    private final DecisionTreeFactory decisionTreeGenerator;
+    private final DataGenerator dataGenerator;
+    private final OutputTarget outputter;
 
     public GenerationEngine(
-        IOutputTarget outputter,
+        OutputTarget outputter,
         DataGenerator dataGenerator,
-        DecisionTreeGenerator decisionTreeGenerator) {
+        DecisionTreeFactory decisionTreeGenerator) {
         this.outputter = outputter;
         this.dataGenerator = dataGenerator;
         this.decisionTreeGenerator = decisionTreeGenerator;

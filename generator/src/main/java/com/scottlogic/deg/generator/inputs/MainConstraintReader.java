@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 
-public class MainConstraintReader implements IConstraintReader {
+public class MainConstraintReader implements ConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
 
     public MainConstraintReader() {
@@ -27,7 +27,7 @@ public class MainConstraintReader implements IConstraintReader {
         }
 
         if (dto.is != null) {
-            IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
+            ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
 
             if (subReader == null) {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);

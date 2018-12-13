@@ -24,7 +24,7 @@ import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.*;
 
-class DecisionTreeGeneratorTests {
+class ProfileDecisionTreeFactoryTests {
     private final Field fieldA = new Field("A");
     private final Field fieldB = new Field("B");
     private final Field fieldC = new Field("C");
@@ -49,7 +49,7 @@ class DecisionTreeGeneratorTests {
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
                 this.rules);
 
-            DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+            ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
             this.actualOutput = testObject.analyse(testInput);
         }
@@ -65,7 +65,7 @@ class DecisionTreeGeneratorTests {
     @Test
     void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -76,7 +76,7 @@ class DecisionTreeGeneratorTests {
     void shouldReturnAnalysedProfileWithCorrectFields() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
         Profile testInput = new Profile(inputFieldList, new ArrayList<>());
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
         ProfileFields actualFields = testOutput.getFields();
@@ -96,7 +96,7 @@ class DecisionTreeGeneratorTests {
         Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -117,7 +117,7 @@ class DecisionTreeGeneratorTests {
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
         Rule testRule = new Rule("test", inputConstraints);
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -139,7 +139,7 @@ class DecisionTreeGeneratorTests {
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rule());
         Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -162,7 +162,7 @@ class DecisionTreeGeneratorTests {
         Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -190,7 +190,7 @@ class DecisionTreeGeneratorTests {
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
         Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -211,7 +211,7 @@ class DecisionTreeGeneratorTests {
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -232,7 +232,7 @@ class DecisionTreeGeneratorTests {
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -269,7 +269,7 @@ class DecisionTreeGeneratorTests {
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
         Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -307,7 +307,7 @@ class DecisionTreeGeneratorTests {
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -385,7 +385,7 @@ class DecisionTreeGeneratorTests {
         Constraint notConstraint = conditionalConstraint.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -451,7 +451,7 @@ class DecisionTreeGeneratorTests {
         Constraint notConstraint1 = notConstraint0.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
@@ -474,7 +474,7 @@ class DecisionTreeGeneratorTests {
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
-        DecisionTreeGenerator testObject = new DecisionTreeGenerator();
+        ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 

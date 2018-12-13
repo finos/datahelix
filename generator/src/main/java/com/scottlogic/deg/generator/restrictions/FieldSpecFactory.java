@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.constraints.ConstraintRule;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
@@ -265,7 +265,7 @@ public class FieldSpecFactory {
         return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, rule);
     }
 
-    private FieldSpec constructGenerator(IStringGenerator generator, boolean negate, AtomicConstraint constraint, ConstraintRule rule) {
+    private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint, ConstraintRule rule) {
         final StringRestrictions stringRestrictions = new StringRestrictions();
 
         stringRestrictions.stringGenerator = negate

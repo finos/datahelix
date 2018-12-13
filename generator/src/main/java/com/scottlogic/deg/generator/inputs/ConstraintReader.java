@@ -7,7 +7,7 @@ import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 @FunctionalInterface
-public interface IConstraintReader {
+public interface ConstraintReader {
     Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields,

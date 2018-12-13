@@ -35,7 +35,7 @@ public class DecisionTreeToRowSpecsTests {
                     fieldSpecMerger
             )
     );
-    private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
+    private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
     private ConstraintNode reduceRules(DecisionTreeCollection profile) {
         return ConstraintNode.merge(

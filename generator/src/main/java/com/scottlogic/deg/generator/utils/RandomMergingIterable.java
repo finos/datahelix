@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 public class RandomMergingIterable<E> implements Iterable<E> {
     private final List<Iterable<E>> iterableList;
-    private final IRandomNumberGenerator randomNumberGenerator;
+    private final RandomNumberGenerator randomNumberGenerator;
 
-    public RandomMergingIterable(List<Iterable<E>> iterableList, IRandomNumberGenerator randomNumberGenerator) {
+    public RandomMergingIterable(List<Iterable<E>> iterableList, RandomNumberGenerator randomNumberGenerator) {
         this.iterableList = iterableList;
         this.randomNumberGenerator = randomNumberGenerator;
     }
@@ -24,9 +24,9 @@ public class RandomMergingIterable<E> implements Iterable<E> {
     private class InternalIterator implements Iterator<E> {
 
         private final List<Iterator<E>> iteratorList;
-        private final IRandomNumberGenerator randomNumberGenerator;
+        private final RandomNumberGenerator randomNumberGenerator;
 
-        private InternalIterator(List<Iterator<E>> iteratorList, IRandomNumberGenerator randomNumberGenerator) {
+        private InternalIterator(List<Iterator<E>> iteratorList, RandomNumberGenerator randomNumberGenerator) {
             this.iteratorList = iteratorList;
             this.randomNumberGenerator = randomNumberGenerator;
         }

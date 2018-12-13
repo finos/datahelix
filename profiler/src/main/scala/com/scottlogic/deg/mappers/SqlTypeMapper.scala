@@ -3,7 +3,7 @@ package com.scottlogic.deg.mappers
 import com.scottlogic.deg.classifier._
 import org.apache.spark.sql.types.{DataType, TimestampType => SQLTimeStampType, DoubleType => SQLDoubleType, FloatType => SQLFloatType, LongType => SQLLongType, StringType => SQLStringType}
 
-object SqlTypeMapper extends IMapper[SemanticType, DataType] {
+object SqlTypeMapper extends Mapper[SemanticType, DataType] {
   override def Map(original: SemanticType): DataType = {
     original match {
       case StringType => SQLStringType;

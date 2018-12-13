@@ -1,11 +1,10 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -93,16 +92,16 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
                     outputDir,
                     getFilenameWithoutExtension(profileFile.getName()),
                     new CsvDataSetWriter()),
-                new DataGenerator(
+                new DecisionTreeDataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
                     dontPartitionTrees
                         ? new NoopTreePartitioner()
                         : new RelatedFieldTreePartitioner(),
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
-                        : new DecisionTreeOptimiser(),
+                        : new MostProlificConstraintOptimiser(),
                     monitor),
-                new DecisionTreeGenerator())
+                new ProfileDecisionTreeFactory())
                 .generateTestCases(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

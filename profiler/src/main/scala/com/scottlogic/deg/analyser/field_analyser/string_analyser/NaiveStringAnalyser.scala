@@ -19,7 +19,7 @@ class NaiveStringAnalyser(val df: DataFrame, val field: StructField) extends Str
     val stringAnalysis = analysis._2.first()
 
     val fieldName = field.name;
-    val allFieldConstraints = ListBuffer[IConstraint]();
+    val allFieldConstraints = ListBuffer[Constraint]();
 
     val fieldTypeConstraint = new IsOfTypeConstraint(fieldName, "string");
 

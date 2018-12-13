@@ -5,7 +5,7 @@ import com.scottlogic.deg.schemas.v3.RuleDTO
 
 import scala.collection.JavaConversions
 
-object RuleDTOMapper extends IMapper[Rule,RuleDTO] {
+object RuleDTOMapper extends Mapper[Rule,RuleDTO] {
   override def Map(original: Rule): RuleDTO = 
     new RuleDTO(original.Description, 
                 JavaConversions

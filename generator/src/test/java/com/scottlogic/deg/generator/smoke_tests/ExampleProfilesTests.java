@@ -3,10 +3,10 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
@@ -14,7 +14,7 @@ import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -59,7 +59,7 @@ class ExampleProfilesTests {
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(IGenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -74,12 +74,12 @@ class ExampleProfilesTests {
                 consumer.generate(
                     new GenerationEngine(
                         new NullOutputTarget(),
-                        new DataGenerator(
+                        new DecisionTreeDataGenerator(
                             walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
-                            new DecisionTreeOptimiser(),
+                            new MostProlificConstraintOptimiser(),
                             new NoopDataGeneratorMonitor()),
-                        new DecisionTreeGenerator()),
+                        new ProfileDecisionTreeFactory()),
                     profileFile);
             });
 
@@ -89,7 +89,7 @@ class ExampleProfilesTests {
         return dynamicTests;
     }
 
-    private class NullOutputTarget implements IOutputTarget {
+    private class NullOutputTarget implements OutputTarget {
         @Override
         public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
@@ -109,7 +109,7 @@ class ExampleProfilesTests {
     }
 
     @FunctionalInterface
-    private interface IGenerateConsumer {
+    private interface GenerateConsumer {
         void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }

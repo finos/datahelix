@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -97,16 +97,16 @@ public class Generate implements Runnable, GenerationConfigSource {
 
             new GenerationEngine(
                 new FileOutputTarget(outputPath, new CsvDataSetWriter()),
-                new DataGenerator(
+                new DecisionTreeDataGenerator(
                     treeWalker,
                     dontPartitionTrees
                         ? new NoopTreePartitioner()
                         : new RelatedFieldTreePartitioner(),
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
-                        : new DecisionTreeOptimiser(),
+                        : new MostProlificConstraintOptimiser(),
                     monitor),
-                new DecisionTreeGenerator())
+                new ProfileDecisionTreeFactory())
                 .generateDataSet(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

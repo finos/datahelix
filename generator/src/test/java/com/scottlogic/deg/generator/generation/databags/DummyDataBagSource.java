@@ -2,11 +2,9 @@ package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
-class DummyDataBagSource implements IDataBagSource
+class DummyDataBagSource implements DataBagSource
 {
     private final Stream<DataBag> dataBags;
 

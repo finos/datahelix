@@ -19,7 +19,7 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val inputField = field;
     val fieldName = inputField.name;
-    val allFieldConstraints = ListBuffer[IConstraint]();
+    val allFieldConstraints = ListBuffer[Constraint]();
 
     val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"numeric");
 

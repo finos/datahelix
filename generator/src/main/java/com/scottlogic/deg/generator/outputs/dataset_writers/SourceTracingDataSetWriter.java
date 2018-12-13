@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SourceTracingDataSetWriter implements IDataSetWriter<SourceTracingDataSetWriter.JsonArrayOutputWriter> {
+public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDataSetWriter.JsonArrayOutputWriter> {
     private final ObjectWriter writer;
 
     public SourceTracingDataSetWriter() {

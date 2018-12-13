@@ -1,5 +1,5 @@
 package com.scottlogic.deg.mappers
 
-trait IMapper[A,B] {
+trait Mapper[A,B] {
   def Map(original : A) : B
 }

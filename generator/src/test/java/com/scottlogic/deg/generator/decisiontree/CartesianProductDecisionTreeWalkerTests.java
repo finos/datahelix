@@ -33,7 +33,7 @@ class CartesianProductDecisionTreeWalkerTests {
                     fieldSpecMerger
             )
     );
-    private final DecisionTreeGenerator dTreeGenerator = new DecisionTreeGenerator();
+    private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
     @Test
     void test() {
