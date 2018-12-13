@@ -1,12 +1,17 @@
-package com.scottlogic.deg.generator.inputs.validation;
+package com.scottlogic.deg.generator.inputs.validation.restrictions;
 
+import com.scottlogic.deg.generator.inputs.validation.Criticality;
+import com.scottlogic.deg.generator.inputs.validation.StandardValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
+import com.scottlogic.deg.generator.inputs.validation.ValidationType;
+import com.scottlogic.deg.generator.inputs.validation.messages.SetConstraintValidationMessages;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 
 public class SetConstraintRestrictions implements ConstraintValidation {
 
-    public final ValidationAlert.ValidationType ValidationType = ValidationAlert.ValidationType.SET;
+    public final ValidationType validationType = ValidationType.SET;
 
     private Set<Object> legalValues;
     private List<ValidationAlert> alerts;
@@ -22,12 +27,12 @@ public class SetConstraintRestrictions implements ConstraintValidation {
         if (legalValues.size() == 0) {
             legalValues = values;
         } else if (values.size() > legalValues.size()) {
-            logError(field, String.format("Set values %s do not meet the existing restrictions. Allowed values are: %s", values.toString(), legalValues.toString()));
+            logError(field, new SetConstraintValidationMessages(legalValues, values));
         } else {
             Set<Object> intersection = SetUtils.intersect(legalValues, values);
 
             if (intersection.size() < values.size()) {
-                logError(field, String.format("Set values %s do not meet the existing restrictions. Allowed values are: %s", values.toString(), legalValues.toString()));
+                logError(field, new SetConstraintValidationMessages(legalValues, values));
             } else {
                 legalValues = intersection;
             }
@@ -43,18 +48,18 @@ public class SetConstraintRestrictions implements ConstraintValidation {
             Set<Object> intersection = SetUtils.intersect(values, legalValues);
 
             if (intersection.size() != values.size()) {
-                logError(field, String.format("Set values %s do not meet the existing restrictions. Allowed values are: %s", values.toString(), legalValues.toString()));
+                logError(field,  new SetConstraintValidationMessages(legalValues, values));
             } else {
                 legalValues = intersection;
             }
         }
     }
 
-    private void logError(String field, String message) {
+    private void logError(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
-            ValidationAlert.Criticality.ERROR,
+            Criticality.ERROR,
             message,
-            ValidationType,
+            validationType,
             field));
     }
 

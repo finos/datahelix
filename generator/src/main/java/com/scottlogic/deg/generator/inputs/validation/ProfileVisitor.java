@@ -22,4 +22,6 @@ public interface ProfileVisitor {
     void visit(IsNullConstraint constraint);
     void visit(NotConstraint constraint);
     void visit(IsGranularToConstraint constraint);
+    void visit(IsLessThanConstantConstraint constraint);
+    void visit(IsGreaterThanConstantConstraint constraint);
 }

@@ -4,14 +4,13 @@ package com.scottlogic.deg.generator.inputs.validation;
 public class ValidationAlert {
 
     private Criticality criticality;
-    private String message;
+    private StandardValidationMessages message;
     private ValidationType validationType;
     private String field;
 
-
     public ValidationAlert(
         Criticality criticality,
-        String message,
+        StandardValidationMessages message,
         ValidationType validationType,
         String field){
 
@@ -21,26 +20,17 @@ public class ValidationAlert {
         this.field = field;
     }
 
-    @Override
-    public String toString(){
-        return String.format("Field %s: %s during %s Validation: %s ", field, criticality.toString(),validationType.toString(), message);
-    }
-
     public Criticality getCriticality(){
         return criticality;
     }
-
-    public enum Criticality {
-        ERROR,
-        WARNING
+    public StandardValidationMessages getMessage(){
+        return message;
     }
-
-    public enum ValidationType {
-        TEMPORAL,
-        TYPE,
-        SET,
-        STRING,
-        NULL,
-        GRANULARITY
-    }}
+    public ValidationType getValidationType(){
+        return validationType;
+    }
+    public String getField(){
+        return field;
+    }
+}
 

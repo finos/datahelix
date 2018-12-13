@@ -1,9 +1,11 @@
-package com.scottlogic.deg.generator.inputs.validation;
+package com.scottlogic.deg.generator.inputs.validation.restrictions;
+
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class ConstraintRestrictions {
+public class ConstraintRestrictions {
 
     public final TypeConstraintRestrictions typeConstraintRestrictions;
     public final TemporalConstraintRestrictions temporalConstraintRestrictions;
@@ -11,13 +13,15 @@ class ConstraintRestrictions {
     public final StringConstraintRestrictions stringConstraintRestrictions;
     public final NullConstraintRestrictions nullConstraintRestrictions;
     public final GranularityConstraintRestrictions granularityConstraintRestrictions;
+    public final NumericConstraintRestrictions numericConstraintRestriction;
 
     public ConstraintRestrictions(TypeConstraintRestrictions typeConstraintRestrictions,
                                   TemporalConstraintRestrictions temporalConstraintRestrictions,
                                   SetConstraintRestrictions setConstraintRestrictions,
                                   StringConstraintRestrictions stringConstraintRestrictions,
                                   NullConstraintRestrictions nullConstraintRestrictions,
-                                  GranularityConstraintRestrictions granularityConstraintRestrictions)
+                                  GranularityConstraintRestrictions granularityConstraintRestrictions,
+                                  NumericConstraintRestrictions numericConstraintRestriction)
     {
         this.typeConstraintRestrictions = typeConstraintRestrictions;
         this.temporalConstraintRestrictions = temporalConstraintRestrictions;
@@ -25,6 +29,7 @@ class ConstraintRestrictions {
         this.stringConstraintRestrictions = stringConstraintRestrictions;
         this.nullConstraintRestrictions = nullConstraintRestrictions;
         this.granularityConstraintRestrictions = granularityConstraintRestrictions;
+        this.numericConstraintRestriction = numericConstraintRestriction;
     }
 
     public List<ValidationAlert> getValidationAlerts(){
@@ -37,6 +42,7 @@ class ConstraintRestrictions {
         alerts.addAll(stringConstraintRestrictions.getAlerts());
         alerts.addAll(nullConstraintRestrictions.getAlerts());
         alerts.addAll(granularityConstraintRestrictions.getAlerts());
+        alerts.addAll(numericConstraintRestriction.getAlerts());
 
         return alerts;
     }

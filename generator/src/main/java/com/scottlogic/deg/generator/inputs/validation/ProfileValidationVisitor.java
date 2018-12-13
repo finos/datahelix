@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.inputs.validation.restrictions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,6 +102,23 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     }
 
     @Override
+    public void visit(IsLessThanConstantConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.getField().name);
+
+        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsLessThan(constraint.field.name, constraint.referenceValue);
+    }
+
+    @Override
+    public void visit(IsGreaterThanConstantConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.getField().name);
+
+        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsGreaterThan(constraint.field.name, constraint.referenceValue);
+
+    }
+
+    @Override
     public void visit(ProfileFields fields) {
 
     }
@@ -114,26 +132,11 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(Constraint constraint) {
     }
 
-    public void outputValidationResults() {
+    public List<ValidationAlert> getAlerts() {
         final List<ValidationAlert> alerts = new ArrayList<>();
         allFieldsState.values().stream().map(state-> alerts.addAll(state.getValidationAlerts())).collect(Collectors.toList());
 
-        if (alerts.size() > 0) {
-            boolean hasErrors = false;
-            for (ValidationAlert alert : alerts) {
-
-                if (alert.getCriticality().equals(ValidationAlert.Criticality.ERROR)) {
-                    hasErrors = true;
-                }
-
-                System.out.println(alert.toString());
-            }
-
-            if (hasErrors) {
-                System.out.println("Encountered unrecoverable profile validation errors.");
-                System.exit(1);
-            }
-        }
+        return alerts;
     }
 
 
@@ -147,7 +150,8 @@ public class ProfileValidationVisitor implements ProfileVisitor {
                 new SetConstraintRestrictions(),
                 new StringConstraintRestrictions(),
                 new NullConstraintRestrictions(),
-                new GranularityConstraintRestrictions());
+                new GranularityConstraintRestrictions(),
+                new NumericConstraintRestrictions());
 
             allFieldsState.put(fieldName, noRestrictions);
             return noRestrictions;

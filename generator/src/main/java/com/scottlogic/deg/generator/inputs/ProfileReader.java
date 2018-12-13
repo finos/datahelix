@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.inputs.validation.reporters.CmdProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidationVisitor;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
 import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
@@ -25,7 +26,8 @@ public class ProfileReader {
 
         ProfileValidationVisitor profileValidationVisitor = new ProfileValidationVisitor();
         profile.accept(profileValidationVisitor);
-        profileValidationVisitor.outputValidationResults();
+        CmdProfileValidationReporter profileValidationReporter = new CmdProfileValidationReporter();
+        profileValidationReporter.output(profileValidationVisitor.getAlerts());
 
 
         return profile;
