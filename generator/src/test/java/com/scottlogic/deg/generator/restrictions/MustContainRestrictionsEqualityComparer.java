@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class MustContainRestrictionsEqualityComparer implements EqualityComparer {
 
     @Override
@@ -24,6 +27,14 @@ public class MustContainRestrictionsEqualityComparer implements EqualityComparer
             return true;
         }
 
-        return item1.getRequiredObjects().equals(item2.getRequiredObjects());
+        return checkNullObject(item1.getRequiredObjects()).equals(checkNullObject(item2.getRequiredObjects()));
+    }
+
+    private Set<FieldSpec> checkNullObject(Set<FieldSpec> set) {
+        if (set == null) {
+            return Collections.emptySet();
+        }
+
+        return set;
     }
 }
