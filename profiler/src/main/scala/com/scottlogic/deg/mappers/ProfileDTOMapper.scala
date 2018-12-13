@@ -5,7 +5,7 @@ import com.scottlogic.deg.schemas.v3.V3ProfileDTO
 
 import scala.collection.JavaConversions
 
-object ProfileDTOMapper extends IMapper[Profile,V3ProfileDTO] {
+object ProfileDTOMapper extends Mapper[Profile,V3ProfileDTO] {
   override def Map(original: Profile): V3ProfileDTO = {
     if (original == null) return null
 
