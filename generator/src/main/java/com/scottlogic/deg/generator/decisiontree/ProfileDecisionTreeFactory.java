@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DecisionTreeGenerator implements IDecisionTreeGenerator {
+public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     private static Collection<Constraint> wrapEach(

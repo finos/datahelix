@@ -7,7 +7,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public interface IDataSetWriter<TWriter extends Closeable> {
+public interface DataSetWriter<TWriter extends Closeable> {
     TWriter openWriter(
         Path directory,
         String filenameWithoutExtension,

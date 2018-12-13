@@ -49,7 +49,7 @@ public class GenerateTreeCollectionJson implements Runnable {
 
     @Override
     public void run() {
-        final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
         final Profile profile;
 
         try {
@@ -67,8 +67,8 @@ public class GenerateTreeCollectionJson implements Runnable {
                 ? new RelatedFieldTreePartitioner()
                 : new NoopTreePartitioner();
                 
-        IDecisionTreeOptimiser treeOptimiser = doOptimise 
-                ? new DecisionTreeOptimiser()
+        DecisionTreeOptimiser treeOptimiser = doOptimise
+                ? new MostProlificConstraintOptimiser()
                 : new NoopDecisionTreeOptimiser();
                 
         final List<DecisionTree> listOfTree =

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestDTO;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.TestCaseDTO;
@@ -18,9 +18,9 @@ import java.util.stream.Stream;
 
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
-    private final IDataSetWriter datasetWriter;
+    private final DataSetWriter datasetWriter;
 
-    public TestCaseGenerationResultWriter(IDataSetWriter datasetWriter) {
+    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter) {
         this.manifestWriter = new ManifestWriter();
 
         this.datasetWriter = datasetWriter;

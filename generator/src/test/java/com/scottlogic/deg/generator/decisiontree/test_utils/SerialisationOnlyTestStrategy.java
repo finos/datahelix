@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
 
 public class SerialisationOnlyTestStrategy implements TreeTransformationTestStrategy {
 

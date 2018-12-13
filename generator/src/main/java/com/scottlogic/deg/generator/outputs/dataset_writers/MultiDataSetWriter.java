@@ -10,14 +10,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class MultiDataSetWriter implements IDataSetWriter<MultiDataSetWriter.MultiCloseable> {
-    private final List<IDataSetWriter> writers;
+public class MultiDataSetWriter implements DataSetWriter<MultiDataSetWriter.MultiCloseable> {
+    private final List<DataSetWriter> writers;
 
-    public MultiDataSetWriter(IDataSetWriter... writers) {
+    public MultiDataSetWriter(DataSetWriter... writers) {
         this(Arrays.asList(writers));
     }
 
-    public MultiDataSetWriter(List<IDataSetWriter> writers) {
+    public MultiDataSetWriter(List<DataSetWriter> writers) {
         this.writers = writers;
     }
 
@@ -84,9 +84,9 @@ public class MultiDataSetWriter implements IDataSetWriter<MultiDataSetWriter.Mul
     }
 
     class MultiCloseable implements Closeable {
-        final Map<IDataSetWriter, Closeable> writers;
+        final Map<DataSetWriter, Closeable> writers;
 
-        MultiCloseable(Map<IDataSetWriter, Closeable> writers) {
+        MultiCloseable(Map<DataSetWriter, Closeable> writers) {
             this.writers = writers;
         }
 

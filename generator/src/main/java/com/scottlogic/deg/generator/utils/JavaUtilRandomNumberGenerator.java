@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.utils;
 
 import java.util.Random;
 
-public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
+public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     private final Random random;
 
     public JavaUtilRandomNumberGenerator(){

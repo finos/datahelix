@@ -10,12 +10,12 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -82,9 +82,9 @@ public class GeneratorTestUtilities {
             new ProfileFields(profileFields),
             Collections.singleton(new Rule("TEST_RULE", constraints)));
 
-        final DecisionTreeCollection analysedProfile = new DecisionTreeGenerator().analyse(profile);
+        final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
 
-        final IDataGenerator dataGenerator = new DataGenerator(
+        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             new CartesianProductDecisionTreeWalker(
                 new ConstraintReducer(
                     new FieldSpecFactory(),

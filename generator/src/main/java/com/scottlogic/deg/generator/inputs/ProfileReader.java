@@ -34,7 +34,7 @@ public class ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        IConstraintReader constraintReader = new MainConstraintReader();
+        ConstraintReader constraintReader = new MainConstraintReader();
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,

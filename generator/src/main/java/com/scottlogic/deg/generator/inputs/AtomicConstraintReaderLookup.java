@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
@@ -13,10 +13,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
-    private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
+    private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
-        Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
+        Map<String, StringGenerator> standardNameToStringGenerator = new HashMap<>();
         standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
 
         typeCodeToSpecificReader = new HashMap<>();
@@ -181,7 +181,7 @@ public class AtomicConstraintReaderLookup {
         return mappedValues;
     }
 
-    private static void add(String typeCode, IConstraintReader func) {
+    private static void add(String typeCode, ConstraintReader func) {
         typeCodeToSpecificReader.put(typeCode, func);
     }
 
@@ -217,7 +217,7 @@ public class AtomicConstraintReaderLookup {
         }
     }
 
-    public IConstraintReader getByTypeCode(String typeCode) {
+    public ConstraintReader getByTypeCode(String typeCode) {
         return typeCodeToSpecificReader.get(typeCode);
     }
 }
