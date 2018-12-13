@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.NotConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 
 import java.util.*;
 import java.util.function.Function;
@@ -57,12 +57,12 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
     }
 
     private ConstraintNode optimiseDecisions(ConstraintNode rootNode, int depth){
-        IConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
+        AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
         if (mostProlificAtomicConstraint == null){
             return null;
         }
         // Add negation of most prolific constraint to new decision node
-        IConstraint negatedMostProlificConstraint = NotConstraint.negate(mostProlificAtomicConstraint);
+        AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.negate();
 
         List<DecisionNode> factorisableDecisionNodes = rootNode.getDecisions().stream()
             .filter(node -> this.decisionIsFactorisable(node, mostProlificAtomicConstraint, negatedMostProlificConstraint))
@@ -72,10 +72,8 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(mostProlificAtomicConstraint));
-        ConstraintNode negatedFactorisingConstraintNode = new OptimisedConstraintNode(
-            new TreeConstraintNode(negatedMostProlificConstraint));
+        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint).markNode(NodeMarking.OPTIMISED);
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);;
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -92,22 +90,22 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
         }
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new OptimisedDecisionNode(new TreeDecisionNode(
+        DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
                     coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
                     coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList())));
+            .collect(Collectors.toList())).markNode(NodeMarking.OPTIMISED);
 
         return rootNode
             .removeDecisions(decisionsToRemove)
             .addDecisions(Collections.singletonList(factorisedDecisionNode));
     }
 
-    private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<IConstraint> constraints){
+    private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<AtomicConstraint> constraints){
         return node.getAtomicConstraints().stream()
-            .map(NotConstraint::negate)
+            .map(AtomicConstraint::negate)
             .allMatch(constraints::contains);
     }
 
@@ -118,32 +116,36 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new OptimisedDecisionNode(new TreeDecisionNode(optionsToAdd));
+        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd).markNode(NodeMarking.OPTIMISED);
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
-    private int disfavourNotConstraints(Map.Entry<IConstraint, Long> entry){
+    private int disfavourNotConstraints(Map.Entry<AtomicConstraint, Long> entry){
         return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
-    private IConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
-        Map<IConstraint, Long> decisionConstraints = decisions
+    private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
+        Map<AtomicConstraint, Long> decisionConstraints = decisions
             .stream()
             .flatMap(dn -> dn.getOptions().stream())
             .flatMap(option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
+        Comparator<Map.Entry<AtomicConstraint, Long>> comparator = Comparator.comparing(Map.Entry::getValue);
+        comparator = comparator.reversed();
+        comparator = comparator.thenComparing(this::disfavourNotConstraints);
+        comparator = comparator.thenComparing(entry -> entry.getKey().toString());
+
         return decisionConstraints.entrySet()
             .stream()
-            .sorted(Comparator
-                .comparing(this::disfavourNotConstraints))
-            .max(Comparator.comparing(Map.Entry::getValue)) //order by the number of occurrences
-            .filter(constraint -> constraint.getValue() > 1) //where the number of occurrences > 1
+            .filter(constraint -> constraint.getValue() > 1) // where the number of occurrences > 1
+            .sorted(comparator)
             .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
+            .findFirst()
             .orElse(null); //otherwise return null
     }
 
-    private boolean decisionIsFactorisable(DecisionNode decision, IConstraint factorisingConstraint, IConstraint negatedFactorisingConstraint){
+    private boolean decisionIsFactorisable(DecisionNode decision, AtomicConstraint factorisingConstraint, AtomicConstraint negatedFactorisingConstraint){
         // The decision should contain ONE option with the MPC
         boolean optionWithMPCExists = decision.getOptions().stream()
             .filter(option -> option.atomicConstraintExists(factorisingConstraint))
@@ -168,15 +170,15 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
 
     class DecisionAnalyser {
         private DecisionNode decision;
-        private IConstraint factorisingConstraint;
-        private IConstraint negatedFactorisingConstraint;
-        private Set<IConstraint> atomicConstraintsAssociatedWithFactorisingOption = new HashSet<>();
-        private Set<IConstraint> atomicConstraintsAssociatedWithNegatedOption = new HashSet<>();
+        private AtomicConstraint factorisingConstraint;
+        private AtomicConstraint negatedFactorisingConstraint;
+        private Set<AtomicConstraint> atomicConstraintsAssociatedWithFactorisingOption = new HashSet<>();
+        private Set<AtomicConstraint> atomicConstraintsAssociatedWithNegatedOption = new HashSet<>();
 
-        DecisionAnalyser(DecisionNode decisionNode, IConstraint factorisingConstraint){
+        DecisionAnalyser(DecisionNode decisionNode, AtomicConstraint factorisingConstraint){
             this.decision = decisionNode;
             this.factorisingConstraint = factorisingConstraint;
-            this.negatedFactorisingConstraint = NotConstraint.negate(factorisingConstraint);
+            this.negatedFactorisingConstraint = factorisingConstraint.negate();
         }
 
         /**
@@ -218,7 +220,7 @@ public class DecisionTreeOptimiser implements IDecisionTreeOptimiser {
             return result;
         }
 
-        private void markOptionForFactorisation(IConstraint factorisingConstraint, ConstraintNode node, List<ConstraintNode> options, Set<IConstraint> constraints){
+        private void markOptionForFactorisation(AtomicConstraint factorisingConstraint, ConstraintNode node, List<ConstraintNode> options, Set<AtomicConstraint> constraints){
             ConstraintNode newOption = node.cloneWithoutAtomicConstraint(factorisingConstraint);
             if (!newOption.getAtomicConstraints().isEmpty()){
                 options.add(newOption);

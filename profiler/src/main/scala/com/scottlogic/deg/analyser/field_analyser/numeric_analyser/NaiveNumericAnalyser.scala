@@ -23,16 +23,16 @@ class NaiveNumericAnalyser(val df: DataFrame, val field: StructField) extends Nu
 
     val fieldTypeConstraint = new IsOfTypeConstraint(fieldName,"numeric");
 
-    val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min").toString);
+    val minLengthConstraint = new IsGreaterThanOrEqualToConstantConstraint(fieldName,head.getAs("min"));
 
-    val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max").toString);
+    val maxLengthConstraint = new IsLowerThanConstraint(fieldName, head.getAs("max"));
 
     allFieldConstraints += fieldTypeConstraint;
     allFieldConstraints += minLengthConstraint;
     allFieldConstraints += maxLengthConstraint;
     // FIXME for now we add a granular-to constraint (with value 1) only for IntegerType
     // It is actually non-trivial to find out the granularity of DoubleType and FloatType
-    if (inputField.dataType == IntegerType) {
+    if (inputField.dataType == LongType) {
       allFieldConstraints += new GranularToConstraint(fieldName,1);
     }
 

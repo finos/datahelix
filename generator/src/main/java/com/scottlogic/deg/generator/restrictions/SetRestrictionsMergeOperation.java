@@ -1,10 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,12 +11,12 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
     private static final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
 
     @Override
-    public boolean applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
         MergeResult<SetRestrictions> mergeResult =
             setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions());
 
         if (!mergeResult.successful){
-            return false;
+            return Optional.empty();
         }
 
         SetRestrictions setRestrictions = mergeResult.restrictions;
@@ -30,15 +29,15 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             Stream<?> filterStream = setRestrictions.getWhitelist().stream();
             TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
 
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
                 filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
             }
 
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
                 filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
             }
 
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
                 filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
             }
 
@@ -61,8 +60,9 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 setRestrictions.getBlacklist());
         }
 
-        merged.setSetRestrictions(setRestrictions);
-        return true;
+        return Optional.of(merged.withSetRestrictions(
+            setRestrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

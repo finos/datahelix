@@ -1,18 +1,19 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.combination_strategies.ICombinationStrategy;
+import com.scottlogic.deg.generator.Generate;
+import com.scottlogic.deg.generator.generation.combination_strategies.*;
 
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
-    private final ICombinationStrategy combinationStrategy;
+    private final CombinationStrategyType combinationStrategy;
     private final long maxRows = 10_000_000;
 
     public GenerationConfig(
         DataGenerationType dataGenerationType,
         TreeWalkerType walkerType,
-        ICombinationStrategy combinationStrategy) {
+        CombinationStrategyType combinationStrategy) {
 
         this.dataGenerationType = dataGenerationType;
         this.walkerType = walkerType;
@@ -24,7 +25,18 @@ public class GenerationConfig {
     }
 
     public ICombinationStrategy getCombinationStrategy() {
-        return combinationStrategy;
+        if (this.walkerType == TreeWalkerType.REDUCTIVE){
+            return new ReductiveCombinationStrategy();
+        }
+
+        switch(this.combinationStrategy){
+            case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
+            case PINNING: return new PinningCombinationStrategy();
+            case MINIMAL: return new MinimalCombinationStrategy();
+            default:
+                throw new UnsupportedOperationException(
+                    "$Combination strategy {this.combinationStrategy} is unsupported.");
+        }
     }
 
     public TreeWalkerType getWalkerType() {
@@ -34,9 +46,9 @@ public class GenerationConfig {
     public long getMaxRows() { return maxRows; }
 
     public enum DataGenerationType {
-        FullSequential("full"),
-        Interesting("interesting"),
-        Random("random");
+        FULL_SEQUENTIAL("full"),
+        INTERESTING("interesting"),
+        RANDOM("random");
 
         private final String text;
 
@@ -51,8 +63,9 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        Exhaustive("exhaustive"),
-        Routed("routed");
+        CARTESIAN_PRODUCT(Generate.defaultTreeWalkerType),
+        ROUTED("routed"),
+        REDUCTIVE("reductive");
 
         private final String text;
 
@@ -65,4 +78,22 @@ public class GenerationConfig {
             return text;
         }
     }
+
+    public enum CombinationStrategyType {
+
+        EXHAUSTIVE("exhaustive"),
+        PINNING("pinning"),
+        MINIMAL("minimal");
+        private final String text;
+
+        CombinationStrategyType(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
 }

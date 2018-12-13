@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
@@ -250,7 +250,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
 
         @Override
-        public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<IConstraint> atomicConstraints) {
+        public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> atomicConstraints) {
             for (ConstraintNodeToRowSpecMap map : maps){
                 if (constraintsMatch(map.constraint, atomicConstraints.iterator())){
                     return map.rowSpec == null
@@ -262,15 +262,15 @@ class DecisionTreeRoutesTreeWalkerTest {
             return Optional.empty();
         }
 
-        private boolean constraintsMatch(ConstraintNode constraint, Iterator<IConstraint> atomicConstraints){
-            Iterator<IConstraint> compareAtomicConstraints = constraint.getAtomicConstraints().iterator();
+        private boolean constraintsMatch(ConstraintNode constraint, Iterator<AtomicConstraint> atomicConstraints){
+            Iterator<AtomicConstraint> compareAtomicConstraints = constraint.getAtomicConstraints().iterator();
 
             while (atomicConstraints.hasNext()){
                 if (!compareAtomicConstraints.hasNext())
                     return false;
 
-                IConstraint compareNext = compareAtomicConstraints.next();
-                IConstraint next = atomicConstraints.next();
+                AtomicConstraint compareNext = compareAtomicConstraints.next();
+                AtomicConstraint next = atomicConstraints.next();
 
                 if (!next.equals(compareNext))
                     return false;
@@ -323,16 +323,16 @@ class DecisionTreeRoutesTreeWalkerTest {
     }
 
     private static class OrderedConstraintNode implements ConstraintNode {
-        private final List<IConstraint> atomicConstraints;
+        private final List<AtomicConstraint> atomicConstraints;
         private final List<DecisionNode> decisions;
 
-        public OrderedConstraintNode(List<IConstraint> atomicConstraints, List<DecisionNode> decisions) {
+        public OrderedConstraintNode(List<AtomicConstraint> atomicConstraints, List<DecisionNode> decisions) {
             this.atomicConstraints = atomicConstraints;
             this.decisions = decisions;
         }
 
         @Override
-        public Collection<IConstraint> getAtomicConstraints() {
+        public Collection<AtomicConstraint> getAtomicConstraints() {
             return atomicConstraints;
         }
 
@@ -352,17 +352,17 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
 
         @Override
-        public ConstraintNode cloneWithoutAtomicConstraint(IConstraint excludeAtomicConstraint) {
+        public ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint) {
             throw new UnsupportedOperationException("Not supported");
         }
 
         @Override
-        public boolean atomicConstraintExists(IConstraint constraint) {
+        public boolean atomicConstraintExists(AtomicConstraint constraint) {
             throw new UnsupportedOperationException("Not supported");
         }
 
         @Override
-        public ConstraintNode addAtomicConstraints(Collection<IConstraint> constraints) {
+        public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
             throw new UnsupportedOperationException("Not supported");
         }
 
@@ -373,6 +373,16 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         @Override
         public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public ConstraintNode markNode(NodeMarking marking) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
     }
@@ -391,6 +401,16 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         @Override
         public DecisionNode setOptions(Collection<ConstraintNode> options) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public DecisionNode markNode(NodeMarking marking) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+
+        @Override
+        public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
     }

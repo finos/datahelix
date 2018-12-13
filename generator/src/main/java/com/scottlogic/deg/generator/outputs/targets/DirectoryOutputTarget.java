@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -22,10 +23,15 @@ public class DirectoryOutputTarget implements IOutputTarget {
 
     @Override
     public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
-        Path outputPath = this.directoryPath
-            .resolve(this.dataSetWriter.makeFilename("output"));
-
-        this.dataSetWriter.write(profileFields, generatedObjects, outputPath);
+        try (Closeable writer = this.dataSetWriter.openWriter(this.directoryPath, "output", profileFields)) {
+            generatedObjects.forEach(row -> {
+                try {
+                    this.dataSetWriter.writeRow(writer, row);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 
     @Override

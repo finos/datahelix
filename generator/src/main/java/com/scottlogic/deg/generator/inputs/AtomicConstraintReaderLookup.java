@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IStringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
@@ -9,10 +9,7 @@ import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
@@ -40,7 +37,7 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields) ->
                         new IsInSetConstraint(
                                 fields.getByName(dto.field),
-                                new HashSet<>(dto.values)));
+                                mapValues(dto.values)));
 
         add(AtomicConstraintType.CONTAINSREGEX.toString(),
             (dto, fields) ->
@@ -125,15 +122,15 @@ public class AtomicConstraintReaderLookup {
                     final IsOfTypeConstraint.Types type;
                     switch ((String) dto.value) {
                         case "numeric":
-                            type = IsOfTypeConstraint.Types.Numeric;
+                            type = IsOfTypeConstraint.Types.NUMERIC;
                             break;
 
                         case "string":
-                            type = IsOfTypeConstraint.Types.String;
+                            type = IsOfTypeConstraint.Types.STRING;
                             break;
 
                         case "temporal":
-                            type = IsOfTypeConstraint.Types.Temporal;
+                            type = IsOfTypeConstraint.Types.TEMPORAL;
                             break;
 
                         default:
@@ -172,6 +169,16 @@ public class AtomicConstraintReaderLookup {
                             fields.getByName(dto.field),
                             length);
                 });
+    }
+
+    private static Set<Object> mapValues(Collection<Object> values) throws InvalidProfileException {
+        HashSet<Object> mappedValues = new HashSet<>();
+
+        for (Object value: values){
+            mappedValues.add(AtomicConstraintReaderLookup.potentialUnwrapDate(value));
+        }
+
+        return mappedValues;
     }
 
     private static void add(String typeCode, IConstraintReader func) {
