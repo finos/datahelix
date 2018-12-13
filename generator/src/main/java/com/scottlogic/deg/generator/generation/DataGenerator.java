@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
@@ -48,7 +48,7 @@ public class DataGenerator implements IDataGenerator {
             .stream()
             .map(treeWalker::walk);
 
-        final Stream<IDataBagSource> allDataBagSources =
+        final Stream<DataBagSource> allDataBagSources =
             rowSpecsByPartition
                 .map(rowSpecs ->
                     new ConcatenatingDataBagSource(
