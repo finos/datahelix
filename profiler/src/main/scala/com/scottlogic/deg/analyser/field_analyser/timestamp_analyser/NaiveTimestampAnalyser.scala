@@ -25,7 +25,7 @@ class NaiveTimestampAnalyser(val df: DataFrame, val field: StructField) extends 
         val higherThanOrEqualConstraint = new IsAfterOrEqualToConstantDateTimeConstraint(inputField, Map("date" -> dateFormat.format(dateAnalysis.getAs("min"))))
         val lowerThanConstraint = new IsBeforeConstantDateTimeConstraint(inputField, Map("date" -> dateFormat.format(dateAnalysis.getAs("max"))))
 
-        val allConstraints = ListBuffer[IConstraint]()
+        val allConstraints = ListBuffer[Constraint]()
         allConstraints += fieldTypeConstraint
         allConstraints += higherThanOrEqualConstraint
         allConstraints += lowerThanConstraint
