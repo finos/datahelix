@@ -5,13 +5,12 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ReductiveRowSpec extends RowSpec {
@@ -24,8 +23,8 @@ public class ReductiveRowSpec extends RowSpec {
     }
 
     @Override
-    public IDataBagSource createDataBagSource() {
-        List<IDataBagSource> fieldDataBagSources = new ArrayList<>(getFields().size() - 1);
+    public DataBagSource createDataBagSource() {
+        List<DataBagSource> fieldDataBagSources = new ArrayList<>(getFields().size() - 1);
 
         for (Field field : getFields()) {
             if (field.equals(this.lastFixedField)){
@@ -39,16 +38,16 @@ public class ReductiveRowSpec extends RowSpec {
                     new FieldSpecFulfiller(field, fieldSpec)));
         }
 
-        IDataBagSource sourceWithoutLastFixedField = new MultiplexingDataBagSource(fieldDataBagSources.stream());
+        DataBagSource sourceWithoutLastFixedField = new MultiplexingDataBagSource(fieldDataBagSources.stream());
         return new MultiplyingDataBagSource(
             sourceWithoutLastFixedField,
             new FieldSpecFulfiller(this.lastFixedField, this.getSpecForField(this.lastFixedField)));
     }
 
-    class SingleValueDataBagSource implements IDataBagSource {
-        private final IDataBagSource source;
+    class SingleValueDataBagSource implements DataBagSource {
+        private final DataBagSource source;
 
-        public SingleValueDataBagSource(IDataBagSource source) {
+        public SingleValueDataBagSource(DataBagSource source) {
             this.source = source;
         }
 
@@ -59,12 +58,12 @@ public class ReductiveRowSpec extends RowSpec {
         }
     }
 
-    class MultiplyingDataBagSource implements IDataBagSource {
+    class MultiplyingDataBagSource implements DataBagSource {
 
-        private final IDataBagSource fieldsForAllFixedFields;
-        private final IDataBagSource valuesForLastField;
+        private final DataBagSource fieldsForAllFixedFields;
+        private final DataBagSource valuesForLastField;
 
-        public MultiplyingDataBagSource(IDataBagSource fieldsForAllFixedFields, IDataBagSource valuesForLastField) {
+        public MultiplyingDataBagSource(DataBagSource fieldsForAllFixedFields, DataBagSource valuesForLastField) {
             this.fieldsForAllFixedFields = fieldsForAllFixedFields;
             this.valuesForLastField = valuesForLastField;
         }

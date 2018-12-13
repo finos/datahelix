@@ -4,10 +4,10 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-public class MultiplexingDataBagSource implements IDataBagSource {
-    private final Stream<IDataBagSource> subGenerators;
+public class MultiplexingDataBagSource implements DataBagSource {
+    private final Stream<DataBagSource> subGenerators;
 
-    public MultiplexingDataBagSource(Stream<IDataBagSource> subGenerators) {
+    public MultiplexingDataBagSource(Stream<DataBagSource> subGenerators) {
         this.subGenerators = subGenerators;
     }
 

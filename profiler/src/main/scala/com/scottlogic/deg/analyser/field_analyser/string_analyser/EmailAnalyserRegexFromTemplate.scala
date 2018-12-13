@@ -16,7 +16,7 @@ class EmailAnalyserRegexFromTemplate(val field: StructField) extends EmailAnalys
     val RegexTemplate = "(tim|frank|greg)\\.(smith|jones|sestero)@(gmail|hotmail|live)\\.com";
     val fieldName = field.name;
     
-    val allFieldConstraints: List[IConstraint] = List(
+    val allFieldConstraints: List[Constraint] = List(
             new IsOfTypeConstraint(fieldName, "string"),         // FIXME use a constant?
             new MatchesRegexConstraint(fieldName, RegexTemplate)
         )

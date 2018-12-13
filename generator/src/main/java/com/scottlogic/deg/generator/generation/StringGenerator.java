@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.field_value_sources.IFieldValueSource;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
-public interface IStringGenerator {
-    IStringGenerator intersect(IStringGenerator stringGenerator);
-    IStringGenerator complement();
+public interface StringGenerator {
+    StringGenerator intersect(StringGenerator stringGenerator);
+    StringGenerator complement();
 
     boolean isFinite();
     long getValueCount();
@@ -16,17 +16,17 @@ public interface IStringGenerator {
 
     Iterable<String> generateAllValues();
 
-    Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
+    Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
 
-    default IFieldValueSource asFieldValueSource() {
+    default FieldValueSource asFieldValueSource() {
         return new StringGeneratorAsFieldValueSource(this);
     }
 
     // Adapter
-    class StringGeneratorAsFieldValueSource implements IFieldValueSource {
-        private final IStringGenerator underlyingGenerator;
+    class StringGeneratorAsFieldValueSource implements FieldValueSource {
+        private final StringGenerator underlyingGenerator;
 
-        StringGeneratorAsFieldValueSource(IStringGenerator underlyingGenerator) {
+        StringGeneratorAsFieldValueSource(StringGenerator underlyingGenerator) {
             this.underlyingGenerator = underlyingGenerator;
         }
 
@@ -53,7 +53,7 @@ public interface IStringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
             return () -> new UpCastingIterator<>(
                 underlyingGenerator.generateRandomValues(randomNumberGenerator).iterator());
         }

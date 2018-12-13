@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.SedolStringGenerator;
@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.generation.SedolStringGenerator;
  * https://github.com/ScottLogic/data-engineering-generator/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/RegexFieldConstraint.java#L133
  */
 public class StringRestrictions {
-    public IStringGenerator stringGenerator;
+    public StringGenerator stringGenerator;
 
     public StringRestrictions() {
 

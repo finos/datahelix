@@ -11,7 +11,7 @@ class IsinAnalyser(val field: StructField) extends StringAnalyser {
     
     val fieldName = field.name;
     
-    val allFieldConstraints: List[IConstraint] = List(
+    val allFieldConstraints: List[Constraint] = List(
           new IsOfTypeConstraint(fieldName, "string"),   // FIXME use a constant?
           new IsAValidConstraint(fieldName, "ISIN")      // FIXME use a constant?
         )      

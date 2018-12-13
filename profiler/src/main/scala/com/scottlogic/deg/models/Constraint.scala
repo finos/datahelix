@@ -1,5 +1,5 @@
 package com.scottlogic.deg.models
 
-trait IConstraint {
+trait Constraint {
 
 }

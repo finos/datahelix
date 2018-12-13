@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 /** Where the generated data should be persisted. Possible implementations: A filepath, a directory path, a DB connection string */
-public interface IOutputTarget {
+public interface OutputTarget {
     void outputDataset(
         Stream<GeneratedObject> generatedObjects,
         ProfileFields profileFields)

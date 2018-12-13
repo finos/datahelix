@@ -3,9 +3,6 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
@@ -39,7 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class TreeTransformationIntegrationTests {
-    private final IDecisionTreeGenerator decisionTreeGenerator = new DecisionTreeGenerator();
+    private final DecisionTreeFactory decisionTreeGenerator = new ProfileDecisionTreeFactory();
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
