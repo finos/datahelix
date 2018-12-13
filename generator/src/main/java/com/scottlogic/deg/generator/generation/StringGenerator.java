@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 public interface StringGenerator {
@@ -16,7 +16,7 @@ public interface StringGenerator {
 
     Iterable<String> generateAllValues();
 
-    Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
+    Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
 
     default FieldValueSource asFieldValueSource() {
         return new StringGeneratorAsFieldValueSource(this);
@@ -53,7 +53,7 @@ public interface StringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
             return () -> new UpCastingIterator<>(
                 underlyingGenerator.generateRandomValues(randomNumberGenerator).iterator());
         }

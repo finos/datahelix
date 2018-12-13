@@ -85,7 +85,7 @@ public class IsinStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         if (isNegated) {
             return new RandomMergingIterable<>(
                     Arrays.asList(
@@ -115,7 +115,7 @@ public class IsinStringGenerator implements StringGenerator {
         return new RegexStringGenerator(invalidCountryCodeRegex, true).generateAllValues();
     }
 
-    private Iterable<String> generateRandomInvalidCountryStrings(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidCountryStrings(RandomNumberGenerator randomNumberGenerator) {
         final String invalidCountryCodeRegex = IsinUtils.VALID_COUNTRY_CODES.stream()
             .collect(Collectors.joining("|", "((?!", ")).*"));
         return new RegexStringGenerator(invalidCountryCodeRegex, true).generateRandomValues(randomNumberGenerator);
@@ -146,7 +146,7 @@ public class IsinStringGenerator implements StringGenerator {
                 isin -> !IsinUtils.isValidIsin(isin));
     }
 
-    private static Iterable<String> generateRandomCountriesWithInvalidNsins(IRandomNumberGenerator randomNumberGenerator) {
+    private static Iterable<String> generateRandomCountriesWithInvalidNsins(RandomNumberGenerator randomNumberGenerator) {
         final List<Iterable<String>> countryWithInvalidNsinIterables = IsinUtils.VALID_COUNTRY_CODES.stream()
                 .map(countryCode -> {
                     final StringGenerator nsinGeneratorForCountry = getNsinGeneratorForCountry(countryCode);
@@ -193,7 +193,7 @@ public class IsinStringGenerator implements StringGenerator {
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
 
-    private Iterable<String> generateRandomInvalidCheckDigitIsins(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidCheckDigitIsins(RandomNumberGenerator randomNumberGenerator) {
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
                 .map(isinSansCheckDigitGenerator ->
                         new FlatteningIterable<>(

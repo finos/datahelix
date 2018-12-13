@@ -80,7 +80,7 @@ public class SedolStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         if (negate) {
             return new RandomMergingIterable<>(
                 Arrays.asList(
@@ -96,7 +96,7 @@ public class SedolStringGenerator implements StringGenerator {
         return sedolSansCheckDigitGenerator.complement().generateAllValues();
     }
 
-    private Iterable<String> generateRandomInvalidRegexSedols(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidRegexSedols(RandomNumberGenerator randomNumberGenerator) {
         return sedolSansCheckDigitGenerator.complement().generateRandomValues(randomNumberGenerator);
     }
 
@@ -104,7 +104,7 @@ public class SedolStringGenerator implements StringGenerator {
         return generateInvalidCheckDigitSedols(sedolSansCheckDigitGenerator::generateAllValues);
     }
 
-    private Iterable<String> generateRandomInvalidCheckDigitSedols(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidCheckDigitSedols(RandomNumberGenerator randomNumberGenerator) {
         return generateInvalidCheckDigitSedols(
             () -> sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator));
     }

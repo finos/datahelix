@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 public interface FieldValueSource {
     boolean isFinite();
@@ -10,6 +10,6 @@ public interface FieldValueSource {
 
     Iterable<Object> generateAllValues();
 
-    Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator);
+    Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
 }
 

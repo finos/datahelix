@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
             () -> this.allValues.get(
                 randomNumberGenerator.nextInt(

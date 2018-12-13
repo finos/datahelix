@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
@@ -64,7 +64,7 @@ public class RegexStringGenerator implements StringGenerator {
         return RegexStringGenerator.createFromBlacklist(blacklist, new JavaUtilRandomNumberGenerator());
     }
 
-    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, IRandomNumberGenerator random) {
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, RandomNumberGenerator random) {
         String[] blacklistStrings = new String[blacklist.size()];
         int i = 0;
         for (Object obj : blacklist) {
@@ -123,7 +123,7 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
             () -> generateRandomStringInternal(
                 "",
@@ -211,7 +211,7 @@ public class RegexStringGenerator implements StringGenerator {
         State state,
         int minLength,
         int maxLength,
-        IRandomNumberGenerator random) {
+        RandomNumberGenerator random) {
 
         List<Transition> transitions = state.getSortedTransitions(false);
         Set<Integer> selectedTransitions = new HashSet<>();
@@ -247,7 +247,7 @@ public class RegexStringGenerator implements StringGenerator {
         int minLength,
         int maxLength,
         List<Transition> transitions,
-        IRandomNumberGenerator random) {
+        RandomNumberGenerator random) {
 
         if (state.isAccept()) {
             if (strMatch.length() == maxLength) {

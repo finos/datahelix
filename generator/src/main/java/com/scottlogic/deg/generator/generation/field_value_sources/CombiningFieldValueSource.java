@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +44,7 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new InternalRandomIterator(
             underlyingSources.stream()
                 .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
@@ -54,11 +54,11 @@ public class CombiningFieldValueSource implements FieldValueSource {
 
     private class InternalRandomIterator implements Iterator<Object> {
         private final List<Iterator<Object>> iterators;
-        private final IRandomNumberGenerator randomNumberGenerator;
+        private final RandomNumberGenerator randomNumberGenerator;
 
         InternalRandomIterator(
             List<Iterator<Object>> iterators,
-            IRandomNumberGenerator randomNumberGenerator) {
+            RandomNumberGenerator randomNumberGenerator) {
 
             this.iterators = iterators.stream()
                 .filter(Iterator::hasNext)
