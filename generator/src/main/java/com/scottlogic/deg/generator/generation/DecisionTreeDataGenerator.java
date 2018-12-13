@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
@@ -19,12 +19,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
-    private final IDecisionTreeOptimiser treeOptimiser;
+    private final DecisionTreeOptimiser treeOptimiser;
 
     public DecisionTreeDataGenerator(
             DecisionTreeWalker treeWalker,
             TreePartitioner treePartitioner,
-            IDecisionTreeOptimiser optimiser,
+            DecisionTreeOptimiser optimiser,
             DataGeneratorMonitor monitor) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;

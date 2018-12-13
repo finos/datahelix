@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -73,7 +73,7 @@ class ExampleProfilesTests {
                         new DecisionTreeDataGenerator(
                             walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
-                            new DecisionTreeOptimiser(),
+                            new MostProlificConstraintOptimiser(),
                             new NoopDataGeneratorMonitor())),
                     profileFile);
             });

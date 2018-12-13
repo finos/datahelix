@@ -67,8 +67,8 @@ public class GenerateTreeCollectionJson implements Runnable {
                 ? new RelatedFieldTreePartitioner()
                 : new NoopTreePartitioner();
                 
-        IDecisionTreeOptimiser treeOptimiser = doOptimise 
-                ? new DecisionTreeOptimiser()
+        DecisionTreeOptimiser treeOptimiser = doOptimise
+                ? new MostProlificConstraintOptimiser()
                 : new NoopDecisionTreeOptimiser();
                 
         final List<DecisionTree> listOfTree =
