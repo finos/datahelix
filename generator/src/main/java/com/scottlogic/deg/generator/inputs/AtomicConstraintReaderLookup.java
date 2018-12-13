@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
-    private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
+    private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
         Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
@@ -181,7 +181,7 @@ public class AtomicConstraintReaderLookup {
         return mappedValues;
     }
 
-    private static void add(String typeCode, IConstraintReader func) {
+    private static void add(String typeCode, ConstraintReader func) {
         typeCodeToSpecificReader.put(typeCode, func);
     }
 
@@ -217,7 +217,7 @@ public class AtomicConstraintReaderLookup {
         }
     }
 
-    public IConstraintReader getByTypeCode(String typeCode) {
+    public ConstraintReader getByTypeCode(String typeCode) {
         return typeCodeToSpecificReader.get(typeCode);
     }
 }
