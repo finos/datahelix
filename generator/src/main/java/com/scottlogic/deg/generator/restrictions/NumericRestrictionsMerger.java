@@ -21,8 +21,13 @@ public class NumericRestrictionsMerger {
 
         final NumericRestrictions merged = new NumericRestrictions();
 
+
         merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
+
+        if (merged.min != null && merged.max != null && merged.min.getLimit().compareTo(merged.max.getLimit()) >0 ) {
+            return new MergeResult<>();
+        }
 
         return new MergeResult<>(merged);
     }
@@ -42,7 +47,7 @@ public class NumericRestrictionsMerger {
             return new NumericLimit<>(
                 left.getLimit(),
                 left.isInclusive() && right.isInclusive());
-        switch(mergeLimit) {
+        switch (mergeLimit) {
             case MIN:
                 if (left.getLimit().compareTo(right.getLimit()) > 0)
                     return left;

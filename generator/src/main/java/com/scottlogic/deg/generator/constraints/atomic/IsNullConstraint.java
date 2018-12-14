@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.Objects;
 
@@ -23,7 +24,7 @@ public class IsNullConstraint implements AtomicConstraint, VisitableProfileEleme
     public String toString(){
         return String.format(
                 "`%s`: %s",
-                NullRestrictions.Nullness.MUST_BE_NULL,
+                Nullness.MUST_BE_NULL,
                 field.toString());
     }
 

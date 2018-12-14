@@ -6,32 +6,37 @@ import com.scottlogic.deg.generator.inputs.validation.StandardValidationMessages
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.ValidationType;
 import com.scottlogic.deg.generator.inputs.validation.messages.TypeConstraintValidationMessages;
+import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-public class TypeConstraintRestrictions implements ConstraintValidation {
+public class TypeConstraintValidationMergeOperation implements ConstraintValidation {
 
     public final ValidationType validationType = ValidationType.TYPE;
-    private HashSet<IsOfTypeConstraint.Types> allowedTypes;
     private List<ValidationAlert> alerts;
 
-    public TypeConstraintRestrictions(){
-        this.allowedTypes = new HashSet<>(Arrays.asList(IsOfTypeConstraint.Types.values()));
+    TypeRestrictions currentRestrictions;
+
+
+    public TypeConstraintValidationMergeOperation(){
         this.alerts = new ArrayList<>();
+        this.currentRestrictions = new DataTypeRestrictions(Arrays.asList(IsOfTypeConstraint.Types.values()));
 
     }
 
+
     public void isOfType(String field, IsOfTypeConstraint.Types type) {
 
-        if (this.allowedTypes.contains(type)) {
-            this.allowedTypes = new HashSet<>(Arrays.asList(type));
-        }
-        else
-        {
-            logError(field, new TypeConstraintValidationMessages(allowedTypes.iterator().next(), type));
+        TypeRestrictions candidateRestrictions = new DataTypeRestrictions(Arrays.asList(type));
+        TypeRestrictionsMerger merger = new TypeRestrictionsMerger();
+
+        MergeResult<TypeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
+        if(result.successful){
+            currentRestrictions = result.restrictions;
+        } else {
+            logError(field, new TypeConstraintValidationMessages(candidateRestrictions.getAllowedTypes().iterator().next(), currentRestrictions.getAllowedTypes().iterator().next()));
         }
     }
 

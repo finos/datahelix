@@ -1,4 +1,8 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
+
+import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.NullRestrictionsMerger;
 
 import java.util.Optional;
 

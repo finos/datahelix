@@ -1,11 +1,13 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstraint {
+public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     public final LocalDateTime referenceValue;
 
@@ -40,5 +42,10 @@ public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstra
     @Override
     public String toString(){
         return String.format("`%s` >= %s", field.name, referenceValue);
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+        visitor.visit(this);
     }
 }

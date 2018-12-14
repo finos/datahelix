@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
@@ -142,11 +143,11 @@ public class FieldSpecFulfiller implements IDataBagSource {
         IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (spec.getNullRestrictions() != null) {
-            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {
+            if (spec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL) {
                 // if *always* null, add a null-only source and signal that no other sources are needed
                 fieldValueSources.add(nullOnlySource);
                 return true;
-            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_NOT_BE_NULL) {
+            } else if (spec.getNullRestrictions().nullness == Nullness.MUST_NOT_BE_NULL) {
                 // if *never* null, add nothing and signal that source generation should continue
                 return false;
             }

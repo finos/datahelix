@@ -7,28 +7,28 @@ import java.util.List;
 
 public class ConstraintRestrictions {
 
-    public final TypeConstraintRestrictions typeConstraintRestrictions;
+    public final TypeConstraintValidationMergeOperation typeConstraintValidationMergeOperation;
     public final TemporalConstraintRestrictions temporalConstraintRestrictions;
-    public final SetConstraintRestrictions setConstraintRestrictions;
-    public final StringConstraintRestrictions stringConstraintRestrictions;
-    public final NullConstraintRestrictions nullConstraintRestrictions;
-    public final GranularityConstraintRestrictions granularityConstraintRestrictions;
-    public final NumericConstraintRestrictions numericConstraintRestriction;
+    public final SetConstraintValidationMergeOperation setConstraintValidationMergeOperation;
+    public final StringConstraintValidationMergeOperation stringConstraintValidationMergeOperation;
+    public final NullConstraintValidationMergeOperation nullConstraintValidationMergeOperation;
+    public final GranularityConstraintValidationMergeOperation granularityConstraintValidationMergeOperation;
+    public final NumericConstraintValidationMergeOperation numericConstraintRestriction;
 
-    public ConstraintRestrictions(TypeConstraintRestrictions typeConstraintRestrictions,
+    public ConstraintRestrictions(TypeConstraintValidationMergeOperation typeConstraintValidationMergeOperation,
                                   TemporalConstraintRestrictions temporalConstraintRestrictions,
-                                  SetConstraintRestrictions setConstraintRestrictions,
-                                  StringConstraintRestrictions stringConstraintRestrictions,
-                                  NullConstraintRestrictions nullConstraintRestrictions,
-                                  GranularityConstraintRestrictions granularityConstraintRestrictions,
-                                  NumericConstraintRestrictions numericConstraintRestriction)
+                                  SetConstraintValidationMergeOperation setConstraintValidationMergeOperation,
+                                  StringConstraintValidationMergeOperation stringConstraintValidationMergeOperation,
+                                  NullConstraintValidationMergeOperation nullConstraintValidationMergeOperation,
+                                  GranularityConstraintValidationMergeOperation granularityConstraintValidationMergeOperation,
+                                  NumericConstraintValidationMergeOperation numericConstraintRestriction)
     {
-        this.typeConstraintRestrictions = typeConstraintRestrictions;
+        this.typeConstraintValidationMergeOperation = typeConstraintValidationMergeOperation;
         this.temporalConstraintRestrictions = temporalConstraintRestrictions;
-        this.setConstraintRestrictions = setConstraintRestrictions;
-        this.stringConstraintRestrictions = stringConstraintRestrictions;
-        this.nullConstraintRestrictions = nullConstraintRestrictions;
-        this.granularityConstraintRestrictions = granularityConstraintRestrictions;
+        this.setConstraintValidationMergeOperation = setConstraintValidationMergeOperation;
+        this.stringConstraintValidationMergeOperation = stringConstraintValidationMergeOperation;
+        this.nullConstraintValidationMergeOperation = nullConstraintValidationMergeOperation;
+        this.granularityConstraintValidationMergeOperation = granularityConstraintValidationMergeOperation;
         this.numericConstraintRestriction = numericConstraintRestriction;
     }
 
@@ -36,12 +36,12 @@ public class ConstraintRestrictions {
 
         List<ValidationAlert> alerts = new ArrayList<>();
 
-        alerts.addAll(typeConstraintRestrictions.getAlerts());
+        alerts.addAll(typeConstraintValidationMergeOperation.getAlerts());
         alerts.addAll(temporalConstraintRestrictions.getAlerts());
-        alerts.addAll(setConstraintRestrictions.getAlerts());
-        alerts.addAll(stringConstraintRestrictions.getAlerts());
-        alerts.addAll(nullConstraintRestrictions.getAlerts());
-        alerts.addAll(granularityConstraintRestrictions.getAlerts());
+        alerts.addAll(setConstraintValidationMergeOperation.getAlerts());
+        alerts.addAll(stringConstraintValidationMergeOperation.getAlerts());
+        alerts.addAll(nullConstraintValidationMergeOperation.getAlerts());
+        alerts.addAll(granularityConstraintValidationMergeOperation.getAlerts());
         alerts.addAll(numericConstraintRestriction.getAlerts());
 
         return alerts;

@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSour
 import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.List;

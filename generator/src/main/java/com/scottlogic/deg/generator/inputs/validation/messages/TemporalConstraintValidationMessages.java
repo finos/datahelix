@@ -9,20 +9,18 @@ public class TemporalConstraintValidationMessages implements StandardValidationM
 
     private LocalDateTime allowedMin;
     private LocalDateTime allowedMax;
-    private LocalDateTime invalidMin;
-    private LocalDateTime invalidMax;
+    private LocalDateTime invalidValue;
 
-    public TemporalConstraintValidationMessages(LocalDateTime allowedMin, LocalDateTime allowedMax, LocalDateTime invalidMin, LocalDateTime invalidMax) {
+    public TemporalConstraintValidationMessages(LocalDateTime allowedMin, LocalDateTime allowedMax, LocalDateTime invalidValue) {
 
         this.allowedMin = allowedMin;
         this.allowedMax = allowedMax;
-        this.invalidMin = invalidMin;
-        this.invalidMax = invalidMax;
+        this.invalidValue = invalidValue;
     }
 
     @Override
     public String getVerboseMessage() {
 
-        return String.format("Temporal constraint between %s and %s is not allowed. The allowed range is between %s and %s.", invalidMin, invalidMax, allowedMin == LocalDateTime.MIN ? "anytime" : allowedMin , allowedMax == LocalDateTime.MAX ? "anytime" : allowedMax);
+        return String.format("Temporal constraint with value %s is not allowed. The allowed range is between %s and %s.", invalidValue, allowedMin == null ? "anytime" : allowedMin , allowedMax == null ? "anytime" : allowedMax);
     }
 }

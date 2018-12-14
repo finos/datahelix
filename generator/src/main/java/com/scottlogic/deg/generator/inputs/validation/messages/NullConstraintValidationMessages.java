@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs.validation.messages;
 
 import com.scottlogic.deg.generator.inputs.validation.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.restrictions.Nullness;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 public class NullConstraintValidationMessages implements StandardValidationMessages {
 

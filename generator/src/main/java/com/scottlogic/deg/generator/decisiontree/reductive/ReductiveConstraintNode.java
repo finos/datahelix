@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.Collection;
 import java.util.Optional;

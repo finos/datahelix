@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.inputs.validation.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,15 +22,15 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsOfTypeConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, constraint.requiredType);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, constraint.requiredType);
     }
 
     @Override
     public void visit(IsAfterConstantDateTimeConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintRestrictions.isAfter(constraint.field.name, constraint.referenceValue);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.isAfter(constraint.field.name, constraint.referenceValue, false);
 
     }
 
@@ -37,17 +38,34 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsBeforeConstantDateTimeConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintRestrictions.isBefore(constraint.field.name, constraint.referenceValue);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.isBefore(constraint.field.name, constraint.referenceValue, false);
 
+    }
+
+    @Override
+    public void visit(IsAfterOrEqualToConstantDateTimeConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.field.name);
+
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.isAfter(constraint.field.name, constraint.referenceValue, true);
+    }
+
+    @Override
+    public void visit(IsBeforeOrEqualToConstantDateTimeConstraint constraint) {
+
+        ConstraintRestrictions state = getFieldState(constraint.field.name);
+
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintRestrictions.isBefore(constraint.field.name, constraint.referenceValue, true);
     }
 
     @Override
     public void visit(IsInSetConstraint constraint) {
 
         ConstraintRestrictions state = getFieldState(constraint.field.name);
-        state.nullConstraintRestrictions.mustNotBeNull(constraint.field.name);
-        state.setConstraintRestrictions.isInSet(constraint.field.name, constraint.legalValues);
+        state.nullConstraintValidationMergeOperation.setNullness(constraint.field.name, Nullness.MUST_NOT_BE_NULL);
+        state.setConstraintValidationMergeOperation.isInSet(constraint.field.name, constraint.legalValues);
 
 
     }
@@ -56,8 +74,8 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsStringShorterThanConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
-        state.stringConstraintRestrictions.isShorterThan(constraint.field.name, constraint.referenceValue);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
+        state.stringConstraintValidationMergeOperation.isShorterThan(constraint.field.name, constraint.referenceValue);
 
     }
 
@@ -65,8 +83,8 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsStringLongerThanConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-       state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
-       state.stringConstraintRestrictions.isLongerThan(constraint.field.name, constraint.referenceValue);
+       state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.STRING);
+       state.stringConstraintValidationMergeOperation.isLongerThan(constraint.field.name, constraint.referenceValue);
 
 
     }
@@ -75,7 +93,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsNullConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.field.name);
 
-        state.nullConstraintRestrictions.mustBeNull(constraint.field.name);
+        state.nullConstraintValidationMergeOperation.setNullness(constraint.field.name, Nullness.MUST_BE_NULL);
     }
 
     @Override
@@ -85,10 +103,10 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintRestrictions state = getFieldState(negatedConstraint.getField().name);
 
         if(negatedConstraint instanceof IsNullConstraint){
-            state.nullConstraintRestrictions.mustNotBeNull(negatedConstraint.getField().name);
+            state.nullConstraintValidationMergeOperation.setNullness(negatedConstraint.getField().name, Nullness.MUST_NOT_BE_NULL);
         } else if(negatedConstraint instanceof IsInSetConstraint){
             IsInSetConstraint negatedSetConstraint = (IsInSetConstraint) negatedConstraint;
-            state.setConstraintRestrictions.mustNotBeInSet(negatedSetConstraint.getField().name,negatedSetConstraint.legalValues);
+            state.setConstraintValidationMergeOperation.mustNotBeInSet(negatedSetConstraint.getField().name,negatedSetConstraint.legalValues);
         }
     }
 
@@ -96,8 +114,8 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsGranularToConstraint constraint) {
 
         ConstraintRestrictions state = getFieldState(constraint.getField().name);
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
-        state.granularityConstraintRestrictions.granularTo(constraint.field.name, constraint.granularity.getNumericGranularity());
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.granularityConstraintValidationMergeOperation.granularTo(constraint.field.name, constraint.granularity.getNumericGranularity());
 
     }
 
@@ -105,17 +123,33 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsLessThanConstantConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.getField().name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsLessThan(constraint.field.name, constraint.referenceValue);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsLessThan(constraint.field.name, constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsGreaterThanConstantConstraint constraint) {
         ConstraintRestrictions state = getFieldState(constraint.getField().name);
 
-        state.typeConstraintRestrictions.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsGreaterThan(constraint.field.name, constraint.referenceValue);
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsGreaterThan(constraint.field.name, constraint.referenceValue, false);
 
+    }
+
+    @Override
+    public void visit(IsLessThanOrEqualToConstantConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.getField().name);
+
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsLessThan(constraint.field.name, constraint.referenceValue, true);
+    }
+
+    @Override
+    public void visit(IsGreaterThanOrEqualToConstantConstraint constraint) {
+        ConstraintRestrictions state = getFieldState(constraint.getField().name);
+
+        state.typeConstraintValidationMergeOperation.isOfType(constraint.field.name, IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintRestriction.IsGreaterThan(constraint.field.name, constraint.referenceValue, true);
     }
 
     @Override
@@ -145,13 +179,13 @@ public class ProfileValidationVisitor implements ProfileVisitor {
             return allFieldsState.get(fieldName);
         } else {
             ConstraintRestrictions noRestrictions = new ConstraintRestrictions(
-                new TypeConstraintRestrictions(),
+                new TypeConstraintValidationMergeOperation(),
                 new TemporalConstraintRestrictions(),
-                new SetConstraintRestrictions(),
-                new StringConstraintRestrictions(),
-                new NullConstraintRestrictions(),
-                new GranularityConstraintRestrictions(),
-                new NumericConstraintRestrictions());
+                new SetConstraintValidationMergeOperation(),
+                new StringConstraintValidationMergeOperation(),
+                new NullConstraintValidationMergeOperation(),
+                new GranularityConstraintValidationMergeOperation(),
+                new NumericConstraintValidationMergeOperation());
 
             allFieldsState.put(fieldName, noRestrictions);
             return noRestrictions;

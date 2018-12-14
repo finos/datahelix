@@ -9,14 +9,14 @@ import com.scottlogic.deg.generator.inputs.validation.messages.StringConstraintV
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringConstraintRestrictions implements ConstraintValidation {
+public class StringConstraintValidationMergeOperation implements ConstraintValidation {
 
     public final ValidationType validationType = ValidationType.STRING;
     private int lengthMin;
     private int lengthMax;
     private List<ValidationAlert> alerts;
 
-    public StringConstraintRestrictions() {
+    public StringConstraintValidationMergeOperation() {
         this.lengthMin = 0;
         this.lengthMax = Integer.MAX_VALUE;
         this.alerts = new ArrayList<>();

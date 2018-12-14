@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSourc
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ReductiveRowSpec extends RowSpec {
