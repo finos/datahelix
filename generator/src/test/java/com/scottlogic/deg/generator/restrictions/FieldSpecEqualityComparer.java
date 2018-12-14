@@ -1,18 +1,16 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.decisiontree.test_utils.DefaultEqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 
 public class FieldSpecEqualityComparer implements EqualityComparer {
-    private EqualityComparer setRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer stringRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer nullRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer typeRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer dateTimeRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer formatRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer granularityRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer mustContainRestrictionsComparer = new DefaultEqualityComparer();
-    private EqualityComparer fieldSpecSourceComparer = new DefaultEqualityComparer();
+    private EqualityComparer setRestrictionsComparer = new SetRestrictionsEqualityComparer();
+    private EqualityComparer stringRestrictionsComparer = new StringRestrictionsEqualityComparer();
+    private EqualityComparer nullRestrictionsComparer = new NullRestrictionsEqualityComparer();
+    private EqualityComparer typeRestrictionsComparer = new TypeRestrictionsEqualityComparer();
+    private EqualityComparer dateTimeRestrictionsComparer = new DateTimeRestrictionsEqualityComparer();
+    private EqualityComparer formatRestrictionsComparer = new FormatRestrictionsEqualityComparer();
+    private EqualityComparer granularityRestrictionsComparer = new GranularityRestrictionsEqualityComparer();
+    private EqualityComparer mustContainRestrictionsComparer = new MustContainRestrictionsEqualityComparer();
 
     @Override
     public int getHashCode(Object item) {
@@ -30,11 +28,18 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
             return false;
         }
 
-        //must not have any other restrictions on <fieldSpec>
-        //<fieldSpec> must have a must contain restriction
-        //must contain restriction must have 1 item in collection (field spec)
-        //must contain restriction single item must have null restriction
-        //must contain restriction single item must not have any other restrictions
-        return false;
+        if (fieldSpec1 == null && fieldSpec2 == null){
+            return true;
+        }
+
+        return setRestrictionsComparer.equals(fieldSpec1.getSetRestrictions(), fieldSpec2.getSetRestrictions())
+        && stringRestrictionsComparer.equals(fieldSpec1.getStringRestrictions(), fieldSpec2.getStringRestrictions())
+        && nullRestrictionsComparer.equals(fieldSpec1.getNullRestrictions(), fieldSpec2.getNullRestrictions())
+        && typeRestrictionsComparer.equals(fieldSpec1.getTypeRestrictions(), fieldSpec2.getTypeRestrictions())
+        && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions())
+        && formatRestrictionsComparer.equals(fieldSpec1.getFormatRestrictions(), fieldSpec2.getFormatRestrictions())
+        && granularityRestrictionsComparer.equals(fieldSpec1.getGranularityRestrictions(), fieldSpec2.getGranularityRestrictions())
+        && mustContainRestrictionsComparer.equals(fieldSpec1.getMustContainRestriction(), fieldSpec2.getMustContainRestriction());
     }
 }
+
