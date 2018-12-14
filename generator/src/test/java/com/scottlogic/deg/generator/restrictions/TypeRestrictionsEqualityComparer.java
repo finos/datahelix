@@ -1,6 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
+
+import java.util.Set;
 
 public class TypeRestrictionsEqualityComparer implements EqualityComparer {
 
@@ -22,6 +25,10 @@ public class TypeRestrictionsEqualityComparer implements EqualityComparer {
 
         if (item1 == null && item2 == null) {
             return true;
+        }
+
+        if (item1.getClass() != item2.getClass()) {
+            return false;
         }
 
         return item1.getAllowedTypes().equals(item2.getAllowedTypes());
