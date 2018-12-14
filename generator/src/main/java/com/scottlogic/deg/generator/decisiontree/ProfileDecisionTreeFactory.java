@@ -43,26 +43,17 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
                 : ifConstraint.negate());
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(
-        Collection<AtomicConstraint> constraints,
-        boolean violated) {
+    private static Collection<ConstraintNode> asConstraintNodeList(Collection<AtomicConstraint> constraints) {
 
         return Collections.singleton(
             new TreeConstraintNode(
-                constraints
-                    .stream()
-                    .map(c -> violated
-                        ? new ViolatedAtomicConstraint(c)
-                        : c)
-                    .collect(Collectors.toList()),
+                constraints,
                 Collections.emptyList()));
     }
 
-    private static Collection<ConstraintNode> asConstraintNodeList(
-        AtomicConstraint constraint,
-        boolean violated) {
+    private static Collection<ConstraintNode> asConstraintNodeList(AtomicConstraint constraint) {
 
-        return asConstraintNodeList(Collections.singleton(constraint), violated);
+        return asConstraintNodeList(Collections.singleton(constraint));
     }
 
     private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
@@ -84,7 +75,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
 
     private ConstraintNode convertRule(Rule rule) {
         Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
-            .flatMap(c -> convertConstraint(c, false).stream())
+            .flatMap(c -> convertConstraint(c).stream())
             .iterator();
 
         return ConstraintNode.merge(rootConstraintNodeFragments);
@@ -114,14 +105,14 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
                     .map(AndConstraint::new)
                     .collect(Collectors.toList());
 
-            return convertConstraint(new OrConstraint(possibleFulfilments), false);
+            return convertConstraint(new OrConstraint(possibleFulfilments));
         }
         // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
         else if (violatedConstraint instanceof OrConstraint) {
             Collection<Constraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
 
             return convertConstraint(
-                new AndConstraint(violateEach(subConstraints)), false);
+                new AndConstraint(violateEach(subConstraints)));
         }
         // VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
         // VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
@@ -141,15 +132,16 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             return convertConstraint(
                 negativeViolation != null
                     ? positiveViolation.or(negativeViolation)
-                    : positiveViolation,
-                false);
+                    : positiveViolation
+            );
         }
 
         // we've got an atomic constraint
-        return convertConstraint(violatedConstraint.negate(), true);
+        AtomicConstraint violatedAtomicConstraint = (AtomicConstraint) violatedConstraint;
+        return convertConstraint(new ViolatedAtomicConstraint(violatedAtomicConstraint.negate()));
     }
 
-    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert, boolean violated) {
+    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
         if (constraintToConvert instanceof ViolateConstraint) {
             return convertConstraint((ViolateConstraint)constraintToConvert);
         }
@@ -162,14 +154,14 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
                 Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
-                    new OrConstraint(negateEach(subConstraints)), violated);
+                    new OrConstraint(negateEach(subConstraints)));
             }
             // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
             else if (negatedConstraint instanceof OrConstraint) {
                 Collection<Constraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
 
                 return convertConstraint(
-                    new AndConstraint(negateEach(subConstraints)), violated);
+                    new AndConstraint(negateEach(subConstraints)));
             }
             // ¬IF(X, then: Y) reduces to AND(X, ¬Y)
             // ¬IF(X, then: Y, else: Z) reduces to OR(AND(X, ¬Y), AND(¬X, ¬Z))
@@ -189,12 +181,13 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
                 return convertConstraint(
                     negativeNegation != null
                         ? positiveNegation.or(negativeNegation)
-                        : positiveNegation,
-                    violated);
+                        : positiveNegation
+                );
             }
             // if we got this far, it must be an atomic constraint
             else {
-                return asConstraintNodeList((AtomicConstraint) constraintToConvert, violated);
+                AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
+                return asConstraintNodeList(atomicConstraint);
             }
         }
         // AND(X, Y, Z) becomes a flattened list of constraint nodes
@@ -202,7 +195,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             Collection<Constraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
 
             return subConstraints.stream()
-                .flatMap(c -> convertConstraint(c, violated).stream())
+                .flatMap(c -> convertConstraint(c).stream())
                 .collect(Collectors.toList());
         }
         // OR(X, Y, Z) becomes a decision node
@@ -211,14 +204,15 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
 
             DecisionNode decisionPoint = new TreeDecisionNode(
                 subConstraints.stream()
-                    .map(c -> ConstraintNode.merge(convertConstraint(c, violated).stream().iterator()))
+                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
                     .collect(Collectors.toList()));
 
             return asConstraintNodeList(decisionPoint);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
-            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert), violated);
+            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert));
         } else {
-            return asConstraintNodeList((AtomicConstraint) constraintToConvert, violated);
+            AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
+            return asConstraintNodeList(atomicConstraint);
         }
     }
 }
