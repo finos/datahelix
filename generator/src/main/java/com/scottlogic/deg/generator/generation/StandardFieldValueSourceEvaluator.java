@@ -35,12 +35,14 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
                 )
             );
         }
-        getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-            .forEach(o -> validSources.add(
-                new CannedValuesFieldValueSource(
-                    new ArrayList<>(o.getSetRestrictions().getWhitelist())
-                )
-            ));
+        if (mustContainRestriction != null) {
+            getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                .forEach(o -> validSources.add(
+                    new CannedValuesFieldValueSource(
+                        new ArrayList<>(o.getSetRestrictions().getWhitelist())
+                    )
+                ));
+        }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
             ? fieldSpec.getTypeRestrictions()

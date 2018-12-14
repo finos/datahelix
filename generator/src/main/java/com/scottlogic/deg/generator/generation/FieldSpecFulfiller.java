@@ -17,12 +17,16 @@ import java.util.stream.StreamSupport;
 public class FieldSpecFulfiller implements IDataBagSource {
     private final Field field;
     private final FieldSpec spec;
-    private final StandardFieldValueSourceEvaluator sourceFactory;
+    private final FieldValueSourceEvaluator sourceFactory;
 
     public FieldSpecFulfiller(Field field, FieldSpec spec) {
+        this(field, spec, new StandardFieldValueSourceEvaluator());
+    }
+
+    public FieldSpecFulfiller(Field field, FieldSpec spec, FieldValueSourceEvaluator sourceEvaluator) {
         this.field = field;
         this.spec = spec;
-        this.sourceFactory = new StandardFieldValueSourceEvaluator();
+        this.sourceFactory = sourceEvaluator;
     }
 
     @Override

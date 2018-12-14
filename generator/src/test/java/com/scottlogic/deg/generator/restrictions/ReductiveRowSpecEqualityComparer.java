@@ -12,19 +12,15 @@ public class ReductiveRowSpecEqualityComparer implements EqualityComparer {
 
     @Override
     public boolean equals(Object item1, Object item2) {
-        if (item1 != null && item2 == null ||
-            item1 == null && item2 != null) {
-            return false;
-        }
-        if (item1.getClass() != ReductiveRowSpec.class ||
-            item2.getClass() != ReductiveRowSpec.class) {
-            return false;
-        }
-
         return equals((ReductiveRowSpec) item1, (ReductiveRowSpec) item2);
     }
 
     private boolean equals(ReductiveRowSpec rowSpec1, ReductiveRowSpec rowSpec2) {
+        if (rowSpec1 != null && rowSpec2 == null ||
+            rowSpec1 == null && rowSpec2 != null) {
+            return false;
+        }
+
         boolean result = rowSpec1.getFields().equals(rowSpec2.getFields());
 
         if (result) {
