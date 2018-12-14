@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.Set;
 
 public class MustContainRestrictionsEqualityComparer implements EqualityComparer {
+    private final EqualityComparer fieldSpecComparer;
+
+    MustContainRestrictionsEqualityComparer(EqualityComparer fieldSpecComparer) {
+        this.fieldSpecComparer = fieldSpecComparer;
+    }
 
     @Override
     public int getHashCode(Object item) {
@@ -27,7 +32,11 @@ public class MustContainRestrictionsEqualityComparer implements EqualityComparer
             return true;
         }
 
-        return checkNullObject(item1.getRequiredObjects()).equals(checkNullObject(item2.getRequiredObjects()));
+
+        return setsAreEqual(
+            checkNullObject(item1.getRequiredObjects()),
+            checkNullObject(item2.getRequiredObjects())
+        );
     }
 
     private Set<FieldSpec> checkNullObject(Set<FieldSpec> set) {
@@ -36,5 +45,25 @@ public class MustContainRestrictionsEqualityComparer implements EqualityComparer
         }
 
         return set;
+    }
+
+    private boolean setsAreEqual(Set<FieldSpec> requiredObjects1, Set<FieldSpec> requiredObjects2) {
+        if (requiredObjects1.size() != requiredObjects2.size()) {
+            return false;
+        }
+
+        boolean areEqual = true;
+        for (FieldSpec spec1 : requiredObjects1) {
+            for (FieldSpec spec2 : requiredObjects2) {
+                if (fieldSpecComparer.equals(spec1, spec2)) {
+                    areEqual = true;
+                    break;
+                }
+
+                areEqual = false;
+            }
+        }
+
+        return areEqual;
     }
 }

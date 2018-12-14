@@ -10,7 +10,7 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
     private EqualityComparer dateTimeRestrictionsComparer = new DateTimeRestrictionsEqualityComparer();
     private EqualityComparer formatRestrictionsComparer = new FormatRestrictionsEqualityComparer();
     private EqualityComparer granularityRestrictionsComparer = new GranularityRestrictionsEqualityComparer();
-    private EqualityComparer mustContainRestrictionsComparer = new MustContainRestrictionsEqualityComparer();
+    private EqualityComparer mustContainRestrictionsComparer = new MustContainRestrictionsEqualityComparer(this);
 
     @Override
     public int getHashCode(Object item) {

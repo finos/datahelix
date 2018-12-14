@@ -15,16 +15,36 @@ public class NullRestrictionsEqualityComparer implements EqualityComparer {
     }
 
     private boolean equals (NullRestrictions item1, NullRestrictions item2) {
-        if (item1 == null && item2 != null ||
-            item1 != null && item2 == null) {
+        if (objectsAreOppositeNullState(item1, item2)) {
             return false;
         }
 
-        if (item1 == null && item2 == null) {
+        if (objectsBothNull(item1, item2)) {
             return true;
         }
 
-        return item1.nullness.equals(item2.nullness);
+        return nullnessAreEqual(item1.nullness, item2.nullness);
     }
 
+    private boolean nullnessAreEqual(NullRestrictions.Nullness nullness1, NullRestrictions.Nullness nullness2) {
+        if (nullness1 == null && nullness2 != null ||
+            nullness1 != null && nullness2 == null) {
+            return false;
+        }
+
+        if (nullness1 == null && nullness2 == null) {
+            return true;
+        }
+
+        return nullness1.equals(nullness2);
+    }
+
+    private boolean objectsAreOppositeNullState(Object object1, Object object2) {
+        return object1 == null && object2 != null ||
+               object1 != null && object2 == null;
+    }
+
+    private boolean objectsBothNull(Object object1, Object object2) {
+        return object1 == null && object2 == null;
+    }
 }
