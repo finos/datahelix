@@ -80,7 +80,7 @@ public class IsinStringGeneratorTest {
 
     @Test
     public void complementShouldProduceNoRandomValidIsins() {
-        IStringGenerator target = new IsinStringGenerator().complement();
+        StringGenerator target = new IsinStringGenerator().complement();
 
         final int NumberOfTests = 100;
 

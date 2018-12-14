@@ -165,7 +165,7 @@ class IntegerFieldValueSourceTests {
         expectAllValues();
     }
 
-    private IFieldValueSource getObjectUnderTest() {
+    private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
             NumericRestrictions restrictions = new NumericRestrictions();
             restrictions.min = lowerLimit;

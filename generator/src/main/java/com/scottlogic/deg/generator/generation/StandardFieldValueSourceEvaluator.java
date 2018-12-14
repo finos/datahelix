@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
-    public List<IFieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
-        List<IFieldValueSource> validSources = new ArrayList<>();
+    public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
+        List<FieldValueSource> validSources = new ArrayList<>();
         MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
 
         // check nullability...
@@ -77,7 +77,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
                 Set<Object> blacklist = getBlacklist(fieldSpec);
 
-                final IStringGenerator generator;
+                final StringGenerator generator;
                 if (blacklist.size() > 0) {
                     RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
@@ -106,10 +106,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private boolean determineNullabilityAndDecideWhetherToHalt(
-        List<IFieldValueSource> fieldValueSources,
+        List<FieldValueSource> fieldValueSources,
         FieldSpec fieldSpec) {
 
-        IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+        FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (fieldSpec.getNullRestrictions() != null) {
             if (fieldSpec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {

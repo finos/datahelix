@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 
 /**
  * For a given combination of choices over the decision tree
@@ -15,7 +15,7 @@ public class StringRestrictionsMerger {
         if (right == null)
             return new MergeResult<>(left);
 
-        IStringGenerator mergedStringBuilder = left.stringGenerator.intersect(right.stringGenerator);
+        StringGenerator mergedStringBuilder = left.stringGenerator.intersect(right.stringGenerator);
 
         StringRestrictions newRestrictions = new StringRestrictions();
         newRestrictions.stringGenerator = mergedStringBuilder;

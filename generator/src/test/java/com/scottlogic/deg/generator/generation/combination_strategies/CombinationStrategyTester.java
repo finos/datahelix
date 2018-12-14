@@ -1,28 +1,18 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
-import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import gherkin.lexer.Da;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
-import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
 
-import java.sql.DatabaseMetaData;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 class CombinationStrategyTester {
-    private ICombinationStrategy strategy;
+    private CombinationStrategy strategy;
     private Stream<Stream<DataBag>> dataBags;
 
-    CombinationStrategyTester(ICombinationStrategy combinationStrategy) {
+    CombinationStrategyTester(CombinationStrategy combinationStrategy) {
         strategy = combinationStrategy;
     }
 

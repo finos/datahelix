@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RegexStringGenerator implements IStringGenerator {
+public class RegexStringGenerator implements StringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
 
     static {
@@ -65,7 +65,7 @@ public class RegexStringGenerator implements IStringGenerator {
         return RegexStringGenerator.createFromBlacklist(blacklist, new JavaUtilRandomNumberGenerator());
     }
 
-    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, IRandomNumberGenerator random) {
+    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, RandomNumberGenerator random) {
         String[] blacklistStrings = blacklist.stream().map(Object::toString).toArray(String[]::new);
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
@@ -73,7 +73,7 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator intersect(IStringGenerator stringGenerator) {
+    public StringGenerator intersect(StringGenerator stringGenerator) {
         if (!(stringGenerator instanceof RegexStringGenerator)) {
             return stringGenerator.intersect(this);
         }
@@ -87,7 +87,7 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator complement() {
+    public StringGenerator complement() {
         return new RegexStringGenerator(
                 this.automaton.clone().complement(),
                 String.format("COMPLEMENT-OF %s", this.regexRepresentation));
@@ -120,7 +120,7 @@ public class RegexStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
             () -> generateRandomStringInternal(
                 "",
@@ -208,7 +208,7 @@ public class RegexStringGenerator implements IStringGenerator {
         State state,
         int minLength,
         int maxLength,
-        IRandomNumberGenerator random) {
+        RandomNumberGenerator random) {
 
         List<Transition> transitions = state.getSortedTransitions(false);
         Set<Integer> selectedTransitions = new HashSet<>();
@@ -244,7 +244,7 @@ public class RegexStringGenerator implements IStringGenerator {
         int minLength,
         int maxLength,
         List<Transition> transitions,
-        IRandomNumberGenerator random) {
+        RandomNumberGenerator random) {
 
         if (state.isAccept()) {
             if (strMatch.length() == maxLength) {

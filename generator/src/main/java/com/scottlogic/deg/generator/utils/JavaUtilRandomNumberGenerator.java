@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.utils;
 
 import java.util.Random;
 
-public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
+public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     private final Random random;
 
     public JavaUtilRandomNumberGenerator(){
@@ -25,7 +25,7 @@ public class JavaUtilRandomNumberGenerator implements IRandomNumberGenerator {
 
     @Override
     public int nextInt(int lowerInclusive, int upperExclusive) {
-        // implementation stolen from Random::internalNextInt
+        // implementation copied from Random::internalNextInt
         if (lowerInclusive < upperExclusive) {
             int n = upperExclusive - lowerInclusive;
             if (n > 0) {

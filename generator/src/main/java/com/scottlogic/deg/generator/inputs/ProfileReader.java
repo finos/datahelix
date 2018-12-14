@@ -34,7 +34,7 @@ public class ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        IConstraintReader constraintReader = new MainConstraintReader();
+        ConstraintReader constraintReader = new MainConstraintReader();
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
@@ -57,7 +57,6 @@ public class ProfileReader {
         return new Profile(profileFields, rules, profileDto.description);
     }
 
-    //* Because Java sucks at handling exceptions during stream operations */
     static <TInput, TOutput> Collection<TOutput> mapDtos(
         Collection<TInput> dtos,
         DtoConverterFunction<TInput, TOutput> mapFunc) throws InvalidProfileException {

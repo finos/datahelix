@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFieldValueSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.IFieldValueSource;
+import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecFulfiller implements IDataBagSource {
+public class FieldSpecFulfiller implements DataBagSource {
     private final Field field;
     private final FieldSpec spec;
     private final FieldValueSourceEvaluator sourceFactory;
@@ -31,9 +31,9 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        List<IFieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(this.spec);
+        List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(this.spec);
 
-        IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
@@ -54,7 +54,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             });
     }
 
-    private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+    private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
             default:

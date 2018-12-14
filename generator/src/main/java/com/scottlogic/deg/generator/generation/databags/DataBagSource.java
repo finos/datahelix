@@ -4,6 +4,6 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-public interface IDataBagSource {
+public interface DataBagSource {
     Stream<DataBag> generate(GenerationConfig generationConfig);
 }
