@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs.validation.restrictions;
 
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.StandardValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.ValidationType;
 import com.scottlogic.deg.generator.inputs.validation.messages.StringConstraintValidationMessages;

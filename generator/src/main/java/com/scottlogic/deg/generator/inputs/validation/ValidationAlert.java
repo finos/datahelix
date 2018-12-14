@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
 
+import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
+
 public class ValidationAlert {
 
     private Criticality criticality;
