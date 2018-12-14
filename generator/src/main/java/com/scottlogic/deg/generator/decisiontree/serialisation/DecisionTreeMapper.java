@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -242,7 +243,9 @@ public class DecisionTreeMapper {
         return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue, rule(dto.rule));
     }
 
-    private static RuleInformation rule(String rule){
-        return RuleInformation.fromDescription(rule);
+    private static RuleInformation rule(String name){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = name;
+        return new RuleInformation(rule);
     }
 }

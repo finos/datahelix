@@ -41,9 +41,7 @@ public class ProfileReader {
             r -> {
                 RuleInformation constraintRule = new RuleInformation(r);
                 return new Rule(
-                r.rule != null
-                    ? r.rule
-                    : "Unnamed rule",
+                new RuleInformation(r),
                 mapDtos(
                     r.constraints,
                     dto -> {

@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -40,7 +41,7 @@ class ProfileDecisionTreeFactoryTests {
     }
 
     private void givenRule(Constraint... constraints) {
-        this.rules.add(new Rule("", Arrays.asList(constraints)));
+        this.rules.add(new Rule(rule(""), Arrays.asList(constraints)));
     }
 
     private DecisionTreeCollection getActualOutput() {
@@ -94,7 +95,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rule());
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rule());
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rule());
-        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(constraint0, constraint1, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
@@ -116,7 +117,7 @@ class ProfileDecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rule());
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rule());
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
+        Rule testRule = new Rule(rule("test"), inputConstraints);
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -138,7 +139,7 @@ class ProfileDecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rule());
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rule());
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -160,7 +161,7 @@ class ProfileDecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rule());
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rule());
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
@@ -189,7 +190,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rule());
         IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rule());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -210,7 +211,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rule());
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rule());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -231,7 +232,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rule());
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rule());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -268,7 +269,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rule());
         IsEqualToConstantConstraint constraintE = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rule());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -306,7 +307,7 @@ class ProfileDecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rule());
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20, rule());
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(conditionalConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -384,7 +385,7 @@ class ProfileDecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rule());
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -450,7 +451,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rule());
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -473,7 +474,7 @@ class ProfileDecisionTreeFactoryTests {
         IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rule());
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5, rule());
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -647,6 +648,12 @@ class ProfileDecisionTreeFactoryTests {
     }
 
     private static RuleInformation rule(){
-        return RuleInformation.fromDescription("rule");
+        return rule("rule");
+    }
+
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
     }
 }

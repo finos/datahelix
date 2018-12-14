@@ -52,7 +52,7 @@ public class TestCaseGenerationResultWriter {
                     filenameWithoutExtension,
                     dataset.violation == null
                         ? Collections.emptyList()
-                        : Collections.singleton(dataset.violation)));
+                        : Collections.singleton(dataset.violation.getDescription())));
 
             index++;
         }

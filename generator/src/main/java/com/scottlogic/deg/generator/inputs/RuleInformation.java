@@ -11,7 +11,8 @@ public class RuleInformation {
     private final String description;
 
     public RuleInformation(RuleDTO rule) {
-        this.description = rule.rule;
+        String ruleDescription = rule != null ? rule.rule : null;
+        this.description = ruleDescription != null ? ruleDescription : "Unnamed rule";
     }
 
     private RuleInformation(String description) {
@@ -28,10 +29,6 @@ public class RuleInformation {
 
     public static RuleInformation fromConstraints(Collection<Constraint> constraints, String delimiter){
         return fromRules(constraints.stream().map(Constraint::getRule).collect(Collectors.toList()), delimiter);
-    }
-
-    public static RuleInformation fromDescription(String rule) {
-        return new RuleInformation(rule);
     }
 
     public String getDescription() {

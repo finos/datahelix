@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.ContainsRegexConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,6 +41,8 @@ public class ContainsRegexConstraintTest {
     }
 
     private static RuleInformation rule(){
-        return RuleInformation.fromDescription("rule");
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        return new RuleInformation(rule);
     }
 }

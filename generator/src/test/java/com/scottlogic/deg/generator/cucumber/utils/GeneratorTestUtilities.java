@@ -14,12 +14,14 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -77,7 +79,7 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
-            Collections.singleton(new Rule("TEST_RULE", constraints)));
+            Collections.singleton(new Rule(rule("TEST_RULE"), constraints)));
 
         final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
 
@@ -134,5 +136,11 @@ public class GeneratorTestUtilities {
             return LocalDateTime.parse(input);
         }
         return parseInput(input);
+    }
+
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
     }
 }

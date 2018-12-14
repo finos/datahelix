@@ -12,6 +12,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -438,6 +439,8 @@ class DecisionTreeRoutesTreeWalkerTest {
     }
 
     private static RuleInformation rule(){
-        return RuleInformation.fromDescription("rule");
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        return new RuleInformation(rule);
     }
 }

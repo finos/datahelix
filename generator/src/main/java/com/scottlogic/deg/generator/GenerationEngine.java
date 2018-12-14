@@ -39,7 +39,7 @@ public class GenerationEngine {
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
-        final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
+        final TestCaseDataSet validCase = new TestCaseDataSet(null, generate(profile, config));
 
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
@@ -63,10 +63,10 @@ public class GenerationEngine {
         Profile violatingProfile = new Profile(
             profile.fields,
             violatedRule,
-            String.format("%s -- Violating: %s", profile.description, rule.description));
+            String.format("%s -- Violating: %s", profile.description, rule.rule.getDescription()));
 
         return new TestCaseDataSet(
-            rule.description,
+            rule.rule,
             generate(
                 violatingProfile,
                 config));
@@ -88,6 +88,6 @@ public class GenerationEngine {
                 : new AndConstraint(rule.constraints);
 
         ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
-        return new Rule(rule.description, Collections.singleton(violatedConstraint));
+        return new Rule(rule.rule, Collections.singleton(violatedConstraint));
     }
 }

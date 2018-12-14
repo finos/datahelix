@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -997,6 +998,8 @@ class ConstraintReducerTest {
     }
 
     private static RuleInformation rule(){
-        return RuleInformation.fromDescription("rule");
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        return new RuleInformation(rule);
     }
 }
