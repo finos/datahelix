@@ -57,7 +57,7 @@ public class Visualise implements Runnable {
 
     @Override
     public void run() {
-        final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
         final Profile profile;
 
         try {
@@ -73,9 +73,9 @@ public class Visualise implements Runnable {
         final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
-        final IDecisionTreeOptimiser treeOptimiser = dontOptimise
+        final DecisionTreeOptimiser treeOptimiser = dontOptimise
                 ? new NoopDecisionTreeOptimiser()
-                : new DecisionTreeOptimiser();
+                : new MostProlificConstraintOptimiser();
 
         StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
             profile.fields,

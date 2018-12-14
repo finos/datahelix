@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class PinningCombinationStrategy implements ICombinationStrategy {
+public class PinningCombinationStrategy implements CombinationStrategy {
 
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {

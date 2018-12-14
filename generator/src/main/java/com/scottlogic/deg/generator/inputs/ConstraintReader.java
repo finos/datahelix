@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 @FunctionalInterface
-public interface IConstraintReader {
+public interface ConstraintReader {
     Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields)

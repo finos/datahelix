@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // There's a lot of copy-paste in this class. We should address that before we make any significant changes to it
-public class SedolStringGenerator implements IStringGenerator {
+public class SedolStringGenerator implements StringGenerator {
 
     private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "00[B-DF-HJ-NP-TV-Z0-9]{6}";
 
@@ -31,12 +31,12 @@ public class SedolStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public IStringGenerator intersect(IStringGenerator stringGenerator) {
+    public StringGenerator intersect(StringGenerator stringGenerator) {
         return this;
     }
 
     @Override
-    public IStringGenerator complement() {
+    public StringGenerator complement() {
         return new SedolStringGenerator(sedolSansCheckDigitGenerator, !negate);
     }
 
@@ -80,7 +80,7 @@ public class SedolStringGenerator implements IStringGenerator {
     }
 
     @Override
-    public Iterable<String> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         if (negate) {
             return new RandomMergingIterable<>(
                 Arrays.asList(
@@ -96,7 +96,7 @@ public class SedolStringGenerator implements IStringGenerator {
         return sedolSansCheckDigitGenerator.complement().generateAllValues();
     }
 
-    private Iterable<String> generateRandomInvalidRegexSedols(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidRegexSedols(RandomNumberGenerator randomNumberGenerator) {
         return sedolSansCheckDigitGenerator.complement().generateRandomValues(randomNumberGenerator);
     }
 
@@ -104,7 +104,7 @@ public class SedolStringGenerator implements IStringGenerator {
         return generateInvalidCheckDigitSedols(sedolSansCheckDigitGenerator::generateAllValues);
     }
 
-    private Iterable<String> generateRandomInvalidCheckDigitSedols(IRandomNumberGenerator randomNumberGenerator) {
+    private Iterable<String> generateRandomInvalidCheckDigitSedols(RandomNumberGenerator randomNumberGenerator) {
         return generateInvalidCheckDigitSedols(
             () -> sedolSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator));
     }

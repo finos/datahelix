@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-public class NoopDecisionTreeOptimiser implements IDecisionTreeOptimiser {
+public class NoopDecisionTreeOptimiser implements DecisionTreeOptimiser {
 
     @Override
     public DecisionTree optimiseTree(DecisionTree tree) {

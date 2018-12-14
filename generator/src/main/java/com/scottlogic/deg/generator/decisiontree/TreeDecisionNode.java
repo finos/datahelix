@@ -69,4 +69,15 @@ public final class TreeDecisionNode implements DecisionNode {
     public int hashCode() {
         return Objects.hash(options);
     }
+
+    @Override
+    public DecisionNode accept(NodeVisitor visitor){
+        Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
+        return visitor.visit(
+            new TreeDecisionNode(
+                options.collect(Collectors.toSet()),
+                nodeMarkings
+            )
+        );
+    }
 }

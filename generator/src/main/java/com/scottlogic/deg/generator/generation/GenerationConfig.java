@@ -24,7 +24,7 @@ public class GenerationConfig {
         return this.dataGenerationType;
     }
 
-    public ICombinationStrategy getCombinationStrategy() {
+    public CombinationStrategy getCombinationStrategy() {
         if (this.walkerType == TreeWalkerType.REDUCTIVE){
             return new ReductiveCombinationStrategy();
         }

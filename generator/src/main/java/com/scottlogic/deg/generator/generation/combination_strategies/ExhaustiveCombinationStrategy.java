@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ExhaustiveCombinationStrategy implements ICombinationStrategy {
+public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
     @Override
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
