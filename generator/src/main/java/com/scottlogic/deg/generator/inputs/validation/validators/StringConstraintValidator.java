@@ -1,14 +1,13 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.StringConstraintValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.messages.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO Consider bringing these rules to field spec restrictions
 public class StringConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.STRING;
@@ -31,13 +30,9 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
 
         if (length > lengthMin && length < lengthMax) {
             lengthMax = length;
-        } else if (lengthMin > length) {
-            logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
-        } else if (lengthMax > length) {
+        } else if (lengthMin > length || lengthMax < length) {
             logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
         }
-
-
     }
 
     public void isLongerThan(String field, int length) {
@@ -47,25 +42,18 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
             return;
         }
 
-        if (lengthMax > length) {
-            lengthMax = length;
-        } else if (lengthMin > length) {
+        if (lengthMax > length && lengthMin > length) {
+            lengthMin = length;
+        } else if (lengthMin < length || lengthMax < length) {
             logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
-        } else if (lengthMin < length) {
-            if (lengthMax < length) {
-                logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
-            } else {
-                lengthMin = length;
-            }
         }
-
     }
 
-    public List<ValidationAlert> getAlerts(){
+    public List<ValidationAlert> getAlerts() {
         return alerts;
     }
 
-    private void logError(String field, StandardValidationMessages message){
+    private void logError(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             message,

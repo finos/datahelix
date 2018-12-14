@@ -1,14 +1,8 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.NullConstraintValidationMessages;
-import com.scottlogic.deg.generator.restrictions.MergeResult;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.generator.restrictions.NullRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.Nullness;
+import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.messages.*;
 
 import java.util.ArrayList;
 import java.util.List;

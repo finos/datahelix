@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO Consider bringing these rules to field spec restrictions
 public class GranularityConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.GRANULARITY;
