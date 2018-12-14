@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
@@ -10,14 +10,14 @@ import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 
-public class SetConstraintValidationMergeOperation implements ConstraintValidation {
+public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.SET;
 
     private List<ValidationAlert> alerts;
-    SetRestrictions currentRestrictions;
+    private SetRestrictions currentRestrictions;
 
-    public SetConstraintValidationMergeOperation() {
+    public SetConstraintValidator() {
         alerts = new ArrayList<>();
     }
 
@@ -26,19 +26,19 @@ public class SetConstraintValidationMergeOperation implements ConstraintValidati
         SetRestrictions candidateRestrictions = new SetRestrictions(values, null);
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
-
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
+
         if (result.successful) {
 
             //additional validation checks
             if (currentRestrictions != null && currentRestrictions.getWhitelist() != null) {
-                Set<Object> intersection = SetUtils.intersect(currentRestrictions.getWhitelist(), values);
 
+                Set<Object> intersection = SetUtils.intersect(currentRestrictions.getWhitelist(), values);
                 if (intersection.size() < values.size()) {
                     logError(field, new SetConstraintValidationMessages(currentRestrictions.getWhitelist(), values));
-
                 }
-            } else {
+            }
+            else {
                 currentRestrictions = result.restrictions;
             }
 
@@ -53,8 +53,8 @@ public class SetConstraintValidationMergeOperation implements ConstraintValidati
         SetRestrictions candidateRestrictions = new SetRestrictions(null, values);
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
-
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
+
         if (result.successful) {
             currentRestrictions = result.restrictions;
         } else {

@@ -1,26 +1,21 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.TemporalConstraintValidationMessages;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.messages.*;
+import com.scottlogic.deg.generator.restrictions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemporalConstraintRestrictions implements ConstraintValidation {
+public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.TEMPORAL;
 
     private List<ValidationAlert> alerts;
-    DateTimeRestrictions currentRestrictions;
+    private DateTimeRestrictions currentRestrictions;
 
-    public TemporalConstraintRestrictions() {
+    public TemporalConstraintValidator() {
         this.alerts = new ArrayList<>();
     }
 

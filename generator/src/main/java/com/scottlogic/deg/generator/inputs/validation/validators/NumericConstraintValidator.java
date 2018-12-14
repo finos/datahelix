@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
@@ -14,36 +14,35 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NumericConstraintValidationMergeOperation implements ConstraintValidation {
+public class NumericConstraintValidator implements ConstraintValidatorAlerts {
 
 
     public final ValidationType validationType = ValidationType.NUMERIC;
-
-    NumericRestrictions currentRestrictions;
     private List<ValidationAlert> alerts;
+    private NumericRestrictions currentRestrictions;
 
-
-    public NumericConstraintValidationMergeOperation() {
+    public NumericConstraintValidator() {
         this.alerts = new ArrayList<>();
     }
 
     public void IsLessThan(String field, Number referenceValue, boolean inclusive) {
 
         BigDecimal referenceBigDecimal = new BigDecimal(referenceValue.toString());
-
         NumericRestrictions candidateRestrictions = new NumericRestrictions();
         candidateRestrictions.max = new NumericLimit<>(
             referenceBigDecimal,
             inclusive);
 
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
-
         MergeResult<NumericRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
         if(result.successful){
             currentRestrictions = result.restrictions;
         } else {
-            logError(field, new NumericConstraintValidationMessages(currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(), currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(), referenceBigDecimal));
+            logError(field, new NumericConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceBigDecimal));
         }
 
     }
@@ -51,20 +50,21 @@ public class NumericConstraintValidationMergeOperation implements ConstraintVali
     public void IsGreaterThan(String field, Number referenceValue, boolean inclusive) {
 
         BigDecimal referenceBigDecimal = new BigDecimal(referenceValue.toString());
-
         NumericRestrictions candidateRestrictions = new NumericRestrictions();
         candidateRestrictions.min = new NumericLimit<>(
             referenceBigDecimal,
             inclusive);
 
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
-
         MergeResult<NumericRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
         if(result.successful){
             currentRestrictions = result.restrictions;
         } else {
-            logError(field, new NumericConstraintValidationMessages(currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(), currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(), referenceBigDecimal));
+            logError(field, new NumericConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceBigDecimal));
         }
     }
 

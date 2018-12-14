@@ -1,23 +1,20 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.GranularityConstraintValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.messages.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GranularityConstraintValidationMergeOperation implements ConstraintValidation {
+public class GranularityConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.GRANULARITY;
 
     private BigDecimal granularity;
     private List<ValidationAlert> alerts;
 
-    public GranularityConstraintValidationMergeOperation(){
+    public GranularityConstraintValidator(){
         granularity = BigDecimal.ZERO;
         alerts = new ArrayList<>();
     }
@@ -34,12 +31,6 @@ public class GranularityConstraintValidationMergeOperation implements Constraint
         }
     }
 
-    @Override
-    public List<ValidationAlert> getAlerts() {
-        return alerts;
-    }
-
-
     private void logError(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
@@ -47,4 +38,10 @@ public class GranularityConstraintValidationMergeOperation implements Constraint
             validationType,
             field));
     }
+
+    @Override
+    public List<ValidationAlert> getAlerts() {
+        return alerts;
+    }
+
 }

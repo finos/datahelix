@@ -10,9 +10,6 @@ public interface ProfileVisitor {
     void visit(ProfileFields fields);
     void visit(Rule rule);
     void visit(Constraint constraint);
-   // void visit(ComposedConstraint composedConstraint);
-
-
     void visit(IsOfTypeConstraint constraint);
     void visit(IsAfterConstantDateTimeConstraint constraint);
     void visit(IsBeforeConstantDateTimeConstraint constraint);

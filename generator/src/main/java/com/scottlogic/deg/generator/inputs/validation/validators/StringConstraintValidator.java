@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
@@ -9,14 +9,14 @@ import com.scottlogic.deg.generator.inputs.validation.messages.StringConstraintV
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringConstraintValidationMergeOperation implements ConstraintValidation {
+public class StringConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.STRING;
     private int lengthMin;
     private int lengthMax;
     private List<ValidationAlert> alerts;
 
-    public StringConstraintValidationMergeOperation() {
+    public StringConstraintValidator() {
         this.lengthMin = 0;
         this.lengthMax = Integer.MAX_VALUE;
         this.alerts = new ArrayList<>();

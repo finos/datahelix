@@ -1,29 +1,25 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.TypeConstraintValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.messages.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TypeConstraintValidationMergeOperation implements ConstraintValidation {
+public class TypeConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.TYPE;
     private List<ValidationAlert> alerts;
 
-    TypeRestrictions currentRestrictions;
+    private TypeRestrictions currentRestrictions;
 
 
-    public TypeConstraintValidationMergeOperation(){
+    public TypeConstraintValidator(){
         this.alerts = new ArrayList<>();
         this.currentRestrictions = new DataTypeRestrictions(Arrays.asList(IsOfTypeConstraint.Types.values()));
-
     }
 
 
@@ -36,7 +32,9 @@ public class TypeConstraintValidationMergeOperation implements ConstraintValidat
         if(result.successful){
             currentRestrictions = result.restrictions;
         } else {
-            logError(field, new TypeConstraintValidationMessages(candidateRestrictions.getAllowedTypes().iterator().next(), currentRestrictions.getAllowedTypes().iterator().next()));
+            logError(field, new TypeConstraintValidationMessages(
+                candidateRestrictions.getAllowedTypes().iterator().next(),
+                currentRestrictions.getAllowedTypes().iterator().next()));
         }
     }
 

@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs.validation.restrictions;
+package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
@@ -13,14 +13,13 @@ import com.scottlogic.deg.generator.restrictions.Nullness;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NullConstraintValidationMergeOperation implements ConstraintValidation {
+public class NullConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.NULL;
     private List<ValidationAlert> alerts;
+    private NullRestrictions currentRestrictions;
 
-    NullRestrictions currentRestrictions;
-
-    public NullConstraintValidationMergeOperation() {
+    public NullConstraintValidator() {
         this.alerts = new ArrayList<>();
     }
 
