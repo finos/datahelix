@@ -6,17 +6,17 @@ import com.scottlogic.deg.generator.inputs.validation.StandardValidationMessages
 public class TypeConstraintValidationMessages implements StandardValidationMessages {
 
 
-    private IsOfTypeConstraint.Types allowedType;
+    private IsOfTypeConstraint.Types validType;
     private IsOfTypeConstraint.Types invalidType;
 
-    public TypeConstraintValidationMessages(IsOfTypeConstraint.Types allowedType, IsOfTypeConstraint.Types invalidType){
+    public TypeConstraintValidationMessages(IsOfTypeConstraint.Types validType, IsOfTypeConstraint.Types invalidType){
 
-        this.allowedType = allowedType;
+        this.validType = validType;
         this.invalidType = invalidType;
     }
 
     @Override
     public String getVerboseMessage() {
-        return String.format("Type %s is not allowed. The allowed type is: %s", invalidType, allowedType);
+        return String.format("Type %s is not valid. The valid type is: %s", invalidType, validType);
     }
 }

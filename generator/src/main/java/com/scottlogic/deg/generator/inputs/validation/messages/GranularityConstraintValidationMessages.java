@@ -7,18 +7,18 @@ import java.math.BigDecimal;
 public class GranularityConstraintValidationMessages implements StandardValidationMessages {
 
 
-    private BigDecimal allowedValue;
+    private BigDecimal validValue;
     private BigDecimal invalidValue;
 
-    public GranularityConstraintValidationMessages(BigDecimal allowedValue, BigDecimal invalidValue){
+    public GranularityConstraintValidationMessages(BigDecimal validValue, BigDecimal invalidValue){
 
-        this.allowedValue = allowedValue;
+        this.validValue = validValue;
         this.invalidValue = invalidValue;
     }
 
     @Override
     public String getVerboseMessage() {
-        return String.format("Cannot set granularity to %s. Granularity is currently set to: %s", invalidValue, allowedValue);
+        return String.format("Having granularity of %s is not valid. Granularity is currently set to: %s", invalidValue, validValue);
     }
 }
 
