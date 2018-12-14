@@ -1,5 +1,5 @@
-// stolen from:
-// https://stackoverflow.com/questions/45372227/how-to-implement-typescript-deep-partial-mapped-type-not-breaking-array-properti
+// Copied from: Stack Overflow: https://stackoverflow.com/questions/45372227/how-to-implement-typescript-deep-partial-mapped-type-not-breaking-array-properti
+// Author: Krzysztof Kaczor: https://stackoverflow.com/users/580181/krzysztof-kaczor
 
 /* tslint:disable */
 type DeepPartial<T> = {
