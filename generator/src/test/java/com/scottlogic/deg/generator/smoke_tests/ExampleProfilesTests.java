@@ -1,13 +1,19 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -22,27 +28,34 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesTests {
+    private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
+
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
-                new FieldExhaustiveCombinationStrategy());
-
-            generationEngine.generateTestCases(profileFile.toPath(), config);
+            GenerationConfig config = new GenerationConfig(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING);
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(GenerationConfig.DataGenerationType.Interesting,
-                new FieldExhaustiveCombinationStrategy());
+            GenerationConfig config = new GenerationConfig(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING);
 
-            generationEngine.generateDataSet(profileFile.toPath(), config);
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(IGenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -55,7 +68,13 @@ class ExampleProfilesTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 consumer.generate(
-                    new GenerationEngine(new NullOutputTarget()),
+                    new GenerationEngine(
+                        new NullOutputTarget(),
+                        new DecisionTreeDataGenerator(
+                            walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
+                            new RelatedFieldTreePartitioner(),
+                            new MostProlificConstraintOptimiser(),
+                            new NoopDataGeneratorMonitor())),
                     profileFile);
             });
 
@@ -65,7 +84,7 @@ class ExampleProfilesTests {
         return dynamicTests;
     }
 
-    private class NullOutputTarget implements IOutputTarget {
+    private class NullOutputTarget implements OutputTarget {
         @Override
         public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
@@ -85,7 +104,8 @@ class ExampleProfilesTests {
     }
 
     @FunctionalInterface
-    private interface IGenerateConsumer {
+    private interface GenerateConsumer {
         void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }
+

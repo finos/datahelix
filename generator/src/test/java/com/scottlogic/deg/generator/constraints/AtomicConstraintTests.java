@@ -2,8 +2,9 @@ package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
-import com.scottlogic.deg.generator.inputs.IConstraintReader;
+import com.scottlogic.deg.generator.inputs.ConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
@@ -16,9 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -55,7 +54,10 @@ public class AtomicConstraintTests {
 
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
-        dateValueDto.value = "2020-01-01T01:02:03.456";
+
+        Map date = new HashMap();
+        date.put("date", "2020-01-01T01:02:03.456");
+        dateValueDto.value = date;
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
@@ -96,7 +98,7 @@ public class AtomicConstraintTests {
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+            ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
             // Assert.assertNotNull("No reader found for constraint type '" + type.toString() + "'", reader);
             if (reader == null) {
                 missingConstraints.add(type.toString());
@@ -117,10 +119,10 @@ public class AtomicConstraintTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            IConstraint constraint = reader.apply(dto, profileFields);
+            Constraint constraint = reader.apply(dto, profileFields);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

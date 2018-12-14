@@ -18,6 +18,8 @@ The [grammatical `not` constraint](GrammaticalConstraints.md) inverts a constrai
 { "field": "type", "is": "equalTo", "value": "X_092" }
 OR
 { "field": "type", "is": "equalTo", "value": 23 }
+OR
+{ "field": "type", "is": "equalTo", "value": { "date": "2001-02-03T04:05:06.007" } }
 ```
 
 Is satisfied if `field`'s value is equal to `value`
@@ -25,7 +27,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "is": "inSet", "values": [ "X_092", "X_094" ] }
+{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, { "date": "2001-02-03T04:05:06.007" } ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -145,14 +147,14 @@ Is satisfied if `field` has the granularity specified in `value`. Numerical gran
 - `0.1` would permit `20` and `20.1`, but not `20.01` 
 
 ## Temporal constraints
-These constraints imply `ofType temporal`. All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS`.
+These constraints imply `ofType temporal`. All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
 
-Example: `"2018-01-01T00:00:00.000"`
+Example: `{ "date": "2001-02-03T04:05:06.007" }`
 
 ### `after` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "after", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "is": "after", "value": { "date": "2018-09-01T00:00:00.000" } }
 ```
 
 Is satisfied if `field` is a datetime occurring after `value`.
@@ -160,7 +162,7 @@ Is satisfied if `field` is a datetime occurring after `value`.
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "afterOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "is": "afterOrAt", "value": { "date": "2018-09-01T00:00:00.000" } }
 ```
 
 Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
@@ -168,7 +170,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 ### `before` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "before", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "is": "before", "value": { "date": "2018-09-01T00:00:00.000" } }
 ```
 
 Is satisfied if `field` is a datetime occurring before `value`.
@@ -176,7 +178,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ### `beforeOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "is": "beforeOrAt", "value": { "date": "2018-09-01T00:00:00.000" } }
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.

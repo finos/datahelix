@@ -23,7 +23,7 @@ class InSetAnalyser(val df: DataFrame, val field: StructField) extends StringAna
                                   .toList
 
 
-    val allFieldConstraints: List[IConstraint] = List(
+    val allFieldConstraints: List[Constraint] = List(
           new IsOfTypeConstraint(fieldName, "string"),
           new InSetConstraint(fieldName, members)
         )

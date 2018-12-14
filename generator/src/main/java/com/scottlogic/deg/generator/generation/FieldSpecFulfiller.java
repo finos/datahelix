@@ -1,20 +1,20 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.ProjectingIterable;
 
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecFulfiller implements IDataBagSource {
+public class FieldSpecFulfiller implements DataBagSource {
     private final Field field;
     private final FieldSpec spec;
 
@@ -25,9 +25,9 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
+        List<FieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
-        IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
@@ -37,7 +37,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
                     value,
                     this.spec.getFormatRestrictions() != null
                         ? this.spec.getFormatRestrictions().formatString
-                        : null);
+                        : null,
+                    new DataBagValueSource(this.spec.getFieldSpecSource()));
 
                 return DataBag.startBuilding()
                     .set(
@@ -47,8 +48,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
             });
     }
 
-    private List<IFieldValueSource> getAllApplicableValueSources() {
-        List<IFieldValueSource> validSources = new ArrayList<>();
+    private List<FieldValueSource> getAllApplicableValueSources() {
+        List<FieldValueSource> validSources = new ArrayList<>();
 
         // check nullability...
         if (determineNullabilityAndDecideWhetherToHalt(validSources))
@@ -64,11 +65,11 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        ITypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
+        TypeRestrictions typeRestrictions = spec.getTypeRestrictions() != null
                 ? spec.getTypeRestrictions()
-                : TypeRestrictions.all;
+                : DataTypeRestrictions.all;
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Numeric)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             NumericRestrictions restrictions = spec.getNumericRestrictions() == null
                 ? new NumericRestrictions()
                 : spec.getNumericRestrictions();
@@ -91,13 +92,13 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.String)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
 
             StringRestrictions stringRestrictions = spec.getStringRestrictions();
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
                 Set<Object> blacklist = getBlacklist();
 
-                final IStringGenerator generator;
+                final StringGenerator generator;
                 if (blacklist.size() > 0) {
                     RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
@@ -114,7 +115,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             }
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.Temporal)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
 
             DateTimeRestrictions restrictions = spec.getDateTimeRestrictions();
             validSources.add(new TemporalFieldValueSource(
@@ -125,27 +126,27 @@ public class FieldSpecFulfiller implements IDataBagSource {
         return validSources;
     }
 
-    private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+    private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
-            case FullSequential:
+            case FULL_SEQUENTIAL:
             default:
                 return source.generateAllValues();
-            case Interesting:
+            case INTERESTING:
                 return source.generateInterestingValues();
-            case Random:
+            case RANDOM:
                 return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
         }
     }
 
-    private boolean determineNullabilityAndDecideWhetherToHalt(List<IFieldValueSource> fieldValueSources) {
-        IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+    private boolean determineNullabilityAndDecideWhetherToHalt(List<FieldValueSource> fieldValueSources) {
+        FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (spec.getNullRestrictions() != null) {
-            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustBeNull) {
+            if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {
                 // if *always* null, add a null-only source and signal that no other sources are needed
                 fieldValueSources.add(nullOnlySource);
                 return true;
-            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MustNotBeNull) {
+            } else if (spec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_NOT_BE_NULL) {
                 // if *never* null, add nothing and signal that source generation should continue
                 return false;
             }

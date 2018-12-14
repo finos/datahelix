@@ -1,36 +1,42 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 /**
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
  */
 public class NullRestrictionsMerger {
-    public NullRestrictions merge(NullRestrictions left, NullRestrictions right) {
+    public MergeResult<NullRestrictions> merge(NullRestrictions left, NullRestrictions right) {
         if (left == null && right == null)
-            return null;
+            return new MergeResult<>(null);
 
         final NullRestrictions merged = new NullRestrictions();
-        merged.nullness = getMergedNullness(getNullness(left), getNullness(right));
+        Optional<NullRestrictions.Nullness> nullness = getMergedNullness(getNullness(left), getNullness(right));
+        if (!nullness.isPresent()){
+            return new MergeResult<>();
+        }
 
-        return merged;
+        merged.nullness = nullness.get();
+        return new MergeResult<>(merged);
     }
 
-    private NullRestrictions.Nullness getMergedNullness(NullRestrictions.Nullness left, NullRestrictions.Nullness right) {
+    private Optional<NullRestrictions.Nullness> getMergedNullness(NullRestrictions.Nullness left, NullRestrictions.Nullness right) {
         if (left == null && right == null) {
-            return null;
+            return Optional.of(null);
         }
         if (left == null) {
-            return right;
+            return Optional.of(right);
         }
         if (right == null) {
-            return left;
+            return Optional.of(left);
         }
 
         if (left == right) {
-            return left;
+            return Optional.of(left);
         }
 
-        throw new UnmergeableRestrictionException();
+        return Optional.empty();
     }
 
     private NullRestrictions.Nullness getNullness(NullRestrictions restrictions) {

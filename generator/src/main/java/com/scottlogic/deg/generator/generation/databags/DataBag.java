@@ -1,12 +1,14 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.outputs.CellSource;
+import com.scottlogic.deg.generator.outputs.RowSource;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class DataBag {
@@ -62,6 +64,18 @@ public class DataBag {
         return Objects.hash(fieldToValue);
     }
 
+    public RowSource getRowSource(ProfileFields fields) {
+        return new RowSource(
+            fields
+                .stream()
+                .map(field -> {
+                    DataBagValue value = this.fieldToValue.get(field);
+                    return new CellSource(value, field);
+                })
+                .collect(Collectors.toList())
+        );
+    }
+
     public static class DataBagBuilder {
         private final Map<Field, DataBagValue> fieldToValue;
 
@@ -78,8 +92,8 @@ public class DataBag {
             return this;
         }
 
-        public DataBagBuilder set(Field field, Object value) {
-            return this.set(field, new DataBagValue(value));
+        public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
+            return this.set(field, new DataBagValue(value, source));
         }
 
         public DataBag build() {

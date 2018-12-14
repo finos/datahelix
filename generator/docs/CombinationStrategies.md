@@ -58,6 +58,7 @@ It has these properties:
 * Exemplifies each value at least once
 * It is always possible to find another output differing by just one field
 * Output size increases **linearly** with number of fields
+* The maximum number of rows generated can be calculated as: ( the sum of the total number of possible values for all fields ) less ( the total number of fields ) plus 1
 
 ## Random
 

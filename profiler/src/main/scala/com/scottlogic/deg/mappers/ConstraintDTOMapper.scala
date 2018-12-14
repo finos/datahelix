@@ -5,8 +5,8 @@ import com.scottlogic.deg.schemas.v3.{AtomicConstraintType, ConstraintDTO, Const
 
 import collection.JavaConverters._
 
-object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
-  override def Map(original: IConstraint): ConstraintDTO = {
+object ConstraintDTOMapper extends Mapper[Constraint,ConstraintDTO] {
+  override def Map(original: Constraint): ConstraintDTO = {
     if(original == null){
       throw new IllegalArgumentException("constraint argument was null")
     }
@@ -32,6 +32,16 @@ object ConstraintDTOMapper extends IMapper[IConstraint,ConstraintDTO] {
       case instance: IsLowerThanConstraint =>
         builder.appendField(instance.FieldName)
           .appendIs(AtomicConstraintType.ISLESSTHANCONSTANT.toString)
+          .appendValue(instance.Value)
+          .Build;
+      case instance: IsAfterOrEqualToConstantDateTimeConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString)
+          .appendValue(instance.Value)
+          .Build;
+      case instance: IsBeforeConstantDateTimeConstraint =>
+        builder.appendField(instance.FieldName)
+          .appendIs(AtomicConstraintType.ISBEFORECONSTANTDATETIME.toString)
           .appendValue(instance.Value)
           .Build;
       case instance: MatchesRegexConstraint =>

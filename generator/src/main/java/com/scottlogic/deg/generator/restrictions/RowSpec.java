@@ -2,11 +2,11 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
+import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,7 +59,7 @@ public class RowSpec {
                                         .stream()
                                         .map(x -> x.getSpecForField(field))
                                         .reduce(
-                                                Optional.of(new FieldSpec()),
+                                                Optional.of(FieldSpec.Empty),
                                                 (acc, next) -> acc.flatMap(fieldSpec -> fieldSpecMerger.merge(fieldSpec, next)),
                                                 (opt1, opt2) -> opt1.flatMap(
                                                         fieldSpec1 -> opt2.flatMap(
@@ -91,5 +91,18 @@ public class RowSpec {
     @Override
     public String toString() {
         return Objects.toString(fieldToFieldSpec);
+    }
+
+    public DataBagSource createDataBagSource() {
+        List<DataBagSource> fieldDataBagSources = new ArrayList<>(fields.size());
+
+        for (Field field : fields) {
+            FieldSpec fieldSpec = getSpecForField(field);
+
+            fieldDataBagSources.add(
+                new FieldSpecFulfiller(field, fieldSpec));
+        }
+
+        return new MultiplexingDataBagSource(fieldDataBagSources.stream());
     }
 }

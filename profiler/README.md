@@ -58,6 +58,16 @@ git clone https://github.com/steveloughran/winutils
 **Without replacing existing files**: copy the contents of `hadoop-2.7.1\bin` into `C:\hadoop-2.7.6\bin`.  
 Such that `C:\hadoop-2.7.6\bin\winutils.exe` and friends exist, but such that you do not overwrite your existing 2.7.6 hadoop.dll.
 
+### Cucumber 
+
+Add Gherkin and Cucumber for Java plugins (file > settings > plugins if using Intellij IDE) 
+
+Currently the tests cannot be run from the TestRunner class
+
+To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field 
+
+An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/data-engineering-generator/blob/master/docs/CucumberSyntax.md) 
+
 ### IntelliJ IDE
 
 Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all features of Ultimate (improves framework support and polyglot).
@@ -205,6 +215,17 @@ Don't accidentally commit your changes to the run configuration.
 As per the argument defined in the launch configuration, you should find an output file 
 `test-output.json` in your current directory (which is 
 `data-engineering-generator\profiler`)
+
+## Test input files and expected output files 
+
+We keep track of some input files and their expected output file under these two folders
+
+- `profiler\src\test\resources\`
+- `profiler\src\test\resources\expected_output\`
+
+During build time we run Integration tests that compare the profiles currently generated to the expected outputs.
+
+Please refer to the `README.md` file in `profiler\src\test\resources\expected_output\` for more details.
 
 ## Submitting a Spark job
 

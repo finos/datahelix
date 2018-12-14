@@ -2,7 +2,13 @@ package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,9 +43,21 @@ public class Visualise implements Runnable {
         description = "Hides the title from the output")
     private boolean shouldHideTitle;
 
+    @picocli.CommandLine.Option(
+            names = {"--no-optimise"},
+            description = "Prevents tree optimisation",
+            hidden = true)
+    private boolean dontOptimise;
+
+    @picocli.CommandLine.Option(
+        names = {"--no-simplify"},
+        description = "Prevents tree simplification",
+        hidden = true)
+    private boolean dontSimplify;
+
     @Override
     public void run() {
-        final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
         final Profile profile;
 
         try {
@@ -52,10 +70,24 @@ public class Visualise implements Runnable {
 
         final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+        final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
+        final DecisionTreeOptimiser treeOptimiser = dontOptimise
+                ? new NoopDecisionTreeOptimiser()
+                : new MostProlificConstraintOptimiser();
 
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner().splitTreeIntoPartitions(mergedTree).collect(Collectors.toList());
+        StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
+            profile.fields,
+            new RowSpecMerger(fieldSpecMerger),
+            new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
+
+        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
+                .splitTreeIntoPartitions(mergedTree)
+                .map(treeOptimiser::optimiseTree)
+                .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
+                .map(treeValidator::markContradictions)
+                .collect(Collectors.toList());
 
         final String title = shouldHideTitle
             ? null
@@ -67,7 +99,7 @@ public class Visualise implements Runnable {
         try {
             if (treePartitions.size() == 1) {
                 writeTreeTo(
-                    mergedTree,
+                    treePartitions.get(0),
                     title,
                     outputDir.resolve(profileBaseName + ".gv"));
             } else {
@@ -78,7 +110,7 @@ public class Visualise implements Runnable {
 
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
-                        mergedTree,
+                        treePartitions.get(i),
                         title != null
                             ? title + " (partition " + (i + 1) + ")"
                             : null,
@@ -100,7 +132,6 @@ public class Visualise implements Runnable {
         try (OutputStreamWriter outWriter = new OutputStreamWriter(
                 new FileOutputStream(outputFilePath.toString()),
                 StandardCharsets.UTF_8)) {
-            outWriter.write('\ufeff'); //Write the BOM (works on windows)
 
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,

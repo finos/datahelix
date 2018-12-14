@@ -1,10 +1,19 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.combination_strategies.FieldExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -24,20 +33,42 @@ public class GenerateTestCases implements Runnable {
     private Path outputDir;
 
     @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FullSequential, Interesting, Random).",
-        defaultValue = "Interesting")
-    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.Interesting;
+        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
+        defaultValue = "INTERESTING")
+    private GenerationConfig.DataGenerationType generationType = GenerationConfig.DataGenerationType.INTERESTING;
+
+    @CommandLine.Option(names = {"-c", "--c"},
+        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
+        defaultValue = "PINNING")
+    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
+
+    @CommandLine.Option(names = {"-w", "--w"},
+        description = "Determines the tree walker that should be used.",
+        defaultValue = "CARTESIAN_PRODUCT",
+        hidden = true)
+    private GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
 
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(
             generationType,
-            new FieldExhaustiveCombinationStrategy());
+            walkerType,
+            combinationType);
+
 
         try {
+            DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
+
             new GenerationEngine(
-                    new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()))
-                .generateTestCases(profileFile.toPath(), config);
+                new DirectoryOutputTarget(outputDir, new CsvDataSetWriter()),
+                new DecisionTreeDataGenerator(
+                    walkerFactory.getDecisionTreeWalker(outputDir),
+                    new NoopTreePartitioner(),
+                    new NoopDecisionTreeOptimiser(),
+                    new NoopDataGeneratorMonitor()))
+                .generateTestCases(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }

@@ -1,11 +1,12 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.When;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SetValueStep {
@@ -16,21 +17,27 @@ public class SetValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {operator} {set}")
-    public void whenFieldIsConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addConstraint(fieldName, constraintName, this.getSetValues(value));
+    @When("{fieldVar} is in set:")
+    public void whenFieldIsConstrainedBySetValue(String fieldName, List<String> values) {
+        this.state.addConstraint(fieldName, "in set", this.getSetValues(values));
     }
 
-    @When("{fieldVar} is anything but {operator} {set}")
-    public void whenFieldIsNotConstrainedBySetValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addNotConstraint(fieldName, constraintName, this.getSetValues(value));
+    @When("{fieldVar} is anything but in set:")
+    public void whenFieldIsNotConstrainedBySetValue(String fieldName, List<String> values) {
+        this.state.addNotConstraint(fieldName, "in set", this.getSetValues(values));
     }
 
-    private Collection<Object> getSetValues(String csvSet) {
-        return Arrays.asList(csvSet.split(","))
-            .stream()
+    private Collection<Object> getSetValues(List<String> values) {
+        return values.stream()
             .map(String::trim)
-            .map(GeneratorTestUtilities::parseInput)
+            .map(value -> {
+                try {
+                    return GeneratorTestUtilities.parseInput(value);
+                } catch (JsonParseException e) {
+                    this.state.addException(e);
+                    return "<exception thrown: " + e.getMessage() + ">";
+                }
+            })
             .collect(Collectors.toSet());
     }
 

@@ -1,27 +1,19 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.AndConstraint;
-import com.scottlogic.deg.generator.constraints.IConstraint;
-import com.scottlogic.deg.generator.constraints.ViolateConstraint;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeGenerator;
-import com.scottlogic.deg.generator.decisiontree.IDecisionTreeGenerator;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
+import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.IDataGenerator;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.targets.IOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,31 +21,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final IDecisionTreeGenerator profileAnalyser = new DecisionTreeGenerator();
-    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-    private final IDataGenerator dataGenerator = new DataGenerator(
-        new RowSpecMerger(fieldSpecMerger),
-        new ConstraintReducer(
-            new FieldSpecFactory(),
-            fieldSpecMerger));
+    private final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
+    private final DataGenerator dataGenerator;
 
-    private final IOutputTarget outputter;
+    private final OutputTarget outputter;
 
-    public GenerationEngine(IOutputTarget outputter) {
+    public GenerationEngine(OutputTarget outputter, DecisionTreeDataGenerator dataGenerator) {
         this.outputter = outputter;
+        this.dataGenerator = dataGenerator;
     }
 
-    public void generateDataSet(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
-        final Profile profile = new ProfileReader().read(profileFilePath);
-
+    public void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
         final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
         this.outputter.outputDataset(generatedDataItems, profile.fields);
     }
 
-    public void generateTestCases(Path profileFilePath, GenerationConfig config) throws IOException, InvalidProfileException {
-        final Profile profile = new ProfileReader().read(profileFilePath);
-
+    public void generateTestCases(Profile profile, GenerationConfig config) throws IOException, InvalidProfileException {
         final TestCaseDataSet validCase = new TestCaseDataSet("", generate(profile, config));
 
         System.out.println("Valid cases generated, starting violation generation...");
@@ -99,7 +83,7 @@ public class GenerationEngine {
     }
 
     private Rule violateRule(Rule rule) {
-        IConstraint violateConstraint =
+        Constraint violateConstraint =
             rule.constraints.size() == 1
                 ? new ViolateConstraint(
                 rule.constraints.iterator().next())

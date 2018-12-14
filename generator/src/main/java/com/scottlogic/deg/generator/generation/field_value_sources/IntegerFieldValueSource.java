@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class IntegerFieldValueSource implements IFieldValueSource {
+public class IntegerFieldValueSource implements FieldValueSource {
     private final Integer inclusiveLower;
     private final Integer exclusiveUpper;
     private final Set<Integer> blacklist;
@@ -104,16 +105,20 @@ public class IntegerFieldValueSource implements IFieldValueSource {
 
     @Override
     public Iterable<Object> generateInterestingValues() {
+        if (inclusiveLower >= exclusiveUpper) {
+            return () -> new UpCastingIterator<>(Collections.emptyIterator());
+        }
+
         return () -> new UpCastingIterator<>(
             Stream.of(
-                    incrementWhile(inclusiveLower, x -> blacklist.contains(x)),
-                    inclusiveLower <= 0 && 0 < exclusiveUpper && !blacklist.contains(0)
-                        ? 0
-                        : null,
-                    decrementWhile(exclusiveUpper - 1, x -> blacklist.contains(x)))
-                .filter(x -> x != null)
-                .iterator()
-            );
+                incrementWhile(inclusiveLower, blacklist::contains),
+                inclusiveLower <= 0 && 0 < exclusiveUpper && !blacklist.contains(0)
+                    ? 0
+                    : null,
+                decrementWhile(exclusiveUpper - 1, blacklist::contains))
+            .filter(x -> x != null)
+            .iterator()
+        );
     }
 
     @Override
@@ -130,7 +135,7 @@ public class IntegerFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->
