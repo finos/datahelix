@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation.combination;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 
 import java.util.HashMap;
 import java.util.Map;
