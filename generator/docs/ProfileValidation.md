@@ -135,10 +135,26 @@ Example profiles may include:
 | Constraint 1          | Constraint 2          |                          Valid                         |                                                                        Reason |
 |-----------------------|-----------------------|:------------------------------------------------------:|------------------------------------------------------------------------------:|
 | E is granular to 0.1  | E is granular to 0.01 |                          Valid                         | Both granularities are valid and so the smallest one (0.01) will be selected. |
-| E is granular to 0.01 | E is granular to 0.01 | E is a number with up to 2 decimal places granularity. |           Both granularities are valid and the same so 0.01 will be selected. |
-| E is granular to 1e-8 | E is granular to 1-e6 |  E is a number with up to 8 decimal place granularity. | Both granularities are valid and so the smallest one (1-e6) will be selected. |
+| E is granular to 0.01 | E is granular to 0.01 |                          Valid                         |           Both granularities are valid and the same so 0.01 will be selected. |
+| E is granular to 1e-8 | E is granular to 1-e6 |                          Valid                         | Both granularities are valid and so the smallest one (1-e6) will be selected. |
 
 
 ## String validation
+
+The profile supports several constraints on strings length including: is shorter than, is longer than.
+Usage of string constraints implies that the Type of the field is STRING.
+
+| Constraint          |              String length | Field Type |
+|---------------------|---------------------------:|------------|
+| F is longer than 3  | F is 4 characters or more. | STRING     |
+| F is shorter than 5 | F is 4 characters or less. | STRING     |
+
+Example profiles may include:
+
+| Constraint 1       |     Constraint 2     | Valid | Reason                                                                                  |
+|--------------------|:--------------------:|------:|-----------------------------------------------------------------------------------------|
+| F is longer than 3 |  F is shorter than 3 | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| F is longer than 3 | F is shorter than 10 | Valid | F is between 4 and 9 characters long.                                                   |
+
 
 ## Null validation
