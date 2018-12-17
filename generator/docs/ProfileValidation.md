@@ -21,6 +21,7 @@ There are a number of checks performed depending on the constraint applied. Belo
 The profile has 3 valid types for fields: NUMERIC, STRING and TEMPORAL.
 
 There are a number of ways in which a type may be enforced for a field, including:
+
 | Contstraint                               | Type restriction |
 |-------------------------------------------|------------------|
 | A is of type STRING                       | STRING           |
