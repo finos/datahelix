@@ -15,6 +15,7 @@ The validation checks currently performed include:
 The workflow for the profile validator is that it iterates over all the constraints in the profile and for each field it keeps a running collection of restrictions that must be observed in order for the profile to remain valid. When an invalidating constraint is encountered, a validation alert is raised and the restrictions for this field remain unchanged. All validation alerts for all fields will be reported at the end of the process.
 
 Validation alerts have different levels:
+
 | Criticality |      Data generation      |                                                                                                     Explaination |
 |-------------|:-------------------------:|-----------------------------------------------------------------------------------------------------------------:|
 | Error       | Data cannot be generated. |                       There are unrecoverable contradictions between constraints. These errors must be resolved. |
@@ -23,7 +24,7 @@ Validation alerts have different levels:
 
 There are a number of checks performed depending on the constraint applied. Below we explain them.
 
-## Type restrictions
+## Type validation
 
 The profile supports 3 valid types for fields: NUMERIC, STRING and TEMPORAL.
 
@@ -54,7 +55,7 @@ Example profiles may include:
 | A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to NUMERIC types.  |
 
 
-## Set restrictions
+## Set validation
 
 The profile supports in set and not in set constraints which modify a whitelist / blacklist for a field. The values in the whitelist are allowed values for the field whilst the values in the blacklist are not allowed.
 
@@ -72,3 +73,36 @@ Example profiles may include:
 | B is in set [1,2,3]                   |      B is in set [6]      | Invalid | B is in set [1,2,3]. Constraint 2 tries to define B as in set [6] which is outside of [1,2,3]               |
 | B is in set [1,2,3]                   | B is not in set ["Hello"] |   Valid | B is in set [1,2,3]. B not being in set ["Hello"] does not contradict Constraint 1.                         |
 | B is not in set ["Hello", "Good day"] |    B is in set ["Bye"]    |   Valid | B is not in set ["Hello", "Good day"]. B not being in this set does not contradict it being in set ["Bye"]. |
+
+
+## Numeric validation
+
+The profile supports several numeric operations inclusing: is less than, is greater than, is less than or equal to, is greater than or equal to.
+Usage of numeric constrains implies that the Type of the field is NUMERIC.
+
+
+| Constraint                      |  Numeric range  | Field Type |
+|---------------------------------|:---------------:|-----------:|
+| C is less than 10               | any number < 10 |    NUMERIC |
+| C is greater than 10            | any number > 10 |    NUMERIC |
+| C is less than or equal to 5    | any number <= 5 |    NUMERIC |
+| C is greater than or equal to 5 | any number >= 5 |    NUMERIC |
+
+Example profiles may include:
+
+| Constraint 1                     |          Constraint 2         | Valid | Reason                                                                                  |
+|----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
+| C is less than 10                | C is great than 20            | Valid | C is between 10 and 20.                                                                 |
+| C is greater than or equal to 10 | C is less than or equal to 10 | Valid | C is equal to 10.                                                                       |
+| C is greater than 10             | C is less than 5              | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+|                                  |                               |       |                                                                                         |
+
+
+
+## Granularity validation
+
+## String validation
+
+## Temporal validation
+
+## Null validation
