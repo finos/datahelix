@@ -19,8 +19,7 @@ Validation alerts have different levels:
 | Criticality |      Data generation      |                                                                                                     Explaination |
 |-------------|:-------------------------:|-----------------------------------------------------------------------------------------------------------------:|
 | Error       | Data cannot be generated. |                       There are unrecoverable contradictions between constraints. These errors must be resolved. |
-| Warning     |   Data can be generated.  | There are constraints that look like they may be incorrect but there are some possible values that satisfy them. |
-| Information |   Data can be generated.  |                                                            There are implicit assumptions made about the fields. |
+| Information |   Data can be generated.  | There are constraints that look like they may sometimes contradict but there are some possible values that satisfy them. |
 
 There are a number of checks performed depending on the constraint applied. Below we explain them.
 
