@@ -8,6 +8,8 @@ public class IsOfTypeConstraintDto implements ConstraintDto {
     @JsonProperty("requiredType")
     public String requiredTypeString;
 
+    public String rule;
+
     public IsOfTypeConstraint.Types getTypesFromTypesDto() {
         return IsOfTypeConstraint.Types.valueOf(requiredTypeString.toUpperCase());
     }

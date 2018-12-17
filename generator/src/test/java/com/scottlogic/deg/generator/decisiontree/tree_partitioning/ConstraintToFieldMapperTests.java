@@ -2,12 +2,14 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +23,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindConstraintMappings() {
         givenFields("A");
 
-        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("A"), "test-value");
+        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("A"), "test-value", rules());
         givenConstraints(constraint);
         givenFields("A");
 
@@ -32,7 +34,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindRootDecisionNodeMapping() {
         givenFields("B");
 
-        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value");
+        final AtomicConstraint constraint = new IsEqualToConstantConstraint(new Field("B"), "test-value", rules());
         final DecisionNode decision = new TreeDecisionNode(
             new TreeConstraintNode(constraint));
 
@@ -45,9 +47,9 @@ class ConstraintToFieldMapperTests {
     void shouldCreateCorrectNumberOfMappings() {
         givenFields("A", "B", "C");
 
-        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
-        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
+        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value", rules());
+        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value", rules());
+        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value", rules());
 
         givenConstraints(constraintA, constraintB, constraintC);
 
@@ -58,12 +60,12 @@ class ConstraintToFieldMapperTests {
     void shouldMapTopLevelConstraintsToNestedFields() {
         givenFields("A", "B", "C", "D", "E", "F");
 
-        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value");
-        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value");
-        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value");
-        final AtomicConstraint constraintD = new IsEqualToConstantConstraint(new Field("D"), "test-value");
-        final AtomicConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value");
-        final AtomicConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value");
+        final AtomicConstraint constraintA = new IsEqualToConstantConstraint(new Field("A"), "test-value", rules());
+        final AtomicConstraint constraintB = new IsEqualToConstantConstraint(new Field("B"), "test-value", rules());
+        final AtomicConstraint constraintC = new IsEqualToConstantConstraint(new Field("C"), "test-value", rules());
+        final AtomicConstraint constraintD = new IsEqualToConstantConstraint(new Field("D"), "test-value", rules());
+        final AtomicConstraint constraintE = new IsEqualToConstantConstraint(new Field("E"), "test-value", rules());
+        final AtomicConstraint constraintF = new IsEqualToConstantConstraint(new Field("F"), "test-value", rules());
 
         final DecisionNode decisionABC = new TreeDecisionNode(
             new TreeConstraintNode(
@@ -158,5 +160,11 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         Assert.assertThat(mappings, Matchers.aMapWithSize(mappingsCount));
+    }
+
+    private static Set<RuleInformation> rules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

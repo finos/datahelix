@@ -2,10 +2,12 @@ package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OrConstraint implements GrammaticalConstraint {
@@ -35,5 +37,13 @@ public class OrConstraint implements GrammaticalConstraint {
     @Override
     public Collection<Field> getFields() {
         return subConstraints.stream().flatMap(c -> c.getFields().stream()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<RuleInformation> getRules() {
+        return this.subConstraints
+            .stream()
+            .flatMap(c -> c.getRules().stream())
+            .collect(Collectors.toSet());
     }
 }

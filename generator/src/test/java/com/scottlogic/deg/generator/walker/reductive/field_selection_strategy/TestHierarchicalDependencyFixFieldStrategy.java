@@ -6,6 +6,8 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -204,10 +206,15 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
-        List<Rule> rules = Collections.singletonList(new Rule("Test rule", constraints));
+        List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
         Profile profile = new Profile(fields, rules);
         HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
         return strategy.getFieldFixingPriorityList();
     }
 
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
+    }
 }

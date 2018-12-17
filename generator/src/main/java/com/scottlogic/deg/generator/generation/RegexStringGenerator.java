@@ -418,6 +418,15 @@ public class RegexStringGenerator implements StringGenerator {
         }
     }
 
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        RegexStringGenerator constraint = (RegexStringGenerator) o;
+        return this.automaton.equals(constraint.automaton);
+    }
 
-
+    public int hashCode(){
+        return Objects.hash(this.automaton, this.getClass());
+    }
 }
