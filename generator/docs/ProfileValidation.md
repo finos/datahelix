@@ -99,7 +99,7 @@ Example profiles may include:
 
 ## Temporal validation
 The profile supports several temporal operations inclusing: is after, is before, is after or at, is before or at.
-Usage of temporal constrains implies that the Type of the field is TEMPORAL.
+Usage of temporal constraints implies that the Type of the field is TEMPORAL.
 
 
 | Constraint                                |                   Temporal range                  | Field Type |
@@ -119,6 +119,25 @@ Example profiles may include:
 
 
 ## Granularity validation
+
+The profile supports the specification of a granularity which must be a positive number, less than 1 and a fractional power of 10.
+Usage of granularity constraints implies that the Type of the field is NUMERIC. 
+
+
+| Constraint            |                       Granularity                      | Field Type |
+|-----------------------|:------------------------------------------------------:|-----------:|
+| E is granular to 0.1  |  E is a number with up to 1 decimal place granularity. |    NUMERIC |
+| E is granular to 0.01 | E is a number with up to 2 decimal places granularity. |    NUMERIC |
+| E is granular to 1e-8 |  E is a number with up to 8 decimal place granularity. |    NUMERIC |
+
+Example profiles may include:
+
+| Constraint 1          | Constraint 2          |                          Valid                         |                                                                        Reason |
+|-----------------------|-----------------------|:------------------------------------------------------:|------------------------------------------------------------------------------:|
+| E is granular to 0.1  | E is granular to 0.01 |                          Valid                         | Both granularities are valid and so the smallest one (0.01) will be selected. |
+| E is granular to 0.01 | E is granular to 0.01 | E is a number with up to 2 decimal places granularity. |           Both granularities are valid and the same so 0.01 will be selected. |
+| E is granular to 1e-8 | E is granular to 1-e6 |  E is a number with up to 8 decimal place granularity. | Both granularities are valid and so the smallest one (1-e6) will be selected. |
+
 
 ## String validation
 
