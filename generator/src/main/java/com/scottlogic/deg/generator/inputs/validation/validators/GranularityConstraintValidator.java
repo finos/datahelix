@@ -22,19 +22,18 @@ public class GranularityConstraintValidator implements ConstraintValidatorAlerts
 
     public void granularTo(String field, BigDecimal referenceValue){
 
-        //granularity can only be increased (e.g. increase number of decimal places), it can not be decreased.
         if(granularity.compareTo(BigDecimal.ZERO) == 0) {
             granularity = referenceValue;
         } else if(granularity.compareTo(referenceValue) > 0){
             granularity = referenceValue;
         } else if(granularity.compareTo(referenceValue) < 0) {
-            logError(field, new GranularityConstraintValidationMessages(granularity, referenceValue));
+            logInformation(field, new GranularityConstraintValidationMessages(granularity, referenceValue));
         }
     }
 
-    private void logError(String field, StandardValidationMessages message) {
+    private void logInformation(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
-            Criticality.ERROR,
+            Criticality.INFORMATION,
             message,
             validationType,
             field));

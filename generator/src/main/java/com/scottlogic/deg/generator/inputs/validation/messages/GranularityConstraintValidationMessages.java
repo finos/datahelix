@@ -17,7 +17,7 @@ public class GranularityConstraintValidationMessages implements StandardValidati
     @Override
     public String getVerboseMessage() {
         return String.format(
-            "Having granularity of %s is not valid. Granularity is currently set to: %s",
+            "Attempted to set granularity to %s. Granularity is currently set to: %s",
             invalidValue,
             validValue);
     }
