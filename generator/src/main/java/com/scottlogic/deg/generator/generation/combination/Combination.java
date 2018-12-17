@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.decisiontree.rule_strategy;
+package com.scottlogic.deg.generator.generation.combination;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;

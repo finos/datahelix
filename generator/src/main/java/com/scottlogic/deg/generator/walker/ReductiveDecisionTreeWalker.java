@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.rule_strategy.Combination;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
@@ -33,10 +32,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree) {
-        return walk(tree, new Combination());
-    }
-
-    public Stream<RowSpec> walk(DecisionTree tree, Combination combination) {
         ConstraintNode rootNode = tree.getRootNode();
         FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
 
