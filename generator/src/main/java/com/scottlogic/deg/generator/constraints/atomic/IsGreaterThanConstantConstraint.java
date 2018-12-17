@@ -52,4 +52,9 @@ public class IsGreaterThanConstantConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsGreaterThanConstantConstraint(this.field, this.referenceValue, rules);
+    }
 }

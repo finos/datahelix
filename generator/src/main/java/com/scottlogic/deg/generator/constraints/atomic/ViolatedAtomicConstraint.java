@@ -50,4 +50,9 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     public boolean equals(Object obj){
         return violatedConstraint.equals(obj);
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new ViolatedAtomicConstraint(this.violatedConstraint.withRules(rules));
+    }
 }

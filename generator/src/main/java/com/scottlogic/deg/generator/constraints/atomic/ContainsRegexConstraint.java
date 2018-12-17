@@ -53,4 +53,9 @@ public class ContainsRegexConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new ContainsRegexConstraint(this.field, this.regex, rules);
+    }
 }

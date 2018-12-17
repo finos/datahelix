@@ -31,4 +31,9 @@ public class FormatConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new FormatConstraint(this.field, this.format, rules);
+    }
 }

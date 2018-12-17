@@ -65,4 +65,9 @@ public class NotConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return negatedConstraint.getRules();
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new NotConstraint(this.negatedConstraint.withRules(rules));
+    }
 }

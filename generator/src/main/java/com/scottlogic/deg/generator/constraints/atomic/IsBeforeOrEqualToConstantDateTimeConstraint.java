@@ -53,4 +53,9 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstr
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsBeforeOrEqualToConstantDateTimeConstraint(this.field, this.referenceValue, rules);
+    }
 }

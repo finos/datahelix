@@ -52,4 +52,9 @@ public class IsLessThanOrEqualToConstantConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsLessThanOrEqualToConstantConstraint(this.field, this.referenceValue, rules);
+    }
 }

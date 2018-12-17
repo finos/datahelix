@@ -51,4 +51,9 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
     public Set<RuleInformation> getRules() {
         return rules;
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsStringShorterThanConstraint(this.field, this.referenceValue, rules);
+    }
 }

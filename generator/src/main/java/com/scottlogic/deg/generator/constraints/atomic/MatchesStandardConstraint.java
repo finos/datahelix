@@ -48,4 +48,9 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     public int hashCode(){
         return Objects.hash(field, standard);
     }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new MatchesStandardConstraint(this.field, this.standard, rules);
+    }
 }
