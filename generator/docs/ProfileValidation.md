@@ -49,10 +49,10 @@ Example profiles may include:
 
 | Constraint 1                       | Constraint 2          | Valid   | Reason                                                                                                    |
 |------------------------------------|-----------------------|---------|-----------------------------------------------------------------------------------------------------------|
-| A is of type STRING                | A is of type NUMERIC  | Invalid | A is already set to be of type STRING by Constraint 1. The type cannot be changed to a different one.     |
-| A is less than 10                  | A is of type TEMPORAL | Invalid | Constraint 1 implies that A must be of NUMERIC type. The type cannot be changed to a different one.       |
-| A is of type STRING                | A is granular to 1    | Invalid | A is of type String and applying granular to constraint is only allowed on NUMERIC fields.                |
-| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to NUMERIC types.  |
+| A is of type STRING                | A is of type NUMERIC  | Invalid - Error | A is already set to be of type STRING by Constraint 1. The type cannot be changed to a different one.     |
+| A is less than 10                  | A is of type TEMPORAL | Invalid - Error | Constraint 1 implies that A must be of NUMERIC type. The type cannot be changed to a different one.       |
+| A is of type STRING                | A is granular to 1    | Invalid - Error | A is of type String and applying granular to constraint is only allowed on NUMERIC fields.                |
+| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid - Error | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to NUMERIC types.  |
 
 
 ## Set validation
@@ -70,7 +70,7 @@ Example profiles may include:
 
 | Constraint 1                          |        Constraint 2       |   Valid | Reason                                                                                                      |
 |---------------------------------------|:-------------------------:|--------:|-------------------------------------------------------------------------------------------------------------|
-| B is in set [1,2,3]                   |      B is in set [6]      | Invalid | B is in set [1,2,3]. Constraint 2 tries to define B as in set [6] which is outside of [1,2,3]               |
+| B is in set [1,2,3]                   |      B is in set [6]      | Invalid - Error | B is in set [1,2,3]. Constraint 2 tries to define B as in set [6] which is outside of [1,2,3]               |
 | B is in set [1,2,3]                   | B is not in set ["Hello"] |   Valid | B is in set [1,2,3]. B not being in set ["Hello"] does not contradict Constraint 1.                         |
 | B is not in set ["Hello", "Good day"] |    B is in set ["Bye"]    |   Valid | B is not in set ["Hello", "Good day"]. B not being in this set does not contradict it being in set ["Bye"]. |
 
@@ -94,7 +94,7 @@ Example profiles may include:
 |----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
 | C is less than 10                | C is great than 20            | Valid | C is between 10 and 20.                                                                 |
 | C is greater than or equal to 10 | C is less than or equal to 10 | Valid | C is equal to 10.                                                                       |
-| C is greater than 10             | C is less than 5              | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| C is greater than 10             | C is less than 5              | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
 
 
 ## Temporal validation
@@ -115,7 +115,7 @@ Example profiles may include:
 |----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
 | C is less than 10                | C is great than 20            | Valid | C is between 10 and 20.                                                                 |
 | C is greater than or equal to 10 | C is less than or equal to 10 | Valid | C is equal to 10.                                                                       |
-| C is greater than 10             | C is less than 5              | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| C is greater than 10             | C is less than 5              | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
 
 
 ## Granularity validation
@@ -134,9 +134,9 @@ Example profiles may include:
 
 | Constraint 1          | Constraint 2          |                          Valid                         |                                                                        Reason |
 |-----------------------|-----------------------|:------------------------------------------------------:|------------------------------------------------------------------------------:|
-| E is granular to 0.1  | E is granular to 0.01 |                          Valid                         | Both granularities are valid and so the smallest one (0.01) will be selected. |
+| E is granular to 0.1  | E is granular to 0.01 |                          Valid - Information                         | Both granularities are valid and so the smallest one (0.01) will be selected. |
 | E is granular to 0.01 | E is granular to 0.01 |                          Valid                         |           Both granularities are valid and the same so 0.01 will be selected. |
-| E is granular to 1e-8 | E is granular to 1-e6 |                          Valid                         | Both granularities are valid and so the smallest one (1-e6) will be selected. |
+| E is granular to 1e-8 | E is granular to 1-e6 |                          Valid - Information                         | Both granularities are valid and so the smallest one (1-e6) will be selected. |
 
 
 ## String validation
@@ -153,7 +153,7 @@ Example profiles may include:
 
 | Constraint 1       |     Constraint 2     | Valid | Reason                                                                                  |
 |--------------------|:--------------------:|------:|-----------------------------------------------------------------------------------------|
-| F is longer than 3 |  F is shorter than 3 | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| F is longer than 3 |  F is shorter than 3 | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
 | F is longer than 3 | F is shorter than 10 | Valid | F is between 4 and 9 characters long.                                                   |
 
 
@@ -170,4 +170,4 @@ Example profiles may include:
 
 | Constraint 1 |  Constraint 2 |   Valid | Reason                                                                     |
 |--------------|:-------------:|--------:|----------------------------------------------------------------------------|
-| G is null    | G is not null | Invalid | G cannot be null and not null simultaneously. No results can be generated. |
+| G is null    | G is not null | Invalid - Error | G cannot be null and not null simultaneously. No results can be generated. |
