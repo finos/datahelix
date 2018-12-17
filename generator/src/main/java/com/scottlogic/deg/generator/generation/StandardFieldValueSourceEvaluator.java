@@ -24,8 +24,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             if (mustContainRestriction != null) {
                 whitelist.addAll(
                     getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                        .map(o -> o.getSetRestrictions().getWhitelist())
-                        .collect(Collectors.toSet())
+                        .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())
+                        .collect(Collectors.toList())
                 );
             }
 
