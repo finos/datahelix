@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Combination {
-    private Map<Field, Object> combinations = new HashMap<>();
+    private Map<Field, DataValue> combinations = new HashMap<>();
 
-    public  Map<Field, Object> getCombinations() { return combinations; }
+    public  Map<Field, DataValue> getCombinations() { return combinations; }
 
-    public void add(Field field, Object o){
+    public void add(Field field, DataValue o){
         combinations.put(field, o);
     }
 

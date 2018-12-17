@@ -1,29 +1,38 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.combination.DecisionTreeCombinationProducer;
+import com.scottlogic.deg.generator.generation.combination.SingleCombinationStrategy;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.CombinationBasedWalker;
+import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
+import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
+import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
-import java.nio.file.Path;
-
-public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
+public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
     private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
     private final DataGeneratorMonitor monitor;
+    private final DecisionTree tree;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy, DecisionTree tree) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
         this.monitor = monitor;
+        this.tree = tree;
     }
 
     @Override
-    public DecisionTreeWalker getDecisionTreeWalker(Path outputPath) {
+    public DecisionTreeWalker getDecisionTreeWalker() {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);
@@ -45,16 +54,16 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     ? (ReductiveDataGeneratorMonitor) this.monitor
                     : new NoopDataGeneratorMonitor();
 
-                return new ReductiveDecisionTreeWalker(
-                    visualiser,
-                    new FieldCollectionFactory(
-                        config,
-                        constraintReducer,
-                        fieldSpecMerger,
-                        fieldSpecFactory,
-                        fixFieldStrategy,
-                        reductiveMonitor),
+                FieldCollectionFactory fieldCollectionFactory = new FieldCollectionFactory(
+                    config,
+                    constraintReducer,
+                    fieldSpecMerger,
+                    fieldSpecFactory,
+                    fixFieldStrategy,
                     reductiveMonitor);
+
+                ReductiveDecisionTreeWalker reductiveDecisionTreeWalker = new ReductiveDecisionTreeWalker(visualiser, fieldCollectionFactory, reductiveMonitor);
+                return new CombinationBasedWalker(new DecisionTreeCombinationProducer(tree, constraintReducer, config, new SingleCombinationStrategy()), fieldCollectionFactory, reductiveDecisionTreeWalker);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

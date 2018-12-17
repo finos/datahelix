@@ -1,12 +1,10 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
-import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
@@ -21,12 +19,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenerationEngine {
-    private final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
+    private final OutputTarget outputter;
     private final DataGenerator dataGenerator;
 
-    private final OutputTarget outputter;
-
-    public GenerationEngine(OutputTarget outputter, DecisionTreeDataGenerator dataGenerator) {
+    public GenerationEngine(OutputTarget outputter, DataGenerator dataGenerator) {
         this.outputter = outputter;
         this.dataGenerator = dataGenerator;
     }
@@ -73,12 +69,8 @@ public class GenerationEngine {
     }
 
     private Stream<GeneratedObject> generate(Profile profile, GenerationConfig config) {
-
-        final DecisionTreeCollection analysedProfile = this.profileAnalyser.analyse(profile);
-
         return this.dataGenerator.generateData(
             profile,
-            analysedProfile.getMergedTree(),
             config);
     }
 

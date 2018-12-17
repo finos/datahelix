@@ -32,13 +32,21 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree) {
-        ConstraintNode rootNode = tree.getRootNode();
         FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
+        return walk(tree, fieldCollection);
+    }
 
+    public Stream<RowSpec> walk(DecisionTree tree, FieldCollection fieldCollection) {
+        ConstraintNode rootNode = tree.getRootNode();
         visualise(rootNode, fieldCollection);
 
+        ReductiveConstraintNode adaptedRootNode = nodeAdapter.adapt(rootNode, fieldCollection);
+        if (fieldCollection.allFieldsAreFixed()){
+            return fieldCollection.createRowSpecFromFixedValues(adaptedRootNode);
+        }
+
         //calculate a field to fix and start processing
-        return process(rootNode, fieldCollection.getNextFixedField(nodeAdapter.adapt(rootNode, fieldCollection)));
+        return process(rootNode, fieldCollection.getNextFixedField(adaptedRootNode));
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, FieldCollection fieldCollection) {
@@ -80,5 +88,9 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ReductiveDataGeneratorMonitor getMonitor(){
+        return this.monitor;
     }
 }

@@ -65,7 +65,7 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
                     .map(dataBag -> dataBag.getValue(entry.getKey()))
             ));
 
-        return this.combinationStrategy.getCombinations(generatedData);
+        return this.combinationStrategy.getCombinations(generatedData, fieldSpecifications);
     }
 
     private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){

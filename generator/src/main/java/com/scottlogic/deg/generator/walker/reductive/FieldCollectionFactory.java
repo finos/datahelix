@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +49,21 @@ public class FieldCollectionFactory {
             this.fixFieldStrategy,
             new HashMap<>(),
             null,
+            this.monitor);
+    }
+
+    public FieldCollection create(DecisionTree tree, Deque<FixedField> initialFixedFields){
+        FixedField current = initialFixedFields.pop();
+        return new FieldCollection(
+            tree.getFields(),
+            this,
+            this.config,
+            this.constraintReducer,
+            this.fieldSpecMerger,
+            this.fieldSpecFactory,
+            this.fixFieldStrategy,
+            initialFixedFields.stream().collect(Collectors.toMap(ff -> ff.field, ff -> ff)),
+            current,
             this.monitor);
     }
 
