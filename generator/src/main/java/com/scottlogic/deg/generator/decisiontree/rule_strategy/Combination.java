@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Combination {
-    Map<Field, IsEqualToConstantConstraint> combinations = new HashMap<>();
+    private Map<Field, Object> combinations = new HashMap<>();
 
-    public  Map<Field, IsEqualToConstantConstraint> getCombinations() { return combinations; }
+    public  Map<Field, Object> getCombinations() { return combinations; }
 
     public void add(Field field, Object o){
-        combinations.put(field, new IsEqualToConstantConstraint(field, o));
+        combinations.put(field, o);
     }
 
 }
