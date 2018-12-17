@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 
 import java.util.*;
@@ -93,8 +93,8 @@ public class RowSpec {
         return Objects.toString(fieldToFieldSpec);
     }
 
-    public IDataBagSource createDataBagSource() {
-        List<IDataBagSource> fieldDataBagSources = new ArrayList<>(fields.size());
+    public DataBagSource createDataBagSource() {
+        List<DataBagSource> fieldDataBagSources = new ArrayList<>(fields.size());
 
         for (Field field : fields) {
             FieldSpec fieldSpec = getSpecForField(field);

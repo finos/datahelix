@@ -4,10 +4,12 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
-import com.scottlogic.deg.generator.inputs.IConstraintReader;
+import com.scottlogic.deg.generator.inputs.ConstraintReader;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -98,7 +100,7 @@ public class AtomicConstraintTests {
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+            ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
             // Assert.assertNotNull("No reader found for constraint type '" + type.toString() + "'", reader);
             if (reader == null) {
                 missingConstraints.add(type.toString());
@@ -119,10 +121,14 @@ public class AtomicConstraintTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        IConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            Constraint constraint = reader.apply(dto, profileFields);
+            RuleDTO rule = new RuleDTO();
+            rule.rule = "rule";
+            Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+
+            Constraint constraint = reader.apply(dto, profileFields, ruleInformation);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

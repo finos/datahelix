@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,21 +11,23 @@ import java.util.stream.Stream;
 public class FieldSpecSource {
     final static FieldSpecSource Empty = new FieldSpecSource(Collections.emptySet(), Collections.emptySet());
 
-    private final Set<String> rules;
     private final Set<AtomicConstraint> constraints;
+    private final Set<AtomicConstraint> violatedConstraints;
 
-    private FieldSpecSource(Set<String> rules, Set<AtomicConstraint> constraints) {
-        this.rules = rules;
+    private FieldSpecSource(Set<AtomicConstraint> constraints, Set<AtomicConstraint> violatedConstraints) {
         this.constraints = constraints;
+        this.violatedConstraints = violatedConstraints;
     }
 
-    static FieldSpecSource fromConstraint(AtomicConstraint constraint, boolean negate) {
+    static FieldSpecSource fromConstraint(AtomicConstraint constraint, boolean negate, boolean violated) {
         return new FieldSpecSource(
-            Collections.emptySet(),
             Collections.singleton(
                 negate
                     ? constraint.negate()
-                    : constraint));
+                    : constraint),
+            violated
+                ? Collections.singleton(constraint)
+                : Collections.emptySet());
     }
 
     static FieldSpecSource fromFieldSpecs(FieldSpec left, FieldSpec right) {
@@ -41,14 +42,12 @@ public class FieldSpecSource {
         return left.getFieldSpecSource().combine(right.getFieldSpecSource());
     }
 
-    public String getRule() {
-        return this.rules.isEmpty()
-            ? null
-            : Objects.toString(this.rules);
-    }
-
     public Set<AtomicConstraint> getConstraints() {
         return this.constraints;
+    }
+
+    public Set<AtomicConstraint> getViolatedConstraints() {
+        return this.violatedConstraints;
     }
 
     FieldSpecSource combine(FieldSpecSource source) {
@@ -61,8 +60,8 @@ public class FieldSpecSource {
         }
 
         return new FieldSpecSource(
-            concat(this.rules, source.rules),
-            concat(this.constraints, source.constraints)
+            concat(this.constraints, source.constraints),
+            concat(this.violatedConstraints, source.violatedConstraints)
         );
     }
 

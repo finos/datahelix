@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestDTO;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.TestCaseDTO;
@@ -18,11 +18,12 @@ import java.util.stream.Stream;
 
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
-    private final IDataSetWriter datasetWriter;
+    private final DataSetWriter datasetWriter;
+    private final String profileFileNameWithoutExtension;
 
-    public TestCaseGenerationResultWriter(IDataSetWriter datasetWriter) {
+    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter, String profileFileNameWithoutExtension) {
+        this.profileFileNameWithoutExtension = profileFileNameWithoutExtension;
         this.manifestWriter = new ManifestWriter();
-
         this.datasetWriter = datasetWriter;
     }
 
@@ -31,22 +32,27 @@ public class TestCaseGenerationResultWriter {
 
         List<TestCaseDTO> testCaseDtos = new ArrayList<>();
 
-        System.out.println("Writing test case files");
-        int index = 1;
+        int index = 0;
         for (TestCaseDataSet dataset : result.datasets) {
-            String filenameWithoutExtension = intFormatter.format(index);
+            String filenameWithoutExtension = index == 0
+                ? this.profileFileNameWithoutExtension
+                : intFormatter.format(index);
 
             write(result.profile.fields,
                 dataset.stream(),
                 directoryPath,
                 filenameWithoutExtension);
 
+            if (index == 1){
+                System.out.println("Valid cases generated, starting violation generation...");
+            }
+
             testCaseDtos.add(
                 new TestCaseDTO(
                     filenameWithoutExtension,
                     dataset.violation == null
                         ? Collections.emptyList()
-                        : Collections.singleton(dataset.violation)));
+                        : Collections.singleton(dataset.violation.getDescription())));
 
             index++;
         }
@@ -76,7 +82,7 @@ public class TestCaseGenerationResultWriter {
 
     private static DecimalFormat getDecimalFormat(int numberOfDatasets)
     {
-        int maxNumberOfDigits = (int)Math.floor(Math.log10(numberOfDatasets));
+        int maxNumberOfDigits = (int)Math.ceil(Math.log10(numberOfDatasets));
 
         char[] zeroes = new char[maxNumberOfDigits];
         Arrays.fill(zeroes, '0');

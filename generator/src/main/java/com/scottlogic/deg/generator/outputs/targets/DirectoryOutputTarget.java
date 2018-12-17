@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResultWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.IDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -12,13 +12,21 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /** Output into a specific directory */
-public class DirectoryOutputTarget implements IOutputTarget {
+public class DirectoryOutputTarget implements OutputTarget {
     private final Path directoryPath;
-    private final IDataSetWriter dataSetWriter;
+    private final DataSetWriter dataSetWriter;
+    private final TestCaseGenerationResultWriter testCaseWriter;
 
-    public DirectoryOutputTarget(Path directoryPath, IDataSetWriter dataSetWriter) {
+    public DirectoryOutputTarget(
+        Path directoryPath,
+        String profileFileNameWithoutExtension,
+        DataSetWriter dataSetWriter) {
+
         this.directoryPath = directoryPath;
         this.dataSetWriter = dataSetWriter;
+        this.testCaseWriter = new TestCaseGenerationResultWriter(
+            this.dataSetWriter,
+            profileFileNameWithoutExtension);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class DirectoryOutputTarget implements IOutputTarget {
 
     @Override
     public void outputTestCases(TestCaseGenerationResult dataSets) throws IOException {
-        new TestCaseGenerationResultWriter(this.dataSetWriter)
+        this.testCaseWriter
             .writeToDirectory(
                 dataSets,
                 this.directoryPath.toAbsolutePath().normalize());

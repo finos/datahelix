@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.IStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
@@ -13,111 +13,126 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintReaderLookup {
-    private static final Map<String, IConstraintReader> typeCodeToSpecificReader;
+    private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
-        Map<String, IStringGenerator> standardNameToStringGenerator = new HashMap<>();
+        Map<String, StringGenerator> standardNameToStringGenerator = new HashMap<>();
         standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
 
         typeCodeToSpecificReader = new HashMap<>();
 
         add(AtomicConstraintType.FORMATTEDAS.toString(),
-                (dto, fields) ->
-                        new FormatConstraint(
-                                fields.getByName(dto.field),
-                                (String) dto.value));
+                (dto, fields, rules) ->
+                    new FormatConstraint(
+                        fields.getByName(dto.field),
+                        (String) dto.value,
+                        rules));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
-                (dto, fields) ->
-                        new IsEqualToConstantConstraint(
-                                fields.getByName(dto.field),
-                                potentialUnwrapDate(dto.value)));
+                (dto, fields, rules) ->
+                    new IsEqualToConstantConstraint(
+                        fields.getByName(dto.field),
+                        potentialUnwrapDate(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISINSET.toString(),
-                (dto, fields) ->
-                        new IsInSetConstraint(
-                                fields.getByName(dto.field),
-                                mapValues(dto.values)));
+                (dto, fields, rules) ->
+                    new IsInSetConstraint(
+                        fields.getByName(dto.field),
+                        mapValues(dto.values),
+                        rules));
 
         add(AtomicConstraintType.CONTAINSREGEX.toString(),
-            (dto, fields) ->
+            (dto, fields, rules) ->
                 new ContainsRegexConstraint(
                     fields.getByName(dto.field),
-                    Pattern.compile((String) dto.value)));
+                    Pattern.compile((String) dto.value),
+                    rules));
 
         add(AtomicConstraintType.MATCHESREGEX.toString(),
-                (dto, fields) ->
-                        new MatchesRegexConstraint(
-                                fields.getByName(dto.field),
-                                Pattern.compile((String) dto.value)));
+                (dto, fields, rules) ->
+                    new MatchesRegexConstraint(
+                        fields.getByName(dto.field),
+                        Pattern.compile((String) dto.value),
+                        rules));
 
         add(AtomicConstraintType.AVALID.toString(),
-                (dto, fields) ->
-                        new MatchesStandardConstraint(
-                                fields.getByName(dto.field),
-                                standardNameToStringGenerator.get((String) dto.value)
-                        ));
+                (dto, fields, rules) ->
+                    new MatchesStandardConstraint(
+                        fields.getByName(dto.field),
+                        standardNameToStringGenerator.get((String) dto.value),
+                        rules
+                    ));
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),
-                (dto, fields) ->
-                        new IsGreaterThanConstantConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields, rules) ->
+                    new IsGreaterThanConstantConstraint(
+                        fields.getByName(dto.field),
+                        (Number) dto.value,
+                        rules));
 
         add(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT.toString(),
-                (dto, fields) ->
-                        new IsGreaterThanOrEqualToConstantConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields, rules) ->
+                    new IsGreaterThanOrEqualToConstantConstraint(
+                        fields.getByName(dto.field),
+                        (Number) dto.value,
+                        rules));
 
         add(AtomicConstraintType.ISLESSTHANCONSTANT.toString(),
-                (dto, fields) ->
-                        new IsLessThanConstantConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields, rules) ->
+                    new IsLessThanConstantConstraint(
+                        fields.getByName(dto.field),
+                        (Number) dto.value,
+                        rules));
 
         add(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT.toString(),
-                (dto, fields) ->
-                        new IsLessThanOrEqualToConstantConstraint(
-                                fields.getByName(dto.field),
-                                (Number) dto.value));
+                (dto, fields, rules) ->
+                    new IsLessThanOrEqualToConstantConstraint(
+                        fields.getByName(dto.field),
+                        (Number) dto.value,
+                        rules));
 
         add(AtomicConstraintType.ISBEFORECONSTANTDATETIME.toString(),
-                (dto, fields) ->
-                        new IsBeforeConstantDateTimeConstraint(
-                                fields.getByName(dto.field),
-                                unwrapDate(dto.value)));
+                (dto, fields, rules) ->
+                    new IsBeforeConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        unwrapDate(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME.toString(),
-                (dto, fields) ->
-                        new IsBeforeOrEqualToConstantDateTimeConstraint(
-                                fields.getByName(dto.field),
-                                unwrapDate(dto.value)));
+                (dto, fields, rules) ->
+                    new IsBeforeOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        unwrapDate(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString(),
-                (dto, fields) ->
-                        new IsAfterConstantDateTimeConstraint(
-                                fields.getByName(dto.field),
-                                unwrapDate(dto.value)));
+                (dto, fields, rules) ->
+                    new IsAfterConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        unwrapDate(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
-                (dto, fields) ->
-                        new IsAfterOrEqualToConstantDateTimeConstraint(
-                                fields.getByName(dto.field),
-                                unwrapDate(dto.value)));
+                (dto, fields, rules) ->
+                    new IsAfterOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        unwrapDate(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
-                (dto, fields) ->
-                        new IsGranularToConstraint(
-                                fields.getByName(dto.field),
-                                ParsedGranularity.parse(dto.value)));
+                (dto, fields, rules) ->
+                    new IsGranularToConstraint(
+                        fields.getByName(dto.field),
+                        ParsedGranularity.parse(dto.value),
+                        rules));
 
         add(AtomicConstraintType.ISNULL.toString(),
-                (dto, fields) ->
-                        new IsNullConstraint(fields.getByName(dto.field)));
+                (dto, fields, rules) ->
+                    new IsNullConstraint(fields.getByName(dto.field), rules));
 
         add(AtomicConstraintType.ISOFTYPE.toString(),
-                (dto, fields) ->
+                (dto, fields, rules) ->
                 {
                     final IsOfTypeConstraint.Types type;
                     switch ((String) dto.value) {
@@ -138,36 +153,40 @@ public class AtomicConstraintReaderLookup {
                     }
 
                     return new IsOfTypeConstraint(
-                            fields.getByName(dto.field),
-                            type);
+                        fields.getByName(dto.field),
+                        type,
+                        rules);
                 });
 
         // String constraints
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
-                (dto, fields) -> {
+                (dto, fields, rules) -> {
 
                     int length = ((Number) dto.value).intValue();
                     return new IsStringLongerThanConstraint(
-                            fields.getByName(dto.field),
-                            length);
+                        fields.getByName(dto.field),
+                        length,
+                        rules);
                 });
 
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
-                (dto, fields) -> {
+                (dto, fields, rules) -> {
 
                     int length = ((Number) dto.value).intValue();
                     return new IsStringShorterThanConstraint(
-                            fields.getByName(dto.field),
-                            length);
+                        fields.getByName(dto.field),
+                        length,
+                        rules);
                 });
 
         add(AtomicConstraintType.HASLENGTH.toString(),
-                (dto, fields) -> {
+                (dto, fields, rules) -> {
 
                     int length = ((Number) dto.value).intValue();
                     return new StringHasLengthConstraint(
-                            fields.getByName(dto.field),
-                            length);
+                        fields.getByName(dto.field),
+                        length,
+                        rules);
                 });
     }
 
@@ -181,7 +200,7 @@ public class AtomicConstraintReaderLookup {
         return mappedValues;
     }
 
-    private static void add(String typeCode, IConstraintReader func) {
+    private static void add(String typeCode, ConstraintReader func) {
         typeCodeToSpecificReader.put(typeCode, func);
     }
 
@@ -217,7 +236,7 @@ public class AtomicConstraintReaderLookup {
         }
     }
 
-    public IConstraintReader getByTypeCode(String typeCode) {
+    public ConstraintReader getByTypeCode(String typeCode) {
         return typeCodeToSpecificReader.get(typeCode);
     }
 }

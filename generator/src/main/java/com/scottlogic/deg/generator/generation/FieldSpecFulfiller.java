@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.IDataBagSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecFulfiller implements IDataBagSource {
+public class FieldSpecFulfiller implements DataBagSource {
     private final Field field;
     private final FieldSpec spec;
 
@@ -26,9 +26,9 @@ public class FieldSpecFulfiller implements IDataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        List<IFieldValueSource> fieldValueSources = getAllApplicableValueSources();
+        List<FieldValueSource> fieldValueSources = getAllApplicableValueSources();
 
-        IFieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
@@ -49,8 +49,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
             });
     }
 
-    private List<IFieldValueSource> getAllApplicableValueSources() {
-        List<IFieldValueSource> validSources = new ArrayList<>();
+    private List<FieldValueSource> getAllApplicableValueSources() {
+        List<FieldValueSource> validSources = new ArrayList<>();
 
         // check nullability...
         if (determineNullabilityAndDecideWhetherToHalt(validSources))
@@ -99,7 +99,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
             if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
                 Set<Object> blacklist = getBlacklist();
 
-                final IStringGenerator generator;
+                final StringGenerator generator;
                 if (blacklist.size() > 0) {
                     RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
@@ -127,7 +127,7 @@ public class FieldSpecFulfiller implements IDataBagSource {
         return validSources;
     }
 
-    private Iterable<Object> getDataValues(IFieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+    private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
             default:
@@ -139,8 +139,8 @@ public class FieldSpecFulfiller implements IDataBagSource {
         }
     }
 
-    private boolean determineNullabilityAndDecideWhetherToHalt(List<IFieldValueSource> fieldValueSources) {
-        IFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+    private boolean determineNullabilityAndDecideWhetherToHalt(List<FieldValueSource> fieldValueSources) {
+        FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (spec.getNullRestrictions() != null) {
             if (spec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL) {

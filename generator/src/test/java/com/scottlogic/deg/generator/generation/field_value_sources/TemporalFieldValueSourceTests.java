@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
-import com.scottlogic.deg.generator.utils.IRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -178,7 +178,7 @@ public class TemporalFieldValueSourceTests {
         return LocalDateTime.of(year, month, day, 0, 0, 0);
     }
 
-    private class TestRandomNumberGenerator implements IRandomNumberGenerator {
+    private class TestRandomNumberGenerator implements RandomNumberGenerator {
 
         private double nextDoubleValue = 0;
 

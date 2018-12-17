@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ProfileReader {
@@ -44,30 +45,31 @@ public class ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        IConstraintReader constraintReader = new MainConstraintReader();
+        ConstraintReader constraintReader = new MainConstraintReader();
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
-            r -> new Rule(
-                r.rule != null
-                    ? r.rule
-                    : "Unnamed rule",
-                mapDtos(
-                    r.constraints,
-                    dto -> {
-                        try {
-                            return constraintReader.apply(
-                                dto,
-                                profileFields);
-                        } catch (InvalidProfileException e) {
-                            throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
-                        }
-                    })));
+            r -> {
+                RuleInformation constraintRule = new RuleInformation(r);
+                return new Rule(
+                    constraintRule,
+                    mapDtos(
+                        r.constraints,
+                        dto -> {
+                            try {
+                                return constraintReader.apply(
+                                    dto,
+                                    profileFields,
+                                    Collections.singleton(constraintRule));
+                            } catch (InvalidProfileException e) {
+                                throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
+                            }
+                        }));
+            });
 
         return new Profile(profileFields, rules, profileDto.description);
     }
 
-    //* Because Java sucks at handling exceptions during stream operations */
     static <TInput, TOutput> Collection<TOutput> mapDtos(
         Collection<TInput> dtos,
         DtoConverterFunction<TInput, TOutput> mapFunc) throws InvalidProfileException {

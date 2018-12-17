@@ -25,7 +25,7 @@ class EmailAnalyserRegexFromData(val df: DataFrame, val field: StructField) exte
   override def constructField(): Rule = {
     
     val fieldName = field.name;
-    val allFieldConstraints = ListBuffer[IConstraint]();
+    val allFieldConstraints = ListBuffer[Constraint]();
     val emailAnalysis = analyse().first();
     
     val fieldTypeConstraint = new IsOfTypeConstraint(fieldName, "string"); // FIXME use a constant?

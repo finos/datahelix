@@ -9,24 +9,24 @@ import java.util.Set;
 public class DataBagValueSource {
     public static final DataBagValueSource Empty = new DataBagValueSource();
 
-    private final String rule;
     private final Set<AtomicConstraint> constraints;
+    private final Set<AtomicConstraint> violatedConstraints;
 
     private DataBagValueSource() {
-        rule = null;
         constraints = Collections.emptySet();
+        violatedConstraints = Collections.emptySet();
     }
 
     public DataBagValueSource(FieldSpecSource fieldSpecSource) {
-        this.rule = fieldSpecSource != null ? fieldSpecSource.getRule() : null;
         this.constraints = fieldSpecSource != null ? fieldSpecSource.getConstraints() : null;
-    }
-
-    public String getRule() {
-        return rule;
+        this.violatedConstraints = fieldSpecSource != null ? fieldSpecSource.getViolatedConstraints() : null;
     }
 
     public Set<AtomicConstraint> getConstraints() {
         return constraints;
+    }
+
+    public Set<AtomicConstraint> getViolatedConstraints() {
+        return violatedConstraints;
     }
 }

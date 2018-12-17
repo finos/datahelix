@@ -7,7 +7,9 @@ import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstrain
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-public class MainConstraintReader implements IConstraintReader {
+import java.util.Set;
+
+public class MainConstraintReader implements ConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
 
     public MainConstraintReader() {
@@ -17,7 +19,8 @@ public class MainConstraintReader implements IConstraintReader {
     @Override
     public Constraint apply(
         ConstraintDTO dto,
-        ProfileFields fields)
+        ProfileFields fields,
+        Set<RuleInformation> rules)
         throws InvalidProfileException {
 
         if (dto == null) {
@@ -25,17 +28,17 @@ public class MainConstraintReader implements IConstraintReader {
         }
 
         if (dto.is != null) {
-            IConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
+            ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
 
             if (subReader == null) {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
             }
 
-            return subReader.apply(dto, fields);
+            return subReader.apply(dto, fields, rules);
         }
 
         if (dto.not != null) {
-            return this.apply(dto.not, fields).negate();
+            return this.apply(dto.not, fields, rules).negate();
         }
 
         if (dto.allOf != null) {
@@ -44,7 +47,8 @@ public class MainConstraintReader implements IConstraintReader {
                     dto.allOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields)));
+                        fields,
+                        rules)));
         }
 
         if (dto.anyOf != null) {
@@ -53,21 +57,25 @@ public class MainConstraintReader implements IConstraintReader {
                     dto.anyOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields)));
+                        fields,
+                        rules)));
         }
 
         if (dto.if_ != null) {
             return new ConditionalConstraint(
                 this.apply(
                     dto.if_,
-                    fields),
+                    fields,
+                    rules),
                 this.apply(
                     dto.then,
-                    fields),
+                    fields,
+                    rules),
                 dto.else_ != null
                     ? this.apply(
                         dto.else_,
-                        fields)
+                        fields,
+                        rules)
                     : null);
         }
 

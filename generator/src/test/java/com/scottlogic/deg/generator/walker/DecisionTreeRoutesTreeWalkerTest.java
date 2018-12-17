@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -11,6 +12,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -47,12 +49,13 @@ class DecisionTreeRoutesTreeWalkerTest {
             [ singleDecisionOption ] */
 
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
-        RowSpecRoute route1 = route(-1, route(0));
         ConstraintNode singleDecisionOption = constraint("decision");
         ConstraintNode rootNode = constraint(
             "root",
             new OrderedDecisionNode(singleDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
+
+        RowSpecRoute route1 = route(null, route(singleDecisionOption));
         RowSpec expectedRowSpec = rowSpec("single decision");
         ConstraintReducer reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
@@ -81,7 +84,6 @@ class DecisionTreeRoutesTreeWalkerTest {
 [ leftDecisionOption ]  [ rightDecisionOption ] */
 
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
-        RowSpecRoute route1 = route(-1, route(0), route(0));
         ConstraintNode leftDecisionOption = constraint("left");
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
@@ -90,6 +92,8 @@ class DecisionTreeRoutesTreeWalkerTest {
             new OrderedDecisionNode(rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
+
+        RowSpecRoute route1 = route(null, route(leftDecisionOption), route(rightDecisionOption));
         ConstraintReducer reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
@@ -117,7 +121,6 @@ class DecisionTreeRoutesTreeWalkerTest {
 [ leftDecisionOption ]  [ conflictingOption ] */
 
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
-        RowSpecRoute route1 = route(-1, route(0), route(0));
         ConstraintNode leftDecisionOption = constraint("left");
         ConstraintNode conflictingOption = constraint("conflicting");
         ConstraintNode rootNode = constraint(
@@ -126,6 +129,8 @@ class DecisionTreeRoutesTreeWalkerTest {
             new OrderedDecisionNode(conflictingOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
+
+        RowSpecRoute route1 = route(null, route(leftDecisionOption), route(conflictingOption));
         ConstraintReducer reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
@@ -153,8 +158,6 @@ class DecisionTreeRoutesTreeWalkerTest {
 [ leftDecisionOption ]  [ rightDecisionOption ] */
 
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
-        RowSpecRoute route1 = route(-1, route(0));
-        RowSpecRoute route2 = route(-1, route(1));
         ConstraintNode leftDecisionOption = constraint("left");
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
@@ -162,6 +165,9 @@ class DecisionTreeRoutesTreeWalkerTest {
             new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
+
+        RowSpecRoute route1 = route(null, route(leftDecisionOption));
+        RowSpecRoute route2 = route(null, route(rightDecisionOption));
         ConstraintReducer reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
@@ -191,13 +197,13 @@ class DecisionTreeRoutesTreeWalkerTest {
 [ leftDecisionOption ]  [ rightDecisionOption ] */
 
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
-        RowSpecRoute route1 = route(-1, route(0));
         ConstraintNode leftDecisionOption = constraint("left");
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
             new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
         );
+        RowSpecRoute route1 = route(null, route(leftDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
         ConstraintReducer reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
@@ -227,17 +233,13 @@ class DecisionTreeRoutesTreeWalkerTest {
         return new ProfileFields(Arrays.asList(new Field[0]));
     }
 
-    private static RowSpecRoute route(int decisionOptionIndex, RowSpecRoute... subRoutes){
-        RowSpecRoute route = new RowSpecRoute();
-        route.decisionIndex = decisionOptionIndex;
-        route.subRoutes = subRoutes;
-
-        return route;
+    private static RowSpecRoute route(ConstraintNode decisionOption, RowSpecRoute... subRoutes){
+        return new RowSpecRoute(decisionOption, Arrays.asList(subRoutes));
     }
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
         return new OrderedConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rules())),
             Arrays.asList(decisions));
     }
 
@@ -385,6 +387,17 @@ class DecisionTreeRoutesTreeWalkerTest {
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public ConstraintNode accept(NodeVisitor visitor){
+            Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
+            Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
+
+            return visitor.visit(
+                new OrderedConstraintNode(
+                    atomicConstraintStream.collect(Collectors.toList()),
+                    decisionNodeStream.collect(Collectors.toList())));
+        }
     }
 
     private static class OrderedDecisionNode implements DecisionNode {
@@ -413,5 +426,21 @@ class DecisionTreeRoutesTreeWalkerTest {
         public boolean hasMarking(NodeMarking detail) {
             throw new UnsupportedOperationException("Not supported");
         }
+
+        @Override
+        public DecisionNode accept(NodeVisitor visitor){
+            Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
+            return visitor.visit(
+                new TreeDecisionNode(
+                    options.collect(Collectors.toList())
+                )
+            );
+        }
+    }
+
+    private static Set<RuleInformation> rules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

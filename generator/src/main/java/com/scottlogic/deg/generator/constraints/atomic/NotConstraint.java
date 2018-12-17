@@ -3,8 +3,10 @@ package com.scottlogic.deg.generator.constraints.atomic;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class NotConstraint implements AtomicConstraint, VisitableProfileElement {
     public final AtomicConstraint negatedConstraint;
@@ -43,8 +45,15 @@ public class NotConstraint implements AtomicConstraint, VisitableProfileElement 
 
     @Override
     public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof ViolatedAtomicConstraint) {
+            return o.equals(this);
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         NotConstraint otherConstraint = (NotConstraint) o;
         return Objects.equals(getBaseConstraint(), otherConstraint.getBaseConstraint());
     }
@@ -59,5 +68,15 @@ public class NotConstraint implements AtomicConstraint, VisitableProfileElement 
         visitor.visit(this);
 
 
+    }
+
+    @Override
+    public Set<RuleInformation> getRules() {
+        return negatedConstraint.getRules();
+    }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new NotConstraint(this.negatedConstraint.withRules(rules));
     }
 }

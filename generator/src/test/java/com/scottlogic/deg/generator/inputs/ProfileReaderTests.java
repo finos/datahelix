@@ -56,7 +56,7 @@ public class ProfileReaderTests {
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.description, equalTo(expectedDescription));
+        return rule -> Assert.assertThat(rule.rule.getDescription(), equalTo(expectedDescription));
     }
 
     private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {

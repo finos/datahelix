@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 
-public class JsonDataSetWriter implements IDataSetWriter<JsonDataSetWriter.JsonWriter> {
+public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWriter> {
     private static final SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Override

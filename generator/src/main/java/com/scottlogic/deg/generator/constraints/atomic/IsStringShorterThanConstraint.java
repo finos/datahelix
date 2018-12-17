@@ -3,17 +3,21 @@ package com.scottlogic.deg.generator.constraints.atomic;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class IsStringShorterThanConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
+    private final Set<RuleInformation> rules;
     public final int referenceValue;
 
-    public IsStringShorterThanConstraint(Field field, int referenceValue) {
+    public IsStringShorterThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
 
         this.referenceValue = referenceValue;
         this.field = field;
+        this.rules = rules;
     }
 
     @Override
@@ -29,6 +33,9 @@ public class IsStringShorterThanConstraint implements AtomicConstraint, Visitabl
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
+        if (o instanceof ViolatedAtomicConstraint) {
+            return o.equals(this);
+        }
         if (o == null || getClass() != o.getClass()) return false;
         IsStringShorterThanConstraint constraint = (IsStringShorterThanConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
@@ -45,5 +52,15 @@ public class IsStringShorterThanConstraint implements AtomicConstraint, Visitabl
     @Override
     public void accept(ProfileVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public Set<RuleInformation> getRules() {
+        return rules;
+    }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsStringShorterThanConstraint(this.field, this.referenceValue, rules);
     }
 }

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,11 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
-        GenerationConfig.DataGenerationType.INTERESTING,
-        GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-        GenerationConfig.CombinationStrategyType.PINNING);
+        new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+            GenerationConfig.CombinationStrategyType.PINNING)
+    );
 
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
@@ -26,8 +29,8 @@ class ConcatenatingDataBagSourceTests {
         DataBag dataBag2 = DataBag.startBuilding().build();
         DataBag dataBag3 = DataBag.startBuilding().build();
 
-        IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
-        IDataBagSource dataBagSource2 = new DummyDataBagSource(dataBag3);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
+        DataBagSource dataBagSource2 = new DummyDataBagSource(dataBag3);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
@@ -54,7 +57,7 @@ class ConcatenatingDataBagSourceTests {
         // ARRANGE
         DataBag dataBag1 = DataBag.startBuilding().build();
 
-        IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
@@ -79,9 +82,9 @@ class ConcatenatingDataBagSourceTests {
         DataBag dataBag2 = DataBag.startBuilding().build();
         DataBag dataBag3 = DataBag.startBuilding().build();
 
-        IDataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
-        IDataBagSource dataBagSource2 = new DummyDataBagSource();
-        IDataBagSource dataBagSource3 = new DummyDataBagSource(dataBag3);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
+        DataBagSource dataBagSource2 = new DummyDataBagSource();
+        DataBagSource dataBagSource3 = new DummyDataBagSource(dataBag3);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
@@ -107,8 +110,8 @@ class ConcatenatingDataBagSourceTests {
     @Test
     void whenAllSourcesAreEmpty() {
         // ARRANGE
-        IDataBagSource dataBagSource1 = new DummyDataBagSource();
-        IDataBagSource dataBagSource2 = new DummyDataBagSource();
+        DataBagSource dataBagSource1 = new DummyDataBagSource();
+        DataBagSource dataBagSource2 = new DummyDataBagSource();
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(

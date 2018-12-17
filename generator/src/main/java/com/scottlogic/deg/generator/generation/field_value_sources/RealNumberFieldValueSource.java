@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class RealNumberFieldValueSource implements IFieldValueSource {
+public class RealNumberFieldValueSource implements FieldValueSource {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
     private final BigDecimal stepSize;
@@ -91,7 +91,7 @@ public class RealNumberFieldValueSource implements IFieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(IRandomNumberGenerator randomNumberGenerator) {
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->

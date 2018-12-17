@@ -6,11 +6,10 @@ import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConstraintBuilder {
@@ -26,12 +25,12 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values){
-        constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values)));
+        constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values), rules()));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value){
-        constraints.add(new IsEqualToConstantConstraint(fields.get(fieldname), value));
+        constraints.add(new IsEqualToConstantConstraint(fields.get(fieldname), value, rules()));
         return this;
     }
 
@@ -41,8 +40,13 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addNullConstraint(String fieldName){
-        constraints.add(new IsNullConstraint(fields.get(fieldName)));
+        constraints.add(new IsNullConstraint(fields.get(fieldName), rules()));
         return this;
     }
 
+    private static Set<RuleInformation> rules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
+    }
 }
