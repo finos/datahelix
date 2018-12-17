@@ -32,6 +32,16 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         if (result.successful) {
             currentRestrictions = result.restrictions;
+
+            if (currentRestrictions.min != null
+                && currentRestrictions.max != null
+                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
+
+                logInformation(field, new TemporalConstraintValidationMessages(
+                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                    referenceValue));
+            }
         } else {
             logError(field, new TemporalConstraintValidationMessages(
                 currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
@@ -53,6 +63,16 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         if (result.successful) {
             currentRestrictions = result.restrictions;
+
+            if (currentRestrictions.min != null
+                && currentRestrictions.max != null
+                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
+
+                logInformation(field, new TemporalConstraintValidationMessages(
+                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                    referenceValue));
+            }
         } else {
             logError(field, new TemporalConstraintValidationMessages(
                 currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
@@ -64,6 +84,14 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
     private void logError(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
+            message,
+            validationType,
+            field));
+    }
+
+    private void logInformation(String field, StandardValidationMessages message) {
+        alerts.add(new ValidationAlert(
+            Criticality.INFORMATION,
             message,
             validationType,
             field));
