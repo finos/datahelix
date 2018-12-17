@@ -64,7 +64,6 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsInSetConstraint constraint) {
 
         ConstraintValidator state = getFieldState(constraint.field.name);
-        state.nullConstraintValidation.setNullness(constraint.field.name, Nullness.MUST_NOT_BE_NULL);
         state.setConstraintValidation.isInSet(constraint.field.name, constraint.legalValues);
 
 
@@ -106,7 +105,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
             state.nullConstraintValidation.setNullness(negatedConstraint.getField().name, Nullness.MUST_NOT_BE_NULL);
         } else if(negatedConstraint instanceof IsInSetConstraint){
             IsInSetConstraint negatedSetConstraint = (IsInSetConstraint) negatedConstraint;
-            state.setConstraintValidation.mustNotBeInSet(negatedSetConstraint.getField().name,negatedSetConstraint.legalValues);
+            state.setConstraintValidation.mustNotBeInSet(negatedSetConstraint.getField().name, negatedSetConstraint.legalValues);
         }
     }
 
