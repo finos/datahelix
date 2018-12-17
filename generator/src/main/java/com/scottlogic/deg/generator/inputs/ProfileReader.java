@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ProfileReader {
@@ -41,19 +42,19 @@ public class ProfileReader {
             r -> {
                 RuleInformation constraintRule = new RuleInformation(r);
                 return new Rule(
-                new RuleInformation(r),
-                mapDtos(
-                    r.constraints,
-                    dto -> {
-                        try {
-                            return constraintReader.apply(
-                                dto,
-                                profileFields,
-                                constraintRule);
-                        } catch (InvalidProfileException e) {
-                            throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
-                        }
-                    }));
+                    constraintRule,
+                    mapDtos(
+                        r.constraints,
+                        dto -> {
+                            try {
+                                return constraintReader.apply(
+                                    dto,
+                                    profileFields,
+                                    Collections.singleton(constraintRule));
+                            } catch (InvalidProfileException e) {
+                                throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
+                            }
+                        }));
             });
 
         return new Profile(profileFields, rules, profileDto.description);

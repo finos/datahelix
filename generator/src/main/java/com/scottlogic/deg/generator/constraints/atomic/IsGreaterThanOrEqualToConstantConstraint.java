@@ -4,16 +4,17 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
     public final Number referenceValue;
 
-    public IsGreaterThanOrEqualToConstantConstraint(Field field, Number referenceValue, RuleInformation rule) {
+    public IsGreaterThanOrEqualToConstantConstraint(Field field, Number referenceValue, Set<RuleInformation> rules) {
         this.referenceValue = referenceValue;
         this.field = field;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

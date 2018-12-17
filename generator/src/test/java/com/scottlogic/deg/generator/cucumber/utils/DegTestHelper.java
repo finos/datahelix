@@ -9,7 +9,9 @@ import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,7 @@ public class DegTestHelper {
 
             List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
                 try {
-                    return constraintReader.apply(dto, profileFields, rule());
+                    return constraintReader.apply(dto, profileFields, rules());
                 } catch (InvalidProfileException e) {
                     state.addException(e);
                     exceptionInMapping.set(true);
@@ -86,9 +88,9 @@ public class DegTestHelper {
         return state.testExceptions;
     }
 
-    private static RuleInformation rule(){
+    private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        return new RuleInformation(rule);
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

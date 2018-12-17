@@ -30,13 +30,13 @@ public class CellSource {
     public boolean isViolated(RuleInformation rule){
         return this.source.getViolatedConstraints()
             .stream()
-            .anyMatch(c -> c.getRule().equals(rule));
+            .anyMatch(c -> c.getRules().equals(rule));
     }
 
     public Set<RuleInformation> getRules(){
         return this.source.getConstraints()
             .stream()
-            .map(Constraint::getRule)
+            .flatMap(c -> c.getRules().stream())
             .collect(Collectors.toSet());
     }
 }

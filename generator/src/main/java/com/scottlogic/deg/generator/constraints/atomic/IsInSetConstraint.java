@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
     public final Set<Object> legalValues;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public IsInSetConstraint(Field field, Set<Object> legalValues, RuleInformation rule) {
+    public IsInSetConstraint(Field field, Set<Object> legalValues, Set<RuleInformation> rules) {
         this.field = field;
         this.legalValues = legalValues;
-        this.rule = rule;
+        this.rules = rules;
 
         if (legalValues.isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
@@ -68,7 +68,7 @@ public class IsInSetConstraint implements AtomicConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

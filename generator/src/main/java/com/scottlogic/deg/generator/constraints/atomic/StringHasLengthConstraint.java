@@ -4,18 +4,19 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;
     public final Number referenceValue;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public StringHasLengthConstraint(Field field, Number referenceValue, RuleInformation rule) {
-        this.rule = rule;
+    public StringHasLengthConstraint(Field field, Number referenceValue, Set<RuleInformation> rules) {
         if (referenceValue == null) {
             throw new IllegalArgumentException("Argument 'referenceValue' cannot be null.");
         }
 
+        this.rules = rules;
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -50,7 +51,7 @@ public class StringHasLengthConstraint implements AtomicConstraint {
     public String toString() { return String.format("`%s` length = %s", field.name, referenceValue); }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

@@ -70,7 +70,7 @@ public class FieldSpecFactory {
             new IsInSetConstraint(
                 constraint.field,
                 Collections.singleton(constraint.requiredValue),
-                constraint.getRule()
+                constraint.getRules()
             ),
             negate,
             violated);

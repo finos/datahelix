@@ -52,11 +52,11 @@ class CartesianProductDecisionTreeWalkerTests {
                         new IsEqualToConstantConstraint(
                             country,
                             "US",
-                            rule()),
+                            rules()),
                         new IsInSetConstraint(
                             city,
                             new HashSet<>(Arrays.asList("New York", "Washington DC")),
-                            rule())))),
+                            rules())))),
             new Rule(
                 rule("GB country constrains city"),
                 Collections.singletonList(
@@ -64,11 +64,11 @@ class CartesianProductDecisionTreeWalkerTests {
                         new IsEqualToConstantConstraint(
                             country,
                             "GB",
-                            rule()),
+                            rules()),
                         new IsInSetConstraint(
                             city,
                             new HashSet<>(Arrays.asList("Bristol", "London")),
-                            rule())))),
+                            rules())))),
             new Rule(
                 rule("US country constrains currency"),
                 Collections.singletonList(
@@ -76,11 +76,11 @@ class CartesianProductDecisionTreeWalkerTests {
                         new IsEqualToConstantConstraint(
                             country,
                             "US",
-                            rule()),
+                            rules()),
                         new IsEqualToConstantConstraint(
                             currency,
                             "USD",
-                            rule())))),
+                            rules())))),
             new Rule(
                 rule("GB country constrains currency"),
                 Collections.singletonList(
@@ -88,11 +88,11 @@ class CartesianProductDecisionTreeWalkerTests {
                         new IsEqualToConstantConstraint(
                             country,
                             "GB",
-                            rule()),
+                            rules()),
                         new IsEqualToConstantConstraint(
                             currency,
                             "GBP",
-                            rule())))));
+                            rules())))));
 
         Profile profile = new Profile(fields, dummyRules);
 
@@ -107,8 +107,8 @@ class CartesianProductDecisionTreeWalkerTests {
         Assert.assertThat(rowSpecs, notNullValue());
     }
 
-    private static RuleInformation rule(){
-        return rule("rule");
+    private static Set<RuleInformation> rules(){
+        return Collections.singleton(rule("rules"));
     }
 
     private static RuleInformation rule(String description){

@@ -3,16 +3,18 @@ package com.scottlogic.deg.generator.constraints.atomic;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
+import java.util.Set;
+
 public class FormatConstraint implements AtomicConstraint {
 
     public final Field field;
     public final String format;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public FormatConstraint(Field field, String format, RuleInformation rule) {
+    public FormatConstraint(Field field, String format, Set<RuleInformation> rules) {
         this.field = field;
         this.format = format;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class FormatConstraint implements AtomicConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

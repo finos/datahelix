@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,13 +85,16 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
     private static class TracingConstraintDto {
         public String type;
         public String value;
-        public String rule;
+        public List<String> rules;
         public boolean violated;
 
         TracingConstraintDto(AtomicConstraint constraint, boolean violated) {
             this.type = constraint.getClass().getSimpleName();
             this.value = constraint.toString();
-            this.rule = constraint.getRule().getDescription();
+            this.rules = constraint.getRules()
+                .stream()
+                .map(RuleInformation::getDescription)
+                .collect(Collectors.toList());
             this.violated = violated;
         }
     }

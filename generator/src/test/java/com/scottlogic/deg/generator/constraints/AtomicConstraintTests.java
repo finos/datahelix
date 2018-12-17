@@ -126,7 +126,7 @@ public class AtomicConstraintTests {
         try {
             RuleDTO rule = new RuleDTO();
             rule.rule = "rule";
-            RuleInformation ruleInformation = new RuleInformation(rule);
+            Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
 
             Constraint constraint = reader.apply(dto, profileFields, ruleInformation);
 

@@ -5,15 +5,16 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class IsNullConstraint implements AtomicConstraint
 {
     public final Field field;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public IsNullConstraint(Field field, RuleInformation rule) {
+    public IsNullConstraint(Field field, Set<RuleInformation> rules) {
         this.field = field;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class IsNullConstraint implements AtomicConstraint
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

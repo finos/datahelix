@@ -8,6 +8,9 @@ import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static org.hamcrest.Matchers.equalTo;
 
 public class NotConstraintTest {
@@ -16,8 +19,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
-        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rules()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rules()).negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -25,8 +28,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqualRecursively() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
-        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rules()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rules()).negate().negate().negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -34,8 +37,8 @@ public class NotConstraintTest {
     public void testConstraintIsEqualRecursivelySameLevel() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate().negate().negate();
-        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rules()).negate().negate().negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rules()).negate().negate().negate();
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -43,8 +46,8 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
-        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rules()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rules()).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -52,8 +55,8 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rule()).negate();
-        Constraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd", rule()).negate();
+        Constraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rules()).negate();
+        Constraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd", rules()).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -61,14 +64,14 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualRecursively() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsNullConstraint(field1, rule()).negate();
-        Constraint constraint2 = new IsNullConstraint(field2, rule()).negate().negate();
+        Constraint constraint1 = new IsNullConstraint(field1, rules()).negate();
+        Constraint constraint2 = new IsNullConstraint(field2, rules()).negate().negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
-    private static RuleInformation rule(){
+    private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        return new RuleInformation(rule);
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

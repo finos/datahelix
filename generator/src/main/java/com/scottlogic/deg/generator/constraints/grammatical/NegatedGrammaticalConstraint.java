@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
 public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     public final GrammaticalConstraint negatedConstraint;
@@ -49,7 +50,7 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return negatedConstraint.getRule();
+    public Set<RuleInformation> getRules() {
+        return negatedConstraint.getRules();
     }
 }

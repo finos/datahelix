@@ -7,6 +7,8 @@ import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -17,8 +19,8 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsEqual() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rule());
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rules());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rules());
         Assert.assertThat(constraint1, equalTo(constraint2));
     }
 
@@ -26,8 +28,8 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsNotEqualDueToField() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField2");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rule());
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rules());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"), rules());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
@@ -35,14 +37,14 @@ public class ContainsRegexConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rule());
-        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abcd]"), rule());
+        ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"), rules());
+        ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abcd]"), rules());
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
-    private static RuleInformation rule(){
+    private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        return new RuleInformation(rule);
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class ViolatedAtomicConstraint implements AtomicConstraint {
     public final AtomicConstraint violatedConstraint;
@@ -33,8 +34,8 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return this.violatedConstraint.getRule();
+    public Set<RuleInformation> getRules() {
+        return this.violatedConstraint.getRules();
     }
 
     @Override

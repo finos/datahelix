@@ -4,16 +4,17 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class IsOfTypeConstraint implements AtomicConstraint {
     public final Field field;
     public final Types requiredType;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public IsOfTypeConstraint(Field field, Types requiredType, RuleInformation rule) {
+    public IsOfTypeConstraint(Field field, Types requiredType, Set<RuleInformation> rules) {
         this.field = field;
         this.requiredType = requiredType;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     public enum Types {
@@ -52,7 +53,7 @@ public class IsOfTypeConstraint implements AtomicConstraint {
     public String toString() { return String.format("`%s` is %s", field.name, requiredType.name()); }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

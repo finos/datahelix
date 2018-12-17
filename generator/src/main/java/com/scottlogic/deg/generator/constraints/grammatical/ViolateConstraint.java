@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class ViolateConstraint implements GrammaticalConstraint {
     public final Constraint violatedConstraint;
@@ -19,8 +20,8 @@ public class ViolateConstraint implements GrammaticalConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return this.violatedConstraint.getRule();
+    public Set<RuleInformation> getRules() {
+        return this.violatedConstraint.getRules();
     }
 
     @Override

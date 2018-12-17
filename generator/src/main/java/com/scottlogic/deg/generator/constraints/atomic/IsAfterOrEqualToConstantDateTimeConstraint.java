@@ -5,16 +5,17 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstraint {
     public final Field field;
     public final LocalDateTime referenceValue;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public IsAfterOrEqualToConstantDateTimeConstraint(Field field, LocalDateTime referenceValue, RuleInformation rule) {
+    public IsAfterOrEqualToConstantDateTimeConstraint(Field field, LocalDateTime referenceValue, Set<RuleInformation> rules) {
         this.field = field;
         this.referenceValue = referenceValue;
-        this.rule = rule;
+        this.rules= rules;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstra
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

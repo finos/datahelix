@@ -222,7 +222,7 @@ class RelatedFieldTreePartitionerTests {
         AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
-            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value", rule());
+            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value", rules());
             this.constraints.put(fieldName, constraint);
         }
 
@@ -294,9 +294,9 @@ class RelatedFieldTreePartitionerTests {
         }
     }
 
-    private static RuleInformation rule(){
+    private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        return new RuleInformation(rule);
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

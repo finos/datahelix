@@ -5,16 +5,17 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class IsGranularToConstraint implements AtomicConstraint {
     public final Field field;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
     public final ParsedGranularity granularity;
 
-    public IsGranularToConstraint(Field field, ParsedGranularity granularity, RuleInformation rule) {
+    public IsGranularToConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
         this.granularity = granularity;
         this.field = field;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class IsGranularToConstraint implements AtomicConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

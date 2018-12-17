@@ -1,11 +1,8 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class RuleInformation {
     private final String description;
@@ -13,22 +10,6 @@ public class RuleInformation {
     public RuleInformation(RuleDTO rule) {
         String ruleDescription = rule != null ? rule.rule : null;
         this.description = ruleDescription != null ? ruleDescription : "Unnamed rule";
-    }
-
-    private RuleInformation(String description) {
-        this.description = description;
-    }
-
-    private static RuleInformation fromRules(Collection<RuleInformation> rules, String delimiter){
-        return new RuleInformation(
-            String.join(
-                delimiter,
-                rules.stream().map(r -> r.description).collect(Collectors.toList()))
-        );
-    }
-
-    public static RuleInformation fromConstraints(Collection<Constraint> constraints, String delimiter){
-        return fromRules(constraints.stream().map(Constraint::getRule).collect(Collectors.toList()), delimiter);
     }
 
     public String getDescription() {

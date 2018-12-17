@@ -7,6 +7,8 @@ import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstrain
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
+import java.util.Set;
+
 public class MainConstraintReader implements ConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
 
@@ -18,7 +20,7 @@ public class MainConstraintReader implements ConstraintReader {
     public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields,
-        RuleInformation rule)
+        Set<RuleInformation> rules)
         throws InvalidProfileException {
 
         if (dto == null) {
@@ -32,11 +34,11 @@ public class MainConstraintReader implements ConstraintReader {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
             }
 
-            return subReader.apply(dto, fields, rule);
+            return subReader.apply(dto, fields, rules);
         }
 
         if (dto.not != null) {
-            return this.apply(dto.not, fields, rule).negate();
+            return this.apply(dto.not, fields, rules).negate();
         }
 
         if (dto.allOf != null) {
@@ -46,7 +48,7 @@ public class MainConstraintReader implements ConstraintReader {
                     subConstraintDto -> this.apply(
                         subConstraintDto,
                         fields,
-                        rule)));
+                        rules)));
         }
 
         if (dto.anyOf != null) {
@@ -56,7 +58,7 @@ public class MainConstraintReader implements ConstraintReader {
                     subConstraintDto -> this.apply(
                         subConstraintDto,
                         fields,
-                        rule)));
+                        rules)));
         }
 
         if (dto.if_ != null) {
@@ -64,16 +66,16 @@ public class MainConstraintReader implements ConstraintReader {
                 this.apply(
                     dto.if_,
                     fields,
-                    rule),
+                    rules),
                 this.apply(
                     dto.then,
                     fields,
-                    rule),
+                    rules),
                 dto.else_ != null
                     ? this.apply(
                         dto.else_,
                         fields,
-                        rule)
+                        rules)
                     : null);
         }
 

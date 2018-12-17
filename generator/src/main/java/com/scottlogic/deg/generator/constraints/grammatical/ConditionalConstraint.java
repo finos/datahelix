@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,10 +38,10 @@ public class ConditionalConstraint implements GrammaticalConstraint
             .collect(Collectors.toList());
     }
     @Override
-    public RuleInformation getRule() {
-        return RuleInformation.fromConstraints(
-            Stream.of(condition, whenConditionIsTrue, whenConditionIsFalse)
+    public Set<RuleInformation> getRules() {
+        return Stream.of(condition, whenConditionIsTrue, whenConditionIsFalse)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList()), ", ");
+                .flatMap(c -> c.getRules().stream())
+                .collect(Collectors.toSet());
     }
 }

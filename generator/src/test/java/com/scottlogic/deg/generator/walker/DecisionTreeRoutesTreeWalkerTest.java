@@ -239,7 +239,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
         return new OrderedConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rule())),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rules())),
             Arrays.asList(decisions));
     }
 
@@ -438,9 +438,9 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
     }
 
-    private static RuleInformation rule(){
+    private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        return new RuleInformation(rule);
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

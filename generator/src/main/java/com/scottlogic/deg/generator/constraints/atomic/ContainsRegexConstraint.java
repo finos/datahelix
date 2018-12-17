@@ -4,17 +4,18 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class ContainsRegexConstraint implements AtomicConstraint {
     public final Field field;
     public final Pattern regex;
-    private final RuleInformation rule;
+    private final Set<RuleInformation> rules;
 
-    public ContainsRegexConstraint(Field field, Pattern regex, RuleInformation rule) {
+    public ContainsRegexConstraint(Field field, Pattern regex, Set<RuleInformation> rules) {
         this.field = field;
         this.regex = regex;
-        this.rule = rule;
+        this.rules = rules;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ContainsRegexConstraint implements AtomicConstraint {
     }
 
     @Override
-    public RuleInformation getRule() {
-        return rule;
+    public Set<RuleInformation> getRules() {
+        return rules;
     }
 }

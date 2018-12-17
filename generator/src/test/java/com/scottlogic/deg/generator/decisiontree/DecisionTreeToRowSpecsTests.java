@@ -19,10 +19,7 @@ import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DecisionTreeToRowSpecsTests {
@@ -69,12 +66,12 @@ public class DecisionTreeToRowSpecsTests {
                             new IsEqualToConstantConstraint(
                                 country,
                                 "US",
-                                rule()
+                                rules()
                             ),
                             new IsInSetConstraint(
                                 city,
                                 new HashSet<>(Arrays.asList("New York", "Washington DC")),
-                                rule()
+                                rules()
                             )
                         )
                     )
@@ -86,12 +83,12 @@ public class DecisionTreeToRowSpecsTests {
                             new IsEqualToConstantConstraint(
                                 country,
                                 "GB",
-                                rule()
+                                rules()
                             ),
                             new IsInSetConstraint(
                                 city,
                                 new HashSet<>(Arrays.asList("Bristol", "London")),
-                                rule()
+                                rules()
                             )
                         )
                     )
@@ -103,12 +100,12 @@ public class DecisionTreeToRowSpecsTests {
                             new IsEqualToConstantConstraint(
                                 country,
                                 "US",
-                                rule()
+                                rules()
                             ),
                             new IsEqualToConstantConstraint(
                                 currency,
                                 "USD",
-                                rule()
+                                rules()
                             )
                         )
                     )
@@ -120,12 +117,12 @@ public class DecisionTreeToRowSpecsTests {
                             new IsEqualToConstantConstraint(
                                 country,
                                 "GB",
-                                rule()
+                                rules()
                             ),
                             new IsEqualToConstantConstraint(
                                 currency,
                                 "GBP",
-                                rule()
+                                rules()
                             )
                         )
                     )
@@ -134,8 +131,8 @@ public class DecisionTreeToRowSpecsTests {
         );
     }
 
-    private static RuleInformation rule(){
-        return rule("rule");
+    private static Set<RuleInformation> rules(){
+        return Collections.singleton(rule("rules"));
     }
 
     private static RuleInformation rule(String description){
