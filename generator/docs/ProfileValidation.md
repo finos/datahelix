@@ -95,14 +95,31 @@ Example profiles may include:
 | C is less than 10                | C is great than 20            | Valid | C is between 10 and 20.                                                                 |
 | C is greater than or equal to 10 | C is less than or equal to 10 | Valid | C is equal to 10.                                                                       |
 | C is greater than 10             | C is less than 5              | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
-|                                  |                               |       |                                                                                         |
 
+
+## Temporal validation
+The profile supports several temporal operations inclusing: is after, is before, is after or at, is before or at.
+Usage of temporal constrains implies that the Type of the field is TEMPORAL.
+
+
+| Constraint                                |                   Temporal range                  | Field Type |
+|-------------------------------------------|:-------------------------------------------------:|-----------:|
+| D is before 2000-09-15T15:53:00.000       | any datetime before 2000-09-15T15:53:00.000       | TEMPORAL   |
+| D is after 2000-09-15T15:53:00.000        | any datetime after 2000-09-15T15:53:00.000        | TEMPORAL   |
+| D is before or at 2008-09-15T15:53:00.000 | any datetime before or at 2008-09-15T15:53:00.000 | TEMPORAL   |
+| D is after or at 2008-09-15T15:53:00.000  | any datetime after or at 2008-09-15T15:53:00.000  | TEMPORAL   |
+
+Example profiles may include:
+
+| Constraint 1                     |          Constraint 2         | Valid | Reason                                                                                  |
+|----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
+| C is less than 10                | C is great than 20            | Valid | C is between 10 and 20.                                                                 |
+| C is greater than or equal to 10 | C is less than or equal to 10 | Valid | C is equal to 10.                                                                       |
+| C is greater than 10             | C is less than 5              | Valid | The empty set satisfies these conditions. An empty value will be provided in all cases. |
 
 
 ## Granularity validation
 
 ## String validation
-
-## Temporal validation
 
 ## Null validation
