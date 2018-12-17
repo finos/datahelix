@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 
 import java.nio.file.Path;
 
@@ -33,12 +34,10 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
         switch (config.getWalkerType()){
             case ROUTED:
-                throw new UnsupportedOperationException("RouteProducer isn't implemented yet");
-/*
                 return new DecisionTreeRoutesTreeWalker(
                     constraintReducer,
                     rowSpecMerger,
-                    <the producer>);*/
+                    new ExhaustiveProducer());
             case REDUCTIVE:
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
