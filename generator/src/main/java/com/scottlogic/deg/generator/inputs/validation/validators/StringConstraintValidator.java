@@ -24,28 +24,32 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
     public void isShorterThan(String field, int length) {
 
         if (length < 0) {
-            logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
             return;
         }
 
-        if (length > lengthMin && length < lengthMax) {
+        if(lengthMin <= length && length <= lengthMax) {
             lengthMax = length;
-        } else if (lengthMin > length || lengthMax < length) {
-            logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
+        } else if (length <= lengthMin) {
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
+        } else if (lengthMax <= length) {
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
         }
     }
 
     public void isLongerThan(String field, int length) {
 
         if (length < 0) {
-            logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
             return;
         }
 
-        if (lengthMax > length && lengthMin > length) {
+        if(lengthMin <= length && length <= lengthMax) {
             lengthMin = length;
-        } else if (lengthMin < length || lengthMax < length) {
-            logError(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
+        } else if (length <= lengthMin) {
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
+        } else if (lengthMax <= length) {
+            logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
         }
     }
 
@@ -53,9 +57,9 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
         return alerts;
     }
 
-    private void logError(String field, StandardValidationMessages message) {
+    private void logInformation(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
-            Criticality.ERROR,
+            Criticality.INFORMATION,
             message,
             validationType,
             field));

@@ -24,7 +24,7 @@ public class StringConstraintValidationMessages implements StandardValidationMes
     @Override
     public String getVerboseMessage() {
         return String.format(
-            "String length constraint between %s and %s is not valid. The valid range is between %s and %s.",
+            "Attempted to set string length constraint between %s and %s. The valid range is between %s and %s not inclusive.",
             invalidMinLength,
             invalidMaxLength,
             validMinLength,
