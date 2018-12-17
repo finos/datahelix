@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.utils.EqualityComparer;
 
 public class TreeComparer implements EqualityComparer {
     private final EqualityComparer constraintNodeComparer;

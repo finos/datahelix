@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.test_utils;
 
+import com.scottlogic.deg.generator.utils.EqualityComparer;
+
 public class DefaultEqualityComparer implements EqualityComparer {
     private final EqualityComparer collectionComparer;
 

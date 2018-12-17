@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
+    private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
+    private final FieldValueSourceEqualityComparer fieldValueSourceEqualityComparer = new FieldValueSourceEqualityComparer();
+
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
         List<FieldValueSource> validSources = new ArrayList<>();
         MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
@@ -36,12 +39,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             );
         }
         if (mustContainRestriction != null) {
-            getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                .forEach(o -> validSources.add(
-                    new CannedValuesFieldValueSource(
-                        new ArrayList<>(o.getSetRestrictions().getWhitelist())
-                    )
-                ));
+            applyMustConstrainRestrictionToValidSources(validSources, fieldSpec);
         }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
@@ -138,5 +136,26 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return restriction.getRequiredObjects()
             .stream()
             .filter(o -> o.getSetRestrictions() != null);
+    }
+
+    private void applyMustConstrainRestrictionToValidSources(List<FieldValueSource> validSources, FieldSpec fieldSpec) {
+        final Set<FieldSpec> mustContainRestrictionFieldsSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
+        mustContainRestrictionFieldsSpecs.forEach(fs -> {
+            final List<FieldValueSource> fieldValueSources = getFieldValueSources(fs);
+
+            for (FieldValueSource source : fieldValueSources) {
+                boolean exists = false;
+                for (FieldValueSource validSource : validSources) {
+                    if (fieldValueSourceEqualityComparer.equals(source, validSource)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    validSources.add(source);
+                }
+            }
+        });
     }
 }
