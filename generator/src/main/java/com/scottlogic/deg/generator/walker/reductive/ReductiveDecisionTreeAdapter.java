@@ -9,7 +9,13 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ReductiveDecisionTreeAdapter {
+
     private final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
+    private final FieldCollectionHelper fieldCollectionHelper;
+
+    public ReductiveDecisionTreeAdapter(FieldCollectionHelper fieldCollectionHelper){
+        this.fieldCollectionHelper = fieldCollectionHelper;
+    }
 
     public ReductiveConstraintNode adapt(ConstraintNode rootNode, FieldCollection fixedFields){
         AdapterContext context = new AdapterContext();
@@ -43,11 +49,11 @@ public class ReductiveDecisionTreeAdapter {
             .collect(Collectors.toList()));
     }
 
-    private static Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
+    private Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
         Collection<AtomicConstraint> potentialResult = constraint
             .getAtomicConstraints().stream()
             .filter(atomicConstraint -> {
-                AtomicConstraintFixedFieldBehaviour behaviour = fixedFields.shouldIncludeAtomicConstraint(atomicConstraint);
+                AtomicConstraintFixedFieldBehaviour behaviour = fieldCollectionHelper.shouldIncludeAtomicConstraint(fixedFields, atomicConstraint);
                 switch (behaviour) {
                     case NON_CONTRADICTORY:
                         context.addNonContradictoryAtomicConstraint(atomicConstraint);

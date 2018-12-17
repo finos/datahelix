@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
+import com.scottlogic.deg.generator.walker.reductive.FieldCollectionHelper;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeAdapter;
 
@@ -15,36 +15,38 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
-    private final ReductiveDecisionTreeAdapter nodeAdapter = new ReductiveDecisionTreeAdapter();
+    private final ReductiveDecisionTreeAdapter nodeAdapter;
 
     private final IterationVisualiser iterationVisualiser;
-    private final FieldCollectionFactory fieldCollectionFactory;
+    private final FieldCollectionHelper fieldCollectionHelper;
     private final ReductiveDataGeneratorMonitor monitor;
 
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FieldCollectionFactory fieldCollectionFactory,
+        FieldCollectionHelper fieldCollectionHelper,
         ReductiveDataGeneratorMonitor monitor) {
         this.iterationVisualiser = iterationVisualiser;
-        this.fieldCollectionFactory = fieldCollectionFactory;
+        this.fieldCollectionHelper = fieldCollectionHelper;
         this.monitor = monitor;
+        this.nodeAdapter = new ReductiveDecisionTreeAdapter(fieldCollectionHelper);
     }
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree) {
         ConstraintNode rootNode = tree.getRootNode();
-        FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
+        FieldCollection fieldCollection = new FieldCollection(tree.fields);
 
         visualise(rootNode, fieldCollection);
 
         //calculate a field to fix and start processing
-        return process(rootNode, fieldCollection.getNextFixedField(nodeAdapter.adapt(rootNode, fieldCollection)));
+        ReductiveConstraintNode adapted = nodeAdapter.adapt(rootNode, fieldCollection);
+        return process(rootNode, fieldCollectionHelper.getNextFixedField(fieldCollection, adapted));
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, FieldCollection fieldCollection) {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
         if (fieldCollection.allFieldsAreFixed()){
-            return fieldCollection.createRowSpecFromFixedValues(constraintNode);
+            return fieldCollectionHelper.createRowSpecFromFixedValues(fieldCollection, constraintNode);
         }
 
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
@@ -71,7 +73,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(adaptedNode, fieldCollection);
 
         //find the next fixed field and continue
-        return process(adaptedNode, fieldCollection.getNextFixedField(adaptedNode));
+        return process(adaptedNode, fieldCollectionHelper.getNextFixedField(fieldCollection, adaptedNode));
     }
 
     private void visualise(ConstraintNode rootNode, FieldCollection fieldCollection){
