@@ -139,8 +139,12 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private void applyMustConstrainRestrictionToValidSources(List<FieldValueSource> validSources, FieldSpec fieldSpec) {
-        final Set<FieldSpec> mustContainRestrictionFieldsSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
-        mustContainRestrictionFieldsSpecs.forEach(fs -> {
+        Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
+        if (mustContainRestrictionFieldSpecs.size() > 1) {
+            mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
+        }
+
+        mustContainRestrictionFieldSpecs.forEach(fs -> {
             final List<FieldValueSource> fieldValueSources = getFieldValueSources(fs);
 
             for (FieldValueSource source : fieldValueSources) {
