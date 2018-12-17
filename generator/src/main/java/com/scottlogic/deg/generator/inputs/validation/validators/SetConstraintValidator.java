@@ -27,7 +27,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
         if (result.successful) {
 
-            //additional validation checks
+            //additional validation detects that we are trying to extend the whitelist
             if (currentRestrictions != null && currentRestrictions.getWhitelist() != null) {
 
                 Set<Object> intersection = SetUtils.intersect(currentRestrictions.getWhitelist(), values);

@@ -72,6 +72,7 @@ Example profiles may include:
 | B is in set [1,2,3]                   |      B is in set [6]      | Invalid - Error | B is in set [1,2,3]. Constraint 2 tries to define B as in set [6] which is outside of [1,2,3]               |
 | B is in set [1,2,3]                   | B is not in set ["Hello"] |   Valid - N/A | B is in set [1,2,3]. B not being in set ["Hello"] does not contradict Constraint 1.                         |
 | B is not in set ["Hello", "Good day"] |    B is in set ["Bye"]    |   Valid - N/A | B is not in set ["Hello", "Good day"]. B not being in this set does not contradict it being in set ["Bye"]. |
+| B is in set ["Hello", "Good day"] |    B is in set ["Hello", "Bye"]    |   Valid - Information | B is in set ["Hello", "Good day"] from Constraint 1. We have an overlap of the two sets with "Hello" so this is a valid profile.  |
 
 
 ## Numeric validation
