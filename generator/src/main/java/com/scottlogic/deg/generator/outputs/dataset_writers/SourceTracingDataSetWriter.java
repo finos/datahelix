@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;
@@ -13,6 +14,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,12 +48,12 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
         public static final Collection<TracingDto> empty = Collections.emptySet();
 
         public Set<TracingConstraintDto> constraints;
-        public String rule;
+        public Set<TracingRuleDto> rules;
         public String field;
 
-        TracingDto(Set<TracingConstraintDto> constraints, String rule, String field) {
+        TracingDto(Set<TracingConstraintDto> constraints, Set<TracingRuleDto> rules, String field) {
             this.constraints = constraints;
-            this.rule = rule;
+            this.rules = rules;
             this.field = field;
         }
 
@@ -64,19 +66,36 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
 
         private static TracingDto fromCellSource(CellSource cellSource) {
             return new TracingDto(
-                cellSource.getConstraints().stream().map(TracingConstraintDto::new).collect(Collectors.toSet()),
-                cellSource.getRule(),
+                cellSource.getConstraints().stream().map(c -> new TracingConstraintDto(c, cellSource.isViolated(c))).collect(Collectors.toSet()),
+                cellSource.getRules().stream().map(rule -> new TracingRuleDto(rule, cellSource.isViolated(rule))).collect(Collectors.toSet()),
                 cellSource.field.name);
+        }
+    }
+
+    private static class TracingRuleDto{
+        public String rule;
+        public boolean violated;
+
+        TracingRuleDto(RuleInformation rule, boolean anyConstraintInRuleIsViolated) {
+            this.rule = rule.getDescription();
+            this.violated = anyConstraintInRuleIsViolated;
         }
     }
 
     private static class TracingConstraintDto {
         public String type;
         public String value;
+        public List<String> rules;
+        public boolean violated;
 
-        TracingConstraintDto(AtomicConstraint constraint) {
-            type = constraint.getClass().getSimpleName();
-            value = constraint.toString();
+        TracingConstraintDto(AtomicConstraint constraint, boolean violated) {
+            this.type = constraint.getClass().getSimpleName();
+            this.value = constraint.toString();
+            this.rules = constraint.getRules()
+                .stream()
+                .map(RuleInformation::getDescription)
+                .collect(Collectors.toList());
+            this.violated = violated;
         }
     }
 

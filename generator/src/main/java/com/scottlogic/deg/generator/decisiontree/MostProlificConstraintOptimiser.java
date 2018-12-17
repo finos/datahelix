@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.*;
 import java.util.function.Function;
@@ -73,7 +74,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
 
         // Add most prolific constraint to new decision node
         ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint).markNode(NodeMarking.OPTIMISED);
-        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);;
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -120,29 +121,45 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
-    private int disfavourNotConstraints(Map.Entry<AtomicConstraint, Long> entry){
+    private int disfavourNotConstraints(Map.Entry<AtomicConstraint, List<AtomicConstraint>> entry){
         return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
-        Map<AtomicConstraint, Long> decisionConstraints = decisions
+        Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints = decisions
             .stream()
             .flatMap(dn -> dn.getOptions().stream())
             .flatMap(option -> option.getAtomicConstraints().stream())
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            .collect(Collectors.groupingBy(Function.identity()));
 
-        Comparator<Map.Entry<AtomicConstraint, Long>> comparator = Comparator.comparing(Map.Entry::getValue);
-        comparator = comparator.reversed();
-        comparator = comparator.thenComparing(this::disfavourNotConstraints);
-        comparator = comparator.thenComparing(entry -> entry.getKey().toString());
+        Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
+            .comparing(entry -> entry.getValue().size());
+        comparator = comparator.reversed()
+            .thenComparing(this::disfavourNotConstraints)
+            .thenComparing(entry -> entry.getKey().toString());
 
         return decisionConstraints.entrySet()
             .stream()
-            .filter(constraint -> constraint.getValue() > 1) // where the number of occurrences > 1
+            .filter(constraint -> constraint.getValue().size() > 1) // where the number of occurrences > 1
             .sorted(comparator)
-            .map(Map.Entry::getKey) //get a reference to the first identified atomic-constraint
+            .map(entry -> getAtomicConstraintWithAllRules(entry.getValue()))
             .findFirst()
             .orElse(null); //otherwise return null
+    }
+
+    private AtomicConstraint getAtomicConstraintWithAllRules(List<AtomicConstraint> identicalAtomicConstraints) {
+        Set<RuleInformation> rules = identicalAtomicConstraints
+            .stream()
+            .flatMap(ac -> ac.getRules().stream())
+            .collect(Collectors.toSet());
+
+        AtomicConstraint firstAtomicConstraint = identicalAtomicConstraints.iterator().next();
+
+        if (rules.size() == 1){
+            return firstAtomicConstraint; //there is only one rule in play, no need to merge constraints
+        }
+
+        return firstAtomicConstraint.withRules(rules);
     }
 
     private boolean decisionIsFactorisable(DecisionNode decision, AtomicConstraint factorisingConstraint, AtomicConstraint negatedFactorisingConstraint){

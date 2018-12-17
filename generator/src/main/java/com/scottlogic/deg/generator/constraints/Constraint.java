@@ -6,8 +6,10 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,4 +56,7 @@ public interface Constraint
     Constraint negate();
 
     Collection<Field> getFields();
+
+    Set<RuleInformation> getRules();
 }
+
