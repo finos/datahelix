@@ -25,10 +25,6 @@ public class NumericRestrictionsMerger {
         merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
-        if (merged.min != null && merged.max != null && merged.min.getLimit().compareTo(merged.max.getLimit()) >0 ) {
-            return new MergeResult<>();
-        }
-
         return new MergeResult<>(merged);
     }
 
