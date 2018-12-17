@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMappe
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import picocli.CommandLine;
@@ -53,7 +54,7 @@ public class GenerateTreeCollectionJson implements Runnable {
         final Profile profile;
 
         try {
-            profile = new ProfileReader().read(inputPath.toPath());
+            profile = new ProfileReader().read(inputPath.toPath(), GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION);
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();

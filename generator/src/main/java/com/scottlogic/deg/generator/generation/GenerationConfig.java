@@ -9,12 +9,15 @@ public class GenerationConfig {
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
     private final long maxRows;
+    private final boolean profileValidation;
 
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
+        this.profileValidation = source.getProfileValidation();
+
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -41,6 +44,8 @@ public class GenerationConfig {
     }
 
     public long getMaxRows() { return maxRows; }
+
+    public boolean getProfileValidation() { return profileValidation; }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),
@@ -119,5 +124,7 @@ public class GenerationConfig {
         }
 
         public static final long DEFAULT_MAX_ROWS = 10_000_000;
+
+        public static final boolean DEFAULT_PROFILE_VALIDATION = false;
     }
 }

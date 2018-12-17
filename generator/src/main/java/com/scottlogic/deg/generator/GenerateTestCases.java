@@ -79,13 +79,20 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
+
+    @CommandLine.Option(
+        names = {"-v", "--v", "--profile-validation"},
+        description = "Defines whether to run profile validation. Accepts true or false.")
+    private boolean profileValidation = GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION;
+
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
 
         try {
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader().read(profileFile.toPath(), config.getProfileValidation() );
             DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
 
             new GenerationEngine(
@@ -131,5 +138,10 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     @Override
     public long getMaxRows() {
         return maxRows;
+    }
+
+    @Override
+    public boolean getProfileValidation() {
+        return profileValidation;
     }
 }

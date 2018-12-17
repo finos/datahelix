@@ -83,12 +83,18 @@ public class Generate implements Runnable, GenerationConfigSource {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
+    @CommandLine.Option(
+        names = {"-v", "--v", "--profile-validation"},
+        description = "Defines whether to run profile validation. Accepts true or false.")
+    private boolean profileValidation = GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION;
+
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
 
         try {
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader().read(profileFile.toPath(), config.getProfileValidation() );
 
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
@@ -131,5 +137,10 @@ public class Generate implements Runnable, GenerationConfigSource {
     @Override
     public long getMaxRows() {
         return maxRows;
+    }
+
+    @Override
+    public boolean getProfileValidation() {
+        return profileValidation;
     }
 }

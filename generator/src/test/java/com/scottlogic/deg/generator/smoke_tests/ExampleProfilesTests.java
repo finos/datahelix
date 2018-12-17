@@ -40,7 +40,7 @@ class ExampleProfilesTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader().read(profileFile.toPath(), GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION );
             generationEngine.generateTestCases(profile, config);
         }));
     }
@@ -54,7 +54,7 @@ class ExampleProfilesTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader().read(profileFile.toPath(), GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION );
             generationEngine.generateTestCases(profile, config);
         }));
     }

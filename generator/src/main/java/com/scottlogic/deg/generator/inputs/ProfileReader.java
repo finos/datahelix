@@ -19,17 +19,18 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ProfileReader {
-    public Profile read(Path filePath) throws IOException, InvalidProfileException {
+    public Profile read(Path filePath, boolean doProfileValidation) throws IOException, InvalidProfileException {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, Charset.forName("UTF-8"));
 
         Profile profile =  this.read(profileJson);
 
-        ProfileValidationVisitor profileValidationVisitor = new ProfileValidationVisitor();
-        profile.accept(profileValidationVisitor);
-        CmdProfileValidationReporter profileValidationReporter = new CmdProfileValidationReporter();
-        profileValidationReporter.output(profileValidationVisitor.getAlerts());
-
+        if( doProfileValidation) {
+            ProfileValidationVisitor profileValidationVisitor = new ProfileValidationVisitor();
+            profile.accept(profileValidationVisitor);
+            CmdProfileValidationReporter profileValidationReporter = new CmdProfileValidationReporter();
+            profileValidationReporter.output(profileValidationVisitor.getAlerts());
+        }
 
         return profile;
     }

@@ -17,6 +17,7 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeTransformationTestStrategy;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import org.junit.Assert;
@@ -117,7 +118,7 @@ class TreeTransformationIntegrationTests {
     }
 
     private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        return new ProfileReader().read(path);
+        return new ProfileReader().read(path, GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION);
     }
 
     private List<DecisionTreeDto> getMappedExpectedOutput(File file) throws IOException {

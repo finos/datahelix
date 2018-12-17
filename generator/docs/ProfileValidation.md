@@ -12,6 +12,8 @@ The validation checks currently performed include:
 
     Example: A is a string and granularity constraint is applied - granularity constraint can only operate on numeric fields at the moment.
 
+Profile validation is turned off by default. To enable it please pass in parameter: --profile-validation=true or -v=true
+
 The workflow for the profile validator is that it iterates over all the constraints in the profile and for each field it keeps a running collection of restrictions that must be observed in order for the profile to remain valid. When an invalidating constraint is encountered, a validation alert is raised and the restrictions for this field remain unchanged. All validation alerts for all fields will be reported at the end of the process.
 
 Validation alerts have different levels:
