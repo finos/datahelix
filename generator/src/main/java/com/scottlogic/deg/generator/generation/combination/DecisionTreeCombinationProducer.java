@@ -19,11 +19,13 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
     private final DecisionTree tree;
     private final ConstraintReducer reducer;
     private final GenerationConfig generationConfig;
+    private final CombinationStrategy combinationStrategy;
 
-    public DecisionTreeCombinationProducer(DecisionTree tree, ConstraintReducer reducer, GenerationConfig generationConfig){
+    public DecisionTreeCombinationProducer(DecisionTree tree, ConstraintReducer reducer, GenerationConfig generationConfig, CombinationStrategy combinationStrategy){
         this.tree = tree;
         this.reducer = reducer;
         this.generationConfig = generationConfig;
+        this.combinationStrategy = combinationStrategy;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
                     .map(dataBag -> dataBag.getValue(entry.getKey()))
             ));
 
-        return getCombinations(generatedData);
+        return this.combinationStrategy.getCombinations(generatedData);
     }
 
     private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){
@@ -77,14 +79,6 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
                 Collectors.toMap(
                     Map.Entry::getKey,
                     entry -> this.reducer.reduceConstraintsToFieldSpec(entry.getValue()).orElse(FieldSpec.Empty)));
-    }
-
-    private List<Combination> getCombinations(Map<Field, Stream<Object>> generatedData) {
-        Combination combo = new Combination();
-        generatedData.forEach((k, v) -> {
-            combo.add(k, v.findFirst().orElse(null));
-        });
-        return Collections.singletonList(combo);
     }
 
 }
