@@ -26,7 +26,7 @@ public class CmdProfileValidationReporter implements  ProfileValidationReporter 
 
             if (hasErrors) {
                 System.out.println("Encountered unrecoverable profile validation errors.");
-                System.exit(1);
+               // System.exit(1);
             }
         }
     }

@@ -32,7 +32,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
                 Set<Object> intersection = SetUtils.intersect(currentRestrictions.getWhitelist(), values);
                 if (intersection.size() < values.size()) {
-                    logError(field, new SetConstraintValidationMessages(currentRestrictions.getWhitelist(), values));
+                    logInformation(field, new SetConstraintValidationMessages(currentRestrictions.getWhitelist(), values));
                 }
             }
             else {
@@ -62,6 +62,14 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
     private void logError(String field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
+            message,
+            validationType,
+            field));
+    }
+
+    private void logInformation(String field, StandardValidationMessages message) {
+        alerts.add(new ValidationAlert(
+            Criticality.INFORMATION,
             message,
             validationType,
             field));

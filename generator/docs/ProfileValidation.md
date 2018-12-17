@@ -158,3 +158,16 @@ Example profiles may include:
 
 
 ## Null validation
+
+The profile supports is null and not is null constraints. 
+
+| Constraint    |     Nullness     |
+|---------------|:----------------:|
+| G is null     |   Must be null   |
+| G is not null | Must not be null |
+
+Example profiles may include:
+
+| Constraint 1 |  Constraint 2 |   Valid | Reason                                                                     |
+|--------------|:-------------:|--------:|----------------------------------------------------------------------------|
+| G is null    | G is not null | Invalid | G cannot be null and not null simultaneously. No results can be generated. |
