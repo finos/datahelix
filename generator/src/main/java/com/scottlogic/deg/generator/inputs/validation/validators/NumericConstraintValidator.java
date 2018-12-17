@@ -30,24 +30,16 @@ public class NumericConstraintValidator implements ConstraintValidatorAlerts {
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
         MergeResult<NumericRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if(result.successful){
+        if (result.successful) {
             currentRestrictions = result.restrictions;
 
-            if (currentRestrictions.min != null
-                && currentRestrictions.max != null &&
-                currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
+            if (isRangeInvalid()) {
 
-                logInformation(field, new NumericConstraintValidationMessages(
-                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                    referenceBigDecimal));
+                logInformation(field,referenceBigDecimal);
             }
 
         } else {
-            logError(field, new NumericConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                referenceBigDecimal));
+            logError(field, referenceBigDecimal);
         }
 
     }
@@ -63,39 +55,46 @@ public class NumericConstraintValidator implements ConstraintValidatorAlerts {
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
         MergeResult<NumericRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if(result.successful){
+        if (result.successful) {
             currentRestrictions = result.restrictions;
 
-            if (currentRestrictions.min != null
-                && currentRestrictions.max != null &&
-                currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
+            if (isRangeInvalid()) {
 
-                logInformation(field, new NumericConstraintValidationMessages(
-                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                    referenceBigDecimal));
+                logInformation(field, referenceBigDecimal);
             }
         } else {
-            logError(field, new NumericConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                referenceBigDecimal));
+            logError(field, referenceBigDecimal);
         }
     }
 
-    private void logError(String field, StandardValidationMessages message) {
+    private boolean isRangeInvalid() {
+        return currentRestrictions.min != null
+            && currentRestrictions.max != null &&
+            (currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) > 0
+                || ((!currentRestrictions.min.isInclusive()
+                    || !currentRestrictions.max.isInclusive())
+                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
+    }
+
+    private void logError(String field, BigDecimal referenceBigDecimal) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
-            message,
+            new NumericConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceBigDecimal),
             validationType,
             field));
     }
 
 
-    private void logInformation(String field, StandardValidationMessages message) {
+    private void logInformation(String field, BigDecimal referenceBigDecimal) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
-            message,
+            new NumericConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceBigDecimal),
             validationType,
             field));
     }

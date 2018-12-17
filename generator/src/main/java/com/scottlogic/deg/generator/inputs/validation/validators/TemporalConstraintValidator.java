@@ -33,20 +33,11 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
         if (result.successful) {
             currentRestrictions = result.restrictions;
 
-            if (currentRestrictions.min != null
-                && currentRestrictions.max != null
-                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
-
-                logInformation(field, new TemporalConstraintValidationMessages(
-                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                    referenceValue));
+            if (isRangeInvalid() ) {
+                logInformation(field, referenceValue);
             }
         } else {
-            logError(field, new TemporalConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                referenceValue));
+            logError(field, referenceValue);
         }
     }
 
@@ -64,35 +55,42 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
         if (result.successful) {
             currentRestrictions = result.restrictions;
 
-            if (currentRestrictions.min != null
-                && currentRestrictions.max != null
-                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) >0 ) {
+            if (isRangeInvalid() ) {
 
-                logInformation(field, new TemporalConstraintValidationMessages(
-                    currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                    currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                    referenceValue));
+                logInformation(field, referenceValue);
             }
         } else {
-            logError(field, new TemporalConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                referenceValue));
+            logError(field,referenceValue);
         }
     }
 
-    private void logError(String field, StandardValidationMessages message) {
+    private boolean isRangeInvalid() {
+        return currentRestrictions.min != null
+            && currentRestrictions.max != null &&
+            (currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) > 0
+                || ((!currentRestrictions.min.isInclusive()
+                || !currentRestrictions.max.isInclusive())
+                && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
+    }
+
+    private void logError(String field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
-            message,
+            new TemporalConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceValue),
             validationType,
             field));
     }
 
-    private void logInformation(String field, StandardValidationMessages message) {
+    private void logInformation(String field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
-            message,
+            new TemporalConstraintValidationMessages(
+                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
+                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                referenceValue),
             validationType,
             field));
     }
