@@ -22,7 +22,6 @@ public class IsOfTypeConstraint implements AtomicConstraint, VisitableProfileEle
     @Override
     public void accept(ProfileVisitor visitor) {
        visitor.visit(this);
-
     }
 
     public enum Types {

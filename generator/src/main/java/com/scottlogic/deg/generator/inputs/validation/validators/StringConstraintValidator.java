@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 
@@ -13,7 +14,7 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
     public final ValidationType validationType = ValidationType.STRING;
     private int lengthMin;
     private int lengthMax;
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
 
     public StringConstraintValidator() {
         this.lengthMin = 0;
@@ -21,7 +22,7 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
         this.alerts = new ArrayList<>();
     }
 
-    public void isShorterThan(String field, int length) {
+    public void isShorterThan(Field field, int length) {
 
         if (length < 0) {
             logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, lengthMin, length));
@@ -37,7 +38,7 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
         }
     }
 
-    public void isLongerThan(String field, int length) {
+    public void isLongerThan(Field field, int length) {
 
         if (length < 0) {
             logInformation(field, new StringConstraintValidationMessages(lengthMin, lengthMax, length, lengthMax));
@@ -57,7 +58,7 @@ public class StringConstraintValidator implements ConstraintValidatorAlerts {
         return alerts;
     }
 
-    private void logInformation(String field, StandardValidationMessages message) {
+    private void logInformation(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             message,

@@ -32,6 +32,5 @@ public class Profile implements VisitableProfileElement {
     public void accept(ProfileVisitor visitor){
         rules.forEach(visitor::visit);
         rules.forEach(rule -> rule.accept(visitor));
-
     }
 }

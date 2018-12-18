@@ -55,7 +55,7 @@ public class IsNullConstraint implements AtomicConstraint, VisitableProfileEleme
 
     @Override
     public void accept(ProfileVisitor visitor) {
-        visitor.visit(this  );
+        visitor.visit(this);
     }
 
     @Override

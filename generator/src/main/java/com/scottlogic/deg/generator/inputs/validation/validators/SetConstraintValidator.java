@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
@@ -11,14 +12,14 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.SET;
 
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
     private SetRestrictions currentRestrictions;
 
     public SetConstraintValidator() {
         alerts = new ArrayList<>();
     }
 
-    public void isInSet(String field, Set<Object> values) {
+    public void isInSet(Field field, Set<Object> values) {
 
         SetRestrictions candidateRestrictions = new SetRestrictions(values, null);
 
@@ -45,7 +46,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
     }
 
 
-    public void mustNotBeInSet(String field, Set<Object> values) {
+    public void mustNotBeInSet(Field field, Set<Object> values) {
 
         SetRestrictions candidateRestrictions = new SetRestrictions(null, values);
 
@@ -59,7 +60,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
         }
     }
 
-    private void logError(String field, StandardValidationMessages message) {
+    private void logError(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             message,
@@ -67,7 +68,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
             field));
     }
 
-    private void logInformation(String field, StandardValidationMessages message) {
+    private void logInformation(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             message,

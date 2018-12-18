@@ -66,8 +66,6 @@ public class NotConstraint implements AtomicConstraint, VisitableProfileElement 
     @Override
     public void accept(ProfileVisitor visitor) {
         visitor.visit(this);
-
-
     }
 
     @Override

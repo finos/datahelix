@@ -1,20 +1,21 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
 
 public class ValidationAlert {
 
-    private Criticality criticality;
-    private StandardValidationMessages message;
-    private ValidationType validationType;
-    private String field;
+    private final Criticality criticality;
+    private final StandardValidationMessages message;
+    private final ValidationType validationType;
+    private final Field field;
 
     public ValidationAlert(
         Criticality criticality,
         StandardValidationMessages message,
         ValidationType validationType,
-        String field){
+        Field field){
 
         this.criticality = criticality;
         this.message = message;
@@ -31,7 +32,7 @@ public class ValidationAlert {
     public ValidationType getValidationType(){
         return validationType;
     }
-    public String getField(){
+    public Field getField(){
         return field;
     }
 }

@@ -5,7 +5,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.CombinationStrategyType combinationStrategy;
     public GenerationConfig.TreeWalkerType walkerType;
     public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
-    public boolean profileValidation = GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION;
+    public GenerationConfig.ProfileValidationReporterType profileValidation = GenerationConfig.ProfileValidationReporterType.NOOP;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -40,7 +40,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean getProfileValidation() {
+    public GenerationConfig.ProfileValidationReporterType getProfileValidationReporterType() {
         return profileValidation;
     }
 

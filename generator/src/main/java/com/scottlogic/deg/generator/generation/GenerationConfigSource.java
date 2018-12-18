@@ -5,5 +5,5 @@ public interface GenerationConfigSource {
     GenerationConfig.CombinationStrategyType getCombinationStrategyType();
     GenerationConfig.TreeWalkerType getWalkerType();
     long getMaxRows();
-    boolean getProfileValidation();
+    GenerationConfig.ProfileValidationReporterType getProfileValidationReporterType();
 }

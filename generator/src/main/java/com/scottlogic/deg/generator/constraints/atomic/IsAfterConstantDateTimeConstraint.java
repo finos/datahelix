@@ -56,7 +56,6 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint, Visi
         visitor.visit(this);
     }
 
-
     @Override
     public Set<RuleInformation> getRules() {
         return rules;

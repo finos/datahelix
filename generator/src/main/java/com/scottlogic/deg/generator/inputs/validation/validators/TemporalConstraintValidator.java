@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -12,14 +13,14 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.TEMPORAL;
 
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
     private DateTimeRestrictions currentRestrictions;
 
     public TemporalConstraintValidator() {
         this.alerts = new ArrayList<>();
     }
 
-    public void isAfter(String field, LocalDateTime referenceValue, boolean inclusive) {
+    public void isAfter(Field field, LocalDateTime referenceValue, boolean inclusive) {
 
         DateTimeRestrictions candidateRestrictions = new DateTimeRestrictions();
         candidateRestrictions.min = new DateTimeRestrictions.DateTimeLimit(
@@ -28,20 +29,20 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
-        MergeResult<DateTimeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
+        DateTimeRestrictions result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if (result.successful) {
-            currentRestrictions = result.restrictions;
+        if (result != null) {
+            currentRestrictions = result;
 
             if (isRangeInvalid() ) {
                 logInformation(field, referenceValue);
             }
         } else {
-            logError(field, referenceValue);
+            logInformation(field, referenceValue);
         }
     }
 
-    public void isBefore(String field, LocalDateTime referenceValue, boolean inclusive) {
+    public void isBefore(Field field, LocalDateTime referenceValue, boolean inclusive) {
 
         DateTimeRestrictions candidateRestrictions = new DateTimeRestrictions();
         candidateRestrictions.max = new DateTimeRestrictions.DateTimeLimit(
@@ -50,17 +51,16 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
-        MergeResult<DateTimeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
+        DateTimeRestrictions result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if (result.successful) {
-            currentRestrictions = result.restrictions;
+        if (result != null) {
+            currentRestrictions = result;
 
             if (isRangeInvalid() ) {
-
                 logInformation(field, referenceValue);
             }
         } else {
-            logError(field,referenceValue);
+            logInformation(field, referenceValue);
         }
     }
 
@@ -73,7 +73,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
                 && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
     }
 
-    private void logError(String field, LocalDateTime referenceValue) {
+    private void logError(Field field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             new TemporalConstraintValidationMessages(
@@ -84,7 +84,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
             field));
     }
 
-    private void logInformation(String field, LocalDateTime referenceValue) {
+    private void logInformation(Field field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             new TemporalConstraintValidationMessages(

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 
@@ -13,14 +14,14 @@ public class GranularityConstraintValidator implements ConstraintValidatorAlerts
     public final ValidationType validationType = ValidationType.GRANULARITY;
 
     private BigDecimal granularity;
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
 
     public GranularityConstraintValidator(){
         granularity = BigDecimal.ZERO;
         alerts = new ArrayList<>();
     }
 
-    public void granularTo(String field, BigDecimal referenceValue){
+    public void granularTo(Field field, BigDecimal referenceValue){
 
         if(granularity.compareTo(BigDecimal.ZERO) == 0) {
             granularity = referenceValue;
@@ -31,7 +32,7 @@ public class GranularityConstraintValidator implements ConstraintValidatorAlerts
         }
     }
 
-    private void logInformation(String field, StandardValidationMessages message) {
+    private void logInformation(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             message,

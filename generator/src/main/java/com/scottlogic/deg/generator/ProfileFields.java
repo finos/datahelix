@@ -36,6 +36,6 @@ public class ProfileFields implements Iterable<Field>, VisitableProfileElement {
 
     @Override
     public void accept(ProfileVisitor visitor) {
-
+        visitor.visit(this);
     }
 }

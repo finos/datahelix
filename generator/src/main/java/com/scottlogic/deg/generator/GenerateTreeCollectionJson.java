@@ -12,6 +12,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartition
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
+import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import picocli.CommandLine;
 
 import java.io.BufferedWriter;
@@ -54,7 +55,7 @@ public class GenerateTreeCollectionJson implements Runnable {
         final Profile profile;
 
         try {
-            profile = new ProfileReader().read(inputPath.toPath(), GenerationConfig.Constants.DEFAULT_PROFILE_VALIDATION);
+            profile = new ProfileReader(new NoopProfileValidationReporter()).read(inputPath.toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();

@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.combination_strategies.*;
 import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
+import com.scottlogic.deg.generator.inputs.validation.reporters.StandardOutProfileValidationReporter;
+import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
+import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 
 public class GenerationConfig {
 
@@ -9,14 +12,14 @@ public class GenerationConfig {
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
     private final long maxRows;
-    private final boolean profileValidation;
+    private final ProfileValidationReporterType profileValidation;
 
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
-        this.profileValidation = source.getProfileValidation();
+        this.profileValidation = source.getProfileValidationReporterType();
 
     }
 
@@ -45,7 +48,14 @@ public class GenerationConfig {
 
     public long getMaxRows() { return maxRows; }
 
-    public boolean getProfileValidation() { return profileValidation; }
+    public ProfileValidationReporter getProfileValidationReporter() {
+        switch(this.profileValidation){
+            case NOOP: return new NoopProfileValidationReporter();
+            case STANDARDOUT: return new StandardOutProfileValidationReporter();
+            default:
+                throw new UnsupportedOperationException(
+                    "Profile validation reporter {this.profileValidation} is unsupported.");
+        } }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),
@@ -98,6 +108,22 @@ public class GenerationConfig {
         }
     }
 
+    public enum ProfileValidationReporterType {
+        NOOP(Constants.ProfileValidationReporterTypes.NOOP),
+        STANDARDOUT(Constants.ProfileValidationReporterTypes.STANDARDOUT);
+
+        private final String text;
+
+        ProfileValidationReporterType(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
@@ -125,6 +151,9 @@ public class GenerationConfig {
 
         public static final long DEFAULT_MAX_ROWS = 10_000_000;
 
-        public static final boolean DEFAULT_PROFILE_VALIDATION = false;
+        public static class ProfileValidationReporterTypes {
+            public static final String NOOP = "NOOP";
+            public static final String STANDARDOUT = "STANDARDOUT";
+        }
     }
 }

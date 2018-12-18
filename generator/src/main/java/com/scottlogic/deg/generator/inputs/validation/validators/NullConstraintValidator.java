@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
@@ -10,7 +11,7 @@ import java.util.List;
 public class NullConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.NULL;
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
     private NullRestrictions currentRestrictions;
 
     public NullConstraintValidator() {
@@ -18,7 +19,7 @@ public class NullConstraintValidator implements ConstraintValidatorAlerts {
     }
 
 
-    public void setNullness(String field, Nullness value) {
+    public void setNullness(Field field, Nullness value) {
         NullRestrictions candidateRestrictions = new NullRestrictions(value);
         NullRestrictionsMerger merger = new NullRestrictionsMerger();
 
@@ -31,7 +32,7 @@ public class NullConstraintValidator implements ConstraintValidatorAlerts {
     }
 
 
-    private void logError(String field, StandardValidationMessages message) {
+    private void logError(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             message,

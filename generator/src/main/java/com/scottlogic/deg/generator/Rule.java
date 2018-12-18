@@ -24,6 +24,7 @@ public class Rule implements VisitableProfileElement
             .filter(f -> f instanceof VisitableProfileElement)
             .map(cc -> (VisitableProfileElement)cc)
             .forEach(cc -> cc.accept(visitor));
+        visitor.visit(this);
     }
 }
 

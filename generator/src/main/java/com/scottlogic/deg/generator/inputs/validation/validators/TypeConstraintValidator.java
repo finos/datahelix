@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
@@ -12,7 +13,7 @@ import java.util.List;
 public class TypeConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.TYPE;
-    private List<ValidationAlert> alerts;
+    private final List<ValidationAlert> alerts;
 
     private TypeRestrictions currentRestrictions;
 
@@ -23,7 +24,7 @@ public class TypeConstraintValidator implements ConstraintValidatorAlerts {
     }
 
 
-    public void isOfType(String field, IsOfTypeConstraint.Types type) {
+    public void isOfType(Field field, IsOfTypeConstraint.Types type) {
 
         TypeRestrictions candidateRestrictions = new DataTypeRestrictions(Arrays.asList(type));
         TypeRestrictionsMerger merger = new TypeRestrictionsMerger();
@@ -38,7 +39,7 @@ public class TypeConstraintValidator implements ConstraintValidatorAlerts {
         }
     }
 
-    private void logError(String field, StandardValidationMessages message){
+    private void logError(Field field, StandardValidationMessages message){
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             message,
