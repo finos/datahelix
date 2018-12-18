@@ -96,7 +96,7 @@ Example profiles may include:
 |----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
 | C is less than 10                | C is great than 20            | Valid - N/A | C is between 10 and 20.                                                                 |
 | C is greater than or equal to 10 | C is less than or equal to 10 | Valid - N/A | C is equal to 10.                                                                       |
-| C is greater than 10             | C is less than 5              | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| C is greater than 10             | C is less than 5              | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
 
 
 ## Temporal validation
@@ -113,11 +113,10 @@ Usage of temporal constraints implies that the Type of the field is TEMPORAL.
 
 Example profiles may include:
 
-| Constraint 1                     |          Constraint 2         |  Validity - Logging | Reason                                                                                  |
-|----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
-| C is less than 10                | C is great than 20            | Valid - N/A | C is between 10 and 20.                                                                 |
-| C is greater than or equal to 10 | C is less than or equal to 10 | Valid - N/A | C is equal to 10.                                                                       |
-| C is greater than 10             | C is less than 5              | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| Constraint 1                        |            Constraint 2            |     Valid - Logging | Reason                                                                                  |
+|-------------------------------------|:----------------------------------:|--------------------:|-----------------------------------------------------------------------------------------|
+| D is before 2000-09-15T15:53:00.000 | D is after 2010-09-15T15:53:00.000 | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
+| D is before 2000-09-15T15:53:00.000 | D is after 1990-09-15T15:53:00.000 |         Valid - N/A | D is between 1990-09-15T15:53:00.000 and 2000-09-15T15:53:00.000                        |
 
 
 ## Granularity validation
@@ -155,7 +154,7 @@ Example profiles may include:
 
 | Constraint 1       |     Constraint 2     |  Validity - Logging | Reason                                                                                  |
 |--------------------|:--------------------:|------:|-----------------------------------------------------------------------------------------|
-| F is longer than 3 |  F is shorter than 3 | Valid - Information | The empty set satisfies these conditions. An empty value will be provided in all cases. |
+| F is longer than 3 |  F is shorter than 3 | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
 | F is longer than 3 | F is shorter than 10 | Valid - N/A | F is between 4 and 9 characters long.                                                   |
 
 
