@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Objects;
+
 public class NullRestrictions {
     public Nullness nullness;
 
@@ -24,5 +26,18 @@ public class NullRestrictions {
         }
 
         return nullness.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NullRestrictions that = (NullRestrictions) o;
+        return nullness == that.nullness;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nullness);
     }
 }

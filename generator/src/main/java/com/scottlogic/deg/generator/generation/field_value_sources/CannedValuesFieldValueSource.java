@@ -15,11 +15,6 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
         this.interestingValues = values;
     }
 
-    public CannedValuesFieldValueSource(List<Object> allValues, List<Object> interestingValues) {
-        this.allValues = allValues;
-        this.interestingValues = interestingValues;
-    }
-
     public static FieldValueSource of(Object... values) {
         return new CannedValuesFieldValueSource(Arrays.asList(values));
     }

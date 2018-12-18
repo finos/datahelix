@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
-    private final FieldValueSourceEqualityComparer fieldValueSourceEqualityComparer = new FieldValueSourceEqualityComparer();
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
         List<FieldValueSource> validSources = new ArrayList<>();
@@ -146,20 +145,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         mustContainRestrictionFieldSpecs.forEach(fs -> {
             final List<FieldValueSource> fieldValueSources = getFieldValueSources(fs);
-
-            for (FieldValueSource source : fieldValueSources) {
-                boolean exists = false;
-                for (FieldValueSource validSource : validSources) {
-                    if (fieldValueSourceEqualityComparer.equals(source, validSource)) {
-                        exists = true;
-                        break;
-                    }
-                }
-
-                if (!exists) {
-                    validSources.add(source);
-                }
-            }
+            validSources.addAll(fieldValueSources);
         });
     }
 }

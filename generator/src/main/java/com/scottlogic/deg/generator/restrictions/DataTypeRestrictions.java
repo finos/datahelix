@@ -67,5 +67,18 @@ public class DataTypeRestrictions implements TypeRestrictions {
     public Set<IsOfTypeConstraint.Types> getAllowedTypes() {
         return allowedTypes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataTypeRestrictions that = (DataTypeRestrictions) o;
+        return Objects.equals(allowedTypes, that.allowedTypes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(allowedTypes);
+    }
 }
 

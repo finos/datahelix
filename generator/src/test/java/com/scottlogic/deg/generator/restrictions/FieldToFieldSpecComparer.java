@@ -6,8 +6,6 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import java.util.Map;
 
 public class FieldToFieldSpecComparer implements EqualityComparer {
-    private EqualityComparer fieldSpecComparer = new FieldSpecEqualityComparer();
-
     @Override
     public int getHashCode(Object item) {
         return 0;
@@ -33,7 +31,7 @@ public class FieldToFieldSpecComparer implements EqualityComparer {
             for (Map.Entry<Field, FieldSpec> pair : fieldToFieldSpec1.entrySet()) {
                 result =
                     fieldToFieldSpec2.containsKey(pair.getKey()) &&
-                    fieldSpecComparer.equals(pair.getValue(), fieldToFieldSpec2.get(pair.getKey()));
+                    pair.getValue().equals(fieldToFieldSpec2.get(pair.getKey()));
 
                 if (!result) {
                     break;
