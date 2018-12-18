@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Details a column's atomic constraints
@@ -183,17 +184,11 @@ public class FieldSpec {
     public String toString() {
         return String.join(
             " & ",
-            Stream.of(
-                Objects.toString(setRestrictions, null),
-                Objects.toString(numericRestrictions, null),
-                Objects.toString(stringRestrictions, null),
-                Objects.toString(nullRestrictions, null),
-                Objects.toString(typeRestrictions, null),
-                Objects.toString(dateTimeRestrictions, null),
-                Objects.toString(granularityRestrictions, null),
-                Objects.toString(mustContainRestriction, null))
-            .filter(s -> s != null)
-            .collect(Collectors.toList()));
+            Arrays
+                .stream(getPropertiesToCompare(this))
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .collect(Collectors.toList()));
     }
 
     public FormatRestrictions getFormatRestrictions() {
@@ -230,5 +225,73 @@ public class FieldSpec {
 
     public FieldSpecSource getFieldSpecSource() {
         return this.source;
+    }
+
+    public int hashCode(){
+        return Arrays.hashCode(getPropertiesToCompare(this));
+    }
+
+    public boolean equals(Object obj){
+        if (obj == null){
+            return false;
+        }
+
+        if (!(obj instanceof FieldSpec)){
+            return false;
+        }
+
+        return equals((FieldSpec)obj);
+    }
+
+    private boolean equals(FieldSpec other){
+        Iterator<Object> myProperties = Arrays.asList(getPropertiesToCompare(this)).iterator();
+        Iterator<Object> otherPropertiesToCompare = Arrays.asList(getPropertiesToCompare(other)).iterator();
+
+        //effectively Stream.zip(myProperties, otherProperties).allMatch((x, y) -> propertiesAreEqual(x, y));
+        while (myProperties.hasNext()){
+            Object myProperty = myProperties.next();
+
+            if (!otherPropertiesToCompare.hasNext()){
+                return false;
+            }
+
+            Object otherProperty = otherPropertiesToCompare.next();
+
+            if (!propertiesAreEqual(myProperty, otherProperty)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean propertiesAreEqual(Object myProperty, Object otherProperty) {
+        if (myProperty == null && otherProperty == null){
+            return true;
+        }
+
+        if (myProperty == null || otherProperty == null){
+            return false; //one of the properties are null, but the other one cannot be (the first IF guards against this)
+        }
+
+        if (!myProperty.getClass().equals(otherProperty.getClass())){
+            return false;
+        }
+
+        return myProperty.equals(otherProperty);
+    }
+
+    private static Object[] getPropertiesToCompare(FieldSpec fieldSpec){
+        return new Object[]{
+            fieldSpec.dateTimeRestrictions,
+            fieldSpec.formatRestrictions,
+            fieldSpec.granularityRestrictions,
+            fieldSpec.mustContainRestriction,
+            fieldSpec.nullRestrictions,
+            fieldSpec.numericRestrictions,
+            fieldSpec.setRestrictions,
+            fieldSpec.stringRestrictions,
+            fieldSpec.typeRestrictions
+        };
     }
 }
