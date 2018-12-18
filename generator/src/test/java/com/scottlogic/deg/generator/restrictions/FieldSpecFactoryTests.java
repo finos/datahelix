@@ -3,8 +3,6 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
-import com.scottlogic.deg.generator.restrictions.Equality.FieldSpecEqualityComparer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +11,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 class FieldSpecFactoryTests {
-    private EqualityComparer fieldSpecComparer = new FieldSpecEqualityComparer();
-
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
@@ -37,6 +33,6 @@ class FieldSpecFactoryTests {
             )
         );
 
-        Assert.assertTrue(fieldSpecComparer.equals(fieldSpec, expectedFieldSpec));
+        Assert.assertEquals(fieldSpec, expectedFieldSpec);
     }
 }

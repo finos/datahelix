@@ -1,14 +1,11 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.Equality.FieldSpecEqualityComparer;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class MustContainRestrictionReducer {
     private final FieldSpecMerger merger = new FieldSpecMerger();
-    private final FieldSpecEqualityComparer comparer = new FieldSpecEqualityComparer();
 
     public Set<FieldSpec> getReducedMustContainRestriction(FieldSpec parentFieldSpec) {
         final MustContainRestriction mustContainRestriction = parentFieldSpec.getMustContainRestriction();
@@ -37,7 +34,7 @@ public class MustContainRestrictionReducer {
                         // Ensure that we are not adding an existing field spec
                         boolean isInFinalFieldSpec = false;
                         for (FieldSpec finalFieldSpec : finalFieldSpecs) {
-                            isInFinalFieldSpec = comparer.equals(finalFieldSpec, mergedFieldSpec);
+                            isInFinalFieldSpec = finalFieldSpec.equals(mergedFieldSpec);
                             if (isInFinalFieldSpec) {
                                 break;
                             }
