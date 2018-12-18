@@ -67,10 +67,7 @@ class FieldSpecFulfillerTests {
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(
-                        new HashSet<>(Collections.singletonList(5)),
-                        new DataBagValueSource(fieldSpec.getFieldSpecSource())
-                    )
+                    new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
