@@ -13,20 +13,20 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ReductiveDecisionTreeAdapter {
+public class ReductiveDecisionTreeReducer {
 
     private final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
     private FieldSpecFactory fieldSpecFactory;
     private FieldSpecMerger fieldSpecMerger;
 
-    public ReductiveDecisionTreeAdapter(FieldSpecFactory fieldSpecFactory, FieldSpecMerger fieldSpecMerger){
+    public ReductiveDecisionTreeReducer(FieldSpecFactory fieldSpecFactory, FieldSpecMerger fieldSpecMerger){
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public ReductiveConstraintNode adapt(ConstraintNode rootNode, FieldCollection fixedFields){
+    public ReductiveConstraintNode reduce(ConstraintNode rootNode, FieldCollection fixedFields){
         AdapterContext context = new AdapterContext();
-        ConstraintNode node = adapt(rootNode, fixedFields, context);
+        ConstraintNode node = reduce(rootNode, fixedFields, context);
 
         if (!context.isValid() || node == null){
             return null;
@@ -37,7 +37,7 @@ public class ReductiveDecisionTreeAdapter {
             context.getAllUnfixedAtomicConstraints());
     }
 
-    private ConstraintNode adapt(ConstraintNode rootNode, FieldCollection fixedFields, AdapterContext context){
+    private ConstraintNode reduce(ConstraintNode rootNode, FieldCollection fixedFields, AdapterContext context){
         ConstraintNode node = new TreeConstraintNode(
             context.isValid() ? getAtomicConstraints(rootNode, fixedFields, context) : Collections.emptySet(),
             context.isValid() ? getDecisions(rootNode, fixedFields, context) : Collections.emptySet()
@@ -48,10 +48,10 @@ public class ReductiveDecisionTreeAdapter {
             : null;
     }
 
-    private DecisionNode adapt(DecisionNode decision, FieldCollection fixedFields, AdapterContext context){
+    private DecisionNode reduce(DecisionNode decision, FieldCollection fixedFields, AdapterContext context){
         return new TreeDecisionNode(decision.getOptions()
             .stream()
-            .map(o -> adapt(o, fixedFields, context.forOption(o)))
+            .map(o -> reduce(o, fixedFields, context.forOption(o)))
             .filter(o -> o != null && !o.getAtomicConstraints().isEmpty())
             .collect(Collectors.toList()));
     }
@@ -87,7 +87,7 @@ public class ReductiveDecisionTreeAdapter {
     private Collection<DecisionNode> getDecisions(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
         return constraint.getDecisions()
             .stream()
-            .map(d -> adapt(d, fixedFields, context))
+            .map(d -> reduce(d, fixedFields, context))
             .filter(d -> !d.getOptions().isEmpty())
             .collect(Collectors.toList());
     }

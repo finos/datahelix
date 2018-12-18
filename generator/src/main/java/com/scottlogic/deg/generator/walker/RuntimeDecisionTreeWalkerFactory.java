@@ -53,7 +53,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         fixFieldStrategy,
                         reductiveMonitor),
                     reductiveMonitor,
-                    new ReductiveDecisionTreeAdapter(
+                    new ReductiveDecisionTreeReducer(
                         fieldSpecFactory,
                         fieldSpecMerger)
                 );

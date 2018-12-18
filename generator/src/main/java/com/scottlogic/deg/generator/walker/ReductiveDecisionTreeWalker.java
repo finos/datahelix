@@ -9,13 +9,13 @@ import com.scottlogic.deg.generator.restrictions.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
 import com.scottlogic.deg.generator.walker.reductive.FieldCollectionHelper;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeAdapter;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
-    private final ReductiveDecisionTreeAdapter nodeAdapter;
+    private final ReductiveDecisionTreeReducer nodeAdapter;
     private final IterationVisualiser iterationVisualiser;
     private final FieldCollectionHelper fieldCollectionHelper;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -24,7 +24,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         IterationVisualiser iterationVisualiser,
         FieldCollectionHelper fieldCollectionHelper,
         ReductiveDataGeneratorMonitor monitor,
-        ReductiveDecisionTreeAdapter nodeAdapter) {
+        ReductiveDecisionTreeReducer nodeAdapter) {
         this.iterationVisualiser = iterationVisualiser;
         this.fieldCollectionHelper = fieldCollectionHelper;
         this.monitor = monitor;
@@ -39,7 +39,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(rootNode, fieldCollection);
 
         //calculate a field to fix and start processing
-        ReductiveConstraintNode adapted = nodeAdapter.adapt(rootNode, fieldCollection);
+        ReductiveConstraintNode adapted = nodeAdapter.reduce(rootNode, fieldCollection);
         return process(rootNode, fieldCollectionHelper.getNextFixedField(fieldCollection, adapted));
     }
 
@@ -60,7 +60,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FieldCollection fieldCollection){
 
         //reduce the tree based on the fields that are now fixed
-        ReductiveConstraintNode adaptedNode = this.nodeAdapter.adapt(constraintNode, fieldCollection);
+        ReductiveConstraintNode adaptedNode = this.nodeAdapter.reduce(constraintNode, fieldCollection);
         if (adaptedNode == null){
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
