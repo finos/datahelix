@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 public class TemporalFieldValueSource implements FieldValueSource {
@@ -145,6 +146,23 @@ public class TemporalFieldValueSource implements FieldValueSource {
     private LocalDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
         if (lower.min == null || lower.min.getLimit() == null) return null;
         return lower.min.isInclusive() ? lower.min.getLimit() : lower.min.getLimit().plusNanos(1_000_000);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        TemporalFieldValueSource otherSource = (TemporalFieldValueSource) obj;
+        return restrictions.equals(otherSource.restrictions) &&
+            blacklist.equals(otherSource.blacklist) &&
+            inclusiveLower.equals(otherSource.inclusiveLower) &&
+            exclusiveUpper.equals(otherSource.exclusiveUpper);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(restrictions, blacklist, inclusiveLower, exclusiveUpper);
     }
 
     private class SequentialDateIterator implements Iterator<LocalDateTime> {

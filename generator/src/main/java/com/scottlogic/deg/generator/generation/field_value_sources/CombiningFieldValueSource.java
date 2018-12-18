@@ -5,12 +5,14 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CombiningFieldValueSource implements FieldValueSource {
-    private final List<FieldValueSource> underlyingSources;
+    private final Set<FieldValueSource> underlyingSources;
 
-    public CombiningFieldValueSource(List<FieldValueSource> underlyingSources) {
+    public CombiningFieldValueSource(Set<FieldValueSource> underlyingSources) {
         this.underlyingSources = underlyingSources;
     }
 
@@ -50,6 +52,20 @@ public class CombiningFieldValueSource implements FieldValueSource {
                 .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
                 .collect(Collectors.toList()),
             randomNumberGenerator);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        CombiningFieldValueSource otherSource = (CombiningFieldValueSource) obj;
+        return underlyingSources.equals(otherSource.underlyingSources);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(underlyingSources);
     }
 
     private class InternalRandomIterator implements Iterator<Object> {

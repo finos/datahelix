@@ -6,5 +6,5 @@ import com.scottlogic.deg.generator.restrictions.*;
 import java.util.*;
 
 public interface FieldValueSourceEvaluator {
-    List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec);
+    Set<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec);
 }

@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
 
-    public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
-        List<FieldValueSource> validSources = new ArrayList<>();
+    public Set<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
+        Set<FieldValueSource> validSources = new HashSet<>();
         MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
 
         // check nullability...
@@ -31,9 +31,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
                 );
             }
 
-            return Collections.singletonList(
-                new CannedValuesFieldValueSource(
-                    new ArrayList<>(whitelist)
+            return new HashSet<>(
+                Collections.singletonList(
+                    new CannedValuesFieldValueSource(
+                        new ArrayList<>(whitelist)
+                    )
                 )
             );
         }
@@ -103,7 +105,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private boolean determineNullabilityAndDecideWhetherToHalt(
-        List<FieldValueSource> fieldValueSources,
+        Set<FieldValueSource> fieldValueSources,
         FieldSpec fieldSpec) {
 
         FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
@@ -137,15 +139,12 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             .filter(o -> o.getSetRestrictions() != null);
     }
 
-    private void applyMustConstrainRestrictionToValidSources(List<FieldValueSource> validSources, FieldSpec fieldSpec) {
+    private void applyMustConstrainRestrictionToValidSources(Set<FieldValueSource> validSources, FieldSpec fieldSpec) {
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
         if (mustContainRestrictionFieldSpecs.size() > 1) {
             mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
         }
 
-        mustContainRestrictionFieldSpecs.forEach(fs -> {
-            final List<FieldValueSource> fieldValueSources = getFieldValueSources(fs);
-            validSources.addAll(fieldValueSources);
-        });
+        mustContainRestrictionFieldSpecs.forEach(fs -> validSources.addAll(getFieldValueSources(fs)));
     }
 }
