@@ -20,7 +20,6 @@ public class FieldCollectionHelper {
     private final GenerationConfig generationConfig;
     private final ConstraintReducer reducer;
     private final FieldSpecMerger fieldSpecMerger;
-    private final FieldSpecFactory fieldSpecFactory;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
 
@@ -28,11 +27,9 @@ public class FieldCollectionHelper {
         GenerationConfig config,
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
-        FieldSpecFactory fieldSpecFactory,
         FixFieldStrategy fixFieldStrategy,
         ReductiveDataGeneratorMonitor monitor) {
         this.fieldSpecMerger = fieldSpecMerger;
-        this.fieldSpecFactory = fieldSpecFactory;
         this.fixFieldStrategy = fixFieldStrategy;
         this.generationConfig = config;
         this.reducer = constraintReducer;
@@ -84,25 +81,6 @@ public class FieldCollectionHelper {
         return fieldCollection.with(field);
     }
 
-
-    //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
-    AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(FieldCollection fieldCollection, AtomicConstraint atomicConstraint) {
-        //is the field for this atomic constraint fixed?
-        //does the constraint complement or conflict with the fixed field?
-
-        Field field = atomicConstraint.getField();
-        FixedField fixedFieldValue = fieldCollection.getFixedField(field);
-        if (fixedFieldValue == null){
-            //field isn't fixed
-            return AtomicConstraintFixedFieldBehaviour.FIELD_NOT_FIXED;
-        }
-
-        //field is fixed, work out if it is contradictory
-        return fixedValueConflictsWithAtomicConstraint(fixedFieldValue, atomicConstraint)
-            ? AtomicConstraintFixedFieldBehaviour.CONSTRAINT_CONTRADICTS
-            : AtomicConstraintFixedFieldBehaviour.NON_CONTRADICTORY;
-    }
-
     //create a mapping of field->fieldspec for each fixed field - efficiency
     private Map<Field, FieldSpec> getFieldSpecsForAllFixedFieldsExceptLast(FieldCollection fieldCollection, ConstraintNode constraintNode){
         Map<Field, List<AtomicConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
@@ -142,14 +120,6 @@ public class FieldCollectionHelper {
             .map(dataBag -> dataBag.getValue(field));
 
         return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
-    }
-    //work out if the field is contradictory
-    private boolean fixedValueConflictsWithAtomicConstraint(FixedField fixedField, AtomicConstraint atomicConstraint) {
-        FieldSpec fieldSpec = fieldSpecFactory.construct(atomicConstraint);
-        FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
-
-        Optional<FieldSpec> merged = fieldSpecMerger.merge(fixedValueFieldSpec, fieldSpec);
-        return !merged.isPresent(); //no conflicts
     }
 
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field

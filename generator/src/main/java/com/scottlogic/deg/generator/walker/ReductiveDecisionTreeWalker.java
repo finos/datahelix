@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDecisionTreeAdapter nodeAdapter;
-
     private final IterationVisualiser iterationVisualiser;
     private final FieldCollectionHelper fieldCollectionHelper;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -24,11 +23,12 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
         FieldCollectionHelper fieldCollectionHelper,
-        ReductiveDataGeneratorMonitor monitor) {
+        ReductiveDataGeneratorMonitor monitor,
+        ReductiveDecisionTreeAdapter nodeAdapter) {
         this.iterationVisualiser = iterationVisualiser;
         this.fieldCollectionHelper = fieldCollectionHelper;
         this.monitor = monitor;
-        this.nodeAdapter = new ReductiveDecisionTreeAdapter(fieldCollectionHelper);
+        this.nodeAdapter = nodeAdapter;
     }
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */

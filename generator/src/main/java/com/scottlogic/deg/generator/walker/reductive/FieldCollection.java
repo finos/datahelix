@@ -106,6 +106,6 @@ public class FieldCollection {
             (fixedFields.values().stream(), Stream.of(lastFixedField))
             .collect(Collectors.toMap(x->x.field, Function.identity()));
 
-        return new FieldCollection(getFields(), newFixedFieldsMap, fixedField);
+        return new FieldCollection(fields, newFixedFieldsMap, fixedField);
     }
 }
