@@ -15,14 +15,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldCollectionHelper {
+public class FixedFieldBuilder {
 
     private final GenerationConfig generationConfig;
     private final ConstraintReducer constraintReducer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
 
-    public FieldCollectionHelper(
+    public FixedFieldBuilder(
         GenerationConfig config,
         ConstraintReducer constraintReducer,
         FixFieldStrategy fixFieldStrategy,

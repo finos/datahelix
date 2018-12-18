@@ -14,18 +14,18 @@ import java.util.stream.Stream;
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDecisionTreeReducer treeReducer;
     private final IterationVisualiser iterationVisualiser;
-    private final FieldCollectionHelper fieldCollectionHelper;
+    private final FixedFieldBuilder fixedFieldBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FieldCollectionHelper fieldCollectionHelper,
+        FixedFieldBuilder fixedFieldBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveDecisionTreeReducer treeReducer,
         ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
         this.iterationVisualiser = iterationVisualiser;
-        this.fieldCollectionHelper = fieldCollectionHelper;
+        this.fixedFieldBuilder = fixedFieldBuilder;
         this.monitor = monitor;
         this.treeReducer = treeReducer;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
@@ -40,7 +40,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //calculate a field to fix and start processing
         ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
-        FixedField nextFixedField = fieldCollectionHelper.findNextFixedField(initialState, reduced);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
         return process(rootNode, initialState.with(nextFixedField));
     }
 
@@ -74,7 +74,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedNode, reductiveState);
 
         //find the next fixed field and continue
-        FixedField nextFixedField = fieldCollectionHelper.findNextFixedField(reductiveState, reducedNode);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode);
         return process(reducedNode, reductiveState.with(nextFixedField));
     }
 

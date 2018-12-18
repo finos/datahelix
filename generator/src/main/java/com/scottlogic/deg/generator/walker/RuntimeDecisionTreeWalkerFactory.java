@@ -46,7 +46,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
-                    new FieldCollectionHelper(
+                    new FixedFieldBuilder(
                         config,
                         constraintReducer,
                         fixFieldStrategy,
