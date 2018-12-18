@@ -8,17 +8,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldCollection {
+public class ReductiveState {
 
     private final ProfileFields fields;
     private final Map<Field, FixedField> fixedFields;
     private final FixedField lastFixedField;
 
-    public FieldCollection(ProfileFields fields){
+    public ReductiveState(ProfileFields fields){
         this(fields, new HashMap<>(), null);
     }
 
-    private FieldCollection(
+    private ReductiveState(
         ProfileFields fields,
         Map<Field, FixedField> fixedFields,
         FixedField lastFixedField) {
@@ -97,15 +97,15 @@ public class FieldCollection {
         return this.fields;
     }
 
-    public FieldCollection with(FixedField fixedField){
+    public ReductiveState with(FixedField fixedField){
 
         if (lastFixedField == null)
-            return new FieldCollection(fields, new HashMap<>(), fixedField);
+            return new ReductiveState(fields, new HashMap<>(), fixedField);
 
         Map<Field, FixedField> newFixedFieldsMap = Stream.concat
             (fixedFields.values().stream(), Stream.of(lastFixedField))
             .collect(Collectors.toMap(x->x.field, Function.identity()));
 
-        return new FieldCollection(fields, newFixedFieldsMap, fixedField);
+        return new ReductiveState(fields, newFixedFieldsMap, fixedField);
     }
 }

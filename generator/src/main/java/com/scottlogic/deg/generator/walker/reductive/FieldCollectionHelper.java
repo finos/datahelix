@@ -33,19 +33,19 @@ public class FieldCollectionHelper {
         this.monitor = monitor;
     }
 
-    //work out the next field to fix and return a new FieldCollection with this field fixed
-    public FieldCollection fixNextFieldAndAddToCollection(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
-        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(fieldCollection, rootNode);
+    //work out the next field to fix and return a new ReductiveState with this field fixed
+    public ReductiveState fixNextField(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
+        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
 
         if (fieldToFix == null){
             throw new UnsupportedOperationException(
                 String.format(
                     "Unable to find a field to fix, no finite constraints\nUnfixed fields: %s",
-                    Objects.toString(fieldCollection.getUnfixedFields())));
+                    Objects.toString(reductiveState.getUnfixedFields())));
         }
 
         FixedField field = createFixedFieldWithValues(fieldToFix, rootNode);
-        return fieldCollection.with(field);
+        return reductiveState.with(field);
     }
 
     //for the given field get a stream of possible values

@@ -24,7 +24,7 @@ public class ReductiveDecisionTreeReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public ReductiveConstraintNode reduce(ConstraintNode rootNode, FieldCollection fixedFields){
+    public ReductiveConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields){
         AdapterContext context = new AdapterContext();
         ConstraintNode node = reduce(rootNode, fixedFields, context);
 
@@ -37,7 +37,7 @@ public class ReductiveDecisionTreeReducer {
             context.getAllUnfixedAtomicConstraints());
     }
 
-    private ConstraintNode reduce(ConstraintNode rootNode, FieldCollection fixedFields, AdapterContext context){
+    private ConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields, AdapterContext context){
         ConstraintNode node = new TreeConstraintNode(
             context.isValid() ? getAtomicConstraints(rootNode, fixedFields, context) : Collections.emptySet(),
             context.isValid() ? getDecisions(rootNode, fixedFields, context) : Collections.emptySet()
@@ -48,7 +48,7 @@ public class ReductiveDecisionTreeReducer {
             : null;
     }
 
-    private DecisionNode reduce(DecisionNode decision, FieldCollection fixedFields, AdapterContext context){
+    private DecisionNode reduce(DecisionNode decision, ReductiveState fixedFields, AdapterContext context){
         return new TreeDecisionNode(decision.getOptions()
             .stream()
             .map(o -> reduce(o, fixedFields, context.forOption(o)))
@@ -56,7 +56,7 @@ public class ReductiveDecisionTreeReducer {
             .collect(Collectors.toList()));
     }
 
-    private Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
+    private Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, ReductiveState fixedFields, AdapterContext context) {
         Collection<AtomicConstraint> potentialResult = constraint
             .getAtomicConstraints().stream()
             .filter(atomicConstraint -> {
@@ -84,7 +84,7 @@ public class ReductiveDecisionTreeReducer {
             : Collections.emptySet();
     }
 
-    private Collection<DecisionNode> getDecisions(ConstraintNode constraint, FieldCollection fixedFields, AdapterContext context) {
+    private Collection<DecisionNode> getDecisions(ConstraintNode constraint, ReductiveState fixedFields, AdapterContext context) {
         return constraint.getDecisions()
             .stream()
             .map(d -> reduce(d, fixedFields, context))
@@ -94,12 +94,12 @@ public class ReductiveDecisionTreeReducer {
 
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
-    private AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(FieldCollection fieldCollection, AtomicConstraint atomicConstraint) {
+    private AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(ReductiveState fixedFields, AtomicConstraint atomicConstraint) {
         //is the field for this atomic constraint fixed?
         //does the constraint complement or conflict with the fixed field?
 
         Field field = atomicConstraint.getField();
-        FixedField fixedFieldValue = fieldCollection.getFixedField(field);
+        FixedField fixedFieldValue = fixedFields.getFixedField(field);
         if (fixedFieldValue == null){
             //field isn't fixed
             return AtomicConstraintFixedFieldBehaviour.FIELD_NOT_FIXED;
