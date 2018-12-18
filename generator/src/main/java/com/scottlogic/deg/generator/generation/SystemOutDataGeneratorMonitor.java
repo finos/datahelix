@@ -72,7 +72,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: Unable to step further %s ",
-                fieldCollection.getFixedFields().size(),
+                fieldCollection.getFixedFieldsExceptLast().size(),
                 fieldCollection.toString(true)));
     }
 }

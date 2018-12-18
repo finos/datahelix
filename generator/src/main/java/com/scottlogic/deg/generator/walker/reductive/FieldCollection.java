@@ -61,7 +61,7 @@ public class FieldCollection {
         return toString(false);
     }
 
-    public Map<Field, FixedField> getFixedFields(){
+    public Map<Field, FixedField> getFixedFieldsExceptLast(){
         return this.fixedFields;
     }
 
