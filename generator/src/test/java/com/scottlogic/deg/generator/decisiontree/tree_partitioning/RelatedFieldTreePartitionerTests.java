@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

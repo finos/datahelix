@@ -2,8 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
-import com.scottlogic.deg.generator.restrictions.Equality.ReductiveRowSpecEqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

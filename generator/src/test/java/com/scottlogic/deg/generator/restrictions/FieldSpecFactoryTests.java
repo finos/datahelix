@@ -3,8 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
-import com.scottlogic.deg.generator.restrictions.Equality.FieldSpecEqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

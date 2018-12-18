@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.Equality.FieldSpecEqualityComparer;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

@@ -1,7 +1,6 @@
-package com.scottlogic.deg.generator.restrictions.Equality;
+package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 
 public class StringRestrictionsEqualityComparer implements EqualityComparer {
 

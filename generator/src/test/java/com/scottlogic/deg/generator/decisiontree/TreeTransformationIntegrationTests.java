@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMappe
 import com.scottlogic.deg.generator.decisiontree.test_utils.AnyOrderCollectionEqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ConstraintNodeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.DecisionComparer;
-import com.scottlogic.deg.generator.utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.OptimiseTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.PartitionTestStrategy;
 import com.scottlogic.deg.generator.decisiontree.test_utils.ProfileFieldComparer;
