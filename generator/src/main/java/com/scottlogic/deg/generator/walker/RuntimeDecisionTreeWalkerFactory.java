@@ -22,17 +22,15 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
     private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
     private final DataGeneratorMonitor monitor;
-    private final DecisionTree tree;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy, DecisionTree tree) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
         this.monitor = monitor;
-        this.tree = tree;
     }
 
     @Override
-    public DecisionTreeWalker getDecisionTreeWalker() {
+    public DecisionTreeWalker getDecisionTreeWalker(DecisionTree tree) {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);

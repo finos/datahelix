@@ -49,8 +49,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTree decisionTree = profileAnalyser.analyse(profile).getMergedTree();
 
         // Factory should be IOC
-        DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, fixFieldStrategy, decisionTree);
-        DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker();
+        DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, fixFieldStrategy);
 
         final List<DecisionTree> partitionedTrees =
             treePartitioner
@@ -60,7 +59,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
-            .map(treeWalker::walk);
+            .map(treeWalkerFactory.getDecisionTreeWalker(decisionTree)::walk);
 
         final Stream<DataBagSource> allDataBagSources =
             rowSpecsByPartition

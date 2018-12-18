@@ -52,6 +52,10 @@ public class FieldCollection {
         this.monitor = monitor;
     }
 
+    public boolean allValuesAreFixed() {
+        return this.lastFixedField.hasValueSet() && this.fixedFields.size() == this.fields.size() - 1;
+    }
+
     public boolean allFieldsAreFixed() {
         int noOfFixedFields = this.lastFixedField == null
             ? this.fixedFields.size()
@@ -67,7 +71,7 @@ public class FieldCollection {
     //get a stream of all possible values for the field that was fixed on the last iteration
     public Stream<Object> getValuesFromLastFixedField(){
         if (this.lastFixedField == null)
-            throw new NullPointerException("Field has not been fixed yet");
+            throw new NullPointerException("No field has been fixed yet");
 
         return this.lastFixedField.getStream();
     }
@@ -79,24 +83,17 @@ public class FieldCollection {
             throw new UnsupportedOperationException("Field has not been fixed yet");
         }
 
-        Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(constraintNode);
+        Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFields(constraintNode);
 
         if (fieldSpecsPerField.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
             return Stream.empty();
         }
 
-        FieldSpec fieldSpecForValuesInLastFixedField = this.lastFixedField.getFieldSpecForValues();
-        fieldSpecsPerField.put(this.lastFixedField.field, fieldSpecForValuesInLastFixedField);
-
-        RowSpec rowSpecWithAllValuesForLastFixedField = new ReductiveRowSpec(
-            this.fields,
-            fieldSpecsPerField,
-            this.lastFixedField.field
-        );
+        RowSpec rowSpecWithAllValuesForLastFixedField = new RowSpec(this.fields, fieldSpecsPerField);
 
         this.monitor.rowSpecEmitted(
             this.lastFixedField,
-            fieldSpecForValuesInLastFixedField,
+            fieldSpecsPerField.get(this.lastFixedField.field),
             rowSpecWithAllValuesForLastFixedField);
         return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
@@ -172,14 +169,12 @@ public class FieldCollection {
         return this.fixedFields.getOrDefault(field, null);
     }
 
-    //create a mapping of field->fieldspec for each fixed field - efficiency
-    private Map<Field, FieldSpec> getFieldSpecsForAllFixedFieldsExceptLast(ConstraintNode constraintNode){
+    private Map<Field, FieldSpec> getFieldSpecsForAllFixedFields(ConstraintNode constraintNode){
         Map<Field, List<AtomicConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(AtomicConstraint::getField));
 
-        return this.fixedFields.values()
-            .stream()
+        return Stream.concat(this.fixedFields.values().stream(), Stream.of(this.lastFixedField))
             .collect(Collectors.toMap(
                 ff -> ff.field,
                 ff -> {

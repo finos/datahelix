@@ -51,7 +51,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, FieldCollection fieldCollection) {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
-        if (fieldCollection.allFieldsAreFixed()){
+        if (fieldCollection.allValuesAreFixed()){
             return fieldCollection.createRowSpecFromFixedValues(constraintNode);
         }
 
@@ -77,6 +77,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //visualise the tree now
         visualise(adaptedNode, fieldCollection);
+
+        if (fieldCollection.allValuesAreFixed()){
+            return fieldCollection.createRowSpecFromFixedValues(constraintNode);
+        }
 
         //find the next fixed field and continue
         return process(adaptedNode, fieldCollection.getNextFixedField(adaptedNode));

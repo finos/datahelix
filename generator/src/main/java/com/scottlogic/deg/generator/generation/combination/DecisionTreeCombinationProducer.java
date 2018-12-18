@@ -69,12 +69,11 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
     }
 
     private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        return constraints
-            .stream()
+        Map<Field, List<AtomicConstraint>> map = constraints.stream()
             .filter(c -> fields.contains(c.getField()))
-            .collect(Collectors.groupingBy(AtomicConstraint::getField))
-            .entrySet()
-            .stream()
+            .collect(Collectors.groupingBy(AtomicConstraint::getField));
+
+            return map.entrySet().stream()
             .collect(
                 Collectors.toMap(
                     Map.Entry::getKey,
