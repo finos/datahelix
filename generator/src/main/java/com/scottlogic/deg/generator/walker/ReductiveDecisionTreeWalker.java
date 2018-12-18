@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
-    private final ReductiveDecisionTreeReducer nodeAdapter;
+    private final ReductiveDecisionTreeReducer treeReducer;
     private final IterationVisualiser iterationVisualiser;
     private final FieldCollectionHelper fieldCollectionHelper;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -24,11 +24,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         IterationVisualiser iterationVisualiser,
         FieldCollectionHelper fieldCollectionHelper,
         ReductiveDataGeneratorMonitor monitor,
-        ReductiveDecisionTreeReducer nodeAdapter) {
+        ReductiveDecisionTreeReducer treeReducer) {
         this.iterationVisualiser = iterationVisualiser;
         this.fieldCollectionHelper = fieldCollectionHelper;
         this.monitor = monitor;
-        this.nodeAdapter = nodeAdapter;
+        this.treeReducer = treeReducer;
     }
 
     /* initialise the walker with a set (FieldCollection) of unfixed fields */
@@ -39,14 +39,14 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(rootNode, fieldCollection);
 
         //calculate a field to fix and start processing
-        ReductiveConstraintNode adapted = nodeAdapter.reduce(rootNode, fieldCollection);
-        return process(rootNode, fieldCollectionHelper.getNextFixedField(fieldCollection, adapted));
+        ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, fieldCollection);
+        return process(rootNode, fieldCollectionHelper.fixNextField(fieldCollection, reduced));
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, FieldCollection fieldCollection) {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
         if (fieldCollection.allFieldsAreFixed()){
-            return fieldCollectionHelper.createRowSpecFromFixedValues(fieldCollection, constraintNode);
+            return fieldCollectionHelper.createRowSpecsFromFixedValues(fieldCollection, constraintNode);
         }
 
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
@@ -60,8 +60,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FieldCollection fieldCollection){
 
         //reduce the tree based on the fields that are now fixed
-        ReductiveConstraintNode adaptedNode = this.nodeAdapter.reduce(constraintNode, fieldCollection);
-        if (adaptedNode == null){
+        ReductiveConstraintNode reducedNode = this.treeReducer.reduce(constraintNode, fieldCollection);
+        if (reducedNode == null){
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
@@ -70,10 +70,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         //visualise the tree now
-        visualise(adaptedNode, fieldCollection);
+        visualise(reducedNode, fieldCollection);
 
         //find the next fixed field and continue
-        return process(adaptedNode, fieldCollectionHelper.getNextFixedField(fieldCollection, adaptedNode));
+        return process(reducedNode, fieldCollectionHelper.fixNextField(fieldCollection, reducedNode));
     }
 
     private void visualise(ConstraintNode rootNode, FieldCollection fieldCollection){

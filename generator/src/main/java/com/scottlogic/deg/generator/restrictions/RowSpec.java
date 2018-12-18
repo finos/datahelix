@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 
@@ -100,7 +100,7 @@ public class RowSpec {
             FieldSpec fieldSpec = getSpecForField(field);
 
             fieldDataBagSources.add(
-                new FieldSpecFulfiller(field, fieldSpec));
+                new FieldSpecValueGenerator(field, fieldSpec));
         }
 
         return new MultiplexingDataBagSource(fieldDataBagSources.stream());

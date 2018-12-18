@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class FieldCollectionHelper {
 
     private final GenerationConfig generationConfig;
-    private final ConstraintReducer reducer;
+    private final ConstraintReducer constraintReducer;
     private final FieldSpecMerger fieldSpecMerger;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -32,13 +32,12 @@ public class FieldCollectionHelper {
         this.fieldSpecMerger = fieldSpecMerger;
         this.fixFieldStrategy = fixFieldStrategy;
         this.generationConfig = config;
-        this.reducer = constraintReducer;
+        this.constraintReducer = constraintReducer;
         this.monitor = monitor;
     }
 
-
     //produce a stream of RowSpecs for each value in the permitted set of values for the field fixed on the last iteration
-    public Stream<RowSpec> createRowSpecFromFixedValues(FieldCollection fieldCollection, ConstraintNode constraintNode) {
+    public Stream<RowSpec> createRowSpecsFromFixedValues(FieldCollection fieldCollection, ConstraintNode constraintNode) {
         //create a row spec where every field is set to this.fixedFields & field=value
         if (fieldCollection.getLastFixedField() == null) {
             throw new UnsupportedOperationException("Field has not been fixed yet");
@@ -67,7 +66,7 @@ public class FieldCollectionHelper {
     }
 
     //work out the next field to fix and return a new FieldCollection with this field fixed
-    public FieldCollection getNextFixedField(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
+    public FieldCollection fixNextField(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
         Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(fieldCollection, rootNode);
 
         if (fieldToFix == null){
@@ -77,7 +76,7 @@ public class FieldCollectionHelper {
                     Objects.toString(fieldCollection.getUnfixedFields())));
         }
 
-        FixedField field = getFixedFieldWithValuesForField(fieldToFix, rootNode);
+        FixedField field = createFixedFieldWithValues(fieldToFix, rootNode);
         return fieldCollection.with(field);
     }
 
@@ -92,7 +91,7 @@ public class FieldCollectionHelper {
             .collect(Collectors.toMap(
                 ff -> ff.field,
                 ff -> {
-                    FieldSpec fieldSpec = getFieldSpec(ff, fieldToConstraints.get(ff.field));
+                    FieldSpec fieldSpec = createFieldSpec(ff, fieldToConstraints.get(ff.field));
                     return fieldSpec == null
                         ? FieldSpec.Empty
                         : fieldSpec;
@@ -101,9 +100,8 @@ public class FieldCollectionHelper {
     }
 
 
-    //TODO move this, as it is all fixedField related, and not field collection stuff
     //for the given field get a stream of possible values
-    private FixedField getFixedFieldWithValuesForField(Field field, ConstraintNode rootNode) {
+    private FixedField createFixedFieldWithValues(Field field, ConstraintNode rootNode) {
         //from the original tree, get all atomic constraints that match the given field
         Set<AtomicConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
             .stream()
@@ -111,11 +109,11 @@ public class FieldCollectionHelper {
             .collect(Collectors.toSet());
 
         //produce a fieldspec for all the atomic constraints
-        FieldSpec rootConstraintsFieldSpec = this.reducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
+        FieldSpec rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(constraintsForRootNode)
             .orElse(FieldSpec.Empty);
 
-        //use the FieldSpecFulfiller to emit all possible values given the generation mode, interesting or full-sequential
-        Stream<Object> values = new FieldSpecFulfiller(field, rootConstraintsFieldSpec)
+        //use the FieldSpecValueGenerator to emit all possible values given the generation mode, interesting or full-sequential
+        Stream<Object> values = new FieldSpecValueGenerator(field, rootConstraintsFieldSpec)
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
 
@@ -123,9 +121,9 @@ public class FieldCollectionHelper {
     }
 
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
-    private FieldSpec getFieldSpec(FixedField fixedField, Collection<AtomicConstraint> constraintsForField) {
+    private FieldSpec createFieldSpec(FixedField fixedField, Collection<AtomicConstraint> constraintsForField) {
         FieldSpec fixedFieldSpec = fixedField.getFieldSpecForCurrentValue();
-        Optional<FieldSpec> constrainedFieldSpecOpt = this.reducer.reduceConstraintsToFieldSpec(constraintsForField);
+        Optional<FieldSpec> constrainedFieldSpecOpt = this.constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
 
         if (!constrainedFieldSpecOpt.isPresent()){
             return null; //this shouldn't happen: caused by constraints for one of the fixed fields contradicting each other (issue in optimising and/or reducing) - see issue #250
