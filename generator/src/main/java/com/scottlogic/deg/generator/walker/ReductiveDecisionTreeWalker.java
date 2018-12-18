@@ -40,7 +40,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //calculate a field to fix and start processing
         ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
-        return process(rootNode, fieldCollectionHelper.fixNextField(initialState, reduced));
+        FixedField nextFixedField = fieldCollectionHelper.findNextFixedField(initialState, reduced);
+        return process(rootNode, initialState.with(nextFixedField));
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState) {
@@ -73,7 +74,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedNode, reductiveState);
 
         //find the next fixed field and continue
-        return process(reducedNode, fieldCollectionHelper.fixNextField(reductiveState, reducedNode));
+        FixedField nextFixedField = fieldCollectionHelper.findNextFixedField(reductiveState, reducedNode);
+        return process(reducedNode, reductiveState.with(nextFixedField));
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){

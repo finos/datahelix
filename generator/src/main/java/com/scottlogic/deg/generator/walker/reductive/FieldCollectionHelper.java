@@ -34,8 +34,8 @@ public class FieldCollectionHelper {
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
-    public ReductiveState fixNextField(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
-        Field fieldToFix = this.fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
+    public FixedField findNextFixedField(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
+        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
 
         if (fieldToFix == null){
             throw new UnsupportedOperationException(
@@ -44,8 +44,7 @@ public class FieldCollectionHelper {
                     Objects.toString(reductiveState.getUnfixedFields())));
         }
 
-        FixedField field = createFixedFieldWithValues(fieldToFix, rootNode);
-        return reductiveState.with(field);
+        return createFixedFieldWithValues(fieldToFix, rootNode);
     }
 
     //for the given field get a stream of possible values
