@@ -17,7 +17,7 @@ public class Combination {
 
     @Override
     public String toString(){
-        return this.getCombinations().toString();
+        return "Combination: " + this.getCombinations().toString();
     }
 
     @Override

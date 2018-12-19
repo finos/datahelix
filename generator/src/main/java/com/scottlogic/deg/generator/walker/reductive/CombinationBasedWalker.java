@@ -18,6 +18,7 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
     private final CombinationProducer combinationProducer;
     private final FieldCollectionFactory fieldCollectionFactory;
     private final ReductiveDecisionTreeWalker reductiveWalker;
+    private final static int MAX_ROWSPEC_PER_COMBINATION = 1;
 
     public CombinationBasedWalker(CombinationProducer combinationProducer, FieldCollectionFactory fieldCollectionFactory, ReductiveDecisionTreeWalker reductiveWalker){
         this.combinationProducer = combinationProducer;
@@ -27,19 +28,18 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
 
     @Override
     public Stream<RowSpec> walk(DecisionTree tree) {
-        Stream<Combination> combinations = combinationProducer.getCombinations()
-            .distinct();
-
+        Stream<Combination> combinations = combinationProducer.getCombinations().distinct(); // discard combinations that are non unique
         return FlatMappingSpliterator.flatMap(
             combinations.map(combo -> {
                 Deque<FixedField> initialFixFields = combo.getCombinations().entrySet().stream()
-                    .map(entry -> new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()), entry.getValue().getSource(), reductiveWalker.getMonitor()))
+                    .map(entry -> new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()),
+                        entry.getValue().getSource(), reductiveWalker.getMonitor()))
                     .peek(ff -> {
                         ff.getStream().iterator().next();
                     })
                     .collect(Collectors.toCollection(ArrayDeque::new));
                 return fieldCollectionFactory.create(tree, initialFixFields);
             }),
-            fieldCollection -> this.reductiveWalker.walk(tree, fieldCollection).limit(1));
+            (FieldCollection fieldCollection) -> this.reductiveWalker.walk(tree, fieldCollection).limit(MAX_ROWSPEC_PER_COMBINATION));
     }
 }
