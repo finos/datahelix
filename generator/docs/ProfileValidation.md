@@ -25,7 +25,7 @@ Validation alerts have different levels:
 
 There are a number of checks performed depending on the constraint applied. Below we explain them.
 
-Further details about what constraints are available and how to use them can be found at: ../../docs/EpistemicConstraints.md
+Further details about what constraints are available and how to use them can be found in [Epistemic Constrainds documentation](../../docs/EpistemicConstraints.md). 
 
 ## Type validation
 
