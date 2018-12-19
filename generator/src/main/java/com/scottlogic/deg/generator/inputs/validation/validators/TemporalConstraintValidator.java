@@ -77,8 +77,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             new TemporalConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                currentRestrictions,
                 referenceValue),
             validationType,
             field));
@@ -88,8 +87,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             new TemporalConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                currentRestrictions,
                 referenceValue),
             validationType,
             field));

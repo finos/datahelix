@@ -1,31 +1,29 @@
 package com.scottlogic.deg.generator.inputs.validation.messages;
 
+import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+
 import java.time.LocalDateTime;
 
 public class TemporalConstraintValidationMessages implements StandardValidationMessages {
 
 
-    private LocalDateTime validMin;
-    private LocalDateTime validMax;
-    private LocalDateTime invalidValue;
+    private DateTimeRestrictions restriction;
+    private LocalDateTime newValue;
 
     public TemporalConstraintValidationMessages(
-        LocalDateTime validMin,
-        LocalDateTime validMax,
-        LocalDateTime invalidValue) {
+        DateTimeRestrictions restriction,
+        LocalDateTime newValue) {
 
-        this.validMin = validMin;
-        this.validMax = validMax;
-        this.invalidValue = invalidValue;
+        this.restriction = restriction;
+        this.newValue = newValue;
     }
 
     @Override
     public String getVerboseMessage() {
 
         return String.format(
-            "Temporal constraint with value %s is not valid. The valid range is between %s and %s.",
-            invalidValue,
-            validMin == null ? "anytime" : validMin,
-            validMax == null ? "anytime" : validMax);
+            "Temporal constraint with value %s has been applied. The range is %s.",
+            newValue,
+            restriction.toString());
     }
 }
