@@ -1,28 +1,27 @@
 package com.scottlogic.deg.generator.inputs.validation.messages;
 
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+
 import java.math.BigDecimal;
 
 public class NumericConstraintValidationMessages implements StandardValidationMessages {
 
 
-    private BigDecimal validMin;
-    private BigDecimal validMax;
-    private BigDecimal invalidValue;
+    private NumericRestrictions restrictions;
+    private BigDecimal newValue;
 
-    public NumericConstraintValidationMessages(BigDecimal validMin, BigDecimal validMax, BigDecimal invalidValue) {
+    public NumericConstraintValidationMessages(NumericRestrictions restrictions, BigDecimal newValue) {
 
-        this.validMin = validMin;
-        this.validMax = validMax;
-        this.invalidValue = invalidValue;
+        this.restrictions = restrictions;
+        this.newValue = newValue;
     }
 
     @Override
     public String getVerboseMessage() {
 
         return String.format(
-            "Numeric constraint with value %s is not valid. The valid range is between %s and %s.",
-            invalidValue,
-            validMin == null ? "anything" : validMin,
-            validMax == null ? "more" : validMax);
+            "Numeric constraint with value %s has been applied. The range is %s.",
+            newValue,
+            restrictions.toString());
     }
 }

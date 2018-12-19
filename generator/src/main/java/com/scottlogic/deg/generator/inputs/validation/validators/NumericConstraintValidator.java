@@ -39,10 +39,7 @@ public class NumericConstraintValidator implements ConstraintValidatorAlerts {
                 logInformation(field,referenceBigDecimal);
             }
 
-        } else {
-            logError(field, referenceBigDecimal);
         }
-
     }
 
     public void IsGreaterThan(Field field, Number referenceValue, boolean inclusive) {
@@ -60,11 +57,8 @@ public class NumericConstraintValidator implements ConstraintValidatorAlerts {
             currentRestrictions = result.restrictions;
 
             if (isRangeInvalid()) {
-
                 logInformation(field, referenceBigDecimal);
             }
-        } else {
-            logError(field, referenceBigDecimal);
         }
     }
 
@@ -77,24 +71,12 @@ public class NumericConstraintValidator implements ConstraintValidatorAlerts {
                 && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
     }
 
-    private void logError(Field field, BigDecimal referenceBigDecimal) {
-        alerts.add(new ValidationAlert(
-            Criticality.ERROR,
-            new NumericConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
-                referenceBigDecimal),
-            validationType,
-            field));
-    }
-
 
     private void logInformation(Field field, BigDecimal referenceBigDecimal) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             new NumericConstraintValidationMessages(
-                currentRestrictions.min == null ? null : currentRestrictions.min.getLimit(),
-                currentRestrictions.max == null ? null : currentRestrictions.max.getLimit(),
+                currentRestrictions,
                 referenceBigDecimal),
             validationType,
             field));
