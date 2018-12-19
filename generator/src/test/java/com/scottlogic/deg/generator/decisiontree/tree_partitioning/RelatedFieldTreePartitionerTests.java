@@ -261,7 +261,7 @@ class RelatedFieldTreePartitionerTests {
     }
 
     private void partitionTrees() {
-        partitionedTrees = new RelatedFieldTreePartitioner()
+        partitionedTrees = new RelatedFieldTreePartitioner(new ConstraintToFieldMapper())
             .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }

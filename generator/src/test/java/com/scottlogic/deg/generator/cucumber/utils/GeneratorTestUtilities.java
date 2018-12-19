@@ -14,6 +14,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ConstraintToFieldMapper;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -102,7 +103,7 @@ public class GeneratorTestUtilities {
 
         final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             getWalker(config),
-            new RelatedFieldTreePartitioner(),
+            new RelatedFieldTreePartitioner(new ConstraintToFieldMapper()),
             new NoopDecisionTreeOptimiser(),
             new NoopDataGeneratorMonitor());
 

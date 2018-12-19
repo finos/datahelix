@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -18,6 +19,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
+    @Inject
     public ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
         FixedFieldBuilder fixedFieldBuilder,

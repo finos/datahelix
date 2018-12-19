@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
@@ -19,8 +20,9 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
     private final ConstraintToFieldMapper fieldMapper;
     private static Integer partitionIndex = 0;
 
-    public RelatedFieldTreePartitioner() {
-        fieldMapper = new ConstraintToFieldMapper();
+    @Inject
+    public RelatedFieldTreePartitioner(ConstraintToFieldMapper fieldMapper) {
+        this.fieldMapper = fieldMapper;
     }
 
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {

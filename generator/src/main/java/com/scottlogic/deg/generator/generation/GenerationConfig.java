@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.generation.combination_strategies.*;
 import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
@@ -76,7 +77,7 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        CARTESIAN_PRODUCT(Constants.WalkerTypes.CARTESIAN_PRODUCT),
+        CARTESIAN_PRODUCT(GenerateCommandLine.defaultTreeWalkerType),
         ROUTED(Constants.WalkerTypes.ROUTED),
         REDUCTIVE(Constants.WalkerTypes.REDUCTIVE);
 

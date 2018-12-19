@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ConstraintToFieldMapper;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -78,7 +79,7 @@ class ExampleProfilesTests {
                         new NullOutputTarget(),
                         new DecisionTreeDataGenerator(
                             walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
-                            new RelatedFieldTreePartitioner(),
+                            new RelatedFieldTreePartitioner(new ConstraintToFieldMapper()),
                             new MostProlificConstraintOptimiser(),
                             new NoopDataGeneratorMonitor()),
                         new ProfileDecisionTreeFactory()),
