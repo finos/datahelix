@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 public interface ReductiveDataGeneratorMonitor extends DataGeneratorMonitor{
@@ -13,5 +13,5 @@ public interface ReductiveDataGeneratorMonitor extends DataGeneratorMonitor{
         RowSpec rowSpecWithAllValuesForLastFixedField);
 
     void fieldFixedToValue(Field field, Object current);
-    void unableToStepFurther(FieldCollection fieldCollection);
+    void unableToStepFurther(ReductiveState reductiveState);
 }

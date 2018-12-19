@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
@@ -35,13 +35,13 @@ public class ReductiveRowSpec extends RowSpec {
 
             fieldDataBagSources.add(
                 new SingleValueDataBagSource(
-                    new FieldSpecFulfiller(field, fieldSpec)));
+                    new FieldSpecValueGenerator(field, fieldSpec)));
         }
 
         DataBagSource sourceWithoutLastFixedField = new MultiplexingDataBagSource(fieldDataBagSources.stream());
         return new MultiplyingDataBagSource(
             sourceWithoutLastFixedField,
-            new FieldSpecFulfiller(this.lastFixedField, this.getSpecForField(this.lastFixedField)));
+            new FieldSpecValueGenerator(this.lastFixedField, this.getSpecForField(this.lastFixedField)));
     }
 
     class SingleValueDataBagSource implements DataBagSource {
