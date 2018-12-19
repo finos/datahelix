@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 import java.math.BigInteger;
@@ -38,10 +38,6 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
             this.lastSampleTime = newSampleTime;
             this.rowsSinceLastSample = 0;
         }
-
-        if (this.rowsEmitted.compareTo(this.maxRows) >= 0){
-            System.out.println("\n\n\nAll rows emitted\n\n\n");
-        }
     }
 
     private void reportVelocity(float rowsEmittedInDuration, Instant lastSampleTime, Instant newSampleTime) {
@@ -72,12 +68,12 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
     }
 
     @Override
-    public void unableToStepFurther(FieldCollection fieldCollection) {
+    public void unableToStepFurther(ReductiveState reductiveState) {
         System.out.println(
             String.format(
                 "%d: Unable to step further %s ",
-                fieldCollection.getFixedFields().size(),
-                fieldCollection.toString(true)));
+                reductiveState.getFixedFieldsExceptLast().size(),
+                reductiveState.toString(true)));
     }
 }
 

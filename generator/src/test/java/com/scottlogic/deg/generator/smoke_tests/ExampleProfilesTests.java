@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -38,9 +39,10 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException, InvalidProfileException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
+                new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader().read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
@@ -50,9 +52,10 @@ class ExampleProfilesTests {
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException, InvalidProfileException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
+                new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                GenerationConfig.CombinationStrategyType.PINNING));
 
             final Profile profile = new ProfileReader().read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);

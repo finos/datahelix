@@ -16,13 +16,11 @@ import java.util.stream.Stream;
 public class CombinationBasedWalker implements DecisionTreeWalker {
 
     private final CombinationProducer combinationProducer;
-    private final FieldCollectionFactory fieldCollectionFactory;
     private final ReductiveDecisionTreeWalker reductiveWalker;
     private final static int MAX_ROWSPEC_PER_COMBINATION = 1;
 
-    public CombinationBasedWalker(CombinationProducer combinationProducer, FieldCollectionFactory fieldCollectionFactory, ReductiveDecisionTreeWalker reductiveWalker){
+    public CombinationBasedWalker(CombinationProducer combinationProducer, ReductiveDecisionTreeWalker reductiveWalker){
         this.combinationProducer = combinationProducer;
-        this.fieldCollectionFactory = fieldCollectionFactory;
         this.reductiveWalker = reductiveWalker;
     }
 
@@ -38,8 +36,8 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
                         ff.getStream().iterator().next();
                     })
                     .collect(Collectors.toCollection(ArrayDeque::new));
-                return fieldCollectionFactory.create(tree, initialFixFields);
+                return new ReductiveState(tree.fields).with(initialFixFields);
             }),
-            (FieldCollection fieldCollection) -> this.reductiveWalker.walk(tree, fieldCollection).limit(MAX_ROWSPEC_PER_COMBINATION));
+            (ReductiveState initialState) -> this.reductiveWalker.walk(tree, initialState).limit(MAX_ROWSPEC_PER_COMBINATION));
     }
 }

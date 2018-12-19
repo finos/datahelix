@@ -25,7 +25,7 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
 
     @Override
     public int nextInt(int lowerInclusive, int upperExclusive) {
-        // implementation stolen from Random::internalNextInt
+        // implementation copied from Random::internalNextInt
         if (lowerInclusive < upperExclusive) {
             int n = upperExclusive - lowerInclusive;
             if (n > 0) {

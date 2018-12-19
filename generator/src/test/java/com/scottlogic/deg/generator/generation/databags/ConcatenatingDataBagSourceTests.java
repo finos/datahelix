@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,11 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
-        GenerationConfig.DataGenerationType.INTERESTING,
-        GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-        GenerationConfig.CombinationStrategyType.PINNING);
+        new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+            GenerationConfig.CombinationStrategyType.PINNING)
+    );
 
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {

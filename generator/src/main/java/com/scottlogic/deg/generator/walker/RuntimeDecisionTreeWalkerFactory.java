@@ -11,11 +11,9 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.reductive.CombinationBasedWalker;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
-import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
+import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 
 public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
@@ -40,28 +38,39 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
 
         switch (config.getWalkerType()){
             case ROUTED:
-                throw new UnsupportedOperationException("RouteProducer isn't implemented yet");
-/*
                 return new DecisionTreeRoutesTreeWalker(
                     constraintReducer,
                     rowSpecMerger,
-                    <the producer>);*/
+                    new ExhaustiveProducer());
             case REDUCTIVE:
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor
                     : new NoopDataGeneratorMonitor();
 
-                FieldCollectionFactory fieldCollectionFactory = new FieldCollectionFactory(
-                    config,
-                    constraintReducer,
-                    fieldSpecMerger,
-                    fieldSpecFactory,
-                    fixFieldStrategy,
-                    reductiveMonitor);
-
-                ReductiveDecisionTreeWalker reductiveDecisionTreeWalker = new ReductiveDecisionTreeWalker(visualiser, fieldCollectionFactory, reductiveMonitor);
-                return new CombinationBasedWalker(new DecisionTreeCombinationProducer(tree, constraintReducer, config, new SingleCombinationStrategy()), fieldCollectionFactory, reductiveDecisionTreeWalker);
+                ReductiveDecisionTreeWalker reductiveDecisionTreeWalker = new ReductiveDecisionTreeWalker(
+                    visualiser,
+                    new FixedFieldBuilder(
+                        config,
+                        constraintReducer,
+                        fixFieldStrategy,
+                        reductiveMonitor),
+                    reductiveMonitor,
+                    new ReductiveDecisionTreeReducer(
+                        fieldSpecFactory,
+                        fieldSpecMerger),
+                    new ReductiveRowSpecGenerator(
+                        constraintReducer,
+                        fieldSpecMerger,
+                        reductiveMonitor)
+                );
+                return new CombinationBasedWalker(
+                    new DecisionTreeCombinationProducer(
+                        tree,
+                        constraintReducer,
+                        config,
+                        new SingleCombinationStrategy()),
+                    reductiveDecisionTreeWalker);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
