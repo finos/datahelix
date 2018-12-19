@@ -23,69 +23,69 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsOfTypeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), constraint.requiredType);
+        state.typeConstraintValidator.isOfType(constraint.getField(), constraint.requiredType);
     }
 
     @Override
     public void visit(IsAfterConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidation.isAfter(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsBeforeConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidation.isBefore(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsAfterOrEqualToConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidation.isAfter(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
     public void visit(IsBeforeOrEqualToConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidation.isBefore(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
+        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
     public void visit(IsInSetConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.setConstraintValidation.isInSet(constraint.getField(), constraint.legalValues);
+        state.setConstraintValidator.isInSet(constraint.getField(), constraint.legalValues);
     }
 
     @Override
     public void visit(IsStringShorterThanConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.STRING);
-        state.stringConstraintValidation.isShorterThan(constraint.getField(), constraint.referenceValue);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.STRING);
+        state.stringConstraintValidator.isShorterThan(constraint.getField(), constraint.referenceValue);
     }
 
     @Override
     public void visit(IsStringLongerThanConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.STRING);
-        state.stringConstraintValidation.isLongerThan(constraint.getField(), constraint.referenceValue);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.STRING);
+        state.stringConstraintValidator.isLongerThan(constraint.getField(), constraint.referenceValue);
     }
 
     @Override
     public void visit(IsNullConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.nullConstraintValidation.setNullness(constraint.getField(), Nullness.MUST_BE_NULL);
+        state.nullConstraintValidator.setNullness(constraint.getField(), Nullness.MUST_BE_NULL);
     }
 
     @Override
@@ -95,10 +95,10 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(negatedConstraint.getField());
 
         if(negatedConstraint instanceof IsNullConstraint){
-            state.nullConstraintValidation.setNullness(negatedConstraint.getField(), Nullness.MUST_NOT_BE_NULL);
+            state.nullConstraintValidator.setNullness(negatedConstraint.getField(), Nullness.MUST_NOT_BE_NULL);
         } else if(negatedConstraint instanceof IsInSetConstraint){
             IsInSetConstraint negatedSetConstraint = (IsInSetConstraint) negatedConstraint;
-            state.setConstraintValidation.mustNotBeInSet(negatedSetConstraint.getField(), negatedSetConstraint.legalValues);
+            state.setConstraintValidator.mustNotBeInSet(negatedSetConstraint.getField(), negatedSetConstraint.legalValues);
         }
     }
 
@@ -106,40 +106,40 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsGranularToConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.granularityConstraintValidation.granularTo(constraint.getField(), constraint.granularity.getNumericGranularity());
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
+        state.granularityConstraintValidator.granularTo(constraint.getField(), constraint.granularity.getNumericGranularity());
     }
 
     @Override
     public void visit(IsLessThanConstantConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsLessThan(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintValidator.IsLessThan(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsGreaterThanConstantConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsGreaterThan(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintValidator.IsGreaterThan(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsLessThanOrEqualToConstantConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsLessThan(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintValidator.IsLessThan(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
     public void visit(IsGreaterThanOrEqualToConstantConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidation.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.numericConstraintRestriction.IsGreaterThan(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
+        state.numericConstraintValidator.IsGreaterThan(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
