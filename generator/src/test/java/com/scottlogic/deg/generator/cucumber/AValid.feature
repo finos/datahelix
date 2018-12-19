@@ -21,6 +21,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "0002634946GB"  |
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
       | "US0378331005" |
     And the following data should not be included in what is generated:
@@ -108,6 +109,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     And foo is equal to "GB0002634946"
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
 
 
@@ -125,6 +127,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
 
 
@@ -159,6 +162,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
 
 
@@ -430,6 +434,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "333"          |
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
       | "1"            |
     And the following data should not be included in what is generated:
@@ -448,6 +453,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       """
     Then the following data should be generated:
       | foo            |
+      | null           |
       | "GB0002634946" |
 
 

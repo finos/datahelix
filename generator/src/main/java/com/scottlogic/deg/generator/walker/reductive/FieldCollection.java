@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -124,11 +125,7 @@ public class FieldCollection {
             .stream()
             .filter(c -> c.getField().equals(field))
             .collect(Collectors.toSet());
-        Set<AtomicConstraint> constraintsForDecisions = rootNode.getDecisions()
-            .stream()
-            .flatMap(d -> d.getOptions().stream())
-            .flatMap(o -> o.getAtomicConstraints().stream())
-            .filter(c -> !(c instanceof NotConstraint) && c.getField().equals(field))
+        Set<AtomicConstraint> constraintsForDecisions = getAtomicConstraintsFromDecisions(field, rootNode)
             .collect(Collectors.toSet());
 
         //produce a fieldspec for all the atomic constraints
@@ -142,6 +139,21 @@ public class FieldCollection {
             .map(dataBag -> dataBag.getValue(field));
 
         return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
+    }
+
+    private Stream<AtomicConstraint> getAtomicConstraintsFromDecisions(Field field, ConstraintNode node) {
+        final Collection<DecisionNode> decisions = node.getDecisions();
+        Stream<AtomicConstraint> atomicConstraints = decisions
+            .stream()
+            .flatMap(d -> d.getOptions().stream())
+            .flatMap(o -> o.getAtomicConstraints().stream())
+            .filter(c -> !(c instanceof NotConstraint) && c.getField().equals(field));
+
+        return Stream.concat(
+            atomicConstraints, decisions.stream()
+                .flatMap(d -> d.getOptions().stream())
+                .flatMap(o -> getAtomicConstraintsFromDecisions(field, o))
+        );
     }
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not

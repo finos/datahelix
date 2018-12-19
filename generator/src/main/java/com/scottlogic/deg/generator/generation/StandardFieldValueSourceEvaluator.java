@@ -31,14 +31,13 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
                 );
             }
 
-            return new HashSet<>(
-                Collections.singletonList(
-                    new CannedValuesFieldValueSource(
-                        new ArrayList<>(whitelist)
-                    )
-                )
-            );
+            FieldValueSource whitelistSource = new CannedValuesFieldValueSource(new ArrayList<>(whitelist));
+            return Stream.concat(
+                validSources.stream(),
+                Stream.of(whitelistSource)
+            ).collect(Collectors.toSet());
         }
+
         if (mustContainRestriction != null) {
             applyMustConstrainRestrictionToValidSources(validSources, fieldSpec);
         }
