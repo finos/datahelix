@@ -39,9 +39,13 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     public Stream<RowSpec> walk(DecisionTree tree, ReductiveState initialState) {
         ConstraintNode rootNode = tree.getRootNode();
-        visualise(rootNode, initialState);
+        visualise(rootNode, new ReductiveState(tree.fields));
+
+
         ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
-        if (initialState.allFieldsAreFixed()){
+        visualise(reduced, initialState);
+
+        if (initialState.allValuesAreFixed()){
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(initialState, reduced);
         }
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
