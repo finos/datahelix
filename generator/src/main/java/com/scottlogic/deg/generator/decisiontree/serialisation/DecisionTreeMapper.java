@@ -2,15 +2,12 @@ package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -214,19 +211,19 @@ public class DecisionTreeMapper {
      * Pair F2 
      */
     private static AtomicConstraint fromDto(IsInSetConstraintDto dto) {
-        return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues));
+        return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues), rules(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsEqualToConstantConstraintDto dto) {
-        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue);
+        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue, rules(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsStringShorterThanConstraintDto dto) {
-        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue);
+        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue, rules(dto.rule));
     }
     
     private static AtomicConstraint fromDto(IsOfTypeConstraintDto dto) {
-        return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto());
+        return new IsOfTypeConstraint(new Field(dto.field.name), dto.getTypesFromTypesDto(), rules(dto.rule));
     }
     
     private static AtomicConstraint fromDto(NotConstraintDto dto) {
@@ -234,11 +231,16 @@ public class DecisionTreeMapper {
     }
     
     private static AtomicConstraint fromDto(IsNullConstraintDto dto) {
-        return new IsNullConstraint(new Field(dto.field.name));
+        return new IsNullConstraint(new Field(dto.field.name), rules(dto.rule));
     }
 
     private static AtomicConstraint fromDto(IsLessThanConstantConstraintDto dto) {
-        return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue);
+        return new IsLessThanConstantConstraint(new Field(dto.field.name), dto.referenceValue, rules(dto.rule));
     }
 
+    private static Set<RuleInformation> rules(String name){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = name;
+        return Collections.singleton(new RuleInformation(rule));
+    }
 }

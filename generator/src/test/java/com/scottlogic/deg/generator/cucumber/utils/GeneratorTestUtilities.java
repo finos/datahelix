@@ -7,22 +7,19 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
-import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -80,24 +77,25 @@ public class GeneratorTestUtilities {
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
-            Collections.singleton(new Rule("TEST_RULE", constraints)));
+            Collections.singleton(new Rule(rule("TEST_RULE"), constraints)));
 
         final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
+        FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
+        final GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
+                generationStrategy,
+                walkerType,
+                combinationStrategy));
 
         final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
-            new CartesianProductDecisionTreeWalker(
-                new ConstraintReducer(
-                    new FieldSpecFactory(),
-                    new FieldSpecMerger()),
-                new RowSpecMerger(
-                    new FieldSpecMerger())),
+            config,
             new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor());
+            new NoopDataGeneratorMonitor(),
+            new ProfileDecisionTreeFactory(),
+            fixFieldStrategy);
 
-        final GenerationConfig config = new GenerationConfig(generationStrategy, walkerType, combinationStrategy);
-        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-
+        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, config);
         return dataSet.collect(Collectors.toList());
     }
 
@@ -133,5 +131,11 @@ public class GeneratorTestUtilities {
             return LocalDateTime.parse(input);
         }
         return parseInput(input);
+    }
+
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
     }
 }

@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.walker;
 
-import java.nio.file.Path;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 public interface DecisionTreeWalkerFactory {
-    DecisionTreeWalker getDecisionTreeWalker(Path outputPath);
+    DecisionTreeWalker getDecisionTreeWalker(DecisionTree tree);
 }
 

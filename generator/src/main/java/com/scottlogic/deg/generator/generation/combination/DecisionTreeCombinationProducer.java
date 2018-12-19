@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.generation.FieldSpecFulfiller;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpec;
@@ -60,21 +60,20 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
 
         Map<Field, Stream<Object>> generatedData = fieldSpecifications.entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, entry ->
-                new FieldSpecFulfiller(entry.getKey(), entry.getValue())
+                new FieldSpecValueGenerator(entry.getKey(), entry.getValue())
                     .generate(this.generationConfig)
                     .map(dataBag -> dataBag.getValue(entry.getKey()))
             ));
 
-        return this.combinationStrategy.getCombinations(generatedData);
+        return this.combinationStrategy.getCombinations(generatedData, fieldSpecifications);
     }
 
     private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        return constraints
-            .stream()
+        Map<Field, List<AtomicConstraint>> map = constraints.stream()
             .filter(c -> fields.contains(c.getField()))
-            .collect(Collectors.groupingBy(AtomicConstraint::getField))
-            .entrySet()
-            .stream()
+            .collect(Collectors.groupingBy(AtomicConstraint::getField));
+
+            return map.entrySet().stream()
             .collect(
                 Collectors.toMap(
                     Map.Entry::getKey,

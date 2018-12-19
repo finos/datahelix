@@ -1,16 +1,21 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.combination.DecisionTreeCombinationProducer;
+import com.scottlogic.deg.generator.generation.combination.SingleCombinationStrategy;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
 import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 
-import java.nio.file.Path;
-
-public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFactory {
+public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
     private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
@@ -23,7 +28,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
     }
 
     @Override
-    public DecisionTreeWalker getDecisionTreeWalker(Path outputPath) {
+    public DecisionTreeWalker getDecisionTreeWalker(DecisionTree tree) {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
         RowSpecMerger rowSpecMerger = new RowSpecMerger(fieldSpecMerger);
@@ -33,28 +38,39 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
         switch (config.getWalkerType()){
             case ROUTED:
-                throw new UnsupportedOperationException("RouteProducer isn't implemented yet");
-/*
                 return new DecisionTreeRoutesTreeWalker(
                     constraintReducer,
                     rowSpecMerger,
-                    <the producer>);*/
+                    new ExhaustiveProducer());
             case REDUCTIVE:
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor
                     : new NoopDataGeneratorMonitor();
 
-                return new ReductiveDecisionTreeWalker(
+                ReductiveDecisionTreeWalker reductiveDecisionTreeWalker = new ReductiveDecisionTreeWalker(
                     visualiser,
-                    new FieldCollectionFactory(
+                    new FixedFieldBuilder(
                         config,
                         constraintReducer,
-                        fieldSpecMerger,
-                        fieldSpecFactory,
                         fixFieldStrategy,
                         reductiveMonitor),
-                    reductiveMonitor);
+                    reductiveMonitor,
+                    new ReductiveDecisionTreeReducer(
+                        fieldSpecFactory,
+                        fieldSpecMerger),
+                    new ReductiveRowSpecGenerator(
+                        constraintReducer,
+                        fieldSpecMerger,
+                        reductiveMonitor)
+                );
+                return new CombinationBasedWalker(
+                    new DecisionTreeCombinationProducer(
+                        tree,
+                        constraintReducer,
+                        config,
+                        new SingleCombinationStrategy()),
+                    reductiveDecisionTreeWalker);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

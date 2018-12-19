@@ -8,16 +8,15 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
@@ -39,7 +38,7 @@ class ProfileDecisionTreeFactoryTests {
     }
 
     private void givenRule(Constraint... constraints) {
-        this.rules.add(new Rule("", Arrays.asList(constraints)));
+        this.rules.add(new Rule(rule(""), Arrays.asList(constraints)));
     }
 
     private DecisionTreeCollection getActualOutput() {
@@ -90,10 +89,10 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        Rule testRule = new Rule(rule("test"), Arrays.asList(constraint0, constraint1, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
@@ -111,11 +110,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
+        Rule testRule = new Rule(rule("test"), inputConstraints);
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -133,11 +132,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -155,11 +154,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
@@ -182,13 +181,13 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsEqualToConstantConstraint constraint0 = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
-        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
-        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        IsEqualToConstantConstraint constraint2 = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rules());
+        IsEqualToConstantConstraint constraint3 = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rules());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -203,13 +202,13 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
-        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rules());
+        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rules());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -224,13 +223,13 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
-        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        IsEqualToConstantConstraint constraintC = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rules());
+        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rules());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -259,15 +258,15 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5, rules());
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
-        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam");
-        IsEqualToConstantConstraint constraintE = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel");
+        IsEqualToConstantConstraint constraintD = new IsEqualToConstantConstraint(inputFieldList.get(1), "steam", rules());
+        IsEqualToConstantConstraint constraintE = new IsEqualToConstantConstraint(inputFieldList.get(1), "diesel", rules());
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
+        Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -301,11 +300,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rules());
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20, rules());
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(conditionalConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -340,9 +339,9 @@ class ProfileDecisionTreeFactoryTests {
     // Checks IF (A OR B) THEN C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        AtomicConstraint aEquals10 = new IsEqualToConstantConstraint(fieldA, 10);
-        AtomicConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10);
-        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
+        AtomicConstraint aEquals10 = new IsEqualToConstantConstraint(fieldA, 10, rules());
+        AtomicConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10, rules());
+        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
 
         givenRule(
             new ConditionalConstraint(
@@ -378,12 +377,12 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20, rules());
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rules());
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -424,8 +423,8 @@ class ProfileDecisionTreeFactoryTests {
         // is equivalent to
         // A ^ ¬B
 
-        AtomicConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10);
-        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
+        AtomicConstraint aEqualTo10 = new IsEqualToConstantConstraint(fieldA, 10, rules());
+        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
@@ -446,10 +445,10 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -469,10 +468,10 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10);
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
+        IsEqualToConstantConstraint constraintA = new IsEqualToConstantConstraint(inputFieldList.get(0), 10, rules());
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5, rules());
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
+        Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
@@ -503,9 +502,9 @@ class ProfileDecisionTreeFactoryTests {
     // (A OR B) OR C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        AtomicConstraint constraintA = new IsEqualToConstantConstraint(fieldA, 10);
-        AtomicConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20);
-        AtomicConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10);
+        AtomicConstraint constraintA = new IsEqualToConstantConstraint(fieldA, 10, rules());
+        AtomicConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
+        AtomicConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10, rules());
 
         givenRule(
             new OrConstraint(
@@ -554,10 +553,10 @@ class ProfileDecisionTreeFactoryTests {
         return match;
     }
 
-    private final AtomicConstraint aIsNull = new IsNullConstraint(new Field("A"));
-    private final AtomicConstraint bEquals10 = new IsEqualToConstantConstraint(new Field("B"), 10);
-    private final AtomicConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC);
-    private final AtomicConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING);
+    private final AtomicConstraint aIsNull = new IsNullConstraint(new Field("A"), rules());
+    private final AtomicConstraint bEquals10 = new IsEqualToConstantConstraint(new Field("B"), 10, rules());
+    private final AtomicConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC, rules());
+    private final AtomicConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING, rules());
 
     @Test
     void whenViolatingPositiveAtomic() {
@@ -645,5 +644,13 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 
+    private static Set<RuleInformation> rules(){
+        return Collections.singleton(rule("rules"));
+    }
 
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
+    }
 }

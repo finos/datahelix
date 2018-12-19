@@ -5,5 +5,5 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import java.io.IOException;
 
 public interface IterationVisualiser {
-    void visualise(ConstraintNode rootNode, FieldCollection fieldCollection) throws IOException;
+    void visualise(ConstraintNode rootNode, ReductiveState reductiveState) throws IOException;
 }

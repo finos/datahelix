@@ -43,8 +43,8 @@ public class FixedField {
             });
     }
 
-    public FieldSpec getFieldSpecForValues(){
-        return this.valuesFieldSpec;
+    boolean hasValueSet() {
+        return current == null || !current.equals(NOT_ITERATED);
     }
 
     @Override

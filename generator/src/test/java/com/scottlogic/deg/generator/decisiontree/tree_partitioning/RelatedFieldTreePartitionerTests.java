@@ -2,10 +2,12 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -220,7 +222,7 @@ class RelatedFieldTreePartitionerTests {
         AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
-            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value");
+            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value", rules());
             this.constraints.put(fieldName, constraint);
         }
 
@@ -290,5 +292,11 @@ class RelatedFieldTreePartitionerTests {
             reporter.reportMessages(context);
             Assert.fail("Trees do not match");
         }
+    }
+
+    private static Set<RuleInformation> rules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

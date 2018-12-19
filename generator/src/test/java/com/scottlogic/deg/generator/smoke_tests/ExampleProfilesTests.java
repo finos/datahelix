@@ -3,17 +3,22 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -31,31 +36,33 @@ class ExampleProfilesTests {
     private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
 
     @TestFactory
-    Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
+    Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException, InvalidProfileException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
+                new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader().read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }
 
     @TestFactory
-    Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
+    Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException, InvalidProfileException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
             GenerationConfig config = new GenerationConfig(
+                new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                GenerationConfig.CombinationStrategyType.PINNING));
 
             final Profile profile = new ProfileReader().read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException, InvalidProfileException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -65,16 +72,21 @@ class ExampleProfilesTests {
 
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
+            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 consumer.generate(
                     new GenerationEngine(
                         new NullOutputTarget(),
                         new DecisionTreeDataGenerator(
-                            walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
+                            null,
                             new RelatedFieldTreePartitioner(),
                             new MostProlificConstraintOptimiser(),
-                            new NoopDataGeneratorMonitor())),
+                            new NoopDataGeneratorMonitor(),
+                            new ProfileDecisionTreeFactory(),
+                            fixFieldStrategy
+                            )),
                     profileFile);
             });
 

@@ -56,7 +56,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     private void defineDataGenerationStrategyType(TypeRegistry tr){
         Transformer<GenerationConfig.DataGenerationType> transformer = strategyString ->
             Arrays.stream(GenerationConfig.DataGenerationType.values())
-            .filter(val -> val.toString().equals(strategyString))
+            .filter(val -> val.toString().equalsIgnoreCase(strategyString))
             .findFirst().orElse(GenerationConfig.DataGenerationType.FULL_SEQUENTIAL);
 
         tr.defineParameterType(new ParameterType<>(
@@ -69,7 +69,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     private void defineCombinationStrategyType(TypeRegistry tr){
         Transformer<GenerationConfig.CombinationStrategyType> transformer = strategyString ->
             Arrays.stream(GenerationConfig.CombinationStrategyType.values())
-                .filter(val -> val.toString().equals(strategyString))
+                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
                 .findFirst().orElse(GenerationConfig.CombinationStrategyType.PINNING);
 
         tr.defineParameterType(new ParameterType<>(
