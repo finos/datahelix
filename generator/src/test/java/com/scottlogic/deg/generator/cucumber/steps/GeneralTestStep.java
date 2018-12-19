@@ -90,8 +90,26 @@ public class GeneralTestStep {
 
     @And("^no data is created$")
     public void noDataIsCreated() {
-        testHelper.generateAndGetData();
-        Assert.assertFalse(testHelper.hasDataBeenGenerated());
+        List<List<Object>> data = testHelper.generateAndGetData();
+
+        if (!testHelper.hasDataBeenGenerated()){
+            return; //pass
+        }
+
+        String serialisedData = String.join(
+            "\n",
+            data
+                .stream()
+                .map(row ->
+                    String.join(
+                        ",",
+                        row
+                            .stream()
+                            .map(cell -> cell == null ? "<null>" : cell.toString())
+                            .collect(Collectors.toList())))
+                .collect(Collectors.toList()));
+
+        Assert.fail("Some data was generated when none was expected:\n" + serialisedData);
     }
 
     @Then("^the following data should be generated:$")
