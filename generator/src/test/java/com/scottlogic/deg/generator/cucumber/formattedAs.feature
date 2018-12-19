@@ -4,12 +4,11 @@ Feature: User can specify that a value is so formatted
     Given the generation strategy is full
     And there is a field foo
 
-
-
   Scenario Outline: Running a valid 'formattedAs' request should be successful
     Given foo is in set:
       | <input> |
     And foo is formatted as <format>
+    And foo is anything but null
     Then the following data should be generated:
       | foo        |
       | <expected> |
@@ -208,6 +207,7 @@ Feature: User can specify that a value is so formatted
     Given foo is in set:
       | <input> |
     And foo is formatted as <format>
+    And foo is anything but null
     Then I am presented with an error message
     And no data is created
     Examples:
