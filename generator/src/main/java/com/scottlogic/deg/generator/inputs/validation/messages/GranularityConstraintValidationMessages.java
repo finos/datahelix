@@ -1,25 +1,24 @@
 package com.scottlogic.deg.generator.inputs.validation.messages;
 
-import java.math.BigDecimal;
 
 public class GranularityConstraintValidationMessages implements StandardValidationMessages {
 
 
-    private BigDecimal validValue;
-    private BigDecimal invalidValue;
+    private int originalGranularity;
+    private int candidateGranularity;
 
-    public GranularityConstraintValidationMessages(BigDecimal validValue, BigDecimal invalidValue) {
+    public GranularityConstraintValidationMessages(int originalGranularity, int candidateGranularity) {
 
-        this.validValue = validValue;
-        this.invalidValue = invalidValue;
+        this.originalGranularity = originalGranularity;
+        this.candidateGranularity = candidateGranularity;
     }
 
     @Override
     public String getVerboseMessage() {
         return String.format(
-            "Attempted to set granularity to %s. Granularity is currently set to: %s",
-            invalidValue,
-            validValue);
+            "Detected two granularities for the same field: %s and %s decimal places. The smallest value will be selected.",
+            originalGranularity,
+            candidateGranularity);
     }
 }
 
