@@ -27,19 +27,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
         if (result.successful) {
-
-            //additional validation detects that we are trying to extend the whitelist
-            if (currentRestrictions != null && currentRestrictions.getWhitelist() != null) {
-
-                Set<Object> intersection = SetUtils.intersect(currentRestrictions.getWhitelist(), values);
-                if (intersection.size() < values.size()) {
-                    logInformation(field, new SetConstraintValidationMessages(currentRestrictions.getWhitelist(), values));
-                }
-            }
-            else {
-                currentRestrictions = result.restrictions;
-            }
-
+            currentRestrictions = result.restrictions;
         } else {
             logError(field, new SetConstraintValidationMessages(currentRestrictions.getWhitelist(), values));
         }
