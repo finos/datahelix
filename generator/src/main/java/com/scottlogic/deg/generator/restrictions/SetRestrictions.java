@@ -9,9 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SetRestrictions {
-    private static final SetRestrictions neutral = new SetRestrictions(
-        null,
-        new HashSet<>());
+    private static final SetRestrictions neutral = new SetRestrictions();
 
     private final Set<Object> whitelist;
     private final Set<Object> blacklist;
@@ -24,9 +22,19 @@ public class SetRestrictions {
         return this.blacklist;
     }
 
+    private SetRestrictions(){
+        this.whitelist = null;
+        this.blacklist = new HashSet<>();
+    }
+
     public SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
         this.whitelist = whitelist;
         this.blacklist = blacklist;
+    }
+
+    public boolean isEmpty(){
+        return ((this.whitelist == null || this.whitelist.isEmpty())
+            && (this.blacklist == null || this.blacklist.isEmpty()));
     }
 
     public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
@@ -85,8 +93,8 @@ public class SetRestrictions {
 
     @Override
     public String toString() {
-        if ((whitelist == null || whitelist.isEmpty()) && (blacklist == null || blacklist.isEmpty()))
-            return null;
+        if (isEmpty())
+            return "<empty>";
 
         if (whitelist == null || whitelist.isEmpty())
             return String.format(
