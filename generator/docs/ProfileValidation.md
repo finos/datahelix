@@ -25,26 +25,11 @@ Validation alerts have different levels:
 
 There are a number of checks performed depending on the constraint applied. Below we explain them.
 
+Further details about what constraints are available and how to use them can be found at: ../../docs/EpistemicConstraints.md
+
 ## Type validation
 
-The profile supports 3 valid types for fields: NUMERIC, STRING and TEMPORAL.
-
-There are a number of ways in which a type may be enforced for a field, including:
-
-| Contstraint                               | Type restriction |
-|-------------------------------------------|------------------|
-| A is of type STRING                       | STRING           |
-| A is after 2008-09-15T15:53:00.000        | TEMPORAL         |
-| A is before 2008-09-15T15:53:00.000       | TEMPORAL         |
-| A is after or at 2008-09-15T15:53:00.000  | TEMPORAL         |
-| A is before or at 2008-09-15T15:53:00.000 | TEMPORAL         |
-| A is shorter than 10                      | STRING           |
-| A is longer than 1                        | STRING           |
-| A is granular to 1                        | NUMERIC          |
-| A is less than 10                         | NUMERIC          |
-| A is less than or equal to 10             | NUMERIC          |
-| A is greater than 15                      | NUMERIC          |
-| A is greater than or equal to 15          | NUMERIC          |
+Type validation is performed to ensure that the field type is set correctly and not contradicted by other constraints.
 
 Example profiles may include:
 
@@ -58,14 +43,7 @@ Example profiles may include:
 
 ## Set validation
 
-The profile supports in set and not in set constraints which modify a whitelist / blacklist for a field. The values in the whitelist are allowed values for the field whilst the values in the blacklist are not allowed.
-
-
-| Constraint                          |     Set Whitelist     |       Set Blacklist |
-|-------------------------------------|:---------------------:|--------------------:|
-| B is in set [1,2,3]                 |        [1,2,3]        |                     |
-| B is in set ["Hello", "Good day"]   | ["Hello", "Good day"] |                     |
-| B is not in set ["Bye", "Good bye"] |                       | ["Bye", "Good bye"] |
+Set validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 
@@ -79,16 +57,7 @@ Example profiles may include:
 
 ## Numeric validation
 
-The profile supports several numeric operations inclusing: is less than, is greater than, is less than or equal to, is greater than or equal to.
-Usage of numeric constrains implies that the Type of the field is NUMERIC.
-
-
-| Constraint                      |  Numeric range  | Field Type |
-|---------------------------------|:---------------:|-----------:|
-| C is less than 10               | any number < 10 |    NUMERIC |
-| C is greater than 10            | any number > 10 |    NUMERIC |
-| C is less than or equal to 5    | any number <= 5 |    NUMERIC |
-| C is greater than or equal to 5 | any number >= 5 |    NUMERIC |
+Numeric validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 
@@ -100,16 +69,8 @@ Example profiles may include:
 
 
 ## Temporal validation
-The profile supports several temporal operations inclusing: is after, is before, is after or at, is before or at.
-Usage of temporal constraints implies that the Type of the field is TEMPORAL.
 
-
-| Constraint                                |                   Temporal range                  | Field Type |
-|-------------------------------------------|:-------------------------------------------------:|-----------:|
-| D is before 2000-09-15T15:53:00.000       | any datetime before 2000-09-15T15:53:00.000       | TEMPORAL   |
-| D is after 2000-09-15T15:53:00.000        | any datetime after 2000-09-15T15:53:00.000        | TEMPORAL   |
-| D is before or at 2008-09-15T15:53:00.000 | any datetime before or at 2008-09-15T15:53:00.000 | TEMPORAL   |
-| D is after or at 2008-09-15T15:53:00.000  | any datetime after or at 2008-09-15T15:53:00.000  | TEMPORAL   |
+Temporal validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 
@@ -121,15 +82,7 @@ Example profiles may include:
 
 ## Granularity validation
 
-The profile supports the specification of a granularity which must be a positive number, less than 1 and a fractional power of 10.
-Usage of granularity constraints implies that the Type of the field is NUMERIC. 
-
-
-| Constraint            |                       Granularity                      | Field Type |
-|-----------------------|:------------------------------------------------------:|-----------:|
-| E is granular to 0.1  |  E is a number with up to 1 decimal place granularity. |    NUMERIC |
-| E is granular to 0.01 | E is a number with up to 2 decimal places granularity. |    NUMERIC |
-| E is granular to 1e-8 |  E is a number with up to 8 decimal place granularity. |    NUMERIC |
+Granularity validation is performed to ensure granularity is set correctly and to highlight the selection of the granularity that will be used.
 
 Example profiles may include:
 
@@ -142,13 +95,7 @@ Example profiles may include:
 
 ## String validation
 
-The profile supports several constraints on strings length including: is shorter than, is longer than.
-Usage of string constraints implies that the Type of the field is STRING.
-
-| Constraint          |              String length | Field Type |
-|---------------------|---------------------------:|------------|
-| F is longer than 3  | F is 4 characters or more. | STRING     |
-| F is shorter than 5 | F is 4 characters or less. | STRING     |
+String validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 
@@ -160,12 +107,7 @@ Example profiles may include:
 
 ## Null validation
 
-The profile supports is null and not is null constraints. 
-
-| Constraint    |     Nullness     |
-|---------------|:----------------:|
-| G is null     |   Must be null   |
-| G is not null | Must not be null |
+Null validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 
