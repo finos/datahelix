@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
@@ -22,20 +23,21 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         // if there's a whitelist, we can just output that
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
             Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
+
             // If we have values that must be included we need to check that those values are included in the whitelist
             if (mustContainRestriction != null) {
-                whitelist.addAll(
-                    getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                        .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())
-                        .collect(Collectors.toList())
-                );
+                whitelist = Stream.concat(whitelist.stream(),
+                getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                    .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())).collect(Collectors.toSet());
             }
 
-            FieldValueSource whitelistSource = new CannedValuesFieldValueSource(new ArrayList<>(whitelist));
-            return Stream.concat(
-                validSources.stream(),
-                Stream.of(whitelistSource)
-            ).collect(Collectors.toSet());
+            Stream<Object> validSourcesValues = validSources
+                .stream()
+                .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false));
+            Stream<Object> whitelistAndValidSourcesValues = Stream.concat(whitelist.stream(), validSourcesValues);
+            return Collections.singleton(
+                new CannedValuesFieldValueSource(whitelistAndValidSourcesValues.collect(Collectors.toList()))
+            );
         }
 
         if (mustContainRestriction != null) {

@@ -47,6 +47,6 @@ public class ProfileFields implements Iterable<Field> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(fields);
+        return fields.hashCode();
     }
 }
