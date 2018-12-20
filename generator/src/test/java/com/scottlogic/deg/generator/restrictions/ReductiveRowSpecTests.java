@@ -75,18 +75,9 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
+                    FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                        null)
                 );
             }},
             null
@@ -194,18 +185,9 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
+                    FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                        null)
                 );
             }},
             new Field("First Field")
@@ -251,18 +233,9 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
+                    FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                        null)
                 );
             }},
             new Field("First Field")
@@ -288,18 +261,9 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
+                    FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                        null)
                 );
             }},
             new Field("First Field")
@@ -314,18 +278,9 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
+                    FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                        null)
                 );
             }},
             null
@@ -351,18 +306,10 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
-                        new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
-                        new NoTypeRestriction(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                    FieldSpec.Empty.withNullRestrictions(
+                        new NullRestrictions(),
+                        null)
+                    .withTypeRestrictions(new NoTypeRestriction(), null)
                 );
             }},
             new Field("Second Field")
@@ -377,18 +324,10 @@ class ReductiveRowSpecTests {
             new HashMap<Field, FieldSpec>() {{
                 put(
                     new Field("First Field"),
-                    new FieldSpec(
-                        null,
-                        null,
-                        null,
-                        new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
-                        new NoTypeRestriction(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
+                    FieldSpec.Empty.withNullRestrictions(
+                        new NullRestrictions(),
+                        null)
+                        .withTypeRestrictions(new NoTypeRestriction(), null)
                 );
             }},
             new Field("Second Field")

@@ -35,18 +35,8 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = new FieldSpec(
-            new SetRestrictions(null, null),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withSetRestrictions(new SetRestrictions(null, null), null);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -61,18 +51,9 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
 
         boolean result = fieldSpec.equals(
-            new FieldSpec(
+            FieldSpec.Empty.withSetRestrictions(
                 new SetRestrictions(null, null),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-            )
+                null)
         );
 
         assertFalse(
@@ -83,42 +64,25 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = new FieldSpec(
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withSetRestrictions(
             new SetRestrictions(
                 new HashSet<>(
                     Arrays.asList(1, 2, 3)
                 ),
                 null
             ),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
+            null);
 
         boolean result = fieldSpec.equals(
-            new FieldSpec(
+            FieldSpec.Empty.withSetRestrictions(
                 new SetRestrictions(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
                     ),
                     null
                 ),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-            )
+                null)
         );
 
         assertFalse(
@@ -129,18 +93,9 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = new FieldSpec(
-            null,
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
+            null);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -155,18 +110,9 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
 
         boolean result = fieldSpec.equals(
-            new FieldSpec(
-                null,
+            FieldSpec.Empty.withNumericRestrictions(
                 new NumericRestrictions(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-            )
+                null)
         );
 
         assertFalse(

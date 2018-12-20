@@ -15,47 +15,47 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-class FieldSpecFulfillerTests {
+class FieldSpecValueGeneratorTests {
+    private final NullRestrictions notNull = new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL);
+    private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
+
     @Test
     void generate_fieldSpecContainsSingleMustContainRestriction_returnsValuesWithValueInMustContainRestriction() {
-        FieldSpec fieldSpec = new FieldSpec(
-            new SetRestrictions(
-                new HashSet<>(
-                    Arrays.asList(1, 10)
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withSetRestrictions(
+                new SetRestrictions(
+                    new HashSet<>(
+                        Arrays.asList(1, 10)
+                    ),
+                    null
                 ),
-                null
-            ),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            new MustContainRestriction(
-                new HashSet<>(
-                    Collections.singletonList(
-                        FieldSpec.Empty.withSetRestrictions(
-                            new SetRestrictions(
-                                new HashSet<>(
-                                    Collections.singletonList(5)
+                fieldSpecSource)
+            .withMustContainRestriction(
+                new MustContainRestriction(
+                    new HashSet<>(
+                        Collections.singletonList(
+                            FieldSpec.Empty.withSetRestrictions(
+                                new SetRestrictions(
+                                    new HashSet<>(
+                                        Collections.singletonList(5)
+                                    ),
+                                    null
                                 ),
-                                null
-                            ),
-                            null
+                                fieldSpecSource
+                            ).withNullRestrictions(notNull, fieldSpecSource)
                         )
                     )
                 )
-            ),
-            null
-        );
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+            );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 
@@ -81,44 +81,44 @@ class FieldSpecFulfillerTests {
 
     @Test
     void generate_fieldSpecContainsMultipleMustContainRestrictionsWithNumericRestrictions_returnsInterestingValuesWithMustContainRestrictionsApplied() {
-        FieldSpec fieldSpec = new FieldSpec(
-            null,
-            new NumericRestrictions() {{
-                min = new NumericLimit<>(new BigDecimal(10), false);
-                max = new NumericLimit<>(new BigDecimal(30), false);
-            }},
-            null,
-            new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL),
-            new DataTypeRestrictions(Collections.singletonList(
-                IsOfTypeConstraint.Types.NUMERIC
-            )),
-            null,
-            null,
-            null,
-            new MustContainRestriction(
-                new HashSet<>(
-                    Collections.singletonList(
-                        FieldSpec.Empty.withSetRestrictions(
-                            new SetRestrictions(
-                                new HashSet<>(
-                                    Arrays.asList(15, 25)
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withNumericRestrictions(
+                new NumericRestrictions() {{
+                    min = new NumericLimit<>(new BigDecimal(10), false);
+                    max = new NumericLimit<>(new BigDecimal(30), false);
+                }},
+                fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(Collections.singletonList(
+                    IsOfTypeConstraint.Types.NUMERIC
+                )),
+                fieldSpecSource)
+            .withMustContainRestriction(
+                new MustContainRestriction(
+                    new HashSet<>(
+                        Collections.singletonList(
+                            FieldSpec.Empty.withSetRestrictions(
+                                new SetRestrictions(
+                                    new HashSet<>(
+                                        Arrays.asList(15, 25)
+                                    ),
+                                    null
                                 ),
-                                null
-                            ),
-                            null
+                                fieldSpecSource
+                            ).withNullRestrictions(notNull, fieldSpecSource)
                         )
                     )
                 )
-            ),
-            null
-        );
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+            );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 
@@ -148,43 +148,40 @@ class FieldSpecFulfillerTests {
 
     @Test
     void generate_fieldSpecContainsStringValuesForMustContainRestrictionAndFieldSpecIsStringType_returnsValuesThatIncludeValuesInMustContain() {
-        FieldSpec fieldSpec = new FieldSpec(
-            null,
-            null,
-            null,
-            new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL),
-            new DataTypeRestrictions(
-                Collections.singletonList(
-                    IsOfTypeConstraint.Types.STRING
-                )
-            ),
-            null,
-            null,
-            null,
-            new MustContainRestriction(
-                new HashSet<>(
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(
                     Collections.singletonList(
-                        FieldSpec.Empty.withSetRestrictions(
-                            new SetRestrictions(
-                                new HashSet<>(
-                                    Arrays.asList("Test One", "Test Two")
+                        IsOfTypeConstraint.Types.STRING
+                    )
+                ),
+                fieldSpecSource)
+            .withMustContainRestriction(
+                new MustContainRestriction(
+                    new HashSet<>(
+                        Collections.singletonList(
+                            FieldSpec.Empty.withSetRestrictions(
+                                new SetRestrictions(
+                                    new HashSet<>(
+                                        Arrays.asList("Test One", "Test Two")
+                                    ),
+                                    null
                                 ),
-                                null
-                            ),
-                            null
+                                fieldSpecSource
+                            )
                         )
                     )
                 )
-            ),
-            null
-        );
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+            );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 
@@ -207,45 +204,46 @@ class FieldSpecFulfillerTests {
 
     @Test
     void generate_fieldSpecContainsStringValuesForMustContainRestrictionAndFieldSpecContainsRegexConstraint_returnsValuesFromMustContainRestriction() {
-        FieldSpec fieldSpec = new FieldSpec(
-            null,
-            null,
-            new StringRestrictions() {{
-                stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
-            }},
-            new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL),
-            new DataTypeRestrictions(
-                Collections.singletonList(
-                    IsOfTypeConstraint.Types.STRING
-                )
-            ),
-            null,
-            null,
-            null,
-            new MustContainRestriction(
-                new HashSet<>(
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withStringRestrictions(
+                new StringRestrictions() {{
+                    stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
+                }},
+                fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(
                     Collections.singletonList(
-                        FieldSpec.Empty.withSetRestrictions(
-                            new SetRestrictions(
-                                new HashSet<>(
-                                    Arrays.asList("ba", "ab")
+                        IsOfTypeConstraint.Types.STRING
+                    )
+                ),
+                fieldSpecSource)
+            .withMustContainRestriction(
+                new MustContainRestriction(
+                    new HashSet<>(
+                        Collections.singletonList(
+                            FieldSpec.Empty.withSetRestrictions(
+                                new SetRestrictions(
+                                    new HashSet<>(
+                                        Arrays.asList("ba", "ab")
+                                    ),
+                                    null
                                 ),
-                                null
-                            ),
-                            null
+                                fieldSpecSource
+                            )
+                            .withNullRestrictions(notNull, fieldSpecSource)
                         )
                     )
                 )
-            ),
-            null
-        );
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+            );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 
@@ -271,25 +269,27 @@ class FieldSpecFulfillerTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withSetRestrictions(
-            new SetRestrictions(
-                new HashSet<>(
-                    Arrays.asList(
-                        10, 20, 30
-                    )
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withSetRestrictions(
+                new SetRestrictions(
+                    new HashSet<>(
+                        Arrays.asList(
+                            10, 20, 30
+                        )
+                    ),
+                    null
                 ),
-                null
-            ),
-            null
-        );
+                fieldSpecSource);
 
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 
@@ -315,30 +315,26 @@ class FieldSpecFulfillerTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
-        FieldSpec fieldSpec = new FieldSpec(
-            null,
-            new NumericRestrictions() {{
-                min = new NumericLimit<>(new BigDecimal(10), false);
-                max = new NumericLimit<>(new BigDecimal(30), false);
-            }},
-            null,
-            null,
-            new DataTypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            ),
-            null,
-            null,
-            null,
-            null,
-            null
-        );
-        FieldSpecFulfiller fieldSpecFulfiller = new FieldSpecFulfiller(new Field("First Field"), fieldSpec);
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNumericRestrictions(
+                new NumericRestrictions() {{
+                    min = new NumericLimit<>(new BigDecimal(10), false);
+                    max = new NumericLimit<>(new BigDecimal(30), false);
+                }},
+                fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(
+                    Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+                ),
+                fieldSpecSource);
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(
             new GenerationConfig(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
             )
         ).collect(Collectors.toSet());
 

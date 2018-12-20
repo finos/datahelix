@@ -23,7 +23,7 @@ public class FieldSpecValueGenerator implements DataBagSource {
         this(field, spec, new StandardFieldValueSourceEvaluator());
     }
 
-    public FieldSpecFulfiller(Field field, FieldSpec spec, FieldValueSourceEvaluator sourceEvaluator) {
+    public FieldSpecValueGenerator(Field field, FieldSpec spec, FieldValueSourceEvaluator sourceEvaluator) {
         this.field = field;
         this.spec = spec;
         this.sourceFactory = sourceEvaluator;
