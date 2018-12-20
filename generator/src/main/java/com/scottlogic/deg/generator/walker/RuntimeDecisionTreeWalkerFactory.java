@@ -46,14 +46,20 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
-                    new FieldCollectionFactory(
+                    new FixedFieldBuilder(
                         config,
                         constraintReducer,
-                        fieldSpecMerger,
-                        fieldSpecFactory,
                         fixFieldStrategy,
                         reductiveMonitor),
-                    reductiveMonitor);
+                    reductiveMonitor,
+                    new ReductiveDecisionTreeReducer(
+                        fieldSpecFactory,
+                        fieldSpecMerger),
+                    new ReductiveRowSpecGenerator(
+                        constraintReducer,
+                        fieldSpecMerger,
+                        reductiveMonitor)
+                );
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,
