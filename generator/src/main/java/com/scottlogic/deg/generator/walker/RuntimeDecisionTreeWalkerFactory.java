@@ -5,8 +5,7 @@ import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.combination.DecisionTreeCombinationProducer;
-import com.scottlogic.deg.generator.generation.combination.SingleCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combination.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
@@ -14,6 +13,9 @@ import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import static com.scottlogic.deg.generator.generation.GenerationConfig.ReductionTarget.*;
 
 public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
@@ -43,6 +45,21 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
                     rowSpecMerger,
                     new ExhaustiveProducer());
             case REDUCTIVE:
+                CombinationCreator combinationCreator = new CombinationCreator(
+                    constraintReducer,
+                    config,
+                    new SingleCombinationStrategy());
+
+                CombinationProducer combinationProducer;
+
+                if (config.getReductionTarget() == VIOLATE_RULE){
+                    combinationProducer = new ViolationCombinationProducer(tree, combinationCreator);
+                }
+                else if (config.getReductionTarget() == VALID_RULE){
+                    combinationProducer = new DecisionTreeCombinationProducer(tree, combinationCreator);
+                }
+                else throw new NotImplementedException();
+
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor
@@ -65,11 +82,7 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
                         reductiveMonitor)
                 );
                 return new CombinationBasedWalker(
-                    new DecisionTreeCombinationProducer(
-                        tree,
-                        constraintReducer,
-                        config,
-                        new SingleCombinationStrategy()),
+                    combinationProducer,
                     reductiveDecisionTreeWalker);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(

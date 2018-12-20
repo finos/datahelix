@@ -17,15 +17,11 @@ import java.util.stream.Stream;
 public class DecisionTreeCombinationProducer implements CombinationProducer {
 
     private final DecisionTree tree;
-    private final ConstraintReducer reducer;
-    private final GenerationConfig generationConfig;
-    private final CombinationStrategy combinationStrategy;
+    private final CombinationCreator combinationCreator;
 
-    public DecisionTreeCombinationProducer(DecisionTree tree, ConstraintReducer reducer, GenerationConfig generationConfig, CombinationStrategy combinationStrategy){
+    public DecisionTreeCombinationProducer(DecisionTree tree, CombinationCreator combinationCreator){
         this.tree = tree;
-        this.reducer = reducer;
-        this.generationConfig = generationConfig;
-        this.combinationStrategy = combinationStrategy;
+        this.combinationCreator = combinationCreator;
     }
 
     @Override
@@ -48,36 +44,13 @@ public class DecisionTreeCombinationProducer implements CombinationProducer {
         currentAccumulation.addAll(node.getAtomicConstraints());
         if (node.getDecisions().isEmpty()){
             Set<Field> fields = node.getAtomicConstraints().stream().map(AtomicConstraint::getField).collect(Collectors.toSet());
-            return this.makeCombinations(fields, currentAccumulation);
+            return combinationCreator.makeCombinations(fields, currentAccumulation);
         }
         return node.getDecisions().stream()
             .flatMap(dNode -> this.getConstraintCombinations(dNode, currentAccumulation)
             .stream()).collect(Collectors.toList());
     }
 
-    private List<Combination> makeCombinations(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        Map<Field, FieldSpec> fieldSpecifications = getFieldSpecsForConstraints(fields, constraints);
 
-        Map<Field, Stream<Object>> generatedData = fieldSpecifications.entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry ->
-                new FieldSpecValueGenerator(entry.getKey(), entry.getValue())
-                    .generate(this.generationConfig)
-                    .map(dataBag -> dataBag.getValue(entry.getKey()))
-            ));
-
-        return this.combinationStrategy.getCombinations(generatedData, fieldSpecifications);
-    }
-
-    private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        Map<Field, List<AtomicConstraint>> map = constraints.stream()
-            .filter(c -> fields.contains(c.getField()))
-            .collect(Collectors.groupingBy(AtomicConstraint::getField));
-
-            return map.entrySet().stream()
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> this.reducer.reduceConstraintsToFieldSpec(entry.getValue()).orElse(FieldSpec.Empty)));
-    }
 
 }

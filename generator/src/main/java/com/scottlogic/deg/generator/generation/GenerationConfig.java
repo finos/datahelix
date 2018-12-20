@@ -9,12 +9,14 @@ public class GenerationConfig {
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
     private final long maxRows;
+    private final ReductionTarget reductionTarget;
 
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
+        this.reductionTarget = ReductionTarget.VALID_RULE;
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -38,6 +40,10 @@ public class GenerationConfig {
 
     public TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    public ReductionTarget getReductionTarget(){
+        return reductionTarget;
     }
 
     public long getMaxRows() { return maxRows; }
@@ -91,6 +97,13 @@ public class GenerationConfig {
         public String toString() {
             return text;
         }
+    }
+
+    public enum ReductionTarget {
+        NO_TARGET,
+        VALID_RULE,
+        VIOLATE_RULE,
+        BREACHED_RULE
     }
 
     public static class Constants {

@@ -5,10 +5,6 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,15 +13,11 @@ import java.util.stream.Stream;
 public class ViolationCombinationProducer implements CombinationProducer {
 
     private final DecisionTree decisionTree;
-    private final ConstraintReducer constraintReducer;
-    private final GenerationConfig generationConfig;
-    private final CombinationStrategy combinationStrategy;
+    private final CombinationCreator combinationCreator;
 
-    public ViolationCombinationProducer(DecisionTree decisionTree, ConstraintReducer constraintReducer, GenerationConfig generationConfig, CombinationStrategy combinationStrategy){
+    public ViolationCombinationProducer(DecisionTree decisionTree, CombinationCreator combinationCreator){
         this.decisionTree = decisionTree;
-        this.constraintReducer = constraintReducer;
-        this.generationConfig = generationConfig;
-        this.combinationStrategy = combinationStrategy;
+        this.combinationCreator = combinationCreator;
     }
 
     @Override
@@ -36,7 +28,7 @@ public class ViolationCombinationProducer implements CombinationProducer {
             .collect(Collectors.toSet());
 
         if (!violatedRootConstraints.isEmpty()){
-            return makeCombinations(getFields(violatedRootConstraints), violatedRootConstraints).stream();
+            return combinationCreator.makeCombinations(getFields(violatedRootConstraints), violatedRootConstraints).stream();
         }
 
         DecisionNode violated = getViolatedDecisionNode(decisionTree.getRootNode());
@@ -66,32 +58,7 @@ public class ViolationCombinationProducer implements CombinationProducer {
             constraintNode.getAtomicConstraints().stream())
             .collect(Collectors.toSet());
 
-        return makeCombinations(getFields(constraintNode.getAtomicConstraints()), constraints);
-    }
-
-    private List<Combination> makeCombinations(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        Map<Field, FieldSpec> fieldSpecifications = getFieldSpecsForConstraints(fields, constraints);
-
-        Map<Field, Stream<Object>> generatedData = fieldSpecifications.entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, entry ->
-                new FieldSpecValueGenerator(entry.getKey(), entry.getValue())
-                    .generate(this.generationConfig)
-                    .map(dataBag -> dataBag.getValue(entry.getKey()))
-            ));
-
-        return this.combinationStrategy.getCombinations(generatedData, fieldSpecifications);
-    }
-
-    private Map<Field, FieldSpec> getFieldSpecsForConstraints(Collection<Field> fields, Collection<AtomicConstraint> constraints){
-        Map<Field, List<AtomicConstraint>> map = constraints.stream()
-            .filter(c -> fields.contains(c.getField()))
-            .collect(Collectors.groupingBy(AtomicConstraint::getField));
-
-        return map.entrySet().stream()
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> this.constraintReducer.reduceConstraintsToFieldSpec(entry.getValue()).orElse(FieldSpec.Empty)));
+        return combinationCreator.makeCombinations(getFields(constraintNode.getAtomicConstraints()), constraints);
     }
 
 
