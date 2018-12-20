@@ -4,19 +4,19 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 
-public class SystemOutProfileValidator implements ProfileValidator {
+public class ReportingProfileValidator implements ProfileValidator {
 
-    private ProfileValidationVisitor visitor;
-    private ProfileValidationReporter reporter;
+    private final ProfileValidationReporter reporter;
 
-    public SystemOutProfileValidator(){
-        this.visitor = new ProfileValidationVisitor();
-        this.reporter = new SystemOutProfileValidationReporter();
+    public ReportingProfileValidator(ProfileValidationReporter reporter){
+        this.reporter = reporter;
     }
 
     @Override
     public void validate(Profile profile) {
+        ProfileValidationVisitor visitor = new ProfileValidationVisitor();
+
         profile.accept(visitor);
-        reporter.output(visitor.getAlerts());
+        this.reporter.output(visitor.getAlerts());
     }
 }

@@ -4,10 +4,8 @@ import com.scottlogic.deg.generator.generation.combination_strategies.*;
 import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.SystemOutProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
-import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 
 public class GenerationConfig {
 
@@ -54,7 +52,7 @@ public class GenerationConfig {
     public ProfileValidator getProfileValidator() {
 
         if(validateProfile) {
-            return new SystemOutProfileValidator();
+            return new ReportingProfileValidator(new SystemOutProfileValidationReporter());
         }
 
         return new NoopProfileValidator();
