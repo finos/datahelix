@@ -14,12 +14,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecFulfiller implements DataBagSource {
+public class FieldSpecValueGenerator implements DataBagSource {
     private final Field field;
     private final FieldSpec spec;
     private final FieldValueSourceEvaluator sourceFactory;
 
-    public FieldSpecFulfiller(Field field, FieldSpec spec) {
+    public FieldSpecValueGenerator(Field field, FieldSpec spec) {
         this(field, spec, new StandardFieldValueSourceEvaluator());
     }
 

@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     public FieldSpec construct(AtomicConstraint constraint) {
-        return construct(constraint, false);
+        return construct(constraint, false, false);
     }
 
     public FieldSpec toMustContainRestrictionFieldSpec(Collection<AtomicConstraint> constraints) {
@@ -25,72 +25,76 @@ public class FieldSpecFactory {
         );
     }
 
-    private FieldSpec construct(AtomicConstraint constraint, boolean negate) {
-        if (constraint instanceof NotConstraint) {
-            return construct(((NotConstraint) constraint).negatedConstraint, !negate);
+    private FieldSpec construct(AtomicConstraint constraint, boolean negate, boolean violated) {
+        if (constraint instanceof ViolatedAtomicConstraint){
+            return construct(((ViolatedAtomicConstraint)constraint).violatedConstraint, negate, true);
+        } else if (constraint instanceof NotConstraint) {
+            return construct(((NotConstraint) constraint).negatedConstraint, !negate, violated);
         } else if (constraint instanceof IsInSetConstraint) {
-            return construct((IsInSetConstraint) constraint, negate);
+            return construct((IsInSetConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsEqualToConstantConstraint) {
-            return construct((IsEqualToConstantConstraint) constraint, negate);
+            return construct((IsEqualToConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
-            return construct((IsGreaterThanConstantConstraint) constraint, negate);
+            return construct((IsGreaterThanConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
-            return construct((IsGreaterThanOrEqualToConstantConstraint) constraint, negate);
+            return construct((IsGreaterThanOrEqualToConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsLessThanConstantConstraint) {
-            return construct((IsLessThanConstantConstraint) constraint, negate);
+            return construct((IsLessThanConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsLessThanOrEqualToConstantConstraint) {
-            return construct((IsLessThanOrEqualToConstantConstraint) constraint, negate);
+            return construct((IsLessThanOrEqualToConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsAfterConstantDateTimeConstraint) {
-            return construct((IsAfterConstantDateTimeConstraint) constraint, negate);
+            return construct((IsAfterConstantDateTimeConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsAfterOrEqualToConstantDateTimeConstraint) {
-            return construct((IsAfterOrEqualToConstantDateTimeConstraint) constraint, negate);
+            return construct((IsAfterOrEqualToConstantDateTimeConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsBeforeConstantDateTimeConstraint) {
-            return construct((IsBeforeConstantDateTimeConstraint) constraint, negate);
+            return construct((IsBeforeConstantDateTimeConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
-            return construct((IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate);
+            return construct((IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGranularToConstraint) {
-            return construct((IsGranularToConstraint) constraint, negate);
+            return construct((IsGranularToConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsNullConstraint) {
-            return constructIsNull(negate, constraint);
+            return constructIsNull(negate, constraint, violated);
         } else if (constraint instanceof MatchesRegexConstraint) {
-            return construct((MatchesRegexConstraint) constraint, negate);
+            return construct((MatchesRegexConstraint) constraint, negate, violated);
         } else if (constraint instanceof ContainsRegexConstraint) {
-            return construct((ContainsRegexConstraint) constraint, negate);
+            return construct((ContainsRegexConstraint) constraint, negate, violated);
         } else if (constraint instanceof MatchesStandardConstraint) {
-            return construct((MatchesStandardConstraint) constraint, negate);
+            return construct((MatchesStandardConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsOfTypeConstraint) {
-            return construct((IsOfTypeConstraint) constraint, negate);
+            return construct((IsOfTypeConstraint) constraint, negate, violated);
         } else if (constraint instanceof FormatConstraint) {
-            return construct((FormatConstraint) constraint, negate);
+            return construct((FormatConstraint) constraint, negate, violated);
         } else if (constraint instanceof StringHasLengthConstraint) {
-            return construct((StringHasLengthConstraint) constraint, negate);
+            return construct((StringHasLengthConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
-            return construct((IsStringLongerThanConstraint) constraint, negate);
+            return construct((IsStringLongerThanConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
-            return construct((IsStringShorterThanConstraint) constraint, negate);
+            return construct((IsStringShorterThanConstraint) constraint, negate, violated);
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
-    private FieldSpec construct(IsEqualToConstantConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsEqualToConstantConstraint constraint, boolean negate, boolean violated) {
         return construct(
             new IsInSetConstraint(
                 constraint.field,
-                Collections.singleton(constraint.requiredValue)
+                Collections.singleton(constraint.requiredValue),
+                constraint.getRules()
             ),
-            negate);
+            negate,
+            violated);
     }
 
-    private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty.withSetRestrictions(
                 negate
                     ? SetRestrictions.fromBlacklist(constraint.legalValues)
                     : SetRestrictions.fromWhitelist(constraint.legalValues),
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
         final NullRestrictions nullRestrictions = new NullRestrictions();
 
         nullRestrictions.nullness = negate
@@ -99,10 +103,10 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNullRestrictions(
             nullRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate, boolean violated) {
         final TypeRestrictions typeRestrictions;
 
         if (negate) {
@@ -113,18 +117,18 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withTypeRestrictions(
             typeRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {
-        return constructGreaterThanConstraint(constraint.referenceValue, false, negate, constraint);
+    private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate, boolean violated) {
+        return constructGreaterThanConstraint(constraint.referenceValue, false, negate, constraint, violated);
     }
 
-    private FieldSpec construct(IsGreaterThanOrEqualToConstantConstraint constraint, boolean negate) {
-        return constructGreaterThanConstraint(constraint.referenceValue, true, negate, constraint);
+    private FieldSpec construct(IsGreaterThanOrEqualToConstantConstraint constraint, boolean negate, boolean violated) {
+        return constructGreaterThanConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final NumericRestrictions numericRestrictions = new NumericRestrictions();
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
@@ -140,18 +144,18 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNumericRestrictions(
             numericRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate) {
-        return constructLessThanConstraint(constraint.referenceValue, false, negate, constraint);
+    private FieldSpec construct(IsLessThanConstantConstraint constraint, boolean negate, boolean violated) {
+        return constructLessThanConstraint(constraint.referenceValue, false, negate, constraint, violated);
     }
 
-    private FieldSpec construct(IsLessThanOrEqualToConstantConstraint constraint, boolean negate) {
-        return constructLessThanConstraint(constraint.referenceValue, true, negate, constraint);
+    private FieldSpec construct(IsLessThanOrEqualToConstantConstraint constraint, boolean negate, boolean violated) {
+        return constructLessThanConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final NumericRestrictions numericRestrictions = new NumericRestrictions();
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
@@ -166,10 +170,10 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNumericRestrictions(
             numericRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsGranularToConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsGranularToConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
             // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
             return FieldSpec.Empty;
@@ -177,18 +181,18 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withGranularityRestrictions(
             new GranularityRestrictions(constraint.granularity),
-            FieldSpecSource.fromConstraint(constraint, false));
+            FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 
-    private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
-        return constructIsAfterConstraint(constraint.referenceValue, false, negate, constraint);
+    private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate, boolean violated) {
+        return constructIsAfterConstraint(constraint.referenceValue, false, negate, constraint, violated);
     }
 
-    private FieldSpec construct(IsAfterOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
-        return constructIsAfterConstraint(constraint.referenceValue, true, negate, constraint);
+    private FieldSpec construct(IsAfterOrEqualToConstantDateTimeConstraint constraint, boolean negate, boolean violated) {
+        return constructIsAfterConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
@@ -199,18 +203,18 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withDateTimeRestrictions(
             dateTimeRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
-        return constructIsBeforeConstraint(constraint.referenceValue, false, negate, constraint);
+    private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate, boolean violated) {
+        return constructIsBeforeConstraint(constraint.referenceValue, false, negate, constraint, violated);
     }
 
-    private FieldSpec construct(IsBeforeOrEqualToConstantDateTimeConstraint constraint, boolean negate) {
-        return constructIsBeforeConstraint(constraint.referenceValue, true, negate, constraint);
+    private FieldSpec construct(IsBeforeOrEqualToConstantDateTimeConstraint constraint, boolean negate, boolean violated) {
+        return constructIsBeforeConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
@@ -221,22 +225,22 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withDateTimeRestrictions(
             dateTimeRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {
-        return constructPattern(constraint.regex, negate, true, constraint);
+    private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate, boolean violated) {
+        return constructPattern(constraint.regex, negate, true, constraint, violated);
     }
 
-    private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate) {
-        return constructPattern(constraint.regex, negate, false, constraint);
+    private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate, boolean violated) {
+        return constructPattern(constraint.regex, negate, false, constraint, violated);
     }
 
-    private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
-        return constructGenerator(constraint.standard, negate, constraint);
+    private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
+        return constructGenerator(constraint.standard, negate, constraint, violated);
     }
 
-    private FieldSpec construct(FormatConstraint constraint, boolean negate) {
+    private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
             // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
             return FieldSpec.Empty;
@@ -247,29 +251,29 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withFormatRestrictions(
             formatRestrictions,
-            FieldSpecSource.fromConstraint(constraint, false));
+            FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 
-    private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {
+    private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
         final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
-        return constructPattern(regex, negate, true, constraint);
+        return constructPattern(regex, negate, true, constraint, violated);
     }
 
-    private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate, boolean violated) {
         final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue - 1));
-        return constructPattern(regex, negate, true, constraint);
+        return constructPattern(regex, negate, true, constraint, violated);
     }
 
-    private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate) {
+    private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate, boolean violated) {
         final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
-        return constructPattern(regex, negate, true, constraint);
+        return constructPattern(regex, negate, true, constraint, violated);
     }
 
-    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint) {
-        return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint);
+    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
+        return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, violated);
     }
 
-    private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint) {
+    private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
         final StringRestrictions stringRestrictions = new StringRestrictions();
 
         stringRestrictions.stringGenerator = negate
@@ -278,6 +282,6 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withStringRestrictions(
             stringRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate));
+            FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 }

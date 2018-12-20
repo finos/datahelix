@@ -6,77 +6,81 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollectionFactory;
-import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeAdapter;
+import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
-    private final ReductiveDecisionTreeAdapter nodeAdapter = new ReductiveDecisionTreeAdapter();
-
+    private final ReductiveDecisionTreeReducer treeReducer;
     private final IterationVisualiser iterationVisualiser;
-    private final FieldCollectionFactory fieldCollectionFactory;
+    private final FixedFieldBuilder fixedFieldBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
+    private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FieldCollectionFactory fieldCollectionFactory,
-        ReductiveDataGeneratorMonitor monitor) {
+        FixedFieldBuilder fixedFieldBuilder,
+        ReductiveDataGeneratorMonitor monitor,
+        ReductiveDecisionTreeReducer treeReducer,
+        ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
         this.iterationVisualiser = iterationVisualiser;
-        this.fieldCollectionFactory = fieldCollectionFactory;
+        this.fixedFieldBuilder = fixedFieldBuilder;
         this.monitor = monitor;
+        this.treeReducer = treeReducer;
+        this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
     }
 
-    /* initialise the walker with a set (FieldCollection) of unfixed fields */
+    /* initialise the walker with a set (ReductiveState) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree) {
         ConstraintNode rootNode = tree.getRootNode();
-        FieldCollection fieldCollection = fieldCollectionFactory.create(tree);
+        ReductiveState initialState = new ReductiveState(tree.fields);
 
-        visualise(rootNode, fieldCollection);
+        visualise(rootNode, initialState);
 
         //calculate a field to fix and start processing
-        return process(rootNode, fieldCollection.getNextFixedField(nodeAdapter.adapt(rootNode, fieldCollection)));
+        ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+        return process(rootNode, initialState.with(nextFixedField));
     }
 
-    private Stream<RowSpec> process(ConstraintNode constraintNode, FieldCollection fieldCollection) {
+    private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState) {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
-        if (fieldCollection.allFieldsAreFixed()){
-            return fieldCollection.createRowSpecFromFixedValues(constraintNode);
+        if (reductiveState.allFieldsAreFixed()){
+            return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, constraintNode);
         }
 
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
         return FlatMappingSpliterator.flatMap(
-            fieldCollection.getValuesFromLastFixedField(),
-            fieldValue -> getRowSpecsForFixedField(constraintNode, fieldCollection));
+            reductiveState.getValuesFromLastFixedField(),
+            fieldValue -> getRowSpecsForFixedField(constraintNode, reductiveState));
     }
 
     private Stream<RowSpec> getRowSpecsForFixedField(
         ConstraintNode constraintNode,
-        FieldCollection fieldCollection){
+        ReductiveState reductiveState){
 
         //reduce the tree based on the fields that are now fixed
-        ReductiveConstraintNode adaptedNode = this.nodeAdapter.adapt(constraintNode, fieldCollection);
-        if (adaptedNode == null){
+        ReductiveConstraintNode reducedNode = this.treeReducer.reduce(constraintNode, reductiveState);
+        if (reducedNode == null){
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
-            this.monitor.unableToStepFurther(fieldCollection);
+            this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
         }
 
         //visualise the tree now
-        visualise(adaptedNode, fieldCollection);
+        visualise(reducedNode, reductiveState);
 
         //find the next fixed field and continue
-        return process(adaptedNode, fieldCollection.getNextFixedField(adaptedNode));
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode);
+        return process(reducedNode, reductiveState.with(nextFixedField));
     }
 
-    private void visualise(ConstraintNode rootNode, FieldCollection fieldCollection){
+    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
         try {
-            iterationVisualiser.visualise(rootNode, fieldCollection);
+            iterationVisualiser.visualise(rootNode, reductiveState);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
