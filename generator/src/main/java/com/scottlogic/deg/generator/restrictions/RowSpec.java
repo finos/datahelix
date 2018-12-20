@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class RowSpec {
     private ProfileFields fields;
-    private Map<Field, FieldSpec> fieldToFieldSpec;
+    Map<Field, FieldSpec> fieldToFieldSpec;
 
     public RowSpec(
         ProfileFields fields,
@@ -30,8 +30,6 @@ public class RowSpec {
     public ProfileFields getFields() {
         return fields;
     }
-
-    public Map<Field, FieldSpec> getFieldToFieldSpec() { return fieldToFieldSpec; }
 
     public FieldSpec getSpecForField(Field field) {
         FieldSpec ownFieldSpec = this.fieldToFieldSpec.get(field);

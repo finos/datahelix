@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -51,7 +52,7 @@ class ReductiveRowSpecTests {
         );
         ReductiveRowSpec otherRowSpec = new ReductiveRowSpec(
             new ProfileFields(
-                Arrays.asList(
+                Collections.singletonList(
                     new Field("First Field")
                 )
             ),
@@ -134,7 +135,7 @@ class ReductiveRowSpecTests {
     void equals_rowSpecHasFieldsAndOtherRowSpecDoesNotHaveFields_returnsFalse() {
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(
             new ProfileFields(
-                Arrays.asList(
+                Collections.singletonList(
                     new Field("Test")
                 )
             ),

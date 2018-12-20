@@ -29,10 +29,10 @@ public class ReductiveRowSpecEqualityComparer implements EqualityComparer {
         boolean result = fieldsAreEqual(rowSpec1.getFields(), rowSpec2.getFields());
 
         if (result) {
-            result = fieldToFieldSpecComparer.equals(rowSpec1.getFieldToFieldSpec(), rowSpec2.getFieldToFieldSpec());
+            result = fieldToFieldSpecComparer.equals(rowSpec1.fieldToFieldSpec, rowSpec2.fieldToFieldSpec);
         }
         if (result) {
-            result = rowSpec1.getLastFixedField().equals(rowSpec2.getLastFixedField());
+            result = rowSpec1.lastFixedField.equals(rowSpec2.lastFixedField);
         }
 
         return result;
