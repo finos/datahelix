@@ -84,18 +84,18 @@ public class Generate implements Runnable, GenerationConfigSource {
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
-        names = {"-v", "--v", "--validation-reporter-type"},
-        description = "Defines the profile validation reporter to use (" +
-            GenerationConfig.Constants.ProfileValidationReporterTypes.NOOP+ ", " +
-            GenerationConfig.Constants.ProfileValidationReporterTypes.STANDARDOUT + ").")
-    private GenerationConfig.ProfileValidationReporterType profileValidationReporterType = GenerationConfig.ProfileValidationReporterType.NOOP;
+        names = {"-v", "--v", "--validate-profile"},
+        description = "Defines whether to validate the profile (" +
+            true+ ", " +
+            false + ").")
+    private boolean validateProfile;
 
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
 
         try {
-            final Profile profile = new ProfileReader(config.getProfileValidationReporter()).read(profileFile.toPath());
+            final Profile profile = new ProfileReader(config.getProfileValidator()).read(profileFile.toPath());
 
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
@@ -141,7 +141,7 @@ public class Generate implements Runnable, GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.ProfileValidationReporterType getProfileValidationReporterType() {
-        return profileValidationReporterType;
+    public boolean getValidateProfile() {
+        return validateProfile;
     }
 }

@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidationVisitor;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
@@ -12,6 +13,7 @@ import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,22 +23,20 @@ import java.util.stream.Collectors;
 
 public class ProfileReader {
 
-    private ProfileValidationReporter reporter;
+    private ProfileValidator validator;
 
-    public ProfileReader(ProfileValidationReporter reporter) {
+    public ProfileReader(ProfileValidator validator) {
 
-        this.reporter = reporter;
+        this.validator = validator;
     }
 
     public Profile read(Path filePath) throws IOException, InvalidProfileException {
         byte[] encoded = Files.readAllBytes(filePath);
-        String profileJson = new String(encoded, Charset.forName("UTF-8"));
+        String profileJson = new String(encoded, StandardCharsets.UTF_8);
 
         Profile profile =  this.read(profileJson);
 
-        ProfileValidationVisitor profileValidationVisitor = new ProfileValidationVisitor();
-        profile.accept(profileValidationVisitor);
-        reporter.output(profileValidationVisitor.getAlerts());
+        validator.validate(profile);
 
         return profile;
     }

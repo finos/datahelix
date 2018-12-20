@@ -12,6 +12,7 @@ import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -41,7 +42,7 @@ class ExampleProfilesTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
-            final Profile profile = new ProfileReader(new NoopProfileValidationReporter()).read(profileFile.toPath());
+            final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }
@@ -55,7 +56,7 @@ class ExampleProfilesTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
-            final Profile profile = new ProfileReader(new NoopProfileValidationReporter()).read(profileFile.toPath());
+            final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }

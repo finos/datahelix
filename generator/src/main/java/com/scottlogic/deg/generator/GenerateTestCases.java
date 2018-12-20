@@ -80,11 +80,11 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
-        names = {"-v", "--v", "--validation-reporter-type"},
-        description = "Defines the profile validation reporter to use (" +
-            GenerationConfig.Constants.ProfileValidationReporterTypes.NOOP+ ", " +
-            GenerationConfig.Constants.ProfileValidationReporterTypes.STANDARDOUT + ").")
-    private GenerationConfig.ProfileValidationReporterType profileValidation = GenerationConfig.ProfileValidationReporterType.NOOP;
+        names = {"-v", "--v", "--validate-profile"},
+        description = "Defines whether to validate the profile (" +
+            true+ ", " +
+            false + ").")
+    private boolean validateProfile;
 
     @Override
     public void run() {
@@ -92,7 +92,7 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
 
         try {
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-            final Profile profile = new ProfileReader(config.getProfileValidationReporter()).read(profileFile.toPath());
+            final Profile profile = new ProfileReader(config.getProfileValidator()).read(profileFile.toPath());
             DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
 
             new GenerationEngine(
@@ -141,7 +141,7 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.ProfileValidationReporterType getProfileValidationReporterType() {
-        return profileValidation;
+    public boolean getValidateProfile() {
+        return validateProfile;
     }
 }

@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 
 import java.util.List;
 
-public class StandardOutProfileValidationReporter implements  ProfileValidationReporter {
+public class SystemOutProfileValidationReporter implements  ProfileValidationReporter {
 
     @Override
     public void output(List<ValidationAlert> alerts) {
