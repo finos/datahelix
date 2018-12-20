@@ -90,7 +90,6 @@ Scenario: Running a 'shorterThan' request using an empty string "" to specify a 
      Then I am presented with an error message
        And no data is created
 
-@ignore
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
      Given there is a field foo
        And foo is shorter than null
