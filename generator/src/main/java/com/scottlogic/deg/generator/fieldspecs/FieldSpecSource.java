@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 

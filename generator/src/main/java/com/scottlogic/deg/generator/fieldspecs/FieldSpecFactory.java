@@ -1,7 +1,8 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
+import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
@@ -88,8 +89,8 @@ public class FieldSpecFactory {
         final NullRestrictions nullRestrictions = new NullRestrictions();
 
         nullRestrictions.nullness = negate
-            ? NullRestrictions.Nullness.MUST_NOT_BE_NULL
-            : NullRestrictions.Nullness.MUST_BE_NULL;
+            ? Nullness.MUST_NOT_BE_NULL
+            : Nullness.MUST_BE_NULL;
 
         return FieldSpec.Empty.withNullRestrictions(
             nullRestrictions,

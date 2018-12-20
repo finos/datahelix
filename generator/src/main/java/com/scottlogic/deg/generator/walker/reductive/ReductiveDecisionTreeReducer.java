@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -17,8 +17,11 @@ import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparer;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonContext;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeComparisonReporter;
 import com.scottlogic.deg.generator.decisiontree.test_utils.TreeTransformationTestStrategy;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -117,7 +120,7 @@ class TreeTransformationIntegrationTests {
     }
 
     private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        return new ProfileReader().read(path);
+        return new ProfileReader(new NoopProfileValidator()).read(path);
     }
 
     private List<DecisionTreeDto> getMappedExpectedOutput(File file) throws IOException {
