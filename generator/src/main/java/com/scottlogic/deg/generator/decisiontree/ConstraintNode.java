@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.restrictions.RowSpec;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public interface ConstraintNode extends Node {
     Collection<AtomicConstraint> getAtomicConstraints();
@@ -34,6 +36,10 @@ public interface ConstraintNode extends Node {
         }
 
         return new TreeConstraintNode(atomicConstraints, decisions);
+    }
+
+    default Collection<Field> getConstrainedFields() {
+        return this.getAtomicConstraints().stream().map(AtomicConstraint::getField).collect(Collectors.toSet());
     }
 }
 
