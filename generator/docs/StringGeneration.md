@@ -40,3 +40,8 @@ Other than the fact that we can use the state machine to generate strings, the m
 ## Anchors
 
 dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](https://github.com/ScottLogic/data-engineering-generator/blob/generator-documentation/docs/EpistemicConstraints.md#matchingregex-field-value) and [containingRegex](https://github.com/ScottLogic/data-engineering-generator/blob/generator-documentation/docs/EpistemicConstraints.md#containingregex-field-value). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+
+## Character support
+
+The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
+
