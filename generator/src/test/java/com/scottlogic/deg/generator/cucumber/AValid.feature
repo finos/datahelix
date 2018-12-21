@@ -432,7 +432,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "1"            |
       | "GB0002634947" |
       | "333"          |
-    Then the following data should be generated:
+    Then the following data should be included in what is generated:
       | foo            |
       | null           |
       | "GB0002634946" |
