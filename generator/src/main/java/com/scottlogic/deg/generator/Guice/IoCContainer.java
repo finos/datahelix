@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CanGenerate;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
@@ -10,7 +11,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
@@ -38,10 +39,11 @@ public class IoCContainer extends AbstractModule {
         bind(FileOutputTarget.class).toProvider(FileOutputTargetProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         // Bind known implementations - no user input required
+        bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
         bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
-
-        // Bind varying providers - used for varying implmentations based on user input
+        bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
+        bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
     }
 

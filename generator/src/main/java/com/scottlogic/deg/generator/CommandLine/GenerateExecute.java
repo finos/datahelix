@@ -30,6 +30,7 @@ public class GenerateExecute implements Runnable {
             Profile profile = this.profileReader.read(this.commandLine.getProfileFile().toPath());
 
             generationEngine.generateDataSet(profile, config);
+
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
