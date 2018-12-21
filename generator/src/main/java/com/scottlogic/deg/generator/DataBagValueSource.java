@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.restrictions.FieldSpecSource;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 
 import java.util.Collections;
 import java.util.Set;

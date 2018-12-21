@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

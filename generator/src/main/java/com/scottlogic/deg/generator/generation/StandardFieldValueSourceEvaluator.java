@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
@@ -112,11 +113,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         FieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
         if (fieldSpec.getNullRestrictions() != null) {
-            if (fieldSpec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_BE_NULL) {
+            if (fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL) {
                 // if *always* null, add a null-only source and signal that no other sources are needed
                 fieldValueSources.add(nullOnlySource);
                 return true;
-            } else if (fieldSpec.getNullRestrictions().nullness == NullRestrictions.Nullness.MUST_NOT_BE_NULL) {
+            } else if (fieldSpec.getNullRestrictions().nullness == Nullness.MUST_NOT_BE_NULL) {
                 // if *never* null, add nothing and signal that source generation should continue
                 return false;
             }

@@ -12,7 +12,7 @@ public class NullRestrictionsMerger {
             return new MergeResult<>(null);
 
         final NullRestrictions merged = new NullRestrictions();
-        Optional<NullRestrictions.Nullness> nullness = getMergedNullness(getNullness(left), getNullness(right));
+        Optional<Nullness> nullness = getMergedNullness(getNullness(left), getNullness(right));
         if (!nullness.isPresent()){
             return new MergeResult<>();
         }
@@ -21,7 +21,7 @@ public class NullRestrictionsMerger {
         return new MergeResult<>(merged);
     }
 
-    private Optional<NullRestrictions.Nullness> getMergedNullness(NullRestrictions.Nullness left, NullRestrictions.Nullness right) {
+    private Optional<Nullness> getMergedNullness(Nullness left, Nullness right) {
         if (left == null && right == null) {
             return Optional.of(null);
         }
@@ -39,7 +39,7 @@ public class NullRestrictionsMerger {
         return Optional.empty();
     }
 
-    private NullRestrictions.Nullness getNullness(NullRestrictions restrictions) {
+    private Nullness getNullness(NullRestrictions restrictions) {
         return restrictions != null ? restrictions.nullness : null;
     }
 }

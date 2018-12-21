@@ -3,11 +3,11 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.Set;

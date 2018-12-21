@@ -1,12 +1,14 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsOfTypeConstraint implements AtomicConstraint {
+public class IsOfTypeConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     public final Types requiredType;
     private final Set<RuleInformation> rules;
@@ -15,6 +17,11 @@ public class IsOfTypeConstraint implements AtomicConstraint {
         this.field = field;
         this.requiredType = requiredType;
         this.rules = rules;
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+       visitor.visit(this);
     }
 
     public enum Types {

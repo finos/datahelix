@@ -4,6 +4,8 @@ import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 class FieldSpecValueGeneratorTests {
-    private final NullRestrictions notNull = new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL);
+    private final NullRestrictions notNull = new NullRestrictions(Nullness.MUST_NOT_BE_NULL);
     private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
     @Test

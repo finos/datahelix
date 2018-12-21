@@ -3,10 +3,10 @@ package com.scottlogic.deg.generator.reducer;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.Collections;
 import java.util.List;

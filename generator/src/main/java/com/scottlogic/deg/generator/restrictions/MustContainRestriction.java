@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+
 import java.util.Objects;
 import java.util.Set;
 

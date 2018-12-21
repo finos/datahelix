@@ -6,12 +6,14 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -51,7 +53,7 @@ class ReductiveRowSpecGeneratorTests {
                 Stream.empty(),
                 FieldSpec.Empty
                     .withSetRestrictions(SetRestrictions.fromWhitelist(new HashSet<>(expectedValues)), fieldSpecSource)
-                    .withNullRestrictions(new NullRestrictions(NullRestrictions.Nullness.MUST_NOT_BE_NULL), fieldSpecSource),
+                    .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource),
                 mock(ReductiveDataGeneratorMonitor.class)));
         GenerationConfig config = new GenerationConfig(new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,

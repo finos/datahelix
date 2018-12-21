@@ -1,13 +1,16 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsNullConstraint implements AtomicConstraint
+public class IsNullConstraint implements AtomicConstraint, VisitableProfileElement
 {
     public final Field field;
     private final Set<RuleInformation> rules;
@@ -25,7 +28,7 @@ public class IsNullConstraint implements AtomicConstraint
     public String toString(){
         return String.format(
                 "`%s`: %s",
-                NullRestrictions.Nullness.MUST_BE_NULL,
+                Nullness.MUST_BE_NULL,
                 field.toString());
     }
 
@@ -48,6 +51,11 @@ public class IsNullConstraint implements AtomicConstraint
     @Override
     public int hashCode(){
         return Objects.hash(field);
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override
