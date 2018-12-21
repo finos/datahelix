@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
 import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpecEqualityComparer;
 import org.junit.jupiter.api.Test;
@@ -311,8 +312,8 @@ class ReductiveRowSpecTests {
                     new Field("First Field"),
                     FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null)
-                    .withTypeRestrictions(new NoTypeRestriction(), null)
+                        FieldSpecSource.Empty)
+                    .withTypeRestrictions(new NoTypeRestriction(), FieldSpecSource.Empty)
                 );
             }},
             new Field("Second Field")
@@ -329,8 +330,8 @@ class ReductiveRowSpecTests {
                     new Field("First Field"),
                     FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
-                        null)
-                        .withTypeRestrictions(new NoTypeRestriction(), null)
+                        FieldSpecSource.Empty)
+                        .withTypeRestrictions(new NoTypeRestriction(), FieldSpecSource.Empty)
                 );
             }},
             new Field("Second Field")
