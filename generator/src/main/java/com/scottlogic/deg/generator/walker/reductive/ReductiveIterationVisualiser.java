@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,13 +24,13 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
     }
 
     @Override
-    public void visualise(ConstraintNode rootNode, FieldCollection fieldCollection) throws IOException {
+    public void visualise(ConstraintNode rootNode, ReductiveState reductiveState) throws IOException {
         createVisualiseDirectoryIfAbsent();
 
         int iteration = currentIteration.getAndIncrement();
 
-        ProfileFields profileFields = fieldCollection.getFields();
-        String description = String.format("Iteration %d\n%s", iteration, fieldCollection.toString(true));
+        ProfileFields profileFields = reductiveState.getFields();
+        String description = String.format("Iteration %d\n%s", iteration, reductiveState.toString(true));
         Path outputPath = visualiseDirectoryPath.resolve(String.format("Reduced-tree-%03d.gv", iteration));
 
         //copy of Visualise.writeTreeTo()

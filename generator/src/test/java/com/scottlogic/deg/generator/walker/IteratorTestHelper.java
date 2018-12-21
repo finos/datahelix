@@ -42,7 +42,7 @@ public class IteratorTestHelper {
 
     private static ConstraintNode constraint(String name, DecisionNode... decisions){
         return new TreeConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, Collections.emptySet())),
             Arrays.asList(decisions));
     }
 }

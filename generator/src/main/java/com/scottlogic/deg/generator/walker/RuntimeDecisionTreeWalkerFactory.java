@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
@@ -39,21 +39,27 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     new ExhaustiveProducer());
             case REDUCTIVE:
-                IterationVisualiser visualiser = new ReductiveIterationVisualiser(outputPath);
+                IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor
                     : new NoopDataGeneratorMonitor();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,
-                    new FieldCollectionFactory(
+                    new FixedFieldBuilder(
                         config,
                         constraintReducer,
-                        fieldSpecMerger,
-                        fieldSpecFactory,
                         fixFieldStrategy,
                         reductiveMonitor),
-                    reductiveMonitor);
+                    reductiveMonitor,
+                    new ReductiveDecisionTreeReducer(
+                        fieldSpecFactory,
+                        fieldSpecMerger),
+                    new ReductiveRowSpecGenerator(
+                        constraintReducer,
+                        fieldSpecMerger,
+                        reductiveMonitor)
+                );
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

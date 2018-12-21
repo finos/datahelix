@@ -3,24 +3,23 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DecisionTreeToRowSpecsTests {
@@ -58,69 +57,87 @@ public class DecisionTreeToRowSpecsTests {
         final Field currency = new Field("currency");
         final Field city = new Field("city");
         return new Profile(
-                Arrays.asList(country, currency, city),
-                Arrays.asList(
-                        new Rule(
-                                "US country constrains city",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "US"
-                                                ),
-                                                new IsInSetConstraint(
-                                                        city,
-                                                        new HashSet<>(Arrays.asList("New York", "Washington DC"))
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "GB country constrains city",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "GB"
-                                                ),
-                                                new IsInSetConstraint(
-                                                        city,
-                                                        new HashSet<>(Arrays.asList("Bristol", "London"))
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "US country constrains currency",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "US"
-                                                ),
-                                                new IsEqualToConstantConstraint(
-                                                        currency,
-                                                        "USD"
-                                                )
-                                        )
-                                )
-                        ),
-                        new Rule(
-                                "GB country constrains currency",
-                                Collections.singletonList(
-                                        new ConditionalConstraint(
-                                                new IsEqualToConstantConstraint(
-                                                        country,
-                                                        "GB"
-                                                ),
-                                                new IsEqualToConstantConstraint(
-                                                        currency,
-                                                        "GBP"
-                                                )
-                                        )
-                                )
+            Arrays.asList(country, currency, city),
+            Arrays.asList(
+                new Rule(
+                    rule("US country constrains city"),
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "US",
+                                rules()
+                            ),
+                            new IsInSetConstraint(
+                                city,
+                                new HashSet<>(Arrays.asList("New York", "Washington DC")),
+                                rules()
+                            )
                         )
+                    )
+                ),
+                new Rule(
+                    rule("GB country constrains city"),
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "GB",
+                                rules()
+                            ),
+                            new IsInSetConstraint(
+                                city,
+                                new HashSet<>(Arrays.asList("Bristol", "London")),
+                                rules()
+                            )
+                        )
+                    )
+                ),
+                new Rule(
+                    rule("US country constrains currency"),
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "US",
+                                rules()
+                            ),
+                            new IsEqualToConstantConstraint(
+                                currency,
+                                "USD",
+                                rules()
+                            )
+                        )
+                    )
+                ),
+                new Rule(
+                    rule("GB country constrains currency"),
+                    Collections.singletonList(
+                        new ConditionalConstraint(
+                            new IsEqualToConstantConstraint(
+                                country,
+                                "GB",
+                                rules()
+                            ),
+                            new IsEqualToConstantConstraint(
+                                currency,
+                                "GBP",
+                                rules()
+                            )
+                        )
+                    )
                 )
+            )
         );
+    }
+
+    private static Set<RuleInformation> rules(){
+        return Collections.singleton(rule("rules"));
+    }
+
+    private static RuleInformation rule(String description){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = description;
+        return new RuleInformation(rule);
     }
 }

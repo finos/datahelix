@@ -1,16 +1,23 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.Objects;
+import java.util.Set;
 
-public class IsNullConstraint implements AtomicConstraint
+public class IsNullConstraint implements AtomicConstraint, VisitableProfileElement
 {
     public final Field field;
+    private final Set<RuleInformation> rules;
 
-    public IsNullConstraint(Field field) {
+    public IsNullConstraint(Field field, Set<RuleInformation> rules) {
         this.field = field;
+        this.rules = rules;
     }
 
     @Override
@@ -21,7 +28,7 @@ public class IsNullConstraint implements AtomicConstraint
     public String toString(){
         return String.format(
                 "`%s`: %s",
-                NullRestrictions.Nullness.MUST_BE_NULL,
+                Nullness.MUST_BE_NULL,
                 field.toString());
     }
 
@@ -33,6 +40,9 @@ public class IsNullConstraint implements AtomicConstraint
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
+        if (o instanceof ViolatedAtomicConstraint) {
+            return o.equals(this);
+        }
         if (o == null || getClass() != o.getClass()) return false;
         IsNullConstraint constraint = (IsNullConstraint) o;
         return Objects.equals(field, constraint.field);
@@ -41,5 +51,20 @@ public class IsNullConstraint implements AtomicConstraint
     @Override
     public int hashCode(){
         return Objects.hash(field);
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public Set<RuleInformation> getRules() {
+        return rules;
+    }
+
+    @Override
+    public AtomicConstraint withRules(Set<RuleInformation> rules) {
+        return new IsNullConstraint(this.field, rules);
     }
 }

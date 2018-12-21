@@ -1,9 +1,8 @@
-# Presentational constraints
 
 ### `formattedAs` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": formattedAs", "value": "%.5s" }
+{ "field": "price", "is": "formattedAs", "value": "%.5s" }
 ```
 
 Used by output serialisers where string output is required. `value` must be:

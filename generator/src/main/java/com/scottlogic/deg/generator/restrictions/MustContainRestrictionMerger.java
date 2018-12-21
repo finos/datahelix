@@ -1,5 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class MustContainRestrictionMerger {
     public MustContainRestriction merge(MustContainRestriction left, MustContainRestriction right) {
         if (left == null) {
@@ -9,7 +12,11 @@ public class MustContainRestrictionMerger {
             return left;
         }
 
-        // TODO: implement merging
-        return right;
+        return new MustContainRestriction(
+            Stream.concat(
+                left.getRequiredObjects().stream(),
+                right.getRequiredObjects().stream()
+            ).collect(Collectors.toSet())
+        );
     }
 }
