@@ -613,6 +613,7 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
      Then I am presented with an error message
        And no data is created
 
+@ignore
 Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
      Given the following fields exist:
        | foo   |
@@ -621,21 +622,15 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
        And there is a constraint:
        """
        {
-         "if": { "field": "foo", "is": "matchingRegex", "value": "[a-b]{1}" },
+         "if": { "field": "foo", "is": "matchingRegex", "value": "[a-c]{1}" },
          "then": { "field": "price", "is": "equalTo", "value": 1 },
          "else": { "field": "price", "is": "equalTo", "value": 2 }
          }
        """
     Then the following data should be generated:
       | foo  | price |
-      | null | null  |
-      | null | 1     |
       | "a"  | 1     |
-      | "a"  | null  |
       | "b"  | 1     |
-      | "b"  | null  |
       | null | 2     |
       | "c"  | 2     |
-      | "c"  | null  |
       | "d"  | 2     |
-      | "d"  | null  |
