@@ -622,7 +622,7 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
        And there is a constraint:
        """
        {
-         "if": { "field": "foo", "is": "matchingRegex", "value": "[a-c]{1}" },
+         "if": { "field": "foo", "is": "matchingRegex", "value": "[a-b]{1}" },
          "then": { "field": "price", "is": "equalTo", "value": 1 },
          "else": { "field": "price", "is": "equalTo", "value": 2 }
          }
