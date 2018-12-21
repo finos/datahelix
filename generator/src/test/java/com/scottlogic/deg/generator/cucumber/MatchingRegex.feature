@@ -562,7 +562,6 @@ Scenario: Running a 'matchingRegex' request with a not constraint should be succ
        And foo is anything but matching regex /[0-1]{1}/
      Then the following data should not be included in what is generated:
        | foo  |
-       | null |
        | "0"  |
        | "1"  |
 
