@@ -16,8 +16,7 @@ import java.util.stream.Stream;
 /**
  * Produces combinations of values based on a decision tree.
  *
- * Will produce combinations for each field in the root node and combinations for each leaf node
- * that constrains more than one field.
+ * Will produce combinations for each field in the root node and combinations for each leaf node.
  */
 public final class DecisionTreeCombinationProducer implements CombinationProducer {
 
@@ -53,12 +52,7 @@ public final class DecisionTreeCombinationProducer implements CombinationProduce
         currentAccumulation.addAll(node.getAtomicConstraints());
         if (node.getDecisions().isEmpty()) {
             Collection<Field> fields = node.getConstrainedFields();
-            // Create combinations when the constraint node affects more than one field
-            if (fields.size() > 1) {
-                return combinationCreator.makeCombinations(fields, currentAccumulation);
-            } else {
-                return Collections.emptyList();
-            }
+            return combinationCreator.makeCombinations(fields, currentAccumulation);
         }
         return node.getDecisions().stream()
             .flatMap(dNode -> this.getConstraintCombinationsFromLeaves(dNode, currentAccumulation)
