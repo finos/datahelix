@@ -13,6 +13,10 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Decision tree walker that will use fixed combinations of values as seeds to the Reductive Decision Tree Walker.
+ * More importantly, it only produces a single row for each combination before moving on.
+ */
 public class CombinationBasedWalker implements DecisionTreeWalker {
 
     private final CombinationProducer combinationProducer;
@@ -26,7 +30,7 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
 
     @Override
     public Stream<RowSpec> walk(DecisionTree tree) {
-        Stream<Combination> combinations = combinationProducer.getCombinations().distinct(); // discard combinations that are non unique
+        Stream<Combination> combinations = combinationProducer.getCombinations().distinct(); // discard duplicate combinations
         return FlatMappingSpliterator.flatMap(
             combinations.map(combo -> {
                 Deque<FixedField> initialFixFields = combo.getCombinations().entrySet().stream()
