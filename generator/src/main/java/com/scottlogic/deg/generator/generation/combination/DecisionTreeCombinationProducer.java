@@ -34,7 +34,7 @@ public final class DecisionTreeCombinationProducer implements CombinationProduce
     }
 
     private Stream<Combination> getConstraintCombinations(ConstraintNode root){
-        List<Combination> rootCombinations = root.getConstrainedFields().stream()
+        List<Combination> rootCombinations = getConstrainedFields(root).stream()
             .flatMap(field -> combinationCreator.makeCombinations(Collections.singletonList(field), root.getAtomicConstraints()).stream())
             .collect(Collectors.toList());
 
@@ -51,7 +51,7 @@ public final class DecisionTreeCombinationProducer implements CombinationProduce
         Collection<AtomicConstraint> currentAccumulation = new HashSet<>(accumulatedConstraints);
         currentAccumulation.addAll(node.getAtomicConstraints());
         if (node.getDecisions().isEmpty()) {
-            Collection<Field> fields = node.getConstrainedFields();
+            Collection<Field> fields = getConstrainedFields(node);
             return combinationCreator.makeCombinations(fields, currentAccumulation);
         }
         return node.getDecisions().stream()
@@ -59,6 +59,8 @@ public final class DecisionTreeCombinationProducer implements CombinationProduce
             .stream()).collect(Collectors.toList());
     }
 
-
+    public static Collection<Field> getConstrainedFields(ConstraintNode node) {
+        return node.getAtomicConstraints().stream().map(AtomicConstraint::getField).collect(Collectors.toSet());
+    }
 
 }
