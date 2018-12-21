@@ -26,7 +26,7 @@ public class NullRestrictionsEqualityComparer implements EqualityComparer {
         return nullnessAreEqual(item1.nullness, item2.nullness);
     }
 
-    private boolean nullnessAreEqual(NullRestrictions.Nullness nullness1, NullRestrictions.Nullness nullness2) {
+    private boolean nullnessAreEqual(Nullness nullness1, Nullness nullness2) {
         if (nullness1 == null && nullness2 != null ||
             nullness1 != null && nullness2 == null) {
             return false;

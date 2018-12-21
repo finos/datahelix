@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ public class RankedConstraintFixFieldStrategy implements FixFieldStrategy {
     4. Yield detail of the constraint and its related field
     */
     @Override
-    public Field getNextFieldToFix(FieldCollection fieldCollection, ReductiveConstraintNode rootNode) {
+    public Field getNextFieldToFix(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
         return rootNode.getAllUnfixedAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(AtomicConstraint::getField))

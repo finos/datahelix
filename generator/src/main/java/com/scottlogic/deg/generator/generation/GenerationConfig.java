@@ -1,23 +1,27 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Generate;
 import com.scottlogic.deg.generator.generation.combination_strategies.*;
+import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
-    private final long maxRows = 10_000_000;
+    private final long maxRows;
+    private final boolean validateProfile;
 
-    public GenerationConfig(
-        DataGenerationType dataGenerationType,
-        TreeWalkerType walkerType,
-        CombinationStrategyType combinationStrategy) {
+    public GenerationConfig(GenerationConfigSource source) {
+        this.dataGenerationType = source.getGenerationType();
+        this.walkerType = source.getWalkerType();
+        this.combinationStrategy = source.getCombinationStrategyType();
+        this.maxRows = source.getMaxRows();
+        this.validateProfile = source.getValidateProfile();
 
-        this.dataGenerationType = dataGenerationType;
-        this.walkerType = walkerType;
-        this.combinationStrategy = combinationStrategy;
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -45,10 +49,19 @@ public class GenerationConfig {
 
     public long getMaxRows() { return maxRows; }
 
+    public ProfileValidator getProfileValidator() {
+
+        if(validateProfile) {
+            return new ReportingProfileValidator(new SystemOutProfileValidationReporter());
+        }
+
+        return new NoopProfileValidator();
+    }
+
     public enum DataGenerationType {
-        FULL_SEQUENTIAL("full"),
-        INTERESTING("interesting"),
-        RANDOM("random");
+        FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),
+        INTERESTING(Constants.GenerationTypes.INTERESTING),
+        RANDOM(Constants.GenerationTypes.RANDOM);
 
         private final String text;
 
@@ -63,9 +76,9 @@ public class GenerationConfig {
     }
 
     public enum TreeWalkerType {
-        CARTESIAN_PRODUCT(Generate.defaultTreeWalkerType),
-        ROUTED("routed"),
-        REDUCTIVE("reductive");
+        CARTESIAN_PRODUCT(Constants.WalkerTypes.CARTESIAN_PRODUCT),
+        ROUTED(Constants.WalkerTypes.ROUTED),
+        REDUCTIVE(Constants.WalkerTypes.REDUCTIVE);
 
         private final String text;
 
@@ -81,9 +94,9 @@ public class GenerationConfig {
 
     public enum CombinationStrategyType {
 
-        EXHAUSTIVE("exhaustive"),
-        PINNING("pinning"),
-        MINIMAL("minimal");
+        EXHAUSTIVE(Constants.CombinationStrategies.EXHAUSTIVE),
+        PINNING(Constants.CombinationStrategies.PINNING),
+        MINIMAL(Constants.CombinationStrategies.MINIMAL);
         private final String text;
 
         CombinationStrategyType(String text){
@@ -96,4 +109,31 @@ public class GenerationConfig {
         }
     }
 
+    public static class Constants {
+        public static class WalkerTypes {
+            public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
+            public static final String ROUTED = "ROUTED";
+            public static final String REDUCTIVE = "REDUCTIVE";
+
+            public static final String DEFAULT = CARTESIAN_PRODUCT;
+        }
+
+        public static class CombinationStrategies {
+            public static final String EXHAUSTIVE = "EXHAUSTIVE";
+            public static final String PINNING = "PINNING";
+            public static final String MINIMAL = "MINIMAL";
+
+            public static final String DEFAULT = PINNING;
+        }
+
+        public static class GenerationTypes {
+            public static final String FULL_SEQUENTIAL = "FULL_SEQUENTIAL";
+            public static final String INTERESTING = "INTERESTING";
+            public static final String RANDOM = "RANDOM";
+
+            public static final String DEFAULT = INTERESTING;
+        }
+
+        public static final long DEFAULT_MAX_ROWS = 10_000_000;
+    }
 }

@@ -156,8 +156,20 @@ public class TemporalFieldValueSource implements FieldValueSource {
         TemporalFieldValueSource otherSource = (TemporalFieldValueSource) obj;
         return restrictions.equals(otherSource.restrictions) &&
             blacklist.equals(otherSource.blacklist) &&
-            inclusiveLower.equals(otherSource.inclusiveLower) &&
-            exclusiveUpper.equals(otherSource.exclusiveUpper);
+            equals(inclusiveLower, otherSource.inclusiveLower) &&
+            equals(exclusiveUpper, otherSource.exclusiveUpper);
+    }
+
+    private static boolean equals(LocalDateTime x, LocalDateTime y){
+        if (x == null && y == null) {
+            return true;
+        }
+
+        if (x == null || y == null) {
+            return false; //either x OR y is null, but not both (XOR)
+        }
+
+        return x.equals(y);
     }
 
     @Override

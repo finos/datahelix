@@ -15,10 +15,18 @@ import java.util.stream.Stream;
 public class DirectoryOutputTarget implements OutputTarget {
     private final Path directoryPath;
     private final DataSetWriter dataSetWriter;
+    private final TestCaseGenerationResultWriter testCaseWriter;
 
-    public DirectoryOutputTarget(Path directoryPath, DataSetWriter dataSetWriter) {
+    public DirectoryOutputTarget(
+        Path directoryPath,
+        String profileFileNameWithoutExtension,
+        DataSetWriter dataSetWriter) {
+
         this.directoryPath = directoryPath;
         this.dataSetWriter = dataSetWriter;
+        this.testCaseWriter = new TestCaseGenerationResultWriter(
+            this.dataSetWriter,
+            profileFileNameWithoutExtension);
     }
 
     @Override
@@ -36,7 +44,7 @@ public class DirectoryOutputTarget implements OutputTarget {
 
     @Override
     public void outputTestCases(TestCaseGenerationResult dataSets) throws IOException {
-        new TestCaseGenerationResultWriter(this.dataSetWriter)
+        this.testCaseWriter
             .writeToDirectory(
                 dataSets,
                 this.directoryPath.toAbsolutePath().normalize());
