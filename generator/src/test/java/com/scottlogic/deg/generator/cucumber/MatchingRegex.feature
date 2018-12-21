@@ -612,7 +612,6 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
      Then I am presented with an error message
        And no data is created
 
-@ignore
 Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
      Given the following fields exist:
        | foo   |
@@ -630,6 +629,9 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
       | foo  | price |
       | "a"  | 1     |
       | "b"  | 1     |
-      | null | 2     |
       | "c"  | 2     |
       | "d"  | 2     |
+      | null | 1     |
+      | null | 2     |
+      | null | null  |
+      | null | null  |
