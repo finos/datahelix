@@ -462,7 +462,6 @@ Scenario: Running an 'inSet' request that includes a null entry ("") characters 
 Scenario: Running an 'inSet' request that includes a null entry (null) characters should be successful
      Given there is a field foo
        And foo is in set:
-       | null |
        | 1    |
      Then the following data should be generated:
        | foo  |
@@ -472,7 +471,6 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
 Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
      Given there is a field foo
        And foo is in set:
-       | null                    |
        | 1                       |
        | 2010-01-01T00:00:00.000 |
        | "String!"               |
