@@ -20,16 +20,14 @@ import java.util.stream.Stream;
  */
 public final class DecisionTreeCombinationProducer implements CombinationProducer {
 
-    private final DecisionTree tree;
     private final CombinationCreator combinationCreator;
 
-    public DecisionTreeCombinationProducer(DecisionTree tree, CombinationCreator combinationCreator){
-        this.tree = tree;
+    public DecisionTreeCombinationProducer(CombinationCreator combinationCreator){
         this.combinationCreator = combinationCreator;
     }
 
     @Override
-    public Stream<Combination> getCombinations() {
+    public Stream<Combination> getCombinations(DecisionTree tree) {
         return this.getConstraintCombinations(tree.getRootNode());
     }
 

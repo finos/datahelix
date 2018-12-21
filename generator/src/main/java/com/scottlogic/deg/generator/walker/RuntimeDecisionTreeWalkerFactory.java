@@ -13,9 +13,6 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import static com.scottlogic.deg.generator.generation.GenerationConfig.ReductionTarget.*;
 
 public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFactory {
 
@@ -50,15 +47,11 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
                     config,
                     new SingleCombinationStrategy());
 
-                CombinationProducer combinationProducer;
+                CombinationProducer combinationProducer = new DecisionTreeCombinationProducer(combinationCreator);
 
-                if (config.getReductionTarget() == VIOLATE_RULE){
-                    combinationProducer = new ViolationCombinationProducer(tree, combinationCreator);
+                if (config.getReductionTarget() == GenerationConfig.ReductionTarget.VIOLATE_RULE){
+                    combinationProducer = new ViolationCombinationProducer(combinationCreator);
                 }
-                else if (config.getReductionTarget() == VALID_RULE){
-                    combinationProducer = new DecisionTreeCombinationProducer(tree, combinationCreator);
-                }
-                else throw new NotImplementedException();
 
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor

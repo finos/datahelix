@@ -30,7 +30,7 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
 
     @Override
     public Stream<RowSpec> walk(DecisionTree tree) {
-        Stream<Combination> combinations = combinationProducer.getCombinations().distinct(); // discard duplicate combinations
+        Stream<Combination> combinations = combinationProducer.getCombinations(tree).distinct(); // discard duplicate combinations
         return FlatMappingSpliterator.flatMap(
             combinations.map(combo -> {
                 Deque<FixedField> initialFixFields = combo.getCombinations().entrySet().stream()

@@ -12,18 +12,16 @@ import java.util.stream.Stream;
 
 public class ViolationCombinationProducer implements CombinationProducer {
 
-    private final DecisionTree decisionTree;
     private final CombinationCreator combinationCreator;
 
-    public ViolationCombinationProducer(DecisionTree decisionTree, CombinationCreator combinationCreator){
-        this.decisionTree = decisionTree;
+    public ViolationCombinationProducer(CombinationCreator combinationCreator){
         this.combinationCreator = combinationCreator;
     }
 
     @Override
-    public Stream<Combination> getCombinations() {
+    public Stream<Combination> getCombinations(DecisionTree tree) {
 
-        Collection<AtomicConstraint> violatedRootConstraints = decisionTree.getRootNode().getAtomicConstraints()
+        Collection<AtomicConstraint> violatedRootConstraints = tree.getRootNode().getAtomicConstraints()
             .stream().filter(x->x instanceof ViolatedAtomicConstraint)
             .collect(Collectors.toSet());
 
@@ -31,7 +29,7 @@ public class ViolationCombinationProducer implements CombinationProducer {
             return combinationCreator.makeCombinations(getFields(violatedRootConstraints), violatedRootConstraints).stream();
         }
 
-        DecisionNode violated = getViolatedDecisionNode(decisionTree.getRootNode());
+        DecisionNode violated = getViolatedDecisionNode(tree.getRootNode());
         if (violated == null){
             // no decision has been violated
             return Stream.empty();
@@ -39,7 +37,7 @@ public class ViolationCombinationProducer implements CombinationProducer {
 
         List<Combination> combinations = new ArrayList<>();
         for (ConstraintNode option : violated.getOptions()) {
-            combinations.addAll(combinationsForOption(option));
+            combinations.addAll(combinationsForOption(tree, option));
         }
 
         return combinations.stream();
@@ -52,9 +50,9 @@ public class ViolationCombinationProducer implements CombinationProducer {
     }
 
 
-    private List<Combination> combinationsForOption(ConstraintNode constraintNode){
+    private List<Combination> combinationsForOption(DecisionTree tree, ConstraintNode constraintNode){
         Set<AtomicConstraint> constraints = Stream.concat(
-            decisionTree.rootNode.getAtomicConstraints().stream(),
+            tree.rootNode.getAtomicConstraints().stream(),
             constraintNode.getAtomicConstraints().stream())
             .collect(Collectors.toSet());
 

@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,16 +33,13 @@ public class GenerationEngine {
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
-        final TestCaseDataSet validCase = new TestCaseDataSet(null, generate(profile, config));
-
-        final Stream<TestCaseDataSet> violatingCases = profile.rules
+        final List<TestCaseDataSet> violatingCases = profile.rules
             .stream()
-            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
+            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule))
+            .collect(Collectors.toList());
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
-            profile,
-            Stream.concat(Stream.of(validCase), violatingCases)
-                .collect(Collectors.toList()));
+            profile, violatingCases);
 
         this.outputter.outputTestCases(generationResult);
     }
