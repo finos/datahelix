@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import java.util.Collection;
 import java.util.Optional;

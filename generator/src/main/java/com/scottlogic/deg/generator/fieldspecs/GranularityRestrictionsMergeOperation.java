@@ -1,4 +1,6 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
+
+import com.scottlogic.deg.generator.restrictions.GranularityRestrictionsMerger;
 
 import java.util.Optional;
 

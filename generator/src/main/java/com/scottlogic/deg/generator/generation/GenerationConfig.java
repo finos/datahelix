@@ -2,6 +2,10 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.generation.combination_strategies.*;
 import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 
 public class GenerationConfig {
 
@@ -10,6 +14,7 @@ public class GenerationConfig {
     private final CombinationStrategyType combinationStrategy;
     private final long maxRows;
     private final ReductionTarget reductionTarget;
+    private final boolean validateProfile;
 
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
@@ -17,6 +22,8 @@ public class GenerationConfig {
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
         this.reductionTarget = ReductionTarget.VALID_RULE;
+        this.validateProfile = source.getValidateProfile();
+
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -47,6 +54,15 @@ public class GenerationConfig {
     }
 
     public long getMaxRows() { return maxRows; }
+
+    public ProfileValidator getProfileValidator() {
+
+        if(validateProfile) {
+            return new ReportingProfileValidator(new SystemOutProfileValidationReporter());
+        }
+
+        return new NoopProfileValidator();
+    }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),

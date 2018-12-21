@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -43,21 +44,23 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
 
             StringRestrictions stringRestrictions = merged.getStringRestrictions();
             if(stringRestrictions != null){
-                filterStream = filterStream.filter(x -> stringRestrictions.match(x));
+                filterStream = filterStream.filter(stringRestrictions::match);
             }
 
             NumericRestrictions numberRestrictions = merged.getNumericRestrictions();
             if(numberRestrictions != null){
-                filterStream = filterStream.filter(x -> numberRestrictions.match(x));
+                filterStream = filterStream.filter(numberRestrictions::match);
             }
 
             DateTimeRestrictions dateTimeRestrictions = merged.getDateTimeRestrictions();
             if(dateTimeRestrictions != null){
-                filterStream = filterStream.filter(x -> dateTimeRestrictions.match(x));
+                filterStream = filterStream.filter(dateTimeRestrictions::match);
             }
 
-            setRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
+            SetRestrictions newSetRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
                 setRestrictions.getBlacklist());
+
+            setRestrictions = newSetRestrictions;
         }
 
         return Optional.of(merged.withSetRestrictions(

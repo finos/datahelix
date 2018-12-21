@@ -13,6 +13,8 @@ import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -43,7 +45,7 @@ class ExampleProfilesTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }
@@ -57,7 +59,7 @@ class ExampleProfilesTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateTestCases(profile, config);
         }));
     }
@@ -72,7 +74,7 @@ class ExampleProfilesTests {
 
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {

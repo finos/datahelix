@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.combination.Combination;
 import com.scottlogic.deg.generator.generation.combination.CombinationProducer;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
 
@@ -34,8 +34,8 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
         return FlatMappingSpliterator.flatMap(
             combinations.map(combo -> {
                 Deque<FixedField> initialFixFields = combo.getCombinations().entrySet().stream()
-                    .map(entry -> new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()),
-                        entry.getValue().getSource(), reductiveWalker.getMonitor()))
+                    .map(entry ->
+                        new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()), entry.getValue().getSource(), reductiveWalker.getMonitor()))
                     .peek(ff -> {
                         ff.getStream().iterator().next();
                     })

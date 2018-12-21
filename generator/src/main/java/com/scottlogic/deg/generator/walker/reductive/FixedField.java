@@ -2,8 +2,9 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 
 import java.util.Collections;
@@ -78,7 +79,7 @@ public class FixedField {
     private FieldSpec getNullRequiredFieldSpec() {
         return FieldSpec.Empty
         .withNullRestrictions(
-            new NullRestrictions(NullRestrictions.Nullness.MUST_BE_NULL),
+            new NullRestrictions(Nullness.MUST_BE_NULL),
             this.valuesFieldSpec.getFieldSpecSource()
         );
     }

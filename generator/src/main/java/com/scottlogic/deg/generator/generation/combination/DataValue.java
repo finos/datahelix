@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.combination;
 
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
+
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 import java.util.Objects;
 

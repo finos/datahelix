@@ -79,12 +79,19 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
+    @CommandLine.Option(
+        names = {"-v", "--v", "--validate-profile"},
+        description = "Defines whether to validate the profile (" +
+            true+ ", " +
+            false + ").")
+    private boolean validateProfile;
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
 
         try {
-            final Profile profile = new ProfileReader().read(profileFile.toPath());
+            final Profile profile = new ProfileReader(config.getProfileValidator()).read(profileFile.toPath());
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
 
             new GenerationEngine(
@@ -127,5 +134,10 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     @Override
     public long getMaxRows() {
         return maxRows;
+    }
+
+    @Override
+    public boolean getValidateProfile() {
+        return validateProfile;
     }
 }

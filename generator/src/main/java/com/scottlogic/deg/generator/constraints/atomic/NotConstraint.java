@@ -1,12 +1,14 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
+import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class NotConstraint implements AtomicConstraint {
+public class NotConstraint implements AtomicConstraint, VisitableProfileElement {
     public final AtomicConstraint negatedConstraint;
 
     protected NotConstraint(AtomicConstraint negatedConstraint) {
@@ -59,6 +61,11 @@ public class NotConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash("NOT", negatedConstraint.hashCode());
+    }
+
+    @Override
+    public void accept(ProfileVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override
