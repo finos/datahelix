@@ -53,6 +53,10 @@ public class ProfileReaderTests {
         Assertions.assertThrows(Exception.class, this::getResultingProfile);
     }
 
+    private void expectInvalidProfileException() {
+        Assertions.assertThrows(InvalidProfileException.class, this::getResultingProfile);
+    }
+
     private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException, InvalidProfileException {
         expectMany(this.getResultingProfile().rules, ruleAssertions);
     }
@@ -489,4 +493,31 @@ public class ProfileReaderTests {
         expectException();
     }
 
+    @Test
+    public void shouldRejectEqualToWithNullValue() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": null }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectInSetWithANullValue() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ null ] }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
 }
