@@ -27,9 +27,22 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
             // If we have values that must be included we need to check that those values are included in the whitelist
             if (mustContainRestriction != null) {
-                whitelist = Stream.concat(whitelist.stream(),
-                getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                    .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())).collect(Collectors.toSet());
+                Set<Object> mustContainValues = getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                    .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()).collect(Collectors.toSet());
+
+                //the items in the whitelist that are not in mustContainValues
+                Set<Object> relativeComplementaryWhitelistValues =
+                    whitelist.stream().filter(value -> !mustContainValues.contains(value))
+                    .collect(Collectors.toSet());
+
+                whitelist = Stream.concat(
+                    mustContainValues.stream(),
+                    relativeComplementaryWhitelistValues.stream().limit(1) //include a non-must contains item
+                ).collect(Collectors.toSet());
+            }
+            else {
+                //there are no values defined as MUST contain, so pick at most 2 items from the whitelist
+                whitelist = whitelist.stream().limit(2).collect(Collectors.toSet());
             }
 
             Stream<Object> validSourcesValues = validSources

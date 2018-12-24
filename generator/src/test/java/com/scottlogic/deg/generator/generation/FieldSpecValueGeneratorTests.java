@@ -22,7 +22,7 @@ class FieldSpecValueGeneratorTests {
     private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
     @Test
-    void generate_fieldSpecContainsSingleMustContainRestriction_returnsValuesWithValueInMustContainRestriction() {
+    void generate_fieldSpecContainsSingleMustContainRestriction_returnsValuesWithValueInMustContainRestrictionAndOneOther() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withSetRestrictions(
@@ -70,10 +70,62 @@ class FieldSpecValueGeneratorTests {
                 DataBag.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                ).build()
+            )
+        );
+
+        assertEquals(expectedDataBags, result);
+    }
+
+    @Test
+    void generate_fieldSpecContainsSingleMustContainRestriction_returnsValuesWithValueInMustContainRestrictionAndFirstOther() {
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNullRestrictions(notNull, fieldSpecSource)
+            .withSetRestrictions(
+                new SetRestrictions(
+                    new HashSet<>(
+                        Arrays.asList(5, 10, 20)
+                    ),
+                    null
+                ),
+                fieldSpecSource)
+            .withMustContainRestriction(
+                new MustContainRestriction(
+                    new HashSet<>(
+                        Collections.singletonList(
+                            FieldSpec.Empty.withSetRestrictions(
+                                new SetRestrictions(
+                                    new HashSet<>(
+                                        Collections.singletonList(5)
+                                    ),
+                                    null
+                                ),
+                                fieldSpecSource
+                            ).withNullRestrictions(notNull, fieldSpecSource)
+                        )
+                    )
+                )
+            );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+
+        final Set<DataBag> result = fieldSpecFulfiller.generate(
+            new GenerationConfig(
+                new TestGenerationConfigSource(
+                    GenerationConfig.DataGenerationType.INTERESTING,
+                    GenerationConfig.TreeWalkerType.REDUCTIVE,
+                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+            )
+        ).collect(Collectors.toSet());
+
+        Set<DataBag> expectedDataBags = new HashSet<>(
+            Arrays.asList(
+                DataBag.startBuilding().set(
+                    new Field("First Field"),
+                    new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
             )
         );
@@ -304,10 +356,6 @@ class FieldSpecValueGeneratorTests {
                 DataBag.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(30, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
             )
         );

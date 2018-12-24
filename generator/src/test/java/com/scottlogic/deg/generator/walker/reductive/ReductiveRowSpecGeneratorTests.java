@@ -42,7 +42,7 @@ class ReductiveRowSpecGeneratorTests {
 
     @Test
     void getValuesFromLastFixedField_lastFixedFieldNotNull_returnsStreamOfAllValuesInLastFixedField() {
-        List<Integer> expectedValues = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> expectedValues = Arrays.asList(1, 2);
         ReductiveRowSpecGenerator rowSpecGenerator = getRowSpecGenerator();
         ConstraintNode rootNode = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet());
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
