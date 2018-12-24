@@ -9,6 +9,7 @@ Scenario: Running an 'ofType' = string request that includes strings with roman 
        And foo is of type "string"
      Then the following data should be generated:
        | foo                          |
+       | null                         |
        | "abcdefghijklmnopqrstuvwxyz" |
 
 Scenario: Running an 'ofType' = String request that includes strings with roman alphabet uppercase chars (A-Z) only should be successful
@@ -17,6 +18,7 @@ Scenario: Running an 'ofType' = String request that includes strings with roman 
        And foo is of type "string"
      Then the following data should be generated:
        | foo                          |
+       | null                         |
        | "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |
 
 Scenario: Running an 'ofType' = String request that includes strings with roman numeric chars (0-9) only should be successful
@@ -25,6 +27,7 @@ Scenario: Running an 'ofType' = String request that includes strings with roman 
        And foo is of type "string"
      Then the following data should be generated:
        | foo          |
+       | null         |
        | "0123456789" |
 
 Scenario: Running an 'ofType' = String request that includes strings with both roman alphabet lowercase (a-z) and uppercase (A-Z) should be successful
@@ -33,6 +36,7 @@ Scenario: Running an 'ofType' = String request that includes strings with both r
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                                    |
+       | null                                                   |
        | "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" |
 
 Scenario: Running an 'ofType' = String request that includes strings with both roman alphabet (a-z, A-Z)and numeric chars (0-9) should be successful
@@ -41,6 +45,7 @@ Scenario: Running an 'ofType' = String request that includes strings with both r
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                                              |
+       | null                                                             |
        | "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" |
 
 Scenario: Running an 'ofType' = String request that includes roman character strings that include profanity should be successful
@@ -49,6 +54,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo             |
+       | null            |
        | "Dick Van Dyke" |
 
 Scenario: Running an 'ofType' = String request that includes roman character strings that include in-use values should be successful
@@ -61,6 +67,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo         |
+       | null        |
        | "true"      |
        | "false"     |
        | "null"      |
@@ -77,7 +84,8 @@ Scenario: Running an 'ofType' = String request that includes strings with specia
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                            |
-       | "!?:;()&%+-="                                |
+       | null                                           |
+       | "!?:;()&%+-="                                  |
        | "]	[] [] [] [] [] [] ["                       |
        | "†ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
        | "☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
@@ -94,6 +102,7 @@ Scenario: Running an 'ofType' = String request that includes strings with specia
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                                              |
+       | null                                                             |
        | "abcdefghijklmnop  !?:;()&%+-="                                  |
        | "abcdefghijklmnop  ]	[] [] [] [] [] [] ["                       |
        | "abcdefghijklmnop  †ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
@@ -109,6 +118,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
        And foo is of type "string"
      Then the following data should be generated:
        | foo            |
+       | null           |
        | "0.0"          |
        | "0.0.1"        |
        | "99.999999000" |
@@ -122,6 +132,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
        And foo is of type "string"
      Then the following data should be generated:
        | foo       |
+       | null      |
        | "1,000"   |
        | "100,000" |
        | "5,99"    |
@@ -134,6 +145,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
        And foo is of type "string"
      Then the following data should be generated:
        | foo         |
+       | null        |
        | "010"       |
        | "0001 0100" |
 
@@ -146,6 +158,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
        And foo is of type "string"
      Then the following data should be generated:
        | foo          |
+       | null         |
        | "000010"     |
        | "10000"      |
        | "0000.00000" |
@@ -158,6 +171,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
        And foo is of type "string"
      Then the following data should be generated:
        | foo     |
+       | null    |
        | "£1.00" |
        | "€5,99" |
 
@@ -170,6 +184,7 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
   And foo is of type "string"
   Then the following data should be generated:
     | foo       |
+    | null      |
     | "+5"      |
     | "-99"     |
     | "-500.05" |
@@ -183,6 +198,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo        |
+       | null       |
        | "Infinity" |
        | "NaN"      |
        | "nil"      |
@@ -195,6 +211,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo        |
+       | null       |
        | "1E+02"    |
        | "001 001"  |
 
@@ -206,6 +223,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo                       |
+       | null                      |
        | "2010-01-01T00:00:00.000" |
        | "2010-02-29T23:59:59.000" |
 
@@ -218,6 +236,7 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is of type "string"
      Then the following data should be generated:
        | foo                       |
+       | null                      |
        | "2010-01-01T00:00"        |
        | "01-01-2010T00:00:00,000" |
        | "1st January 2010"        |
@@ -227,8 +246,9 @@ Scenario: Running an 'ofType' = numeric request that includes a number value (no
        And foo is equal to 1
        And foo is of type "numeric"
      Then the following data should be generated:
-       | foo |
-       | 1   |
+       | foo  |
+       | null |
+       | 1    |
 
 Scenario: Running an 'ofType' = numeric request that includes a decimal number value should be successful
      Given there is a field foo
@@ -236,6 +256,7 @@ Scenario: Running an 'ofType' = numeric request that includes a decimal number v
        And foo is of type "numeric"
      Then the following data should be generated:
        | foo  |
+       | null |
        | 0.66 |
 
 Scenario: Running an 'ofType' = numeric request that includes a negative number value should be successful
@@ -244,6 +265,7 @@ Scenario: Running an 'ofType' = numeric request that includes a negative number 
        And foo is of type "numeric"
      Then the following data should be generated:
        | foo   |
+       | null  |
        | -99.4 |
 
 Scenario: Running an 'ofType' = numeric request that includes the number zero should be successful
@@ -252,6 +274,7 @@ Scenario: Running an 'ofType' = numeric request that includes the number zero sh
        And foo is of type "numeric"
      Then the following data should be generated:
        | foo   |
+       | null  |
        | 0     |
 
 Scenario: Running an 'ofType' = temporal request that includes a date value (not a string) should be successful
@@ -260,6 +283,7 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (not
        And foo is of type "temporal"
      Then the following data should be generated:
        | foo                     |
+       | null                    |
        | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an 'ofType' = temporal request that includes a date value (leap year) should be successful
@@ -268,6 +292,7 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (lea
        And foo is of type "temporal"
      Then the following data should be generated:
        | foo                     |
+       | null                    |
        | 2020-02-29T09:15:00.000 |
 
 Scenario: Running an 'ofType' = temporal request that includes a date value (system epoch dates) should be successful
@@ -278,6 +303,7 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (sys
        And foo is of type "temporal"
      Then the following data should be generated:
        | foo                     |
+       | null                    |
        | 0001-01-01T00:00:00.001 |
        | 1970-01-01T00:00:00.000 |
 
@@ -287,6 +313,7 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (sys
         And foo is of type "temporal"
      Then the following data should be generated:
        | foo                      |
+       | null                     |
        | 9999-12-31T23:59:59.999  |
 
 Scenario: Running an 'ofType' = temporal request that includes an invalid date value should fail with an error message
@@ -308,8 +335,9 @@ Scenario: Running an 'ofType' = string request that includes a null entry ("") c
        And foo is equal to ""
        And foo is of type "string"
      Then the following data should be generated:
-       | foo |
-       | ""  |
+       | foo  |
+       | null |
+       | ""   |
 
 Scenario: Running an 'ofType' = string request that includes a null entry (null) characters should be successful
      Given there is a field foo

@@ -34,6 +34,7 @@ public class ConditionalConstraint implements GrammaticalConstraint
     @Override
     public Collection<Field> getFields() {
         return Stream.of(condition, whenConditionIsTrue, whenConditionIsFalse)
+            .filter(Objects::nonNull)
             .flatMap(constraint -> constraint.getFields().stream())
             .collect(Collectors.toList());
     }

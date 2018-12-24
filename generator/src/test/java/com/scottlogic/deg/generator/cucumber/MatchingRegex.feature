@@ -290,6 +290,7 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalT
        And foo is equal to "aaa"
      Then the following data should be generated:
        | foo   |
+       | null  |
        | "aaa" |
 
 @ignore
@@ -308,6 +309,7 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet 
          | "aaa" |
      Then the following data should be generated:
        | foo   |
+       | null  |
        | "a"   |
        | "aaa" |
 
@@ -316,7 +318,7 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting inSet cons
      Given there is a field foo
        And foo is matching regex /[a]{1,3}/
        And foo is in set:
-         | "b" |
+         | "b"   |
          | "bbb" |
      Then I am presented with an error message
        And no data is created
@@ -625,9 +627,11 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
        """
     Then the following data should be generated:
       | foo  | price |
-      | null | 1     |
       | "a"  | 1     |
       | "b"  | 1     |
-      | null | 2     |
       | "c"  | 2     |
       | "d"  | 2     |
+      | null | 1     |
+      | null | 2     |
+      | null | null  |
+      | null | null  |
