@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.cucumber.steps;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import cucumber.api.java.en.When;
 
 import java.util.Collection;
@@ -33,7 +34,7 @@ public class SetValueStep {
             .map(value -> {
                 try {
                     return GeneratorTestUtilities.parseInput(value);
-                } catch (JsonParseException e) {
+                } catch (JsonParseException | InvalidProfileException e) {
                     this.state.addException(e);
                     return "<exception thrown: " + e.getMessage() + ">";
                 }
