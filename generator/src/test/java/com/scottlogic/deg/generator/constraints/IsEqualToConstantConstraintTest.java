@@ -41,6 +41,19 @@ public class IsEqualToConstantConstraintTest {
         Assert.assertNotEquals(constraint1, constraint2);
     }
 
+    @Test
+    public void testConstraintThrowsIfGivenNull(){
+        Field field1 = new Field("TestField");
+        try {
+            new IsEqualToConstantConstraint(field1, null, rules());
+        } catch (Exception e) {
+            Assert.assertThat(e, is(instanceOf(IllegalArgumentException.class)));
+            return;
+        }
+
+        Assert.fail("Exception was expected but not thrown");
+    }
+
     private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
         rule.rule = "rules";
