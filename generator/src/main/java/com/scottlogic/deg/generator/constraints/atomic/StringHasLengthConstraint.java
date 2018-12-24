@@ -12,6 +12,11 @@ public class StringHasLengthConstraint implements AtomicConstraint {
     private final Set<RuleInformation> rules;
 
     public StringHasLengthConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
+        if (referenceValue < 0){
+            throw new IllegalArgumentException("Cannot create an StringHasLengthConstraint for field '" +
+                field.name + "' with a a negative length.");
+        }
+
         this.rules = rules;
         this.referenceValue = referenceValue;
         this.field = field;
