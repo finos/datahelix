@@ -111,4 +111,18 @@ public class SetRestrictions {
             Objects.toString(whitelist, "-"),
             Objects.toString(blacklist, "-"));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SetRestrictions that = (SetRestrictions) o;
+        return Objects.equals(whitelist, that.whitelist) &&
+            Objects.equals(blacklist, that.blacklist);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(whitelist, blacklist);
+    }
 }

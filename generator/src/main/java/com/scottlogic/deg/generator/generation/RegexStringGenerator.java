@@ -11,6 +11,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class RegexStringGenerator implements StringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
@@ -65,11 +66,7 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist, RandomNumberGenerator random) {
-        String[] blacklistStrings = new String[blacklist.size()];
-        int i = 0;
-        for (Object obj : blacklist) {
-            blacklistStrings[i] = obj.toString();
-        }
+        String[] blacklistStrings = blacklist.stream().map(Object::toString).toArray(String[]::new);
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
         return new RegexStringGenerator(automaton, String.format("NOT-IN %s", Objects.toString(blacklist)));
