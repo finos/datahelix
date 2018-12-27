@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Objects;
+
 public class GranularityRestrictions {
     private final int numericScale;
 
@@ -27,5 +29,18 @@ public class GranularityRestrictions {
     @Override
     public String toString() {
         return String.format("granular-to %d", this.numericScale);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GranularityRestrictions that = (GranularityRestrictions) o;
+        return numericScale == that.numericScale;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numericScale);
     }
 }

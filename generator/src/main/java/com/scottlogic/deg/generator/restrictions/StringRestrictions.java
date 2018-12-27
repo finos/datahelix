@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 
+import java.util.Objects;
+
 /**
  * https://github.com/ScottLogic/data-engineering-generator/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/util/RegexProcessor.java
  * https://github.com/ScottLogic/data-engineering-generator/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/RegexFieldConstraint.java#L133
@@ -42,5 +44,18 @@ public class StringRestrictions {
             return "Isin";
 
         return stringGenerator.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StringRestrictions that = (StringRestrictions) o;
+        return Objects.equals(stringGenerator, that.stringGenerator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stringGenerator);
     }
 }

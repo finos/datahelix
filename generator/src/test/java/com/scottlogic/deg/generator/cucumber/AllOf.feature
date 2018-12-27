@@ -105,6 +105,7 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
 
     Then the following data should be generated:
       | price |
+      | null  |
       |  5   |
 
 
@@ -121,6 +122,7 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
 
     Then the following data should be generated:
       | foo   |
+      | null  |
       | "Test0" |
 
 

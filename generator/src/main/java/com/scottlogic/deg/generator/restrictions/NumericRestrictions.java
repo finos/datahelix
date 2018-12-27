@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class NumericRestrictions {
 
@@ -42,5 +43,19 @@ public class NumericRestrictions {
             min != null ? min.toString(">") : "",
             min != null && max != null ? " and " : "",
             max != null ? max.toString("<") : "");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumericRestrictions that = (NumericRestrictions) o;
+        return Objects.equals(min, that.min) &&
+            Objects.equals(max, that.max);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max);
     }
 }
