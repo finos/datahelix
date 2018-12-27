@@ -8,7 +8,9 @@ Scenario: if constraint is not satisfied, else constraint is
        | foo   |
        | price |
        And foo is of type "string"
+       And foo is anything but null
        And price is of type "numeric"
+       And price is anything but null
        And foo is in set:
         | "a" |
         | "b" |
@@ -30,7 +32,9 @@ Scenario: User requires both if and then constraint to be satisfied
        | productCode |
        | priceTest   |
        And productCode is of type "string"
+       And productCode is anything but null
        And priceTest is of type "numeric"
+       And priceTest is anything but null
        And productCode is in set:
           | "a" |
           | "b" |

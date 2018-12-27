@@ -9,7 +9,9 @@ Scenario: Running an exhaustive combination strategy with roman alphabet charact
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "string"
+       And bar is anything but null
        And foo is in set:
          | "a" |
          | "b" |
@@ -28,7 +30,9 @@ Scenario: Running an exhaustive combination strategy with upper case roman alpha
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "string"
+       And bar is anything but null
        And foo is in set:
          | "A" |
          | "B" |
@@ -47,7 +51,9 @@ Scenario: Running an exhaustive combination strategy with roman numeric characte
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "string"
+       And bar is anything but null
        And foo is in set:
          | "0" |
          | "1" |
@@ -66,7 +72,9 @@ Scenario: Running an exhaustive combination strategy with special character (emo
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "string"
+       And bar is anything but null
        And foo is in set:
          | "😐" |
          | "☻" |
@@ -85,7 +93,9 @@ Scenario: Running an exhaustive combination strategy with special character (whi
         | foo |
         | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "string"
+       And bar is anything but null
        And foo is in set:
          | " " |
          | " "  |
@@ -104,7 +114,9 @@ Scenario: Running an exhaustive combination strategy with valid number values sh
        | foo |
        | bar |
        And foo is of type "numeric"
+       And foo is anything but null
        And bar is of type "numeric"
+       And bar is anything but null
        And foo is in set:
          | 999 |
          | -12 |
@@ -124,7 +136,9 @@ Scenario: Running an exhaustive combination strategy with invalid number values 
        | foo |
        | bar |
        And foo is of type "numeric"
+       And foo is anything but null
        And bar is of type "numeric"
+       And bar is anything but null
        And foo is in set:
          | 999 |
          | +12 |
@@ -139,7 +153,9 @@ Scenario: Running an exhaustive combination strategy with valid date values shou
        | foo |
        | bar |
        And foo is of type "temporal"
+       And foo is anything but null
        And bar is of type "temporal"
+       And bar is anything but null
        And foo is in set:
          | 2018-12-04T14:00:00.000 |
          | 2018-12-05T14:00:00.000 |
@@ -158,7 +174,9 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
        | foo |
        | bar |
        And foo is of type "temporal"
+       And foo is anything but null
        And bar is of type "temporal"
+       And bar is anything but null
        And foo is in set:
          | 2018-12-99T14:00:00.000 |
          | 2018-12-05T14:00:00.000 |
@@ -174,7 +192,9 @@ Scenario: Running an exhaustive combination strategy with invalid date formats s
        | foo |
        | bar |
        And foo is of type "temporal"
+       And foo is anything but null
        And bar is of type "temporal"
+       And bar is anything but null
        And foo is in set:
          | 2018-12-01T14:00:00.000 |
          | 2018-12-05T14:00:00.000 |
@@ -188,6 +208,8 @@ Scenario: Running an exhaustive combination strategy with null values (empty str
      Given the following fields exist:
        | foo |
        | bar |
+       And foo is anything but null
+       And bar is anything but null
        And foo is in set:
          | "" |
          | 1  |
@@ -206,7 +228,9 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
        | foo |
        | bar |
        And foo is of type "numeric"
+       And foo is anything but null
        And bar is of type "numeric"
+       And bar is anything but null
        And foo is in set:
          | 0 |
          | 1 |
@@ -220,7 +244,9 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
        | foo |
        | bar |
        And foo is of type "numeric"
+       And foo is anything but null
        And bar is of type "numeric"
+       And bar is anything but null
        And foo is in set:
          | 0 |
          | 1 |
@@ -239,7 +265,9 @@ Scenario: Running an exhaustive combination strategy with a string and a numeric
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "numeric"
+       And bar is anything but null
        And foo is in set:
          | "x" |
          | "y" |
@@ -258,7 +286,9 @@ Scenario: Running an exhaustive combination strategy with a string and a tempora
        | foo |
        | bar |
        And foo is of type "string"
+       And foo is anything but null
        And bar is of type "temporal"
+       And bar is anything but null
        And foo is in set:
          | "x" |
          | "y" |
@@ -277,7 +307,9 @@ Scenario: Running an exhaustive combination strategy with a numeric and a tempor
        | foo |
        | bar |
        And foo is of type "numeric"
+       And foo is anything but null
        And bar is of type "temporal"
+       And bar is anything but null
        And foo is in set:
          | 500 |
          | 1.1 |
@@ -298,6 +330,11 @@ Scenario: Running an exhaustive combination strategy with a numeric and a tempor
       | foo3 |
       | foo4 |
       | foo5 |
+    And foo1 is anything but null
+    And foo2 is anything but null
+    And foo3 is anything but null
+    And foo4 is anything but null
+    And foo5 is anything but null
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -354,8 +391,9 @@ Scenario: Running an exhaustive combination strategy across three fields with fi
        | foo1 |
        | foo2 |
        | foo3 |
-       | foo4 |
-       | foo5 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | 1 |
          | 2 |
@@ -508,6 +546,9 @@ Scenario: Running an exhaustive combination strategy across fields with an uneve
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | 1 |
        And foo2 is in set:
@@ -543,6 +584,9 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | 1 |
        And foo2 is in set:
@@ -568,6 +612,9 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | 1 |
        And foo2 is in set:
@@ -602,6 +649,9 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | 1 |
          | 0 |
@@ -653,6 +703,9 @@ Scenario: Running an exhaustive combination strategy that includes an "if" state
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but null
+       And foo2 is anything but null
+       And foo3 is anything but null
        And foo1 is in set:
          | "alpha" |
        And foo2 is in set:
