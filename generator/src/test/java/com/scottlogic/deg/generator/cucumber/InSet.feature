@@ -459,14 +459,12 @@ Scenario: Running an 'inSet' request that includes a null entry ("") characters 
        | ""   |
        | 1    |
 
-Scenario: Running an 'inSet' request that includes a null entry (null) characters should be successful
+Scenario: Running an 'inSet' request that includes a null entry (null) characters should throw an error
      Given there is a field foo
        And foo is in set:
-       | 1    |
-     Then the following data should be generated:
-       | foo  |
        | null |
        | 1    |
+     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
 
 Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
      Given there is a field foo
@@ -476,10 +474,10 @@ Scenario: Running an 'inSet' request that includes strings, numeric and temporal
        | "String!"               |
      Then the following data should be generated:
        | foo                     |
-       | null                    |
        | 1                       |
        | 2010-01-01T00:00:00.000 |
        | "String!"               |
+       | null                    |
 
 Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.
      Given there is a field foo
