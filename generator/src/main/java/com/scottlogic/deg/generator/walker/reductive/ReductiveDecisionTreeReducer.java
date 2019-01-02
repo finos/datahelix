@@ -15,13 +15,17 @@ import java.util.stream.Collectors;
 
 public class ReductiveDecisionTreeReducer {
 
-    private final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
-    private FieldSpecFactory fieldSpecFactory;
-    private FieldSpecMerger fieldSpecMerger;
+    private final DecisionTreeSimplifier simplifier;
+    private final FieldSpecFactory fieldSpecFactory;
+    private final FieldSpecMerger fieldSpecMerger;
 
-    public ReductiveDecisionTreeReducer(FieldSpecFactory fieldSpecFactory, FieldSpecMerger fieldSpecMerger){
+    public ReductiveDecisionTreeReducer(
+        FieldSpecFactory fieldSpecFactory,
+        FieldSpecMerger fieldSpecMerger,
+        DecisionTreeSimplifier simplifier){
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
+        this.simplifier = simplifier;
     }
 
     public ReductiveConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields){
