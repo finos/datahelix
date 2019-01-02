@@ -391,3 +391,10 @@ Scenario: EqualTo operator can be used to generate a number
      Then the following data should be generated:
        | foo |
        | 23  |
+
+Scenario: Running an 'equalTo' request that includes a boolean value e.g. true should be successful
+     Given there is a field foo
+       And foo is equal to true
+     Then the following data should be generated:
+       | foo |
+       | true |
