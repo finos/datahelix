@@ -179,7 +179,7 @@ public class GeneralTestStep {
             .map(row -> row.stream().map(cell -> {
                 try {
                     return GeneratorTestUtilities.parseExpected(cell);
-                } catch (JsonParseException e) {
+                } catch (JsonParseException | InvalidProfileException e) {
                     this.state.addException(e);
                     return "<exception thrown: " + e.getMessage() + ">";
                 }

@@ -14,6 +14,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -104,7 +105,7 @@ public class GeneratorTestUtilities {
         return dataSet.collect(Collectors.toList());
     }
 
-    public static Object parseInput(String input) throws JsonParseException {
+    public static Object parseInput(String input) throws JsonParseException, InvalidProfileException {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)) {
@@ -113,9 +114,11 @@ public class GeneratorTestUtilities {
             return null;
         } else if (input.matches("-?(\\d+(\\.\\d+)?)")) {
             return parseNumber(input);
+        } else if (input.equals("true") || input.equals("false")){
+            return input.equals("true");
         }
 
-        return input;
+        throw new InvalidProfileException(String.format("Unable to determine correct type for `%s`.\nEnsure strings are wrapped in double-quotes.", input));
     }
 
     public static Object parseNumber(String input) throws JsonParseException {
@@ -131,7 +134,7 @@ public class GeneratorTestUtilities {
         }
     }
 
-    public static Object parseExpected(String input) throws JsonParseException {
+    public static Object parseExpected(String input) throws JsonParseException, InvalidProfileException {
         if (input.matches(DateValueStep.DATE_REGEX)) {
             return LocalDateTime.parse(input);
         }
