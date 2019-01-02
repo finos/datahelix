@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -46,7 +47,8 @@ public class IsInSetConstraintTests {
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
-        new IsInSetConstraint(field1, Collections.singleton("foo"), rules());
+        Assertions.assertDoesNotThrow(
+            () -> new IsInSetConstraint(field1, Collections.singleton("foo"), rules()));
     }
 
     private static Set<RuleInformation> rules(){
