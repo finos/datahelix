@@ -34,6 +34,12 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "(-?\\d+(\\.\\d+)?)$",
             Number.class,
             (Transformer<Number>) value -> (Number) GeneratorTestUtilities.parseNumber(value)));
+
+        tr.defineParameterType(new ParameterType<>(
+            "boolean",
+            "(true|false)$",
+            Boolean.class,
+            (Transformer<Boolean>) Boolean::valueOf));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){
