@@ -237,12 +237,7 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
        And bar is in set:
          | 2    |
          | null |
-     Then the following data should be generated:
-       | foo | bar  |
-       | 0   | 2    |
-       | 1   | 2    |
-       | 0   | null |
-       | 1   | null |
+     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null."
 
 Scenario: Running an exhaustive combination strategy with null values (null) should be successful
      Given the following fields exist:
