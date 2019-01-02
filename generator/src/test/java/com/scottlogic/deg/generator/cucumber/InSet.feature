@@ -79,11 +79,9 @@ Scenario: Running an 'inSet' request that includes roman character strings that 
        | "undefined" |
      Then the following data should be generated:
        |  foo        |
-       | null        |
-       | "true"      |
-       | "false"     |
        | "null"      |
-       | "undefined" |
+       | "true"      |
+       | null        |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (standard) should be successful
      Given there is a field foo
@@ -141,12 +139,8 @@ Scenario: Running an 'inSet' request that includes strings with special characte
      Then the following data should be generated:
        | foo  |
        | null |
-       | "Ω"  |
        | "ڦ"  |
        | "আ" |
-       | "⾉" |
-       | "㑹" |
-       | "㾹" |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (standard) alongside roman alphanumeric characters should be successful
      Given there is a field foo
@@ -157,34 +151,29 @@ Scenario: Running an 'inSet' request that includes strings with special characte
      Then the following data should be generated:
        | foo            |
        | null           |
-       | "£1.00"        |
-       | "$5.00"        |
        | "Testing (01)" |
+       | "$5.00"        |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (white spaces) alongside roman alphanumeric characters should be successful
      Given there is a field foo
        And foo is in set:
          | "Test	One" |
          | "Test 02"   |
-         | "Test Three" |
      Then the following data should be generated:
        | foo         |
        | null        |
        | "Test	One" |
        | "Test 02"   |
-       | "Test Three" |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (unicode symbols) alongside roman alphanumeric characters should be successful
      Given there is a field foo
        And foo is in set:
        | "I will display ♠"           |
-       | "★ I will display ★"        |
        | "♞♟♜⚣ Displaying symbols" |
      Then the following data should be generated:
        | foo                          |
        | null                         |
        | "I will display ♠"           |
-       | "★ I will display ★"        |
        | "♞♟♜⚣ Displaying symbols" |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (emoji) alongside roman alphanumeric characters should be successful
@@ -192,80 +181,64 @@ Scenario: Running an 'inSet' request that includes strings with special characte
        And foo is in set:
        | "Test 01 has passed 😃"  |
        | "❤ Test 02 ❤"          |
-       | "Passing Tests ☑"       |
      Then the following data should be generated:
        | foo                      |
        | null                     |
        | "Test 01 has passed 😃"  |
        | "❤ Test 02 ❤"          |
-       | "Passing Tests ☑"       |
 
 Scenario: Running an 'inSet' request that includes strings with special characters (non roman character maps) alongside roman alphanumeric characters should be successful
      Given there is a field foo
        And foo is in set:
        | "Cyrillic text: Тхис ис Тест Нумбер 01" |
        | "Japanese text: これはテスト番号2です"   |
-       | "Korean text: 이것은 시험 번호 3입니다"  |
      Then the following data should be generated:
        | foo                                     |
        | null                                    |
        | "Cyrillic text: Тхис ис Тест Нумбер 01" |
        | "Japanese text: これはテスト番号2です"   |
-       | "Korean text: 이것은 시험 번호 3입니다"   |
 
 Scenario: Running an 'inSet' request that includes roman numeric strings that include decimal numbers should be successful
      Given there is a field foo
        And foo is in set:
-       | "0.1"         |
        | "0.00"        |
        | "12.5.99"     |
-       | "0000000.345" |
      Then the following data should be generated:
        | foo           |
        | null          |
-       | "0.1"         |
        | "0.00"        |
        | "12.5.99"     |
-       | "0000000.345" |
 
 Scenario: Running an 'inSet' request that includes roman numeric strings that include comma separated numbers should be successful
      Given there is a field foo
        And foo is in set:
        | "55,5"         |
-       | "10,000"       |
        | "1,000,000.00" |
      Then the following data should be generated:
        | foo            |
        | null           |
-       | "55,5"         |
-       | "10,000"       |
+       | "55,5"       |
        | "1,000,000.00" |
 
 Scenario: Running an 'inSet' request that includes roman numeric strings that include numbers with Preceding zeros should be successful
      Given there is a field foo
        And foo is in set:
-       | "001"                  |
        | "010"                  |
-       | "01.00"                |
        | "000000000.0000000001" |
      Then the following data should be generated:
        | foo                    |
        | null                   |
-       | "001"                  |
        | "010"                  |
-       | "01.00"                |
        | "000000000.0000000001" |
 
 Scenario: Running an 'inSet' request that includes roman numeric strings that include numbers with Preceding zeros should be successful
      Given there is a field foo
        And foo is in set:
-       | "£1.00"   |
        | "€5,99"   |
        | "¥10,000" |
      Then the following data should be generated:
        | foo       |
        | null      |
-       | "£1.00"   |
        | "€5,99"   |
        | "¥10,000" |
 
@@ -296,13 +269,11 @@ Scenario: Running an 'inSet' request that includes roman character strings that 
        And foo is in set:
        | "Infinity" |
        | "NaN"      |
-       | "nil"      |
      Then the following data should be generated:
        | foo        |
        | null       |
        | "Infinity" |
        | "NaN"      |
-       | "nil"      |
 
 Scenario: Running an 'inSet' request that includes roman character strings that include computer formatted numbers should be successful
      Given there is a field foo
@@ -320,67 +291,53 @@ Scenario: Running an 'inSet' request that includes roman character strings that 
        And foo is in set:
        | "2010-01-01T00:00:00.000" |
        | "2010-01-01T00:00:00.001" |
-       | "2011-01-01T00:00:00.000" |
      Then the following data should be generated:
        | foo                       |
        | null                      |
        | "2010-01-01T00:00:00.000" |
        | "2010-01-01T00:00:00.001" |
-       | "2011-01-01T00:00:00.000" |
 
 Scenario: Running an 'inSet' request that includes roman character strings that include invalidly formatted date values should be successful
      Given there is a field foo
        And foo is in set:
-       | "2010-01-01T00:00:00"     |
-       | "01-01-2010T00:00:00.001" |
        | "1st Jan 2010"            |
        | "2011-01-88T00:00:00.000" |
-       | "2011-01-01T88:00:00.000" |
      Then the following data should be generated:
        | foo                       |
        | null                      |
-       | "2010-01-01T00:00:00"     |
-       | "01-01-2010T00:00:00.001" |
        | "1st Jan 2010"            |
        | "2011-01-88T00:00:00.000" |
-       | "2011-01-01T88:00:00.000" |
 
 Scenario: Running an 'inSet' request that includes a number value (not a string) should be successful
      Given there is a field foo
        And foo is in set:
        | 1     |
-       | 54    |
        | 99999 |
      Then the following data should be generated:
        | foo   |
        | null  |
        | 1     |
-       | 54    |
        | 99999 |
 
 Scenario: Running an 'inSet' request that includes a decimal number value should be successful
      Given there is a field foo
        And foo is in set:
        | 0.1       |
-       | 600.01    |
        | 9.0000009 |
      Then the following data should be generated:
        | foo       |
        | null      |
        | 0.1       |
-       | 600.01    |
        | 9.0000009 |
 
 Scenario: Running an 'inSet' request that includes a negative number value should be successful
      Given there is a field foo
        And foo is in set:
-       | -10         |
        | -0.0000089  |
        | -9999999999 |
      Then the following data should be generated:
        | foo         |
        | null        |
-       | -10         |
        | -0.0000089  |
        | -9999999999 |
 
@@ -400,26 +357,22 @@ Scenario: Running an 'inSet' request that includes a date value (not a string) s
        And foo is in set:
        | 2010-01-01T00:00:00.000 |
        | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
      Then the following data should be generated:
        | foo                     |
        | null                    |
        | 2010-01-01T00:00:00.000 |
        | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
 
 Scenario: Running an 'inSet' request that includes a date value (leap year) should be successful
      Given there is a field foo
        And foo is in set:
        | 2020-02-29T00:00:00.000 |
        | 2016-02-29T00:00:00.000 |
-       | 2012-02-29T00:00:00.000 |
      Then the following data should be generated:
        | foo                     |
        | null                    |
        | 2020-02-29T00:00:00.000 |
        | 2016-02-29T00:00:00.000 |
-       | 2012-02-29T00:00:00.000 |
 
 Scenario: Running an 'inSet' request that includes a date value (system epoch dates) should be successful
      Given there is a field foo
@@ -466,15 +419,13 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
        | 1    |
      Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
 
-Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
+Scenario: Running an 'inSet' request that includes strings and temporal fields should be successful.
      Given there is a field foo
        And foo is in set:
-       | 1                       |
        | 2010-01-01T00:00:00.000 |
        | "String!"               |
      Then the following data should be generated:
        | foo                     |
-       | 1                       |
        | 2010-01-01T00:00:00.000 |
        | "String!"               |
        | null                    |
@@ -559,14 +510,12 @@ Scenario: Running a 'inSet' request alongside an ofType = string should be succe
        And foo is in set:
        | "Test 1" |
        | "Test 2" |
-       | "Test 3" |
        And foo is of type "string"
      Then the following data should be generated:
        | foo      |
        | null     |
        | "Test 1" |
        | "Test 2" |
-       | "Test 3" |
 
 @ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = string should fail with an error message
@@ -584,14 +533,12 @@ Scenario: Running a 'inSet' request alongside an ofType = numeric should be succ
        And foo is in set:
        | 1 |
        | 2 |
-       | 3 |
        And foo is of type "numeric"
      Then the following data should be generated:
        | foo  |
        | null |
        | 1    |
        | 2    |
-       | 3    |
 
 @ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = numeric should fail with an error message
@@ -609,14 +556,12 @@ Scenario: Running a 'inSet' request alongside an ofType = temporal should be suc
        And foo is in set:
        | 2010-01-01T00:00:00.000 |
        | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
        And foo is of type "temporal"
      Then the following data should be generated:
        | foo                     |
        | null                    |
        | 2010-01-01T00:00:00.000 |
        | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
 
 @ignore
 Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal should fail with an error message

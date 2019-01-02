@@ -26,7 +26,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
 
             // If we have values that must be included we need to check that those values are included in the whitelist
-            if (mustContainRestriction != null) {
+            if (mustContainRestriction != null && !mustContainRestriction.getRequiredObjects().isEmpty()) {
                 Set<Object> mustContainValues = getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
                     .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()).collect(Collectors.toSet());
 
