@@ -7,10 +7,10 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runner.notification.StoppedByUserException;
 
-public class TreatSkippedCucumberStepsAsTestFailuresRunNotifier extends RunNotifier {
+public class TreatUndefinedCucumberStepsAsTestFailuresRunNotifier extends RunNotifier {
     private final RunNotifier notifier;
 
-    public TreatSkippedCucumberStepsAsTestFailuresRunNotifier(RunNotifier notifier) {
+    public TreatUndefinedCucumberStepsAsTestFailuresRunNotifier(RunNotifier notifier) {
         this.notifier = notifier;
     }
 

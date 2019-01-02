@@ -22,7 +22,7 @@ public class GeneratorCucumber extends Cucumber {
     @Override
     protected void runChild(FeatureRunner child, RunNotifier notifier) {
         if (this.notifier == null)
-            this.notifier = new TreatSkippedCucumberStepsAsTestFailuresRunNotifier(notifier); //NOTE: Not thread safe
+            this.notifier = new TreatUndefinedCucumberStepsAsTestFailuresRunNotifier(notifier); //NOTE: Not thread safe
 
         super.runChild(child, this.notifier);
     }
