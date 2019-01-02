@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class NumericLimit<T extends Number> {
     private final T limit;
@@ -37,5 +38,19 @@ public class NumericLimit<T extends Number> {
             this.isInclusive ? "=" : "",
             this.limit.toString()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumericLimit<?> that = (NumericLimit<?>) o;
+        return isInclusive == that.isInclusive &&
+            Objects.equals(limit, that.limit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(limit, isInclusive);
     }
 }

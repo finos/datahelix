@@ -34,7 +34,11 @@ public class MainConstraintReader implements ConstraintReader {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
             }
 
-            return subReader.apply(dto, fields, rules);
+            try {
+                return subReader.apply(dto, fields, rules);
+            } catch (IllegalArgumentException e) {
+                throw new InvalidProfileException(e.getMessage());
+            }
         }
 
         if (dto.not != null) {

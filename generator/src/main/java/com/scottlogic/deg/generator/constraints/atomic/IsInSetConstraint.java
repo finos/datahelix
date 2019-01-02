@@ -23,6 +23,11 @@ public class IsInSetConstraint implements AtomicConstraint, VisitableProfileElem
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with an empty set.");
         }
+
+        if (legalValues.contains(null)){
+            throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
+                field.name + "' with a set containing null.");
+        }
     }
 
     @Override
