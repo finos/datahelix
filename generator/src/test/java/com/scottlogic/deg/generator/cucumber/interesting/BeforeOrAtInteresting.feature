@@ -172,35 +172,35 @@ Scenario: User creates data that is anything but before or equal to a specified 
 @ignore
 Scenario: User attempts to create data before or equal to a specified invalidly formatted date
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at "2018-10-01"
-     Then I am presented with an error message
+       And foo is before or at "2018-10-01"
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to create data before or equal to a specified invalid date
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at 2018-10-40T00:00:00.000
-     Then I am presented with an error message
+       And foo is before or at 2018-10-40T00:00:00.000
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to create data before or equal to a specified invalidly formatted time
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at "2018-10-01T01:00:00.000AM"
-     Then I am presented with an error message
+       And foo is before or at "2018-10-01T01:00:00.000AM"
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to create data before or equal to a specified invalid time
      Given there is a field foo
-       But the profile is invalid as foo can't be before or at 2018-10-01T50:00:00.000
-     Then I am presented with an error message
+       And foo is before or at 2018-10-01T50:00:00.000
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to create data before or equal to a specified date and an invalidly formatted date
      Given there is a field foo
        And foo is before 2018-10-10T00:00:00.000
-       But the profile is invalid as foo can't be before or at "2018-10-01"
-     Then I am presented with an error message
+       And foo is before or at "2018-10-01"
+     Then the profile is invalid
        And no data is created
