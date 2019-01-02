@@ -94,7 +94,7 @@ Scenario: User requires to create a numeric field with negative data values that
        | -1.0 |
 
 Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
-     Given there is a field foo
-       But the profile is invalid as foo can't be granular to "0.1"
-     Then I am presented with an error message
+  Given there is a field foo
+  And foo is granular to "0.1"
+     Then the profile is invalid
         And no data is created

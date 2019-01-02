@@ -276,20 +276,20 @@ Scenario: User creates data that is anything but higher than a specified number
 @ignore
 Scenario: User attempts to data higher than a specified string
      Given there is a field foo
-       But the profile is invalid as foo can't be greater than "$10.00"
-     Then I am presented with an error message
+       And foo is greater than "$10.00"
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to data higher than a specified number formatted as a string
      Given there is a field foo
-       But the profile is invalid as foo can't be greater than "1"
-     Then I am presented with an error message
+       And foo is greater than "1"
+     Then the profile is invalid
        And no data is created
 
 @ignore
 Scenario: User attempts to data higher than a specified date
      Given there is a field foo
-       But the profile is invalid as foo can't be greater than 2018-10-10T00:00:00.000
-     Then I am presented with an error message
+       And foo is greater than 2018-10-10T00:00:00.000
+     Then the profile is invalid
        And no data is created

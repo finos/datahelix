@@ -299,9 +299,11 @@ Scenario: Running an 'equalTo' request that includes a negative number value sho
        | null |
        | -1   |
 
+@ignore #Ignored as leading zeros are not supported by jackson when parsing/reading JSON.
 Scenario: Running an 'equalTo' request that includes a number with Preceding zeros should be unsuccessful
      Given there is a field foo
-       But the profile is invalid as foo can't be equal to 001
+       And foo is equal to 001
+     Then the profile is invalid
 
 Scenario: Running an 'equalTo' request that includes a decimal number with trailing zeros should be successful
      Given there is a field foo

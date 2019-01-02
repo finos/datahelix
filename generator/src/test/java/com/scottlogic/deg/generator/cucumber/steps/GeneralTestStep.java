@@ -61,15 +61,8 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
-    @But("^the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)$")
-    public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        try {
-            Object parsedValue = GeneratorTestUtilities.parseInput(value);
-            this.state.addConstraint(fieldName, constraint, parsedValue);
-        } catch (Exception e) {
-            this.state.addException(e);
-        }
-
+    @Then("^the profile is invalid$")
+    public void theProfileIsInvalid() {
         testHelper.generateAndGetData();
 
         Assert.assertThat(
@@ -101,6 +94,7 @@ public class GeneralTestStep {
     @Then("^I am presented with an error message$")
     public void dataGeneratorShouldError() {
         testHelper.generateAndGetData();
+
         Assert.assertThat(testHelper.generatorHasThrownException(), is(true));
     }
 
