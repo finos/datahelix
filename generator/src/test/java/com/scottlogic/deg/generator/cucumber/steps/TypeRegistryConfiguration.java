@@ -1,12 +1,18 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import cucumber.api.DataTable;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
 import io.cucumber.cucumberexpressions.Transformer;
+import io.cucumber.datatable.DataTableType;
+import io.cucumber.datatable.TableCellByTypeTransformer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +33,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineOperationParameterType(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"regex", "/(.+)/$");
+        tr.setDefaultDataTableCellTransformer(new DataTableCellTransformer());
 
         tr.defineParameterType(new ParameterType<>(
             "number",
@@ -106,4 +113,14 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             .collect(Collectors.joining("|", "(", ")"));
     }
 
+    private class DataTableCellTransformer implements TableCellByTypeTransformer {
+        @Override
+        public <T> T transform(String value, Class<T> aClass) throws Throwable {
+            try {
+                return aClass.cast(GeneratorTestUtilities.parseInput(value.trim()));
+            } catch (JsonParseException | InvalidProfileException e) {
+                return (T)e;
+            }
+        }
+    }
 }
