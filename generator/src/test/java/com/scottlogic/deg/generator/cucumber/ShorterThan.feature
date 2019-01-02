@@ -188,7 +188,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting matching
 Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should fail with an error message
      Given there is a field foo
        And foo is shorter than 1
-       And foo is matching regex /[🍩]{2}/
+       And foo is containing regex /[🍩]{2}/
      Then I am presented with an error message
        And no data is created
 
