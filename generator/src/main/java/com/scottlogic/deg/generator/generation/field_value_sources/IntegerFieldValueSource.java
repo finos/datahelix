@@ -144,4 +144,19 @@ public class IntegerFieldValueSource implements FieldValueSource {
                         exclusiveUpper)),
                 i -> !blacklist.contains(i)));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        IntegerFieldValueSource otherSource = (IntegerFieldValueSource) obj;
+        return inclusiveLower.equals(otherSource.inclusiveLower) &&
+            exclusiveUpper.equals(otherSource.exclusiveUpper) &&
+            blacklist.equals(otherSource.blacklist);
+    }
+
+    public int hashCode() {
+        return Objects.hash(inclusiveLower, exclusiveUpper, blacklist);
+    }
 }

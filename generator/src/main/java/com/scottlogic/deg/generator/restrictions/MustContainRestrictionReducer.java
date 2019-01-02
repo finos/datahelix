@@ -1,5 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

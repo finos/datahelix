@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.restrictions.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
-import com.scottlogic.deg.generator.walker.reductive.FieldCollection;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
@@ -22,5 +22,5 @@ public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
     public void fieldFixedToValue(Field field, Object current) { }
 
     @Override
-    public void unableToStepFurther(FieldCollection fieldCollection) { }
+    public void unableToStepFurther(ReductiveState reductiveState) { }
 }

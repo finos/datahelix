@@ -2,16 +2,17 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.FieldSpecMerger;
-import com.scottlogic.deg.generator.restrictions.RowSpec;
-import com.scottlogic.deg.generator.restrictions.RowSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
+import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -238,7 +239,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
         return new OrderedConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name)),
+            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rules())),
             Arrays.asList(decisions));
     }
 
@@ -435,5 +436,11 @@ class DecisionTreeRoutesTreeWalkerTest {
                 )
             );
         }
+    }
+
+    private static Set<RuleInformation> rules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

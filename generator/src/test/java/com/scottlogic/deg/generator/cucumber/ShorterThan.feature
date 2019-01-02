@@ -90,7 +90,6 @@ Scenario: Running a 'shorterThan' request using an empty string "" to specify a 
      Then I am presented with an error message
        And no data is created
 
-@ignore
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
      Given there is a field foo
        And foo is shorter than null
@@ -103,6 +102,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo 
        And foo is equal to "1234"
      Then the following data should be generated:
        | foo    |
+       | null   |
        | "1234" |
 
 @ignore
@@ -121,6 +121,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
        | "123"  |
      Then the following data should be generated:
        | foo    |
+       | null   |
        | "1234" |
        | "123"  |
 
@@ -286,6 +287,7 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
        And foo is containing regex /[%]{1}/
      Then the following data should be included in what is generated:
        | foo  |
+       | null |
        | "%1" |
        | "%"  |
        And the following data should not be included in what is generated:
@@ -305,6 +307,7 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        And foo is containing regex /[%]{1}/
      Then the following data should be included in what is generated:
        | foo  |
+       | null |
        | "%"  |
        And the following data should not be included in what is generated:
        | foo  |

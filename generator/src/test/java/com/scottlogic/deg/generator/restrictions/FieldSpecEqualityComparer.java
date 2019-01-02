@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 public class FieldSpecEqualityComparer implements EqualityComparer {
     private EqualityComparer setRestrictionsComparer = new SetRestrictionsEqualityComparer();

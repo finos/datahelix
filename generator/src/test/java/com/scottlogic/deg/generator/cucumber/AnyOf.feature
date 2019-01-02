@@ -5,7 +5,6 @@ Background:
      And there is a field foo
 
 Scenario: User requires to create a field with strings that conform to one or many constraints
-
        Given there is a constraint:
        """
        { "anyOf": [
@@ -15,9 +14,9 @@ Scenario: User requires to create a field with strings that conform to one or ma
        ]}
        """
        And foo is of type "string"
+       And foo is anything but null
      Then the following data should be generated:
        | foo     |
-       | null    |
        | "Test0" |
        | "Test1" |
        | "Test2" |
@@ -42,7 +41,6 @@ Scenario: User requires to create a field with strings that conform to one or ma
        | "bbab"  |
 
 Scenario: User requires to create a field with strings that conform to multiple sets of one or many constraints
-
        Given there is a constraint:
        """
        { "anyOf": [
@@ -59,6 +57,7 @@ Scenario: User requires to create a field with strings that conform to multiple 
        ]}
        """
        And foo is of type "string"
+       And foo is anything but null
      Then the following data should be generated:
        | foo   |
 
@@ -198,6 +197,7 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
     | "333"   |
     | "4444"  |
     | "55555" |
+  And foo is anything but null
   Then the following data should be generated:
     | foo     |
     | "1"     |
@@ -229,6 +229,7 @@ Scenario: Running an 'anyOf' request that contains a valid nested allOf request 
     | "333"   |
     | "4444"  |
     | "55555" |
+  And foo is anything but null
   Then the following data should be generated:
     | foo    |
     | "1"    |
