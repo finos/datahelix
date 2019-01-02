@@ -21,27 +21,19 @@ public class IsInSetConstraintTests {
     @Test
     public void testConstraintThrowsIfGivenEmptySet(){
         Field field1 = new Field("TestField");
-        try {
-            new IsInSetConstraint(field1, Collections.emptySet(), rules());
-        } catch (Exception e) {
-            Assert.assertThat(e, is(instanceOf(IllegalArgumentException.class)));
-            return;
-        }
 
-        Assert.fail("Exception was expected but not thrown");
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new IsInSetConstraint(field1, Collections.emptySet(), rules()));
     }
 
     @Test
     public void testConstraintThrowsIfGivenNullInASet(){
         Field field1 = new Field("TestField");
-        try {
-            new IsInSetConstraint(field1, Collections.singleton(null), rules());
-        } catch (Exception e) {
-            Assert.assertThat(e, is(instanceOf(IllegalArgumentException.class)));
-            return;
-        }
 
-        Assert.fail("Exception was expected but not thrown");
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new IsInSetConstraint(field1, Collections.singleton(null), rules()));
     }
 
     @Test

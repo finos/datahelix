@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.Collections;
 import java.util.Set;
@@ -44,14 +45,10 @@ public class IsEqualToConstantConstraintTest {
     @Test
     public void testConstraintThrowsIfGivenNull(){
         Field field1 = new Field("TestField");
-        try {
-            new IsEqualToConstantConstraint(field1, null, rules());
-        } catch (Exception e) {
-            Assert.assertThat(e, is(instanceOf(IllegalArgumentException.class)));
-            return;
-        }
 
-        Assert.fail("Exception was expected but not thrown");
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new IsEqualToConstantConstraint(field1, null, rules()));
     }
 
     private static Set<RuleInformation> rules(){
