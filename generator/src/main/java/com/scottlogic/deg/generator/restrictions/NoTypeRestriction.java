@@ -36,4 +36,12 @@ public class NoTypeRestriction implements TypeRestrictions {
     public Set<IsOfTypeConstraint.Types> getAllowedTypes() {
         return allTypes;
     }
+
+    public int hashCode(){
+        return this.getClass().hashCode();
+    }
+
+    public boolean equals(Object obj){
+        return obj instanceof NoTypeRestriction;
+    }
 }

@@ -14,8 +14,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class ReductiveRowSpec extends RowSpec {
-
-    private final Field lastFixedField;
+    final Field lastFixedField;
 
     public ReductiveRowSpec(ProfileFields fields, Map<Field, FieldSpec> fieldToFieldSpec, Field lastFixedField) {
         super(fields, fieldToFieldSpec);

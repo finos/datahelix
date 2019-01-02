@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FieldSpecSource {
-    final static FieldSpecSource Empty = new FieldSpecSource(Collections.emptySet(), Collections.emptySet());
+    public final static FieldSpecSource Empty = new FieldSpecSource(Collections.emptySet(), Collections.emptySet());
 
     private final Set<AtomicConstraint> constraints;
     private final Set<AtomicConstraint> violatedConstraints;
