@@ -449,3 +449,11 @@ Scenario: Running an 'equalTo' request that includes a boolean value e.g. true s
      Then the following data should be generated:
        | foo |
        | true |
+
+Scenario: Running an 'equalTo' request that includes a boolean value e.g. false should be successful
+      Given there is a field foo
+        And foo is equal to false
+        And foo is anything but null
+      Then the following data should be generated:
+        | foo |
+        | false |
