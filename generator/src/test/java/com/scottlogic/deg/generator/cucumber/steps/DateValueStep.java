@@ -15,19 +15,14 @@ public class DateValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is {operator} {dateString}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addConstraint(fieldName, constraintName, dateObject(value));
+    @When("{fieldVar} is {operator} {date}")
+    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+        this.state.addConstraint(fieldName, constraintName, value);
     }
 
-    @When("{fieldVar} is anything but {operator} {dateString}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addNotConstraint(fieldName, constraintName, dateObject(value));
-    }
-
-    public static Map dateObject(String dateValue) {
-        HashMap map = new HashMap();
-        map.put("date", dateValue);
-        return map;
+    @When("{fieldVar} is anything but {operator} {date}")
+    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+        this.state.addNotConstraint(fieldName, constraintName, value);
     }
 }
+

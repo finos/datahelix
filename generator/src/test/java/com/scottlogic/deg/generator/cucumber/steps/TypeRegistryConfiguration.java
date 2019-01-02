@@ -26,7 +26,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineCombinationStrategyType(tr);
         this.defineOperationParameterType(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
-        this.defineParameterType(tr,"dateString", DateValueStep.DATE_REGEX);
         this.defineParameterType(tr,"regex", "/(.+)/$");
 
         tr.defineParameterType(new ParameterType<>(
@@ -40,6 +39,12 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "(true|false)$",
             Boolean.class,
             (Transformer<Boolean>) Boolean::valueOf));
+
+        tr.defineParameterType(new ParameterType<>(
+            "date",
+            DateValueStep.DATE_REGEX,
+            DateObject.class,
+            DateObject::new));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){
