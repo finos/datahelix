@@ -36,7 +36,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB000263494z"  |
 
 
-  Scenario: Running an 'aValid' request that includes a value of a string "isin" should fail with an error message
+  Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should fail with an error message
     Given foo is a valid "isin"
     And foo is in set:
       | "GB0002634946" |
