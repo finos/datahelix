@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.cucumber.steps.DateObject;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -109,10 +110,10 @@ public class GeneratorTestUtilities {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)) {
-            return DateValueStep.dateObject(input);
+            return new DateObject(input);
         } else if (input.equals("null")) {
             return null;
-        } else if (input.matches("-?(\\d+(\\.\\d+)?)")) {
+        } else if (input.matches("[+-]?(\\d+(\\.\\d+)?)")) {
             return parseNumber(input);
         } else if (input.equals("true") || input.equals("false")){
             return input.equals("true");

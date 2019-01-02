@@ -115,6 +115,6 @@ Scenario: User requires to create a numeric field with data values that are grea
 
 Scenario: User attempts to create a numeric field with data value that are greater than zero using an incorrect field value type of string
      Given there is a field foo
-       But the profile is invalid as foo can't be greater than "Zero"
-     Then I am presented with an error message
+       And foo is greater than "Zero"
+     Then the profile is invalid
         And no data is created

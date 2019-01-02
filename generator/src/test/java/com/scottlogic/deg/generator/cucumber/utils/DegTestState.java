@@ -1,16 +1,15 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DegTestState {
@@ -22,6 +21,20 @@ public class DegTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
+
+    public void addConstraint(String fieldName, String constraintName, List<Object> value) {
+        if (value == null)
+            addConstraint(fieldName, constraintName, (Object)value);
+        else
+            addConstraint(fieldName, constraintName, getSetValues(value));
+    }
+
+    public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
+        if (value == null)
+            addNotConstraint(fieldName, constraintName, (Object)value);
+        else
+            addNotConstraint(fieldName, constraintName, getSetValues(value));
+    }
 
     public void addConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
@@ -37,6 +50,21 @@ public class DegTestState {
     public void addConstraintsFromJson(String constraintProfile) throws IOException {
         ConstraintHolder holder = this.deserialise(constraintProfile);
         this.constraints.addAll(holder.constraints);
+    }
+
+    private Collection<Object> getSetValues(List<Object> values) {
+        if (values == null){
+            throw new IllegalArgumentException("Values cannot be null");
+        }
+
+        values.stream()
+            .filter(value -> value instanceof Exception)
+            .map(value -> (Exception)value)
+            .forEach(this::addException);
+
+        return values.stream()
+            .filter(value -> !(value instanceof Exception))
+            .collect(Collectors.toSet());
     }
 
     public void clearState(){
