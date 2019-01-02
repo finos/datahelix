@@ -14,6 +14,10 @@ public class IsStringShorterThanConstraint implements AtomicConstraint, Visitabl
     public final int referenceValue;
 
     public IsStringShorterThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
+        if (referenceValue < 0){
+            throw new IllegalArgumentException("Cannot create an IsStringShorterThanConstraint for field '" +
+                field.name + "' with a a negative length.");
+        }
 
         this.referenceValue = referenceValue;
         this.field = field;

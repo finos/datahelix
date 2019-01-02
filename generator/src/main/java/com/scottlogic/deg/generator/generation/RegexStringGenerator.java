@@ -41,7 +41,9 @@ public class RegexStringGenerator implements StringGenerator {
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
 
-        this.regexRepresentation = String.format("/%s/", regexStr);
+        String prefix = matchFullString ? "" : "*";
+        String suffix = matchFullString ? "" : "*";
+        this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
         this.automaton = generatedAutomaton;
     }
 
