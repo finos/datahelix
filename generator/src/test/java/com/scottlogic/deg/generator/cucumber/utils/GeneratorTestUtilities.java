@@ -113,7 +113,7 @@ public class GeneratorTestUtilities {
             return new DateObject(input);
         } else if (input.equals("null")) {
             return null;
-        } else if (input.matches("-?(\\d+(\\.\\d+)?)")) {
+        } else if (input.matches("[+-]?(\\d+(\\.\\d+)?)")) {
             return parseNumber(input);
         } else if (input.equals("true") || input.equals("false")){
             return input.equals("true");
