@@ -107,7 +107,7 @@ public class Generate implements Runnable, GenerationConfigSource {
 
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, fixFieldStrategy);
+            DecisionTreeWalkerFactory treeWalkerFactory = new RuntimeDecisionTreeWalkerFactory(config, fixFieldStrategy);
             DecisionTreeWalker treeWalker = treeWalkerFactory.getDecisionTreeWalker(outputPath.getParent());
 
             new GenerationEngine(

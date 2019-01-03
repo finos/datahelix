@@ -15,12 +15,10 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
 
     private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
-    private final DataGeneratorMonitor monitor;
 
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, FixFieldStrategy fixFieldStrategy) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
-        this.monitor = monitor;
     }
 
     @Override
@@ -40,9 +38,6 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     new ExhaustiveProducer());
             case REDUCTIVE:
                 IterationVisualiser visualiser = new NoOpIterationVisualiser();
-                ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
-                    ? (ReductiveDataGeneratorMonitor) this.monitor
-                    : new NoopDataGeneratorMonitor();
 
                 return new ReductiveDecisionTreeWalker(
                     visualiser,

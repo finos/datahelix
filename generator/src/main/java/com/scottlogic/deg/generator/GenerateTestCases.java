@@ -101,7 +101,7 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
         try {
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
             final Profile profile = new ProfileReader(config.getProfileValidator()).read(profileFile.toPath());
-            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
+            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
 
             new GenerationEngine(
                 new DirectoryOutputTarget(

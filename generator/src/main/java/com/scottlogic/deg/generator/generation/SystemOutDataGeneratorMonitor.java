@@ -1,17 +1,16 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
 
-public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
+public class SystemOutDataGeneratorMonitor implements DataGeneratorMonitor {
+    Logger logger = LogManager.getLogger(FixedField.class);
     private Instant startedGenerating;
     private long rowsSinceLastSample;
     private Instant lastSampleTime;
@@ -45,35 +44,10 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         double fractionOfSecondToProduceRows = duration.getNano() / 1_000_000_000.0;
         double rowsPerSecond = rowsEmittedInDuration / fractionOfSecondToProduceRows;
 
-        System.out.println(
-            String.format(
-                "\n\n\n%s rows emitted since %s: %f rows/sec\n\n\n",
+        logger.debug("\n\n\n{} rows emitted since {}: {} rows/sec\n\n\n",
                 this.rowsEmitted.toString(),
                 this.startedGenerating.toString(),
-                rowsPerSecond));
-    }
-
-    @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
-        System.out.println(
-            String.format(
-                "%s %s",
-                lastFixedField.field.name,
-                fieldSpecForValuesInLastFixedField.toString()));
-    }
-
-    @Override
-    public void fieldFixedToValue(Field field, Object current) {
-        System.out.println(String.format("Field [%s] = %s", field.name, current));
-    }
-
-    @Override
-    public void unableToStepFurther(ReductiveState reductiveState) {
-        System.out.println(
-            String.format(
-                "%d: Unable to step further %s ",
-                reductiveState.getFixedFieldsExceptLast().size(),
-                reductiveState.toString(true)));
+                rowsPerSecond);
     }
 }
 
