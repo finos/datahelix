@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReductiveDecisionTreeReducer {
@@ -121,7 +122,19 @@ public class ReductiveDecisionTreeReducer {
         FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
 
         Optional<FieldSpec> merged = fieldSpecMerger.merge(fixedValueFieldSpec, fieldSpec);
-        return !merged.isPresent(); //no conflicts
+
+        if (!merged.isPresent()) {
+            return true;
+        }
+
+        FieldSpec mergedFieldSpec = merged.get();
+        Set<Object> mergedFieldSpecWhitelist = mergedFieldSpec.getSetRestrictions().getWhitelist();
+
+        if (!mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())){
+            return true; //the fixedField value has been removed from the whitelist, the value contradicts another constraint
+        }
+
+        return false;
     }
 
 }
