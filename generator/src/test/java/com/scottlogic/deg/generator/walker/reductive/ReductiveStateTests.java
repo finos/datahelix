@@ -16,11 +16,10 @@ public class ReductiveStateTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
+            new FixedField(new Field("Second Field"), null, null)
         );
         FixedField lastFixedField = new FixedField(
             new Field("First Field"),
-            null,
             null,
             null
         );
@@ -39,11 +38,11 @@ public class ReductiveStateTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("First Field"),
-            new FixedField(new Field("First Field"), null, null, null)
+            new FixedField(new Field("First Field"), null,null)
         );
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
+            new FixedField(new Field("Second Field"), null,null)
         );
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),
@@ -60,11 +59,10 @@ public class ReductiveStateTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
+            new FixedField(new Field("Second Field"), null, null)
         );
         FixedField lastFixedField = new FixedField(
             new Field("First Field"),
-            null,
             null,
             null
         );
@@ -83,7 +81,7 @@ public class ReductiveStateTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
+            new FixedField(new Field("Second Field"), null, null)
         );
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),

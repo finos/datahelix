@@ -22,17 +22,14 @@ public class FixedFieldBuilder {
     private final GenerationConfig generationConfig;
     private final ConstraintReducer constraintReducer;
     private final FixFieldStrategy fixFieldStrategy;
-    private final ReductiveDataGeneratorMonitor monitor;
 
     public FixedFieldBuilder(
         GenerationConfig config,
         ConstraintReducer constraintReducer,
-        FixFieldStrategy fixFieldStrategy,
-        ReductiveDataGeneratorMonitor monitor) {
+        FixFieldStrategy fixFieldStrategy) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.generationConfig = config;
         this.constraintReducer = constraintReducer;
-        this.monitor = monitor;
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
@@ -70,7 +67,7 @@ public class FixedFieldBuilder {
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
 
-        return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
+        return new FixedField(field, values, rootConstraintsFieldSpec);
     }
 
     private Set<AtomicConstraint> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {

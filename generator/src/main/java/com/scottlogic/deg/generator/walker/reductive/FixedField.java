@@ -29,8 +29,7 @@ public class FixedField {
     FixedField(
         Field field,
         Stream<Object> values,
-        FieldSpec valuesFieldSpec,
-        ReductiveDataGeneratorMonitor monitor) {
+        FieldSpec valuesFieldSpec) {
         this.field = field;
         this.values = values;
         this.valuesFieldSpec = valuesFieldSpec;

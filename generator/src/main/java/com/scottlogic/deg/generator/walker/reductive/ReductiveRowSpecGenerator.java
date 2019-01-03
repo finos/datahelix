@@ -24,8 +24,7 @@ public class ReductiveRowSpecGenerator {
 
     public ReductiveRowSpecGenerator(
         ConstraintReducer constraintReducer,
-        FieldSpecMerger fieldSpecMerger,
-        ReductiveDataGeneratorMonitor monitor) {
+        FieldSpecMerger fieldSpecMerger) {
         this.fieldSpecMerger = fieldSpecMerger;
         this.constraintReducer = constraintReducer;
     }

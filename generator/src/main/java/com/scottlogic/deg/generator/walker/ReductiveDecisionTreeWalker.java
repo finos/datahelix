@@ -23,7 +23,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
         FixedFieldBuilder fixedFieldBuilder,
-        ReductiveDataGeneratorMonitor monitor,
         ReductiveDecisionTreeReducer treeReducer,
         ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
         this.iterationVisualiser = iterationVisualiser;

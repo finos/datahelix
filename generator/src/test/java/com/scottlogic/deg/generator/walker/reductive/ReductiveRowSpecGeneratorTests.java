@@ -53,8 +53,7 @@ class ReductiveRowSpecGeneratorTests {
                 Stream.empty(),
                 FieldSpec.Empty
                     .withSetRestrictions(SetRestrictions.fromWhitelist(new HashSet<>(expectedValues)), fieldSpecSource)
-                    .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource),
-                mock(ReductiveDataGeneratorMonitor.class)));
+                    .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource)));
         GenerationConfig config = new GenerationConfig(new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
             GenerationConfig.TreeWalkerType.REDUCTIVE,
@@ -99,8 +98,7 @@ class ReductiveRowSpecGeneratorTests {
         FixedField fixedField = new FixedField(
             new Field("First Field"),
             fixedFieldValues,
-            FieldSpec.Empty,
-            mock(ReductiveDataGeneratorMonitor.class)
+            FieldSpec.Empty
         );
         fixedFields.put(
             new Field("First Field"),
@@ -113,8 +111,7 @@ class ReductiveRowSpecGeneratorTests {
             new FixedField(
                 new Field("Test"),
                 Stream.of(Collections.emptyList()),
-                null,
-                mock(ReductiveDataGeneratorMonitor.class)
+                null
             )
         );
 
@@ -139,8 +136,7 @@ class ReductiveRowSpecGeneratorTests {
         }
         return new ReductiveRowSpecGenerator(
             reducer,
-            fieldSpecMerger,
-            mock(ReductiveDataGeneratorMonitor.class)
+            fieldSpecMerger
         );
     }
 
