@@ -7,15 +7,17 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
+    Logger logger = LogManager.getLogger(ReductiveDecisionTreeWalker.class);
     private final ReductiveDecisionTreeReducer treeReducer;
     private final IterationVisualiser iterationVisualiser;
     private final FixedFieldBuilder fixedFieldBuilder;
-    private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
     ReductiveDecisionTreeWalker(
@@ -26,7 +28,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
         this.iterationVisualiser = iterationVisualiser;
         this.fixedFieldBuilder = fixedFieldBuilder;
-        this.monitor = monitor;
         this.treeReducer = treeReducer;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
     }
@@ -66,7 +67,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
-            this.monitor.unableToStepFurther(reductiveState);
+            logger.debug("{}: Unable to step further {} ", reductiveState.getFixedFieldsExceptLast().size(),
+                                                                reductiveState.toString(true));
             return Stream.empty();
         }
 

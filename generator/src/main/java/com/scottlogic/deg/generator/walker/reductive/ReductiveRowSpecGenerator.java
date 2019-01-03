@@ -9,16 +9,18 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ReductiveRowSpecGenerator {
+    Logger logger = LogManager.getLogger(ReductiveRowSpecGenerator.class);
 
     private final ConstraintReducer constraintReducer;
     private final FieldSpecMerger fieldSpecMerger;
-    private final ReductiveDataGeneratorMonitor monitor;
 
     public ReductiveRowSpecGenerator(
         ConstraintReducer constraintReducer,
@@ -26,7 +28,6 @@ public class ReductiveRowSpecGenerator {
         ReductiveDataGeneratorMonitor monitor) {
         this.fieldSpecMerger = fieldSpecMerger;
         this.constraintReducer = constraintReducer;
-        this.monitor = monitor;
     }
 
     //produce a stream of RowSpecs for each value in the permitted set of values for the field fixed on the last iteration
@@ -51,10 +52,7 @@ public class ReductiveRowSpecGenerator {
             reductiveState.getLastFixedField().field
         );
 
-        this.monitor.rowSpecEmitted(
-            reductiveState.getLastFixedField(),
-            fieldSpecForValuesInLastFixedField,
-            rowSpecWithAllValuesForLastFixedField);
+        logger.debug("{} {}", reductiveState.getLastFixedField().field.name, fieldSpecForValuesInLastFixedField.toString());
         return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
 

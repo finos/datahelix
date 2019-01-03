@@ -6,19 +6,22 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
 public class FixedField {
+    Logger logger = LogManager.getLogger(FixedField.class);
     private static final Object NOT_ITERATED = new NotIterated();
 
     public final Field field;
 
     private final Stream<Object> values;
     private final FieldSpec valuesFieldSpec;
-    private final ReductiveDataGeneratorMonitor monitor;
 
     private Object current = NOT_ITERATED;
     private FieldSpec fieldSpec;
@@ -31,7 +34,6 @@ public class FixedField {
         this.field = field;
         this.values = values;
         this.valuesFieldSpec = valuesFieldSpec;
-        this.monitor = monitor;
     }
 
     public Stream<Object> getStream() {
@@ -40,7 +42,7 @@ public class FixedField {
                 this.current = value;
                 this.fieldSpec = null;
 
-                this.monitor.fieldFixedToValue(this.field, this.current);
+                logger.debug("Field [{}] = {}", field.name, current);
             });
     }
 
