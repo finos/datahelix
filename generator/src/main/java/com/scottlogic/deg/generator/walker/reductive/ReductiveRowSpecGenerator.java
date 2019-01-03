@@ -32,7 +32,7 @@ public class ReductiveRowSpecGenerator {
     public Stream<RowSpec> createRowSpecsFromFixedValues(ReductiveState reductiveState, ConstraintNode constraintNode) {
         //create a row spec where every field is set to this.fixedFields & field=value
         if (reductiveState.getLastFixedField() == null) {
-            throw new UnsupportedOperationException("Field has not been fixed yet");
+            throw new IllegalStateException("Field has not been fixed yet");
         }
 
         Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFields(reductiveState, constraintNode);

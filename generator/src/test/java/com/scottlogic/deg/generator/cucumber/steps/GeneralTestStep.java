@@ -61,15 +61,8 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
-    @But("the profile is invalid as (.+) can't be ([a-z ]+) (((\".*\")|(" + DateValueStep.DATE_REGEX + ")|([0-9]+(.[0-9]+){1}))+)")
-    public void fieldIsInvalid(String fieldName, String constraint, String value) {
-        try {
-            Object parsedValue = GeneratorTestUtilities.parseInput(value);
-            this.state.addConstraint(fieldName, constraint, parsedValue);
-        } catch (Exception e) {
-            this.state.addException(e);
-        }
-
+    @Then("^the profile is invalid$")
+    public void theProfileIsInvalid() {
         testHelper.generateAndGetData();
 
         Assert.assertThat(
@@ -82,9 +75,26 @@ public class GeneralTestStep {
                     .or(isA(ClassCastException.class))));
     }
 
+    @But("^the profile is invalid because \"(.+)\"$")
+    public void fieldIsInvalidWithError(String error) {
+        testHelper.generateAndGetData();
+
+        List<Exception> thrownExceptions = new ArrayList<>(this.testHelper.getThrownExceptions());
+        Assert.assertThat(
+            "Expected invalid profile",
+            thrownExceptions,
+            hasItem(isA(InvalidProfileException.class)));
+
+        Assert.assertThat(
+            thrownExceptions.get(0).getMessage(),
+            is(equalTo(error))
+        );
+    }
+
     @Then("^I am presented with an error message$")
     public void dataGeneratorShouldError() {
         testHelper.generateAndGetData();
+
         Assert.assertThat(testHelper.generatorHasThrownException(), is(true));
     }
 
@@ -163,7 +173,7 @@ public class GeneralTestStep {
             .map(row -> row.stream().map(cell -> {
                 try {
                     return GeneratorTestUtilities.parseExpected(cell);
-                } catch (JsonParseException e) {
+                } catch (JsonParseException | InvalidProfileException e) {
                     this.state.addException(e);
                     return "<exception thrown: " + e.getMessage() + ">";
                 }

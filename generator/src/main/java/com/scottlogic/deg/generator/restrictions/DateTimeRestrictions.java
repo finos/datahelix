@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class DateTimeRestrictions {
     public DateTimeLimit min;
@@ -34,6 +35,20 @@ public class DateTimeRestrictions {
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateTimeRestrictions that = (DateTimeRestrictions) o;
+        return Objects.equals(min, that.min) &&
+            Objects.equals(max, that.max);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max);
+    }
+
     public static class DateTimeLimit {
         private final LocalDateTime limit;
         private final boolean inclusive;
@@ -49,6 +64,20 @@ public class DateTimeRestrictions {
 
         public boolean isInclusive() {
             return inclusive;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            DateTimeLimit that = (DateTimeLimit) o;
+            return inclusive == that.inclusive &&
+                Objects.equals(limit, that.limit);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(limit, inclusive);
         }
     }
 }

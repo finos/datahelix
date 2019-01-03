@@ -2,15 +2,17 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Details a column's atomic constraints
  */
 public class FieldSpec {
     public static final FieldSpec Empty = new FieldSpec(null,
+        null,
         null,
         null,
         null,
@@ -28,9 +30,10 @@ public class FieldSpec {
     private final DateTimeRestrictions dateTimeRestrictions;
     private final FormatRestrictions formatRestrictions;
     private final GranularityRestrictions granularityRestrictions;
+    private final MustContainRestriction mustContainRestriction;
     private final FieldSpecSource source;
 
-    public FieldSpec(
+    private FieldSpec(
         SetRestrictions setRestrictions,
         NumericRestrictions numericRestrictions,
         StringRestrictions stringRestrictions,
@@ -39,6 +42,7 @@ public class FieldSpec {
         DateTimeRestrictions dateTimeRestrictions,
         FormatRestrictions formatRestrictions,
         GranularityRestrictions granularityRestrictions,
+        MustContainRestriction mustContainRestriction,
         FieldSpecSource source) {
         this.setRestrictions = setRestrictions;
         this.numericRestrictions = numericRestrictions;
@@ -48,6 +52,7 @@ public class FieldSpec {
         this.dateTimeRestrictions = dateTimeRestrictions;
         this.formatRestrictions = formatRestrictions;
         this.granularityRestrictions = granularityRestrictions;
+        this.mustContainRestriction = mustContainRestriction;
         this.source = source;
     }
 
@@ -75,6 +80,10 @@ public class FieldSpec {
 
     public GranularityRestrictions getGranularityRestrictions() { return granularityRestrictions; }
 
+    public MustContainRestriction getMustContainRestriction() {
+        return mustContainRestriction;
+    }
+
     public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             setRestrictions,
@@ -85,6 +94,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -98,6 +108,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -111,6 +122,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -124,6 +136,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -137,6 +150,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -150,6 +164,7 @@ public class FieldSpec {
             dateTimeRestrictions,
             this.formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -163,6 +178,7 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             this.formatRestrictions,
             granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
     }
 
@@ -170,16 +186,11 @@ public class FieldSpec {
     public String toString() {
         return String.join(
             " & ",
-            Stream.of(
-                Objects.toString(setRestrictions, null),
-                Objects.toString(numericRestrictions, null),
-                Objects.toString(stringRestrictions, null),
-                Objects.toString(nullRestrictions, null),
-                Objects.toString(typeRestrictions, null),
-                Objects.toString(dateTimeRestrictions, null),
-                Objects.toString(granularityRestrictions, null))
-            .filter(s -> s != null)
-            .collect(Collectors.toList()));
+            Arrays
+                .stream(getPropertiesToCompare(this))
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .collect(Collectors.toList()));
     }
 
     public FormatRestrictions getFormatRestrictions() {
@@ -196,11 +207,93 @@ public class FieldSpec {
             this.dateTimeRestrictions,
             formatRestrictions,
             this.granularityRestrictions,
+            this.mustContainRestriction,
             this.source.combine(source));
+    }
+
+    public FieldSpec withMustContainRestriction(MustContainRestriction mustContainRestriction) {
+        return new FieldSpec(
+            this.setRestrictions,
+            this.numericRestrictions,
+            this.stringRestrictions,
+            this.nullRestrictions,
+            this.typeRestrictions,
+            this.dateTimeRestrictions,
+            this.formatRestrictions,
+            this.granularityRestrictions,
+            mustContainRestriction,
+            this.source);
     }
 
     public FieldSpecSource getFieldSpecSource() {
         return this.source;
     }
-}
 
+    public int hashCode(){
+        return Arrays.hashCode(getPropertiesToCompare(this));
+    }
+
+    public boolean equals(Object obj){
+        if (obj == null){
+            return false;
+        }
+
+        if (!(obj instanceof FieldSpec)){
+            return false;
+        }
+
+        return equals((FieldSpec)obj);
+    }
+
+    private boolean equals(FieldSpec other){
+        Iterator<Object> myProperties = Arrays.asList(getPropertiesToCompare(this)).iterator();
+        Iterator<Object> otherPropertiesToCompare = Arrays.asList(getPropertiesToCompare(other)).iterator();
+
+        //effectively Stream.zip(myProperties, otherProperties).allMatch((x, y) -> propertiesAreEqual(x, y));
+        while (myProperties.hasNext()){
+            Object myProperty = myProperties.next();
+
+            if (!otherPropertiesToCompare.hasNext()){
+                return false;
+            }
+
+            Object otherProperty = otherPropertiesToCompare.next();
+
+            if (!propertiesAreEqual(myProperty, otherProperty)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean propertiesAreEqual(Object myProperty, Object otherProperty) {
+        if (myProperty == null && otherProperty == null){
+            return true;
+        }
+
+        if (myProperty == null || otherProperty == null){
+            return false; //one of the properties are null, but the other one cannot be (the first IF guards against this)
+        }
+
+        if (!myProperty.getClass().equals(otherProperty.getClass())){
+            return false;
+        }
+
+        return myProperty.equals(otherProperty);
+    }
+
+    private static Object[] getPropertiesToCompare(FieldSpec fieldSpec){
+        return new Object[]{
+            fieldSpec.dateTimeRestrictions,
+            fieldSpec.formatRestrictions,
+            fieldSpec.granularityRestrictions,
+            fieldSpec.mustContainRestriction,
+            fieldSpec.nullRestrictions,
+            fieldSpec.numericRestrictions,
+            fieldSpec.setRestrictions,
+            fieldSpec.stringRestrictions,
+            fieldSpec.typeRestrictions
+        };
+    }
+}

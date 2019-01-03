@@ -6,7 +6,7 @@ Background:
 Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
      Given there is a field foo
        And foo is shorter than 5
-       And foo is containing regex /[x]{3}/
+       And foo is matching regex /[x]{0,5}/
      Then the following data should not be included in what is generated:
        | foo      |
        | "xxxxx"  |
@@ -102,6 +102,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo 
        And foo is equal to "1234"
      Then the following data should be generated:
        | foo    |
+       | null   |
        | "1234" |
 
 @ignore
@@ -120,6 +121,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
        | "123"  |
      Then the following data should be generated:
        | foo    |
+       | null   |
        | "1234" |
        | "123"  |
 
@@ -194,7 +196,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength
      Given there is a field foo
        And foo is shorter than 3
        And foo is of length 2
-       And foo is containing regex /[♀]{2}/
+       And foo is matching regex /[♀]{0,2}/
      Then the following data should be generated:
        | foo  |
        | null |
@@ -211,7 +213,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
      Given there is a field foo
        And foo is shorter than 3
        And foo is longer than 1
-       And foo is containing regex /[♀]{1}/
+       And foo is matching regex /[♀]{0,3}/
      Then the following data should be included in what is generated:
        | foo  |
        | null |
@@ -228,7 +230,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
      Given there is a field foo
        And foo is shorter than 4
        And foo is shorter than 3
-       And foo is containing regex /[♀]{1}/
+       And foo is matching regex /[♀]{0,5}/
      Then the following data should be included in what is generated:
        | foo  |
        | null |
@@ -285,6 +287,7 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
        And foo is containing regex /[%]{1}/
      Then the following data should be included in what is generated:
        | foo  |
+       | null |
        | "%1" |
        | "%"  |
        And the following data should not be included in what is generated:
@@ -304,6 +307,7 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        And foo is containing regex /[%]{1}/
      Then the following data should be included in what is generated:
        | foo  |
+       | null |
        | "%"  |
        And the following data should not be included in what is generated:
        | foo  |

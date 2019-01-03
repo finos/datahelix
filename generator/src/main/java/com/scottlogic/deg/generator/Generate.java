@@ -12,6 +12,9 @@ import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.MultiDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
@@ -87,6 +90,11 @@ public class Generate implements Runnable, GenerationConfigSource {
             false + ").")
     private boolean validateProfile;
 
+    @CommandLine.Option(
+        names = {"--trace-constraints"},
+        description = "Defines whether constraint tracing is enabled for the output")
+    private boolean enableTracing;
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
@@ -97,7 +105,7 @@ public class Generate implements Runnable, GenerationConfigSource {
             FixFieldStrategy fixFieldStrategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
             DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
             new GenerationEngine(
-                new FileOutputTarget(outputPath, new CsvDataSetWriter()),
+                new FileOutputTarget(outputPath, getWriter()),
                 new DecisionTreeDataGenerator(
                     config,
                     dontPartitionTrees
@@ -113,6 +121,15 @@ public class Generate implements Runnable, GenerationConfigSource {
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
+    }
+
+    private DataSetWriter getWriter(){
+        DataSetWriter outputWriter = new CsvDataSetWriter();
+        if (this.enableTracing){
+            return new MultiDataSetWriter(outputWriter, new SourceTracingDataSetWriter());
+        }
+
+        return outputWriter;
     }
 
     @Override

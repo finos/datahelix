@@ -12,6 +12,11 @@ public class IsEqualToConstantConstraint implements AtomicConstraint {
     private final Set<RuleInformation> rules;
 
     public IsEqualToConstantConstraint(Field field, Object requiredValue, Set<RuleInformation> rules) {
+        if (requiredValue == null){
+            throw new IllegalArgumentException("Cannot create an IsEqualToConstantConstraint for field '" +
+                field.name + "' with the null value.");
+        }
+
         this.field = field;
         this.requiredValue = requiredValue;
         this.rules = rules;

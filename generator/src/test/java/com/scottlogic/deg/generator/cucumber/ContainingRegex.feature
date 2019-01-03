@@ -238,6 +238,7 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting equa
        And foo is equal to "aaa"
      Then the following data should be generated:
        | foo   |
+       | null  |
        | "aaa" |
 
 @ignore
@@ -252,8 +253,9 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting inSe
      Given there is a field foo
        And foo is containing regex /[a]{1,3}/
      And foo is in set:
-       | "a" |
+       | "a"   |
        | "aaa" |
+     And foo is anything but null
        Then the following data should be generated:
        | foo   |
        | "a"   |
@@ -476,6 +478,8 @@ Scenario: Running a 'containingRegex' request as part of an if constraint should
          }
        """
        And foo is of length 1
+       And foo is anything but null
+       And price is anything but null
      Then the following data should be included in what is generated:
        | foo | price |
        | "a" |  1    |

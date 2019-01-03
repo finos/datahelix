@@ -103,6 +103,24 @@ public class RealNumberFieldValueSource implements FieldValueSource {
                 i -> !blacklist.contains(i)));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        RealNumberFieldValueSource otherSource = (RealNumberFieldValueSource) obj;
+        return inclusiveUpperLimit.equals(otherSource.inclusiveLowerLimit) &&
+            inclusiveLowerLimit.equals(otherSource.inclusiveLowerLimit) &&
+            stepSize.equals(otherSource.stepSize) &&
+            blacklist.equals(otherSource.blacklist) &&
+            scale == otherSource.scale;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, stepSize, blacklist, scale);
+    }
+
     private class RealNumberIterator implements Iterator<Object> {
         private BigDecimal nextValue;
 
