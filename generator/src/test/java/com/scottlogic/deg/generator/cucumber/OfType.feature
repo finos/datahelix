@@ -61,59 +61,79 @@ Scenario: Running an 'ofType' = String request that includes roman character str
      Given there is a field foo
        And foo is in set:
        | "true"      |
+       | "false"     |
        | "null"      |
+       | "undefined" |
        And foo is of type "string"
      Then the following data should be generated:
        | foo         |
        | null        |
        | "true"      |
+       | "false"     |
        | "null"      |
+       | "undefined" |
 
 Scenario: Running an 'ofType' = String request that includes strings with special characters should be successful
      Given there is a field foo
        And foo is in set:
-       | "☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
-       | "传/傳象形字ФХѰѾЦИتشرقصف"                      |
+         | "!?:;()&%+-="                                |
+         | "]	[] [] [] [] [] [] ["                       |
+         | "†ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
+         | "☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
+         | "传/傳象形字ФХѰѾЦИتشرقصف"                      |
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                            |
        | null                                           |
+       | "!?:;()&%+-="                                  |
+       | "]	[] [] [] [] [] [] ["                       |
+       | "†ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
        | "☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
        | "传/傳象形字ФХѰѾЦИتشرقصف"                      |
 
 Scenario: Running an 'ofType' = String request that includes strings with special characters (standard) alongside roman alphanumeric characters should be successful
      Given there is a field foo
        And foo is in set:
-       | "abcdefghijklmnop  ☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
-       | "abcdefghijklmnop  传/傳象形字ФХѰѾЦИتشرقصف"                      |
+         | "abcdefghijklmnop  !?:;()&%+-="                                  |
+         | "abcdefghijklmnop  ]	[] [] [] [] [] [] ["                       |
+         | "abcdefghijklmnop  †ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
+         | "abcdefghijklmnop  ☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
+         | "abcdefghijklmnop  传/傳象形字ФХѰѾЦИتشرقصف"                      |
        And foo is of type "string"
      Then the following data should be generated:
        | foo                                                              |
        | null                                                             |
+       | "abcdefghijklmnop  !?:;()&%+-="                                  |
+       | "abcdefghijklmnop  ]	[] [] [] [] [] [] ["                       |
+       | "abcdefghijklmnop  †ŠŒŽ™¼ǅ©®…¶Σ֎"                               |
        | "abcdefghijklmnop  ☺☹☻😀😁😂😃😄😅😆😇😈😉😊😋😌🚩🚪🚫🚬🚭🚮🚯🚰" |
        | "abcdefghijklmnop  传/傳象形字ФХѰѾЦИتشرقصف"                      |
 
 Scenario: Running an 'ofType' = String request that includes roman numeric strings that include decimal numbers should be successful
      Given there is a field foo
        And foo is in set:
-       | "0.0.1"        |
-       | "99.999999000" |
+         | "0.0"          |
+         | "0.0.1"        |
+         | "99.999999000" |
        And foo is of type "string"
      Then the following data should be generated:
        | foo            |
        | null           |
+       | "0.0"          |
        | "0.0.1"        |
        | "99.999999000" |
 
 Scenario: Running an 'ofType' = String request that includes roman numeric strings that include comma separated numbers should be successful
      Given there is a field foo
        And foo is in set:
-       | "100,000" |
-       | "5,99"    |
+         | "1,000"   |
+         | "100,000" |
+         | "5,99"    |
        And foo is of type "string"
      Then the following data should be generated:
        | foo       |
        | null      |
+       | "1,000"   |
        | "100,000" |
        | "5,99"    |
 
@@ -132,13 +152,15 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
 Scenario: Running an 'ofType' = String request that includes roman numeric strings that include numbers with Preceding and trailing zeros should be successful
      Given there is a field foo
        And foo is in set:
-       | "000010"     |
-       | "0000.00000" |
+         | "000010"     |
+         | "10000"      |
+         | "0000.00000" |
        And foo is of type "string"
      Then the following data should be generated:
        | foo          |
        | null         |
        | "000010"     |
+       | "10000"      |
        | "0000.00000" |
 
 Scenario: Running an 'ofType' = String request that includes roman numeric strings that include numbers in a currency style should be successful
@@ -157,12 +179,14 @@ Scenario: Running an 'ofType' = String request that includes roman numeric strin
      Given there is a field foo
   And foo is in set:
     | "+5"      |
+    | "-99"     |
     | "-500.05" |
   And foo is of type "string"
   Then the following data should be generated:
     | foo       |
     | null      |
     | "+5"      |
+    | "-99"     |
     | "-500.05" |
 
 Scenario: Running an 'ofType' = String request that includes roman character strings that include in-use numeric values should be successful
@@ -170,12 +194,14 @@ Scenario: Running an 'ofType' = String request that includes roman character str
        And foo is in set:
        | "Infinity" |
        | "NaN"      |
+       | "nil"      |
        And foo is of type "string"
      Then the following data should be generated:
        | foo        |
        | null       |
        | "Infinity" |
        | "NaN"      |
+       | "nil"      |
 
 Scenario: Running an 'ofType' = String request that includes roman character strings that include computer formatted numbers ("1E+02", "001 000") should be successful
      Given there is a field foo
@@ -204,12 +230,14 @@ Scenario: Running an 'ofType' = String request that includes roman character str
 Scenario: Running an 'ofType' = String request that includes roman character strings that include invalid date values should be successful
      Given there is a field foo
        And foo is in set:
-       | "01-01-2010T00:00:00,000" |
-       | "1st January 2010"        |
+         | "2010-01-01T00:00"        |
+         | "01-01-2010T00:00:00,000" |
+         | "1st January 2010"        |
        And foo is of type "string"
      Then the following data should be generated:
        | foo                       |
        | null                      |
+       | "2010-01-01T00:00"        |
        | "01-01-2010T00:00:00,000" |
        | "1st January 2010"        |
 

@@ -12,8 +12,12 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     private final List<Object> interestingValues;
 
     public CannedValuesFieldValueSource(List<Object> values) {
-        this.allValues = values;
-        this.interestingValues = values;
+        this(values, values);
+    }
+
+    public CannedValuesFieldValueSource(List<Object> allValues, List<Object> interestingValues) {
+        this.allValues = allValues;
+        this.interestingValues = interestingValues;
     }
 
     public static FieldValueSource of(Object... values) {

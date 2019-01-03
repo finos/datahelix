@@ -19,6 +19,9 @@ Scenario: User requires to create a field with strings that conform to one or ma
        | foo     |
        | "Test0" |
        | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
        | "Test5" |
        | "aaaa"  |
        | "aaba"  |

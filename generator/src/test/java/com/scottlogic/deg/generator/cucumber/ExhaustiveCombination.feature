@@ -603,6 +603,9 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 | foo2 | foo3 |
        | 1    | 20   | 10   |
        | 1    | 20   | 11   |
+       | 1    | 20   | 12   |
+       | 1    | 20   | 13   |
+       | 1    | 20   | 14   |
 
 Scenario: Running an exhaustive combination strategy across fields with a duplicate data option in different formats (numeric & string) in a field should be successful
      Given the following fields exist:
@@ -629,8 +632,16 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
      Then the following data should be generated:
        | foo1 | foo2 | foo3 |
        | 1    | 20   | 10   |
+       | 1    | 20   | 11   |
+       | 1    | 20   | 12   |
+       | 1    | 20   | 13   |
+       | 1    | 20   | 14   |
        | 1    | 20   | "14" |
        | 1    | "20" | 10   |
+       | 1    | "20" | 11   |
+       | 1    | "20" | 12   |
+       | 1    | "20" | 13   |
+       | 1    | "20" | 14   |
        | 1    | "20" | "14" |
 
 Scenario: Running an exhaustive combination strategy across fields with non ordered data options should be successful
@@ -656,14 +667,36 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
          | 14      |
      Then the following data should be generated:
        | foo1 | foo2   | foo3    |
+       | 1    | "zab"  | "!"     |
+       | 1    | "zab"  | "testZ" |
        | 1    | "zab"  | "0"     |
        | 1    | "zab"  | "aaa"   |
+       | 1    | "zab"  | 14      |
+       | 1    | "zaa"  | "!"     |
+       | 1    | "zaa"  | "testZ" |
+       | 1    | "zaa"  | "0"     |
+       | 1    | "zaa"  | "aaa"   |
+       | 1    | "zaa"  | 14      |
+       | 1    | "test" | "!"     |
+       | 1    | "test" | "testZ" |
        | 1    | "test" | "0"     |
        | 1    | "test" | "aaa"   |
+       | 1    | "test" | 14      |
+       | 0    | "zab"  | "!"     |
+       | 0    | "zab"  | "testZ" |
        | 0    | "zab"  | "0"     |
        | 0    | "zab"  | "aaa"   |
+       | 0    | "zab"  | 14      |
+       | 0    | "zaa"  | "!"     |
+       | 0    | "zaa"  | "testZ" |
+       | 0    | "zaa"  | "0"     |
+       | 0    | "zaa"  | "aaa"   |
+       | 0    | "zaa"  | 14      |
+       | 0    | "test" | "!"     |
+       | 0    | "test" | "testZ" |
        | 0    | "test" | "0"     |
        | 0    | "test" | "aaa"   |
+       | 0    | "test" | 14      |
 
 Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
      Given the following fields exist:

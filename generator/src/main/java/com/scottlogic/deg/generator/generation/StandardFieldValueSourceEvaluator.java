@@ -23,34 +23,25 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         // if there's a whitelist, we can just output that
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
+            Set<Object> allWhitelist = getSetRestrictionsWhitelistForAllValues(fieldSpec);
+            Set<Object> interestingWhitelist = getSetRestrictionsWhitelistForInterestingValues(fieldSpec);
 
-            // If we have values that must be included we need to check that those values are included in the whitelist
-            if (mustContainRestriction != null && !mustContainRestriction.getRequiredObjects().isEmpty()) {
-                Set<Object> mustContainValues = getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                    .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()).collect(Collectors.toSet());
-
-                //the items in the whitelist that are not in mustContainValues
-                Set<Object> relativeComplementaryWhitelistValues =
-                    whitelist.stream().filter(value -> !mustContainValues.contains(value))
-                    .collect(Collectors.toSet());
-
-                whitelist = Stream.concat(
-                    mustContainValues.stream(),
-                    relativeComplementaryWhitelistValues.stream().limit(1) //include a non-must contains item
-                ).collect(Collectors.toSet());
-            }
-            else {
-                //there are no values defined as MUST contain, so pick at most 2 items from the whitelist
-                whitelist = whitelist.stream().limit(2).collect(Collectors.toSet());
-            }
-
-            Stream<Object> validSourcesValues = validSources
+            List<Object> validSourcesValues = validSources
                 .stream()
-                .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false));
-            Stream<Object> whitelistAndValidSourcesValues = Stream.concat(whitelist.stream(), validSourcesValues);
+                .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false))
+                .collect(Collectors.toList());
+            Stream<Object> allWhitelistAndValidSourcesValues = Stream.concat(
+                allWhitelist.stream(), validSourcesValues.stream()
+            );
+            Stream<Object> interestingWhitelistAndValidSourceValues = Stream.concat(
+                interestingWhitelist.stream(), validSourcesValues.stream()
+            );
+
             return Collections.singleton(
-                new CannedValuesFieldValueSource(whitelistAndValidSourcesValues.collect(Collectors.toList()))
+                new CannedValuesFieldValueSource(
+                    allWhitelistAndValidSourcesValues.collect(Collectors.toList()),
+                    interestingWhitelistAndValidSourceValues.collect(Collectors.toList())
+                )
             );
         }
 
@@ -161,5 +152,45 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         mustContainRestrictionFieldSpecs.forEach(fs -> validSources.addAll(getFieldValueSources(fs)));
+    }
+
+    private Set<Object> getSetRestrictionsWhitelistForAllValues(FieldSpec fieldSpec) {
+        Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
+        MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
+
+        if (mustContainRestriction != null) {
+            whitelist = Stream.concat(whitelist.stream(),
+                getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                    .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())).collect(Collectors.toSet());
+        }
+
+        return whitelist;
+    }
+
+    private Set<Object> getSetRestrictionsWhitelistForInterestingValues(FieldSpec fieldSpec) {
+        Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
+        MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
+
+        // If we have values that must be included we need to check that those values are included in the whitelist
+        if (mustContainRestriction != null && !mustContainRestriction.getRequiredObjects().isEmpty()) {
+            Set<Object> mustContainValues = getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
+                .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()).collect(Collectors.toSet());
+
+            //the items in the whitelist that are not in mustContainValues
+            Set<Object> relativeComplementaryWhitelistValues =
+                whitelist.stream().filter(value -> !mustContainValues.contains(value))
+                    .collect(Collectors.toSet());
+
+            whitelist = Stream.concat(
+                mustContainValues.stream(),
+                relativeComplementaryWhitelistValues.stream().limit(1) //include a non-must contains item
+            ).collect(Collectors.toSet());
+        }
+        else {
+            //there are no values defined as MUST contain, so pick at most 2 items from the whitelist
+            whitelist = whitelist.stream().limit(2).collect(Collectors.toSet());
+        }
+
+        return whitelist;
     }
 }
