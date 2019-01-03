@@ -54,11 +54,18 @@ public class ReductiveDecisionTreeReducer {
     }
 
     private DecisionNode reduce(DecisionNode decision, ReductiveState fixedFields, AdapterContext context){
-        return new TreeDecisionNode(decision.getOptions()
+        TreeDecisionNode reducedDecision = new TreeDecisionNode(decision.getOptions()
             .stream()
             .map(o -> reduce(o, fixedFields, context.forOption(o)))
             .filter(o -> o != null && !o.getAtomicConstraints().isEmpty())
             .collect(Collectors.toList()));
+
+        if (reducedDecision.getOptions().isEmpty()){
+            //NOTE: Presumes the tree is 'valid' to start off with, i.e. all decision nodes have at least 1 option
+            context.treeIsInvalid();
+        }
+
+        return reducedDecision;
     }
 
     private Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, ReductiveState fixedFields, AdapterContext context) {
