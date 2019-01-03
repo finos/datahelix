@@ -37,6 +37,7 @@ Scenario: Running an 'if' constraint for then and else conditions should be succ
          | "a" |
          | "b" |
        And foo is anything but null
+       And bar is anything but null
        And there is a constraint:
        """
          {
@@ -485,21 +486,23 @@ Scenario: Running an if request that contains a non contradictory null constrain
      Then the following data should be generated:
        | foo  | bar  |
        | null | "b"  |
+       | null | null |
        | 2    | "c"  |
+       | 2    | null |
        | 3    | "c"  |
+       | 3    | null |
        | 4    | "c"  |
+       | 4    | null |
 
 Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
      Given the following fields exist:
        | foo |
        | bar |
        And foo is in set:
-         | null |
          | 2    |
          | 3    |
          | 4    |
        And bar is in set:
-         | null |
          | "b"  |
          | "c"  |
        And there is a constraint:
@@ -513,21 +516,23 @@ Scenario: Running an if request that contains a non contradictory null constrain
      Then the following data should be generated:
        | foo  | bar  |
        | null | "c"  |
+       | null | null |
+       | null | null |
        | 2    | null |
        | 3    | "c"  |
+       | 3    | null |
        | 4    | "c"  |
+       | 4    | null |
 
 Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
      Given the following fields exist:
        | foo |
        | bar |
        And foo is in set:
-         | null |
          | 2    |
          | 3    |
          | 4    |
        And bar is in set:
-         | null |
          | "b"  |
          | "c"  |
        And there is a constraint:
@@ -541,7 +546,10 @@ Scenario: Running an if request that contains a non contradictory null constrain
      Then the following data should be generated:
        | foo  | bar  |
        | null | null |
+       | null | null |
+       | null | "b"  |
        | 2    | "b"  |
+       | 2    | null |
        | 3    | null |
        | 4    | null |
 
@@ -559,7 +567,7 @@ Scenario: Running an if request that contains a contradictory null constraint wi
          | "a" |
          | "b" |
          | "c" |
-       And foo is anything but null
+       And bar is anything but null
        And there is a constraint:
        """
          {
@@ -1235,7 +1243,7 @@ Scenario: Running an if request that contains a non contradictory ofLength const
          | "22"   |
          | "333"  |
          | "4444" |
-       And foo is anything but null
+       And bar is anything but null
        And there is a constraint:
        """
          {

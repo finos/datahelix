@@ -464,10 +464,8 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
        And foo is in set:
        | null |
        | 1    |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | 1    |
+     Then I am presented with an error message
+       And no data is created
 
 Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
      Given there is a field foo
@@ -924,6 +922,7 @@ Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constra
      Then the following data should be generated:
        | foo      |
        | null     |
+       | null     |
        | "Test 1" |
        | "Test 2" |
        | "Test 3" |
@@ -941,8 +940,8 @@ Scenario: Running a 'inSet' request as part of a non-contradicting allOf constra
      Then the following data should be generated:
        | foo      |
        | null     |
-       | "Test 1" |
-       | "Test 2" |
+       | "Test1" |
+       | "Test2" |
 
 @ignore
 Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should fail with an error message
