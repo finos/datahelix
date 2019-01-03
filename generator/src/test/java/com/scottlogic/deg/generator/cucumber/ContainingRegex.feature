@@ -111,6 +111,7 @@ Scenario: Running a 'containingRegex' request that includes basic punctuation ch
        | "-"  |
        | "."  |
 
+@ignore
 Scenario: Running a 'containingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
      Given there is a field foo
        And foo is containing regex /[あ-げ]{1}/
