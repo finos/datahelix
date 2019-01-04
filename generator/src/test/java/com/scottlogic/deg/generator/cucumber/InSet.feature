@@ -464,7 +464,8 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
        And foo is in set:
        | null |
        | 1    |
-     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
+     Then I am presented with an error message
+       And no data is created
 
 Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
      Given there is a field foo
@@ -909,39 +910,38 @@ Scenario: Running a 'inSet' request with a not constraint should be successful
        | null                    |
        | "Test 01 is not in set" |
 
-@ignore
 Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a field foo
        And there is a constraint:
        """
        { "anyOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 3", "Test 4" ]" }
+         { "field": "foo", "is": "inSet", "values": [ "Test 1", "Test 2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test 3", "Test 4" ] }
        ]}
        """
      Then the following data should be generated:
        | foo      |
+       | null     |
        | null     |
        | "Test 1" |
        | "Test 2" |
        | "Test 3" |
        | "Test 4" |
 
-@ignore
 Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
      Given there is a field foo
        And there is a constraint:
        """
        { "allOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" }
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] }
        ]}
        """
      Then the following data should be generated:
        | foo      |
        | null     |
-       | "Test 1" |
-       | "Test 2" |
+       | "Test1" |
+       | "Test2" |
 
 @ignore
 Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should fail with an error message
@@ -949,15 +949,14 @@ Scenario: Running a 'inSet' request as part of a contradicting allOf constraint 
        And there is a constraint:
        """
        { "allOf": [
-         { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
-         { "field": "foo", "is": "inSet", "value": "[ "Test 3", "Test 4" ]" }
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test3", "Test4" ] }
        ]}
        """
      Then I am presented with an error message
        And no data is created
 
-@ignore
-Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
+Scenario: Running a 'inSet' request as part of an if constraint should be successful
      Given the following fields exist:
        | foo   |
        | price |
@@ -969,16 +968,16 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
        And there is a constraint:
        """
        {
-         "if": { "field": "foo", "is": "inSet", "value": "[ "Test 1", "Test 2" ]" },
+         "if": { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
          "then": { "field": "price", "is": "equalTo", "value": 1 },
          "else": { "field": "price", "is": "equalTo", "value": 2 }
          }
        """
+       And foo is anything but null
+       And price is anything but null
      Then the following data should be generated:
        | foo     | price |
-       | null    | 1     |
        | "Test1" | 1     |
        | "Test2" | 1     |
-       | null    | 2     |
        | "Test3" | 2     |
        | "Test4" | 2     |

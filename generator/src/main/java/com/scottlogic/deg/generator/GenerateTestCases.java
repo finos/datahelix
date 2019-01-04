@@ -10,6 +10,9 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.MultiDataSetWriter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
@@ -86,6 +89,11 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
             false + ").")
     private boolean validateProfile;
 
+    @CommandLine.Option(
+        names = {"--trace-constraints"},
+        description = "Defines whether constraint tracing is enabled for the output")
+    private boolean enableTracing;
+
     @Override
     public void run() {
         GenerationConfig config = new GenerationConfig(this);
@@ -99,7 +107,7 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
                 new DirectoryOutputTarget(
                     outputDir,
                     getFilenameWithoutExtension(profileFile.getName()),
-                    new CsvDataSetWriter()),
+                    getWriter()),
                 new DecisionTreeDataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
                     dontPartitionTrees
@@ -114,6 +122,15 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
+    }
+
+    private DataSetWriter getWriter(){
+        DataSetWriter outputWriter = new CsvDataSetWriter();
+        if (this.enableTracing){
+            return new MultiDataSetWriter(outputWriter, new SourceTracingDataSetWriter());
+        }
+
+        return outputWriter;
     }
 
     private String getFilenameWithoutExtension(String fileNameWithExtension) {
