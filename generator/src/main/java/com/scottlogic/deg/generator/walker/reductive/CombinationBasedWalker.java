@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.combination.Combination;
 import com.scottlogic.deg.generator.generation.combination.CombinationProducer;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -19,13 +20,17 @@ import java.util.stream.Stream;
  */
 public class CombinationBasedWalker implements DecisionTreeWalker {
 
+    private final ReductiveDataGeneratorMonitor monitor;
     private final CombinationProducer combinationProducer;
     private final ReductiveDecisionTreeWalker reductiveWalker;
     private final static int MAX_ROWSPEC_PER_COMBINATION = 1;
 
-    public CombinationBasedWalker(CombinationProducer combinationProducer, ReductiveDecisionTreeWalker reductiveWalker){
+    public CombinationBasedWalker(CombinationProducer combinationProducer,
+                                  ReductiveDecisionTreeWalker reductiveWalker,
+                                  ReductiveDataGeneratorMonitor monitor){
         this.combinationProducer = combinationProducer;
         this.reductiveWalker = reductiveWalker;
+        this.monitor = monitor;
     }
 
     @Override
@@ -35,7 +40,7 @@ public class CombinationBasedWalker implements DecisionTreeWalker {
             combinations.map(combo -> {
                 Deque<FixedField> initialFixFields = combo.getCombinations().entrySet().stream()
                     .map(entry ->
-                        new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()), entry.getValue().getSource(), reductiveWalker.getMonitor()))
+                        new FixedField(entry.getKey(), Stream.of(entry.getValue().getValue()), entry.getValue().getSource(), monitor))
                     .peek(ff -> {
                         ff.getStream().iterator().next();
                     })

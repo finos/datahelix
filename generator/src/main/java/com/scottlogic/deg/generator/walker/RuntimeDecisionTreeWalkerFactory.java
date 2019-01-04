@@ -76,7 +76,8 @@ public class RuntimeDecisionTreeWalkerFactory implements DecisionTreeWalkerFacto
                 );
                 return new CombinationBasedWalker(
                     combinationProducer,
-                    reductiveDecisionTreeWalker);
+                    reductiveDecisionTreeWalker,
+                    reductiveMonitor);
             case CARTESIAN_PRODUCT:
                 return new CartesianProductDecisionTreeWalker(
                     constraintReducer,

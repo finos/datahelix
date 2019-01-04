@@ -98,8 +98,4 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             throw new RuntimeException(e);
         }
     }
-
-    public ReductiveDataGeneratorMonitor getMonitor(){
-        return this.monitor;
-    }
 }

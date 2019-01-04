@@ -45,7 +45,7 @@ public class FixedField {
     }
 
     boolean hasValueSet() {
-        return current == null || !current.equals(NOT_ITERATED);
+        return current != NOT_ITERATED;
     }
 
     @Override
