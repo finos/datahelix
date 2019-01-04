@@ -157,4 +157,9 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     public boolean getValidateProfile() {
         return validateProfile;
     }
+
+    @Override
+    public GenerationConfig.ReductionTarget getReductionTarget() {
+        return GenerationConfig.ReductionTarget.VIOLATE_RULE;
+    }
 }

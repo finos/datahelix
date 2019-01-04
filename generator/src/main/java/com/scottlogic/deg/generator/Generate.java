@@ -156,4 +156,9 @@ public class Generate implements Runnable, GenerationConfigSource {
     public boolean getValidateProfile() {
         return validateProfile;
     }
+
+    @Override
+    public GenerationConfig.ReductionTarget getReductionTarget() {
+        return GenerationConfig.ReductionTarget.VALID_RULE;
+    }
 }

@@ -44,4 +44,9 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
         return validateProfile;
     }
 
+    @Override
+    public GenerationConfig.ReductionTarget getReductionTarget() {
+        return GenerationConfig.ReductionTarget.VALID_RULE;
+    }
+
 }

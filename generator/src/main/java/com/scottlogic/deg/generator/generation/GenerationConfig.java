@@ -21,7 +21,7 @@ public class GenerationConfig {
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
-        this.reductionTarget = ReductionTarget.VALID_RULE;
+        this.reductionTarget = source.getReductionTarget();
         this.validateProfile = source.getValidateProfile();
 
     }

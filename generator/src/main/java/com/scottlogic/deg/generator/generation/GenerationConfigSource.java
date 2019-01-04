@@ -6,4 +6,5 @@ public interface GenerationConfigSource {
     GenerationConfig.TreeWalkerType getWalkerType();
     long getMaxRows();
     boolean getValidateProfile();
+    GenerationConfig.ReductionTarget getReductionTarget();
 }
