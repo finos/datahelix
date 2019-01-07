@@ -2,6 +2,9 @@
 
 The data generator profile describes to the generator how to reduce the original set of data to a permitted set of data per field. In most cases the generator starts off using the universal set as the source of data. This represents all values for all types (temporal, string, numeric) without restriction. It also allows for no value to be emitted - the empty set (&#8709;) commonly expressed as `null`).
 
+The universal set can be visualised as  
+![](set-reduction-universal-set.svg)
+
 The generator will only (effectively) use a different original set of data - i.e. not use the universal set - if one of the following constraints are used:
 * `equalTo` - uses the given value and &#8709;* as the set
 * `inSet` - uses the given values and &#8709;* as the entire set
@@ -14,10 +17,10 @@ The above constraints describe the set of permitted values to then (potentially)
 You can imagine the universal set is divided into a number of quadrants, where each constraint only applies a filter to part of the universal set (or what remains of it). i.e.
 * `greaterThan` will only affect the numeric values in the universal set, other values will remain un-touched
 * `shorterThan` will only affect the string values in the universal set, other values will remain un-touched
-* `ofType` will remove all values from the universal set other than those of the prescribed type
-* `not null` will remove the empty set (&#8709;) from the universal set
-* `null` will remove everything except for the empty set (&#8709;) from  the universal set
-* `inSet` removes any value from the universal set that is not in the prescribed set (set intersection) (except &#8709; which remains unless `not null` is used as well)
+* `ofType` will remove all values from the universal set other than those of the prescribed type (see [graphical representation](set-reduction-ofType-string.svg))
+* `not null` will remove the empty set (&#8709;) from the universal set (see [graphical representation](set-reduction-not-null.svg))
+* `null` will remove everything except for the empty set (&#8709;) from the universal set  (see [graphical representation](set-reduction-null.svg))
+* `inSet` removes any value from the universal set that is not in the prescribed set (set intersection) (except &#8709; which remains unless `not null` is used as well) (see [graphical representation](set-reduction-inSet-abc.svg))
 
 ## Examples:
 
