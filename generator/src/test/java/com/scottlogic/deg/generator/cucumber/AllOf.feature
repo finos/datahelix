@@ -28,7 +28,7 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
              { "field": "foo", "is": "ofLength", "value": 1 },
              { "field": "foo", "is": "ofLength", "value": 2 }
            ]},
-           { "field": "foo", "is": "containingRegex", "value": "[1]{1}" }
+           { "field": "foo", "is": "matchingRegex", "value": "[1]{1,2}" }
          ]}
        """
      Then the following data should be included in what is generated:
