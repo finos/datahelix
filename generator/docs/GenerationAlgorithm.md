@@ -30,7 +30,9 @@ could collapse to
 }
 ```
 
-*(note: this is a conceptual example and not a reflection of actual object structure)*
+*(note: this is a conceptual example and not a reflection of actual object structure)* 
+
+See [Set restriction and generation](SetRestrictionAndGeneration.md) for a more indepth explanation of how the constraints are merged and data generated.
 
 This object has all the information needed to produce the values `[3, 4, 5, 6]`.
 

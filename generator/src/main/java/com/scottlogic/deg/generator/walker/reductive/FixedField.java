@@ -73,6 +73,9 @@ public class FixedField {
         return FieldSpec.Empty.withSetRestrictions(
             new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), null),
             this.valuesFieldSpec.getFieldSpecSource()
+        ).withNullRestrictions(
+            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+            this.valuesFieldSpec.getFieldSpecSource()
         );
     }
 
@@ -82,6 +85,14 @@ public class FixedField {
             new NullRestrictions(Nullness.MUST_BE_NULL),
             this.valuesFieldSpec.getFieldSpecSource()
         );
+    }
+
+    public Object getCurrentValue() {
+        if (this.current == NOT_ITERATED){
+            throw new UnsupportedOperationException("FixedField has not iterated yet");
+        }
+
+        return this.current;
     }
 
     private static class NotIterated { }
