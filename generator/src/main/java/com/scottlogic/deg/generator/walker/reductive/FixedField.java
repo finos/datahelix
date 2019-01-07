@@ -87,5 +87,13 @@ public class FixedField {
         );
     }
 
+    public Object getCurrentValue() {
+        if (this.current == NOT_ITERATED){
+            throw new UnsupportedOperationException("FixedField has not iterated yet");
+        }
+
+        return this.current;
+    }
+
     private static class NotIterated { }
 }

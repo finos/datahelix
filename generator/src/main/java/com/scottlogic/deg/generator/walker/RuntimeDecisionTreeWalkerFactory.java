@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -54,7 +55,8 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     reductiveMonitor,
                     new ReductiveDecisionTreeReducer(
                         fieldSpecFactory,
-                        fieldSpecMerger),
+                        fieldSpecMerger,
+                        new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(
                         constraintReducer,
                         fieldSpecMerger,

@@ -63,4 +63,10 @@ public class AdapterContext {
         if (this.parent != null)
             this.parent.addConflictingAtomicConstraint(atomicConstraint);
     }
+
+    public void treeIsInvalid() {
+        this.valid = false;
+        if (this.parent != null)
+            this.parent.treeIsInvalid();
+    }
 }
