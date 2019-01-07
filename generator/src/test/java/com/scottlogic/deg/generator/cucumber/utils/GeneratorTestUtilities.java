@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateObject;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
@@ -23,6 +24,16 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.reductive.FixedFieldBuilder;
+import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.ProfileBasedFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.RankedConstraintFixFieldStrategy;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
 
@@ -85,25 +96,47 @@ public class GeneratorTestUtilities {
 
         final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
 
-        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
-            new CartesianProductDecisionTreeWalker(
-                new ConstraintReducer(
-                    new FieldSpecFactory(),
-                    new FieldSpecMerger()),
-                new RowSpecMerger(
-                    new FieldSpecMerger())),
-            new RelatedFieldTreePartitioner(),
-            new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor());
-
         final GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
                 generationStrategy,
                 walkerType,
                 combinationStrategy));
+
+        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
+            getWalker(config),
+            new RelatedFieldTreePartitioner(),
+            new NoopDecisionTreeOptimiser(),
+            new NoopDataGeneratorMonitor());
+
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
         return dataSet.collect(Collectors.toList());
+    }
+
+    private static DecisionTreeWalker getWalker(GenerationConfig config){
+        FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
+        ConstraintReducer constraintReducer = new ConstraintReducer(
+            fieldSpecFactory,
+            fieldSpecMerger);
+
+        switch (config.getWalkerType()){
+            case REDUCTIVE:
+                NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
+                FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
+                return new ReductiveDecisionTreeWalker(
+                    new NoOpIterationVisualiser(),
+                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor),
+                    monitor,
+                    new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger),
+                    new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
+            default:
+            case CARTESIAN_PRODUCT:
+                return new CartesianProductDecisionTreeWalker(
+                    constraintReducer,
+                    new RowSpecMerger(
+                        fieldSpecMerger));
+        }
     }
 
     public static Object parseInput(String input) throws JsonParseException, InvalidProfileException {
