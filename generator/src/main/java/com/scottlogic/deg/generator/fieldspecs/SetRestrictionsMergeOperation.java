@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,7 +18,9 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions());
 
         if (!mergeResult.successful){
-            return Optional.empty();
+            return Optional.of(merged.withSetRestrictions(
+                SetRestrictions.fromWhitelist(Collections.emptySet()),
+                FieldSpecSource.fromFieldSpecs(left, right)));
         }
 
         SetRestrictions setRestrictions = mergeResult.restrictions;

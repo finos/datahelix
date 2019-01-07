@@ -80,7 +80,7 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
        | foo      |
        | "Test01" |
 
-  Scenario: User attempts to combine contradicting constraints within an allOf operator
+  Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator
     Given there is a field foo
     And there is a constraint:
     """
@@ -89,7 +89,9 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
          { "field": "foo", "is": "equalTo", "value": 5 }
       ]}
     """
-    Then no data is created
+    Then the following data should be generated:
+       | foo  |
+       | null |
 
 
   Scenario: Numeric value using the allOf operator
