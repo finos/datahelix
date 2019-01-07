@@ -2,10 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
@@ -29,8 +26,8 @@ class ReductiveDecisionTreeReducerTests {
     private static final ProfileFields allFields = new ProfileFields(Arrays.asList(field1, field2, field3));
     private static final ReductiveState initialState = new ReductiveState(allFields);
     private static final AtomicConstraint isEqualTo1 = new IsEqualToConstantConstraint(field1, 1, Collections.emptySet());
-    private static final AtomicConstraint isGreaterThan2 = new IsGreaterThanConstantConstraint(field2, 2, Collections.emptySet());
-    private static final AtomicConstraint isLessThan3 = new IsLessThanConstantConstraint(field3, 3, Collections.emptySet());
+    private static final AtomicConstraint isGreaterThanOrEqualTo2 = new IsGreaterThanOrEqualToConstantConstraint(field2, 2, Collections.emptySet());
+    private static final AtomicConstraint isLessThan2 = new IsLessThanConstantConstraint(field3, 2, Collections.emptySet());
 
     private static final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
     private static final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
@@ -50,15 +47,15 @@ class ReductiveDecisionTreeReducerTests {
         Assert.assertThat(reduced.getAtomicConstraints(), equalTo(Collections.emptySet()));
         Assert.assertThat(reduced.getDecisions(), equalTo(Collections.emptySet()));
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
             empty());
     }
 
     @Test
     public void shouldNoOpReduceTreeWithInitialState(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -73,15 +70,15 @@ class ReductiveDecisionTreeReducerTests {
         Assert.assertThat(reduced.getAtomicConstraints(), containsInAnyOrder(isEqualTo1));
         Assert.assertThat(reduced.getDecisions().size(), equalTo(1));
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            containsInAnyOrder(isEqualTo1, isGreaterThan2, isLessThan3));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(isEqualTo1, isGreaterThanOrEqualTo2, isLessThan2));
     }
 
     @Test
     public void shouldRemoveConstraintsThatContradictFixedFields(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -96,21 +93,21 @@ class ReductiveDecisionTreeReducerTests {
 
         ReductiveConstraintNode reduced = reducer.reduce(tree, field2Fixed);
 
-        Assert.assertThat(reduced.getAtomicConstraints(), containsInAnyOrder(isEqualTo1, isLessThan3));
+        Assert.assertThat(reduced.getAtomicConstraints(), containsInAnyOrder(isEqualTo1, isLessThan2));
         Assert.assertThat(reduced.getDecisions().isEmpty(), equalTo(true));
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            containsInAnyOrder(isEqualTo1, isLessThan3));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(isEqualTo1, isLessThan2));
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            not(containsInAnyOrder(isGreaterThan2)));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            not(containsInAnyOrder(isGreaterThanOrEqualTo2)));
     }
 
     @Test
     public void shouldLeaveConstraintsThatComplementFixedFields(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -128,15 +125,15 @@ class ReductiveDecisionTreeReducerTests {
         Assert.assertThat(reduced.getAtomicConstraints(), containsInAnyOrder(isEqualTo1));
         Assert.assertThat(reduced.getDecisions().size(), equalTo(1));
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            containsInAnyOrder(isEqualTo1, isGreaterThan2, isLessThan3));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(isEqualTo1, isGreaterThanOrEqualTo2, isLessThan2));
     }
 
     @Test
     public void shouldLeaveConstraintsThatAreNotFixed(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -152,8 +149,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveConstraintNode reduced = reducer.reduce(tree, field1Fixed);
 
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            hasItems(isGreaterThan2, isLessThan3));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            hasItems(isGreaterThanOrEqualTo2, isLessThan2));
         Assert.assertThat(reduced.getDecisions().size(), equalTo(1));
     }
 
@@ -161,7 +158,7 @@ class ReductiveDecisionTreeReducerTests {
     public void shouldRemoveDecisionsBelowARemovedConstraint(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
         TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
-            Collections.singletonList(isGreaterThan2),
+            Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
                     new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
@@ -169,7 +166,7 @@ class ReductiveDecisionTreeReducerTests {
             ));
         DecisionNode decision1 = new TreeDecisionNode(
             field2GreaterThan2Option, //field2 > 2
-            new TreeConstraintNode(isLessThan3) //field3
+            new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -185,15 +182,15 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveConstraintNode reduced = reducer.reduce(tree, field2Fixed);
 
         Assert.assertThat(
-            AtomicConstraintExtractor.getAllAtomicConstraints(reduced),
-            not(hasItems(isGreaterThan2, field3IsGreaterThan4)));
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            not(hasItems(isGreaterThanOrEqualTo2, field3IsGreaterThan4)));
     }
 
     @Test
     public void shouldSimplifyTheTreeAfterReducing(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
         TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
-            Collections.singletonList(isGreaterThan2),
+            Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
                     new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
@@ -201,7 +198,7 @@ class ReductiveDecisionTreeReducerTests {
             ));
         DecisionNode decision1 = new TreeDecisionNode(
             field2GreaterThan2Option, //field2 > 2
-            new TreeConstraintNode(isLessThan3) //field3
+            new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -221,15 +218,15 @@ class ReductiveDecisionTreeReducerTests {
             equalTo(0));
         Assert.assertThat(
             reduced.getAtomicConstraints(),
-            containsInAnyOrder(isLessThan3, isEqualTo1)
+            containsInAnyOrder(isLessThan2, isEqualTo1)
         );
     }
 
     @Test
     public void shouldExposeAllAtomicConstraintsIfNoFieldsAreFixed(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -243,14 +240,14 @@ class ReductiveDecisionTreeReducerTests {
 
         Assert.assertThat(
             reduced.getAllUnfixedAtomicConstraints(),
-            containsInAnyOrder(isEqualTo1, isGreaterThan2, isLessThan3));
+            containsInAnyOrder(isEqualTo1, isGreaterThanOrEqualTo2, isLessThan2));
     }
 
     @Test
     public void shouldExposeAListOfAllAtomicConstraintsThatAreNotFixed(){
         DecisionNode decision1 = new TreeDecisionNode(
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -267,14 +264,14 @@ class ReductiveDecisionTreeReducerTests {
 
         Assert.assertThat(
             reduced.getAllUnfixedAtomicConstraints(),
-            containsInAnyOrder(isGreaterThan2, isLessThan3));
+            containsInAnyOrder(isGreaterThanOrEqualTo2, isLessThan2));
     }
 
     @Test
     public void shouldReturnNullIfTreeReductionInvalidatesTheTree(){
         DecisionNode decision1 = new TreeDecisionNode( //should have every option removed, therefore invalidating the tree
-            new TreeConstraintNode(isGreaterThan2),
-            new TreeConstraintNode(isLessThan3)
+            new TreeConstraintNode(isGreaterThanOrEqualTo2),
+            new TreeConstraintNode(isLessThan2)
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -300,7 +297,7 @@ class ReductiveDecisionTreeReducerTests {
     public void shouldReturnNullIfALowLevelDecisionIsInvalidated(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
         TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
-            Collections.singletonList(isGreaterThan2),
+            Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
                     new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
@@ -308,7 +305,7 @@ class ReductiveDecisionTreeReducerTests {
             ));
         DecisionNode decision1 = new TreeDecisionNode(
             field2GreaterThan2Option, //field2 > 2
-            new TreeConstraintNode(isLessThan3) //field3
+            new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isEqualTo1),
@@ -335,7 +332,7 @@ class ReductiveDecisionTreeReducerTests {
             return atomicConstraint;
         }
 
-        public static Collection<AtomicConstraint> getAllAtomicConstraints(ConstraintNode node){
+        public static Collection<AtomicConstraint> getAllAtomicConstraintsRecursively(ConstraintNode node){
             AtomicConstraintExtractor extractor = new AtomicConstraintExtractor();
             node.accept(extractor);
             return extractor.atomicConstraints;
