@@ -8,10 +8,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,13 +63,13 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
                                                             Iterable<AtomicConstraint> decisionConstraints) {
-        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
-            return Optional.of(FieldSpec.Empty);
-        }
-
         final FieldSpec decisionConstaintsFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(
             StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
         );
+
+        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
+            return Optional.of(decisionConstaintsFieldSpec);
+        }
 
         final Stream<FieldSpec> rootAndDecisionsConstraintsStream = Stream.concat(
             Stream.of(decisionConstaintsFieldSpec),

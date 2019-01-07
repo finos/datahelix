@@ -34,7 +34,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
             Stream<Object> validSourcesValues = validSources
                 .stream()
-                .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false));
+                .flatMap(valueSource -> toStreamOfValues(valueSource.generateAllValues()));
             Stream<Object> whitelistAndValidSourcesValues = Stream.concat(whitelist.stream(), validSourcesValues);
             return Collections.singleton(
                 new CannedValuesFieldValueSource(whitelistAndValidSourcesValues.collect(Collectors.toList()))
@@ -43,6 +43,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         if (mustContainRestriction != null) {
             applyMustConstrainRestrictionToValidSources(validSources, fieldSpec);
+
+            if (onlyMustContainRestrictionOrNullRestrictionIsSet(fieldSpec)){
+                return Collections.singleton(
+                    new CannedValuesFieldValueSource(
+                        validSources
+                        .stream()
+                        .map(vs -> (CannedValuesFieldValueSource)vs)
+                        .flatMap(vs -> toStreamOfValues(vs.generateAllValues()))
+                        .distinct()
+                        .collect(Collectors.toList())));
+            }
         }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
@@ -104,6 +115,25 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         return validSources;
+    }
+
+    private static Stream<Object> toStreamOfValues(Iterable<Object> values){
+        return StreamSupport.stream(values.spliterator(), false);
+    }
+
+    private boolean onlyMustContainRestrictionOrNullRestrictionIsSet(FieldSpec fieldSpec) {
+        if (fieldSpec.getMustContainRestriction() == null){
+            return false;
+        }
+
+        //NOTE: Explicitly does NOT check the null restrictions.
+        return fieldSpec.getDateTimeRestrictions() == null
+            && fieldSpec.getFormatRestrictions() == null
+            && fieldSpec.getGranularityRestrictions() == null
+            && fieldSpec.getNumericRestrictions() == null
+            && fieldSpec.getStringRestrictions() == null
+            && fieldSpec.getSetRestrictions() == null
+            && fieldSpec.getTypeRestrictions() == null;
     }
 
     private boolean determineNullabilityAndDecideWhetherToHalt(
