@@ -294,3 +294,25 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
   """
   Then I am presented with an error message
   And no data is created
+
+  Scenario: Running an 'inSet' request that has multiple set constraints should return 2 values from each set (deduplicated) and null
+    Given the walker type is reductive
+    And there is a constraint:
+  """
+  {
+    "anyOf": [
+      { "field": "foo", "is": "inSet", "values": [1, 2, 3, 4] },
+      { "field": "foo", "is": "inSet", "values": [1, 6, 7, 8] }
+    ]
+  }
+  """
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+      | 2    |
+      | 3    |
+      | 4    |
+      | 6    |
+      | 7    |
+      | 8    |
