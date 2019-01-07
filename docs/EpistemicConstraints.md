@@ -6,6 +6,8 @@
 * The **universal set** contains all generatable values (`null`, any string, any date, any number, etc)
 * The **denotation** of a constraint is the subset of the universal set that it defines as valid
 
+See [set restriction and generation](SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
+
 If no constraints are defined over a field, then it can accept any member of the universal set. Each constraint added to that field progressively limits the universal set.
 
 The [grammatical `not` constraint](GrammaticalConstraints.md) inverts a constraint's denotation; in other words, it produces the complement of the constraint's denotation and the universal set.
