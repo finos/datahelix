@@ -18,6 +18,5 @@ public class GenerationConfigProvider implements Provider<GenerationConfig> {
     public GenerationConfig get() {
 
         return new GenerationConfig(commandLine);
-
     }
 }

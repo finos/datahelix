@@ -5,15 +5,20 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 
 public class IoCContainer extends AbstractModule {
     private final CommandLineBase commandLine;
@@ -35,18 +40,22 @@ public class IoCContainer extends AbstractModule {
         bind(GenerationConfig.class).toProvider(GenerationConfigProvider.class);
         bind(Profile.class).toProvider(ProfileProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
+        bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
         bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
-        bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
-        bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
+        bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
+        bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeWalkerFactory.class).to(RuntimeDecisionTreeWalkerFactory.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
-        bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
+
+        // To check
+        bind(ProfileValidator.class).to(NoopProfileValidator.class);
+        bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
     }
 
     private void bindAllCommandLineTypes() {

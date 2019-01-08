@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -20,6 +21,7 @@ public class ReductiveRowSpecGenerator {
     private final FieldSpecMerger fieldSpecMerger;
     private final ReductiveDataGeneratorMonitor monitor;
 
+    @Inject
     public ReductiveRowSpecGenerator(
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
