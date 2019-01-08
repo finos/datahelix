@@ -22,6 +22,23 @@ Generates a JSON file representing the in-memory decision tree.  This is a utili
 
 Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection.
 
+To visualise the tree, you can also use [Graphviz](https://www.graphviz.org/). 
+
+Install the tool and create this file on your local environment editting the path to your installation of the tool:
+File name: gviz.bat
+File contents:
+```
+@echo off
+set gviz="<your path>\Graphviz2.38\bin\dot.exe"
+set file=%~1
+set output=%tmp%\%~nx1.svg
+%gviz% -Tsvg "%file%" > "%output%"
+echo File saved as %output%.
+start %output%
+```
+
+Next, drag and drop the .gv file created by the visualise command of the generator onto the bat file. The visualisation of the graph will open in your web browser.
+
 ## Future invocation methods
 
 * Calling into a Java library
