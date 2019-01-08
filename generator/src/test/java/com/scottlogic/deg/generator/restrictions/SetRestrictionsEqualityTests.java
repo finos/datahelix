@@ -68,7 +68,7 @@ public class SetRestrictionsEqualityTests {
     }
 
     @Test
-    void equals_whenOneRestrictionWhitelistIsEmptyAndOtherIsNull_returnsFalse() {
+    void equals_whenOneRestrictionWhitelistIsEmptyAndOtherRestrictionWhitelistIsNull_returnsFalse() {
         SetRestrictions restriction1 = new SetRestrictions(Collections.emptySet(), null);
         SetRestrictions restriction2 = new SetRestrictions(null, null);
 
@@ -78,7 +78,7 @@ public class SetRestrictionsEqualityTests {
     }
 
     @Test
-    void equals_whenOneRestrictionBlacklistIsEmptyAndOtherIsNull_returnsFalse() {
+    void equals_whenOneRestrictionBlacklistIsEmptyAndOtherRestrictionBlacklistIsNull_returnsFalse() {
         SetRestrictions restriction1 = new SetRestrictions(null, Collections.emptySet());
         SetRestrictions restriction2 = new SetRestrictions(null, null);
 
