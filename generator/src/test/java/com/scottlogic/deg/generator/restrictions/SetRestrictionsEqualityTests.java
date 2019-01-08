@@ -154,8 +154,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add(1);
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -169,8 +169,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add("Test");
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -244,8 +244,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add("Parrot");
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -260,8 +260,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add(1);
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -276,8 +276,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add("Test");
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
