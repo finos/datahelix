@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.ConstraintToFieldMapper;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
@@ -13,6 +14,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import picocli.CommandLine;
 
@@ -52,52 +54,52 @@ public class GenerateTreeCollectionJson implements Runnable {
 
     @Override
     public void run() {
-//        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
-//        final Profile profile;
-//
-//        try {
-//            profile = new ProfileReader().read(inputPath.toPath());
-//        } catch (Exception e) {
-//            System.err.println("Failed to read file!");
-//            e.printStackTrace();
-//            return;
-//        }
-//
-//        final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
-//        final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
-//
-//        TreePartitioner treePartitioner = doPartition
-//                ? new RelatedFieldTreePartitioner()
-//                : new NoopTreePartitioner();
-//
-//        DecisionTreeOptimiser treeOptimiser = doOptimise
-//                ? new MostProlificConstraintOptimiser()
-//                : new NoopDecisionTreeOptimiser();
-//
-//        final List<DecisionTree> listOfTree =
-//                treePartitioner
-//                    .splitTreeIntoPartitions(mergedTree)
-//                        .map(treeOptimiser::optimiseTree)
-//                    .collect(Collectors.toList());
-//
-//        final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
-//
-//        List<DecisionTreeDto> listOfDto = listOfTree.stream()
-//                .map(decisionTreeMapper::toDto)
-//                .collect(Collectors.toList());
-//
-//        ObjectMapper om = new ObjectMapper();
-//
-//        om.enable(SerializationFeature.INDENT_OUTPUT);
-//        try (BufferedWriter bw = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
-//            String s = om.writeValueAsString(listOfDto);
-//            bw.write(s);
-//        } catch (JsonProcessingException e2) {
-//            System.err.format("JSON error%n");
-//            e2.printStackTrace();
-//        } catch (IOException e1) {
-//            System.err.format("IOException when writing file %s%n", outputPath);
-//            e1.printStackTrace();
-//        }         
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
+        final Profile profile;
+
+        try {
+            profile = new ProfileReader(new NoopProfileValidator()).read(inputPath.toPath());
+        } catch (Exception e) {
+            System.err.println("Failed to read file!");
+            e.printStackTrace();
+            return;
+        }
+
+        final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
+        final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+
+        TreePartitioner treePartitioner = doPartition
+                ? new RelatedFieldTreePartitioner(new ConstraintToFieldMapper())
+                : new NoopTreePartitioner();
+
+        DecisionTreeOptimiser treeOptimiser = doOptimise
+                ? new MostProlificConstraintOptimiser()
+                : new NoopDecisionTreeOptimiser();
+
+        final List<DecisionTree> listOfTree =
+                treePartitioner
+                    .splitTreeIntoPartitions(mergedTree)
+                        .map(treeOptimiser::optimiseTree)
+                    .collect(Collectors.toList());
+
+        final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
+
+        List<DecisionTreeDto> listOfDto = listOfTree.stream()
+                .map(decisionTreeMapper::toDto)
+                .collect(Collectors.toList());
+
+        ObjectMapper om = new ObjectMapper();
+
+        om.enable(SerializationFeature.INDENT_OUTPUT);
+        try (BufferedWriter bw = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
+            String s = om.writeValueAsString(listOfDto);
+            bw.write(s);
+        } catch (JsonProcessingException e2) {
+            System.err.format("JSON error%n");
+            e2.printStackTrace();
+        } catch (IOException e1) {
+            System.err.format("IOException when writing file %s%n", outputPath);
+            e1.printStackTrace();
+        }
     }
 }
