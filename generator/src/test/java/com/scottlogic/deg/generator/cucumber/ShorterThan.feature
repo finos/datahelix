@@ -69,20 +69,25 @@ Scenario: Running a 'shorterThan' request using a string (special character) to 
        And no data is created
 
 @ignore
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated numeric type field should fail with an error message
+Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated numeric type field should be successful
      Given there is a field foo
        And foo is shorter than 5
        And foo is equal to 1234
-     Then I am presented with an error message
-       And no data is created
+       And foo is of type "numeric"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 1234 |
 
 @ignore
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated temporal type field should fail with an error message
+Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated temporal type field should be successful
      Given there is a field foo
        And foo is shorter than 25
        And foo is equal to 2010-01-01T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+       And foo is of type "temporal"
+     Then the following data should be generated:
+       | foo                     |
+       | 2010-01-01T00:00:00.000 |
 
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given there is a field foo
