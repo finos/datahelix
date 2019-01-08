@@ -380,7 +380,7 @@ class ReductiveDecisionTreeReducerTests {
 
 
         IsNullConstraint isNull = new IsNullConstraint(field3, Collections.emptySet());
-        NotConstraint isNotNull = new NotConstraint(isNull);
+        AtomicConstraint isNotNull = isNull.negate();
 
         ConstraintNode tree = new TreeConstraintNode(
             Collections.singletonList(isNotNull),
@@ -418,7 +418,7 @@ class ReductiveDecisionTreeReducerTests {
         );
 
         IsNullConstraint isNull = new IsNullConstraint(field3, Collections.emptySet());
-        NotConstraint isNotNull = new NotConstraint(isNull);
+        AtomicConstraint isNotNull = isNull.negate();
 
 
         ConstraintNode tree = new TreeConstraintNode(
