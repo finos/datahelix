@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,6 @@ public class SetRestrictionsEqualityTests {
         boolean result = restriction.equals(null);
 
         Assert.assertFalse(result);
-
     }
 
     @Test
@@ -37,6 +37,55 @@ public class SetRestrictionsEqualityTests {
         Assert.assertTrue(result);
     }
 
+    @Test
+    void equals_whenBothSetRestrictionsAreEmptySet_returnsTrue() {
+        SetRestrictions restriction1 = new SetRestrictions(Collections.emptySet(), Collections.emptySet());
+        SetRestrictions restriction2 = new SetRestrictions(Collections.emptySet(), Collections.emptySet());
+
+        boolean result = restriction1.equals(restriction2);
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    void equals_whenWhitelistsAreEmptySetAndBlacklistsAreNull_returnsTrue() {
+        SetRestrictions restriction1 = new SetRestrictions(Collections.emptySet(), null);
+        SetRestrictions restriction2 = new SetRestrictions(Collections.emptySet(), null);
+
+        boolean result = restriction1.equals(restriction2);
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    void equals_whenBlacklistsAreEmptySetAndWhitelistsAreNull_returnsTrue() {
+        SetRestrictions restriction1 = new SetRestrictions(null, Collections.emptySet());
+        SetRestrictions restriction2 = new SetRestrictions(null, Collections.emptySet());
+
+        boolean result = restriction1.equals(restriction2);
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    void equals_whenOneRestrictionWhitelistIsEmptyAndOtherIsNull_returnsFalse() {
+        SetRestrictions restriction1 = new SetRestrictions(Collections.emptySet(), null);
+        SetRestrictions restriction2 = new SetRestrictions(null, null);
+
+        boolean result = restriction1.equals(restriction2);
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void equals_whenOneRestrictionBlacklistIsEmptyAndOtherIsNull_returnsFalse() {
+        SetRestrictions restriction1 = new SetRestrictions(null, Collections.emptySet());
+        SetRestrictions restriction2 = new SetRestrictions(null, null);
+
+        boolean result = restriction1.equals(restriction2);
+
+        Assert.assertFalse(result);
+    }
 
     @Test
     void equals_whenBlacklistsAreNotEqualAndOfSameType_returnsFalse() {
@@ -90,8 +139,8 @@ public class SetRestrictionsEqualityTests {
         whitelist1.add("Test");
         whitelist2.add("Parrot");
 
-        SetRestrictions restriction1 = new SetRestrictions(null, whitelist1);
-        SetRestrictions restriction2 = new SetRestrictions(null, whitelist2);
+        SetRestrictions restriction1 = new SetRestrictions(whitelist1, null);
+        SetRestrictions restriction2 = new SetRestrictions(whitelist2, null);
 
         boolean result = restriction1.equals(restriction2);
 
