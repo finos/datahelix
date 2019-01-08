@@ -19,6 +19,7 @@ public class FieldSpecFactory {
     }
 
     public FieldSpec toMustContainRestrictionFieldSpec(Collection<AtomicConstraint> constraints) {
+        if (constraints.isEmpty()) return FieldSpec.Empty;
         return FieldSpec.Empty.withMustContainRestriction(
             new MustContainRestriction(
                 constraints.stream().map(this::construct).collect(Collectors.toSet())
