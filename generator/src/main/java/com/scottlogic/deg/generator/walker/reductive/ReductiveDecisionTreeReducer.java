@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -135,10 +136,18 @@ public class ReductiveDecisionTreeReducer {
         }
 
         FieldSpec mergedFieldSpec = merged.get();
+
+        if (mergedFieldSpec.getSetRestrictions() == null) {
+            return false;
+        }
+
         Set<Object> mergedFieldSpecWhitelist = mergedFieldSpec.getSetRestrictions().getWhitelist();
 
-        if (!mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())){
-            return true; //the fixedField value has been removed from the whitelist, the value contradicts another constraint
+        if (mergedFieldSpecWhitelist == null || !mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())) {
+            if(mergedFieldSpec.getNullRestrictions()!=null && mergedFieldSpec.getNullRestrictions().nullness != Nullness.MUST_NOT_BE_NULL){
+                return false; // the fixedField is not in the whitelist but can be null
+            }
+            return true; //the fixedField value has been removed from the whitelist and the field cannot be null
         }
 
         return false;
