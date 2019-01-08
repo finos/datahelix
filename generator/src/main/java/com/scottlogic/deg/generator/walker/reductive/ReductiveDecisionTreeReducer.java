@@ -135,10 +135,15 @@ public class ReductiveDecisionTreeReducer {
         }
 
         FieldSpec mergedFieldSpec = merged.get();
+
+        if (mergedFieldSpec.getSetRestrictions() == null) {
+            return false;
+        }
+
         Set<Object> mergedFieldSpecWhitelist = mergedFieldSpec.getSetRestrictions().getWhitelist();
 
-        if (!mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())){
-            return true; //the fixedField value has been removed from the whitelist, the value contradicts another constraint
+        if (mergedFieldSpecWhitelist == null || !mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())) {
+            return true; //the fixedField value has been removed from the whitelist and the field cannot be null
         }
 
         return false;
