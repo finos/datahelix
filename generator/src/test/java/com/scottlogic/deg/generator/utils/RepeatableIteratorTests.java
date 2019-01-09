@@ -50,7 +50,7 @@ class RepeatableIteratorTests {
         iterator.next();
         iterator.next();
         iterator.next();
-        iterator.resetCache();
+        iterator.reset();
         String firstValue = iterator.next();
         String secondValue = iterator.next();
         String thirdValue = iterator.next();
@@ -73,7 +73,7 @@ class RepeatableIteratorTests {
 
         iterator.next();
         iterator.next();
-        iterator.resetCache();
+        iterator.reset();
         String firstValue = iterator.next();
         String secondValue = iterator.next();
         String thirdValue = iterator.next();
@@ -125,7 +125,7 @@ class RepeatableIteratorTests {
         RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         iterator.next();
-        iterator.resetCache();
+        iterator.reset();
         boolean result = iterator.hasNext();
 
         Assert.assertTrue(result);
@@ -136,7 +136,7 @@ class RepeatableIteratorTests {
         RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         iterator.next();
-        iterator.resetCache();
+        iterator.reset();
         iterator.next();
         boolean result = iterator.hasNext();
 

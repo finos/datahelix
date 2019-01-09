@@ -23,7 +23,7 @@ public class ReductiveCombinationStrategy implements CombinationStrategy {
     public Stream<DataBag> next(DataBag accumulatingBag, List<RepeatableIterator<DataBag>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
             RepeatableIterator<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
-            nextStream.resetCache();
+            nextStream.reset();
 
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
                 .map(innerBag -> DataBag.merge(innerBag, accumulatingBag))

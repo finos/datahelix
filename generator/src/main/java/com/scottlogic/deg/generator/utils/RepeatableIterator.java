@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RepeatableIterator<T> implements Iterator<T> {
-    private List<T> cache = new ArrayList<>();
+    private final List<T> cache = new ArrayList<>();
     private int index = 0;
     private final Iterator<T> underlyingIterator;
 
@@ -33,7 +33,7 @@ public class RepeatableIterator<T> implements Iterator<T> {
         return item;
     }
 
-    public void resetCache() {
+    public void reset() {
         index = 0;
     }
 }
