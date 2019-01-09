@@ -9,7 +9,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
     private static final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         MergeResult<StringRestrictions> mergeResult = stringRestrictionsMerger.merge(
             left.getStringRestrictions(), right.getStringRestrictions());
 
@@ -20,17 +20,17 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         StringRestrictions stringRestrictions = mergeResult.restrictions;
 
         if (stringRestrictions == null) {
-            return Optional.of(merged.withStringRestrictions(
+            return Optional.of(merging.withStringRestrictions(
                 null,
                 FieldSpecSource.Empty));
         }
 
-        TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+        TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
         if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
             return Optional.empty();
         }
 
-        return Optional.of(merged
+        return Optional.of(merging
             .withStringRestrictions(
                 stringRestrictions,
                 FieldSpecSource.fromFieldSpecs(left, right))

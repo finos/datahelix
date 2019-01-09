@@ -9,7 +9,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
     private static final NumericRestrictionsMerger numericRestrictionsMerger = new NumericRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         MergeResult<NumericRestrictions> mergeResult = numericRestrictionsMerger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
@@ -19,17 +19,17 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;
         if (numberRestrictions == null) {
-            return Optional.of(merged.withNumericRestrictions(
+            return Optional.of(merging.withNumericRestrictions(
                 null,
                 FieldSpecSource.Empty));
         }
 
-        TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+        TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
         if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             return Optional.empty();
         }
 
-        return Optional.of(merged
+        return Optional.of(merging
             .withNumericRestrictions(
                 numberRestrictions,
                 FieldSpecSource.fromFieldSpecs(left, right))
