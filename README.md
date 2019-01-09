@@ -46,7 +46,7 @@ The profiler can be run using the following command line arguments:
 
 When the profiler is run it will produce a profile JSON file with the same name as the input file in the specified output location. The profiler will also print diagnostic information to the terminal.
 
-An example input (CSV) that can be used is here: [basic_classifier.csv](.\profiler\src\test\resources\basic_classifier.csv)
+An example input (CSV) that can be used is here: [basic_classifier.csv](./profiler/src/test/resources/basic_classifier.csv)
 
 ### Generator
 
