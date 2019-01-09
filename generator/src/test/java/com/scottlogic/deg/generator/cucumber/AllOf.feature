@@ -21,6 +21,7 @@ Scenario: Running an 'allOf' request that contains a valid nested allOf request 
 
 Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
      Given there is a field foo
+       And foo is of type "string"
        And there is a constraint:
        """
          { "allOf": [
@@ -69,6 +70,7 @@ Scenario: Running an 'allOf' request that contains an invalid nested anyOf reque
 
 Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
      Given there is a field foo
+       And foo is of type "string"
        And there is a constraint:
        """
          { "allOf": [
@@ -93,38 +95,17 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
        | foo  |
        | null |
 
-
-  Scenario: Numeric value using the allOf operator
-    Given there is a field price
-
-    And there is a constraint:
-    """
-      { "allOf": [
-         { "field": "price", "is": "ofType", "value": "numeric" },
-         { "field": "price", "is": "equalTo", "value": 5 }
-      ]}
-    """
-
-    Then the following data should be generated:
-      | price |
-      | null  |
-      |  5   |
-
-
-  Scenario: String value using the allOf operator
-    Given there is a field foo
-
-    And there is a constraint:
-    """
-      { "allOf": [
-         { "field": "foo", "is": "equalTo", "value": "Test0" },
-         { "field": "foo", "is": "ofType", "value": "string" }
-      ]}
-    """
-
-    Then the following data should be generated:
-      | foo   |
-      | null  |
-      | "Test0" |
-
-
+Scenario: Numeric value using the allOf operator
+     Given there is a field foo
+       And foo is of type "numeric"
+       And there is a constraint:
+       """
+         { "allOf": [
+            { "field": "foo", "is": "ofType", "value": "numeric" },
+            { "field": "foo", "is": "equalTo", "value": 5 }
+         ]}
+       """
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       |  5   |

@@ -63,7 +63,6 @@ Scenario: User requires to create a field with strings that conform to multiple 
 
 
 Scenario: User requires to create a field with numbers that conform to one or many constraints
-
        Given there is a constraint:
        """
        { "anyOf": [
@@ -89,8 +88,7 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        | 10   |
 
 Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
-
-      Givend there is a constraint:
+      Given there is a constraint:
        """
        { "anyOf": [
          { "field": "foo", "is": "greaterThan", "value": 8 },
@@ -123,7 +121,6 @@ Scenario: User requires to create a field with numbers that conform to multiple 
       | 19   |
 
 Scenario: User requires to create a field with dates that conform to one or many constraints
-
        Given there is a constraint:
        """
        { "anyOf": [
@@ -147,7 +144,6 @@ Scenario: User requires to create a field with dates that conform to one or many
        | 2018-10-09T00:00:00.000 |
 
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
-
        Given there is a constraint:
        """
        { "anyOf": [
@@ -174,8 +170,6 @@ Scenario: User requires to create a field with dates that conform to multiple se
        | 2018-10-07T00:00:00.000 |
        | 2018-10-08T00:00:00.000 |
 
-
-
 Scenario: Running an 'anyOf' request that contains a valid nested anyOf request should be successful
   Given there is a constraint:
     """
@@ -197,6 +191,7 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
     | "333"   |
     | "4444"  |
     | "55555" |
+  And foo is of type "string"
   And foo is anything but null
   Then the following data should be generated:
     | foo     |
@@ -206,7 +201,6 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
   And the following data should not be included in what is generated:
     | "22"   |
     | "4444" |
-
 
 Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
   Given there is a constraint:
@@ -229,6 +223,7 @@ Scenario: Running an 'anyOf' request that contains a valid nested allOf request 
     | "333"   |
     | "4444"  |
     | "55555" |
+  And foo is of type "string"
   And foo is anything but null
   Then the following data should be generated:
     | foo    |
@@ -238,8 +233,6 @@ Scenario: Running an 'anyOf' request that contains a valid nested allOf request 
     | "22"    |
     | "333"   |
     | "55555" |
-
-
 
 Scenario: Running an 'anyOf' request that contains an invalid nested anyOf request should fail with an error message
   Given there is a constraint:
@@ -255,9 +248,10 @@ Scenario: Running an 'anyOf' request that contains an invalid nested anyOf reque
       }
     ]}
   """
+  And foo is of type "string"
+  And foo is anything but null
   Then I am presented with an error message
   And no data is created
-
 
 Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
   Given there is a constraint:
@@ -273,9 +267,10 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
       }
     ]}
   """
+  And foo is of type "string"
+  And foo is anything but null
   Then I am presented with an error message
   And no data is created
-
 
 Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
   Given there is a constraint:
@@ -292,5 +287,7 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
       }
     ]}
   """
+  And foo is of type "string"
+  And foo is anything but null
   Then I am presented with an error message
   And no data is created
