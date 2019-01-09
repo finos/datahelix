@@ -18,7 +18,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
-    ReductiveDecisionTreeWalker(
+    public ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
         FixedFieldBuilder fixedFieldBuilder,
         ReductiveDataGeneratorMonitor monitor,
