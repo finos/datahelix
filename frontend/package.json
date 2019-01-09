@@ -10,7 +10,7 @@
     "file-saver": "^1.3.8",
     "rc-slider": "^8.6.1",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
     "react-scripts-ts": "^4.0.8",
     "redux": "^4.0.0",
