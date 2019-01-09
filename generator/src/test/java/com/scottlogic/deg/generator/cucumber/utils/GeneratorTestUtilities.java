@@ -10,19 +10,19 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.cucumber.steps.DateObject;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
@@ -31,8 +31,6 @@ import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.ProfileBasedFixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.RankedConstraintFixFieldStrategy;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
@@ -128,7 +126,7 @@ public class GeneratorTestUtilities {
                     new NoOpIterationVisualiser(),
                     new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor),
                     monitor,
-                    new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger),
+                    new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
             default:
             case CARTESIAN_PRODUCT:
