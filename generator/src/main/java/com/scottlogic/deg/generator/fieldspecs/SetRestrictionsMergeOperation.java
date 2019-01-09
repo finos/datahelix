@@ -18,6 +18,10 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions());
 
         if (!mergeResult.successful){
+            if (left.getNullRestrictions() != null && left.getNullRestrictions().nullness.equals(Nullness.MUST_NOT_BE_NULL)
+                || right.getNullRestrictions() != null && right.getNullRestrictions().nullness.equals(Nullness.MUST_NOT_BE_NULL)) {
+                return Optional.empty();
+            }
             return Optional.of(merged.withSetRestrictions(
                 SetRestrictions.fromWhitelist(Collections.emptySet()),
                 FieldSpecSource.fromFieldSpecs(left, right)));
