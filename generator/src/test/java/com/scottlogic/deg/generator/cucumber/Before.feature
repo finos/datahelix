@@ -2,10 +2,11 @@ Feature: User can specify that a temporal date is lower than, but not equal to, 
 
 Background:
      Given the generation strategy is full
+       And there is a field foo
+       And foo is of type "temporal"
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date
-     Given there is a field foo
-       And foo is before 2018-10-10T00:00:00.000
+     Given foo is before 2018-10-10T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -23,8 +24,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2018-10-09" |
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a month boundary that are less than a specified date
-     Given there is a field foo
-       And foo is before 2018-10-10T00:00:00.000
+     Given foo is before 2018-10-10T00:00:00.000
        And foo is after 2018-09-28T00:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -45,8 +45,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2018-10-09" |
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a year boundary that are less than a specified date
-     Given there is a field foo
-       And foo is before 2018-01-03T00:00:00.000
+     Given foo is before 2018-01-03T00:00:00.000
        And foo is after 2017-12-25T00:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -64,8 +63,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2018-01-02" |
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a leap year February boundary that are less than a specified date
-     Given there is a field foo
-       And foo is before 2016-03-03T00:00:00.000
+     Given foo is before 2016-03-03T00:00:00.000
        And foo is after 2016-02-25T00:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -81,8 +79,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2016-03-02" |
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a non-leap year February boundary that are less than a specified date
-     Given there is a field foo
-       And foo is before 2017-03-03T00:00:00.000
+     Given foo is before 2017-03-03T00:00:00.000
        And foo is after 2017-02-25T00:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -97,8 +94,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2017-03-02" |
 
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values within a given minute that are less than a specified date and time
-     Given there is a field foo
-       And foo is before 2018-10-01T12:00:10.000
+     Given foo is before 2018-10-01T12:00:10.000
        And foo is after 2018-10-01T12:00:00.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -117,8 +113,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        | "12:00:09" |
 
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than a specified date and time
-     Given there is a field foo
-       And foo is before 2018-10-01T12:01:05.000
+     Given foo is before 2018-10-01T12:01:05.000
        And foo is after 2018-10-01T12:00:57.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -135,8 +130,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        | "12:01:04" |
 
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across an hour boundary that are less than a specified date and time
-     Given there is a field foo
-       And foo is before 2018-10-01T13:00:05.000
+     Given foo is before 2018-10-01T13:00:05.000
        And foo is after 2018-10-01T12:59:57.000
        And foo is anything but null
        And foo is of type "temporal"
@@ -153,8 +147,7 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        | "13:00:04" |
 
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date and a second specified date
-     Given there is a field foo
-       And foo is before 2018-10-10T00:00:00.000
+     Given foo is before 2018-10-10T00:00:00.000
        And foo is before 2018-10-09T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
        And foo is anything but null
