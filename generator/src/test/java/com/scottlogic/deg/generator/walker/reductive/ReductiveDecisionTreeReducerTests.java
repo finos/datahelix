@@ -157,7 +157,7 @@ class ReductiveDecisionTreeReducerTests {
     @Test
     public void shouldRemoveDecisionsBelowARemovedConstraint(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
-        TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode( //expect this to be removed
             Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
@@ -165,7 +165,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThan2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -189,7 +189,7 @@ class ReductiveDecisionTreeReducerTests {
     @Test
     public void shouldSimplifyTheTreeAfterReducing(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
-        TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode( //expect this to be removed
             Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
@@ -197,7 +197,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThan2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -296,7 +296,7 @@ class ReductiveDecisionTreeReducerTests {
     @Test
     public void shouldReturnNullIfALowLevelDecisionIsInvalidated(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
-        TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode( //expect this to be removed
             Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
@@ -304,7 +304,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThan2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -322,6 +322,124 @@ class ReductiveDecisionTreeReducerTests {
 
         Assert.assertThat(reduced, equalTo(null));
     }
+
+
+    @Test
+    public void shouldIncludeAtomicConstraintIfNotContradictoryWithNullForFixedField(){
+        AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode(
+            Collections.singletonList(isGreaterThanOrEqualTo2),
+            Collections.singletonList(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
+                )
+            ));
+        DecisionNode decision1 = new TreeDecisionNode(
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
+            new TreeConstraintNode(isLessThan2) //field3
+        );
+        ConstraintNode tree = new TreeConstraintNode(
+            Collections.singletonList(isEqualTo1),
+            Collections.singletonList(decision1));
+        ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
+            fieldSpecFactory,
+            fieldSpecMerger,
+            simplifier);
+        FixedField field3FixedTo3 = new FixedField(field3, Collections.singletonList(null).stream(), FieldSpec.Empty, nullMonitor);
+        ReductiveState field3Fixed = initialState.with(field3FixedTo3);
+        field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
+
+        ReductiveConstraintNode reduced = reducer.reduce(tree, field3Fixed);
+
+        //fixed value of field3 of null does not contradict any constraints so we get back everything
+
+        Assert.assertThat(reduced.getAtomicConstraints(), containsInAnyOrder(isEqualTo1));
+        Assert.assertThat(reduced.getDecisions().size(), equalTo(1));
+        Assert.assertThat(
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(isEqualTo1, isGreaterThanOrEqualTo2, isLessThan2, field3IsGreaterThan4));
+    }
+
+
+
+
+    @Test
+    public void shouldReturnNullIfTreeReductionWithFixedValueNotNullInvalidatesTheTree(){
+        AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode(
+            Collections.singletonList(isGreaterThanOrEqualTo2),
+            Collections.singletonList(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
+                )
+            ));
+        DecisionNode decision1 = new TreeDecisionNode(
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
+            new TreeConstraintNode(isLessThan2) //field3
+        );
+
+
+        IsNullConstraint isNull = new IsNullConstraint(field3, Collections.emptySet());
+        AtomicConstraint isNotNull = isNull.negate();
+
+        ConstraintNode tree = new TreeConstraintNode(
+            Collections.singletonList(isNotNull),
+            Collections.singletonList(decision1));
+        ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
+            fieldSpecFactory,
+            fieldSpecMerger,
+            simplifier);
+        FixedField field3FixedTo3 = new FixedField(field3, Stream.of(3), FieldSpec.Empty, nullMonitor);
+        ReductiveState field3Fixed = initialState.with(field3FixedTo3);
+        field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
+
+        ReductiveConstraintNode reduced = reducer.reduce(tree, field3Fixed);
+
+        //fixed value of field3 of null contradicts the constraint field3 must not be null
+
+        Assert.assertThat(reduced, equalTo(null));
+    }
+
+
+
+    @Test
+    public void shouldReturnNullIfTreeReductionWithFixedValueNullInvalidatesTheTree(){
+        AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode(
+            Collections.singletonList(isGreaterThanOrEqualTo2),
+            Collections.singletonList(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(field3IsGreaterThan4) //something that isn't yet fixed and itself wouldn't be removed
+                )
+            ));
+        DecisionNode decision1 = new TreeDecisionNode(
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
+            new TreeConstraintNode(isLessThan2) //field3
+        );
+
+        IsNullConstraint isNull = new IsNullConstraint(field3, Collections.emptySet());
+        AtomicConstraint isNotNull = isNull.negate();
+
+
+        ConstraintNode tree = new TreeConstraintNode(
+            Collections.singletonList(isNotNull),
+            Collections.singletonList(decision1));
+        ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
+            fieldSpecFactory,
+            fieldSpecMerger,
+            simplifier);
+        FixedField field3FixedTo3 = new FixedField(field3, Collections.singletonList(null).stream(), FieldSpec.Empty, nullMonitor);
+        ReductiveState field3Fixed = initialState.with(field3FixedTo3);
+        field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
+
+        ReductiveConstraintNode reduced = reducer.reduce(tree, field3Fixed);
+
+        //fixed value of field3 of null contradicts the constraint field3 must not be null
+
+        Assert.assertThat(reduced, equalTo(null));
+    }
+
+
 
     private static class AtomicConstraintExtractor extends BaseVisitor{
         public ArrayList<AtomicConstraint> atomicConstraints = new ArrayList<>();
