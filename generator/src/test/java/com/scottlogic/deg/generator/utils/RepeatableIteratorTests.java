@@ -82,7 +82,6 @@ class RepeatableIteratorTests {
         Assert.assertEquals(firstValue, "First String");
         Assert.assertEquals(secondValue, "Second String");
         Assert.assertEquals(thirdValue, "Third String");
-        Assert.assertEquals(secondValue, "Second String");
         Assert.assertEquals(fourthValue, "Fourth String");
     }
 
