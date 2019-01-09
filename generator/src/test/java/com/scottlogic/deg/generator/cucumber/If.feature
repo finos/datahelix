@@ -3,12 +3,12 @@ Feature: Values can be specified by using if, then and else constraints
 Background:
      Given the generation strategy is full
      And the combination strategy is exhaustive
+     And the following fields exist:
+      | foo |
+      | bar |
 
 Scenario: Running an 'if' constraint for then condition only should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
-       And foo is in set:
+       Given foo is in set:
          | "a" |
          | "b" |
        And foo is anything but null
@@ -30,9 +30,6 @@ Scenario: Running an 'if' constraint for then condition only should be successfu
        | "b" | 20  |
 
 Scenario: Running an 'if' constraint for then and else conditions should be successful
-     Given the following fields exist:
-       | foo  |
-       | bar  |
        And foo is in set:
          | "a" |
          | "b" |
@@ -52,9 +49,6 @@ Scenario: Running an 'if' constraint for then and else conditions should be succ
        | "b" |  5  |
 
 Scenario: Running an 'if' request that contains a valid anyOf statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -84,9 +78,6 @@ Scenario: Running an 'if' request that contains a valid anyOf statement should b
        | 4   | "b"  |
 
 Scenario: Running an 'if' request that contains a valid allOf statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -116,9 +107,6 @@ Scenario: Running an 'if' request that contains a valid allOf statement should b
        | 4   | "b"  |
 
 Scenario: Running an 'if' request that contains a valid not statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -145,9 +133,6 @@ Scenario: Running an 'if' request that contains a valid not statement should be 
        | 4   | "a"  |
 
 Scenario: Running an 'if' request that contains a valid nested if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -177,9 +162,6 @@ Scenario: Running an 'if' request that contains a valid nested if statement shou
        | 4   | "a"  |
 
 Scenario: Running an 'if' request that is invalidly formatted (missing a then statement) should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -202,9 +184,6 @@ Scenario: Running an 'if' request that is invalidly formatted (missing a then st
        And no data is created
 
 Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -232,9 +211,6 @@ Scenario: Running a 'if' request that includes an invalid if value (not in field
        | 4   | "b"  |
 
 Scenario: Running a 'if' request that includes an invalid then value (not in field set) should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -261,9 +237,6 @@ Scenario: Running a 'if' request that includes an invalid then value (not in fie
        | 4   | "b"  |
 
 Scenario: Running a 'if' request that includes an invalid else value (not in field set) should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -288,9 +261,6 @@ Scenario: Running a 'if' request that includes an invalid else value (not in fie
        | 1   | "a"  |
 
 Scenario: Running an if request that contains a non contradictory inSet constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -318,9 +288,6 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
       | 4   | "b"  |
 
 Scenario: Running an if request that contains a non contradictory inSet constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -349,9 +316,6 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
        | 4   | "c"  |
 
 Scenario: Running an if request that contains a non contradictory inSet constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -382,9 +346,6 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
        | 4   | "c"  |
 
 Scenario: Running an if request that contains a contradictory inSet constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -412,9 +373,6 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
        | 4   | "b"  |
 
 Scenario: Running an if request that contains a contradictory inSet constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -438,9 +396,6 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
        And no data is created
 
 Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -465,9 +420,6 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
        | 1   | "a"  |
 
 Scenario: Running an if request that contains a non contradictory null constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2    |
          | 3    |
@@ -495,9 +447,6 @@ Scenario: Running an if request that contains a non contradictory null constrain
        | 4    | null |
 
 Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2    |
          | 3    |
@@ -525,9 +474,6 @@ Scenario: Running an if request that contains a non contradictory null constrain
        | 4    | null |
 
 Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2    |
          | 3    |
@@ -554,9 +500,6 @@ Scenario: Running an if request that contains a non contradictory null constrain
        | 4    | null |
 
 Scenario: Running an if request that contains a contradictory null constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -584,9 +527,6 @@ Scenario: Running an if request that contains a contradictory null constraint wi
          | 4   | "b"  |
 
 Scenario: Running an if request that contains a contradictory null constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -613,9 +553,6 @@ Scenario: Running an if request that contains a contradictory null constraint wi
        | 4   | "a"  |
 
 Scenario: Running an if request that contains a contradictory null constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1 |
          | 2 |
@@ -640,9 +577,6 @@ Scenario: Running an if request that contains a contradictory null constraint wi
        | 1   | "a"  |
 
 Scenario: Running an if request that contains a non contradictory ofType constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -671,9 +605,6 @@ Scenario: Running an if request that contains a non contradictory ofType constra
        | "b" | "AA" |
 
 Scenario: Running an if request that contains a non contradictory ofType constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -703,9 +634,6 @@ Scenario: Running an if request that contains a non contradictory ofType constra
        | "b" | 10   |
 
 Scenario: Running an if request that contains a non contradictory ofType constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -737,9 +665,6 @@ Scenario: Running an if request that contains a non contradictory ofType constra
        | "b" | 20   |
 
 Scenario: Running an if request that contains a contradictory ofType constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -768,9 +693,6 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
        | 4   | "c"  |
 
 Scenario: Running an if request that contains a contradictory ofType constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -798,9 +720,6 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
        | 4   | "c"  |
 
 Scenario: Running an if request that contains a contradictory ofType constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1   |
          | 2   |
@@ -826,9 +745,6 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
        | 1   | "a"  |
 
 Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -857,9 +773,6 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
        | "b" | "AA" |
 
 Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -889,9 +802,6 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
        | "b" | "10" |
 
 Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -923,9 +833,6 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
        | "b" | "20" |
 
 Scenario: Running an if request that contains a contradictory matchingRegex constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -954,9 +861,6 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
        | "b" | "10" |
 
 Scenario: Running an if request that contains a contradictory matchingRegex constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -984,9 +888,6 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
        | "b" | "10" |
 
 Scenario: Running an if request that contains a contradictory matchingRegex constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1" |
          | "2" |
@@ -1012,9 +913,6 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
        | "a" | "BB" |
 
 Scenario: Running an if request that contains a non contradictory containingRegex constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1043,9 +941,6 @@ Scenario: Running an if request that contains a non contradictory containingRege
        | "b2" | "10" |
 
 Scenario: Running an if request that contains a non contradictory containingRegex constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1075,9 +970,6 @@ Scenario: Running an if request that contains a non contradictory containingRege
        | "b2" | "AA" |
 
 Scenario: Running an if request that contains a non contradictory containingRegex constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1109,9 +1001,6 @@ Scenario: Running an if request that contains a non contradictory containingRege
        | "b2" | "20" |
 
 Scenario: Running an if request that contains a contradictory containingRegex constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1140,9 +1029,6 @@ Scenario: Running an if request that contains a contradictory containingRegex co
        | "b2" | "10" |
 
 Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1170,9 +1056,6 @@ Scenario: Running an if request that contains a contradictory containingRegex co
        | "b2" | "10" |
 
 Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "1"  |
          | "2"  |
@@ -1198,9 +1081,6 @@ Scenario: Running an if request that contains a contradictory containingRegex co
        | "1"  | "10" |
 
 Scenario: Running an if request that contains a non contradictory ofLength constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1229,9 +1109,6 @@ Scenario: Running an if request that contains a non contradictory ofLength const
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a non contradictory ofLength constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1260,9 +1137,6 @@ Scenario: Running an if request that contains a non contradictory ofLength const
        | "dddd" | "1"   |
 
 Scenario: Running an if request that contains a non contradictory ofLength constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1291,9 +1165,6 @@ Scenario: Running an if request that contains a non contradictory ofLength const
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory ofLength constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1322,9 +1193,6 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory ofLength constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1352,9 +1220,6 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory ofLength constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1380,9 +1245,6 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
     | "a" | "1" |
 
 Scenario: Running an if request that contains a non contradictory longerThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1411,9 +1273,6 @@ Scenario: Running an if request that contains a non contradictory longerThan con
        | "dddd" | "1"    |
 
 Scenario: Running an if request that contains a non contradictory longerThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1443,9 +1302,6 @@ Scenario: Running an if request that contains a non contradictory longerThan con
          | "dddd" | "1"    |
 
 Scenario: Running an if request that contains a non contradictory longerThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1477,9 +1333,6 @@ Scenario: Running an if request that contains a non contradictory longerThan con
        | "dddd" | "1"    |
 
 Scenario: Running an if request that contains a contradictory longerThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1508,9 +1361,6 @@ Scenario: Running an if request that contains a contradictory longerThan constra
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory longerThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1538,9 +1388,6 @@ Scenario: Running an if request that contains a contradictory longerThan constra
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory longerThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1566,9 +1413,6 @@ Scenario: Running an if request that contains a contradictory longerThan constra
        | "a" | "1" |
 
 Scenario: Running an if request that contains a non contradictory shorterThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1597,9 +1441,6 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a non contradictory shorterThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1629,9 +1470,6 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
        | "dddd" | "333" |
 
 Scenario: Running an if request that contains a non contradictory shorterThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1666,9 +1504,6 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory shorterThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1697,9 +1532,6 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
        | "dddd" | "4444" |
 
 Scenario: Running an if request that contains a contradictory shorterThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1727,9 +1559,6 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
        | "ccc" | "4444" |
 
 Scenario: Running an if request that contains a contradictory shorterThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"    |
          | "bb"   |
@@ -1756,9 +1585,6 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
 
 @ignore
 Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "GB0002634946" |
          | "bb"           |
@@ -1787,9 +1613,6 @@ Scenario: Running an if request that contains a non contradictory aValid constra
        | "dddd"         | "4444" |
 
 Scenario: Running an if request that contains a non contradictory aValid constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "GB0002634946" |
          | "bb"           |
@@ -1818,9 +1641,6 @@ Scenario: Running an if request that contains a non contradictory aValid constra
        | "dddd"         | "333"          |
 
 Scenario: Running an if request that contains a non contradictory aValid constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "GB0002634946" |
          | "bb"           |
@@ -1850,9 +1670,6 @@ Scenario: Running an if request that contains a non contradictory aValid constra
 
 @ignore
 Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "aa"   |
          | "bb"   |
@@ -1882,9 +1699,6 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
 
 @ignore
 Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "aa"   |
          | "bb"   |
@@ -1912,9 +1726,6 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        | "dddd" | "333" |
 
 Scenario: Running an if request that contains a contradictory aValid constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "aa"   |
          | "bb"   |
@@ -1940,9 +1751,6 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        | "ccc" | "333" |
 
 Scenario: Running an if request that contains a non contradictory greaterThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -1971,9 +1779,6 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
        | 40  | 22  |
 
 Scenario: Running an if request that contains a non contradictory greaterThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2004,9 +1809,6 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a non contradictory greaterThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2038,9 +1840,6 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
        | 40  | 1    |
 
 Scenario: Running an if request that contains a contradictory greaterThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2069,9 +1868,6 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
        | 40  | 1   |
 
 Scenario: Running an if request that contains a contradictory greaterThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2099,9 +1895,6 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
        | 30  | 1   |
 
 Scenario: Running an if request that contains a contradictory greaterThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2127,9 +1920,6 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
        | 40  | 1   |
 
 Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2158,9 +1948,6 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
        | 40  | 22  |
 
 Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2191,9 +1978,6 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
        | 40  | 1    |
 
 Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2228,9 +2012,6 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2259,9 +2040,6 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
        | 40  | 1   |
 
 Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2289,9 +2067,6 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
        | 40  | 333 |
 
 Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2317,9 +2092,6 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
        | 10  | 4444 |
 
 Scenario: Running an if request that contains a non contradictory lessThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2348,9 +2120,6 @@ Scenario: Running an if request that contains a non contradictory lessThan const
          | 40  | 1    |
 
 Scenario: Running an if request that contains a non contradictory lessThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2381,9 +2150,6 @@ Scenario: Running an if request that contains a non contradictory lessThan const
        | 40  | 333 |
 
 Scenario: Running an if request that contains a non contradictory lessThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2415,9 +2181,6 @@ Scenario: Running an if request that contains a non contradictory lessThan const
        | 40  | 333 |
 
 Scenario: Running an if request that contains a contradictory lessThan constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2446,9 +2209,6 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
        | 40  | 22  |
 
 Scenario: Running an if request that contains a contradictory lessThan constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2476,9 +2236,6 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
        | 40  | 333 |
 
 Scenario: Running an if request that contains a contradictory lessThan constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2504,9 +2261,6 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
        | 30  | 1   |
 
 Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2535,9 +2289,6 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2568,9 +2319,6 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2608,9 +2356,6 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2639,9 +2384,6 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2669,9 +2411,6 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
        | 40  | 4444 |
 
 Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 10 |
          | 20 |
@@ -2698,10 +2437,7 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
 
 @ignore
 Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
-       And foo is in set:
+      And foo is in set:
          | 1     |
          | 1.1   |
          | 1.11  |
@@ -2730,9 +2466,6 @@ Scenario: Running an if request that contains a non contradictory granularTo con
 
 @ignore
 Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1     |
          | 1.1   |
@@ -2762,9 +2495,6 @@ Scenario: Running an if request that contains a non contradictory granularTo con
 
 @ignore
 Scenario: Running an if request that contains a contradictory granularTo constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1     |
          | 1.1   |
@@ -2794,9 +2524,6 @@ Scenario: Running an if request that contains a contradictory granularTo constra
 
 @ignore
 Scenario: Running an if request that contains a contradictory granularTo constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1     |
          | 1.1   |
@@ -2825,9 +2552,6 @@ Scenario: Running an if request that contains a contradictory granularTo constra
 
 @ignore
 Scenario: Running an if request that contains a contradictory granularTo constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 1     |
          | 1.1   |
@@ -2853,9 +2577,6 @@ Scenario: Running an if request that contains a contradictory granularTo constra
        | 1   | 3.33 |
 
 Scenario: Running an if request that contains a non contradictory after constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -2889,9 +2610,6 @@ Scenario: Running an if request that contains a non contradictory after constrai
        | 2018-06-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory after constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -2925,9 +2643,6 @@ Scenario: Running an if request that contains a non contradictory after constrai
        | 2018-06-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory after constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -2961,9 +2676,6 @@ Scenario: Running an if request that contains a non contradictory after constrai
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory after constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -2997,9 +2709,6 @@ Scenario: Running an if request that contains a contradictory after constraint w
       | 2018-06-01T00:00:00.000 | 2010-01-04T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory after constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3032,9 +2741,6 @@ Scenario: Running an if request that contains a contradictory after constraint w
        | 2018-06-01T00:00:00.000 | 2010-01-04T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory after constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3063,9 +2769,6 @@ Scenario: Running an if request that contains a contradictory after constraint w
        | 2018-01-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3099,9 +2802,6 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3136,9 +2836,6 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
        | 2018-06-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3177,9 +2874,6 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
        | 2018-06-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory afterOrAt constraint within its if statement should be successful
-     Given the following fields exist:
-      | foo |
-      | bar |
     And foo is in set:
       | 2018-01-01T00:00:00.000 |
       | 2018-02-01T00:00:00.000 |
@@ -3213,9 +2907,6 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
       | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory afterOrAt constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3248,9 +2939,6 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory afterOrAt constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3279,9 +2967,6 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
        | 2018-01-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory before constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3315,9 +3000,6 @@ Scenario: Running an if request that contains a non contradictory before constra
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory before constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3352,9 +3034,6 @@ Scenario: Running an if request that contains a non contradictory before constra
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory before constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3393,9 +3072,6 @@ Scenario: Running an if request that contains a non contradictory before constra
        | 2018-06-01T00:00:00.000 | 2010-01-02T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory before constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3429,9 +3105,6 @@ Scenario: Running an if request that contains a contradictory before constraint 
        | 2018-06-01T00:00:00.000 | 2010-01-03T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory before constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3464,9 +3137,6 @@ Scenario: Running an if request that contains a contradictory before constraint 
        | 2018-06-01T00:00:00.000 | 2010-01-03T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory before constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3495,9 +3165,6 @@ Scenario: Running an if request that contains a contradictory before constraint 
        | 2018-01-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3531,9 +3198,6 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3569,9 +3233,6 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
        | 2018-06-01T00:00:00.000 | 2010-01-05T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3615,9 +3276,6 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
        | 2018-06-01T00:00:00.000 | 2010-01-03T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3651,9 +3309,6 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
        | 2018-06-01T00:00:00.000 | 2010-01-03T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3686,9 +3341,6 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
        | 2018-06-01T00:00:00.000 | 2010-01-03T00:00:00.000 |
 
 Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | 2018-01-01T00:00:00.000 |
          | 2018-02-01T00:00:00.000 |
@@ -3717,9 +3369,6 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
        | 2018-01-01T00:00:00.000 | 2010-01-01T00:00:00.000 |
 
 Scenario: Running an if request that contains a non contradictory not constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3744,9 +3393,6 @@ Scenario: Running an if request that contains a non contradictory not constraint
        | "b" | 10  |
 
 Scenario: Running an if request that contains a non contradictory not constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3771,9 +3417,6 @@ Scenario: Running an if request that contains a non contradictory not constraint
        | "b" | 10  |
 
 Scenario: Running an if request that contains a non contradictory not constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3798,9 +3441,6 @@ Scenario: Running an if request that contains a non contradictory not constraint
        | "b" | 30  |
 
 Scenario: Running an if request that contains a contradictory not constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
        And foo is anything but null
@@ -3822,9 +3462,6 @@ Scenario: Running an if request that contains a contradictory not constraint wit
        | "a" | 30  |
 
 Scenario: Running an if request that contains a contradictory not constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3844,9 +3481,6 @@ Scenario: Running an if request that contains a contradictory not constraint wit
        | "b" | 10  |
 
 Scenario: Running an if request that contains a contradictory not constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3867,9 +3501,6 @@ Scenario: Running an if request that contains a contradictory not constraint wit
        | "a" | 10  |
 
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3903,9 +3534,6 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "e" | 10  |
 
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3940,9 +3568,6 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "e" | 50  |
 
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -3980,9 +3605,6 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "e" | 40  |
 
 Scenario: Running an if request that contains a contradictory anyOf constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -4017,9 +3639,6 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
 
 
 Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -4052,9 +3671,6 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "e" | 50  |
 
 Scenario: Running an if request that contains a contradictory anyOf constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a" |
          | "b" |
@@ -4084,9 +3700,6 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "a" | 10  |
 
 Scenario: Running an if request that contains a non contradictory allOf constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
@@ -4120,9 +3733,6 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
        | "eeeee" | 55555 |
 
 Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
@@ -4156,9 +3766,6 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
        | "eeeee" | 55555 |
 
 Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
@@ -4192,9 +3799,6 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
        | "eeeee" | 22  |
 
 Scenario: Running an if request that contains a contradictory allOf constraint within its if statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
@@ -4228,9 +3832,6 @@ Scenario: Running an if request that contains a contradictory allOf constraint w
        | "eeeee" | 55555 |
 
 Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
@@ -4263,9 +3864,6 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
        | "eeeee" | 55555 |
 
 Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
-     Given the following fields exist:
-       | foo |
-       | bar |
        And foo is in set:
          | "a"     |
          | "bb"    |
