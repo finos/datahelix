@@ -2,7 +2,7 @@
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
-See [set restriction and generation](SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
+See [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
 
 ## `not`
 

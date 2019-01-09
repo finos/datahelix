@@ -66,4 +66,4 @@ Both of the above operators will explicitly deny the inclusion of `null`, theref
 
 All fields permit the inclusion of the empty set (&#8709;) by default, to prevent the field from having a `null` emitted, ensure you use the `not(is null)` constraint.
 
-For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
+For more details see the [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) page.
