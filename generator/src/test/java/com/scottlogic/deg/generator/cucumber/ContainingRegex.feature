@@ -2,6 +2,7 @@ Feature: User can specify that contains a specified regex
 
 Background:
      Given the generation strategy is full
+       And foo is of type "string"
 
 Scenario: Running a 'containingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
      Given there is a field foo
@@ -279,32 +280,6 @@ Scenario: Running a 'containingRegex' request alongside a null constraint should
      Then the following data should be generated:
        | foo  |
        | null |
-
-Scenario: Running a 'containingRegex' request alongside an ofType = string should be successful
-     Given there is a field foo
-       And foo is containing regex /[a]{1}/
-       And foo is of type "string"
-       And foo is of length 1
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "a"  |
-
-@ignore
-Scenario: Running a 'containingRegex' request alongside an ofType = numeric should fail with an error message
-     Given there is a field foo
-       And foo is containing regex /[a]{1}/
-       And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
-
-@ignore
-Scenario: Running a 'containingRegex' request alongside an ofType = temporal should fail with an error message
-     Given there is a field foo
-       And foo is containing regex /[a]{1}/
-       And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
 
 Scenario: Running a 'containingRegex' request alongside a non-contradicting matchingRegex constraint should be successful
      Given there is a field foo
