@@ -2,13 +2,14 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
 
 Background:
      Given the generation strategy is full
+       And there is a field foo
+       And foo is of type "numeric"
+       And foo is anything but null
     
 Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
-     Given there is a field foo
-       And foo is granular to 0.1
+     Given foo is granular to 0.1
        And foo is greater than or equal to 0
        And foo is less than or equal to 1
-       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.0  |
@@ -24,11 +25,9 @@ Scenario: User requires to create a numeric field with data values that include 
        | 1.0  |
 
 Scenario: User requires to create a numeric field with data values that include a decimal value to two decimal points
-     Given there is a field foo
-       And foo is granular to 0.01
+     Given foo is granular to 0.01
        And foo is greater than or equal to 0
        And foo is less than or equal to 0.2
-       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.00 |
@@ -54,11 +53,9 @@ Scenario: User requires to create a numeric field with data values that include 
        | 0.20 |
 
 Scenario: User requires to create a numeric field with data values that include a decimal value to five decimal points
-     Given there is a field foo
-       And foo is granular to 0.00001
+     Given foo is granular to 0.00001
        And foo is greater than or equal to 0
        And foo is less than or equal to 0.0001
-       And foo is anything but null
      Then the following data should be generated:
        | foo     |
        | 0.00000 |
@@ -74,11 +71,9 @@ Scenario: User requires to create a numeric field with data values that include 
        | 0.00010 |
 
 Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
-     Given there is a field foo
-       And foo is granular to 0.1
+     Given foo is granular to 0.1
        And foo is less than or equal to 0
        And foo is greater than or equal to -1
-       And foo is anything but null
      Then the following data should be generated:
        | foo  |
        | 0.0  |
@@ -94,7 +89,6 @@ Scenario: User requires to create a numeric field with negative data values that
        | -1.0 |
 
 Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
-  Given there is a field foo
-  And foo is granular to "0.1"
+  Given foo is granular to "0.1"
      Then the profile is invalid
         And no data is created

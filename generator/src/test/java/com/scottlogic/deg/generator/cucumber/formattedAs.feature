@@ -1,18 +1,18 @@
 Feature: User can specify that a value is so formatted
 
-  Background:
-    Given the generation strategy is full
-    And there is a field foo
+Background:
+     Given the generation strategy is full
+       And there is a field foo
 
-  Scenario Outline: Running a valid 'formattedAs' request should be successful
-    Given foo is in set:
-      | <input> |
-    And foo is formatted as <format>
-    And foo is anything but null
-    Then the following data should be generated:
-      | foo        |
-      | <expected> |
-    Examples:
+Scenario Outline: Running a valid 'formattedAs' request should be successful
+     Given foo is in set:
+       | <input> |
+       And foo is formatted as <format>
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo        |
+       | <expected> |
+     Examples:
       | input                    | format       | expected                       |
 #      | 1.0                      | "%a"         | "0x1.0p0"                      | no way to specify float over double
 #      | 1.5                      | "%a"         | "0x1.8p0"                      | no way to specify float over double
@@ -185,16 +185,14 @@ Feature: User can specify that a value is so formatted
 #      | 2018-02-01T16:17:08.199Z  | "%tZ"        | "08"                           | requires timezone information
 #      | 2018-02-01T16:17:08.199Z  | "%tz"        | "08"                           | requires timezone information
 
-
-
-  Scenario Outline: Running an invalid 'formattedAs' request should fail with an error message
-    Given foo is in set:
-      | <input> |
-    And foo is formatted as <format>
-    And foo is anything but null
-    Then I am presented with an error message
-    And no data is created
-    Examples:
+Scenario Outline: Running an invalid 'formattedAs' request should fail with an error message
+     Given foo is in set:
+       | <input> |
+       And foo is formatted as <format>
+       And foo is anything but null
+     Then I am presented with an error message
+       And no data is created
+     Examples:
       | input                    | format      |
       | "1"                      | "%20d"      |
       | 2018-02-01T16:17:18.199  | "%20d"      |
