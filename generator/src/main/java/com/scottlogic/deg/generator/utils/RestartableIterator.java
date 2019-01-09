@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class RepeatableIterator<T> implements Iterator<T> {
+public class RestartableIterator<T> implements Iterator<T> {
     private final List<T> cache = new ArrayList<>();
     private int index = 0;
     private final Iterator<T> underlyingIterator;
 
-    public RepeatableIterator(Iterator<T> underlyingIterator) {
+    public RestartableIterator(Iterator<T> underlyingIterator) {
         this.underlyingIterator = underlyingIterator;
     }
 
@@ -33,7 +33,7 @@ public class RepeatableIterator<T> implements Iterator<T> {
         return item;
     }
 
-    public void reset() {
+    public void restart() {
         index = 0;
     }
 }

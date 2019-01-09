@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class RepeatableIteratorTests {
+class RestartableIteratorTests {
     @Test
     void next_underlyingIteratorHasValueAndFirstTimeCalling_returnsExpectedValue() {
-        RepeatableIterator<String> iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
+        RestartableIterator<String> iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         String value = iterator.next();
 
@@ -20,7 +20,7 @@ class RepeatableIteratorTests {
 
     @Test
     void next_underlyingIteratorHasMultipleValuesAndFirstTimeCalling_returnsAllExpectedValues() {
-        RepeatableIterator<String> iterator = getIterator(
+        RestartableIterator<String> iterator = getIterator(
             new ArrayList<String>() {{
                 add("First String");
                 add("Second String");
@@ -39,7 +39,7 @@ class RepeatableIteratorTests {
 
     @Test
     void next_underlyingIteratorHasMultipleValuesAndResetCacheCalledAndNextCalled_returnsExpectedValuesMoreThanOnce() {
-        RepeatableIterator<String> iterator = getIterator(
+        RestartableIterator<String> iterator = getIterator(
             new ArrayList<String>() {{
                 add("First String");
                 add("Second String");
@@ -50,7 +50,7 @@ class RepeatableIteratorTests {
         iterator.next();
         iterator.next();
         iterator.next();
-        iterator.reset();
+        iterator.restart();
         String firstValue = iterator.next();
         String secondValue = iterator.next();
         String thirdValue = iterator.next();
@@ -62,7 +62,7 @@ class RepeatableIteratorTests {
 
     @Test
     void next_underlyingIteratorHasMultipleValuesAndResetCalledBeforeTheEndOfIterator_returnsAllExpectedValues() {
-        RepeatableIterator<String> iterator = getIterator(
+        RestartableIterator<String> iterator = getIterator(
             new ArrayList<String>() {{
                 add("First String");
                 add("Second String");
@@ -73,7 +73,7 @@ class RepeatableIteratorTests {
 
         iterator.next();
         iterator.next();
-        iterator.reset();
+        iterator.restart();
         String firstValue = iterator.next();
         String secondValue = iterator.next();
         String thirdValue = iterator.next();
@@ -87,7 +87,7 @@ class RepeatableIteratorTests {
 
     @Test
     void next_underlyingIteratorHasNoMoreValues_throwsException() {
-        RepeatableIterator<String> iterator = getIterator(
+        RestartableIterator<String> iterator = getIterator(
             new ArrayList<String>() {{
                 add("First String");
                 add("Second String");
@@ -102,7 +102,7 @@ class RepeatableIteratorTests {
 
     @Test
     void hasNext_underlyingIteratorHasNext_returnsTrue() {
-        RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
+        RestartableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         boolean result = iterator.hasNext();
 
@@ -111,7 +111,7 @@ class RepeatableIteratorTests {
 
     @Test
     void hasNext_underlyingIteratorHasEmittedAllValuesAndResetNotCalled_returnsFalse() {
-        RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
+        RestartableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         iterator.next();
         boolean result = iterator.hasNext();
@@ -121,10 +121,10 @@ class RepeatableIteratorTests {
 
     @Test
     void hasNext_underlyingIteratorHasEmittedAllValueAndResetCalled_returnsTrue() {
-        RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
+        RestartableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         iterator.next();
-        iterator.reset();
+        iterator.restart();
         boolean result = iterator.hasNext();
 
         Assert.assertTrue(result);
@@ -132,10 +132,10 @@ class RepeatableIteratorTests {
 
     @Test
     void hasNext_underlyingIteratorHasEmittedAllValuesAndResetCalledAndCacheEmittedAllValues_returnsFalse() {
-        RepeatableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
+        RestartableIterator iterator = getIterator(new ArrayList<String>() {{ add("Test"); }});
 
         iterator.next();
-        iterator.reset();
+        iterator.restart();
         iterator.next();
         boolean result = iterator.hasNext();
 
@@ -144,7 +144,7 @@ class RepeatableIteratorTests {
 
 
 
-    private RepeatableIterator<String> getIterator(List<String> values) {
-        return new RepeatableIterator<>(values.iterator());
+    private RestartableIterator<String> getIterator(List<String> values) {
+        return new RestartableIterator<>(values.iterator());
     }
 }
