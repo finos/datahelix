@@ -10,20 +10,13 @@
     "file-saver": "^1.3.8",
     "rc-slider": "^8.6.1",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
-    "react-scripts-ts": "^4.0.8",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "reselect": "^3.0.1",
     "semantic-ui-css": "^2.3.2",
     "semantic-ui-react": "^0.81.3"
-  },
-  "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.12",
