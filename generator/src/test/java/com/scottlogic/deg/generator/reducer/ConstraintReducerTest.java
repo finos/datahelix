@@ -1019,6 +1019,11 @@ class ConstraintReducerTest {
             not(equalTo(FieldSpec.Empty)));
         Assert.assertThat("Fieldspec has must contain restriction",
             outputSpec.getMustContainRestriction(), not(nullValue()));
+        Set<FieldSpec> requiredObjects = outputSpec.getMustContainRestriction().getRequiredObjects();
+        Assert.assertThat("Must contain has one required object",
+            requiredObjects.size(), is(1));
+        Assert.assertThat("Required object has a set restriction",
+            requiredObjects.iterator().next().getSetRestrictions(), not(nullValue()));
     }
 
     private static Set<RuleInformation> rules(){
