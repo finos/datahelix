@@ -183,11 +183,18 @@ class NodeVisualiser {
     }
 
     private String determineNodeColour(Node node){
+        if (node.hasMarking(NodeMarking.VIOLATED)){
+            return "[color=\"green\"]";
+        }
+
         if (node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY)) {
             return "[color=\"red\"]";
-        } else if (node.hasMarking(NodeMarking.OPTIMISED)){
+        }
+
+        if (node.hasMarking(NodeMarking.OPTIMISED)){
             return "[color=\"blue\"]";
         }
+
         return "";
     }
 }

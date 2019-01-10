@@ -46,7 +46,8 @@ public class ReductiveDecisionTreeReducer {
     private ConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields, AdapterContext context){
         ConstraintNode node = new TreeConstraintNode(
             context.isValid() ? getAtomicConstraints(rootNode, fixedFields, context) : Collections.emptySet(),
-            context.isValid() ? getDecisions(rootNode, fixedFields, context) : Collections.emptySet()
+            context.isValid() ? getDecisions(rootNode, fixedFields, context) : Collections.emptySet(),
+            rootNode.getNodeMarkings()
         );
 
         return context.isValid()
