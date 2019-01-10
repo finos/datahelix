@@ -86,7 +86,7 @@ class RestartableIteratorTests {
     }
 
     @Test
-    void next_underlyingIteratorHasNoMoreValues_throwsException() {
+    void next_underlyingIteratorHasNoMoreValues_throwsNoSuchElementException() {
         RestartableIterator<String> iterator = getIterator(
             new ArrayList<String>() {{
                 add("First String");
@@ -96,6 +96,13 @@ class RestartableIteratorTests {
 
         iterator.next();
         iterator.next();
+
+        Assertions.assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    void next_underlyingIteratorIsEmpty_throwsNoSuchElementException() {
+        RestartableIterator<String> iterator = getIterator(new ArrayList<>());
 
         Assertions.assertThrows(NoSuchElementException.class, iterator::next);
     }
@@ -142,7 +149,14 @@ class RestartableIteratorTests {
         Assert.assertFalse(result);
     }
 
+    @Test
+    void hasNext_underlyingIteratorEmpty_returnsFalse() {
+        RestartableIterator iterator = getIterator(new ArrayList<>());
 
+        boolean result = iterator.hasNext();
+
+        Assert.assertFalse(result);
+    }
 
     private RestartableIterator<String> getIterator(List<String> values) {
         return new RestartableIterator<>(values.iterator());
