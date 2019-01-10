@@ -40,7 +40,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                     rowSpecMerger,
                     new ExhaustiveProducer());
             case REDUCTIVE:
-                IterationVisualiser visualiser = new NoOpIterationVisualiser();
+                IterationVisualiser visualiser = new ReductiveIterationVisualiser(outputPath);
                 ReductiveDataGeneratorMonitor reductiveMonitor = this.monitor instanceof ReductiveDataGeneratorMonitor
                     ? (ReductiveDataGeneratorMonitor) this.monitor
                     : new NoopDataGeneratorMonitor();
