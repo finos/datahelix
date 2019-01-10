@@ -11,7 +11,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
     private static final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         MergeResult<TypeRestrictions> mergeResult = typeRestrictionsMerger.merge(
             left.getTypeRestrictions(),
             right.getTypeRestrictions());
@@ -24,7 +24,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             ? mergeResult.restrictions
             : DataTypeRestrictions.all;
 
-        return Optional.of(merged.withTypeRestrictions(
+        return Optional.of(merging.withTypeRestrictions(
             restrictions,
             FieldSpecSource.fromFieldSpecs(left, right)));
     }

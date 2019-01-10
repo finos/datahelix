@@ -9,22 +9,22 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
     private static final DateTimeRestrictionsMerger dateTimeRestrictionsMerger = new DateTimeRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         DateTimeRestrictions dateTimeRestrictions = dateTimeRestrictionsMerger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (dateTimeRestrictions == null) {
-            return Optional.of(merged.withDateTimeRestrictions(
+            return Optional.of(merging.withDateTimeRestrictions(
                 null,
                 FieldSpecSource.Empty));
         }
 
-        TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+        TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
         if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
             return Optional.empty();
         }
 
-        return Optional.of(merged
+        return Optional.of(merging
             .withDateTimeRestrictions(
                 dateTimeRestrictions,
                 FieldSpecSource.fromFieldSpecs(left, right))

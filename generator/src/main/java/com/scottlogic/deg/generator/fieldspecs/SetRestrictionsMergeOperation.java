@@ -13,12 +13,12 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
     private static final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         MergeResult<SetRestrictions> mergeResult =
             setRestrictionsMerger.merge(left.getSetRestrictions(), right.getSetRestrictions());
 
         if (!mergeResult.successful){
-            return Optional.of(merged.withSetRestrictions(
+            return Optional.of(merging.withSetRestrictions(
                 SetRestrictions.fromWhitelist(Collections.emptySet()),
                 FieldSpecSource.fromFieldSpecs(left, right)));
         }
@@ -31,7 +31,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             !setRestrictions.getWhitelist().isEmpty()) {
 
             Stream<?> filterStream = setRestrictions.getWhitelist().stream();
-            TypeRestrictions typeRestrictions = merged.getTypeRestrictions();
+            TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
                 filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
@@ -45,17 +45,17 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
             }
 
-            StringRestrictions stringRestrictions = merged.getStringRestrictions();
+            StringRestrictions stringRestrictions = merging.getStringRestrictions();
             if(stringRestrictions != null){
                 filterStream = filterStream.filter(stringRestrictions::match);
             }
 
-            NumericRestrictions numberRestrictions = merged.getNumericRestrictions();
+            NumericRestrictions numberRestrictions = merging.getNumericRestrictions();
             if(numberRestrictions != null){
                 filterStream = filterStream.filter(numberRestrictions::match);
             }
 
-            DateTimeRestrictions dateTimeRestrictions = merged.getDateTimeRestrictions();
+            DateTimeRestrictions dateTimeRestrictions = merging.getDateTimeRestrictions();
             if(dateTimeRestrictions != null){
                 filterStream = filterStream.filter(dateTimeRestrictions::match);
             }
@@ -66,7 +66,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             setRestrictions = newSetRestrictions;
         }
 
-        return Optional.of(merged.withSetRestrictions(
+        return Optional.of(merging.withSetRestrictions(
             setRestrictions,
             FieldSpecSource.fromFieldSpecs(left, right)));
     }
