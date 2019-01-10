@@ -7,21 +7,27 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReductiveDecisionTreeReducer {
 
-    private final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
-    private FieldSpecFactory fieldSpecFactory;
-    private FieldSpecMerger fieldSpecMerger;
+    private final DecisionTreeSimplifier simplifier;
+    private final FieldSpecFactory fieldSpecFactory;
+    private final FieldSpecMerger fieldSpecMerger;
 
-    public ReductiveDecisionTreeReducer(FieldSpecFactory fieldSpecFactory, FieldSpecMerger fieldSpecMerger){
+    public ReductiveDecisionTreeReducer(
+        FieldSpecFactory fieldSpecFactory,
+        FieldSpecMerger fieldSpecMerger,
+        DecisionTreeSimplifier simplifier){
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
+        this.simplifier = simplifier;
     }
 
     public ReductiveConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields){
@@ -49,11 +55,18 @@ public class ReductiveDecisionTreeReducer {
     }
 
     private DecisionNode reduce(DecisionNode decision, ReductiveState fixedFields, AdapterContext context){
-        return new TreeDecisionNode(decision.getOptions()
+        TreeDecisionNode reducedDecision = new TreeDecisionNode(decision.getOptions()
             .stream()
             .map(o -> reduce(o, fixedFields, context.forOption(o)))
             .filter(o -> o != null && !o.getAtomicConstraints().isEmpty())
             .collect(Collectors.toList()));
+
+        if (reducedDecision.getOptions().isEmpty()){
+            //NOTE: Presumes the tree is 'valid' to start off with, i.e. all decision nodes have at least 1 option
+            context.treeIsInvalid();
+        }
+
+        return reducedDecision;
     }
 
     private Collection<AtomicConstraint> getAtomicConstraints(ConstraintNode constraint, ReductiveState fixedFields, AdapterContext context) {
@@ -117,7 +130,32 @@ public class ReductiveDecisionTreeReducer {
         FieldSpec fixedValueFieldSpec = fixedField.getFieldSpecForCurrentValue();
 
         Optional<FieldSpec> merged = fieldSpecMerger.merge(fixedValueFieldSpec, fieldSpec);
-        return !merged.isPresent(); //no conflicts
+
+        if (!merged.isPresent()) {
+            return true;
+        }
+
+        FieldSpec mergedFieldSpec = merged.get();
+
+        if (mergedFieldSpec.getSetRestrictions() == null) {
+            return false;
+        }
+
+        Set<Object> mergedFieldSpecWhitelist = mergedFieldSpec.getSetRestrictions().getWhitelist();
+
+        if (mergedFieldSpecWhitelist == null || !mergedFieldSpecWhitelist.contains(fixedField.getCurrentValue())) {
+            if(mergedFieldSpec.getNullRestrictions() == null){
+                return false; // the fixedField is not in the whitelist but there are no null restrictions so it can be null
+            }
+
+            if((mergedFieldSpec.getNullRestrictions() != null && mergedFieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL)){
+                return false; // the fixedField is not in the whitelist but can be null
+            }
+
+            return true; //the fixedField value has been removed from the whitelist and the field cannot be null
+        }
+
+        return false;
     }
 
 }

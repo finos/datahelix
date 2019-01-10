@@ -20,7 +20,11 @@ Generates a JSON file representing the in-memory decision tree.  This is a utili
 
 ### `visualise`
 
-Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection.
+Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection. You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/). 
+
+There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
+- gv files are encoded with UTF-8, visualisers must support this encoding.
+- gv files can include HTML encoded entities, visualisers should support this feature.
 
 ## Future invocation methods
 
