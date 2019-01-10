@@ -627,7 +627,7 @@ Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal 
        | "2010-01-01T00:00:00.001" |
        | "2011-01-01T00:00:00.000" |
        And foo is of type "temporal"
-     Then I am presented with an error message
+       Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
