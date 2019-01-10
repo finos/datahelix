@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -177,6 +178,7 @@ class NodeVisualiser {
     String renderNode(String id, ConstraintNode node){
         String label = node.getAtomicConstraints()
             .stream()
+            .sorted(Comparator.comparing(ac -> ac.getField().name))
             .map(AtomicConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
