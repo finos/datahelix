@@ -7,7 +7,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     And foo is anything but null
 
 Scenario: User requires to create a numeric field with data values that are greater than zero
-       And foo is greater than 0
+       Given foo is greater than 0
        And foo is less than 10
        And foo is granular to 1
      Then the following data should be included in what is generated:
@@ -23,7 +23,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        | 9   |
 
 Scenario: User requires to create a field with decimal values that are greater than zero, specified as an integer
-       And foo is greater than 0
+       Given foo is greater than 0
        And foo is less than 2
        And foo is granular to 0.1
     Then the following data should be included in what is generated:
@@ -49,7 +49,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 1.9 |
 
 Scenario: User requires to create a field with decimal values that are greater than zero, specified as a decimal
-       And foo is greater than 0.0
+       Given foo is greater than 0.0
        And foo is less than 2.0
        And foo is granular to 0.1
      Then the following data should be included in what is generated:
@@ -75,7 +75,7 @@ Scenario: User requires to create a field with decimal values that are greater t
        | 1.9 |
 
 Scenario: User requires to create a numeric field with data values that are greater than a negative number
-       And foo is greater than -10
+       Given foo is greater than -10
        And foo is less than 0
        And foo is granular to 1
     Then the following data should be included in what is generated:
@@ -91,7 +91,7 @@ Scenario: User requires to create a numeric field with data values that are grea
        | -1  |
 
 Scenario: User requires to create a numeric field with data values that are greater than zero and greater than one
-       And foo is greater than 0
+       Given foo is greater than 0
        And foo is greater than 1
        And foo is less than 10
        And foo is granular to 1
@@ -107,6 +107,6 @@ Scenario: User requires to create a numeric field with data values that are grea
        | 9   |
 
 Scenario: User attempts to create a numeric field with data value that are greater than zero using an incorrect field value type of string
-       And foo is greater than "Zero"
+     Given foo is greater than "Zero"
      Then the profile is invalid
         And no data is created
