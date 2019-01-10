@@ -19,10 +19,8 @@ import java.util.stream.Stream;
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
     private final DataSetWriter datasetWriter;
-    private final String profileFileNameWithoutExtension;
 
-    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter, String profileFileNameWithoutExtension) {
-        this.profileFileNameWithoutExtension = profileFileNameWithoutExtension;
+    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter) {
         this.manifestWriter = new ManifestWriter();
         this.datasetWriter = datasetWriter;
     }
@@ -32,27 +30,19 @@ public class TestCaseGenerationResultWriter {
 
         List<TestCaseDTO> testCaseDtos = new ArrayList<>();
 
-        int index = 0;
+        int index = 1;
         for (TestCaseDataSet dataset : result.datasets) {
-            String filenameWithoutExtension = index == 0
-                ? this.profileFileNameWithoutExtension
-                : intFormatter.format(index);
+            String filenameWithoutExtension = intFormatter.format(index);
 
             write(result.profile.fields,
                 dataset.stream(),
                 directoryPath,
                 filenameWithoutExtension);
 
-            if (index == 1){
-                System.out.println("Valid cases generated, starting violation generation...");
-            }
-
             testCaseDtos.add(
                 new TestCaseDTO(
                     filenameWithoutExtension,
-                    dataset.violation == null
-                        ? Collections.emptyList()
-                        : Collections.singleton(dataset.violation.getDescription())));
+                    Collections.singleton(dataset.violation.getDescription())));
 
             index++;
         }

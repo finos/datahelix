@@ -19,14 +19,11 @@ public class DirectoryOutputTarget implements OutputTarget {
 
     public DirectoryOutputTarget(
         Path directoryPath,
-        String profileFileNameWithoutExtension,
         DataSetWriter dataSetWriter) {
 
         this.directoryPath = directoryPath;
         this.dataSetWriter = dataSetWriter;
-        this.testCaseWriter = new TestCaseGenerationResultWriter(
-            this.dataSetWriter,
-            profileFileNameWithoutExtension);
+        this.testCaseWriter = new TestCaseGenerationResultWriter(this.dataSetWriter);
     }
 
     @Override

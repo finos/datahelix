@@ -39,16 +39,13 @@ public class GenerationEngine {
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
-        final TestCaseDataSet validCase = new TestCaseDataSet(null, generate(profile, config));
-
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
-            Stream.concat(Stream.of(validCase), violatingCases)
-                .collect(Collectors.toList()));
+            violatingCases.collect(Collectors.toList()));
 
         this.outputter.outputTestCases(generationResult);
     }

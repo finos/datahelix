@@ -106,7 +106,6 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
             new GenerationEngine(
                 new DirectoryOutputTarget(
                     outputDir,
-                    getFilenameWithoutExtension(profileFile.getName()),
                     getWriter()),
                 new DecisionTreeDataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
@@ -131,10 +130,6 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
         }
 
         return outputWriter;
-    }
-
-    private String getFilenameWithoutExtension(String fileNameWithExtension) {
-        return fileNameWithExtension.replaceFirst("[.][^.]+$", "");
     }
 
     @Override
