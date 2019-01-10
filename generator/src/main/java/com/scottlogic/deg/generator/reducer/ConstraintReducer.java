@@ -66,13 +66,13 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
                                                             Iterable<AtomicConstraint> decisionConstraints) {
-        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
-            return Optional.of(FieldSpec.Empty);
-        }
-
         final FieldSpec decisionConstaintsFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(
             StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
         );
+
+        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
+            return Optional.of(decisionConstaintsFieldSpec);
+        }
 
         final Stream<FieldSpec> rootAndDecisionsConstraintsStream = Stream.concat(
             Stream.of(decisionConstaintsFieldSpec),
