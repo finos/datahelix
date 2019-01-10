@@ -123,11 +123,13 @@ public class RegexStringGenerator implements StringGenerator {
                 ? Collections.singleton(shortestString)
                 : Arrays.asList(shortestString, longestString);
         } catch (Exception e) {
-            throw new RuntimeException(
+            System.out.println(
                 String.format(
                     "Unable to generate interesting strings for %s\n%s",
                     this.regexRepresentation,
                     e.getMessage()));
+
+            return Collections.emptySet();
         }
     }
 
