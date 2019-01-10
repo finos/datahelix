@@ -102,12 +102,20 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        String shortestString = AutomationUtils.getShortestExample(automaton);
-        String longestString = AutomationUtils.getLongestExample(automaton);
+        try {
+            String shortestString = AutomationUtils.getShortestExample(automaton);
+            String longestString = AutomationUtils.getLongestExample(automaton);
 
-        return shortestString.equals(longestString)
-            ? Collections.singleton(shortestString)
-            : Arrays.asList(shortestString, longestString);
+            return shortestString.equals(longestString)
+                ? Collections.singleton(shortestString)
+                : Arrays.asList(shortestString, longestString);
+        } catch (Exception e) {
+            throw new RuntimeException(
+                String.format(
+                    "Unable to generate interesting strings for %s\n%s",
+                    this.regexRepresentation,
+                    e.getMessage()));
+        }
     }
 
     @Override
