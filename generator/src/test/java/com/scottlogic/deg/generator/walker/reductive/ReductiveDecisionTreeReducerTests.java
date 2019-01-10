@@ -157,7 +157,7 @@ class ReductiveDecisionTreeReducerTests {
     @Test
     public void shouldRemoveDecisionsBelowARemovedConstraint(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
-        TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode( //expect this to be removed
             Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
@@ -165,7 +165,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThan2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -189,7 +189,7 @@ class ReductiveDecisionTreeReducerTests {
     @Test
     public void shouldSimplifyTheTreeAfterReducing(){
         AtomicConstraint field3IsGreaterThan4 = new IsGreaterThanConstantConstraint(field3, 4, Collections.emptySet());
-        TreeConstraintNode field2GreaterThan2Option = new TreeConstraintNode( //expect this to be removed
+        TreeConstraintNode field2GreaterThanOrEqualTo2Option = new TreeConstraintNode( //expect this to be removed
             Collections.singletonList(isGreaterThanOrEqualTo2),
             Collections.singletonList(
                 new TreeDecisionNode(
@@ -197,7 +197,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThan2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -304,7 +304,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThanOrEqualTo2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -335,7 +335,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThanOrEqualTo2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
         ConstraintNode tree = new TreeConstraintNode(
@@ -374,7 +374,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThanOrEqualTo2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
 
@@ -413,7 +413,7 @@ class ReductiveDecisionTreeReducerTests {
                 )
             ));
         DecisionNode decision1 = new TreeDecisionNode(
-            field2GreaterThanOrEqualTo2Option, //field2 > 2
+            field2GreaterThanOrEqualTo2Option, //field2 >= 2
             new TreeConstraintNode(isLessThan2) //field3
         );
 

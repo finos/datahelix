@@ -51,6 +51,11 @@ public class GeneralTestStep {
         this.state.combinationStrategy = strategy;
     }
 
+    @When("the walker type is {walkerType}")
+    public void setTheCombinationStrategy(GenerationConfig.TreeWalkerType walkerType) {
+        this.state.walkerType = walkerType;
+    }
+
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
         this.state.addConstraint(fieldName, "null", null);

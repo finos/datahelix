@@ -10,7 +10,7 @@ public class NullRestrictionsMergeOperation implements RestrictionMergeOperation
     private static final NullRestrictionsMerger nullRestrictionsMerger = new NullRestrictionsMerger();
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merged) {
+    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         MergeResult<NullRestrictions> mergeResult = nullRestrictionsMerger.merge(
             left.getNullRestrictions(),
             right.getNullRestrictions());
@@ -19,7 +19,7 @@ public class NullRestrictionsMergeOperation implements RestrictionMergeOperation
             return Optional.empty();
         }
 
-        return Optional.of(merged.withNullRestrictions(
+        return Optional.of(merging.withNullRestrictions(
             mergeResult.restrictions,
             FieldSpecSource.fromFieldSpecs(left, right)));
     }
