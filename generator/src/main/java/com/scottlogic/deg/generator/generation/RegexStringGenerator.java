@@ -92,7 +92,7 @@ public class RegexStringGenerator implements StringGenerator {
     public StringGenerator complement() {
         return new RegexStringGenerator(
                 this.automaton.clone().complement(),
-                String.format("COMPLEMENT-OF %s", this.regexRepresentation));
+                String.format("¬(%s)", this.regexRepresentation));
     }
 
     @Override
