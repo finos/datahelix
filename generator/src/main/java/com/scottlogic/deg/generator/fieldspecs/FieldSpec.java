@@ -11,16 +11,7 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        FieldSpecSource.Empty);
+    public static final FieldSpec Empty = new EmptyFieldSpec();
 
     private final SetRestrictions setRestrictions;
     private final NumericRestrictions numericRestrictions;
@@ -295,5 +286,26 @@ public class FieldSpec {
             fieldSpec.stringRestrictions,
             fieldSpec.typeRestrictions
         };
+    }
+
+    private static class EmptyFieldSpec extends FieldSpec {
+        public EmptyFieldSpec() {
+            super(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                FieldSpecSource.Empty);
+        }
+
+        @Override
+        public String toString() {
+            return "<empty>";
+        }
     }
 }
