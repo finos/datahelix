@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.generator.CommandLine.CanGenerate;
+import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
@@ -14,7 +14,6 @@ import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 
 public class IoCContainer extends AbstractModule {
     private final CommandLineBase commandLine;
@@ -53,7 +52,7 @@ public class IoCContainer extends AbstractModule {
     private void bindAllCommandLineTypes() {
         if (this.commandLine instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
-            bind(CanGenerate.class).to(GenerateCommandLine.class);
+            bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
 //        TODO: Apply visualise, generate test cases
 //        if (this.commandLine instanceof VisualiseCommandLine) {

@@ -1,12 +1,13 @@
 package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 
-public class GenerateCommandLine extends CommandLineBase implements CanGenerate {
+public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
     public static final String defaultTreeWalkerType = "cartesian_product";
 
@@ -44,13 +45,54 @@ public class GenerateCommandLine extends CommandLineBase implements CanGenerate 
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 
+    @CommandLine.Option(
+        names = {"-n", "--n", "--max-rows"},
+        description = "Defines the maximum number of rows that should be generated")
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
+    private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+
+    @CommandLine.Option(
+        names = {"-v", "--v", "--validate-profile"},
+        description = "Defines whether to validate the profile (" +
+            true+ ", " +
+            false + ").")
+    private boolean validateProfile;
+
+    @CommandLine.Option(
+        names = {"--trace-constraints"},
+        description = "Defines whether constraint tracing is enabled for the output")
+    private boolean enableTracing;
+
     public boolean shouldDoPartitioning() { return !dontPartitionTrees; }
     public boolean dontOptimise() { return dontOptimise; }
     public File getProfileFile() { return profileFile; }
     public Path getOutputPath() { return outputPath; }
-    public GenerationConfig.DataGenerationType getGenerationType() { return generationType; }
-    public GenerationConfig.CombinationStrategyType getCombinationType() { return combinationType; }
-    public GenerationConfig.TreeWalkerType getWalkerType() { return walkerType; }
+    public boolean isEnableTracing() { return enableTracing; }
+
+    @Override
+    public GenerationConfig.DataGenerationType getGenerationType() {
+        return generationType;
+    }
+
+    @Override
+    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+        return combinationType;
+    }
+
+    @Override
+    public GenerationConfig.TreeWalkerType getWalkerType() {
+        return walkerType;
+    }
+
+    @Override
+    public long getMaxRows() {
+        return maxRows;
+    }
+
+    @Override
+    public boolean getValidateProfile() {
+        return validateProfile;
+    }
 
     @Override
     protected Class<? extends Runnable> getExecutorType() {
