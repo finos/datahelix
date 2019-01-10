@@ -10,8 +10,9 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
+import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.*;
@@ -41,7 +42,8 @@ public class IoCContainer extends AbstractModule {
         bind(Profile.class).toProvider(ProfileProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
-        
+        bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
+
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
@@ -50,12 +52,10 @@ public class IoCContainer extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeWalkerFactory.class).to(RuntimeDecisionTreeWalkerFactory.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
+        bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
+        bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
-
-        // To check
-        bind(ProfileValidator.class).to(NoopProfileValidator.class);
-        bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
     }
 
     private void bindAllCommandLineTypes() {
