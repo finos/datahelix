@@ -35,9 +35,19 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             Stream<Object> validSourcesValues = validSources
                 .stream()
                 .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false));
-            Stream<Object> whitelistAndValidSourcesValues = Stream.concat(whitelist.stream(), validSourcesValues);
+            List<Object> whitelistAndValidSourcesValues = Stream
+                .concat(whitelist.stream(), validSourcesValues)
+                .collect(Collectors.toList());
+
+            if (whitelistAndValidSourcesValues.isEmpty()){
+                System.out.println(String.format(
+                    "No values available for field %s (%s)",
+                    fieldSpec.getFieldSpecSource().getConstraints().iterator().next().getField().name,
+                    fieldSpec.toString()));
+            }
+
             return Collections.singleton(
-                new CannedValuesFieldValueSource(whitelistAndValidSourcesValues.collect(Collectors.toList()))
+                new CannedValuesFieldValueSource(whitelistAndValidSourcesValues)
             );
         }
 
