@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 
 public class RestrictionTest {
 
@@ -26,7 +27,7 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterString() {
-        StringRestrictions restriction = new StringRestrictions();
+        StringRestrictions restriction = new StringRestrictions(new StringConstraints(Collections.emptySet()));
 
         restriction.stringGenerator = new RegexStringGenerator("H(i|ello) World", true);
 

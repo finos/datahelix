@@ -278,7 +278,10 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
-        final StringRestrictions stringRestrictions = new StringRestrictions();
+        final StringRestrictions stringRestrictions = new StringRestrictions(
+            new StringConstraints(negate
+                ? constraint.negate()
+                : constraint));
 
         stringRestrictions.stringGenerator = negate
             ? generator.complement()

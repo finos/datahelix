@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 
 /**
@@ -15,11 +16,15 @@ public class StringRestrictionsMerger {
         if (right == null)
             return new MergeResult<>(left);
 
-        StringGenerator mergedStringBuilder = left.stringGenerator.intersect(right.stringGenerator);
+        StringConstraints constraints = left.getConstraints().intersect(right.getConstraints());
+        StringGenerator mergedStringBuilder = constraints.isContradictory()
+            ? new NoStringsStringGenerator(left.stringGenerator, right.stringGenerator)
+            : left.stringGenerator.intersect(right.stringGenerator);
 
-        StringRestrictions newRestrictions = new StringRestrictions();
+        StringRestrictions newRestrictions = new StringRestrictions(constraints);
         newRestrictions.stringGenerator = mergedStringBuilder;
 
         return new MergeResult<>(newRestrictions);
     }
 }
+

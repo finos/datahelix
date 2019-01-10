@@ -209,7 +209,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                new StringRestrictions() {{
+                new StringRestrictions(new StringConstraints(Collections.emptySet())) {{
                     stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
                 }},
                 fieldSpecSource)
