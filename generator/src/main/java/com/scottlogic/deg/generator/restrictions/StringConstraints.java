@@ -1,9 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringLongerThanConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -68,6 +65,10 @@ public class StringConstraints{
                 : false; //we cannot prove it is contradictory
         }
 
+        if (constraint.getClass().equals(otherConstraint.getClass())){
+            return false; //same type constraints cannot contradict
+        }
+
         if (constraint instanceof IsStringShorterThanConstraint){
             return isContradictoryToMaxLength(((IsStringShorterThanConstraint) constraint).referenceValue, otherConstraint)
                 .orElse(false);
@@ -75,6 +76,11 @@ public class StringConstraints{
 
         if (constraint instanceof IsStringLongerThanConstraint){
             return isContradictoryToMinLength(((IsStringLongerThanConstraint) constraint).referenceValue, otherConstraint)
+                .orElse(false);
+        }
+
+        if (constraint instanceof StringHasLengthConstraint) {
+            return isContradictoryToOfLengthConstraint(((StringHasLengthConstraint) constraint).referenceValue, otherConstraint)
                 .orElse(false);
         }
 
@@ -91,10 +97,6 @@ public class StringConstraints{
             return Optional.of(false);
         }
 
-        if (otherConstraint instanceof IsStringShorterThanConstraint){
-            return Optional.of(false); //2 shorter than constraints cannot produce a non-satisfiable intersection, they cannot contradict
-        }
-
         return Optional.empty();
     }
 
@@ -108,8 +110,26 @@ public class StringConstraints{
             return Optional.of(false);
         }
 
+        return Optional.empty();
+    }
+
+    private Optional<Boolean> isContradictoryToOfLengthConstraint(int requiredLength, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringLongerThanConstraint){
-            return Optional.of(false); //2 longer than constraints cannot produce a non-satisfiable intersection, they cannot contradict
+            int longerThan = ((IsStringLongerThanConstraint) otherConstraint).referenceValue;
+            if (longerThan >= requiredLength){
+                return Optional.of(true); // field1 ofLength 10 & field1 > 10 (i.e field1 >= 11)
+            }
+
+            return Optional.of(false); //technically non-contradictory
+        }
+
+        if (otherConstraint instanceof IsStringShorterThanConstraint){
+            int shorterThan = ((IsStringShorterThanConstraint) otherConstraint).referenceValue;
+            if (requiredLength <= shorterThan){
+                return Optional.of(true); // field1 ofLength 10 & field1 < 10 (i.e field1 <= 9)
+            }
+
+            return Optional.of(false); //technically non-contradictory
         }
 
         return Optional.empty();
@@ -130,6 +150,17 @@ public class StringConstraints{
                 longerThan.field,
                 longerThan.referenceValue + 1, //field1 > 9 --> field1 < 10
                 longerThan.getRules());
+        }
+
+        if (negatedConstraint instanceof StringHasLengthConstraint){
+            StringHasLengthConstraint ofLength = (StringHasLengthConstraint) negatedConstraint;
+
+            //can use either longerThan <length> or shorterThan <length>
+            return new IsStringShorterThanConstraint(
+                ofLength.field,
+                ofLength.referenceValue,
+                ofLength.getRules()
+            );
         }
 
         return null;
