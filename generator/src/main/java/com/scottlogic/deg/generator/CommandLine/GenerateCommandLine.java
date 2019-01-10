@@ -64,6 +64,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private boolean enableTracing;
 
     public boolean shouldDoPartitioning() { return !dontPartitionTrees; }
+    public boolean shouldValidateProfile() { return validateProfile; }
     public boolean dontOptimise() { return dontOptimise; }
     public File getProfileFile() { return profileFile; }
     public Path getOutputPath() { return outputPath; }
