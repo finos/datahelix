@@ -56,8 +56,9 @@ public class TestCaseGenerationResultWriter {
         List<TestCaseDTO> testCaseDtos = result.datasets
             .stream()
             .map(dataset -> new TestCaseDTO(
-                intFormatter.format(dataSetIndex.getAndIncrement()),
-                Collections.singleton(dataset.violation.getDescription())))
+                    intFormatter.format(dataSetIndex.getAndIncrement()),
+                    Collections.singleton(dataset.violatedRule.getDescription()),
+                    Collections.singleton(dataset.violatedConstraint.toString())))
             .collect(Collectors.toList());
         ManifestDTO manifestDto = new ManifestDTO(testCaseDtos);
 
