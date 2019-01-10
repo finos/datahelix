@@ -10,10 +10,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TestCaseGenerationResultWriter {
@@ -28,25 +29,36 @@ public class TestCaseGenerationResultWriter {
     public void writeToDirectory(TestCaseGenerationResult result, Path directoryPath) throws IOException {
         DecimalFormat intFormatter = getDecimalFormat(result.datasets.size());
 
-        List<TestCaseDTO> testCaseDtos = new ArrayList<>();
+        int initialFileNumber = 1;
+        writeManifest(result, directoryPath, intFormatter, initialFileNumber);
 
-        int index = 1;
+        int index = initialFileNumber;
         for (TestCaseDataSet dataset : result.datasets) {
-            String filenameWithoutExtension = intFormatter.format(index);
-
             write(result.profile.fields,
                 dataset.stream(),
                 directoryPath,
-                filenameWithoutExtension);
-
-            testCaseDtos.add(
-                new TestCaseDTO(
-                    filenameWithoutExtension,
-                    Collections.singleton(dataset.violation.getDescription())));
+                intFormatter.format(index));
 
             index++;
         }
 
+        System.out.println("Complete");
+    }
+
+    private void writeManifest(
+        TestCaseGenerationResult result,
+        Path directoryPath,
+        DecimalFormat intFormatter,
+        int initialFileNumber) throws IOException {
+
+        AtomicInteger dataSetIndex = new AtomicInteger(initialFileNumber);
+
+        List<TestCaseDTO> testCaseDtos = result.datasets
+            .stream()
+            .map(dataset -> new TestCaseDTO(
+                intFormatter.format(dataSetIndex.getAndIncrement()),
+                Collections.singleton(dataset.violation.getDescription())))
+            .collect(Collectors.toList());
         ManifestDTO manifestDto = new ManifestDTO(testCaseDtos);
 
         System.out.println("Writing manifest");
@@ -54,8 +66,6 @@ public class TestCaseGenerationResultWriter {
             manifestDto,
             directoryPath.resolve(
                 "manifest.json"));
-
-        System.out.println("Complete");
     }
 
     private void write(ProfileFields fields, Stream<GeneratedObject> dataSet, Path directory, String filenameWithoutExtension) throws IOException {
