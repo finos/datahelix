@@ -313,7 +313,7 @@ class ReductiveRowSpecTests {
                     FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
                         FieldSpecSource.Empty)
-                    .withTypeRestrictions(new NoTypeRestriction(), FieldSpecSource.Empty)
+                    .withTypeRestrictions(new AnyTypeRestriction(), FieldSpecSource.Empty)
                 );
             }},
             new Field("Second Field")
@@ -331,7 +331,7 @@ class ReductiveRowSpecTests {
                     FieldSpec.Empty.withNullRestrictions(
                         new NullRestrictions(),
                         FieldSpecSource.Empty)
-                        .withTypeRestrictions(new NoTypeRestriction(), FieldSpecSource.Empty)
+                        .withTypeRestrictions(new AnyTypeRestriction(), FieldSpecSource.Empty)
                 );
             }},
             new Field("Second Field")

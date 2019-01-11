@@ -1041,6 +1041,18 @@ class ConstraintReducerTest {
         Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(empty()));
     }
 
+    @Test
+    public void shouldReduceConstraintsToNullAllowedFieldSpecOnly(){
+        Field field = new Field("field");
+        AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules());
+
+        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
+            Arrays.asList(ofTypeString, ofTypeString.negate()));
+
+        Assert.assertThat(result.isPresent(), is(true));
+        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
+    }
+
     private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
         rule.rule = "rules";
