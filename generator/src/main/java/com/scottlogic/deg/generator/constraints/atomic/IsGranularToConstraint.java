@@ -60,4 +60,9 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
         return new IsGranularToConstraint(this.field, this.granularity, rules);
     }
+
+    @Override
+    public String toString() {
+        return String.format("granularTo %s", this.granularity.getNumericGranularity());
+    }
 }

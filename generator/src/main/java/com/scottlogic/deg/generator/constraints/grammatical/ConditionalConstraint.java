@@ -45,4 +45,14 @@ public class ConditionalConstraint implements GrammaticalConstraint
                 .flatMap(c -> c.getRules().stream())
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "if (%s) then %s%s",
+            condition,
+            whenConditionIsTrue.toString(),
+            whenConditionIsFalse != null ? " else " + whenConditionIsFalse.toString() : ""
+        );
+    }
 }
