@@ -83,6 +83,11 @@ public class MainConstraintReader implements ConstraintReader {
                     : null);
         }
 
+        // dto.is is not missing, therefore if not present dto.is is null - simple fix
+        if (dto.is == null) {
+            throw new InvalidProfileException("Couldn't recognise is null from DTO: " + dto.is);
+        }
+
         throw new InvalidProfileException("Couldn't interpret constraint");
     }
 }
