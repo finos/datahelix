@@ -400,7 +400,6 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan
        And no data is created
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting shorterThan constraint should be successful
-     Given there is a field foo
        And foo is matching regex /[b]{1}/
        And foo is shorter than 2
      Then the following data should be generated:
@@ -560,9 +559,8 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
        And no data is created
 
 Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
-     Given the following fields exist:
-       | foo   |
-       | price |
+     Given there is a field price
+       And foo is matching regex /[a-d]{1}/
        And there is a constraint:
        """
        {
