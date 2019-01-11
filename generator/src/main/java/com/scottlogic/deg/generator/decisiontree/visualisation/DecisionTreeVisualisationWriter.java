@@ -171,6 +171,9 @@ public class DecisionTreeVisualisationWriter {
 }
 
 class NodeVisualiser {
+
+    private final int MAX_LENGTH_FOR_LABEL = 16816;
+
     String renderNode(String id, DecisionNode node){
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]";
     }
@@ -181,6 +184,12 @@ class NodeVisualiser {
             .sorted(Comparator.comparing(ac -> ac.getField().name))
             .map(AtomicConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
+
+        if (label.length() > MAX_LENGTH_FOR_LABEL) {
+            String suffix = "...";
+            label = label.substring(0, MAX_LENGTH_FOR_LABEL - suffix.length() - 1) + suffix;
+        }
+
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
     }
 
