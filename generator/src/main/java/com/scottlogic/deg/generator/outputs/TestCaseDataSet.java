@@ -10,10 +10,6 @@ public class TestCaseDataSet {
     public final Constraint violatedConstraint;
     private final Stream<GeneratedObject> rows;
 
-    public TestCaseDataSet(RuleInformation violatedRule, Constraint violatedConstraint, GeneratedObject... rows) {
-        this(violatedRule, violatedConstraint, Stream.of(rows));
-    }
-
     public TestCaseDataSet(RuleInformation violatedRule, Constraint violatedConstraint, Stream<GeneratedObject> rows) {
         this.rows = rows;
         this.violatedRule = violatedRule;
