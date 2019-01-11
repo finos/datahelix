@@ -2,14 +2,14 @@ Feature: User can specify that a temporal date is lower than, or the same as, a 
 
 Background:
      Given the generation strategy is full
+       And there is a field foo
+       And foo is of type "temporal"
+       And foo is anything but null
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date
-     Given there is a field foo
-       And foo is before or at 2018-10-10T00:00:00.000
+     Given foo is before or at 2018-10-10T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -26,11 +26,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a month boundary that are less than of the same as a specified date
-     Given there is a field foo
-       And foo is before or at 2018-10-10T00:00:00.000
+     Given foo is before or at 2018-10-10T00:00:00.000
        And foo is after 2018-09-28T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -50,11 +47,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a year boundary that are less than or the same as a specified date
-     Given there is a field foo
-       And foo is before or at 2018-01-03T00:00:00.000
+     Given foo is before or at 2018-01-03T00:00:00.000
        And foo is after 2017-12-25T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -71,11 +65,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a leap year February boundary that are less than or the same as a specified date
-     Given there is a field foo
-       And foo is before or at 2016-03-03T00:00:00.000
+     Given foo is before or at 2016-03-03T00:00:00.000
        And foo is after 2016-02-25T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -90,11 +81,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a non-leap year February boundary that are less than or equal to a specified date
-     Given there is a field foo
-       And foo is before or at 2017-03-03T00:00:00.000
+     Given foo is before or at 2017-03-03T00:00:00.000
        And foo is after 2017-02-25T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -108,11 +96,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values within a given minute that are less than or the same as a specified date and time
-     Given there is a field foo
-       And foo is before or at 2018-10-01T12:00:10.000
+     Given foo is before or at 2018-10-01T12:00:10.000
        And foo is after 2018-10-01T12:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo        |
@@ -130,11 +115,8 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
 
 @ignore
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or the same as a specified date and time
-     Given there is a field foo
-       And foo is before or at 2018-10-01T12:01:05.000
+     Given foo is before or at 2018-10-01T12:01:05.000
        And foo is after 2018-10-01T12:00:57.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo        |
@@ -150,11 +132,8 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
 
 @ignore
 Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across an hour boundary that are less than or the same as a specified date and time
-     Given there is a field foo
-       And foo is before or at 2018-10-01T13:00:05.000
+     Given foo is before or at 2018-10-01T13:00:05.000
        And foo is after 2018-10-01T12:59:57.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tT"
      Then the following data should be generated:
        | foo        |
@@ -170,12 +149,9 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date and a less than or equal to a second specified date
-     Given there is a field foo
-       And foo is before 2018-10-10T00:00:00.000
+     Given foo is before 2018-10-10T00:00:00.000
        And foo is before or at 2018-10-09T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -191,12 +167,9 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date and a less than a second specified date
-     Given there is a field foo
-       And foo is before or at 2018-10-10T00:00:00.000
+     Given foo is before or at 2018-10-10T00:00:00.000
        And foo is before 2018-10-09T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |
@@ -211,12 +184,9 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
 
 @ignore
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date and a less than or the same as a second specified date
-     Given there is a field foo
-       And foo is before or at 2018-10-10T00:00:00.000
+     Given foo is before or at 2018-10-10T00:00:00.000
        And foo is before or at 2018-10-09T00:00:00.000
        And foo is after 2018-10-01T00:00:00.000
-       And foo is anything but null
-       And foo is of type "temporal"
        And foo is formatted as "%tF"
      Then the following data should be generated:
        | foo          |

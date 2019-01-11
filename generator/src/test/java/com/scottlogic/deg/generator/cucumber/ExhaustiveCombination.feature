@@ -330,10 +330,15 @@ Scenario: Running an exhaustive combination strategy with a numeric and a tempor
       | foo3 |
       | foo4 |
       | foo5 |
+    And foo1 is of type "numeric"
     And foo1 is anything but null
+    And foo2 is of type "numeric"
     And foo2 is anything but null
+    And foo3 is of type "numeric"
     And foo3 is anything but null
+    And foo4 is of type "numeric"
     And foo4 is anything but null
+    And foo5 is of type "numeric"
     And foo5 is anything but null
     And foo1 is in set:
       | 1 |
@@ -391,8 +396,11 @@ Scenario: Running an exhaustive combination strategy across three fields with fi
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is of type "numeric"
        And foo1 is anything but null
+       And foo2 is of type "numeric"
        And foo2 is anything but null
+       And foo3 is of type "numeric"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -546,8 +554,11 @@ Scenario: Running an exhaustive combination strategy across fields with an uneve
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is of type "numeric"
        And foo1 is anything but null
+       And foo2 is of type "numeric"
        And foo2 is anything but null
+       And foo3 is of type "numeric"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -584,8 +595,11 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is of type "numeric"
        And foo1 is anything but null
+       And foo2 is of type "numeric"
        And foo2 is anything but null
+       And foo3 is of type "numeric"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -612,8 +626,11 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is anything but of type "temporal"
        And foo1 is anything but null
+       And foo2 is anything but of type "temporal"
        And foo2 is anything but null
+       And foo3 is anything but of type "temporal"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -649,8 +666,11 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is of type "numeric"
        And foo1 is anything but null
+       And foo2 is of type "string"
        And foo2 is anything but null
+       And foo3 is anything but of type "temporal"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -703,8 +723,11 @@ Scenario: Running an exhaustive combination strategy that includes an "if" state
        | foo1 |
        | foo2 |
        | foo3 |
+       And foo1 is of type "string"
        And foo1 is anything but null
+       And foo2 is of type "numeric"
        And foo2 is anything but null
+       And foo3 is of type "string"
        And foo3 is anything but null
        And foo1 is in set:
          | "alpha" |

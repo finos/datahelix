@@ -2,9 +2,10 @@ Feature: User can specify that a string length is lower than, a specified number
 
 Background:
      Given the generation strategy is full
+      And there is a field foo
+      And foo is of type "string"
 
 Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is matching regex /[x]{0,5}/
      Then the following data should not be included in what is generated:
@@ -13,64 +14,54 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
        | "xxxxxx" |
 
 Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than 0
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than -1
      Then I am presented with an error message
        And no data is created
 
 @ignore
 Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than 1.1
      Then I am presented with an error message
        And no data is created
 
 @ignore
 Scenario: Running a 'shorterThan' request using a number (comma seperated) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than 1,000
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than "5"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (a-z character) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than "five"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (A-Z character) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than "FIVE"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (A-Z character) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than "FIVE"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (special character) to specify a the length of a generated string should fail with an error message
-     Given there is a field foo
        And foo is shorter than "!"
      Then I am presented with an error message
        And no data is created
 
 @ignore
 Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated numeric type field should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is equal to 1234
        And foo is of type "numeric"
@@ -81,7 +72,6 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
 
 @ignore
 Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated temporal type field should be successful
-     Given there is a field foo
        And foo is shorter than 25
        And foo is equal to 2010-01-01T00:00:00.000
        And foo is of type "temporal"
@@ -90,19 +80,16 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
        | 2010-01-01T00:00:00.000 |
 
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
-     Given there is a field foo
        And foo is shorter than ""
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
-     Given there is a field foo
        And foo is shorter than null
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo constraint should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is equal to "1234"
      Then the following data should be generated:
@@ -112,14 +99,12 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo 
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a contradicting equalTo constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 5
        And foo is equal to "12345"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is in set:
        | "1234" |
@@ -132,7 +117,6 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is in set:
        | "12345"  |
@@ -141,7 +125,6 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a null constraint should be successful
-     Given there is a field foo
        And foo is shorter than 5
        And foo is null
      Then the following data should be generated:
@@ -149,7 +132,6 @@ Scenario: Running a 'shorterThan' request alongside a null constraint should be 
        | null |
 
 Scenario: Running a 'shorterThan' request alongside an ofType = string should be successful
-     Given there is a field foo
        And foo is shorter than 2
        And foo is of type "string"
        And foo is containing regex /[a]{1}/
@@ -160,7 +142,6 @@ Scenario: Running a 'shorterThan' request alongside an ofType = string should be
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside an ofType = numeric should fail with an error message
-     Given there is a field foo
        And foo is shorter than 2
        And foo is of type "numeric"
      Then I am presented with an error message
@@ -168,14 +149,12 @@ Scenario: Running a 'shorterThan' request alongside an ofType = numeric should f
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside an ofType = temporal should fail with an error message
-     Given there is a field foo
        And foo is shorter than 2
        And foo is of type "temporal"
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
-     Given there is a field foo
        And foo is shorter than 3
        And foo is matching regex /[☠]{2}/
      Then the following data should be generated:
@@ -184,21 +163,18 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting matching
        | "☠☠" |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
-     Given there is a field foo
        And foo is shorter than 1
        And foo is matching regex /[💾]{2}/
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 1
        And foo is containing regex /[🍩]{2}/
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength constraint should be successful
-     Given there is a field foo
        And foo is shorter than 3
        And foo is of length 2
        And foo is matching regex /[♀]{0,2}/
@@ -208,14 +184,12 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength
        | "♀♀" |
 
 Scenario: Running a 'shorterThan' request alongside a contradicting ofLength (too short) constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 3
        And foo is of length 10
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting longerThan constraint should be successful
-     Given there is a field foo
        And foo is shorter than 3
        And foo is longer than 1
        And foo is matching regex /[♀]{0,3}/
@@ -225,14 +199,12 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
        | "♀♀" |
 
 Scenario: Running a 'shorterThan' request alongside a contradicting longerThan (too long) constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 3
        And foo is longer than 10
      Then I am presented with an error message
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterThan constraint should be successful
-     Given there is a field foo
        And foo is shorter than 4
        And foo is shorter than 3
        And foo is matching regex /[♀]{0,5}/
@@ -247,7 +219,6 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 10
        And foo is greater than 1
      Then I am presented with an error message
@@ -256,7 +227,6 @@ Scenario: Running a 'shorterThan' request alongside a greaterThan constraint sho
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 10
        And foo is greater than or equal to 3
      Then I am presented with an error message
@@ -264,7 +234,6 @@ Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo const
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a lessThan constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 10
        And foo is less than 15
      Then I am presented with an error message
@@ -273,7 +242,6 @@ Scenario: Running a 'shorterThan' request alongside a lessThan constraint should
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should fail with an error message
-     Given there is a field foo
        And foo is shorter than 10
        And foo is less than or equal to 19
      Then I am presented with an error message
@@ -281,7 +249,6 @@ Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constrai
 
 @ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
-     Given there is a field foo
        And there is a constraint:
        """
        { "anyOf": [
@@ -301,7 +268,6 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
 
 @ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf constraint should be successful
-     Given there is a field foo
        And there is a constraint:
        """
        { "allOf": [

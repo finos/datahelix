@@ -1,11 +1,11 @@
 Feature: User can specify that a field must be a valid ISIN (International Securities Identification Number)
 
-  Background:
-    Given the generation strategy is full
-    And there is a field foo
+Background:
+     Given the generation strategy is full
+       And there is a field foo
+       And foo is of type "string"
 
-
-  Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should be successful
+Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should be successful
     Given foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634946"  |
@@ -100,8 +100,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
-
   # COMBINATION OF CONSTRAINTS #
 
   Scenario: Running an 'aValid' request alongside a non-contradicting equalTo constraint should be successful
@@ -112,14 +110,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | null           |
       | "GB0002634946" |
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is equal to "GB00026349"
     Then I am presented with an error message
     And no data is created
-
 
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
     Given foo is a valid "ISIN"
@@ -129,7 +125,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo            |
       | null           |
       | "GB0002634946" |
-
 
   @ignore
   Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should fail with an error message
@@ -146,45 +141,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a null constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is null
     Then I am presented with an error message
     And no data is created
-
-
-  Scenario: Running an 'aValid' request alongside an ofType = string should be successful
-    Given foo is a valid "ISIN"
-    And foo is of type "string"
-    And foo is in set:
-      | "GB0002634946" |
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "GB0002634946" |
-
-
-  @ignore
-  Scenario: Running an 'aValid' request alongside an ofType = numeric should fail with an error message
-    Given foo is a valid "ISIN"
-    And foo is of type "numeric"
-    And foo is in set:
-      | "GB0002634946" |
-    Then I am presented with an error message
-    And no data is created
-
-
-  @ignore
-  Scenario: Running an 'aValid' request alongside an ofType = temporal should fail with an error message
-    Given foo is a valid "ISIN"
-    And foo is of type "temporal"
-    And foo is in set:
-      | "GB0002634946" |
-    Then I am presented with an error message
-    And no data is created
-
 
   @ignore @bug
   Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should be successful
@@ -217,7 +179,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | /[A-Z0-9]{13}/      |
       | /[A-Z0-9]{11}/      |
 
-
   @ignore @bug
   Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should be successful
     Given foo is a valid "ISIN"
@@ -238,7 +199,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | /[A-Z]{2}[0-9]{9}/  |
       | /[A-Z0-9]{11}/      |
 
-
   Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is containing regex <regex>
@@ -254,7 +214,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | /GBZ/               |
       | /0002634947/        |
 
-
   @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradiction ofLength constraint should be successful
     Given foo is a valid "ISIN"
@@ -264,7 +223,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then the following data should be generated:
       | foo            |
       | "GB0002634946" |
-
 
   Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should fail with an error message
     Given foo is a valid "ISIN"
@@ -278,7 +236,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     | 1      |
     | 0      |
     | 9999   |
-
 
   @ignore @bug
   Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should be successful
@@ -301,7 +258,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should be successful
     Given foo is a valid "ISIN"
@@ -311,13 +267,11 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then the following data should be generated:
       | "GB0002634946" |
 
-
   Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is shorter than 12
     Then I am presented with an error message
     And no data is created
-
 
   @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful
@@ -328,14 +282,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then the following data should be generated:
       | "GB0002634946" |
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a greaterThan constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is greater than 0
     Then I am presented with an error message
     And no data is created
-
 
   @ignore
   Scenario: Running an 'aValid' request alongside a greaterThanOrEqualTo constraint should fail with an error message
@@ -344,14 +296,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a lessThan constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is less than 13
     Then I am presented with an error message
     And no data is created
-
 
   @ignore
   Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should fail with an error message
@@ -360,14 +310,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a granularTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is granular to 1
     Then I am presented with an error message
     And no data is created
-
 
   @ignore
   Scenario: Running an 'aValid' request alongside an after constraint should fail with an error message
@@ -376,14 +324,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside an afterOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is after or at 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
-
 
   @ignore
   Scenario: Running an 'aValid' request alongside a before constraint should fail with an error message
@@ -392,14 +338,12 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then I am presented with an error message
     And no data is created
 
-
   @ignore
   Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is before or at 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
-
 
   @ignore @bug
   Scenario: Running an 'aValid' request with a not constraint should be successful
@@ -417,7 +361,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     And the following data should not be included in what is generated:
       | foo            |
       | "GB0002634946" |
-
 
   Scenario: Running an 'aValid' request as part of a non-contradicting anyOf constraint should be successful
     Given there is a constraint:
@@ -442,7 +385,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634947" |
       | "333"          |
 
-
   Scenario: Running an 'aValid' request as part of a non-contradicting allOf constraint should be successful
     Given there is a constraint:
       """
@@ -455,7 +397,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo            |
       | null           |
       | "GB0002634946" |
-
 
   @ignore
   Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should fail with an error message
