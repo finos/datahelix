@@ -1025,6 +1025,21 @@ class ConstraintReducerTest {
         Assert.assertThat("Required object has a set restriction",
             requiredObjects.iterator().next().getSetRestrictions(), not(nullValue()));
     }
+    
+    @Test
+    public void shouldReduceConstraintsCorrectlyWhereOneIsViolated(){
+        Field field = new Field("field");
+        AtomicConstraint violatedConstraint = new ViolatedAtomicConstraint(new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules()).negate());
+        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100, rules());
+        AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"), rules());
+
+        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
+            Arrays.asList(violatedConstraint, ofLengthConstraint, matchesRegexConstraint));
+
+        Assert.assertThat(result.isPresent(), is(true));
+        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.STRING)));
+        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(empty()));
+    }
 
     private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
