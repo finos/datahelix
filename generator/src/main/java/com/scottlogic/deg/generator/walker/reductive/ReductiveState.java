@@ -12,7 +12,7 @@ public class ReductiveState {
 
     private final ProfileFields fields;
     private final Map<Field, FixedField> fixedFields;
-    private final FixedField lastFixedField;
+    public final FixedField lastFixedField;
 
     public ReductiveState(ProfileFields fields){
         this(fields, new HashMap<>(), null);

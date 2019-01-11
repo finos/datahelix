@@ -10,6 +10,10 @@ import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
     private Instant startedGenerating;
@@ -74,6 +78,30 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
                 "%d: Unable to step further %s ",
                 reductiveState.getFixedFieldsExceptLast().size(),
                 reductiveState.toString(true)));
+    }
+
+    @Override
+    public void noValuesForField(ReductiveState reductiveState) {
+        System.out.println(
+            String.format(
+                "%d: No values for field %s: %s ",
+                reductiveState.getFixedFieldsExceptLast().size(),
+                reductiveState.lastFixedField.field.name,
+                reductiveState.toString(true)));
+    }
+
+    @Override
+    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {
+        List<Map.Entry<Field, FieldSpec>> emptyFieldSpecs = fieldSpecsPerField.entrySet()
+            .stream()
+            .filter(entry -> entry.getValue() == FieldSpec.Empty)
+            .collect(Collectors.toList());
+
+        System.out.println(
+            String.format(
+                "%d: Unable to emit row, some FieldSpec's are Empty: %s",
+                reductiveState.getFixedFieldsExceptLast().size(),
+                Objects.toString(emptyFieldSpecs)));
     }
 }
 
