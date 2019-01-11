@@ -46,7 +46,7 @@ public class GenerationEngine {
             .map(violatedProfile -> new TestCaseDataSet(
                 violatedProfile.ruleBeingViolated.rule,
                 violatedProfile.constraintBeingViolated,
-                generate(
+                () -> generate(
                     violatedProfile,
                     config))
             );
