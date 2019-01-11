@@ -2,6 +2,7 @@ package com.scottlogic.deg.schemas.v3;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.util.Collection;
 
@@ -9,8 +10,6 @@ import java.util.Collection;
 public class ConstraintDTO {
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
-
-    public String is;
 
     /** the ID of the field this constraint constrains, if relevant */
     public String field;
@@ -40,4 +39,14 @@ public class ConstraintDTO {
     /** the constraint to apply if 'if_' is false */
     @JsonProperty("else")
     public ConstraintDTO else_;
+
+    public String is;
+
+    public boolean hasIsConstraintBeenSet = false;
+
+    @JsonSetter("is")
+    public void setIs(String is) {
+        this.is = is;
+        this.hasIsConstraintBeenSet = true;
+    }
 }

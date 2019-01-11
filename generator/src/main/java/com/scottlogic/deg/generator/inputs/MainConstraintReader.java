@@ -27,6 +27,10 @@ public class MainConstraintReader implements ConstraintReader {
             throw new InvalidProfileException("Constraint is null");
         }
 
+        if (dto.hasIsConstraintBeenSet && dto.is == null) {
+            throw new InvalidProfileException("Couldn't recognise is null from DTO: " + dto.is);
+        }
+
         if (dto.is != null) {
             ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
 
@@ -81,11 +85,6 @@ public class MainConstraintReader implements ConstraintReader {
                         fields,
                         rules)
                     : null);
-        }
-
-        // dto.is is not missing, therefore if not present dto.is is null - simple fix
-        if (dto.is == null) {
-            throw new InvalidProfileException("Couldn't recognise is null from DTO: " + dto.is);
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
