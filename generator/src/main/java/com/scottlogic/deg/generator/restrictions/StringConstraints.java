@@ -116,7 +116,7 @@ public class StringConstraints{
     private Optional<Boolean> isContradictoryToOfLengthConstraint(int requiredLength, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringLongerThanConstraint){
             int longerThan = ((IsStringLongerThanConstraint) otherConstraint).referenceValue;
-            if (longerThan >= requiredLength){
+            if (requiredLength <= longerThan){
                 return Optional.of(true); // field1 ofLength 10 & field1 > 10 (i.e field1 >= 11)
             }
 
@@ -125,7 +125,7 @@ public class StringConstraints{
 
         if (otherConstraint instanceof IsStringShorterThanConstraint){
             int shorterThan = ((IsStringShorterThanConstraint) otherConstraint).referenceValue;
-            if (requiredLength <= shorterThan){
+            if (requiredLength >= shorterThan){
                 return Optional.of(true); // field1 ofLength 10 & field1 < 10 (i.e field1 <= 9)
             }
 
