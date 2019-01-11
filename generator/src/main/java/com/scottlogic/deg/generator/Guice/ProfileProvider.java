@@ -12,19 +12,19 @@ import java.io.IOException;
 
 public class ProfileProvider implements Provider<Profile> {
     private final GenerateCommandLine commandLine;
-    private final ProfileValidator validator;
+    private final ProfileReader profileReader;
     private Profile profile;
 
     @Inject
-    public ProfileProvider(GenerateCommandLine commandLine, ProfileValidator validator) {
+    public ProfileProvider(GenerateCommandLine commandLine, ProfileReader profileReader) {
         this.commandLine = commandLine;
-        this.validator = validator;
+        this.profileReader = profileReader;
     }
 
     @Override
     public Profile get() {
         try {
-            profile = new ProfileReader(validator).read(commandLine.getProfileFile().toPath());
+            profile = this.profileReader.read(commandLine.getProfileFile().toPath());
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }

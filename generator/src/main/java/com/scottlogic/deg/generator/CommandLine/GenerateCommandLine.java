@@ -41,7 +41,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(names = {"-w", "--w"},
         description = "Determines the tree walker that should be used.",
-        defaultValue = defaultTreeWalkerType,
+        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 

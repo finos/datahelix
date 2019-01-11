@@ -15,6 +15,5 @@ public abstract class CommandLineBase implements Runnable {
         task.run();
     }
 
-    //TODO: Investigate ways of getting Class<?> without the need for this method
     protected abstract Class<? extends Runnable> getExecutorType();
 }

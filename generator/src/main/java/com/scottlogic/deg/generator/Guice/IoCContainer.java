@@ -20,6 +20,8 @@ import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
+import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 public class IoCContainer extends AbstractModule {
     private final CommandLineBase commandLine;
@@ -54,8 +56,10 @@ public class IoCContainer extends AbstractModule {
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
+        bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
+        bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
     }
 
     private void bindAllCommandLineTypes() {
@@ -63,9 +67,5 @@ public class IoCContainer extends AbstractModule {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
-//        TODO: Apply visualise, generate test cases
-//        if (this.commandLine instanceof VisualiseCommandLine) {
-//            bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.commandLine);
-//        }
     }
 }
