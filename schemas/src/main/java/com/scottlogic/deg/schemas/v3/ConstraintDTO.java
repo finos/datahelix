@@ -1,5 +1,6 @@
 package com.scottlogic.deg.schemas.v3;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -42,6 +43,7 @@ public class ConstraintDTO {
 
     public String is;
 
+    @JsonIgnore
     public boolean hasIsConstraintBeenSet = false;
 
     @JsonSetter("is")
