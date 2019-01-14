@@ -41,7 +41,6 @@ public class IoCContainer extends AbstractModule {
         bind(Profile.class).toProvider(ProfileProvider.class);
         bind(FileOutputTarget.class).toProvider(FileOutputTargetProvider.class);
         bind(GenerationConfig.class).toProvider(GenerationConfigProvider.class);
-        bind(Profile.class).toProvider(ProfileProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
