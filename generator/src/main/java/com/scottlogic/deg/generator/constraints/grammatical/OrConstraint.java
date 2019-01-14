@@ -46,4 +46,14 @@ public class OrConstraint implements GrammaticalConstraint {
             .flatMap(c -> c.getRules().stream())
             .collect(Collectors.toSet());
     }
+
+    @Override
+    public String toString() {
+        return String.join(
+            " or ",
+            this.subConstraints
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet()));
+    }
 }

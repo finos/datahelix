@@ -20,7 +20,7 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
 
     @Override
     public String toDotLabel() {
-        return violatedConstraint.toDotLabel();
+        return "Violated: " + violatedConstraint.toDotLabel();
     }
 
     @Override

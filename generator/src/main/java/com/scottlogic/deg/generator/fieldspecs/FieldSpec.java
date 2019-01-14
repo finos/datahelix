@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -184,13 +185,15 @@ public class FieldSpec {
 
     @Override
     public String toString() {
-        return String.join(
-            " & ",
-            Arrays
-                .stream(getPropertiesToCompare(this))
-                .filter(Objects::nonNull)
-                .map(Object::toString)
-                .collect(Collectors.toList()));
+        List<String> propertyStrings = Arrays
+            .stream(getPropertiesToCompare(this))
+            .filter(Objects::nonNull)
+            .map(Object::toString)
+            .collect(Collectors.toList());
+
+        if (propertyStrings.isEmpty()) { return "<empty>"; }
+
+        return String.join(" & ", propertyStrings);
     }
 
     public FormatRestrictions getFormatRestrictions() {
