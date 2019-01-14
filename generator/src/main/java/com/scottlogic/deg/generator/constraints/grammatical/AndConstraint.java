@@ -47,4 +47,14 @@ public class AndConstraint implements GrammaticalConstraint
             .flatMap(c -> c.getRules().stream())
             .collect(Collectors.toSet());
     }
+
+    @Override
+    public String toString() {
+        return String.join(
+            " and ",
+            this.subConstraints
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet()));
+    }
 }
