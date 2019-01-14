@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,16 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new EmptyFieldSpec();
+    public static final FieldSpec Empty = new FieldSpec(null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        FieldSpecSource.Empty);
 
     private final SetRestrictions setRestrictions;
     private final NumericRestrictions numericRestrictions;
@@ -175,13 +185,15 @@ public class FieldSpec {
 
     @Override
     public String toString() {
-        return String.join(
-            " & ",
-            Arrays
-                .stream(getPropertiesToCompare(this))
-                .filter(Objects::nonNull)
-                .map(Object::toString)
-                .collect(Collectors.toList()));
+        List<String> propertyStrings = Arrays
+            .stream(getPropertiesToCompare(this))
+            .filter(Objects::nonNull)
+            .map(Object::toString)
+            .collect(Collectors.toList());
+
+        if (propertyStrings.isEmpty()) { return "<empty>"; }
+
+        return String.join(" & ", propertyStrings);
     }
 
     public FormatRestrictions getFormatRestrictions() {
@@ -286,26 +298,5 @@ public class FieldSpec {
             fieldSpec.stringRestrictions,
             fieldSpec.typeRestrictions
         };
-    }
-
-    private static class EmptyFieldSpec extends FieldSpec {
-        public EmptyFieldSpec() {
-            super(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                FieldSpecSource.Empty);
-        }
-
-        @Override
-        public String toString() {
-            return "<empty>";
-        }
     }
 }
