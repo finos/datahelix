@@ -110,12 +110,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
   Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is equal to "GB00026349"
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
     Given foo is a valid "ISIN"
@@ -126,7 +126,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
   Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is in set:
@@ -138,15 +137,16 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "400002634946"  |
       | "GBP002634946"  |
       | "GB000263494z"  |
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
-  @ignore
   Scenario: Running an 'aValid' request alongside a null constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is null
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
   @ignore @bug
   Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should be successful
@@ -155,8 +155,11 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     Then the following data should be included in what is generated:
       | foo            |
       | "GB0002634946" |
+      | null           |
+
     Examples:
       | regex               |
+      | null                |
       | /GB0002634946/      |
       | /[A-Z]{2}[0-9]{10}/ |
       | /[A-Z0-9]{12}/      |

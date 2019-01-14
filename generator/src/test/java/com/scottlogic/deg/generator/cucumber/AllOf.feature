@@ -55,6 +55,9 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
 @ignore
 Scenario: Running an 'allOf' request that contains an invalid nested anyOf request should fail with an error message
      Given there is a field foo
+       And foo is in set:
+        |   5   |
+        | "ack" |
        And there is a constraint:
        """
          { "allOf": [
@@ -62,11 +65,13 @@ Scenario: Running an 'allOf' request that contains an invalid nested anyOf reque
              {"field": "foo", "is": "matchingRegex", "value": "[a-z]{3}" },
              {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" }
            ]},
-           { "field": "foo", "is": "ofType", "value": "numeric" }
+           { "field": "foo", "is": "ofType", "value": "numeric" },
+           { "field": "foo", "is": "equalTo", "value": 5}
          ]}
        """
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       |  5   |
 
 Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
      Given there is a field foo
