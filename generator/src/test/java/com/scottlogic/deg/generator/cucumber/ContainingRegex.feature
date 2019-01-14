@@ -112,7 +112,6 @@ Scenario: Running a 'containingRegex' request that includes basic punctuation ch
        | "-"  |
        | "."  |
 
-@ignore
 Scenario: Running a 'containingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
      Given there is a field foo
        And foo is containing regex /[あ-げ]{1}/
@@ -243,13 +242,13 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting equa
        | null  |
        | "aaa" |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a contradicting equalTo constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a contradicting equalTo constraint should produce null
      Given there is a field foo
        And foo is containing regex /[a]{3}/
        And foo is equal to "bbb"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 Scenario: Running a 'containingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given there is a field foo
@@ -263,17 +262,17 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting inSe
        | "a"   |
        | "aaa" |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a contradicting inSet constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a contradicting inSet constraint should produce null
      Given there is a field foo
        And foo is containing regex /[a]{1,3}/
        And foo is in set:
-         | "b" |
+         | "b"   |
          | "bbb" |
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+         | foo  |
+         | null |
 
-Scenario: Running a 'containingRegex' request alongside a null constraint should ber successful
+Scenario: Running a 'containingRegex' request alongside a null constraint should be successful
      Given there is a field foo
        And foo is containing regex /[a]{1,3}/
        And foo is null
@@ -331,87 +330,71 @@ Scenario: Running a 'containingRegex' request alongside a contradicting ofLength
      Then I am presented with an error message
        And no data is created
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a greaterThan constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a greaterThan constraint should produce null
      Given there is a field foo
        And foo is containing regex /[b]{2}/
        And foo is greater than 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a greaterThan constraint should fail with an error message
-     Given there is a field foo
-       And foo is containing regex /[b]{2}/
-       And foo is greater than 1
-     Then I am presented with an error message
-       And no data is created
-
-@ignore
-Scenario: Running a 'containingRegex' request alongside a greaterThanOrEqualTo constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a greaterThanOrEqualTo constraint should produce null
      Given there is a field foo
        And foo is containing regex /[b]{2}/
        And foo is greater than or equal to 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+        | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a lessThan constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a lessThan constraint should produce null
      Given there is a field foo
        And foo is containing regex /[b]{2}/
        And foo is less than 3
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a lessThanOrEqualTo constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a lessThanOrEqualTo constraint should produce null
      Given there is a field foo
        And foo is containing regex /[b]{2}/
        And foo is less than or equal to 3
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
 @ignore
 Scenario: Running a 'containingRegex' request alongside a granularTo constraint should fail with an error message
      Given there is a field foo
        And foo is containing regex /[0-1]{2}/
        And foo is granular to 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+        | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a after constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a after constraint should produce null
      Given there is a field foo
        And foo is containing regex /[0-z]{23}/
        And foo is after 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a afterOrAt constraint should fail with an error message
+
+Scenario: Running a 'containingRegex' request alongside a afterOrAt constraint should produce null
      Given there is a field foo
        And foo is containing regex /[0-z]{23}/
        And foo is after or at 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a before constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a before constraint should produce null
      Given there is a field foo
        And foo is containing regex /[0-z]{23}/
        And foo is before 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+        | null |
 
-@ignore
-Scenario: Running a 'containingRegex' request alongside a beforeOrAt constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a beforeOrAt constraint should produce null
      Given there is a field foo
        And foo is containing regex /[0-z]{23}/
        And foo is before or at 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | null |
 
-@ignore
 Scenario: Running a 'containingRegex' request with a not constraint should be successful
      Given there is a field foo
        And foo is anything but containing regex /[0-1]{1}/
