@@ -367,7 +367,6 @@ Scenario: Running an 'equalTo' request that includes a null entry ("") character
        | null |
        | ""   |
 
-@ignore
 Scenario: Running an 'equalTo' request that includes a null entry (null) characters should fail with an error message
      Given there is a field foo
        And there is a constraint:
