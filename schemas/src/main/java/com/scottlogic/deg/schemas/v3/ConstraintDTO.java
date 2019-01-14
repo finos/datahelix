@@ -1,9 +1,7 @@
 package com.scottlogic.deg.schemas.v3;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
+import com.scottlogic.deg.schemas.common.InvalidSchemaException;
 
 import java.util.Collection;
 
@@ -41,14 +39,22 @@ public class ConstraintDTO {
     @JsonProperty("else")
     public ConstraintDTO else_;
 
-    public String is;
+    private String is;
 
     @JsonIgnore
-    public boolean hasIsConstraintBeenSet = false;
+    private boolean hasIsConstraintBeenSet = false;
 
     @JsonSetter("is")
     public void setIs(String is) {
         this.is = is;
         this.hasIsConstraintBeenSet = true;
+    }
+
+    @JsonGetter("is")
+    public String getIs() throws InvalidSchemaException {
+        if(this.hasIsConstraintBeenSet && this.is == null) {
+            throw new InvalidSchemaException("Cannot recognise is null");
+        }
+        return this.is;
     }
 }

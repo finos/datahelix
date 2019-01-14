@@ -19,7 +19,7 @@ public class ConstraintDTOBuilder {
     }
 
     public ConstraintDTOBuilder appendIs (String constraintName){
-        this.constraintDTO.is = constraintName;
+        this.constraintDTO.setIs(constraintName);
         return this;
     }
 

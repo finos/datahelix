@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.schemas.common.InvalidSchemaException;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.util.Set;
@@ -27,15 +28,13 @@ public class MainConstraintReader implements ConstraintReader {
             throw new InvalidProfileException("Constraint is null");
         }
 
-        if (dto.hasIsConstraintBeenSet && dto.is == null) {
-            throw new InvalidProfileException("Couldn't recognise is null from DTO: " + dto.is);
-        }
+        String isConstraintValue = readIsConstraint(dto);
 
-        if (dto.is != null) {
-            ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(dto.is);
+        if (isConstraintValue != null) {
+            ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode(isConstraintValue);
 
             if (subReader == null) {
-                throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
+                throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + isConstraintValue);
             }
 
             try {
@@ -88,5 +87,14 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
+    }
+
+    private String readIsConstraint(ConstraintDTO dto) throws InvalidProfileException {
+        try {
+            return dto.getIs();
+        }
+        catch (InvalidSchemaException e) {
+            throw new InvalidProfileException(e);
+        }
     }
 }
