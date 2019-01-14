@@ -26,7 +26,7 @@ public class ProfileSerialiserTests {
         profile.rules = Arrays.asList(
             createConstraintAsRule(c -> {
                 c.field = "typecode";
-                c.is = "ofType";
+                c.setIs("ofType");
                 c.value = "string";
             }),
             createConstraintAsRule(c -> {
@@ -35,23 +35,23 @@ public class ProfileSerialiserTests {
                         createConstraint(cNot -> {
                             cNot.not = createConstraint(c1 -> {
                                 c1.field = "typecode";
-                                c1.is = "null";
+                                c1.setIs("null");
                             });
                         }),
                         createConstraint(c1 -> {
                             c1.field = "typecode";
-                            c1.is = "equalTo";
+                            c1.setIs("equalTo");
                             c1.value = "type_001";
                         }));
                 });
                 c.then = createConstraint(then -> {
                     then.field = "price";
-                    then.is = "greaterThanOrEqualTo";
+                    then.setIs("greaterThanOrEqualTo");
                     then.value = 42.1;
                 });
                 c.else_ = createConstraint(elseCondition -> {
                     elseCondition.field = "price";
-                    elseCondition.is = "lessThan";
+                    elseCondition.setIs("lessThan");
                     elseCondition.value = 42.1;
                 });
             }));

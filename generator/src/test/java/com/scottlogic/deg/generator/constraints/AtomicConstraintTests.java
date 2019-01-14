@@ -47,7 +47,7 @@ public class AtomicConstraintTests {
 
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
-        stringValueDto.is = AtomicConstraintType.ISEQUALTOCONSTANT.toString();
+        stringValueDto.setIs(AtomicConstraintType.ISEQUALTOCONSTANT.toString());
         stringValueDto.value = "value";
 
         ConstraintDTO numberValueDto = new ConstraintDTO();

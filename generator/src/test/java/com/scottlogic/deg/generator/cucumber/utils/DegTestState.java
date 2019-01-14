@@ -84,7 +84,7 @@ public class DegTestState {
     private ConstraintDTO createConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = new ConstraintDTO();
         dto.field = fieldName;
-        dto.is = this.extractConstraint(constraintName);
+        dto.setIs(this.extractConstraint(constraintName));
         if (value != null){
             if (value instanceof Collection){
                 dto.values = (Collection<Object>) value;
