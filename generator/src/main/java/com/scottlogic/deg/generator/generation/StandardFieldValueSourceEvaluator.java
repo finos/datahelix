@@ -8,13 +8,12 @@ import com.scottlogic.deg.generator.restrictions.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
 
     public Set<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
-        
+
         if (mustBeNull(fieldSpec)){
             return Collections.singleton(nullOnlySource());
         }
@@ -23,12 +22,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return getWhitelistSources(fieldSpec);
         }
 
-
-        Set<FieldValueSource> validSources = new HashSet<>();
-        if (mayBeNull(fieldSpec)){
-            validSources.add(nullOnlySource());
-        }
-
+        Set<FieldValueSource> validSources = new LinkedHashSet<>();
         if (fieldSpec.getMustContainRestriction() != null) {
             applyMustConstrainRestrictionToValidSources(validSources, fieldSpec);
         }
@@ -89,6 +83,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             validSources.add(new TemporalFieldValueSource(
                 restrictions != null ? restrictions : new DateTimeRestrictions(),
                 getBlacklist(fieldSpec)));
+        }
+
+        if (mayBeNull(fieldSpec)){
+            validSources.add(nullOnlySource());
         }
 
         return validSources;

@@ -577,5 +577,5 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
       | "d"  | 2     |
       | null | 1     |
       | null | 2     |
-      | null | null  |
-      | null | null  |
+      | "a"  | null  |
+      | "c"  | null  |
