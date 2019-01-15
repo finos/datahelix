@@ -21,11 +21,11 @@ Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all f
 
 ### Eclipse
 
-Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/).
+Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/) but please note we do not have detailed documentation for using the generator from Eclipse.
 
 ### Cucumber
 
-Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if using Intellij IDE) 
+Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if using IntelliJ IDE) 
 
 Currently the tests cannot be run from the TestRunner class
 
@@ -73,70 +73,12 @@ generateTestCases "<path to an example JSON profile>" "<path to desired output f
 
 Run both of these configurations to test that installation is successful.
 
-### Eclipse
+### Testing Maven Configuration
 
-You can set up an existing Eclipse to support Scala or set up a new Eclipse with Scala support
+From IntelliJ, open the Maven window.
 
-#### Set up an existing Eclipse installation
+Under the main Data Engineering > Lifecycle tab run the "install" build. Once this completes run the Data Engineering Lifecycle > "compile" build. These should complete without error. Running the install in this way will make the jar artefacts available for use in other Maven builds.
 
-Your Eclipse will need the `scala-ide` plug-in and the `m2e-scala` connector
+Under the generator > Lifecycle tab run the compile build. This should complete without errors but we have had some developers experiencing "Missing jar artefact" errors. Using the Maven install build on the main Lifecycle should fix this.
 
-##### `scala-ide`
-
-You can follow the installation instruction on 
-[here](http://scala-ide.org/docs/current-user-doc/gettingstarted/index.html)
-
-As of this writing, we are using `Scala IDE for Eclipse` version 
-4.7.1.v-2_12-20180102121323-2dfe808 and `Scala 2.12.3` version 4.7.1.201801011322 (Note: 
-this version also supports Scala 2.11, the version that Spark needs).  Other versions may also work. 
-
-##### `m2e-scala` connector
-
-Adding the following url as a "Repository" in Eclipse (Help > Install New Software... > Add...)
-
-`http://alchim31.free.fr/m2e-scala/update-site/`
-
-And from there you install `Maven Integration for Scala IDE` (we use version 0.5.1.201410131304)
-
-#### Set up a new Eclipse installation with Scala support
-
-Get the [scala-ide](http://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-win32.win32.x86_64.zip)
-version of Eclipse.
-
-Extract the archive, launch Eclipse and choose your workspace location.
-
-#### Import the project as a Maven project.
-
-For example, in Eclipse, File > Import... > Maven > Existing Maven Project, and then point to the 
-top-level directory of this project `data-engineering-generator`
-
-When importing is complete some errors relating to Scala versions may be shown.
-To fix this:
-
-- Right-click the *profiler* project in the Package Explorer view and click
-    *Properties*
- - Select *Scala Compiler*, tick *Use Project Settings*, then select *Latest
-    2.11 bundle*
- - Click *Apply and Close*
-
-After the project has been rebuilt the errors should be gone.
-
-#### Run
-
-The appropriate run configuration is stored in the repository and so can be run
-straight away:
-
-- In the top toolbar, click the arrow next to the green start button
-- Click *Profiler*
-
-To change the arguments the Profiler is run with, edit the run configuration:
-
-- In the top toolbar, click the arrow next to the green start button
-- Click *Run Configurations* > *Scala Application* > *Profiler*
-- Click the *Arguments* tab
-
-Don't accidentally commit your changes to the run configuration.
-
-As per the argument defined in the launch configuration, you should find an output file 
-`test-output.json` in your current directory (which is 
-`data-engineering-generator\profiler`)
+Once you have confirmed that install and compile works try running the test build for the generator. This should run all of the tests in the generator folder as will happen on the automated AWS build. 
