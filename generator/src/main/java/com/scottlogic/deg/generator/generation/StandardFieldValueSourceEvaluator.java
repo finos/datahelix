@@ -25,6 +25,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         List<FieldValueSource> validSources = new ArrayList<>();
+
         if (fieldSpec.getMustContainRestriction() != null) {
             validSources.addAll(
                 getMustContainRestrictionSources(fieldSpec));
@@ -35,57 +36,15 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             : DataTypeRestrictions.ALL_TYPES_PERMITTED;
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-            NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null
-                ? new NumericRestrictions()
-                : fieldSpec.getNumericRestrictions();
-
-            int numericScale = fieldSpec.getGranularityRestrictions() != null
-                ? fieldSpec.getGranularityRestrictions().getNumericScale()
-                : 0;
-
-            if (numericScale == 0) {
-                validSources.add(
-                    new IntegerFieldValueSource(
-                        restrictions,
-                        getBlacklist(fieldSpec)));
-            } else {
-                validSources.add(
-                    new RealNumberFieldValueSource(
-                        restrictions,
-                        getBlacklist(fieldSpec),
-                        numericScale));
-            }
+            validSources.add(getNumericSource(fieldSpec));
         }
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-
-            StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-            if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
-                Set<Object> blacklist = getBlacklist(fieldSpec);
-
-                final StringGenerator generator;
-                if (blacklist.size() > 0) {
-                    RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
-
-                    generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
-                } else {
-                    generator = stringRestrictions.stringGenerator;
-                }
-
-                validSources.add(generator.asFieldValueSource());
-
-            } else {
-                // todo: move default interesting values into the string field value source
-                validSources.add(CannedValuesFieldValueSource.of("Lorem Ipsum"));
-            }
+            validSources.add(getStringSource(fieldSpec));
         }
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
-
-            DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
-            validSources.add(new TemporalFieldValueSource(
-                restrictions != null ? restrictions : new DateTimeRestrictions(),
-                getBlacklist(fieldSpec)));
+            validSources.add(getTemporalSource(fieldSpec));
         }
 
         if (mayBeNull(fieldSpec)){
@@ -143,10 +102,61 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             .collect(Collectors.toList());
     }
 
+    private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
+        NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null
+            ? new NumericRestrictions()
+            : fieldSpec.getNumericRestrictions();
+
+        int numericScale = fieldSpec.getGranularityRestrictions() != null
+            ? fieldSpec.getGranularityRestrictions().getNumericScale()
+            : 0;
+
+        if (numericScale == 0) {
+            return new IntegerFieldValueSource(
+                restrictions,
+                getBlacklist(fieldSpec));
+        } else {
+            return new RealNumberFieldValueSource(
+                restrictions,
+                getBlacklist(fieldSpec),
+                numericScale);
+        }
+    }
+
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
         if (fieldSpec.getSetRestrictions() == null)
             return Collections.emptySet();
 
         return new HashSet<>(fieldSpec.getSetRestrictions().getBlacklist());
     }
- }
+
+    private FieldValueSource getStringSource(FieldSpec fieldSpec) {
+        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
+            Set<Object> blacklist = getBlacklist(fieldSpec);
+
+            final StringGenerator generator;
+            if (blacklist.size() > 0) {
+                RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+
+                generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
+            } else {
+                generator = stringRestrictions.stringGenerator;
+            }
+
+            return generator.asFieldValueSource();
+
+        } else {
+            // todo: move default interesting values into the string field value source
+            return CannedValuesFieldValueSource.of("Lorem Ipsum");
+        }
+    }
+
+    private FieldValueSource getTemporalSource(FieldSpec fieldSpec) {
+        DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
+
+        return new TemporalFieldValueSource(
+            restrictions != null ? restrictions : new DateTimeRestrictions(),
+            getBlacklist(fieldSpec));
+    }
+}
