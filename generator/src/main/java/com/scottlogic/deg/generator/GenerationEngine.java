@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
@@ -42,14 +41,7 @@ public class GenerationEngine {
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
-            .flatMap(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule).stream())
-            .map(violatedProfile -> new TestCaseDataSet(
-                violatedProfile.ruleBeingViolated.rule,
-                violatedProfile.constraintBeingViolated,
-                generate(
-                    violatedProfile,
-                    config))
-            );
+            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
@@ -58,25 +50,23 @@ public class GenerationEngine {
         this.outputter.outputTestCases(generationResult);
     }
 
-    private Collection<ViolatedProfile> getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
-        return rule.constraints.stream()
-            .map(constraintToViolate -> {
-                Profile violatedProfile = new Profile(
-                    profile.fields,
-                    profile.rules.stream()
-                        .map(r -> r == rule
-                            ? violateRule(rule, constraintToViolate)
-                            : r)
-                        .collect(Collectors.toList()),
-                    String.format(
-                        "%s -- Violating: %s [%s]",
-                        profile.description,
-                        rule.rule.getDescription(),
-                        constraintToViolate.toString())
-                );
-                return new ViolatedProfile(violatedProfile, rule, constraintToViolate);
-            })
+    private TestCaseDataSet getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
+        Collection<Rule> violatedRule = profile.rules.stream()
+            .map(r -> r == rule
+                ? violateRule(rule)
+                : r)
             .collect(Collectors.toList());
+
+        Profile violatingProfile = new Profile(
+            profile.fields,
+            violatedRule,
+            String.format("%s -- Violating: %s", profile.description, rule.rule.getDescription()));
+
+        return new TestCaseDataSet(
+            rule.rule,
+            generate(
+                violatingProfile,
+                config));
     }
 
     private Stream<GeneratedObject> generate(Profile profile, GenerationConfig config) {
@@ -88,25 +78,13 @@ public class GenerationEngine {
             config);
     }
 
-    private Rule violateRule(Rule rule, Constraint constraintToViolate) {
-        return new Rule(
-            rule.rule,
-            rule.constraints
-                .stream()
-                .map(constraint -> constraint == constraintToViolate
-                    ? new ViolateConstraint(constraint)
-                    : constraint)
-                .collect(Collectors.toList()));
-    }
+    private Rule violateRule(Rule rule) {
+        Constraint constraintToViolate =
+            rule.constraints.size() == 1
+                ? rule.constraints.iterator().next()
+                : new AndConstraint(rule.constraints);
 
-    class ViolatedProfile extends Profile {
-        final Rule ruleBeingViolated;
-        final Constraint constraintBeingViolated;
-
-        ViolatedProfile(Profile profile, Rule ruleBeingViolated, Constraint constraintBeingViolated){
-            super(profile.fields, profile.rules, profile.description);
-            this.ruleBeingViolated = ruleBeingViolated;
-            this.constraintBeingViolated = constraintBeingViolated;
-        }
+        ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
+        return new Rule(rule.rule, Collections.singleton(violatedConstraint));
     }
 }
