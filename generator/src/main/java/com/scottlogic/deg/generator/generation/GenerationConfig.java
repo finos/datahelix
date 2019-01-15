@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.combination_strategies.*;
 import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
@@ -15,13 +16,13 @@ public class GenerationConfig {
     private final long maxRows;
     private final boolean validateProfile;
 
+    @Inject
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
         this.validateProfile = source.getValidateProfile();
-
     }
 
     public DataGenerationType getDataGenerationType() {
