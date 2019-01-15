@@ -963,24 +963,6 @@ class ConstraintReducerTest {
             Matchers.greaterThan(0L));
     }
 
-    @Test
-    void shouldReduceToConstraintsFoundInDecisions() {
-        final Field field = new Field("test0");
-
-        List<AtomicConstraint> decisionConstraints = Arrays.asList(
-            new IsEqualToConstantConstraint(field, "a", rules()));
-
-        Optional<FieldSpec> testOutput = constraintReducer.reduceConstraintsToFieldSpec(
-            Collections.emptySet(),
-            decisionConstraints
-        );
-
-        FieldSpec outputSpec = testOutput.get();
-
-        Assert.assertThat("Fieldspec is not empty", outputSpec,
-            not(equalTo(FieldSpec.Empty)));
-        Assert.assertThat("Fieldspec has must contain restriction",
-            outputSpec.getMustContainRestriction(), not(nullValue()));
         Set<FieldSpec> requiredObjects = outputSpec.getMustContainRestriction().getRequiredObjects();
         Assert.assertThat("Must contain has one required object",
             requiredObjects.size(), is(1));
@@ -1013,8 +995,6 @@ class ConstraintReducerTest {
 
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
-    }
-
     private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
         rule.rule = "rules";
