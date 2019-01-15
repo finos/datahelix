@@ -44,6 +44,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //calculate a field to fix and start processing
         ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
+
+        if (reduced == null){
+            //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
+            //yielding an empty stream will cause back-tracking
+
+            this.monitor.unableToStepFurther(initialState);
+            return Stream.empty();
+        }
+
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
         return process(rootNode, initialState.with(nextFixedField));
     }
