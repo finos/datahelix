@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstrai
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.Collections;
