@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
@@ -13,6 +15,7 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +42,7 @@ public class GenerationEngine {
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
-            .flatMap(rule -> getViolationForRuleTestCaseDataSet(profile, rule).stream())
+            .flatMap(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule).stream())
             .map(violatedProfile -> new TestCaseDataSet(
                 violatedProfile.ruleBeingViolated.rule,
                 violatedProfile.constraintBeingViolated,
@@ -55,7 +58,7 @@ public class GenerationEngine {
         this.outputter.outputTestCases(generationResult);
     }
 
-    private Collection<ViolatedProfile> getViolationForRuleTestCaseDataSet(Profile profile, Rule rule) {
+    private Collection<ViolatedProfile> getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
         return rule.constraints.stream()
             .map(constraintToViolate -> {
                 Profile violatedProfile = new Profile(
