@@ -962,13 +962,6 @@ class ConstraintReducerTest {
             outputSpec.getStringRestrictions().stringGenerator.getValueCount(),
             Matchers.greaterThan(0L));
     }
-
-        Set<FieldSpec> requiredObjects = outputSpec.getMustContainRestriction().getRequiredObjects();
-        Assert.assertThat("Must contain has one required object",
-            requiredObjects.size(), is(1));
-        Assert.assertThat("Required object has a set restriction",
-            requiredObjects.iterator().next().getSetRestrictions(), not(nullValue()));
-    }
     
     @Test
     public void shouldReduceConstraintsCorrectlyWhereOneIsViolated(){
@@ -986,7 +979,7 @@ class ConstraintReducerTest {
     }
 
     @Test
-    public void shouldReduceConstraintsToNullAllowedFieldSpecOnly(){
+    public void shouldReduceConstraintsToNullAllowedFieldSpecOnly() {
         Field field = new Field("field");
         AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules());
 
@@ -995,6 +988,8 @@ class ConstraintReducerTest {
 
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
+    }
+
     private static Set<RuleInformation> rules(){
         RuleDTO rule = new RuleDTO();
         rule.rule = "rules";
