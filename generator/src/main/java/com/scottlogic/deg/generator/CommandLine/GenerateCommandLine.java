@@ -63,12 +63,29 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
-    public boolean shouldDoPartitioning() { return !dontPartitionTrees; }
-    public boolean shouldValidateProfile() { return validateProfile; }
-    public boolean dontOptimise() { return dontOptimise; }
-    public File getProfileFile() { return profileFile; }
-    public Path getOutputPath() { return outputPath; }
-    public boolean isEnableTracing() { return enableTracing; }
+    public boolean shouldDoPartitioning() {
+        return !dontPartitionTrees;
+    }
+
+    public boolean shouldValidateProfile() {
+        return validateProfile;
+    }
+
+    public boolean dontOptimise() {
+        return dontOptimise;
+    }
+
+    public File getProfileFile() {
+        return profileFile;
+    }
+
+    public Path getOutputPath() {
+        return outputPath;
+    }
+
+    public boolean isEnableTracing() {
+        return enableTracing;
+    }
 
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
