@@ -28,10 +28,10 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.is == null) {
-            throw new InvalidProfileException("Couldn't recognise null from is constraint");
+            throw new InvalidProfileException("Couldn't recognise 'is' property, it must be set to a value");
         }
 
-        if (dto.is != dto.undefined) {
+        if (dto.is != ConstraintDTO.undefined) {
             ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode((String) dto.is);
 
             if (subReader == null) {
