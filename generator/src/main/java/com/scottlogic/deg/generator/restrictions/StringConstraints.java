@@ -43,7 +43,9 @@ public class StringConstraints{
         if (constraint instanceof NotConstraint){
             AtomicConstraint complementOfConstraint = complementOfConstraint(((NotConstraint) constraint).negatedConstraint); // field1 < 10 -> field1 > 9
             return complementOfConstraint != null
-                ? isContradictory(constraint, complementOfConstraint)
+                ? otherConstraints
+                    .stream()
+                    .anyMatch(otherConstraint -> isContradictory(complementOfConstraint, otherConstraint))
                 : false; //we cannot prove it is contradictory
         }
 
@@ -66,6 +68,10 @@ public class StringConstraints{
         }
 
         if (constraint.getClass().equals(otherConstraint.getClass())){
+            if (constraint instanceof StringHasLengthConstraint){
+                return areLengthConstraintsContradictory((StringHasLengthConstraint)constraint, (StringHasLengthConstraint)otherConstraint);
+            }
+
             return false; //same type constraints cannot contradict
         }
 
@@ -87,10 +93,16 @@ public class StringConstraints{
         return false; //we cannot prove it is contradictory
     }
 
+    private boolean areLengthConstraintsContradictory(
+        StringHasLengthConstraint constraint,
+        StringHasLengthConstraint otherConstraint) {
+        return constraint.referenceValue != otherConstraint.referenceValue;
+    }
+
     private Optional<Boolean> isContradictoryToMaxLength(int shorterThan, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringLongerThanConstraint){
             int longerThan = ((IsStringLongerThanConstraint) otherConstraint).referenceValue;
-            if (longerThan >= shorterThan){
+            if (longerThan >= shorterThan - 1){
                 return Optional.of(true); //field1 < 10 & field1 > 20 | field1 < 10 & field1 > 10
             }
 

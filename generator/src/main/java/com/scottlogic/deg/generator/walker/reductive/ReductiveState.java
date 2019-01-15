@@ -12,7 +12,7 @@ public class ReductiveState {
 
     private final ProfileFields fields;
     private final Map<Field, FixedField> fixedFields;
-    public final FixedField lastFixedField;
+    private final FixedField lastFixedField;
 
     public ReductiveState(ProfileFields fields){
         this(fields, new HashMap<>(), null);
@@ -65,7 +65,7 @@ public class ReductiveState {
         return this.fixedFields;
     }
 
-    FixedField getLastFixedField(){
+    public FixedField getLastFixedField(){
         return this.lastFixedField;
     }
 

@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
@@ -13,16 +12,16 @@ import java.util.Objects;
  * https://github.com/ScottLogic/data-engineering-generator/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/RegexFieldConstraint.java#L133
  */
 public class StringRestrictions {
-    private final StringConstraints constraint;
+    private final StringConstraints constraints;
     public StringGenerator stringGenerator;
 
-    public StringRestrictions(StringConstraints constraint) {
+    public StringRestrictions(StringConstraints constraints) {
 
-        this.constraint = constraint;
+        this.constraints = constraints;
     }
 
     public StringConstraints getConstraints() {
-        return constraint;
+        return constraints;
     }
 
     public static boolean isString(Object o) {

@@ -94,27 +94,20 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     private Set<FieldValueSource> getWhitelistSources(FieldSpec fieldSpec) {
         MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
-        List<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream().collect(Collectors.toList());
+        Stream<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream();
 
         // If we have values that must be included we need to check that those values are included in the whitelist
         if (mustContainRestriction != null) {
-            whitelist = Stream.concat(whitelist.stream(),
+            whitelist = Stream.concat(whitelist,
             getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                .flatMap(o -> o.getSetRestrictions().getWhitelist().stream())).collect(Collectors.toList());
+                .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()));
         }
 
         if (mayBeNull(fieldSpec)) {
-            whitelist.add(null);
+            whitelist = Stream.concat(whitelist, Stream.of(null));
         }
 
-        if (whitelist.isEmpty()){
-            System.out.println(String.format(
-                "No values available for field %s (%s)",
-                fieldSpec.getFieldSpecSource().getConstraints().iterator().next().getField().name,
-                fieldSpec.toString()));
-        }
-
-        return Collections.singleton(new CannedValuesFieldValueSource(whitelist));
+        return Collections.singleton(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
