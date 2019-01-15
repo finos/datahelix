@@ -104,7 +104,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (mayBeNull(fieldSpec)) {
-            whitelist = Stream.concat(whitelist, Stream.of(null));
+            return new HashSet<>(
+                Arrays.asList(
+                    new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())),
+                    nullOnlySource()
+                ));
         }
 
         return Collections.singleton(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
