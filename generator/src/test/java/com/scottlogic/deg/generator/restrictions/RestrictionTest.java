@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
