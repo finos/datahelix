@@ -548,4 +548,18 @@ public class ProfileReaderTests {
 
         this.expectInvalidProfileException();
     }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": null }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
 }
