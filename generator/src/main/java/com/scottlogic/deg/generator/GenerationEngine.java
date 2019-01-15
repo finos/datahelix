@@ -84,6 +84,12 @@ public class GenerationEngine {
                 ? rule.constraints.iterator().next()
                 : new AndConstraint(rule.constraints);
 
+        //This will in effect produce the following constraint: // VIOLATE(AND(X, Y, Z)) reduces to
+        //   OR(
+        //     AND(VIOLATE(X), Y, Z),
+        //     AND(X, VIOLATE(Y), Z),
+        //     AND(X, Y, VIOLATE(Z)))
+        // See ProfileDecisionTreeFactory.convertConstraint(ViolateConstraint)
         ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
         return new Rule(rule.rule, Collections.singleton(violatedConstraint));
     }
