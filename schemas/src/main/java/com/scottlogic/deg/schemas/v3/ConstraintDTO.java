@@ -10,7 +10,9 @@ public class ConstraintDTO {
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
 
-    public String is;
+    public static final Object undefined = new UndefinedValue();
+
+    public Object is = undefined;
 
     /** the ID of the field this constraint constrains, if relevant */
     public String field;
