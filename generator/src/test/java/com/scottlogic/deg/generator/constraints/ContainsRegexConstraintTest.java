@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.atomic.ContainsRegexConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Set;
