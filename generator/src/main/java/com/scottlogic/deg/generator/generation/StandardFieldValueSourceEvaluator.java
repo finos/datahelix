@@ -10,12 +10,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
+    private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+    
     private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
         if (mustBeNull(fieldSpec)){
-            return Arrays.asList(nullOnlySource());
+            return Arrays.asList(nullOnlySource);
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
@@ -24,7 +26,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
         if (fieldSpec.getMustContainRestriction() != null) {
-            applyMustConstrainRestrictionToValidSources(validSources, fieldSpec);
+            validSources = applyMustConstrainRestrictionToValidSources(fieldSpec);
         }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
@@ -86,7 +88,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (mayBeNull(fieldSpec)){
-            validSources.add(nullOnlySource());
+            validSources.add(nullOnlySource);
         }
 
         return validSources;
@@ -106,7 +108,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         if (mayBeNull(fieldSpec)) {
             return Arrays.asList(
                 new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())),
-                nullOnlySource());
+                nullOnlySource);
         }
 
         return Arrays.asList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
@@ -119,10 +121,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private boolean mustBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() != null
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
-    }
-
-    private CannedValuesFieldValueSource nullOnlySource() {
-        return new CannedValuesFieldValueSource(Collections.singletonList(null));
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
@@ -138,12 +136,16 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             .filter(o -> o.getSetRestrictions() != null);
     }
 
-    private void applyMustConstrainRestrictionToValidSources(List<FieldValueSource> validSources, FieldSpec fieldSpec) {
+    private List<FieldValueSource> applyMustConstrainRestrictionToValidSources(FieldSpec fieldSpec) {
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
         if (mustContainRestrictionFieldSpecs.size() > 1) {
             mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
         }
 
-        mustContainRestrictionFieldSpecs.forEach(fs -> validSources.addAll(getFieldValueSources(fs)));
+        return mustContainRestrictionFieldSpecs.stream()
+            .map(fs -> getFieldValueSources(fs))
+            .flatMap(List::stream)
+            .filter(x->!x.equals(nullOnlySource))
+            .collect(Collectors.toList());
     }
 }
