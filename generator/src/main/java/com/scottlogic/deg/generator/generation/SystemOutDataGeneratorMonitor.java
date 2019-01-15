@@ -86,7 +86,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
             String.format(
                 "%d: No values for field %s: %s ",
                 reductiveState.getFixedFieldsExceptLast().size(),
-                reductiveState.lastFixedField.field.name,
+                reductiveState.getLastFixedField().field.name,
                 reductiveState.toString(true)));
     }
 
