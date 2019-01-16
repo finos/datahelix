@@ -347,13 +347,13 @@ Scenario: Running an 'ofType' = string request that includes a null entry (null)
        | foo  |
        | null |
 
-@ignore
-Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should fail with an error
+Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should produce null
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 Scenario: Running an 'ofType' = numeric request that includes a null entry (null) characters should be successful
      Given there is a field foo
@@ -363,13 +363,13 @@ Scenario: Running an 'ofType' = numeric request that includes a null entry (null
        | foo  |
        | null |
 
-@ignore
-Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should fail with an error
+Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should produce null
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 Scenario: Running an 'ofType' = temporal request that includes a null entry (null) characters should be successful
      Given there is a field foo
@@ -379,50 +379,50 @@ Scenario: Running an 'ofType' = temporal request that includes a null entry (nul
        | foo  |
        | null |
 
-@ignore
-Scenario: Running an 'ofType' = string request that includes a number value should fail with an error message
+Scenario: Running an 'ofType' = string request that includes a number value should produce null
      Given there is a field foo
        And foo is equal to 2
        And foo is of type "string"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
-@ignore
-Scenario: Running an 'ofType' = string request that includes a temporal value should fail with an error message
+Scenario: Running an 'ofType' = string request that includes a temporal value should produce null
      Given there is a field foo
        And foo is equal to 2010-01-01T00:00:00.000
        And foo is of type "string"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
-@ignore
-Scenario: Running an 'ofType' = numeric request that includes a string value should fail with an error message
+Scenario: Running an 'ofType' = numeric request that includes a string value should produce null
      Given there is a field foo
        And foo is equal to "2"
        And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
-@ignore
-Scenario: Running an 'ofType' = numeric request that includes a temporal value should fail with an error message
+Scenario: Running an 'ofType' = numeric request that includes a temporal value should produce null
      Given there is a field foo
        And foo is equal to 2010-01-01T00:00:00.000
        And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
-@ignore
-Scenario: Running an 'ofType' = temporal request that includes a string value should fail with an error message
+Scenario: Running an 'ofType' = temporal request that includes a string value should produce null
      Given there is a field foo
        And foo is equal to "2010-01-01T00:00:00.000"
        And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
-@ignore
-Scenario: Running an 'ofType' = temporal request that includes a number value should fail with an error message
+Scenario: Running an 'ofType' = temporal request that includes a number value should produce null
      Given there is a field foo
        And foo is equal to 2
        And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
