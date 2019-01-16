@@ -34,7 +34,7 @@ public class GenerationEngine {
         this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
+    void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
         final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
         this.outputter.outputDataset(generatedDataItems, profile.fields);
