@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -279,7 +280,7 @@ public class FieldSpecFactory {
 
     private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
         final StringRestrictions stringRestrictions = new StringRestrictions(
-            new StringConstraints(negate
+            new StringConstraintsCollection(negate
                 ? constraint.negate()
                 : constraint));
 

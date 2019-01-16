@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
 
@@ -8,26 +8,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StringConstraints{
+public class StringConstraintsCollection {
     private final Set<AtomicConstraint> constraints;
 
-    public StringConstraints(Set<AtomicConstraint> constraints) {
+    public StringConstraintsCollection(Set<AtomicConstraint> constraints) {
         this.constraints = constraints;
     }
 
-    public StringConstraints(AtomicConstraint constraint){
+    public StringConstraintsCollection(AtomicConstraint constraint){
         this(Collections.singleton(constraint));
     }
 
-    public StringConstraints intersect(StringConstraints otherConstraint){
-        return new StringConstraints(
+    public StringConstraintsCollection intersect(StringConstraintsCollection otherConstraint){
+        return new StringConstraintsCollection(
             Stream.concat(
                 this.constraints.stream(),
                 otherConstraint.constraints.stream()
             ).collect(Collectors.toSet()));
     }
 
-    boolean isContradictory() {
+    public boolean isContradictory() {
         if (this.constraints.isEmpty() || this.constraints.size() == 1){
             return false;
         }
