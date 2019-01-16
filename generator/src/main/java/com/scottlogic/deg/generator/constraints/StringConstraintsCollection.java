@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.constraints;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,18 +85,15 @@ public class StringConstraintsCollection {
         }
 
         if (constraint instanceof IsStringShorterThanConstraint){
-            return isContradictoryToMaxLength(((IsStringShorterThanConstraint) constraint).referenceValue, otherConstraint)
-                .orElse(false);
+            return isContradictoryToMaxLength(((IsStringShorterThanConstraint) constraint).referenceValue, otherConstraint);
         }
 
         if (constraint instanceof IsStringLongerThanConstraint){
-            return isContradictoryToMinLength(((IsStringLongerThanConstraint) constraint).referenceValue, otherConstraint)
-                .orElse(false);
+            return isContradictoryToMinLength(((IsStringLongerThanConstraint) constraint).referenceValue, otherConstraint);
         }
 
         if (constraint instanceof StringHasLengthConstraint) {
-            return isContradictoryToOfLengthConstraint(((StringHasLengthConstraint) constraint).referenceValue, otherConstraint)
-                .orElse(false);
+            return isContradictoryToOfLengthConstraint(((StringHasLengthConstraint) constraint).referenceValue, otherConstraint);
         }
 
         return false; //we cannot prove it is contradictory
@@ -109,52 +105,48 @@ public class StringConstraintsCollection {
         return constraint.referenceValue != otherConstraint.referenceValue;
     }
 
-    private Optional<Boolean> isContradictoryToMaxLength(int shorterThan, AtomicConstraint otherConstraint) {
+    private boolean isContradictoryToMaxLength(int shorterThan, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringLongerThanConstraint){
             int longerThan = ((IsStringLongerThanConstraint) otherConstraint).referenceValue;
             if (longerThan >= shorterThan - 1){
-                return Optional.of(true); //field1 < 10 & field1 > 20 | field1 < 10 & field1 > 10
+                return true; //field1 < 10 & field1 > 20 | field1 < 10 & field1 > 10
             }
-
-            return Optional.of(false);
         }
 
-        return Optional.empty();
+        return false;
     }
 
-    private Optional<Boolean> isContradictoryToMinLength(int longerThan, AtomicConstraint otherConstraint) {
+    private boolean isContradictoryToMinLength(int longerThan, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringShorterThanConstraint){
             int shorterThan = ((IsStringShorterThanConstraint) otherConstraint).referenceValue;
             if (shorterThan <= longerThan){
-                return Optional.of(true); //field1 > 20 & field1 < 20 | field1 > 10 & field1 < 10
+                return true; //field1 > 20 & field1 < 20 | field1 > 10 & field1 < 10
             }
-
-            return Optional.of(false);
         }
 
-        return Optional.empty();
+        return false;
     }
 
-    private Optional<Boolean> isContradictoryToOfLengthConstraint(int requiredLength, AtomicConstraint otherConstraint) {
+    private boolean isContradictoryToOfLengthConstraint(int requiredLength, AtomicConstraint otherConstraint) {
         if (otherConstraint instanceof IsStringLongerThanConstraint){
             int longerThan = ((IsStringLongerThanConstraint) otherConstraint).referenceValue;
             if (requiredLength <= longerThan){
-                return Optional.of(true); // field1 ofLength 10 & field1 > 10 (i.e field1 >= 11)
+                return true; // field1 ofLength 10 & field1 > 10 (i.e field1 >= 11)
             }
 
-            return Optional.of(false); //technically non-contradictory
+            return false; //technically non-contradictory
         }
 
         if (otherConstraint instanceof IsStringShorterThanConstraint){
             int shorterThan = ((IsStringShorterThanConstraint) otherConstraint).referenceValue;
             if (requiredLength >= shorterThan){
-                return Optional.of(true); // field1 ofLength 10 & field1 < 10 (i.e field1 <= 9)
+                return true; // field1 ofLength 10 & field1 < 10 (i.e field1 <= 9)
             }
 
-            return Optional.of(false); //technically non-contradictory
+            return false; //technically non-contradictory
         }
 
-        return Optional.empty();
+        return false;
     }
 
     private AtomicConstraint getComplementOfConstraint(AtomicConstraint negatedConstraint) {
