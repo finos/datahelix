@@ -919,14 +919,15 @@ class ConstraintReducerTest {
     }
 
     @Test
-    void whenHasStringRestrictions_shouldFilterSet() {
+    void whenHasStringRestrictions_shouldOnlyFilterStringsInSet() {
 
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
+        LocalDateTime temporalValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
         List<AtomicConstraint> constraints = Arrays.asList(
             new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)"), rules()),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)), rules())
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", temporalValue)), rules())
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -935,7 +936,50 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum"));
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, temporalValue));
+    }
+
+    @Test
+    void whenHasNumericRestrictions_shouldOnlyFilterNumericValuesInSet() {
+
+        final Field field = new Field("test0");
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+
+        LocalDateTime temporalValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        List<AtomicConstraint> constraints = Arrays.asList(
+            new IsGreaterThanOrEqualToConstantConstraint(field, 2, rules()),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, temporalValue)), rules())
+        );
+
+        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        FieldSpec spec = testOutput.get().getSpecForField(field);
+
+        SetRestrictions setRestrictions = spec.getSetRestrictions();
+
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 5, 2, temporalValue));
+    }
+
+    @Test
+    void whenHasTemporalRestrictions_shouldOnlyFilterTemporalValuesInSet() {
+
+        final Field field = new Field("test0");
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
+
+        LocalDateTime temporalValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime oneHourLaterTemporalValue = temporalValue.plusHours(1);
+        List<AtomicConstraint> constraints = Arrays.asList(
+            new IsAfterConstantDateTimeConstraint(field, temporalValue, rules()),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, temporalValue, oneHourLaterTemporalValue)), rules())
+        );
+
+        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+
+        FieldSpec spec = testOutput.get().getSpecForField(field);
+
+        SetRestrictions setRestrictions = spec.getSetRestrictions();
+
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterTemporalValue));
     }
 
     @Test

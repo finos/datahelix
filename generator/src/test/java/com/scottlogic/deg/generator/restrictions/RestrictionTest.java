@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
@@ -27,7 +28,7 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterString() {
-        StringRestrictions restriction = new StringRestrictions(new StringConstraints(Collections.emptySet()));
+        StringRestrictions restriction = new StringRestrictions(new StringConstraintsCollection(Collections.emptySet()));
 
         restriction.stringGenerator = new RegexStringGenerator("H(i|ello) World", true);
 

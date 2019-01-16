@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsStringLongerThanConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 
-public class StringConstraintsTests {
+public class StringConstraintsCollectionTests {
     private static final Field field = new Field("field");
     private static final Set<RuleInformation> rules = Collections.emptySet();
 
@@ -24,7 +25,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         IsStringLongerThanConstraint longerThan10 = new IsStringLongerThanConstraint(field, 10, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, longerThan10)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -35,7 +36,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, longerThan5)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -46,7 +47,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         IsStringLongerThanConstraint longerThan4 = new IsStringLongerThanConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, longerThan4)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -57,7 +58,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         IsStringLongerThanConstraint longerThan3 = new IsStringLongerThanConstraint(field, 3, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, longerThan3)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -68,7 +69,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength5 = new StringHasLengthConstraint(field, 5, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, ofLength5)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -79,7 +80,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength10 = new StringHasLengthConstraint(field, 10, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, ofLength10)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -90,7 +91,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength1 = new StringHasLengthConstraint(field, 1, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, ofLength1)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -101,7 +102,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength4 = new StringHasLengthConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5, ofLength4)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -112,7 +113,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength5 = new StringHasLengthConstraint(field, 5, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5, ofLength5)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -123,7 +124,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength4 = new StringHasLengthConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5, ofLength4)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -134,7 +135,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5, ofLength6)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -145,7 +146,7 @@ public class StringConstraintsTests {
         StringHasLengthConstraint ofLength6a = new StringHasLengthConstraint(field, 6, rules);
         StringHasLengthConstraint ofLength6b = new StringHasLengthConstraint(field, 6, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(ofLength6a, ofLength6b)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -156,7 +157,7 @@ public class StringConstraintsTests {
         StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
         StringHasLengthConstraint ofLength7 = new StringHasLengthConstraint(field, 7, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(ofLength6, ofLength7)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -167,7 +168,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5.negate(), ofLength6.negate())));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -178,7 +179,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength5 = new StringHasLengthConstraint(field, 5, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5.negate(), ofLength5)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -189,7 +190,7 @@ public class StringConstraintsTests {
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength4 = new StringHasLengthConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(shorterThan5.negate(), ofLength4)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));
@@ -200,7 +201,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength4 = new StringHasLengthConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5.negate(), ofLength4)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -211,7 +212,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength4 = new StringHasLengthConstraint(field, 4, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5.negate(), ofLength4.negate())));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -222,7 +223,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength5 = new StringHasLengthConstraint(field, 5, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5.negate(), ofLength5)));
 
         Assert.assertThat(constraints.isContradictory(), is(false));
@@ -233,7 +234,7 @@ public class StringConstraintsTests {
         IsStringLongerThanConstraint longerThan5 = new IsStringLongerThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
 
-        StringConstraints constraints = new StringConstraints(
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
             new HashSet<>(Arrays.asList(longerThan5.negate(), ofLength6)));
 
         Assert.assertThat(constraints.isContradictory(), is(true));

@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
@@ -209,7 +210,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                new StringRestrictions(new StringConstraints(Collections.emptySet())) {{
+                new StringRestrictions(new StringConstraintsCollection(Collections.emptySet())) {{
                     stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
                 }},
                 fieldSpecSource)
