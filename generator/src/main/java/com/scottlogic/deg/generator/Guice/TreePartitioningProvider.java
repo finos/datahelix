@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 
 public class TreePartitioningProvider implements Provider<TreePartitioner> {
-    private GenerateCommandLine commandLine;
+    private final GenerateCommandLine commandLine;
 
     @Inject
     public TreePartitioningProvider(GenerateCommandLine commandLine) {

@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
-
     private final GenerateCommandLine commandLine;
     private final ProfileValidationReporter validationReporter;
 

@@ -10,8 +10,7 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSet
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 public class FileOutputTargetProvider implements Provider<FileOutputTarget> {
-
-    private GenerateCommandLine commandLine;
+    private final GenerateCommandLine commandLine;
 
     @Inject
     FileOutputTargetProvider(GenerateCommandLine commandLine) {
