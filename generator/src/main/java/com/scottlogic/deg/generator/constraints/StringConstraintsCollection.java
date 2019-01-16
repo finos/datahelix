@@ -19,7 +19,7 @@ public class StringConstraintsCollection {
         this(Collections.singleton(constraint));
     }
 
-    public StringConstraintsCollection intersect(StringConstraintsCollection otherConstraint){
+    public StringConstraintsCollection union(StringConstraintsCollection otherConstraint){
         return new StringConstraintsCollection(
             Stream.concat(
                 this.constraints.stream(),
@@ -41,7 +41,7 @@ public class StringConstraintsCollection {
         Set<AtomicConstraint> otherConstraints = this.constraints.stream().filter(c -> c != constraint).collect(Collectors.toSet());
 
         if (constraint instanceof NotConstraint){
-            AtomicConstraint complementOfConstraint = complementOfConstraint(((NotConstraint) constraint).negatedConstraint); // field1 < 10 -> field1 > 9
+            AtomicConstraint complementOfConstraint = getComplementOfConstraint(((NotConstraint) constraint).negatedConstraint); // field1 < 10 -> field1 > 9
             return complementOfConstraint != null
                 ? otherConstraints
                     .stream()
@@ -61,7 +61,7 @@ public class StringConstraintsCollection {
                 return true; //e.g field1 < 10, not(field1 < 10); //fully contradictory
             }
 
-            AtomicConstraint complementOfOtherConstraint = complementOfConstraint(negatedConstraint); // field1 < 10 -> field1 > 9
+            AtomicConstraint complementOfOtherConstraint = getComplementOfConstraint(negatedConstraint); // field1 < 10 -> field1 > 9
             return complementOfOtherConstraint != null
                 ? isContradictory(constraint, complementOfOtherConstraint)
                 : false; //we cannot prove it is contradictory
@@ -147,7 +147,7 @@ public class StringConstraintsCollection {
         return Optional.empty();
     }
 
-    private AtomicConstraint complementOfConstraint(AtomicConstraint negatedConstraint) {
+    private AtomicConstraint getComplementOfConstraint(AtomicConstraint negatedConstraint) {
         if (negatedConstraint instanceof IsStringShorterThanConstraint){
             IsStringShorterThanConstraint shorterThan = (IsStringShorterThanConstraint) negatedConstraint;
             return new IsStringLongerThanConstraint(

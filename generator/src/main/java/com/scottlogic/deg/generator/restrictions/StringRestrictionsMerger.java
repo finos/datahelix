@@ -17,7 +17,7 @@ public class StringRestrictionsMerger {
         if (right == null)
             return new MergeResult<>(left);
 
-        StringConstraintsCollection constraints = left.getConstraints().intersect(right.getConstraints());
+        StringConstraintsCollection constraints = left.getConstraints().union(right.getConstraints());
         StringGenerator mergedStringBuilder = constraints.isContradictory()
             ? new NoStringsStringGenerator(left.stringGenerator, right.stringGenerator)
             : left.stringGenerator.intersect(right.stringGenerator);
