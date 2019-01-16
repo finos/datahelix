@@ -97,12 +97,12 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo 
        | null   |
        | "1234" |
 
-@ignore
-Scenario: Running a 'shorterThan' request alongside a contradicting equalTo constraint should fail with an error message
+Scenario: Running a 'shorterThan' request alongside a contradicting equalTo constraint should produce null
        And foo is shorter than 5
        And foo is equal to "12345"
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo    |
+       | null   |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
        And foo is shorter than 5
@@ -115,14 +115,14 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
        | "1234" |
        | "123"  |
 
-@ignore
-Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
+Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should produce null
        And foo is shorter than 5
        And foo is in set:
        | "12345"  |
        | "123456" |
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo    |
+       | null   |
 
 Scenario: Running a 'shorterThan' request alongside a null constraint should be successful
        And foo is shorter than 5
@@ -130,29 +130,6 @@ Scenario: Running a 'shorterThan' request alongside a null constraint should be 
      Then the following data should be generated:
        | foo  |
        | null |
-
-Scenario: Running a 'shorterThan' request alongside an ofType = string should be successful
-       And foo is shorter than 2
-       And foo is of type "string"
-       And foo is containing regex /[a]{1}/
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "a"  |
-
-@ignore
-Scenario: Running a 'shorterThan' request alongside an ofType = numeric should fail with an error message
-       And foo is shorter than 2
-       And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
-
-@ignore
-Scenario: Running a 'shorterThan' request alongside an ofType = temporal should fail with an error message
-       And foo is shorter than 2
-       And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
        And foo is shorter than 3
@@ -162,17 +139,30 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting matching
        | null   |
        | "☠☠" |
 
-Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
-       And foo is shorter than 1
+@ignore
+Scenario: Running a 'shorterThan' request alongside a contradicting matchingRegex constraint should produce null
+       And foo is shorter than 2
        And foo is matching regex /[💾]{2}/
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo    |
+       | null   |
 
-Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should fail with an error message
-       And foo is shorter than 1
+@ignore
+Scenario: Running a 'shorterThan' request alongside a non-contradicting containingRegex constraint should be successful
+       And foo is shorter than 3
        And foo is containing regex /[🍩]{2}/
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be included in what is generated:
+       | foo    |
+       | null   |
+       | "🍩🍩" |
+
+@ignore
+Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should produce null
+       And foo is shorter than 2
+       And foo is containing regex /[🍩]{2}/
+     Then the following data should be generated:
+       | foo    |
+       | null   |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength constraint should be successful
        And foo is shorter than 3
@@ -183,7 +173,8 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength
        | null |
        | "♀♀" |
 
-Scenario: Running a 'shorterThan' request alongside a contradicting ofLength (too short) constraint should fail with an error message
+@ignore
+Scenario: Running a 'shorterThan' request alongside a contradicting ofLength (too short) constraint should produce null
        And foo is shorter than 3
        And foo is of length 10
     Then the following data should be generated:
@@ -199,7 +190,8 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
        | null |
        | "♀♀" |
 
-Scenario: Running a 'shorterThan' request alongside a contradicting longerThan (too long) constraint should fail with an error message
+@ignore
+Scenario: Running a 'shorterThan' request alongside a contradicting longerThan (too long) constraint should produce null
        And foo is shorter than 3
        And foo is longer than 10
     Then the following data should be generated:
@@ -220,42 +212,47 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
        | "♀aaa" |
 
 @ignore
-Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should fail with an error message
-       And foo is shorter than 10
-       And foo is greater than 1
-     Then I am presented with an error message
-       And no data is created
-
+Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should be successful
+       And foo is shorter than 2
+       And foo is greater than 10
+      Then the following data should be included in what is generated:
+       | foo    |
+       | "a"    |
+       | null   |
 
 @ignore
-Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should fail with an error message
-       And foo is shorter than 10
+Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should be successful
+       And foo is shorter than 2
        And foo is greater than or equal to 3
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be included in what is generated:
+       | foo    |
+       | "a"    |
+       | null   |
 
 @ignore
-Scenario: Running a 'shorterThan' request alongside a lessThan constraint should fail with an error message
-       And foo is shorter than 10
+Scenario: Running a 'shorterThan' request alongside a lessThan constraint should be successful
+       And foo is shorter than 2
        And foo is less than 15
-     Then I am presented with an error message
-       And no data is created
-
+     Then the following data should be included in what is generated:
+       | foo    |
+       | "a"    |
+       | null   |
 
 @ignore
-Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should fail with an error message
-       And foo is shorter than 10
+Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should be successful
+       And foo is shorter than 2
        And foo is less than or equal to 19
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be included in what is generated:
+       | foo    |
+       | "a"    |
+       | null   |
 
-@ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
        And there is a constraint:
        """
        { "anyOf": [
-         { "field": "foo", "is": "shorterThan", "value": "2" },
-         { "field": "foo", "is": "shorterThan", "value": "1" }
+         { "field": "foo", "is": "shorterThan", "value": 2 },
+         { "field": "foo", "is": "shorterThan", "value": 3 }
        ]}
        """
        And foo is containing regex /[%]{1}/
@@ -268,13 +265,12 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
        | foo   |
        | "%12" |
 
-@ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf constraint should be successful
        And there is a constraint:
        """
        { "allOf": [
-         { "field": "foo", "is": "shorterThan", "value": "2" },
-         { "field": "foo", "is": "shorterThan", "value": "1" }
+         { "field": "foo", "is": "shorterThan", "value": 3 },
+         { "field": "foo", "is": "shorterThan", "value": 2 }
        ]}
        """
        And foo is containing regex /[%]{1}/
@@ -283,5 +279,6 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        | null |
        | "%"  |
        And the following data should not be included in what is generated:
-       | foo  |
-       | "%1" |
+       | foo   |
+       | "%1"  |
+       | "%12" |
