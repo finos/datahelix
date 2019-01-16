@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.reducer;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
@@ -21,6 +22,7 @@ public class ConstraintReducer {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
 
+    @Inject
     public ConstraintReducer(
             FieldSpecFactory fieldSpecFactory,
             FieldSpecMerger fieldSpecMerger
