@@ -12,11 +12,21 @@ public class StringConstraintsCollection {
     private final Set<AtomicConstraint> constraints;
 
     public StringConstraintsCollection(Set<AtomicConstraint> constraints) {
-        this.constraints = constraints;
+        this.constraints = constraints
+            .stream()
+            .filter(StringConstraintsCollection::isUnderstoodConstraintType)
+            .collect(Collectors.toSet());
     }
 
     public StringConstraintsCollection(AtomicConstraint constraint){
         this(Collections.singleton(constraint));
+    }
+
+    private static boolean isUnderstoodConstraintType(AtomicConstraint constraint) {
+        return constraint instanceof StringHasLengthConstraint
+            || constraint instanceof IsStringLongerThanConstraint
+            || constraint instanceof IsStringShorterThanConstraint
+            || (constraint instanceof NotConstraint && isUnderstoodConstraintType(((NotConstraint) constraint).negatedConstraint));
     }
 
     public StringConstraintsCollection union(StringConstraintsCollection otherConstraint){
