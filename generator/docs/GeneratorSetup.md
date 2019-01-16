@@ -1,5 +1,13 @@
 # Generator Setup Instructions
 
+## Get Code
+
+Clone the repository to your local development folder.
+
+```
+git clone https://github.com/ScottLogic/data-engineering-generator.git 
+```
+
 ## Installation Requirements
 
 * Java version 1.8
@@ -21,7 +29,7 @@ Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all f
 
 ### Eclipse
 
-Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/) but please note we do not have detailed documentation for using the generator from Eclipse.
+Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/). Please note we do not have detailed documentation for using the generator from Eclipse.
 
 ### Cucumber
 
@@ -34,14 +42,6 @@ To run a feature file you’ll have to modify the configuration by removing .ste
 An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/data-engineering-generator/blob/master/docs/CucumberSyntax.md) 
 
 ## First time setup
-
-### Getting the code
-
-Clone the repository to your local development folder.
-
-```
-git clone https://github.com/ScottLogic/data-engineering-generator.git 
-```
 
 ### IntelliJ
 
@@ -77,8 +77,8 @@ Run both of these configurations to test that installation is successful.
 
 From IntelliJ, open the Maven window.
 
-Under the main Data Engineering > Lifecycle tab run the "install" build. Once this completes run the Data Engineering Lifecycle > "compile" build. These should complete without error. Running the install in this way will make the jar artefacts available for use in other Maven builds.
+Under the main Data Engineering > Lifecycle tab run the "install" build. Once this completes run the Data Engineering > Lifecycle > "compile" build. These should complete without error. Running the install in this way will make the jar artefacts available for use in other Maven builds.
 
-Under the generator > Lifecycle tab run the compile build. This should complete without errors but we have had some developers experiencing "Missing jar artefact" errors. Using the Maven install build on the main Lifecycle should fix this.
+Under the generator > Lifecycle tab run the "compile" build. This should complete without errors but we have had some developers experiencing "Missing jar artefact" errors. Using the Maven "install" build on the main Lifecycle should fix this.
 
-Once you have confirmed that install and compile works try running the test build for the generator. This should run all of the tests in the generator folder as will happen on the automated AWS build. 
+Once you have confirmed that install and compile works try running the "test" build for the generator. This should run all of the tests in the generator folder as will happen on the automated AWS build. 
