@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
@@ -12,6 +13,7 @@ public final class HierarchicalDependencyFixFieldStrategy extends ProfileBasedFi
     private final SetBasedFixFieldStrategy setBasedFixFieldStrategy;
     private final FieldDependencyAnalyser analyser;
 
+    @Inject
     public HierarchicalDependencyFixFieldStrategy(Profile profile, FieldDependencyAnalyser analyser) {
         super(profile);
         this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(profile);
