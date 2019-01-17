@@ -46,6 +46,9 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.allOf != null) {
+            if (dto.allOf.isEmpty()) {
+                throw new InvalidProfileException("AllOf must contain at least one constraint.");
+            }
             return new AndConstraint(
                 ProfileReader.mapDtos(
                     dto.allOf,

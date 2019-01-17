@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
@@ -24,6 +25,7 @@ public class FixedFieldBuilder {
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
 
+    @Inject
     public FixedFieldBuilder(
         GenerationConfig config,
         ConstraintReducer constraintReducer,

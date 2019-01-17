@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -25,8 +26,8 @@ public class ProfileReader {
 
     private ProfileValidator validator;
 
+    @Inject
     public ProfileReader(ProfileValidator validator) {
-
         this.validator = validator;
     }
 
