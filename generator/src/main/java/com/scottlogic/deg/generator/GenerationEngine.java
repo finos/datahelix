@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
@@ -23,6 +24,7 @@ public class GenerationEngine {
     private final DataGenerator dataGenerator;
     private final OutputTarget outputter;
 
+    @Inject
     public GenerationEngine(
         OutputTarget outputter,
         DataGenerator dataGenerator,

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -18,6 +19,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
     private final GenerationConfig config;
     private final DataGeneratorMonitor monitor;
 
+    @Inject
     public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
