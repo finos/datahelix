@@ -2,6 +2,10 @@
 
 A command-line tool for generating data according to [profiles](../docs/Profiles.md).
 
+## Installation & Setup
+
+See installation instructions [here](./docs/GeneratorSetup.md).
+
 ## Command line
 
 The command line has two commands. Usage instructions for a command can be requested by calling it without arguments - eg, `dg generate`.

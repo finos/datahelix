@@ -519,4 +519,33 @@ public class ProfileReaderTests {
 
         expectInvalidProfileException();
     }
+
+    @Test
+    public void shouldRejectAllOfWithEmptySet() {
+        givenJson("{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [{" +
+            "        \"allOf\": []" +
+            "    }]" +
+            "}");
+
+        this.expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectAllOfWithEmptySetWithExplicitConstraint() {
+        givenJson("{" +
+            "    \"schemaVersion\": \"v3\"," +
+            "    \"fields\": [ { \"name\": \"foo\" } ]," +
+            "    \"rules\": [{" +
+            "        \"rule\": \"foo rule\"," +
+            "        \"constraints\": [{" +
+            "           \"allOf\": []" +
+            "        }]" +
+            "    }]" +
+            "}");
+
+        this.expectInvalidProfileException();
+    }
 }

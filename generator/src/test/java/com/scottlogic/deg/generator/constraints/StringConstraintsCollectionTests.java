@@ -164,6 +164,28 @@ public class StringConstraintsCollectionTests {
     }
 
     @Test
+    public void shouldReportNegatedShorterOfLengthConstraintsAsNonContradictory(){
+        StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
+        StringHasLengthConstraint ofLength7 = new StringHasLengthConstraint(field, 7, rules);
+
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
+            new HashSet<>(Arrays.asList(ofLength6.negate(), ofLength7)));
+
+        Assert.assertThat(constraints.isContradictory(), is(false));
+    }
+
+    @Test
+    public void shouldReportNegatedLongerOfLengthConstraintsAsNonContradictory(){
+        StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 7, rules);
+        StringHasLengthConstraint ofLength7 = new StringHasLengthConstraint(field, 6, rules);
+
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
+            new HashSet<>(Arrays.asList(ofLength6.negate(), ofLength7)));
+
+        Assert.assertThat(constraints.isContradictory(), is(false));
+    }
+
+    @Test
     public void shouldReportNotShorterThan5AndNotOfLength6AsNonContradictory(){
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         StringHasLengthConstraint ofLength6 = new StringHasLengthConstraint(field, 6, rules);
