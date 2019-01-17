@@ -19,17 +19,9 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
                 FieldSpecSource.Empty));
         }
 
-        TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
-            return Optional.empty();
-        }
-
         return Optional.of(merging
             .withDateTimeRestrictions(
                 dateTimeRestrictions,
-                FieldSpecSource.fromFieldSpecs(left, right))
-            .withTypeRestrictions(
-                DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.TEMPORAL),
                 FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }

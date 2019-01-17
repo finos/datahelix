@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -114,7 +115,7 @@ public class FieldSpecFactory {
         final TypeRestrictions typeRestrictions;
 
         if (negate) {
-            typeRestrictions = DataTypeRestrictions.all.except(constraint.requiredType);
+            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED.except(constraint.requiredType);
         } else {
             typeRestrictions = DataTypeRestrictions.createFromWhiteList(constraint.requiredType);
         }
@@ -241,7 +242,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return constructGenerator(constraint.standard, negate, constraint, violated);
+        return construct(constraint.standard, negate, constraint, violated);
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
@@ -274,11 +275,14 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
-        return constructGenerator(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, violated);
+        return construct(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, violated);
     }
 
-    private FieldSpec constructGenerator(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
-        final StringRestrictions stringRestrictions = new StringRestrictions();
+    private FieldSpec construct(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
+        final StringRestrictions stringRestrictions = new StringRestrictions(
+            new StringConstraintsCollection(negate
+                ? constraint.negate()
+                : constraint));
 
         stringRestrictions.stringGenerator = negate
             ? generator.complement()

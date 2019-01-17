@@ -7,6 +7,7 @@ import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -75,24 +76,36 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     @Override
-    public StringGenerator intersect(StringGenerator stringGenerator) {
-        if (!(stringGenerator instanceof RegexStringGenerator)) {
-            return stringGenerator.intersect(this);
+    public StringGenerator intersect(StringGenerator otherGenerator) {
+        if (otherGenerator instanceof NoStringsStringGenerator){
+            return otherGenerator.intersect(this);
         }
 
-        Automaton b = ((RegexStringGenerator) stringGenerator).automaton;
-        Automaton merged = automaton.intersection(b);
+        if (!(otherGenerator instanceof RegexStringGenerator)) {
+            return otherGenerator.intersect(this);
+        }
 
-        return new RegexStringGenerator(
-                merged,
-                String.format("%s ∩ %s", this.regexRepresentation, stringGenerator.toString()));
+        RegexStringGenerator otherRegexGenerator = (RegexStringGenerator) otherGenerator;
+        Automaton b = otherRegexGenerator.automaton;
+        Automaton merged = automaton.intersection(b);
+        String mergedRepresentation = intersectRepresentation(this.regexRepresentation, otherRegexGenerator.regexRepresentation);
+
+        return new RegexStringGenerator(merged, mergedRepresentation);
     }
 
     @Override
     public StringGenerator complement() {
         return new RegexStringGenerator(
-                this.automaton.clone().complement(),
-                String.format("COMPLEMENT-OF %s", this.regexRepresentation));
+            this.automaton.clone().complement(),
+            complementaryRepresentation(this.regexRepresentation));
+    }
+
+    private static String complementaryRepresentation(String representation){
+        return String.format("¬(%s)", representation);
+    }
+
+    static String intersectRepresentation(String left, String right){
+        return String.format("%s ∩ %s", left, right);
     }
 
     @Override
@@ -102,12 +115,22 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        String shortestString = AutomationUtils.getShortestExample(automaton);
-        String longestString = AutomationUtils.getLongestExample(automaton);
+        try {
+            String shortestString = AutomationUtils.getShortestExample(automaton);
+            String longestString = AutomationUtils.getLongestExample(automaton);
 
-        return shortestString.equals(longestString)
-            ? Collections.singleton(shortestString)
-            : Arrays.asList(shortestString, longestString);
+            return shortestString.equals(longestString)
+                ? Collections.singleton(shortestString)
+                : Arrays.asList(shortestString, longestString);
+        } catch (Exception e) {
+            System.out.println(
+                String.format(
+                    "Unable to generate interesting strings for %s\n%s",
+                    this.regexRepresentation,
+                    e.getMessage()));
+
+            return Collections.emptySet();
+        }
     }
 
     @Override
@@ -429,3 +452,4 @@ public class RegexStringGenerator implements StringGenerator {
         return Objects.hash(this.automaton, this.getClass());
     }
 }
+

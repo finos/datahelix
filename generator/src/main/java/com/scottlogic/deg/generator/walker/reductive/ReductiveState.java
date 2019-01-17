@@ -65,7 +65,7 @@ public class ReductiveState {
         return this.fixedFields;
     }
 
-    FixedField getLastFixedField(){
+    public FixedField getLastFixedField(){
         return this.lastFixedField;
     }
 

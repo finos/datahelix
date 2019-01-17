@@ -35,7 +35,9 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             Stream<Object> validSourcesValues = validSources
                 .stream()
                 .flatMap(valueSource -> StreamSupport.stream(valueSource.generateAllValues().spliterator(), false));
-            Stream<Object> whitelistAndValidSourcesValues = Stream.concat(whitelist.stream(), validSourcesValues);
+            Stream<Object> whitelistAndValidSourcesValues = Stream
+                .concat(whitelist.stream(), validSourcesValues);
+
             return Collections.singleton(
                 new CannedValuesFieldValueSource(whitelistAndValidSourcesValues.collect(Collectors.toList()))
             );
@@ -47,7 +49,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
             ? fieldSpec.getTypeRestrictions()
-            : DataTypeRestrictions.all;
+            : DataTypeRestrictions.ALL_TYPES_PERMITTED;
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null

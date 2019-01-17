@@ -39,6 +39,7 @@ public class ReductiveRowSpecGenerator {
         Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(reductiveState, constraintNode);
 
         if (fieldSpecsPerField.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
+            this.monitor.unableToEmitRowAsSomeFieldSpecsAreEmpty(reductiveState, fieldSpecsPerField);
             return Stream.empty();
         }
 

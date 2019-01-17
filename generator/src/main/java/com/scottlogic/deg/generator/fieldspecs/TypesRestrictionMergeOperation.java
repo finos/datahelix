@@ -22,7 +22,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
 
         TypeRestrictions restrictions = mergeResult.restrictions != null
             ? mergeResult.restrictions
-            : DataTypeRestrictions.all;
+            : DataTypeRestrictions.ALL_TYPES_PERMITTED;
 
         return Optional.of(merging.withTypeRestrictions(
             restrictions,
