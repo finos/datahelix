@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Collections;

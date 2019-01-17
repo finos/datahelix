@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation.field_value_sources;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -6,7 +6,8 @@ import java.util.*;
 
 public class DataTypeRestrictions implements TypeRestrictions {
 
-    public final static TypeRestrictions all = new NoTypeRestriction();
+    public final static TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
+    public final static TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
 
     public DataTypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
         if (allowedTypes.size() == 0)
@@ -45,7 +46,7 @@ public class DataTypeRestrictions implements TypeRestrictions {
     }
 
     public TypeRestrictions intersect(TypeRestrictions other) {
-        if (other == all)
+        if (other == ALL_TYPES_PERMITTED)
             return this;
 
         ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);

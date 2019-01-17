@@ -41,16 +41,13 @@ public class GenerationEngine {
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
-        final TestCaseDataSet validCase = new TestCaseDataSet(null, generate(profile, config));
-
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
 
         final TestCaseGenerationResult generationResult = new TestCaseGenerationResult(
             profile,
-            Stream.concat(Stream.of(validCase), violatingCases)
-                .collect(Collectors.toList()));
+            violatingCases.collect(Collectors.toList()));
 
         this.outputter.outputTestCases(generationResult);
     }
@@ -89,6 +86,12 @@ public class GenerationEngine {
                 ? rule.constraints.iterator().next()
                 : new AndConstraint(rule.constraints);
 
+        //This will in effect produce the following constraint: // VIOLATE(AND(X, Y, Z)) reduces to
+        //   OR(
+        //     AND(VIOLATE(X), Y, Z),
+        //     AND(X, VIOLATE(Y), Z),
+        //     AND(X, Y, VIOLATE(Z)))
+        // See ProfileDecisionTreeFactory.convertConstraint(ViolateConstraint)
         ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
         return new Rule(rule.rule, Collections.singleton(violatedConstraint));
     }

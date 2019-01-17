@@ -7,6 +7,8 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
+import java.util.Map;
+
 public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
@@ -23,4 +25,10 @@ public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
     public void unableToStepFurther(ReductiveState reductiveState) { }
+
+    @Override
+    public void noValuesForField(ReductiveState reductiveState) { }
+
+    @Override
+    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) { }
 }

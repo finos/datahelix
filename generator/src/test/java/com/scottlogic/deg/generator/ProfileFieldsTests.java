@@ -1,8 +1,6 @@
 package com.scottlogic.deg.generator;
 
 import static org.junit.Assert.*;
-
-import gherkin.lexer.Fi;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

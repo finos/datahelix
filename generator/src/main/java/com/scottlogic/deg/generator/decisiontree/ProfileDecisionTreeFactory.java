@@ -48,7 +48,11 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         return Collections.singleton(
             new TreeConstraintNode(
                 constraints,
-                Collections.emptyList()));
+                Collections.emptyList(),
+                constraints.stream().anyMatch(ac -> ac instanceof ViolatedAtomicConstraint)
+                    ? Collections.singleton(NodeMarking.VIOLATED)
+                    : Collections.emptySet()
+                ));
     }
 
     private static Collection<ConstraintNode> asConstraintNodeList(AtomicConstraint constraint) {

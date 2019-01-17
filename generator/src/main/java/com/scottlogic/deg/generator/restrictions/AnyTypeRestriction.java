@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NoTypeRestriction implements TypeRestrictions {
+public class AnyTypeRestriction implements TypeRestrictions {
     private final static Set<IsOfTypeConstraint.Types> allTypes = new HashSet<>(Arrays.asList(IsOfTypeConstraint.Types.values()));
 
     public boolean isTypeAllowed(IsOfTypeConstraint.Types type) {
@@ -42,6 +42,6 @@ public class NoTypeRestriction implements TypeRestrictions {
     }
 
     public boolean equals(Object obj){
-        return obj instanceof NoTypeRestriction;
+        return obj instanceof AnyTypeRestriction;
     }
 }

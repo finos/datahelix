@@ -1,20 +1,14 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Set;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 public class IsInSetConstraintTests {
 

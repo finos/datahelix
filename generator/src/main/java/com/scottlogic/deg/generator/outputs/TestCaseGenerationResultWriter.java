@@ -10,19 +10,18 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TestCaseGenerationResultWriter {
     private final ManifestWriter manifestWriter;
     private final DataSetWriter datasetWriter;
-    private final String profileFileNameWithoutExtension;
 
-    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter, String profileFileNameWithoutExtension) {
-        this.profileFileNameWithoutExtension = profileFileNameWithoutExtension;
+    public TestCaseGenerationResultWriter(DataSetWriter datasetWriter) {
         this.manifestWriter = new ManifestWriter();
         this.datasetWriter = datasetWriter;
     }
@@ -30,33 +29,36 @@ public class TestCaseGenerationResultWriter {
     public void writeToDirectory(TestCaseGenerationResult result, Path directoryPath) throws IOException {
         DecimalFormat intFormatter = getDecimalFormat(result.datasets.size());
 
-        List<TestCaseDTO> testCaseDtos = new ArrayList<>();
+        int initialFileNumber = 1;
+        writeManifest(result, directoryPath, intFormatter, initialFileNumber);
 
-        int index = 0;
+        int index = initialFileNumber;
         for (TestCaseDataSet dataset : result.datasets) {
-            String filenameWithoutExtension = index == 0
-                ? this.profileFileNameWithoutExtension
-                : intFormatter.format(index);
-
             write(result.profile.fields,
                 dataset.stream(),
                 directoryPath,
-                filenameWithoutExtension);
-
-            if (index == 1){
-                System.out.println("Valid cases generated, starting violation generation...");
-            }
-
-            testCaseDtos.add(
-                new TestCaseDTO(
-                    filenameWithoutExtension,
-                    dataset.violation == null
-                        ? Collections.emptyList()
-                        : Collections.singleton(dataset.violation.getDescription())));
+                intFormatter.format(index));
 
             index++;
         }
 
+        System.out.println("Complete");
+    }
+
+    private void writeManifest(
+        TestCaseGenerationResult result,
+        Path directoryPath,
+        DecimalFormat intFormatter,
+        int initialFileNumber) throws IOException {
+
+        AtomicInteger dataSetIndex = new AtomicInteger(initialFileNumber);
+
+        List<TestCaseDTO> testCaseDtos = result.datasets
+            .stream()
+            .map(dataset -> new TestCaseDTO(
+                intFormatter.format(dataSetIndex.getAndIncrement()),
+                Collections.singleton(dataset.violation.getDescription())))
+            .collect(Collectors.toList());
         ManifestDTO manifestDto = new ManifestDTO(testCaseDtos);
 
         System.out.println("Writing manifest");
@@ -64,8 +66,6 @@ public class TestCaseGenerationResultWriter {
             manifestDto,
             directoryPath.resolve(
                 "manifest.json"));
-
-        System.out.println("Complete");
     }
 
     private void write(ProfileFields fields, Stream<GeneratedObject> dataSet, Path directory, String filenameWithoutExtension) throws IOException {
