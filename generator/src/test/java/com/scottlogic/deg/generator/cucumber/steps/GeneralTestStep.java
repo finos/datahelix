@@ -146,7 +146,7 @@ public class GeneralTestStep {
             "Exceptions thrown during generation",
             testHelper.getThrownExceptions(),
             empty());
-        Assert.assertThat(data.generatedData, contains(data.expectedData));
+        Assert.assertThat(data.generatedData, equalTo(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
