@@ -261,4 +261,34 @@ public class StringConstraintsCollectionTests {
 
         Assert.assertThat(constraints.isContradictory(), is(true));
     }
+
+    @Test
+    public void shouldReportOfLength1AndNotOfLength1AsAContradiction(){
+        StringHasLengthConstraint ofLength1 = new StringHasLengthConstraint(field, 1, rules);
+
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
+            new HashSet<>(Arrays.asList(ofLength1.negate(), ofLength1)));
+
+        Assert.assertThat(constraints.isContradictory(), is(true));
+    }
+
+    @Test
+    public void shouldReportLongerThan1AndNotLongerThan1AsAContradiction(){
+        IsStringLongerThanConstraint longerThan1 = new IsStringLongerThanConstraint(field, 1, rules);
+
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
+            new HashSet<>(Arrays.asList(longerThan1.negate(), longerThan1)));
+
+        Assert.assertThat(constraints.isContradictory(), is(true));
+    }
+
+    @Test
+    public void shouldReportShorterThan1AndNotShorterThan1AsAContradiction(){
+        IsStringShorterThanConstraint shorterThan1 = new IsStringShorterThanConstraint(field, 1, rules);
+
+        StringConstraintsCollection constraints = new StringConstraintsCollection(
+            new HashSet<>(Arrays.asList(shorterThan1.negate(), shorterThan1)));
+
+        Assert.assertThat(constraints.isContradictory(), is(true));
+    }
 }
