@@ -54,7 +54,7 @@ public class StringConstraintsCollectionTests {
     }
 
     @Test
-    public void shouldReportShorterThan5AndLongerThan3AsAContradiction(){
+    public void shouldReportShorterThan5AndLongerThan3AsNonContradictory(){
         IsStringShorterThanConstraint shorterThan5 = new IsStringShorterThanConstraint(field, 5, rules);
         IsStringLongerThanConstraint longerThan3 = new IsStringLongerThanConstraint(field, 3, rules);
 
