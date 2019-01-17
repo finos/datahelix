@@ -558,10 +558,10 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
-     Given there is a field price
-       And foo is matching regex /[a-d]{1}/
-       And there is a constraint:
+  Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
+    Given there is a field price
+    And foo is matching regex /[a-d]{1}/
+    And there is a constraint:
        """
        {
          "if": { "field": "foo", "is": "matchingRegex", "value": "[a-b]{1}" },
@@ -577,5 +577,28 @@ Scenario: Running a 'matchingRegex' request as part of an if constraint should b
       | "d"  | 2     |
       | null | 1     |
       | null | 2     |
-      | null | null  |
-      | null | null  |
+      | "a"  | null  |
+      | "c"  | null  |
+
+
+  Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
+    Given there is a field bar
+    And the combination strategy is exhaustive
+    And foo is matching regex /[a]{1}/
+    And bar is in set:
+      | "AA" |
+    And there is a field lee
+    And lee is of type "numeric"
+    And lee is granular to 1
+    And lee is less than 2
+    And lee is greater than 0
+    Then the following data should be generated in order:
+      | foo  | bar  | lee  |
+      | "a"  | "AA" | 1    |
+      | "a"  | "AA" | null |
+      | null | "AA" | 1    |
+      | null | "AA" | null |
+      | "a"  | null | 1    |
+      | "a"  | null | null |
+      | null | null | 1    |
+      | null | null | null |

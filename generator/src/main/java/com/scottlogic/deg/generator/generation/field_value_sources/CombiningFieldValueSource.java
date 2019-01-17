@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CombiningFieldValueSource implements FieldValueSource {
-    private final Set<FieldValueSource> underlyingSources;
+    private final List<FieldValueSource> underlyingSources;
 
-    public CombiningFieldValueSource(Set<FieldValueSource> underlyingSources) {
+    public CombiningFieldValueSource(List<FieldValueSource> underlyingSources) {
         this.underlyingSources = underlyingSources;
     }
 
