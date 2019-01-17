@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -21,6 +22,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
 
+    @Inject
     public DecisionTreeDataGenerator(
             DecisionTreeWalker treeWalker,
             TreePartitioner treePartitioner,

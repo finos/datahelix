@@ -548,4 +548,66 @@ public class ProfileReaderTests {
 
         this.expectInvalidProfileException();
     }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": null }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullWithRuleAndConstraintFormat() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"field\": \"foo\", \"is\": null }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullForNot() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullForNotWithRuleAndConstraintFormat() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"not\": { \"field\": \"foo\", \"is\": null } }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
 }

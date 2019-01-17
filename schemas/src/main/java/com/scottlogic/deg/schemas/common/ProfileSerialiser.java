@@ -10,6 +10,7 @@ public class ProfileSerialiser {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(profile);
     }

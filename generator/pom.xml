@@ -19,6 +19,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Google Guice for Dependency Injection -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
         <!-- Regular expression handling -->
         <dependency>
             <groupId>dk.brics.automaton</groupId>
