@@ -25,17 +25,9 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
                 FieldSpecSource.Empty));
         }
 
-        TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-            return Optional.empty();
-        }
-
         return Optional.of(merging
             .withStringRestrictions(
                 stringRestrictions,
-                FieldSpecSource.fromFieldSpecs(left, right))
-            .withTypeRestrictions(
-                DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING),
                 FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }

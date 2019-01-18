@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO Consider bringing these rules to field spec restrictions
+//TODO: This is very similar to the <StringConstraints> type, can any of the functionality be merged?
 public class StringConstraintValidator implements ConstraintValidatorAlerts {
 
     public final ValidationType validationType = ValidationType.STRING;

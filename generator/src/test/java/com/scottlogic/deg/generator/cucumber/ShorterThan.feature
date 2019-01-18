@@ -186,8 +186,9 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength
 Scenario: Running a 'shorterThan' request alongside a contradicting ofLength (too short) constraint should fail with an error message
        And foo is shorter than 3
        And foo is of length 10
-     Then I am presented with an error message
-       And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting longerThan constraint should be successful
        And foo is shorter than 3
@@ -201,8 +202,9 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
 Scenario: Running a 'shorterThan' request alongside a contradicting longerThan (too long) constraint should fail with an error message
        And foo is shorter than 3
        And foo is longer than 10
-     Then I am presented with an error message
-       And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterThan constraint should be successful
        And foo is shorter than 4

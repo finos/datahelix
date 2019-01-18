@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFiel
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -31,7 +32,7 @@ public class FieldSpecValueGenerator implements DataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        Set<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(this.spec);
+        List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(this.spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 

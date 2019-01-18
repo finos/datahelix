@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -170,6 +171,9 @@ public class DecisionTreeVisualisationWriter {
 }
 
 class NodeVisualiser {
+
+    private final int MAX_LENGTH_FOR_LABEL = 16816;
+
     String renderNode(String id, DecisionNode node){
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]";
     }
@@ -177,17 +181,31 @@ class NodeVisualiser {
     String renderNode(String id, ConstraintNode node){
         String label = node.getAtomicConstraints()
             .stream()
+            .sorted(Comparator.comparing(ac -> ac.getField().name))
             .map(AtomicConstraint::toDotLabel)
             .collect(Collectors.joining("\r\n"));
+
+        if (label.length() > MAX_LENGTH_FOR_LABEL) {
+            String suffix = "...";
+            label = label.substring(0, MAX_LENGTH_FOR_LABEL - suffix.length() - 1) + suffix;
+        }
+
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][fontsize=\"12\"][label=\"" + label + "\"][shape=box]";
     }
 
     private String determineNodeColour(Node node){
+        if (node.hasMarking(NodeMarking.VIOLATED)){
+            return "[color=\"green\"]";
+        }
+
         if (node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY)) {
             return "[color=\"red\"]";
-        } else if (node.hasMarking(NodeMarking.OPTIMISED)){
+        }
+
+        if (node.hasMarking(NodeMarking.OPTIMISED)){
             return "[color=\"blue\"]";
         }
+
         return "";
     }
 }

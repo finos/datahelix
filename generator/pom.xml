@@ -19,6 +19,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Google Guice for Dependency Injection -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
         <!-- Regular expression handling -->
         <dependency>
             <groupId>dk.brics.automaton</groupId>
@@ -133,6 +140,10 @@
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
     </dependencies>
     <build>

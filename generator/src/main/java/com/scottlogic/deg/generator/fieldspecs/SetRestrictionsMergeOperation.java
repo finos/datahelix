@@ -47,17 +47,17 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
 
             StringRestrictions stringRestrictions = merging.getStringRestrictions();
             if(stringRestrictions != null){
-                filterStream = filterStream.filter(stringRestrictions::match);
+                filterStream = filterStream.filter(x -> !StringRestrictions.isString(x) || stringRestrictions.match(x));
             }
 
             NumericRestrictions numberRestrictions = merging.getNumericRestrictions();
             if(numberRestrictions != null){
-                filterStream = filterStream.filter(numberRestrictions::match);
+                filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x) || numberRestrictions.match(x));
             }
 
             DateTimeRestrictions dateTimeRestrictions = merging.getDateTimeRestrictions();
             if(dateTimeRestrictions != null){
-                filterStream = filterStream.filter(dateTimeRestrictions::match);
+                filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x) || dateTimeRestrictions.match(x));
             }
 
             SetRestrictions newSetRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),

@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
+import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import picocli.CommandLine;
 
 import java.util.stream.Collectors;
@@ -7,8 +9,8 @@ import java.util.stream.Collectors;
 @CommandLine.Command(name = "dg")
 public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
-        .addSubcommand("generate", new Generate())
-        .addSubcommand("generateTestCases", new GenerateTestCases())
+        .addSubcommand("generate", new GenerateCommandLine())
+        .addSubcommand("generateTestCases", new GenerateTestCasesCommandLine())
         .addSubcommand("visualise", new Visualise())
         .addSubcommand("genTreeJson", new GenerateTreeCollectionJson())
         .setCaseInsensitiveEnumValuesAllowed(true);

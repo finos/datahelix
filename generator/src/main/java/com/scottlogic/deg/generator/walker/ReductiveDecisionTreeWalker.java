@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -9,7 +10,11 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDecisionTreeReducer treeReducer;
@@ -18,6 +23,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
 
+    @Inject
     public ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
         FixedFieldBuilder fixedFieldBuilder,
@@ -40,6 +46,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //calculate a field to fix and start processing
         ReductiveConstraintNode reduced = treeReducer.reduce(rootNode, initialState);
+
+        if (reduced == null){
+            //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
+            //yielding an empty stream will cause back-tracking
+
+            this.monitor.unableToStepFurther(initialState);
+            return Stream.empty();
+        }
+
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
         return process(rootNode, initialState.with(nextFixedField));
     }
@@ -50,9 +65,17 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, constraintNode);
         }
 
+        Iterator<Object> valueIterator = reductiveState.getValuesFromLastFixedField().iterator();
+        if (!valueIterator.hasNext()){
+            this.monitor.noValuesForField(reductiveState);
+            return Stream.empty();
+        }
+
         // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
         return FlatMappingSpliterator.flatMap(
-            reductiveState.getValuesFromLastFixedField(),
+            StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(valueIterator, Spliterator.ORDERED),
+                false),
             fieldValue -> getRowSpecsForFixedField(constraintNode, reductiveState));
     }
 

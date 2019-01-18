@@ -12,7 +12,7 @@ public class TypeRestrictionsMerger {
         final TypeRestrictions merged = left.intersect(right);
 
         if (merged == null) {
-            return new MergeResult();
+            return new MergeResult<>(DataTypeRestrictions.NO_TYPES_PERMITTED);
         }
 
         return new MergeResult<>(merged);

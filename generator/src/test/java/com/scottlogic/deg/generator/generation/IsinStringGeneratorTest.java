@@ -3,8 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.utils.IsinUtils;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;

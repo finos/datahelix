@@ -289,5 +289,9 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
   """
   And foo is of type "string"
   And foo is anything but null
-  Then I am presented with an error message
-  And no data is created
+  Then the following data should be included in what is generated:
+    | foo |
+    | "a" |
+    | "A" |
+    | "1" |
+    | "9" |

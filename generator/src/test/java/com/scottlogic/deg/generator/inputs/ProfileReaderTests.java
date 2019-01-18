@@ -4,17 +4,16 @@ import com.scottlogic.deg.generator.AssertUtils;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -30,7 +29,7 @@ public class ProfileReaderTests {
     private String json;
     private Profile profile;
 
-    @Before
+    @BeforeEach
     public void Setup() {
         this.json = null;
         this.profile = null;
@@ -548,5 +547,67 @@ public class ProfileReaderTests {
             "}");
 
         this.expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"field\": \"foo\", \"is\": null }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullWithRuleAndConstraintFormat() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"field\": \"foo\", \"is\": null }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullForNot() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectIsConstraintSetToNullForNotWithRuleAndConstraintFormat() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"not\": { \"field\": \"foo\", \"is\": null } }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
     }
 }
