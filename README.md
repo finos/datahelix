@@ -16,15 +16,6 @@ As the data generator is at an _beta_ stage, there are no published releases. To
 
 <!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
 
-#### Generate a profile
-The profiler can be run using the following command line arguments:
-
-`profiler> App.scala "<path to data>" "<path to output directory>"`
-
-When the profiler is run it will produce a profile JSON file with the same name as the input file in the specified output location. The profiler will also print diagnostic information to the terminal.
-
-An example input (CSV) that can be used is here: [basic_classifier.csv](./profiler/src/test/resources/basic_classifier.csv)
-
 #### Generate valid data
 `dg generate "<path to profile>" "<path to output directory or file>"`
 
@@ -49,7 +40,6 @@ There are 3 discrete primary elements:
 
 | Product | Description | Status | Notes |
 | ---- | ---- | ---- | ---- |
-| Profiler | Analyse a data source and generate a profile | Stable - Pre-alpha | Currently being developed |
 | Profile | A representation of the data schema and rules which can be used to generate data | Stable - alpha | |
 | Generator | A tool for generating data from a given profile | Stable - alpha | Supports data generation and generation of data that has been [delibrately violated](./generator/docs/DeliberateViolation.md). |
 
@@ -71,16 +61,6 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
 * Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the data generator product, the remaining steps need to be actioned to be able to use the profiler.
-
-  | Generator | Profiler |
-  | ---- | ---- |
-  | JDK | JDK |
-  |  | Scala |
-  |  | Spark |
-  |  | Hadoop |
-  |  | Windows shims |
-  | Cucumber | Cucumber | 
-  | IntelliJ/Eclipse IDE | IntelliJ/Eclipse IDE |
 * Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse
 * Run the data generator or profiler - see the examples below.
 
