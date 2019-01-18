@@ -21,28 +21,25 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class GenerationEngine {
+public class GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private final DataGenerator dataGenerator;
-    private final OutputTarget outputter;
 
     @Inject
-    protected GenerationEngine(
-        OutputTarget outputter,
+    public GenerationEngine(
         DataGenerator dataGenerator,
         DecisionTreeFactory decisionTreeGenerator) {
-        this.outputter = outputter;
         this.dataGenerator = dataGenerator;
         this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
-    void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
+    void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
         final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
-        this.outputter.outputDataset(generatedDataItems, profile.fields);
+        fileOutputTarget.outputDataset(generatedDataItems, profile.fields);
     }
 
-    public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
+    public void generateTestCases(Profile profile, GenerationConfig config, DirectoryOutputTarget directoryOutputTarget) throws IOException {
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
@@ -51,7 +48,7 @@ public abstract class GenerationEngine {
             profile,
             violatingCases.collect(Collectors.toList()));
 
-        this.outputter.outputTestCases(generationResult);
+        directoryOutputTarget.outputTestCases(generationResult);
     }
 
     private TestCaseDataSet getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
