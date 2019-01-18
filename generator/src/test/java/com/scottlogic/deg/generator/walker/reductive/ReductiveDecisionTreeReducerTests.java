@@ -25,7 +25,7 @@ class ReductiveDecisionTreeReducerTests {
     private static final Field field3 = new Field("field3");
     private static final ProfileFields allFields = new ProfileFields(Arrays.asList(field1, field2, field3));
     private static final ReductiveState initialState = new ReductiveState(allFields);
-    private static final AtomicConstraint isEqualTo1 = new IsEqualToConstantConstraint(field1, 1, Collections.emptySet());
+    private static final AtomicConstraint isEqualTo1 = new IsInSetConstraint(field1, Collections.singleton(1), Collections.emptySet());
     private static final AtomicConstraint isGreaterThanOrEqualTo2 = new IsGreaterThanOrEqualToConstantConstraint(field2, 2, Collections.emptySet());
     private static final AtomicConstraint isLessThan2 = new IsLessThanConstantConstraint(field3, 2, Collections.emptySet());
 
