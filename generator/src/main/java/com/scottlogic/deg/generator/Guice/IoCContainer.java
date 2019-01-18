@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
+import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -12,8 +13,9 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
+import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
@@ -38,6 +40,8 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
         bind(Profile.class).toProvider(ProfileProvider.class);
         bind(FileOutputTarget.class).toProvider(FileOutputTargetProvider.class);
+        bind(DirectoryOutputTarget.class).toProvider(DirectoryOutputTargetProvider.class);
+        bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
 
@@ -48,7 +52,6 @@ public class IoCContainer extends AbstractModule {
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeWalkerFactory.class).to(RuntimeDecisionTreeWalkerFactory.class);
-        bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
@@ -61,6 +64,11 @@ public class IoCContainer extends AbstractModule {
         if (this.commandLine instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+        }
+
+        if (this.commandLine instanceof GenerateTestCasesCommandLine) {
+            bind(GenerateTestCasesCommandLine.class).toInstance((GenerateTestCasesCommandLine) this.commandLine);
+            bind(GenerationConfigSource.class).to(GenerateTestCasesCommandLine.class);
         }
     }
 }

@@ -6,12 +6,13 @@ import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class DecisionTreeOptimiserProvider implements Provider<DecisionTreeOptimiser> {
-    private final GenerateCommandLine commandLine;
+    private final GenerationConfigSource commandLine;
 
     @Inject
-    public DecisionTreeOptimiserProvider(GenerateCommandLine commandLine) {
+    public DecisionTreeOptimiserProvider(GenerationConfigSource commandLine) {
         this.commandLine = commandLine;
     }
 
