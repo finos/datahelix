@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
@@ -30,7 +29,7 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value){
-        constraints.add(new IsEqualToConstantConstraint(fields.get(fieldname), value, rules()));
+        constraints.add(new IsInSetConstraint(fields.get(fieldname), Collections.singleton(value), rules()));
         return this;
     }
 
