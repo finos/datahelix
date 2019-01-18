@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -21,6 +22,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
     private final ConstraintReducer constraintReducer;
     private final RowSpecMerger rowSpecMerger;
 
+    @Inject
     public CartesianProductDecisionTreeWalker(
         ConstraintReducer constraintReducer,
         RowSpecMerger rowSpecMerger) {
