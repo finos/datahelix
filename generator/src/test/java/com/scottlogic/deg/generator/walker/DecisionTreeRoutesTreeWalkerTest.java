@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -239,7 +239,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
         return new OrderedConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, rules())),
+            Collections.singletonList(new IsInSetConstraint(new Field(name), Collections.singleton(name), rules())),
             Arrays.asList(decisions));
     }
 

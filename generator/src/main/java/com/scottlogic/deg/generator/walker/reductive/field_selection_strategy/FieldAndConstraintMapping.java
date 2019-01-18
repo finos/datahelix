@@ -49,8 +49,7 @@ public class FieldAndConstraintMapping {
     }
 
     private static int getConstraintPriority(AtomicConstraint constraint) {
-        if (constraint instanceof IsEqualToConstantConstraint
-            || constraint instanceof IsNullConstraint) {
+        if (constraint instanceof IsNullConstraint) {
             return 20000;
         }
 

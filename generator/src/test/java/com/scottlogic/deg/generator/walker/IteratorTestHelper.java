@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
@@ -42,7 +42,7 @@ public class IteratorTestHelper {
 
     private static ConstraintNode constraint(String name, DecisionNode... decisions){
         return new TreeConstraintNode(
-            Collections.singletonList(new IsEqualToConstantConstraint(new Field(name), name, Collections.emptySet())),
+            Collections.singletonList(new IsInSetConstraint(new Field(name), Collections.singleton(name), Collections.emptySet())),
             Arrays.asList(decisions));
     }
 }

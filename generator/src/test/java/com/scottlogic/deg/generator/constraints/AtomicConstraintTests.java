@@ -74,7 +74,7 @@ public class AtomicConstraintTests {
         notValueDto.not = stringValueDto;
 
         return Stream.of(
-                Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, stringValueDto, IsEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, stringValueDto, IsInSetConstraint.class),
                 Arguments.of(AtomicConstraintType.ISINSET, multipleValuesDto, IsInSetConstraint.class),
                 Arguments.of(AtomicConstraintType.ISNULL, stringValueDto, IsNullConstraint.class),
                 Arguments.of(AtomicConstraintType.ISOFTYPE, typeValueDto, IsOfTypeConstraint.class),
