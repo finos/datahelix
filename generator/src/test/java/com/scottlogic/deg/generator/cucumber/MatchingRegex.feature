@@ -485,36 +485,36 @@ Scenario: Running a 'matchingRegex' request alongside a granularTo constraint sh
       | "10" |
 
 Scenario: Running a 'matchingRegex' request alongside a after constraint should be successful
-     Given foo is matching regex /[0-z]{23}/
+     Given foo is matching regex /[0-z]{2}/
        And foo is after 2018-10-10T00:00:00.000
      Then the following data should be included in what is generated:
         | foo  |
         | null |
-        | "abcdefghijklmnopqrstuvw" |
+        | "ab" |
 
 Scenario: Running a 'matchingRegex' request alongside a afterOrAt constraint should be successful
-      Given foo is matching regex /[0-z]{23}/
+      Given foo is matching regex /[a-z]{2}/
         And foo is after or at 2018-10-10T00:00:00.000
       Then the following data should be included in what is generated:
         | foo  |
         | null |
-        | "abcdefghijklmnopqrstuvw" |
+        | "ab" |
 
 Scenario: Running a 'matchingRegex' request alongside a before constraint should be successful
-      Given foo is matching regex /[0-z]{23}/
+      Given foo is matching regex /[a-z]{2}/
         And foo is before 2018-10-10T00:00:00.000
       Then the following data should be included in what is generated:
         | foo  |
         | null |
-        | "abcdefghijklmnopqrstuvw" |
+        | "ab" |
 
 Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should be successful
-      Given foo is matching regex /[0-z]{23}/
+      Given foo is matching regex /[a-z]{2}/
         And foo is before or at 2018-10-10T00:00:00.000
       Then the following data should be included in what is generated:
         | foo  |
         | null |
-        | "abcdefghijklmnopqrstuvw" |
+        | "ab" |
 
 Scenario: Running a 'matchingRegex' request with a not constraint should be successful
      Given foo is matching regex /[0-9]{1}/
