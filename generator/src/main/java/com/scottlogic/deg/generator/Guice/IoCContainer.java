@@ -39,6 +39,7 @@ public class IoCContainer extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
+        bind(Profile.class).toProvider(ProfileProvider.class);
         bind(FileOutputTarget.class).toProvider(FileOutputTargetProvider.class);
         bind(DirectoryOutputTarget.class).toProvider(DirectoryOutputTargetProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
