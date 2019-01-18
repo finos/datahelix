@@ -25,7 +25,6 @@ import java.util.stream.Stream;
         )
 @JsonSubTypes({
     @JsonSubTypes.Type(value = IsInSetConstraint.class, name = "IsInSetConstraint"),
-    @JsonSubTypes.Type(value = IsEqualToConstantConstraint.class, name = "IsEqualToConstantConstraint"),
     @JsonSubTypes.Type(value = IsStringShorterThanConstraint.class, name = "IsStringShorterThanConstraint"),
     @JsonSubTypes.Type(value = IsOfTypeConstraint.class, name = "IsOfTypeConstraint"),
     @JsonSubTypes.Type(value = NotConstraint.class, name = "NotConstraint"),

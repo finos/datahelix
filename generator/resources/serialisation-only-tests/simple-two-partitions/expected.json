@@ -48,22 +48,22 @@
           },
           "referenceValue" : 20
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "Identifier"
           },
-          "requiredValue" : "EventB"
+          "legalValues" : [ "EventB" ]
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "Identifier"
             },
-            "requiredValue" : "EventB"
+            "legalValues" : [ "EventB" ]
           }
         } ],
         "decisions" : [ ]
@@ -106,11 +106,11 @@
           },
           "legalValues" : [ "C" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "Level"
           },
-          "requiredValue" : "First"
+          "legalValues" : [ "First" ]
         } ],
         "decisions" : [ ]
       }, {
