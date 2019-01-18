@@ -3,17 +3,14 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -74,8 +71,7 @@ class ExampleProfilesTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 consumer.generate(
-                    new GenerationEngine(
-                        new NullOutputTarget(),
+                    new NoOutputGenerationEngine(
                         new DecisionTreeDataGenerator(
                             walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                             new RelatedFieldTreePartitioner(),
@@ -114,5 +110,10 @@ class ExampleProfilesTests {
     private interface GenerateConsumer {
         void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
-}
 
+    class NoOutputGenerationEngine extends GenerationEngine {
+        NoOutputGenerationEngine(DataGenerator dataGenerator, DecisionTreeFactory decisionTreeGenerator) {
+            super(new NullOutputTarget(), dataGenerator, decisionTreeGenerator);
+        }
+    }
+}

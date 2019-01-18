@@ -6,12 +6,13 @@ import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class TreePartitioningProvider implements Provider<TreePartitioner> {
-    private final GenerateCommandLine commandLine;
+    private final GenerationConfigSource commandLine;
 
     @Inject
-    public TreePartitioningProvider(GenerateCommandLine commandLine) {
+    public TreePartitioningProvider(GenerationConfigSource commandLine) {
         this.commandLine = commandLine;
     }
 

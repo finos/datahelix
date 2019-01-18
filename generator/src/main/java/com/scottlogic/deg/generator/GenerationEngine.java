@@ -11,6 +11,8 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
@@ -19,13 +21,13 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GenerationEngine {
+public abstract class GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private final DataGenerator dataGenerator;
     private final OutputTarget outputter;
 
     @Inject
-    public GenerationEngine(
+    protected GenerationEngine(
         OutputTarget outputter,
         DataGenerator dataGenerator,
         DecisionTreeFactory decisionTreeGenerator) {

@@ -7,24 +7,22 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.MultiDataSetWriter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
-public class FileOutputTargetProvider implements Provider<FileOutputTarget> {
+public class DataSetWriterProvider implements Provider<DataSetWriter> {
     private final GenerationConfigSource commandLine;
-    private final DataSetWriter dataSetWriter;
 
     @Inject
-    public FileOutputTargetProvider(
-        GenerationConfigSource commandLine,
-        DataSetWriter dataSetWriter) {
+    public DataSetWriterProvider(GenerationConfigSource commandLine) {
         this.commandLine = commandLine;
-        this.dataSetWriter = dataSetWriter;
     }
 
     @Override
-    public FileOutputTarget get() {
-        return new FileOutputTarget(commandLine.getOutputPath(), dataSetWriter);
+    public DataSetWriter get() {
+        DataSetWriter outputWriter = new CsvDataSetWriter();
+
+        if (this.commandLine.isEnableTracing()) {
+            return new MultiDataSetWriter(outputWriter, new SourceTracingDataSetWriter());
+        }
+        return outputWriter;
     }
 }
-

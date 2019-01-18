@@ -16,7 +16,7 @@ public class GenerateExecute implements Runnable {
 
     @Inject
     public GenerateExecute(GenerationConfig config, ProfileReader profileReader,
-                           GenerationEngine generationEngine, GenerateCommandLine commandLine) {
+                           FileOutputtingGenerationEngine generationEngine, GenerateCommandLine commandLine) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;

@@ -1,34 +1,14 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.CommandLine;
 
-import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
-import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.MultiDataSetWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
-import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.RuntimeDecisionTreeWalkerFactory;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
+import com.scottlogic.deg.generator.GenerateTestCasesExecute;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import picocli.CommandLine;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
-@CommandLine.Command(
-    name = "generateTestCases",
-    description = "Generates valid and violating data using a profile file.",
-    mixinStandardHelpOptions = true,
-    version = "1.0")
-public class GenerateTestCases implements Runnable, GenerationConfigSource {
+public class GenerateTestCasesCommandLine extends CommandLineBase implements GenerationConfigSource {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     @SuppressWarnings("unused")
     private File profileFile;
@@ -95,65 +75,57 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
     private boolean enableTracing;
 
     @Override
-    public void run() {
-        GenerationConfig config = new GenerationConfig(this);
-
-        try {
-            DataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-            final Profile profile = new ProfileReader(config.getProfileValidator()).read(profileFile.toPath());
-            DecisionTreeWalkerFactory walkerFactory = new RuntimeDecisionTreeWalkerFactory(config, monitor, new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser()));
-
-            new GenerationEngine(
-                new DirectoryOutputTarget(
-                    outputDir,
-                    getWriter()),
-                new DecisionTreeDataGenerator(
-                    walkerFactory.getDecisionTreeWalker(outputDir),
-                    dontPartitionTrees
-                        ? new NoopTreePartitioner()
-                        : new RelatedFieldTreePartitioner(),
-                    dontOptimise
-                        ? new NoopDecisionTreeOptimiser()
-                        : new MostProlificConstraintOptimiser(),
-                    monitor),
-                new ProfileDecisionTreeFactory())
-                .generateTestCases(profile, config);
-        } catch (IOException | InvalidProfileException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private DataSetWriter getWriter(){
-        DataSetWriter outputWriter = new CsvDataSetWriter();
-        if (this.enableTracing){
-            return new MultiDataSetWriter(outputWriter, new SourceTracingDataSetWriter());
-        }
-
-        return outputWriter;
+    protected Class<? extends Runnable> getExecutorType() {
+        return GenerateTestCasesExecute.class;
     }
 
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
-        return generationType;
+        return this.generationType;
     }
 
     @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return combinationType;
+        return this.combinationType;
     }
 
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
-        return walkerType;
+        return this.walkerType;
     }
 
     @Override
     public long getMaxRows() {
-        return maxRows;
+        return this.maxRows;
     }
 
     @Override
     public boolean getValidateProfile() {
-        return validateProfile;
+        return this.validateProfile;
+    }
+
+    @Override
+    public File getProfileFile() {
+        return this.profileFile;
+    }
+
+    @Override
+    public boolean shouldDoPartitioning() {
+        return !this.dontPartitionTrees;
+    }
+
+    @Override
+    public boolean dontOptimise() {
+        return this.dontOptimise;
+    }
+
+    @Override
+    public Path getOutputPath() {
+        return this.outputDir;
+    }
+
+    @Override
+    public boolean isEnableTracing() {
+        return this.enableTracing;
     }
 }
