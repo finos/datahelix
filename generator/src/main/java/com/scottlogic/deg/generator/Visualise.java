@@ -1,12 +1,9 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -85,8 +82,7 @@ public class Visualise implements Runnable {
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
 
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
-                .splitTreeIntoPartitions(mergedTree)
+        final List<DecisionTree> treePartitions = Stream.of(mergedTree)
                 .map(treeOptimiser::optimiseTree)
                 .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
                 .map(treeValidator::markContradictions)

@@ -4,8 +4,6 @@ import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -109,9 +107,6 @@ public class GenerateTestCases implements Runnable, GenerationConfigSource {
                     getWriter()),
                 new DecisionTreeDataGenerator(
                     walkerFactory.getDecisionTreeWalker(outputDir),
-                    dontPartitionTrees
-                        ? new NoopTreePartitioner()
-                        : new RelatedFieldTreePartitioner(),
                     dontOptimise
                         ? new NoopDecisionTreeOptimiser()
                         : new MostProlificConstraintOptimiser(),

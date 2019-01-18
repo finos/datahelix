@@ -30,11 +30,7 @@ class TreeTransformationIntegrationTests {
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final DecisionTreeMapper decisionTreeMapper = new DecisionTreeMapper();
 
-    @TestFactory
-    Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
-    	return doTest(new PartitionTestStrategy());
-    }
-    
+
     @TestFactory
     Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
     	return doTest(new OptimiseTestStrategy());

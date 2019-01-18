@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
@@ -19,16 +18,13 @@ import java.util.stream.Stream;
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
-    private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
 
     @Inject
     public DecisionTreeDataGenerator(
             DecisionTreeWalker treeWalker,
-            TreePartitioner treePartitioner,
             DecisionTreeOptimiser optimiser,
             DataGeneratorMonitor monitor) {
-        this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
@@ -40,9 +36,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
-        final List<DecisionTree> partitionedTrees =
-            treePartitioner
-                .splitTreeIntoPartitions(decisionTree)
+        final List<DecisionTree> partitionedTrees = Stream.of(decisionTree)
                     .map(this.treeOptimiser::optimiseTree)
                 .collect(Collectors.toList());
 

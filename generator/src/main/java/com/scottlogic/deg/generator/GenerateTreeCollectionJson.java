@@ -6,14 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import picocli.CommandLine;
 
 import java.io.BufferedWriter;
@@ -24,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @picocli.CommandLine.Command(
     name = "genTreeJson",
@@ -65,18 +61,13 @@ public class GenerateTreeCollectionJson implements Runnable {
 
         final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
-        
-        TreePartitioner treePartitioner = doPartition
-                ? new RelatedFieldTreePartitioner()
-                : new NoopTreePartitioner();
+
                 
         DecisionTreeOptimiser treeOptimiser = doOptimise
                 ? new MostProlificConstraintOptimiser()
                 : new NoopDecisionTreeOptimiser();
                 
-        final List<DecisionTree> listOfTree =
-                treePartitioner
-                    .splitTreeIntoPartitions(mergedTree)
+        final List<DecisionTree> listOfTree = Stream.of(mergedTree)
                         .map(treeOptimiser::optimiseTree)
                     .collect(Collectors.toList());
         
