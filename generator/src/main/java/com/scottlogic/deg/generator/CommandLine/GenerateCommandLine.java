@@ -10,8 +10,6 @@ import java.nio.file.Path;
 
 public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
-    public static final String defaultTreeWalkerType = "cartesian_product";
-
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
