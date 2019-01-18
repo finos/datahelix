@@ -10,8 +10,6 @@ import java.nio.file.Path;
 
 public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
-    public static final String defaultTreeWalkerType = "cartesian_product";
-
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -64,53 +62,54 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
+    @Override
     public boolean shouldDoPartitioning() {
-        return !dontPartitionTrees;
+        return !this.dontPartitionTrees;
     }
 
-    public boolean shouldValidateProfile() {
-        return validateProfile;
-    }
-
+    @Override
     public boolean dontOptimise() {
-        return dontOptimise;
+        return this.dontOptimise;
     }
 
+    @Override
     public File getProfileFile() {
-        return profileFile;
+        return this.profileFile;
     }
 
+    @Override
     public Path getOutputPath() {
-        return outputPath;
+        return this.outputPath;
     }
 
+    @Override
     public boolean isEnableTracing() {
-        return enableTracing;
+        return this.enableTracing;
     }
 
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
-        return generationType;
+        return this.generationType;
     }
 
     @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return combinationType;
+        return this.combinationType;
     }
 
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
-        return walkerType;
+        return this.walkerType;
     }
 
     @Override
     public long getMaxRows() {
-        return maxRows;
+        return this.maxRows;
     }
 
     @Override
     public boolean getValidateProfile() {
-        return validateProfile;
+        return this.validateProfile;
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
@@ -22,25 +24,22 @@ import java.util.stream.Stream;
 public class GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private final DataGenerator dataGenerator;
-    private final OutputTarget outputter;
 
     @Inject
     public GenerationEngine(
-        OutputTarget outputter,
         DataGenerator dataGenerator,
         DecisionTreeFactory decisionTreeGenerator) {
-        this.outputter = outputter;
         this.dataGenerator = dataGenerator;
         this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
-    void generateDataSet(Profile profile, GenerationConfig config) throws IOException {
+    void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
         final Stream<GeneratedObject> generatedDataItems = generate(profile, config);
 
-        this.outputter.outputDataset(generatedDataItems, profile.fields);
+        fileOutputTarget.outputDataset(generatedDataItems, profile.fields);
     }
 
-    public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
+    public void generateTestCases(Profile profile, GenerationConfig config, DirectoryOutputTarget directoryOutputTarget) throws IOException {
         final Stream<TestCaseDataSet> violatingCases = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
@@ -49,7 +48,7 @@ public class GenerationEngine {
             profile,
             violatingCases.collect(Collectors.toList()));
 
-        this.outputter.outputTestCases(generationResult);
+        directoryOutputTarget.outputTestCases(generationResult);
     }
 
     private TestCaseDataSet getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
