@@ -3,11 +3,7 @@ package com.scottlogic.deg.generator.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.MultiDataSetWriter;
-import com.scottlogic.deg.generator.outputs.dataset_writers.SourceTracingDataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 public class FileOutputTargetProvider implements Provider<FileOutputTarget> {
