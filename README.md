@@ -2,7 +2,7 @@
 
 # Data Generator
 
-### Welcome to the _Scott Logics_ data generator.
+### An open source project supported by [Scott Logic](https://www.scottlogic.com/)
 The generation of representative test and simulation data is challenging and time-consuming. The data-generator allows you to quickly create data, based on a schema, using a variety of generation modes for the purpose of testing and validation.
 
 You can use this data generator to commission and maintain your test systems with data that conforms to your live environments without copying data or breaching GDPR.
@@ -10,7 +10,7 @@ You can use this data generator to commission and maintain your test systems wit
 The data generator has been written in Java to allow cross platform compatibility, allowing it to work on Microsoft Windows, Apple Mac and Linux equally.
 
 ## Getting started
-As the data generator is at an _beta_ stage, there are no published releases. To be able to use this tool, please build the tool then you'll be able to use it as with the examples below.
+As the data generator is at a _beta_ stage, there are no published releases. To be able to use this tool, please build the tool (see development setup instructions below) then you'll be able to use it as with the examples below.
 
 ### Usage examples
 
@@ -61,10 +61,8 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
 * Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the data generator product, the remaining steps need to be actioned to be able to use the profiler.
-* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse
+* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn compile`) if you prefer.
 * Run the data generator or profiler - see the examples below.
-
-The product is confirmed compatible with Microsoft Windows, and should be compatible with all other operating systems, but this has not been confirmed to date.
 
 ## License
 
