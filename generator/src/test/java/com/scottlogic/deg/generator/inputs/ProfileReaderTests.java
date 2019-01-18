@@ -312,7 +312,7 @@ public class ProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsEqualToConstantConstraint.class));
+                                            instanceOf(IsInSetConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
@@ -343,7 +343,7 @@ public class ProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsEqualToConstantConstraint.class));
+                                            instanceOf(IsInSetConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,

@@ -16,10 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IsinStringGeneratorTest {
 
-    @Before
-    public void setup() {
-    }
-
     @Test
     public void shouldEndAllIsinsWithValidCheckDigit() {
         IsinStringGenerator target = new IsinStringGenerator();

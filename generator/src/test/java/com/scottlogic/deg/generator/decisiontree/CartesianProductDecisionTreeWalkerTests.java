@@ -49,9 +49,9 @@ class CartesianProductDecisionTreeWalkerTests {
                 rule("US country constrains city"),
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             country,
-                            "US",
+                            Collections.singleton("US"),
                             rules()),
                         new IsInSetConstraint(
                             city,
@@ -61,9 +61,9 @@ class CartesianProductDecisionTreeWalkerTests {
                 rule("GB country constrains city"),
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             country,
-                            "GB",
+                            Collections.singleton("GB"),
                             rules()),
                         new IsInSetConstraint(
                             city,
@@ -73,25 +73,25 @@ class CartesianProductDecisionTreeWalkerTests {
                 rule("US country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             country,
-                            "US",
+                            Collections.singleton("US"),
                             rules()),
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             currency,
-                            "USD",
+                            Collections.singleton("USD"),
                             rules())))),
             new Rule(
                 rule("GB country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             country,
-                            "GB",
+                            Collections.singleton("GB"),
                             rules()),
-                        new IsEqualToConstantConstraint(
+                        new IsInSetConstraint(
                             currency,
-                            "GBP",
+                            Collections.singleton("GBP"),
                             rules())))));
 
         Profile profile = new Profile(fields, dummyRules);

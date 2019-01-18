@@ -36,8 +36,6 @@ public class FieldSpecFactory {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate, violated);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate, violated);
-        } else if (constraint instanceof IsEqualToConstantConstraint) {
-            return construct((IsEqualToConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             return construct((IsGreaterThanConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
@@ -77,17 +75,6 @@ public class FieldSpecFactory {
         } else {
             throw new UnsupportedOperationException();
         }
-    }
-
-    private FieldSpec construct(IsEqualToConstantConstraint constraint, boolean negate, boolean violated) {
-        return construct(
-            new IsInSetConstraint(
-                constraint.field,
-                Collections.singleton(constraint.requiredValue),
-                constraint.getRules()
-            ),
-            negate,
-            violated);
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
