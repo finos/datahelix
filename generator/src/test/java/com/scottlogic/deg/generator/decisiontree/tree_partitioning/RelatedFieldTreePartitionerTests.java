@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.*;
 import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
@@ -223,7 +223,7 @@ class RelatedFieldTreePartitionerTests {
         AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
-            constraint = new IsEqualToConstantConstraint(new Field(fieldName), "sample-value", rules());
+            constraint = new IsInSetConstraint(new Field(fieldName), Collections.singleton("sample-value"), rules());
             this.constraints.put(fieldName, constraint);
         }
 
