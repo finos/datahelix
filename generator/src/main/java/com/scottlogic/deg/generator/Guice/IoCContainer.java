@@ -15,8 +15,6 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
@@ -24,6 +22,8 @@ import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.Fi
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
+
+import java.nio.file.Path;
 
 public class IoCContainer extends AbstractModule {
     private final CommandLineBase commandLine;
@@ -40,8 +40,6 @@ public class IoCContainer extends AbstractModule {
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
         bind(Profile.class).toProvider(ProfileProvider.class);
-        bind(FileOutputTarget.class).toProvider(FileOutputTargetProvider.class);
-        bind(DirectoryOutputTarget.class).toProvider(DirectoryOutputTargetProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
@@ -60,6 +58,8 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
+
+        bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
     }
 
     private void bindAllCommandLineTypes() {
