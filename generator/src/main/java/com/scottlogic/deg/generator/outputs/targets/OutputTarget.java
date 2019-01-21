@@ -13,8 +13,4 @@ public interface OutputTarget {
         Stream<GeneratedObject> generatedObjects,
         ProfileFields profileFields)
         throws IOException;
-
-    void outputTestCases(
-        TestCaseGenerationResult dataSets)
-        throws IOException;
 }

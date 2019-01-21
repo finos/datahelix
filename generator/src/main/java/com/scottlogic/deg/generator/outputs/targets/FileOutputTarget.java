@@ -39,9 +39,7 @@ public class FileOutputTarget implements OutputTarget {
         }
     }
 
-    @Override
-    public void outputTestCases(
-        TestCaseGenerationResult dataSets) {
-        throw new UnsupportedOperationException();
+    public Path getFolder(){
+        return filePath.getParent();
     }
 }
