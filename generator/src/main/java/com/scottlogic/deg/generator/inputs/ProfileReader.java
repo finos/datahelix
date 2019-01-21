@@ -48,6 +48,10 @@ public class ProfileReader {
                 profileJson,
                 V3ProfileDTO.SchemaVersion);
 
+        if (profileDto.fields == null || profileDto.rules == null) {
+            throw new InvalidProfileException("Profile is invalid, either 'fields' or 'rules' have not been defined.");
+        }
+
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
                 .map(fDto -> new Field(fDto.name))
