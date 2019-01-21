@@ -12,7 +12,7 @@ The data generator has been written in Java to allow cross platform compatibilit
 ## Getting started
 You will need Java v1.8 installed to run the generator, it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
-You can download the [latest generator here](https://github.com/ScottLogic/data-engineering-generator/releases/).
+You can download the generator from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
 
 ### Usage examples
 

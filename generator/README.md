@@ -8,7 +8,7 @@ See installation instructions [here](./docs/GeneratorSetup.md).
 
 ## Command line
 
-You must have JAVA v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able to run the generator. Once this is installed you can run the generator by running the following command:
+You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able to run the generator. Once this is installed you can run the generator with the following command:
 
 `java -jar <path to JAR file> <command> [options] <arguments>`
 
