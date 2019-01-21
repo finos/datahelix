@@ -63,7 +63,7 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
 * Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the data generator product, the remaining steps need to be actioned to be able to use the profiler.
-* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn compile`) if you prefer.
+* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn install -pl :generator -am`) if you prefer.
 * Run the data generator or profiler - see the examples below.
 
 ## License
