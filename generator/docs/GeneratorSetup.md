@@ -11,6 +11,7 @@ git clone https://github.com/ScottLogic/data-engineering-generator.git
 ## Installation Requirements
 
 * Java version 1.8
+* Maven
 * Cucumber
 * One of IntelliJ/Eclipse IDE 
 
@@ -22,6 +23,10 @@ git clone https://github.com/ScottLogic/data-engineering-generator.git
 
 In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
 Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
+
+### Maven
+
+Download and install Apache Maven, following the [instructions on their project website](https://maven.apache.org/install.html).
 
 ### IntelliJ IDE
 
