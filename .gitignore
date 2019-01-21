@@ -3,6 +3,7 @@
 node_modules/
 *.iml
 *.orig
+classes/
 
 # Eclipse files
 **/*.cache-main
