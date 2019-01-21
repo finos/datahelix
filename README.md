@@ -10,29 +10,31 @@ You can use this data generator to commission and maintain your test systems wit
 The data generator has been written in Java to allow cross platform compatibility, allowing it to work on Microsoft Windows, Apple Mac and Linux equally.
 
 ## Getting started
-As the data generator is at a _beta_ stage, there are no published releases. To be able to use this tool, please build the tool (see development setup instructions below) then you'll be able to use it as with the examples below.
+You will need Java v1.8 installed to run the generator, it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+
+You can download the [latest generator here](https://github.com/ScottLogic/data-engineering-generator/releases/).
 
 ### Usage examples
 
 <!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
 
 #### Generate valid data
-`dg generate "<path to profile>" "<path to output directory or file>"`
+`java -jar generator.jar generate "<path to profile>" "<path to output directory or file>"`
 
 Optional additional switches:
 * `-n 1000` limit the output to 1000 rows
 * `-t <data-generation-type>` - produce different data in different ways, see [generation types](./generator/docs/GenerationTypes.md)
 
-Pass no arguments to `dg generate` to see additional switches and values.
+See [additional details here](./generator/README.md) on the switches that can be provided.
 
 #### Generate violated data
-`dg generateTestCases "<path to profile>" "<path to output directory>"`
+`java -jar generator.jar generateTestCases "<path to profile>" "<path to output directory>"`
 
 Optional additional switches:
 * `-n 1000` limit the output to 1000 rows per rule violation
 * `-t <data-generation-type>` - produce different data in different ways, see [generation types](./generator/docs/GenerationTypes.md)
 
-Pass no arguments to `dg generateTestCases` to see additional switches and values.
+See [additional details here](./generator/README.md) on the switches that can be provided.
 
 ## How it works
 
