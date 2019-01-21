@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.ViolationGenerationEngineWrapper;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -14,9 +15,8 @@ import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
 
-class ExampleProfilesTests {
+class ExampleProfilesViolationTests {
     private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
 
     @TestFactory
@@ -45,7 +45,7 @@ class ExampleProfilesTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config, new NullOutputTarget());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
@@ -59,7 +59,7 @@ class ExampleProfilesTests {
                 GenerationConfig.CombinationStrategyType.PINNING));
 
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config, new NullOutputTarget());
+            generationEngine.generateTestCases(profile, config);
         }));
     }
 
@@ -75,14 +75,17 @@ class ExampleProfilesTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
+                GenerationEngine engine = new GenerationEngine(
+                    new DecisionTreeDataGenerator(
+                        walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
+                        new RelatedFieldTreePartitioner(),
+                        new MostProlificConstraintOptimiser(),
+                        new NoopDataGeneratorMonitor()),
+                    new ProfileDecisionTreeFactory());
+                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget());
+
                 consumer.generate(
-                    new GenerationEngine(
-                        new DecisionTreeDataGenerator(
-                            walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
-                            new RelatedFieldTreePartitioner(),
-                            new MostProlificConstraintOptimiser(),
-                            new NoopDataGeneratorMonitor()),
-                        new ProfileDecisionTreeFactory()),
+                    wrapper,
                     profileFile);
             });
 
@@ -92,7 +95,7 @@ class ExampleProfilesTests {
         return dynamicTests;
     }
 
-    private class NullOutputTarget extends DirectoryOutputTarget {
+    private class NullOutputTarget extends FileOutputTarget {
         public NullOutputTarget() {
             super(null, new NullDataSetWriter());
         }
@@ -106,12 +109,8 @@ class ExampleProfilesTests {
         }
 
         @Override
-        public void outputTestCases(TestCaseGenerationResult dataSets) throws IOException {
-            // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted every iterable
-
-            dataSets.datasets.forEach(
-                ds -> ds.stream().forEach(
-                    row -> Assert.assertThat(row, notNullValue()))); // might as well assert non-null while we're at it
+        public FileOutputTarget withFilename(String filename){
+            return new NullOutputTarget();
         }
     }
 
@@ -128,6 +127,6 @@ class ExampleProfilesTests {
 
     @FunctionalInterface
     private interface GenerateConsumer {
-        void generate(GenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
+        void generate(ViolationGenerationEngineWrapper engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }

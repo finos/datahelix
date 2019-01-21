@@ -42,7 +42,7 @@ public class FileOutputTarget implements OutputTarget {
         }
     }
 
-    public Path getFolder(){
-        return filePath.getParent();
+    public FileOutputTarget withFilename(String filename){
+        return new FileOutputTarget(filePath.resolve(filename), dataSetWriter);
     }
 }

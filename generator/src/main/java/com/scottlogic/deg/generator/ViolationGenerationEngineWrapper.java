@@ -1,53 +1,71 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.outputs.TestCaseDataSet;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
+import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ViolationGenerationEngineWrapper {
     private final GenerationEngine generationEngine;
-    private final Path folder;
+    private final FileOutputTarget fileOutputTarget;
+    private final Path outputPath;
 
     @Inject
-    public ViolationGenerationEngineWrapper(GenerationEngine generationEngine, FileOutputTarget fileOutputTarget){
+    public ViolationGenerationEngineWrapper(@Named("outputPath") Path outputPath, GenerationEngine generationEngine, FileOutputTarget fileOutputTarget){
+        this.outputPath = outputPath;
         this.generationEngine = generationEngine;
-        this.folder = fileOutputTarget.getFolder();
+        this.fileOutputTarget = fileOutputTarget;
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
-        final Stream<Profile> violatingCases = profile.rules
+        final List<ViolatedProfile> violatedProfiles = profile.rules
             .stream()
-            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule));
+            .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule))
+            .collect(Collectors.toList());
 
-        folder.resolve()
+        if (violatedProfiles.isEmpty()) { return; }
+
+        int filename = 1;
+        DecimalFormat intFormatter = getDecimalFormat(violatedProfiles.size());
+        try {
+            new ManifestWriter().writeManifest(violatedProfiles, outputPath, intFormatter, filename);
+        }
+        catch (Exception e){}
+
+        for (ViolatedProfile violated: violatedProfiles) {
+            generationEngine.generateDataSet(violated, config,
+                fileOutputTarget.withFilename(intFormatter.format(filename)));
+            filename++;
+        }
 
 
     }
 
-    private Profile getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule rule) {
-        Collection<Rule> violatedRule = profile.rules.stream()
-            .map(r -> r == rule
-                ? violateRule(rule)
+    private ViolatedProfile getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule violatedRule) {
+        Collection<Rule> newRules = profile.rules.stream()
+            .map(r -> r == violatedRule
+                ? violateRule(violatedRule)
                 : r)
             .collect(Collectors.toList());
 
-        return new Profile(
-            profile.fields,
+        return new ViolatedProfile(
             violatedRule,
-            String.format("%s -- Violating: %s", profile.description, rule.rule.getDescription()));
+            profile.fields,
+            newRules,
+            String.format("%s -- Violating: %s", profile.description, violatedRule.rule.getDescription()));
 
     }
 
@@ -68,4 +86,13 @@ public class ViolationGenerationEngineWrapper {
         return new Rule(rule.rule, Collections.singleton(violatedConstraint));
     }
 
+    private static DecimalFormat getDecimalFormat(int numberOfDatasets)
+    {
+        int maxNumberOfDigits = (int)Math.ceil(Math.log10(numberOfDatasets));
+
+        char[] zeroes = new char[maxNumberOfDigits];
+        Arrays.fill(zeroes, '0');
+
+        return new DecimalFormat(new String(zeroes));
+    }
 }
