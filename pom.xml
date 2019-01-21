@@ -14,7 +14,6 @@
 
     <modules>
         <module>schemas</module>
-        <module>profiler</module>
         <module>generator</module>
     </modules>
 
