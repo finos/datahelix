@@ -22,12 +22,3 @@ This strategy is identical to the cartesian product walker but attempts to overc
 This strategy takes a different approach to the others above and follows the following process. The strategy focuses on reducing the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.) 
 
 See [Reductive tree walker](./docs/ReductiveTreeWalker.md) for more details.
-
-<!--
-1. Identify a field within the profile that can be 'fixed', see [Field fixing strategy](./docs/FieldFixingStrategy.md)
-1. Produce a `Stream` of values for the field.
-1. Treat the field as having the each value in the `Stream`. Each time the field is set to a value:
-   1. Remove any constraints that contradict the given 'fixed field'. If there are any decisions that cannot be satisfied (all options have been removed), then back track and try the next value for the field.
-   1. Repeat the process from (1) given the current state of the tree until all fields are fixed.
-   1. When all fields are fixed all values for a row are known, emit the row.
--->
