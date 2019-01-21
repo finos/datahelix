@@ -27,11 +27,11 @@
 		"decisions": [{
 			"options": [{
 				"atomicConstraints": [{
-					"type": "IsEqualToConstantConstraint",
+					"type": "IsInSetConstraint",
 					"field": {
 						"name": "Identifier"
 					},
-					"requiredValue": "EventB"
+					"legalValues" : [ "EventB" ]
 				},{
 					"type": "IsStringShorterThanConstraint",
 					"field": {
@@ -43,11 +43,11 @@
 				"atomicConstraints": [{
 					"type": "NotConstraint",
 					"negatedConstraint": {
-						"type": "IsEqualToConstantConstraint",
+						"type": "IsInSetConstraint",
 						"field": {
 							"name": "Identifier"
 						},
-						"requiredValue": "EventB"
+						"legalValues" : [ "EventB" ]
 					}
 				}]
 			}]
@@ -141,11 +141,11 @@
 						"C"
 					]
 				},{
-					"type": "IsEqualToConstantConstraint",
+					"type": "IsInSetConstraint",
 					"field": {
 						"name": "Level"
 					},
-					"requiredValue": "First"
+					"legalValues" : [ "First" ]
 				}]
 			},{
 				"atomicConstraints": [{

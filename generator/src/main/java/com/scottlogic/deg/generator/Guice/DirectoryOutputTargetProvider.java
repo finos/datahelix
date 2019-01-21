@@ -4,23 +4,23 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 
-public class FileOutputTargetProvider implements Provider<FileOutputTarget> {
+public class DirectoryOutputTargetProvider implements Provider<DirectoryOutputTarget> {
     private final GenerationConfigSource commandLine;
     private final DataSetWriter dataSetWriter;
 
     @Inject
-    public FileOutputTargetProvider(
-        GenerationConfigSource commandLine,
-        DataSetWriter dataSetWriter) {
+    public DirectoryOutputTargetProvider(GenerationConfigSource commandLine, DataSetWriter dataSetWriter) {
         this.commandLine = commandLine;
         this.dataSetWriter = dataSetWriter;
     }
 
     @Override
-    public FileOutputTarget get() {
-        return new FileOutputTarget(commandLine.getOutputPath(), dataSetWriter);
+    public DirectoryOutputTarget get() {
+        return new DirectoryOutputTarget(
+            this.commandLine.getOutputPath(),
+            dataSetWriter
+        );
     }
 }
-
