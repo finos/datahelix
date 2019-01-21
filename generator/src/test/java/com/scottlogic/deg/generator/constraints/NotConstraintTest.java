@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.constraints;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -55,8 +55,8 @@ public class NotConstraintTest {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsEqualToConstantConstraint(field1, "abc", rules()).negate();
-        Constraint constraint2 = new IsEqualToConstantConstraint(field2, "abcd", rules()).negate();
+        Constraint constraint1 = new IsInSetConstraint(field1, Collections.singleton("abc"), rules()).negate();
+        Constraint constraint2 = new IsInSetConstraint(field2, Collections.singleton("abcd"), rules()).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 

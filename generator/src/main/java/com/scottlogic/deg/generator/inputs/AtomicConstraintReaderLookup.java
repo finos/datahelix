@@ -30,9 +30,9 @@ public class AtomicConstraintReaderLookup {
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
-                    new IsEqualToConstantConstraint(
+                    new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        potentialUnwrapDate(dto.value),
+                        mapValues(Collections.singleton(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISINSET.toString(),
