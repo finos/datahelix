@@ -7,52 +7,73 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class MultiDataSetWriter implements DataSetWriter<MultiDataSetWriter.MultiCloseable> {
-    private final List<DataSetWriter> writers;
+public class MultiDataSetWriter implements DataSetWriter<Closeable> {
+    private final List<StatefulDataSetWriter> writers;
 
     public MultiDataSetWriter(DataSetWriter... writers) {
-        this(Arrays.asList(writers));
-    }
-
-    public MultiDataSetWriter(List<DataSetWriter> writers) {
-        this.writers = writers;
+        this.writers = Arrays.stream(writers).map(StatefulDataSetWriter::new).collect(Collectors.toList());
     }
 
     @Override
-    public MultiCloseable openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
+    public Closeable openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
         ThrownExceptions exceptions = new ThrownExceptions();
 
-        return exceptions.rethrowIfCaughtOrReturn(new MultiCloseable(
-            this.writers
-                .stream()
-                .collect(Collectors.toMap(
-                    Function.identity(),
-                    writer -> {
-                        try {
-                            return writer.openWriter(directory, filenameWithoutExtension, profileFields);
-                        } catch (IOException e) {
-                            exceptions.add(e);
-                            return new NullClosable();
-                        }
-                    }
-                ))
-        ));
-    }
-
-    @Override
-    public void writeRow(MultiCloseable closeable, GeneratedObject row) throws IOException {
-        ThrownExceptions exceptions = new ThrownExceptions();
-
-        closeable.writers.forEach((writer, writerClosable) -> {
+        this.writers.forEach(writer -> {
             try {
-                writer.writeRow(writerClosable, row);
+                writer.openWriterAndRemember(directory, profileFields);
             } catch (IOException e) {
                 exceptions.add(e);
             }
         });
+
+        exceptions.rethrowIfCaught();
+        return this::closeAllWriters; //to ensure when close() is called then its called on all instances in writers.
+    }
+
+    @Override
+    public void writeRow(Closeable closeable, GeneratedObject row) throws IOException {
+        ThrownExceptions exceptions = new ThrownExceptions();
+
+        this.writers.forEach(writer -> {
+            try {
+                writer.writeRow(row);
+            } catch (IOException e) {
+                exceptions.add(e);
+            }
+        });
+
+        exceptions.rethrowIfCaught();
+    }
+
+    @Override
+    public String getFileName(String fileNameWithoutExtension) {
+        String firstFileName = null;
+        for (StatefulDataSetWriter writerWithFileName : this.writers){
+            String fileName = writerWithFileName.getFileNameAndRemember(fileNameWithoutExtension);
+            if (firstFileName == null && fileName != null){
+                firstFileName = fileName;
+            }
+        }
+
+        return firstFileName;
+    }
+
+    private void closeAllWriters() throws IOException {
+        ThrownExceptions exceptions = new ThrownExceptions();
+
+        for (StatefulDataSetWriter writer : this.writers) {
+            if (writer.closeable == null){
+                continue;
+            }
+
+            try {
+                writer.closeable.close();
+            } catch (IOException e) {
+                exceptions.add(e);
+            }
+        }
 
         exceptions.rethrowIfCaught();
     }
@@ -64,11 +85,6 @@ public class MultiDataSetWriter implements DataSetWriter<MultiDataSetWriter.Mult
             exceptions.add(exception);
         }
 
-        <T> T rethrowIfCaughtOrReturn(T ifNoExceptions) throws IOException {
-            rethrowIfCaught();
-            return ifNoExceptions;
-        }
-
         void rethrowIfCaught() throws IOException {
             if (exceptions.isEmpty()){
                 return;
@@ -78,31 +94,34 @@ public class MultiDataSetWriter implements DataSetWriter<MultiDataSetWriter.Mult
         }
     }
 
-    class NullClosable implements Closeable{
-        @Override
-        public void close() { }
-    }
+    class StatefulDataSetWriter {
+        private final DataSetWriter writer;
+        private String fileName;
+        private Closeable closeable;
 
-    class MultiCloseable implements Closeable {
-        final Map<DataSetWriter, Closeable> writers;
-
-        MultiCloseable(Map<DataSetWriter, Closeable> writers) {
-            this.writers = writers;
+        StatefulDataSetWriter(DataSetWriter writer) {
+            this.writer = writer;
         }
 
-        @Override
-        public void close() throws IOException {
-            ThrownExceptions exceptions = new ThrownExceptions();
-
-            for (Closeable closable : this.writers.values()) {
-                try {
-                    closable.close();
-                } catch (IOException e) {
-                    exceptions.add(e);
-                }
+        void openWriterAndRemember(Path directory, ProfileFields profileFields) throws IOException {
+            if (this.fileName == null){
+                throw new IllegalStateException("Filename has not been determined");
             }
 
-            exceptions.rethrowIfCaught();
+            this.closeable = this.writer.openWriter(directory, this.fileName, profileFields);
+        }
+
+        void writeRow(GeneratedObject row) throws IOException {
+            if (this.closeable == null){
+                throw new IllegalStateException("Writer has not been initialised");
+            }
+
+            this.writer.writeRow(this.closeable, row);
+        }
+
+        String getFileNameAndRemember(String fileNameWithoutExtension) {
+            this.fileName = this.writer.getFileName(fileNameWithoutExtension);
+            return this.fileName;
         }
     }
 }

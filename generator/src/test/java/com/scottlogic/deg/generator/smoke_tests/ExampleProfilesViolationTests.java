@@ -123,6 +123,11 @@ class ExampleProfilesViolationTests {
         @Override
         public void writeRow(Closeable closeable, GeneratedObject row) {
         }
+
+        @Override
+        public String getFileName(String fileNameWithoutExtension) {
+            return null;
+        }
     }
 
     @FunctionalInterface

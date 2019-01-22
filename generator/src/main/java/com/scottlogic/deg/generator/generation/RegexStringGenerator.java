@@ -176,6 +176,10 @@ public class RegexStringGenerator implements StringGenerator {
 
         buildRootNode();
 
+        if(rootNode.nextNodes.isEmpty()){
+            return 0;
+        }
+
         return rootNode.matchedStringIdx;
     }
 
