@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class FileOutputTarget implements OutputTarget {
@@ -29,6 +30,10 @@ public class FileOutputTarget implements OutputTarget {
         throws IOException {
 
         Path directoryPath = this.filePath.getParent();
+        if (directoryPath == null) {
+            directoryPath = Paths.get(System.getProperty("user.dir"));
+        }
+
         String fileNameWithoutExtension = this.filePath.getFileName().toString();
 
         try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileNameWithoutExtension, profileFields)) {

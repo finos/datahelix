@@ -69,7 +69,8 @@ public class TestCaseGenerationResultWriter {
     }
 
     private void write(ProfileFields fields, Stream<GeneratedObject> dataSet, Path directory, String filenameWithoutExtension) throws IOException {
-        try (Closeable writer = this.datasetWriter.openWriter(directory, filenameWithoutExtension, fields)) {
+        String fileName = this.datasetWriter.getFileName(filenameWithoutExtension);
+        try (Closeable writer = this.datasetWriter.openWriter(directory, fileName, fields)) {
             dataSet.forEach(row -> {
                 try {
                     this.datasetWriter.writeRow(writer, row);

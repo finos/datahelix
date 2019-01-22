@@ -22,8 +22,13 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
     private static final SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Override
-    public JsonWriter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) {
-        return new JsonWriter(directory.resolve(filenameWithoutExtension + ".json"), profileFields);
+    public JsonWriter openWriter(Path directory, String fileName, ProfileFields profileFields) {
+        return new JsonWriter(directory.resolve(fileName), profileFields);
+    }
+
+    @Override
+    public String getFileName(String fileNameWithoutExtension) {
+        return fileNameWithoutExtension + ".json";
     }
 
     @Override
