@@ -82,7 +82,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private Stream<FieldSpec> getNotNullSetRestrictionFilterOnMustContainRestriction(MustContainRestriction restriction) {
         return restriction.getRequiredObjects()
             .stream()
-            .filter(o -> o.getSetRestrictions() != null);
+            .filter(o -> o.getSetRestrictions() != null
+                && o.getSetRestrictions().getWhitelist() != null);
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
