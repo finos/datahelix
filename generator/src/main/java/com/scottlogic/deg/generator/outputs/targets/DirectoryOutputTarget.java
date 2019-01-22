@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
@@ -17,8 +19,9 @@ public class DirectoryOutputTarget implements OutputTarget {
     private final DataSetWriter dataSetWriter;
     private final TestCaseGenerationResultWriter testCaseWriter;
 
+    @Inject
     public DirectoryOutputTarget(
-        Path directoryPath,
+        @Named("outputPath") Path directoryPath,
         DataSetWriter dataSetWriter) {
 
         this.directoryPath = directoryPath;
