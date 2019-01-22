@@ -16,7 +16,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
-    public CSVPrinter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
+    public CSVPrinter openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
         return writerFormat
             .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
             .withQuoteMode(QuoteMode.NONE)
@@ -24,7 +24,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
                 .map(f -> f.name)
                 .toArray(String[]::new))
             .print(
-                directory.resolve(filenameWithoutExtension + ".csv"),
+                directory.resolve(fileName),
                 StandardCharsets.UTF_8);
     }
 
@@ -35,6 +35,11 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
             .collect(Collectors.toList()));
 
         writer.flush();
+    }
+
+    @Override
+    public String getFileName(String fileNameWithoutExtension) {
+        return fileNameWithoutExtension + ".csv";
     }
 
     private static Object extractCellValue(DataBagValue cell){

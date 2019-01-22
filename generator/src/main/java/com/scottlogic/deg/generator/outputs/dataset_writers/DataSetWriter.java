@@ -10,8 +10,10 @@ import java.nio.file.Path;
 public interface DataSetWriter<TWriter extends Closeable> {
     TWriter openWriter(
         Path directory,
-        String filenameWithoutExtension,
+        String fileName,
         ProfileFields profileFields) throws IOException;
 
     void writeRow(TWriter writer, GeneratedObject row) throws IOException;
+
+    String getFileName(String fileNameWithoutExtension);
 }
