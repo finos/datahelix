@@ -44,3 +44,8 @@ With no options this should yield the following data:
 |"Lorem Ipsum"   |
 |                |"Lorem Ipsum"  |
 
+##Hints and Tips
+
+* Ensure the desired output file is not being used by any other programs or the generator will not be able to run
+    * If the file already exists it will be overwritten
+

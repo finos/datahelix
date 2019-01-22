@@ -3,6 +3,8 @@
 You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able 
 to run the generator. Once this is installed you can run the generator in the following ways:
 
+**GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules**
+
 ##Using the Command Line
 
 Download the Jar file (generator.jar) from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
@@ -33,6 +35,7 @@ Once your IDE is set up the generator can be run using the following program arg
 
 ## Example
 
+
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [previous](./CreatingAProfile.md) section, run the generate command
 with your preferred above method. 
 
@@ -54,5 +57,13 @@ With no options this should yield the following data:
 |2100-01-01T00:00|Lorem Ipsum    |
 |	             |Lorem Ipsum    |
 |-2147483648	 |               |
+
+##Hints and Tips
+
+* The output from generateTestCases will produce one output file per rule being violated
+    * This is why the output location is a directory and not a file
+    * If there are already files in the output directory they may be overwritten 
+* It is important to give your rules descriptions so that the manifest can list the violated rules clearly
+* Rules made up of multiple constraints will be violated as one rule and therefore will produce one output file
 
 
