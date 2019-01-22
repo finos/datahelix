@@ -14,6 +14,8 @@ You will need Java v1.8 installed to run the generator, it can be [downloaded he
 
 You can download the generator from the [GitHub project releases page](https://github.com/ScottLogic/datahelix/releases/).
 
+For an in-depth guide on how the generator may be used see the [step by step instructions](./docs/GettingStarted/CreatingAProfile.md).
+
 ### Usage examples
 
 <!-- A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially screenshots / videos ([LiceCap](https://www.cockos.com/licecap/) is great for this kind of thing) -->
@@ -25,7 +27,7 @@ Optional additional switches:
 * `-n 1000` limit the output to 1000 rows
 * `-t <data-generation-type>` - produce different data in different ways, see [generation types](./generator/docs/GenerationTypes.md)
 
-See [additional details here](./generator/README.md) on the switches that can be provided.
+See [additional details here](./docs/Options/GenerateOptions.md) on the switches that can be provided.
 
 #### Generate violated data
 `java -jar generator.jar generateTestCases "<path to profile>" "<path to output directory>"`
@@ -34,7 +36,7 @@ Optional additional switches:
 * `-n 1000` limit the output to 1000 rows per rule violation
 * `-t <data-generation-type>` - produce different data in different ways, see [generation types](./generator/docs/GenerationTypes.md)
 
-See [additional details here](./generator/README.md) on the switches that can be provided.
+See [additional details here](./docs/Options/GenerateTestCasesOptions.md) on the switches that can be provided.
 
 ## How it works
 

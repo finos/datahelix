@@ -1,4 +1,4 @@
-#Creating a Profile
+##Creating a Profile
 
 This guide will walk you through creating basic profiles with which you can generate data
 
