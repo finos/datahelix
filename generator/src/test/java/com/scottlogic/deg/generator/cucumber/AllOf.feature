@@ -9,18 +9,21 @@ Scenario: Running an 'allOf' request that contains a valid nested allOf request 
        """
          { "allOf": [
            { "allOf": [
-             { "field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" },
-             { "field": "foo", "is": "ofLength", "value": 3 }
+             { "field": "foo", "is": "matchingRegex", "value": "[a-b]{2}" },
+             { "field": "foo", "is": "ofLength", "value": 2 }
            ]},
            { "field": "foo", "is": "ofType", "value": "string" }
          ]}
        """
-     Then the following data should be included in what is generated:
-       | foo   |
-       | "abc" |
-       | null  |
+     Then the following data should be generated:
+       | foo  |
+       | "aa" |
+       | "ab" |
+       | "bb" |
+       | "ba" |
+       | null |
 
-  # failing - generates duplicate nulls linked to issue 343 should have been fixed with 354
+  # failing - generates duplicate nulls linked to issue 91
 Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
      Given there is a field foo
        And foo is of type "string"
@@ -40,7 +43,7 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        | "11" |
        | null |
 
-  # failing should be fixed with ticket 437
+  # failing should be fixed with ticket 91
 Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
      Given there is a field foo
        And there is a constraint:
