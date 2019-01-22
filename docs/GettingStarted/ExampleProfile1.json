@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "v3",
+  "fields": [
+    {
+      "name": "Column 1 Header"
+    },
+    {
+      "name": "Column 2 Header"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Rule Description",
+      "constraints": [
+        {
+          "field": "Column 1 Header",
+          "is": "ofType",
+          "value": "string"
+        },
+        {
+          "field": "Column 2 Header",
+          "is": "ofType",
+          "value": "string"
+        }
+      ]
+    }
+  ]
+}
