@@ -47,6 +47,4 @@ public class ManifestWriter {
             manifestAsJson.getBytes(
                 Charset.forName("UTF-8")));
     }
-{
-    }
 }

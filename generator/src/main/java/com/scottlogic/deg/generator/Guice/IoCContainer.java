@@ -15,7 +15,6 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;

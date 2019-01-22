@@ -16,6 +16,7 @@ import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
 import org.junit.Assert;
@@ -82,7 +83,7 @@ class ExampleProfilesViolationTests {
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
-                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget());
+                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget(), new ManifestWriter());
 
                 consumer.generate(
                     wrapper,

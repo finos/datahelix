@@ -22,12 +22,14 @@ public class ViolationGenerationEngineWrapper {
     private final GenerationEngine generationEngine;
     private final FileOutputTarget fileOutputTarget;
     private final Path outputPath;
+    private final ManifestWriter manifestWriter;
 
     @Inject
-    public ViolationGenerationEngineWrapper(@Named("outputPath") Path outputPath, GenerationEngine generationEngine, FileOutputTarget fileOutputTarget){
+    public ViolationGenerationEngineWrapper(@Named("outputPath") Path outputPath, GenerationEngine generationEngine, FileOutputTarget fileOutputTarget, ManifestWriter manifestWriter){
         this.outputPath = outputPath;
         this.generationEngine = generationEngine;
         this.fileOutputTarget = fileOutputTarget;
+        this.manifestWriter = manifestWriter;
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {
@@ -41,7 +43,7 @@ public class ViolationGenerationEngineWrapper {
         int filename = 1;
         DecimalFormat intFormatter = getDecimalFormat(violatedProfiles.size());
         try {
-            new ManifestWriter().writeManifest(violatedProfiles, outputPath, intFormatter, filename);
+            manifestWriter.writeManifest(violatedProfiles, outputPath, intFormatter, filename);
         }
         catch (Exception e){}
 
