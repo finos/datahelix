@@ -1,8 +1,8 @@
 # Visualising the Decision Tree
 
 
-**Generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
-for manual inspection, in the form of a gv file.** 
+Generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+for manual inspection, in the form of a gv file.
 
 ## Using the Command Line
 
@@ -62,4 +62,7 @@ This is a very simple tree, more complex profiles will generate more complex tre
     There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
     - gv files are encoded with UTF-8, visualisers must support this encoding.
     - gv files can include HTML encoded entities, visualisers should support this feature.
+
+#
+[< Previous](GenerateTestCases.md) | [Contents](StepByStepInstructions.md)
 

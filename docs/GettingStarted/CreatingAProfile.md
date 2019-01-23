@@ -1,6 +1,6 @@
 ## Creating a Profile
 
-This guide will walk you through creating basic profiles with which you can generate data
+This guide will walk you through creating basic profiles with which you can generate data.
 
 [Profiles](../Profiles.md) are JSON documents consisting of three sections, the schema version, the list 
 of fields and the rules.
@@ -72,3 +72,7 @@ This is equivalent to:
 ```
 
 These three sections are combined to form the [complete profile](ExampleProfile1.json).
+
+#
+
+[Contents](StepByStepInstructions.md) | [Next Section >](GeneratingData.md)
