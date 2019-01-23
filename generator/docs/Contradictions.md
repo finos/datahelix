@@ -13,7 +13,7 @@ There is an optional component of the generator - the profile validator - which 
 
 ## 'Hard' contradictions
 This is where contradictions occur in a way where no rows could be satisfied for at least one field. If this is the case then no rows can be emitted for any field in the profile, therefore the output file/s would be empty.
-Hard contradictions can otherwise be described as removed all possible values from the universal set and denying the absence of values for the field; `not(is null)`. All hard contradictions must contain this constraint in some fashion, otherwise `null` can still be emitted.
+Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`. All hard contradictions must contain this constraint in some fashion, otherwise `null` can still be emitted.
 
 See [how data is generated](SetRestrictionAndGeneration.md) for more detail on how constraints are combined and in-turn reduce the set of permissible values for a field.
 

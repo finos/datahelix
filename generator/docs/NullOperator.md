@@ -4,13 +4,13 @@ The `null` operator in a profile, expressed as `"is": "null"` or the negated equ
 
 | Absence / Presence<br />Described in other technologies as nullability | Field value<br /> |
 | ---- | ---- |
-| _null operator omitted_<br /> **The default**. The field's value may be absent or present | `is null`<br />The field will have _no value_ |
-| `not(is null)`<br />The field's value must be present | `not(is null)`<br />The field must have a value |
+| (A) _null operator omitted_<br /> **The default**. The field's value may be absent or present | (B) `is null`<br />The field will have _no value_ |
+| (C) `not(is null)`<br />The field's value must be present | (D) `not(is null)`<br />The field must have a value |
 
 Therefore the null operator can:
-- `not(is null)` express fields that must have a value (otherwise known as a non-nullable field)
-- `is null` express fields as having no value (otherwise known as setting the value to `null`)
-- _By omitting the constraint_: express fields as allowing either having a value or the absent of one (otherwise known as a nullable field)
+- (C, D) `not(is null)` express fields that must have a value (otherwise known as a non-nullable field)
+- (B) `is null` express fields as having no value (otherwise known as setting the value to `null`)
+- (A) _By omitting the constraint_: express fields as permitting absence or presence of a value (otherwise known as a nullable field)
 
 ### `null` and interoperability
 `null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](SetRestrictionAndGenerarion.md) for more details.
