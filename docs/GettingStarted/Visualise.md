@@ -1,10 +1,10 @@
-#Visualising the Decision Tree
+# Visualising the Decision Tree
 
 
 **Generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
 for manual inspection, in the form of a gv file.** 
 
-##Using the Command Line
+## Using the Command Line
 
 
 To visualise the decision tree run the following command from the command line:
@@ -17,7 +17,7 @@ To visualise the decision tree run the following command from the command line:
 * `<path to desired output directory>` the location of the folder for the resultant GV file of the tree
 
 
-##Using an IDE 
+## Using an IDE 
 
 Visualise can be run using the following program arguments within your IDE:
 
@@ -54,7 +54,7 @@ Expected RowSpecs: 1"][fontsize="10"][shape=box][style="dotted"]
 
 This is a very simple tree, more complex profiles will generate more complex trees
 
-##Hints and Tips
+## Hints and Tips
 
 * You may read a gv file with any text editor
 * You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/).

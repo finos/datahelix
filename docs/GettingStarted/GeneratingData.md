@@ -1,6 +1,6 @@
-#Generating Data
+# Generating Data
 
-##Using the Command Line
+## Using the Command Line
 
 To generate data run the following command from the command line
 
@@ -12,7 +12,7 @@ To generate data run the following command from the command line
 * `<path to desired output directory>` the location of the resultant CSV file of generated data
 
 
-##Using an IDE 
+## Using an IDE 
 
 Once your IDE is set up the generator can be run using the following program arguments:
 
@@ -37,7 +37,7 @@ With no options this should yield the following data:
 |"Lorem Ipsum"   |
 |                |"Lorem Ipsum"  |
 
-##Hints and Tips
+## Hints and Tips
 
 * Ensure the desired output file is not being used by any other programs or the generator will not be able to run
     * If the file already exists it will be overwritten

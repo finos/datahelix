@@ -1,4 +1,4 @@
-#Step By Step Instructions
+# Step By Step Instructions
 
 You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able 
 to run the generator. 
@@ -9,7 +9,7 @@ The generator may be run using the command line or through an IDE.
  * If you wish to set up a development environment, follow the instructions [here](../../generator/docs/GeneratorSetup.md).
 
 
-##Contents
+## Contents
 
 1. [ Creating a Profile. ](CreatingAProfile.md)
 2. [Using a profile to Generate data](GeneratingData.md)

@@ -1,7 +1,7 @@
-#Generating Violating Data (Test Cases)
+# Generating Violating Data (Test Cases)
 GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules
 
-##Using the Command Line
+## Using the Command Line
 
 To generate violating data run the following command from the command line
 
@@ -13,7 +13,7 @@ To generate violating data run the following command from the command line
 * `<path to output desired directory>` the location of the folder in which to save the resultant CSV files of generated data
 
 
-##Using an IDE 
+## Using an IDE 
 
 The generator can be run using the following program arguments within your IDE:
 
@@ -50,7 +50,7 @@ With no options this should yield the following data:
 |	             |Lorem Ipsum    |
 |-2147483648	 |               |
 
-##Hints and Tips
+## Hints and Tips
 
 * The output from generateTestCases will produce one output file per rule being violated
     * This is why the output location is a directory and not a file
