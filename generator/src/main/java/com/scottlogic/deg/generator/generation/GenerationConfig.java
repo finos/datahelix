@@ -110,6 +110,14 @@ public class GenerationConfig {
         }
     }
 
+    /**
+     * Represents the two current generation modes, generating valid data for a profile and invalid data or "test cases"
+     */
+    public enum GenerationMode {
+        VIOLATING,
+        VALIDATING
+    }
+
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";

@@ -36,6 +36,10 @@ public class DegTestHelper {
             state.combinationStrategy = GenerationConfig.CombinationStrategyType.PINNING;
         }
 
+        if (this.state.generationMode == null) {
+            this.state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
+        }
+
         if (this.generatorHasRun()) {
             return generatedData;
         }

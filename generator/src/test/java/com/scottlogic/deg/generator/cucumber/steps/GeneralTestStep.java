@@ -171,6 +171,20 @@ public class GeneralTestStep {
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
+    @Given("^the data requested is (violating|validating)$")
+    public void setTheGenerationMode(String generationMode) {
+        switch (generationMode) {
+            case "violating":
+                this.state.generationMode = GenerationConfig.GenerationMode.VIOLATING;
+                break;
+            case "validating":
+                this.state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
+                break;
+            default:
+                throw new IllegalArgumentException("Specified generation mode not supported");
+        }
+    }
+
     private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
