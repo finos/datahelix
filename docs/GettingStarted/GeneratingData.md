@@ -1,5 +1,7 @@
 # Generating Data
 
+This page details how to generate data with a given profile.
+
 ## Using the Command Line
 
 To generate data run the following command from the command line

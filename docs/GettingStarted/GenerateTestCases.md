@@ -1,5 +1,8 @@
 # Generating Violating Data (Test Cases)
-GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules.
+
+This page details how to generate data that intentionally violates the constraints of a profile.
+
+GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules in each file.
 
 ## Using the Command Line
 

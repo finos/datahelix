@@ -1,7 +1,8 @@
 # Visualising the Decision Tree
 
+This page will detail how to use the `visualise` command to view the decision tree for a profile.
 
-Generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+Visualise generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
 for manual inspection, in the form of a gv file.
 
 ## Using the Command Line
