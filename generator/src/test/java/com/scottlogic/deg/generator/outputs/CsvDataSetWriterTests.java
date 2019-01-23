@@ -34,7 +34,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
+            Collections.singletonList(getBigDecimalValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, CSVFormat.EXCEL);
 
@@ -77,11 +77,31 @@ public class CsvDataSetWriterTests {
         Assert.assertEquals("1.2", stringBuffer.toString().trim());
     }
 
+    @Test
+    void nonBigDecimalWithFormatShouldOutputCorrectly() throws IOException {
+        // Arrange
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = new GeneratedObject(
+            Collections.singletonList(getStringValueWithFormat("Hello World", "%.5s")), // Format string to max 5 chars
+            new RowSource(Collections.emptyList()));
+        CSVPrinter printer = new CSVPrinter(stringBuffer, CSVFormat.EXCEL);
+
+        // Act
+        WriteToBuffer(printer, generatedObject);
+
+        // Assert
+        Assert.assertEquals("Hello", stringBuffer.toString().trim());
+    }
+
     private DataBagValue getValue(BigDecimal value) {
         return new DataBagValue(value, DataBagValueSource.Empty);
     }
 
-    private DataBagValue getValueWithFormat(BigDecimal value, String format) {
+    private DataBagValue getBigDecimalValueWithFormat(BigDecimal value, String format) {
+        return new DataBagValue(value, format, DataBagValueSource.Empty);
+    }
+
+    private DataBagValue getStringValueWithFormat(String value, String format) {
         return new DataBagValue(value, format, DataBagValueSource.Empty);
     }
 
