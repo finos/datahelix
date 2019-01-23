@@ -2,8 +2,6 @@
 
 A command-line tool for generating data according to [profiles](../docs/Profiles.md).
 
-You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able to run the generator. 
-
 For an in-depth guide on how the generator may be used see the [step by step instructions](../docs/GettingStarted/StepByStepInstructions.md).
 
 
@@ -16,7 +14,7 @@ See installation instructions [here](./docs/GeneratorSetup.md).
 Download the generator JAR file from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
 
 
-Once Java v1.8 is installed you can run the generator with the following command:
+Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you can run the generator with the following command:
 
 `java -jar <path to JAR file> <command> [options] <arguments>`
 
