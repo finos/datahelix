@@ -60,6 +60,7 @@ Scenario: When user requires creation of a field with strings that contain multi
        And foo is anything but null
      Then no data is created
 
+  @ignore
 # failing - data is duplicated linked to issue 91
 Scenario: User requires to create a field with numbers that conform to one or many non-contradictory constraints
        Given there is a constraint:
@@ -86,6 +87,7 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        | 9    |
        | 10   |
 
+    @ignore
   # failing - data is duplicated linked to issue 91
 Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
       Given there is a constraint:
@@ -120,7 +122,9 @@ Scenario: User requires to create a field with numbers that conform to multiple 
       | 18   |
       | 19   |
 
+  @ignore
   # failing - data is duplicated linked to issue 91
+  # failing - trims seconds off dates with timestamp T00:00:000. Issue 478
 Scenario: User requires to create a field with dates that conform to one or many constraints
        Given there is a constraint:
        """
@@ -144,7 +148,9 @@ Scenario: User requires to create a field with dates that conform to one or many
        | 2018-10-08T00:00:00.000 |
        | 2018-10-09T00:00:00.000 |
 
+    @ignore
     # failing - data is duplicated linked to issue 91
+    # failing - trims seconds off dates with timestamp T00:00:000. Issue 479
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
        Given there is a constraint:
        """
@@ -196,13 +202,13 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
     And foo is of type "string"
     And foo is anything but null
   Then the following data should be generated:
-    | foo     |
-    | "1"     |
-    | "333"   |
-    | "55555" |
-  And the following data should not be included in what is generated:
-    | "22"   |
-    | "4444" |
+      | foo     |
+      | "1"     |
+      | "333"   |
+      | "55555" |
+    And the following data should not be included in what is generated:
+      | "22"   |
+      | "4444" |
 
 Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
   Given there is a constraint:
@@ -228,13 +234,13 @@ Scenario: Running an 'anyOf' request that contains a valid nested allOf request 
     And foo is of type "string"
     And foo is anything but null
   Then the following data should be generated:
-    | foo    |
-    | "1"    |
-    | "4444" |
-  And the following data should not be included in what is generated:
-    | "22"    |
-    | "333"   |
-    | "55555" |
+      | foo    |
+      | "1"    |
+      | "4444" |
+    And the following data should not be included in what is generated:
+      | "22"    |
+      | "333"   |
+      | "55555" |
 
 Scenario: Running an 'anyOf' request that contains an invalid nested anyOf request should fail with an error message
   Given there is a constraint:

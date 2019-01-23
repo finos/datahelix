@@ -43,7 +43,6 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        | "11" |
        | null |
 
-  # failing should be fixed with ticket 91
 Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
      Given there is a field foo
        And there is a constraint:
@@ -56,9 +55,9 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
            { "field": "foo", "is": "ofType", "value": "string" }
          ]}
        """
-     Then the following data should be generated:
-        | foo  |
-        | null |
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
   #failing - looks to be part of issue 91
 Scenario: Running an 'allOf' request that contains soft contradictory restraints in a nested anyOf request should be successful
