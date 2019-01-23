@@ -1,4 +1,4 @@
-#### Generate Test Cases Options
+# Generate Test Cases Options
 Options are optional and case-insensitive
 
 * `-n <rows>` or `--max-rows <rows>`

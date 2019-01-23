@@ -1,4 +1,4 @@
-#### Visualise Options
+# Visualise Options
 Options are optional and case-insensitive
 
 * `-t <title>` or `--title <title>`

@@ -1,5 +1,4 @@
-
-#### Generate Options
+# Generate Options
 Options are optional and case-insensitive
 
 * `-n <rows>` or `--max-rows <rows>`
@@ -18,5 +17,3 @@ Options are optional and case-insensitive
    * Validate the profile, check to see if known contradictions exist, see [Profile validation](./docs/ProfileValidation.md) for more details
 * `--trace-constraints`
    * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
-
-#### Examples
