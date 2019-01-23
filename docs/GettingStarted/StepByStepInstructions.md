@@ -1,9 +1,17 @@
 #Step By Step Instructions
 
+You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able 
+to run the generator. 
+
+The generator may be run using the command line or through an IDE. 
+ * To use the command line download the Jar file (generator.jar) from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
+
+ * If you wish to set up a development environment, follow the instructions [here](../../generator/docs/GeneratorSetup.md).
+
+
 ##Contents
 
 1. [ Creating a Profile. ](CreatingAProfile.md)
-2. [Using a profile to Generate data]()
-3. [Generating Violating data]()
-4. [Visualising Decision Tree]()
-5. [Generate JSON Decision Tree]()
+2. [Using a profile to Generate data](GeneratingData.md)
+3. [Generating Violating data](GenerateTestCases.md)
+4. [Visualising the Decision Tree](Visualise.md)

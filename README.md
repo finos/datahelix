@@ -14,7 +14,7 @@ You will need Java v1.8 installed to run the generator, it can be [downloaded he
 
 You can download the generator from the [GitHub project releases page](https://github.com/ScottLogic/datahelix/releases/).
 
-For an in-depth guide on how the generator may be used see the [step by step instructions](./docs/GettingStarted/CreatingAProfile.md).
+For an in-depth guide on how the generator may be used see the [step by step instructions](./docs/GettingStarted/StepByStepInstructions.md).
 
 ### Usage examples
 

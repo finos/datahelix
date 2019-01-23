@@ -1,42 +1,34 @@
 #Generating Violating Data (Test Cases)
-
-You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able 
-to run the generator. Once this is installed you can run the generator in the following ways:
-
-**GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules**
+GenerateTestCases produces one file per rule violated along with a manifest.json file which lists the violated rules
 
 ##Using the Command Line
 
-Download the Jar file (generator.jar) from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
-
-To generate data run the following command from the command line
+To generate violating data run the following command from the command line
 
 `java -jar <path to JAR file> generateTestCases [options] "<path to profile>" "<path to desired output directory>"`
 
 * `[path to JAR file]` the location of generator.jar
-* `[options]` optionally a combination of [options](../Options/GenerateOptions.md) to configure how the command operates
+* `[options]` optionally a combination of [options](../Options/GenerateTestCasesOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
-* `<path to output directory>` the desired location of the folder for the resultant CSV files of generated data
+* `<path to output desired directory>` the location of the folder in which to save the resultant CSV files of generated data
 
 
 ##Using an IDE 
 
-If you have not already, follow the instructions [here](../../generator/docs/GeneratorSetup.md) to set up the development environment
+The generator can be run using the following program arguments within your IDE:
 
-Once your IDE is set up the generator can be run using the following program arguments:
+`generateTestCases [options] "<path to profile>" "<path to desired output directory>"`
 
-`generateTestCases [options] "<path to profile>" "<path to desired output CSV>"`
-
-* `[options]` optionally a combination of [options](../Options/GenerateOptions.md) to configure how the command operates
+* `[options]` optionally a combination of [options](../Options/GenerateTestCasesOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
-* `<path to output directory>` the desired location of the folder for the resultant CSV files of generated data
+* `<path to output desired directory>` the location of the folder in which to save the resultant CSV files of generated data
 
 
 
 ## Example
 
 
-Using the [Sample Profile](./ExampleProfile1.json) that was created in the [previous](./CreatingAProfile.md) section, run the generate command
+Using the [Sample Profile](./ExampleProfile1.json) that was created in the [first](./CreatingAProfile.md) section, run the generateTestCases command
 with your preferred above method. 
 
 With no options this should yield the following data:

@@ -27,7 +27,7 @@ Generates data to a specified endpoint.
 * `<profile path>`, a path to the profile JSON file
 * `<output path>`, a file path to where the data should be emitted to. This will be a UTF-8 encoded CSV file.
 
-The full list of generate options can be seen [here](../docs/Options/GenerateOptions.md).
+The full list of generate options can be viewed [here](../docs/Options/GenerateOptions.md).
 
 ### __Command:__ `generateTestCases [options] <profile path> <output directory>`
 
@@ -36,7 +36,7 @@ Generates data to a specified directory, including both valid and [invalid data]
 * `<profile path>`, a path to the profile JSON file
 * `<output directory>`, a directory path to where the output file/s should be emitted to. Files will be created for each rule, numbered relative to the position of the rule in the profile.
 
-The full list of generate test cases options can be seen [here](../docs/Options/GenerateTestCasesOptions.md).
+The full list of generate test cases options can be viewed [here](../docs/Options/GenerateTestCasesOptions.md).
 
 ### __Command:__ `genTreeJson [options] <profile path> <output path>`
 
@@ -55,22 +55,12 @@ Options are optional and case-insensitive
 
 ### __Command:__ `visualise [options] <profile path> <output path>`
 
-Generates a [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language))-compliant representation of the decision tree, for manual inspection. You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/). 
-
+Generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+for manual inspection, in the form of a gv file.
 * `<profile path>`, a path to the profile JSON file
 * `<output path>`, a file path to where the tree DOT visualisation should be emitted to. This will be a UTF-8 encoded DOT file.
 
-#### Options
-Options are optional and case-insensitive
-
-* `-t <title>` or `--title <title>`
-   * Include the given `<title>` in the visualisation. If not supplied, the description of in profile will be used, or the filename of the profile.
-* `--no-title`
-   * Exclude the title from the visualisation. This setting overrides `-t`/`--title`.
-* `--no-optimise`
-   * Prevents tree optimisation during visualisation.
-* `--no-simplify`
-   * Prevents tree simplification during visualisation. Simplification is where decisions with only one option are folded into the parent.
+The full list of visualise options can be viewed [here](../docs/Options/VisualiseOptions.md) 
 
 There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
 - gv files are encoded with UTF-8, visualisers must support this encoding.
