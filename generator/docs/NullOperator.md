@@ -13,17 +13,17 @@ Therefore the null operator can:
 - (A) _By omitting the constraint_: express fields as permitting absence or presence of a value (otherwise known as a nullable field)
 
 ### `null` and interoperability
-`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](SetRestrictionAndGenerarion.md) for more details.
+`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](SetRestrictionAndGeneration.md) for more details.
 
 When a field is serialised or otherwise written to a medium, as the output of the generator, it may choose to represent the absence of a value by using the formats' `null` representation, or some other form such as omitting the property and so on.
 
-#### For illustrstion
-CSV files don't support representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)). 
+#### For illustration
+CSV files do not have any standard for representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)). 
 
 JSON files could be presented with `null` as the value for a property or excluding the property from the serialised result. This is the responsibility of the serialiser, and depends on the use cases.
 
 ## The `null` operator and the `if` constraint
-With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](SetRestrictionAndGenerarion.md).
+With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](SetRestrictionAndGeneration.md).
 
 Consider the following if constraint:
 
@@ -46,7 +46,7 @@ Consider the following if constraint:
 }
 ```
 
-The generator will complete the `if` constraint as follows, to ensure the constraint is fully balanced:
+The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
 
 ```
 {
@@ -76,7 +76,7 @@ The generator will complete the `if` constraint as follows, to ensure the constr
 }
 ```
 
-This expression does not prevent the consequence (the `then` constraints) from being considered when `field1` has no value. Equally it does not say anything about the alternative consequence (the `else` constraints). As such both outcomes can be considered at any time.
+This expression does not prevent the consequence (the `then` constraints) from being considered when `field1` has no value. Equally it does not say anything about the alternative consequence (the `else` constraints). As such both outcomes are applicable at any time.
 
 The solution to this is to express the `if` constraint as follows. This is not 'auto completed' for profiles as it would remove functionality that may be intended, it must be explicitly included in the profile.
 
@@ -107,7 +107,7 @@ The solution to this is to express the `if` constraint as follows. This is not '
 }
 ```
 
-The generator will complete the `if` constraint as follows, to ensure the constraint is fully balanced:
+The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
 
 ```
 {
@@ -151,18 +151,19 @@ The generator will complete the `if` constraint as follows, to ensure the constr
 }
 ```
 
-If this case the `then` constraints will only be value when `field1` has a value, otherwise it will fire in either of the `else` cases, but nevertheless is confined to this scope.
+In this case the `then` constraints will only be applicable when `field1` has a value. Where `field1` has no value, either of the `else` constraints can be considered applicable. Nevertheless `field2` will only have the value `"a"` when `field1` has the value `5`, not when it is absent also.
 
 ### Examples:
+Considering this use case, you're trying to generate data to be imported into a SQL server database. Below are some examples of constraints that may help define fields and their mandatoriness or optionality.
 
-* A field that is non-nullable (in SQL terminology)<br />
+* A field that is non-nullable<br />
 `field1 ofType string and field1 not(is null)`
 
-* A field that is nullable (in SQL terminology)<br />
+* A field that is nullable<br />
 `field1 ofType string`
 
-* A field that has no value (null in SQL terminology)<br />
+* A field that has no value<br />
 `field1 is null`
 
-### Violations
+## Violations
 Violations are a special case for the `null` operator, see [Deliberate Violation](DeliberateViolation.md) for more details.

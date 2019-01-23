@@ -13,7 +13,7 @@ There is an optional component of the generator - the profile validator - which 
 
 ## 'Hard' contradictions
 This is where contradictions occur in a way where no rows could be satisfied for at least one field. If this is the case then no rows can be emitted for any field in the profile, therefore the output file/s would be empty.
-Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`. All hard contradictions must contain this constraint in some fashion, otherwise `null` can still be emitted.
+Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`. All hard contradictions must contain this constraint in some fashion, otherwise the field can still have no value (regularly represented as `null`).
 
 See [how data is generated](SetRestrictionAndGeneration.md) for more detail on how constraints are combined and in-turn reduce the set of permissible values for a field.
 
@@ -34,9 +34,9 @@ The contradictions that the validator will detect are [documented here](ProfileV
 ## Non-contradictory examples
 The following are examples of where constraints can be combined and (whilst potentially dubious) are not contradictory:
 * `foo inSet ["a", "b", 1, 2]` and `foo greaterThan 1`
-  * this can emit `"a", "b", 2, null` as there is nothing to say it cannot be null, or must be of a particular type
+  * this can emit `"a", "b", 2` or nothing (`null`) as there is nothing to say it must have a value, or must be of a particular type
 * `foo greaterThan 1` and `foo ofType string`
-  * this can emit all strings, and null (the `greaterThan` constraint is ignored as it only applies to `numeric` values, of which none will be generated)
+  * this can emit all strings, or emit no value (`null`) (the `greaterThan` constraint is ignored as it only applies to `numeric` values, of which none will be generated)
 
 ## What happens
 1. 'hard' contradictions only abort processing when the validator is enabled

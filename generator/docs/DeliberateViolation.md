@@ -15,7 +15,7 @@ Violation is invoked using the `generateTestCases` sub-command. An output direct
 
 ## Manifest
 
-An example of a manifest file when violating one rule, 001.csv is where the first rule has been violated.
+An example of a manifest file when violating one rule. "001.csv" is where the first rule has been violated.
 ```javascript
 [
   {
