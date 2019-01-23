@@ -132,7 +132,6 @@ public class StandardFieldValueSourceEvaluatorTests {
         AssertLastSourceIsNullOnlySource(sources);
     }
 
-
     @Test
     public void shouldReturnNullSourceLastWithMustContainNullAndNumericRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -155,6 +154,75 @@ public class StandardFieldValueSourceEvaluatorTests {
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecWithMustContainNullAndNumericRestrictionsAndNullNotDisallowed);
 
         AssertLastSourceIsNullOnlySource(sources);
+    }
+
+    @Test
+    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithIntegerValues_generatesExpectedIntegerValues() {
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+            new NumericRestrictions() {{
+                min = new NumericLimit<>(new BigDecimal(0), false);
+                max = new NumericLimit<>(new BigDecimal(10), false);
+            }},
+            FieldSpecSource.Empty
+        ).withTypeRestrictions(
+            new DataTypeRestrictions(
+                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            ),
+            FieldSpecSource.Empty
+        ).withNullRestrictions(
+            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+            FieldSpecSource.Empty
+        );
+        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
+
+        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
+
+        Assert.assertEquals(1, result.size());
+        Iterator allValuesIterator = result.get(0).generateAllValues().iterator();
+        List<Integer> valuesFromResult = new ArrayList<>();
+        while (allValuesIterator.hasNext()) {
+            valuesFromResult.add((Integer) allValuesIterator.next());
+        }
+
+        final List<Integer> expectedValues = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Assert.assertEquals(expectedValues, valuesFromResult);
+    }
+
+    @Test
+    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+            new NumericRestrictions() {{
+                min = new NumericLimit<>(new BigDecimal(0), false);
+                max = new NumericLimit<>(new BigDecimal("1E+18"), false);
+            }},
+            FieldSpecSource.Empty
+        ).withTypeRestrictions(
+            new DataTypeRestrictions(
+                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            ),
+            FieldSpecSource.Empty
+        ).withNullRestrictions(
+            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+            FieldSpecSource.Empty
+        );
+        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
+
+        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
+
+        Assert.assertEquals(1, result.size());
+        Iterator allValuesIterator = result.get(0).generateInterestingValues().iterator();
+        List<BigDecimal> valuesFromResult = new ArrayList<>();
+        while (allValuesIterator.hasNext()) {
+            valuesFromResult.add((BigDecimal) allValuesIterator.next());
+        }
+
+        final List<BigDecimal> expectedValues = Arrays.asList(
+            new BigDecimal("1"),
+            new BigDecimal("2"),
+            new BigDecimal("999999999999999998"),
+            new BigDecimal("999999999999999999")
+        );
+        Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
     private void AssertLastSourceIsNullOnlySource(List<FieldValueSource> sources) {

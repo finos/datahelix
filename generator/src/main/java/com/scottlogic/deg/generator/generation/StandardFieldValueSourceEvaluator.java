@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,16 +113,28 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? fieldSpec.getGranularityRestrictions().getNumericScale()
             : 0;
 
-        if (numericScale == 0) {
+        if (isIntegerFieldValue(restrictions, numericScale)) {
             return new IntegerFieldValueSource(
                 restrictions,
                 getBlacklist(fieldSpec));
-        } else {
-            return new RealNumberFieldValueSource(
-                restrictions,
-                getBlacklist(fieldSpec),
-                numericScale);
         }
+
+        return new RealNumberFieldValueSource(
+            restrictions,
+            getBlacklist(fieldSpec),
+            numericScale);
+    }
+
+    private boolean isIntegerFieldValue(NumericRestrictions numericRestrictions, int numericScale) {
+        if (numericScale > 0) {
+            return false;
+        }
+
+        if (numericRestrictions.min == null || numericRestrictions.max == null) {
+            return true;
+        }
+
+        return numericRestrictions.numericValuesAreInteger();
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {

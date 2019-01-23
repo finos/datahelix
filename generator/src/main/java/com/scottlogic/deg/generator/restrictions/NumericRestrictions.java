@@ -36,6 +36,16 @@ public class NumericRestrictions {
         return true;
     }
 
+    public boolean numericValuesAreInteger() {
+        try {
+            int minValue = min.getLimit().intValueExact();
+            int maxValue = max.getLimit().intValueExact();
+            return maxValue >= minValue;
+        } catch (ArithmeticException e) {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return String.format(

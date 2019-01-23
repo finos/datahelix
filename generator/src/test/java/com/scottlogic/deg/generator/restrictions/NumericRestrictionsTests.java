@@ -408,6 +408,72 @@ public class NumericRestrictionsTests {
 
         Assert.assertEquals(hashCode1, hashCode2);
     }
+
+    @Test
+    void numericValuesAreInteger_minAndMaxValueAreWithinIntegerRangeAndDoNotContainDecimalValues_returnsTrue() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(10), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(1000), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_minAndMaxValuesHaveEdgeCaseValuesAndDoNotContainDecimalValues_returnsTrue() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(-2147483648), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(2147483647), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertTrue(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_minValueIsBelowIntegerMinimumAndMaxValueIsIntegerAndBothDoNotContainDecimalValues_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal("1E+38"), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(10), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_maxValueIsAboveIntegerMaximumAndMinValueIsIntegerAndBothDoNotContainDecimalValues_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal("1E+38"), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_minAndMaxValuesAreWithinIntegerRangeAndMinValueContainsDecimalValue_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(15.5), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_minAndMaxValuesAreWithinIntegerRangeAndMaxValueContainsDecimalValue_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(500.25), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
 }
 
 
