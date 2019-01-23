@@ -2,7 +2,9 @@
 
 The `null` operator in a profile, expressed as `"is": "null"` or the negated equivalent has several meanings. It can mean (and emit the behaviour) as described below:
 
-| Absence / Presence<br />Described in other technologies as nullability | Field value<br /> |
+### Possible scenarios:
+
+| Absence / Presence | Field value |
 | ---- | ---- |
 | (A) _null operator omitted_<br /> **The default**. The field's value may be absent or present | (B) `is null`<br />The field will have _no value_ |
 | (C) `not(is null)`<br />The field's value must be present | (D) `not(is null)`<br />The field must have a value |
