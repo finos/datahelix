@@ -17,7 +17,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
         if (mustBeNull(fieldSpec)){
-            return Arrays.asList(nullOnlySource);
+            return Collections.singletonList(nullOnlySource);
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
@@ -76,7 +76,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
                 nullOnlySource);
         }
 
-        return Arrays.asList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
+        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
     }
 
     private Stream<FieldSpec> getNotNullSetRestrictionFilterOnMustContainRestriction(MustContainRestriction restriction) {
@@ -97,7 +97,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         return mustContainRestrictionFieldSpecs.stream()
-            .map(fs -> getFieldValueSources(fs))
+            .map(this::getFieldValueSources)
             .flatMap(List::stream)
             .filter(x->!x.equals(nullOnlySource))
             .collect(Collectors.toList());
