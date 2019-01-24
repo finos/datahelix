@@ -471,7 +471,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should fail with an error message
+  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should generate null
     Given there is a constraint:
       """
         { "allOf": [
