@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.constraints.grammatical;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class NotConstraintTest {
+public class NotConstraintTests {
 
     @Test
     public void testConstraintIsEqual() {
