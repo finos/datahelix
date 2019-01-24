@@ -10,7 +10,7 @@ import java.util.Objects;
 public class RowMatcher extends BaseMatcher<List<Object>> {
     private final List<Object> expectedRow;
 
-    public RowMatcher(List<Object> expectedRow) {
+    RowMatcher(List<Object> expectedRow) {
         this.expectedRow = expectedRow;
     }
 

@@ -1,13 +1,8 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
     public RowsMatchAnyOrderMatcher(List<List<Object>> expectedRows) {
@@ -26,7 +21,7 @@ public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
 
     @Override
     public void describeMismatch(Object item, Description description) {
-        List<List<Objects>> actualRows = (List<List<Objects>>) item;
+        List<List<Object>> actualRows = (List<List<Object>>) item;
 
         super.describeMismatch(item, description);
 
