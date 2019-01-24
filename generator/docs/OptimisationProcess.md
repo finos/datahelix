@@ -1,6 +1,6 @@
 # Decision Tree Optimiser
 
-We optimise the decision tree to improve the performance of how the data generator works. 
+We optimise the decision tree to improve the performance of how the generator works. 
 The optimisation (also known as factorising) can reduce the number of constraints that need to be visited in-order to produce interpretations of data.
 
 ## Strategy

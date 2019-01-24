@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs;
+package com.scottlogic.deg.generator.outputs.manifest;
 
 import java.util.Collection;
 

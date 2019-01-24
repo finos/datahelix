@@ -4,6 +4,7 @@ node_modules/
 *.iml
 *.orig
 classes/
+profiler/
 
 # Eclipse files
 **/*.cache-main
