@@ -43,24 +43,23 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
         return fileNameWithoutExtension + ".csv";
     }
 
-    private static Object extractCellValue(DataBagValue cell){
+    private static Object extractCellValue(DataBagValue cell) {
         if (cell.value == null) {
             return null;
         }
 
-            if (cell.format == null) {
-                if (cell.value instanceof BigDecimal){
-                    return ((BigDecimal) cell.value).toPlainString();
-                }
-                return cell.value;
-            }
+        return cell.format != null
+            ? String.format(cell.format, cell.value)
+            : cell.value;
     }
 
-            return String.format(cell.format, cell.value);
-        }).collect(Collectors.toList()));
     private static Object wrapInQuotesIfString(Object value){
         if (value == null){
             return null;
+        }
+
+        if (value instanceof BigDecimal) {
+            return ((BigDecimal) value).toPlainString();
         }
 
         if (value instanceof String){
