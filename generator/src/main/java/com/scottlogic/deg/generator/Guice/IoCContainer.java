@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
@@ -15,6 +16,7 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
@@ -24,6 +26,7 @@ import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.nio.file.Path;
+import java.util.List;
 
 public class IoCContainer extends AbstractModule {
     private final CommandLineBase commandLine;
@@ -55,6 +58,9 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
+
+        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
+
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);

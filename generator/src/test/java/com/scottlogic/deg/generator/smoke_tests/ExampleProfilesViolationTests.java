@@ -83,7 +83,7 @@ class ExampleProfilesViolationTests {
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
-                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget(), new ManifestWriter());
+                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget(), new ManifestWriter(), new ArrayList<>());
 
                 consumer.generate(
                     wrapper,

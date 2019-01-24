@@ -1,7 +1,11 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
@@ -35,6 +39,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getFilteredTypes() {
+        return new ArrayList<>();
     }
 
     @Override

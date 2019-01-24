@@ -6,13 +6,10 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.violations.filters.ConstraintTypeFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.io.IOException;
@@ -20,21 +17,21 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ViolationGenerationEngineWrapper {
-    private List<ViolationFilter> filters = Arrays.asList(new ConstraintTypeFilter(IsOfTypeConstraint.class), new ConstraintTypeFilter(IsStringShorterThanConstraint.class));
     private final GenerationEngine generationEngine;
     private final FileOutputTarget fileOutputTarget;
     private final Path outputPath;
     private final ManifestWriter manifestWriter;
+    private final List<ViolationFilter> filters;
 
     @Inject
-    public ViolationGenerationEngineWrapper(@Named("outputPath") Path outputPath, GenerationEngine generationEngine, FileOutputTarget fileOutputTarget, ManifestWriter manifestWriter){
+    public ViolationGenerationEngineWrapper(@Named("outputPath") Path outputPath, GenerationEngine generationEngine, FileOutputTarget fileOutputTarget, ManifestWriter manifestWriter, List<ViolationFilter> filters){
         this.outputPath = outputPath;
         this.generationEngine = generationEngine;
         this.fileOutputTarget = fileOutputTarget;
         this.manifestWriter = manifestWriter;
+        this.filters = filters;
     }
 
     public void generateTestCases(Profile profile, GenerationConfig config) throws IOException {

@@ -3,10 +3,13 @@ package com.scottlogic.deg.generator.CommandLine;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
@@ -100,6 +103,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getFilteredTypes() {
+        return new ArrayList<>();
     }
 
     @Override

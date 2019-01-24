@@ -3,10 +3,12 @@ package com.scottlogic.deg.generator.CommandLine;
 import com.scottlogic.deg.generator.violations.GenerateTestCasesExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 public class GenerateTestCasesCommandLine extends CommandLineBase implements GenerationConfigSource {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
@@ -74,6 +76,12 @@ public class GenerateTestCasesCommandLine extends CommandLineBase implements Gen
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
+    @CommandLine.Option(
+        names = {"--dont-violate"},
+        arity = "0..",
+        description = "//TODO")
+    private List<AtomicConstraintType> filteredTypes;
+
     @Override
     protected Class<? extends Runnable> getExecutorType() {
         return GenerateTestCasesExecute.class;
@@ -92,6 +100,11 @@ public class GenerateTestCasesCommandLine extends CommandLineBase implements Gen
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getFilteredTypes() {
+        return filteredTypes;
     }
 
     @Override
