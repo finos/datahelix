@@ -1,6 +1,6 @@
 # Field Fixing strategies
 
-The Data Generator in 'reductive' mode can be said to operate in the following way:
+The generator in 'reductive' mode can be said to operate in the following way:
 1. Pick a field
 2. Fix that field's value
 3. Eliminate any options that cannot be generated based on this value

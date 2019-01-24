@@ -1,4 +1,4 @@
-# Contributing to Data Generator
+# Contributing to DataHelix
 :+1: First off, thanks for taking the time to contribute! :+1:
 
 # Contributor License Agreement (CLA)
