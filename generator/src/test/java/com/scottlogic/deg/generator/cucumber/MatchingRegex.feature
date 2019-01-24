@@ -436,11 +436,12 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid
        | null           |
        | "GB0000000009" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should only emit null
        Given foo is matching regex /[b]{2}/
        And foo is a valid "ISIN"
-     Then I am presented with an error message
-       And no data is created
+       Then the following data should be generated:
+        | foo |
+        | null |
 
 @ignore
 Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should fail with an error message

@@ -25,7 +25,9 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        throw new UnsupportedOperationException();
+        return new NoStringsStringGenerator(
+            RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
+        );
     }
 
     @Override

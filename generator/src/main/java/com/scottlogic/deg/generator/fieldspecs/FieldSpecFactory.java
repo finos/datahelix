@@ -242,7 +242,8 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return construct(standardNameToStringGenerator.get(constraint.standard), negate, constraint, violated);
+        StringGenerator generator = standardNameToStringGenerator.get(constraint.standard);
+        return construct(negate ? generator.complement() : generator, negate, constraint, violated);
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {

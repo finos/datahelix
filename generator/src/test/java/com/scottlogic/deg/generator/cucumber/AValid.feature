@@ -163,11 +163,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z0-9]/          |
 
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is matching regex <regex>
-    Then I am presented with an error message
-    And no data is created
+    And the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | /GB0002634947/      |
@@ -199,11 +200,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z]{2}[0-9]{9}/  |
       | /[A-Z0-9]{11}/      |
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is containing regex <regex>
-    Then I am presented with an error message
-    And no data is created
+    And the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | /GB0002634947/      |
@@ -224,11 +226,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | foo            |
       | "GB0002634946" |
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is of length <length>
-    Then I am presented with an error message
-    And no data is created
+    And the following data should be generated:
+      | foo |
+      | null |
     Examples:
     | length |
     | 11     |
@@ -252,11 +255,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | 1      |
       | 11     |
 
-  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is longer than 12
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo |
+      | null |
 
   @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should be successful
@@ -267,11 +271,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     Then the following data should be generated:
       | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is shorter than 12
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo |
+      | null |
 
   @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful

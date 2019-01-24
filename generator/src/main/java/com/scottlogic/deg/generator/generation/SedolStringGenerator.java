@@ -33,7 +33,9 @@ public class SedolStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        return this;
+        return new NoStringsStringGenerator(
+            RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<SEDOL>")
+        );
     }
 
     @Override
