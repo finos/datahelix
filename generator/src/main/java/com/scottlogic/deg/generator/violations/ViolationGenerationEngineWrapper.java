@@ -7,20 +7,23 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.violations.filters.NotIsTypeFilter;
+import com.scottlogic.deg.generator.violations.filters.NotShorterThanFilter;
+import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ViolationGenerationEngineWrapper {
+    private List<ViolationFilter> filters = new ArrayList<>();
     private final GenerationEngine generationEngine;
     private final FileOutputTarget fileOutputTarget;
     private final Path outputPath;
@@ -75,19 +78,35 @@ public class ViolationGenerationEngineWrapper {
 
 
     private Rule violateRule(Rule rule) {
-        Constraint constraintToViolate =
-            rule.constraints.size() == 1
-                ? rule.constraints.iterator().next()
-                : new AndConstraint(rule.constraints);
+        List<Constraint> violate = new ArrayList<>();
+        List<Constraint> unviolated = new ArrayList<>();
+        for (Constraint constraint:rule.constraints) {
+            if (acceptConstraint(constraint)){
+                violate.add(constraint);
+            } else {
+              unviolated.add(constraint);
+            }
+        }
+        if (violate.isEmpty()) {
+            return rule;
+        }
 
-        //This will in effect produce the following constraint: // VIOLATE(AND(X, Y, Z)) reduces to
-        //   OR(
-        //     AND(VIOLATE(X), Y, Z),
-        //     AND(X, VIOLATE(Y), Z),
-        //     AND(X, Y, VIOLATE(Z)))
-        // See ProfileDecisionTreeFactory.convertConstraint(ViolateConstraint)
-        ViolateConstraint violatedConstraint = new ViolateConstraint(constraintToViolate);
-        return new Rule(rule.rule, Collections.singleton(violatedConstraint));
+        ViolateConstraint violatedConstraint = new ViolateConstraint(
+            violate.size() == 1
+                ? violate.iterator().next()
+                : new AndConstraint(violate));
+
+        unviolated.add(violatedConstraint);
+        return new Rule(rule.rule, unviolated);
+    }
+
+    private boolean acceptConstraint(Constraint constraint){
+        for (ViolationFilter filter : filters) {
+            if (!filter.accept(constraint)){
+                return false;
+            }
+        }
+        return true;
     }
 
     private static DecimalFormat getDecimalFormat(int numberOfDatasets)
