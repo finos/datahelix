@@ -2,7 +2,7 @@
 
 A command-line tool for generating data according to [profiles](../docs/Profiles.md).
 
-For an in-depth guide on how the generator may be used see the [step by step instructions](../docs/GettingStarted/StepByStepInstructions.md).
+For a guide on how the generator may be used see the [step by step instructions](../docs/GettingStarted/StepByStepInstructions.md).
 
 
 ## Installation & Setup of IDE

@@ -2,10 +2,10 @@
   "schemaVersion": "v3",
   "fields": [
     {
-      "name": "Column 1 Header"
+      "name": "Column 1 Name"
     },
     {
-      "name": "Column 2 Header"
+      "name": "Column 2 Name"
     }
   ],
   "rules": [
@@ -13,12 +13,12 @@
       "rule": "Rule Description",
       "constraints": [
         {
-          "field": "Column 1 Header",
+          "field": "Column 1 Name",
           "is": "ofType",
           "value": "string"
         },
         {
-          "field": "Column 2 Header",
+          "field": "Column 2 Name",
           "is": "ofType",
           "value": "string"
         }
