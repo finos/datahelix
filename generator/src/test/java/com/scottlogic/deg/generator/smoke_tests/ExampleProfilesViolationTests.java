@@ -46,7 +46,7 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config);
+            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
@@ -60,7 +60,7 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.CombinationStrategyType.PINNING));
 
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config);
+            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
