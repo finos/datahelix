@@ -8,7 +8,7 @@ Violation is invoked using the `generateTestCases` sub-command. An output direct
 
 1. For each rule `R`:
 	1. Create a new version of the profile where `R` is wrapped in a `ViolationConstraint`. A violation constraint works similar to a not constraint except that `and` conditionals are treated differently (see below).
-	1. Create a decision tree from that profile, and pass it to the data generator as normal.
+	1. Create a decision tree from that profile, and pass it to the generator as normal.
 	1. Write the output to a file in the output directory with a numerical file name.
 1. Output a valid version with no rules violated.
 1. Output a manifest file, listing which output file corresponts to which rule.
