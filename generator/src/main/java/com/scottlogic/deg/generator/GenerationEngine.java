@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -23,7 +23,7 @@ public class GenerationEngine {
         this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget fileOutputTarget) throws IOException {
 
         final DecisionTreeCollection analysedProfile = this.decisionTreeGenerator.analyse(profile);
 

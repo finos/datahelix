@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +28,7 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     @Override
-    public Profile read(Path filePath) throws IOException, InvalidProfileException {
+    public Profile read(Path filePath) {
         return this.getProfile();
     }
 
