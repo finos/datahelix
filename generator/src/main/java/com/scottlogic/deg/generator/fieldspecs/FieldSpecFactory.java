@@ -11,10 +11,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
+    private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
+
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
     }
@@ -262,7 +266,18 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
-        return construct(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, violated);
+        AtomicConstraintConstructTuple atomicConstraintConstructTuple = new AtomicConstraintConstructTuple(constraint, matchFullString, negate);
+        StringGenerator regexStringGenerator;
+        if (constraintToStringGeneratorMap.containsKey(atomicConstraintConstructTuple)) {
+            regexStringGenerator = constraintToStringGeneratorMap.get(atomicConstraintConstructTuple);
+        } else {
+            regexStringGenerator = new RegexStringGenerator(pattern.toString(), matchFullString);
+            if (negate) {
+                regexStringGenerator = regexStringGenerator.complement();
+            }
+            constraintToStringGeneratorMap.put(atomicConstraintConstructTuple, regexStringGenerator);
+        }
+        return construct(regexStringGenerator, negate, constraint, violated);
     }
 
     private FieldSpec construct(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
@@ -271,9 +286,7 @@ public class FieldSpecFactory {
                 ? constraint.negate()
                 : constraint));
 
-        stringRestrictions.stringGenerator = negate
-            ? generator.complement()
-            : generator;
+        stringRestrictions.stringGenerator = generator;
 
         return FieldSpec.Empty.withStringRestrictions(
             stringRestrictions,
