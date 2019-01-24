@@ -3,11 +3,8 @@
 You must have Java v1.8 installed (it can be [downloaded here](https://www.java.com/en/download/manual.jsp)) to be able 
 to run the generator. 
 
-The generator may be run using the command line or through an IDE. 
- * To use the command line download the Jar file (generator.jar) from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
-
- * If you wish to set up a development environment, follow the instructions [here](../../generator/docs/GeneratorSetup.md).
-
+Download the Jar file (generator.jar) from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
+The generator will then be run from the command line using the commands detailed in this guide.
 
 ## Contents
 
