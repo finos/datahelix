@@ -109,9 +109,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? new NumericRestrictions()
             : fieldSpec.getNumericRestrictions();
 
-        int numericScale = fieldSpec.getGranularityRestrictions() != null
-            ? fieldSpec.getGranularityRestrictions().getNumericScale()
-            : 0;
+        int numericScale = getNumericScale(restrictions, fieldSpec);
 
         if (isIntegerFieldValue(restrictions, numericScale)) {
             return new IntegerFieldValueSource(
@@ -123,6 +121,22 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             restrictions,
             getBlacklist(fieldSpec),
             numericScale);
+    }
+
+    private int getNumericScale(NumericRestrictions numericRestrictions, FieldSpec fieldSpec) {
+        if (fieldSpec.getGranularityRestrictions() != null) {
+            return fieldSpec.getGranularityRestrictions().getNumericScale();
+        }
+
+        if (numericRestrictions.min != null && numericRestrictions.max != null) {
+            if (numericRestrictions.min.getLimit().scale() > numericRestrictions.max.getLimit().scale()) {
+                return numericRestrictions.min.getLimit().scale();
+            }
+
+            return numericRestrictions.max.getLimit().scale();
+        }
+
+        return 0;
     }
 
     private boolean isIntegerFieldValue(NumericRestrictions numericRestrictions, int numericScale) {
