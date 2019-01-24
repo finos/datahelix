@@ -16,7 +16,7 @@ public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
         if (expectedRows.size() != actualRows.size())
             return false;
 
-        return super.matches(o);
+        return super.matches(actualRows);
     }
 
     @Override

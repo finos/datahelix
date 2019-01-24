@@ -40,6 +40,7 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
         description.appendText(
             actualRows
                 .stream()
+                .map(RowMatcher::formatDatesInRow)
                 .map(Object::toString)
                 .collect(Collectors.joining(", ")));
 

@@ -39,6 +39,7 @@ public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
         description.appendText(
             actualRows
                 .stream()
+                .map(RowMatcher::formatDatesInRow)
                 .map(Object::toString)
                 .collect(Collectors.joining(", ")));
 

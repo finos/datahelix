@@ -3,11 +3,16 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class RowMatcher extends BaseMatcher<List<Object>> {
+    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
     private final List<Object> expectedRow;
 
     RowMatcher(List<Object> expectedRow) {
@@ -54,6 +59,22 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText(Objects.toString(this.expectedRow));
+        description.appendText(Objects.toString(
+            this.expectedRow
+                .stream()
+                .map(RowMatcher::formatDate)
+                .collect(Collectors.toList())));
+    }
+
+    static List<Object> formatDatesInRow(List<Object> row) {
+        return row.stream().map(RowMatcher::formatDate).collect(Collectors.toList());
+    }
+
+    private static Object formatDate(Object value){
+        if (value instanceof LocalDateTime){
+            return ((LocalDateTime) value).format(dateTimeFormat);
+        }
+
+        return value;
     }
 }
