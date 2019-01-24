@@ -15,15 +15,11 @@ Violation is invoked using the `generateTestCases` sub-command. An output direct
 
 ## Manifest
 
-An example of a manifest file when violating one rule. 001.csv is the non-violated version, 002.csv is where the rule has been violated.
+An example of a manifest file when violating one rule. "001.csv" is where the first rule has been violated.
 ```javascript
 [
   {
     "filepath": "001.csv",
-    "violatedRules": []
-  },
-  {
-    "filepath": "002.csv",
     "violatedRules": [ "Price field should not accept nulls" ]
   }
 ]
@@ -44,32 +40,8 @@ OR(
 
 This is so that we end up with each inner constraint violated separately.
 
-## Inter-rule conflict
-
-Sometimes when a rule is violated it may conflict with another non-violated rule. For example:
-
-* R1: `X in (1, 2, 3)`
-* R2: `X > 0`
-* R3: `X < 4`
-
-If we violate `R1` here, then we end up generating no data.
-
-There are several approaches to this problem:
-1. Delete all rules other than one being violated
-2. Delete all rules that share fields with one being violated
-3. Delete all constraints from other rules that affect fields affected by violated rule
-4. Delete rules until the violated rule can generate
-5. Negate rules until the violated rule can generate
-6. Hard merge (see below)
-
-4 and 5 could delete/negate *parts of* rules, but there's some appeal to keeping rules indivisible from a UX perspective
-
-4 and 5 wouldn't guarantee a *full* range of results; it might be necessary to delete/negate more than one rule (see example labelled #foo, where removing only one of R2 and R3 allows incomplete output)
-
-As of 01/11/18 we implement none of the above yet, and violating `R1` above will generate no data.
-
-### Hard merging
-
-Option 6 above has been discussed but is not considered the correct way to go. It involves a much lower level change in the `FieldSpecMerger` where any conflicts between a violated fieldspec and a non-violated fieldspec are resolved by simply ignoring the non-violated fieldspec instead of throwing the entire rowspec away.
-
-Hard merging solves some cases but in the example above it struggles because the current merging logic doesn't identify it as unsatisfiable. Also it confounds user expectations by violating *other* rules without declaring it in manifest.
+## Known issues
+1. The process would be expected to return vast quantities of data, as the single constraint `foo inSet [a, b, c]` when violated returns all data except [a, b, c] from the universal set. Whilst logically correct, could result in a unusable tool/data-set due to its time to create, or eventual size.
+1. The process of violating constraints also violates the type for fields, e.g. `foo ofType string` will be negated to `not(foo ofType string)`. This itself could be useful for the user to test, but could also render the data unusable (e.g. if the consumer requires the 'schema' to be adhered to)
+1. The process of violating constraints also violates the nullability for fields, e.g. `foo not(is null)` will be negated to `foo is null`. This itself could be useful for the user to test, but could render the data unusable (e.g. if the consumer requires non-null values for field `foo`).
+1. Implied/default rules are not negated, therefore as every field is implied/defaulted to allowing nulls, the method of violation currently doesn't prevent null from being emitted when violating. This means that nulls can appear in both normal data generation mode AND violating data generation mode.

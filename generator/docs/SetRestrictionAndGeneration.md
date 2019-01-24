@@ -118,6 +118,8 @@ This set of values is then the permitted set of values for field _foo_.
 | ---- |
 | &#8709; |
 
+See [this page](Contradictions.md) for more information about how contradictions affect the generator.
+
 ### Conditionals (anyOf, allOf, if)
 
 ```
@@ -178,6 +180,8 @@ effectively (in the ):
 1. For the first set of data for `foo` (_[a, b, c, &#8709;]_) intersect the set [&#8709;] with the set of data for `bar` _([{all temporal values}, {all numeric values}, {all string values}])_ this produces an empty set of data (where event the &#8709; is not present, i.e. [])
 
 This results in no data being created given the scenario where foo has a value in the set _[a, b, c]_. The field `foo` is not restricted from being `null` therefore it is theoretically permitted for the generator to enter the _then_ when `foo` is `null`. This doesn't happen currently as when `foo` is `null` it is ambiguous between the _then_ and the _else_.
+
+See [this page](Contradictions.md) for more information about how contradictions affect the generator.
 
 #### You might expect the following data to be emitted (where foo is not in the set [a, b, c])
 | foo | bar |
