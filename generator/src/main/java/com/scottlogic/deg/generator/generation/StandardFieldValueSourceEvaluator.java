@@ -130,10 +130,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return false;
         }
 
-        if (numericRestrictions.min == null || numericRestrictions.max == null) {
-            return true;
-        }
-
         return numericRestrictions.numericValuesAreInteger();
     }
 

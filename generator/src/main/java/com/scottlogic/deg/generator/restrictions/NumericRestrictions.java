@@ -37,13 +37,20 @@ public class NumericRestrictions {
     }
 
     public boolean numericValuesAreInteger() {
-        try {
-            int minValue = min.getLimit().intValueExact();
-            int maxValue = max.getLimit().intValueExact();
-            return maxValue >= minValue;
-        } catch (ArithmeticException e) {
+        if (min == null || max == null) {
+            return true;
+        }
+
+        // If either of the min or max values have decimal points or if the sign differs when converting to an integer
+        // the value is not an integer
+        if ((min.getLimit().scale() > 0 || max.getLimit().scale() > 0) ||
+            (min.getLimit().signum() != Integer.signum(min.getLimit().intValue()) ||
+             max.getLimit().signum() != Integer.signum(max.getLimit().intValue()))) {
             return false;
         }
+
+        return (min.getLimit().toBigInteger().signum() == 0 || min.getLimit().intValue() != 0) &&
+               (max.getLimit().toBigInteger().signum() == 0 || max.getLimit().intValue() != 0);
     }
 
     @Override
