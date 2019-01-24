@@ -1,6 +1,6 @@
 # Combination strategies
 
-In multiple areas of Data Generator, we find ourselves with multiple streams of valid values for individual fields, and need to select combinations of them for output as data rows. For example:
+In multiple areas of the generator, we find ourselves with multiple streams of valid values for individual fields, and need to select combinations of them for output as data rows. For example:
 
 * Field A can be X or Y
 * Field B can be 1, 2 or 4
