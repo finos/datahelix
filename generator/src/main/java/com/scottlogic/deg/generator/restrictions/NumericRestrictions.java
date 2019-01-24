@@ -36,21 +36,23 @@ public class NumericRestrictions {
         return true;
     }
 
-    public boolean numericValuesAreInteger() {
+    public boolean areLimitValuesInteger() {
         if (min == null || max == null) {
             return false;
         }
 
         // If either of the min or max values have decimal points or if the sign differs when converting to an integer
         // the value is not an integer
-        if ((min.getLimit().scale() > 0 || max.getLimit().scale() > 0) ||
-            (min.getLimit().signum() != Integer.signum(min.getLimit().intValue()) ||
-             max.getLimit().signum() != Integer.signum(max.getLimit().intValue()))) {
+        BigDecimal minLimit = min.getLimit();
+        BigDecimal maxLimit = max.getLimit();
+        if (minLimit.scale() > 0 || maxLimit.scale() > 0 ||
+            minLimit.signum() != Integer.signum(minLimit.intValue()) ||
+            maxLimit.signum() != Integer.signum(maxLimit.intValue())) {
             return false;
         }
 
-        return (min.getLimit().toBigInteger().signum() == 0 || min.getLimit().intValue() != 0) &&
-               (max.getLimit().toBigInteger().signum() == 0 || max.getLimit().intValue() != 0);
+        return (minLimit.toBigInteger().signum() == 0 || minLimit.intValue() != 0) &&
+               (maxLimit.toBigInteger().signum() == 0 || maxLimit.intValue() != 0);
     }
 
     @Override

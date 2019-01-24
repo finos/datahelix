@@ -143,7 +143,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return false;
         }
 
-        return numericRestrictions.numericValuesAreInteger();
+        return numericRestrictions.areLimitValuesInteger();
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
