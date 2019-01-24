@@ -8,6 +8,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
         return fileNameWithoutExtension + ".csv";
     }
 
-    private static Object extractCellValue(DataBagValue cell){
+    private static Object extractCellValue(DataBagValue cell) {
         if (cell.value == null) {
             return null;
         }
@@ -55,6 +56,10 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     private static Object wrapInQuotesIfString(Object value){
         if (value == null){
             return null;
+        }
+
+        if (value instanceof BigDecimal) {
+            return ((BigDecimal) value).toPlainString();
         }
 
         if (value instanceof String){
