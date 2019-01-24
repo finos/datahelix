@@ -2,20 +2,19 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 
 import java.io.IOException;
 
 public class ProfileProvider implements Provider<Profile> {
     private final GenerationConfigSource commandLine;
-    private final ProfileReader profileReader;
+    private final JsonProfileReader profileReader;
 
     @Inject
-    public ProfileProvider(GenerationConfigSource commandLine, ProfileReader profileReader) {
+    public ProfileProvider(GenerationConfigSource commandLine, JsonProfileReader profileReader) {
         this.commandLine = commandLine;
         this.profileReader = profileReader;
     }

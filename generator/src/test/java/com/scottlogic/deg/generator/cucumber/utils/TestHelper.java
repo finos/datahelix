@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
-import com.scottlogic.deg.generator.ProfileFields;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -16,15 +18,35 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * Responsible for controlling the generation of data from the DEG.
+ * Responsible for controlling the generation of data.
  */
-public class DegTestHelper {
+public class TestHelper {
 
     private DegTestState state;
     private List <List<Object>> generatedData;
 
-    public DegTestHelper(DegTestState state){
+    public TestHelper(DegTestState state){
         this.state = state;
+    }
+
+    public Object generate(){
+        try {
+             InMemoryOutputTarget outputTarget = new InMemoryOutputTarget();
+
+            Injector injector = Guice.createInjector();
+            new GenerateExecute(
+                new GenerationConfig(this.state),
+                new CucumberProfileReader(this.state, getRules()),
+                injector.getInstance(GenerationEngine.class),
+                this.state,
+                outputTarget
+            ).run();
+
+            return outputTarget.getRows();
+        } catch (Exception e) {
+            this.state.addException(e);
+            return null;
+        }
     }
 
     public List <List<Object>> generateAndGetData() {
@@ -51,7 +73,7 @@ public class DegTestHelper {
 
             List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
                 try {
-                    return constraintReader.apply(dto, profileFields, rules());
+                    return constraintReader.apply(dto, profileFields, getRules());
                 } catch (InvalidProfileException e) {
                     state.addException(e);
                     exceptionInMapping.set(true);
@@ -92,9 +114,9 @@ public class DegTestHelper {
         return state.testExceptions;
     }
 
-    private static Set<RuleInformation> rules(){
+    private static Set<RuleInformation> getRules(){
         RuleDTO rule = new RuleDTO();
-        rule.rule = "rules";
+        rule.rule = "getRules";
         return Collections.singleton(new RuleInformation(rule));
     }
 }

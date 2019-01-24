@@ -3,16 +3,20 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DegTestState {
+public class DegTestState implements GenerationConfigSource {
 
     public GenerationConfig.DataGenerationType generationStrategy;
     public GenerationConfig.CombinationStrategyType combinationStrategy;
@@ -113,6 +117,56 @@ public class DegTestState {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
+    }
+
+    @Override
+    public GenerationConfig.DataGenerationType getGenerationType() {
+        return null;
+    }
+
+    @Override
+    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+        return null;
+    }
+
+    @Override
+    public GenerationConfig.TreeWalkerType getWalkerType() {
+        return null;
+    }
+
+    @Override
+    public long getMaxRows() {
+        return 0;
+    }
+
+    @Override
+    public boolean getValidateProfile() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldDoPartitioning() {
+        return false;
+    }
+
+    @Override
+    public boolean dontOptimise() {
+        return false;
+    }
+
+    @Override
+    public Path getOutputPath() {
+        return null;
+    }
+
+    @Override
+    public boolean isEnableTracing() {
+        return false;
+    }
+
+    @Override
+    public File getProfileFile() {
+        return null;
     }
 }
 

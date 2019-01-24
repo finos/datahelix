@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import picocli.CommandLine;
 
@@ -17,7 +17,7 @@ import java.io.IOException;
     version = "1.0")
 public class GenerateTestCasesExecute implements Runnable {
     private final GenerationConfig config;
-    private final ProfileReader profileReader;
+    private final JsonProfileReader profileReader;
     private final GenerateTestCasesCommandLine commandLine;
     private final GenerationEngine generationEngine;
     private final DirectoryOutputTarget directoryOutputTarget;
@@ -25,7 +25,7 @@ public class GenerateTestCasesExecute implements Runnable {
     @Inject
     public GenerateTestCasesExecute(
         GenerationConfig config,
-        ProfileReader profileReader,
+        JsonProfileReader profileReader,
         GenerateTestCasesCommandLine commandLine,
         GenerationEngine generationEngine,
         DirectoryOutputTarget directoryOutputTarget){

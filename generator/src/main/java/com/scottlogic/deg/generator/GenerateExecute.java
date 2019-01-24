@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 
@@ -13,15 +14,15 @@ public class GenerateExecute implements Runnable {
     private final GenerationConfig config;
     private final ProfileReader profileReader;
     private final GenerationEngine generationEngine;
-    private final GenerateCommandLine commandLine;
-    private final FileOutputTarget fileOutputTarget;
+    private final GenerationConfigSource commandLine;
+    private final OutputTarget fileOutputTarget;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
                            ProfileReader profileReader,
                            GenerationEngine generationEngine,
-                           GenerateCommandLine commandLine,
-                           FileOutputTarget fileOutputTarget) {
+                           GenerationConfigSource commandLine,
+                           OutputTarget fileOutputTarget) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;

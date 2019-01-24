@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 public class GeneralTestStep {
 
     private DegTestState state;
-    private DegTestHelper testHelper;
+    private TestHelper testHelper;
 
     public GeneralTestStep(DegTestState state){
         this.state = state;
@@ -28,7 +28,7 @@ public class GeneralTestStep {
     @Before
     public void BeforeEach() {
         this.state.clearState();
-        this.testHelper = new DegTestHelper(state);
+        this.testHelper = new TestHelper(state);
     }
 
     @Given("there is a field (.+)$")
