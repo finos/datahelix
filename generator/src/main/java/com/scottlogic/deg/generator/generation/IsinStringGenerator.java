@@ -49,7 +49,8 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public boolean match(String subject) {
-        return IsinUtils.isValidIsin(subject);
+        boolean matches = IsinUtils.isValidIsin(subject);
+        return matches != isNegated;
     }
 
     @Override

@@ -55,7 +55,8 @@ public class SedolStringGenerator implements StringGenerator {
 
     @Override
     public boolean match(String subject) {
-        return IsinUtils.isValidSedolNsin(subject);
+        boolean matches = IsinUtils.isValidSedolNsin(subject);
+        return matches != negate;
     }
 
     @Override

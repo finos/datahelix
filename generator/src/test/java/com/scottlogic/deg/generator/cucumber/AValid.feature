@@ -346,7 +346,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     Then I am presented with an error message
     And no data is created
 
-  @ignore @bug
   Scenario: Running an 'aValid' request with a not constraint should be successful
     Given foo is anything but a valid "ISIN"
     And foo is in set:
@@ -356,9 +355,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946"            |
     Then the following data should be generated:
       | foo                       |
+      | null                      |
       | "333"                     |
-      | 123                       |
-      | 2018-09-01T00:00:00.000   |
     And the following data should not be included in what is generated:
       | foo            |
       | "GB0002634946" |
