@@ -1583,7 +1583,6 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
        | foo    | bar    |
        | "dddd" | "4444" |
 
-@ignore
 Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "GB0002634946" |
