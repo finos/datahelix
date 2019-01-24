@@ -14,6 +14,6 @@ Options are optional and case-insensitive
 * `--no-optimise`
    * Prevent profiles from being optimised during generation. Optimisation enables the generator to process profiles more efficiently, but adds more compute in other areas. See [Decision tree optimiser](./docs/OptimisationProcess.md) for more details.
 * `-v`, `--v` or `--validate-profile`
-   * Validate the profile, check to see if known contradictions exist, see [Profile validation](./docs/ProfileValidation.md) for more details
+    * Validate the profile, check to see if known [contradictions](./docs/Contradictions.md) exist, see [Profile validation](./docs/ProfileValidation.md) for more details
 * `--trace-constraints`
    * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
