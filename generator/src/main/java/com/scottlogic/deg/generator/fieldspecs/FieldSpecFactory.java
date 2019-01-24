@@ -2,22 +2,31 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
+
+    private static final Map<StandardConstraintTypes, StringGenerator>
+        standardNameToStringGenerator = new HashMap<StandardConstraintTypes, StringGenerator>() {{
+            put(StandardConstraintTypes.ISIN, new IsinStringGenerator());
+            put(StandardConstraintTypes.SEDOL, new SedolStringGenerator());
+    }};
 
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
@@ -233,7 +242,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return construct(constraint.standard, negate, constraint, violated);
+        return construct(standardNameToStringGenerator.get(constraint.standard), negate, constraint, violated);
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
