@@ -110,12 +110,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is equal to "GB00026349"
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo |
+      | null |
 
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
     Given foo is a valid "ISIN"
@@ -126,8 +126,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634947"  |
@@ -138,23 +137,23 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "400002634946"  |
       | "GBP002634946"  |
       | "GB000263494z"  |
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo |
+      | null |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a null constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a null constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is null
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo |
+      | null |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is matching regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
+    Then the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | /GB0002634946/      |
@@ -180,13 +179,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z0-9]{13}/      |
       | /[A-Z0-9]{11}/      |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is containing regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
+    Then the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | /GB0002634946/      |
@@ -216,15 +214,14 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /GBZ/               |
       | /0002634947/        |
 
-  @ignore @bug
-  Scenario: Running an 'aValid' request alongside a non-contradiction ofLength constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is of length 12
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
+      | null |
 
   Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
@@ -240,15 +237,14 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     | 0      |
     | 9999   |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is longer than <length>
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
+      | null |
     Examples:
       | length |
       | 0      |
@@ -262,23 +258,23 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | foo |
       | null |
 
-  @ignore @bug
-  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is shorter than 13
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
-      | "GB0002634946" |
+      | foo  |
+      | null |
 
   Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is shorter than 12
     Then the following data should be generated:
-      | foo |
+      | foo  |
       | null |
 
-  @ignore @bug
+  @ignore
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful
     Given foo is a valid "ISIN"
     And foo is a valid "ISIN"
@@ -412,5 +408,4 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
            { "field": "foo", "is": "equalTo", "value": "GB0002634947" }
         ]}
       """
-    Then I am presented with an error message
-    And no data is created
+    Then no data is created
