@@ -13,19 +13,6 @@ To generate data run the following command from the command line
 * `<path to profile>` the location of the JSON profile file
 * `<path to desired output directory>` the location of the resultant CSV file of generated data
 
-
-## Using an IDE 
-
-Once your IDE is set up the generator can be run using the following program arguments:
-
-`generate [options] "<path to profile>" "<path to desired output directory>"`
-
-* `[options]` optionally a combination of [options](../Options/GenerateOptions.md) to configure how the command operates
-* `<path to profile>` the location of the JSON profile file
-* `<path to desired output directory>` the location of the resultant CSV file of generated data
-
-
-
 ## Example
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [previous](./CreatingAProfile.md) section, run the generate command

@@ -15,17 +15,6 @@ To generate violating data run the following command from the command line:
 * `<path to profile>` the location of the JSON profile file
 * `<path to output desired directory>` the location of the folder in which to save the resultant CSV files of generated data
 
-
-## Using an IDE 
-
-The generator can be run using the following program arguments within your IDE:
-
-`generateTestCases [options] "<path to profile>" "<path to desired output directory>"`
-
-* `[options]` optionally a combination of [options](../Options/GenerateTestCasesOptions.md) to configure how the command operates
-* `<path to profile>` the location of the JSON profile file
-* `<path to output desired directory>` the location of the folder in which to save the resultant CSV files of generated data
-
 ## Example
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [first](./CreatingAProfile.md) section, run the generateTestCases command

@@ -17,19 +17,6 @@ To visualise the decision tree run the following command from the command line:
 * `<path to profile>` the location of the JSON profile file
 * `<path to desired output directory>` the location of the folder for the resultant GV file of the tree
 
-
-## Using an IDE 
-
-Visualise can be run using the following program arguments within your IDE:
-
-`visualise [options] "<path to profile>" "<path to desired output GV file>"`
-
-* `[options]` optionally a combination of [options](../Options/VisualiseOptions.md) to configure how the command operates
-* `<path to profile>` the location of the JSON profile file
-* `<path to desired output directory>` the location of the folder for the resultant GV file of the tree
-
-
-
 ## Example
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [first](./CreatingAProfile.md) section, run the visualise command
