@@ -1,6 +1,6 @@
 # Tree walker types
 
-The data generator transforms each profile into one or more [decision trees](../../docs/DecisionTrees/DecisionTrees.md), each of these can then be process through some strategy. The strategies for processing these trees are known as Tree walker types, each must implement `DecisionTreeWalker`.
+The generator transforms each profile into one or more [decision trees](../../docs/DecisionTrees/DecisionTrees.md), each of these can then be process through some strategy. The strategies for processing these trees are known as Tree walker types, each must implement `DecisionTreeWalker`.
 
 The following walker strategies exist:
 

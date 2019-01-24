@@ -1,6 +1,6 @@
 # Set restriction process
 
-The data generator profile describes to the generator how to reduce the original set of data to a permitted set of data per field. In most cases the generator starts off using the universal set as the source of data. This represents all values for all types (temporal, string, numeric) without restriction. It also allows for no value to be emitted - the empty set (&#8709;) commonly expressed as `null`).
+The profile describes to the generator how to reduce the original set of data to a permitted set of data per field. In most cases the generator starts off using the universal set as the source of data. This represents all values for all types (temporal, string, numeric) without restriction. It also allows for no value to be emitted - the empty set (&#8709;) commonly expressed as `null`).
 
 The universal set can be visualised as  
 ![](set-reduction-universal-set.svg)
