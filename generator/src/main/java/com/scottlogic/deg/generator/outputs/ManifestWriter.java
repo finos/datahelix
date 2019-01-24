@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.violations;
+package com.scottlogic.deg.generator.outputs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
