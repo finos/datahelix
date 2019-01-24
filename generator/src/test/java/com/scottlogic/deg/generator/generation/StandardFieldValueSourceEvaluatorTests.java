@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
-import cucumber.api.java.sl.In;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
