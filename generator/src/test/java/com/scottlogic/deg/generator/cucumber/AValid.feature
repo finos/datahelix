@@ -274,72 +274,73 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | foo  |
       | null |
 
-  @ignore
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful
     Given foo is a valid "ISIN"
     And foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
+      | foo            |
+      | null           |
       | "GB0002634946" |
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a greaterThan constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is greater than 0
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a greaterThanOrEqualTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is greater than or equal to 1
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a lessThan constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is less than 13
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is less than or equal to 12
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a granularTo constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is granular to 1
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside an after constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is after 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside an afterOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is after or at 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a before constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is before 2018-09-01T00:00:00.000
     Then I am presented with an error message
     And no data is created
 
-  @ignore
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is before or at 2018-09-01T00:00:00.000
@@ -397,8 +398,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should fail with an error message
+  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should only emit null
     Given there is a constraint:
       """
         { "allOf": [
@@ -406,4 +406,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
            { "field": "foo", "is": "equalTo", "value": "GB0002634947" }
         ]}
       """
-    Then no data is created
+    Then the following data should be generated:
+      | foo            |
+      | null           |
