@@ -1,6 +1,6 @@
 # Generation types
 
-The data generator supports the following data generation types
+The generator supports the following data generation types
 
 * Full sequential
 * Random

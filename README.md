@@ -1,18 +1,18 @@
 <!-- Badges go here (see [shields.io](https://shields.io/), for examples). -->
 
-# Data Generator
+# DataHelix
 
 ### An open source project supported by [Scott Logic](https://www.scottlogic.com/)
-The generation of representative test and simulation data is challenging and time-consuming. The data-generator allows you to quickly create data, based on a schema, using a variety of generation modes for the purpose of testing and validation.
+The generation of representative test and simulation data is challenging and time-consuming. The DataHelix generator (referred to as 'the generator') allows you to quickly create data, based on a schema, using a variety of generation modes for the purpose of testing and validation.
 
-You can use this data generator to commission and maintain your test systems with data that conforms to your live environments without copying data or breaching GDPR.
+You can use the generator to commission and maintain your test systems with data that conforms to your live environments without copying data or breaching GDPR.
 
-The data generator has been written in Java to allow cross platform compatibility, allowing it to work on Microsoft Windows, Apple Mac and Linux equally.
+The generator has been written in Java to allow cross platform compatibility, allowing it to work on Microsoft Windows, Apple Mac and Linux equally.
 
 ## Getting started
 You will need Java v1.8 installed to run the generator, it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
-You can download the generator from the [GitHub project releases page](https://github.com/ScottLogic/data-engineering-generator/releases/).
+You can download the generator from the [GitHub project releases page](https://github.com/ScottLogic/datahelix/releases/).
 
 ### Usage examples
 
@@ -62,9 +62,9 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
-* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the data generator product, the remaining steps need to be actioned to be able to use the profiler.
+* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the generator, the remaining steps need to be actioned to be able to use the profiler.
 * Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn install -pl :generator -am`) if you prefer.
-* Run the data generator or profiler - see the examples below.
+* Run the generator - see the [examples here](./generator/README.md).
 
 ## License
 
