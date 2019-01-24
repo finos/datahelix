@@ -6,13 +6,13 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.violations.filters.NotIsTypeFilter;
-import com.scottlogic.deg.generator.violations.filters.NotShorterThanFilter;
+import com.scottlogic.deg.generator.violations.filters.ConstraintTypeFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ViolationGenerationEngineWrapper {
-    private List<ViolationFilter> filters = new ArrayList<>();
+    private List<ViolationFilter> filters = Arrays.asList(new ConstraintTypeFilter(IsOfTypeConstraint.class), new ConstraintTypeFilter(IsStringShorterThanConstraint.class));
     private final GenerationEngine generationEngine;
     private final FileOutputTarget fileOutputTarget;
     private final Path outputPath;
