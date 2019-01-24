@@ -38,7 +38,7 @@ public class NumericRestrictions {
 
     public boolean numericValuesAreInteger() {
         if (min == null || max == null) {
-            return true;
+            return false;
         }
 
         // If either of the min or max values have decimal points or if the sign differs when converting to an integer

@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
+import cucumber.api.java.sl.In;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -212,10 +213,10 @@ public class StandardFieldValueSourceEvaluatorTests {
         final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
 
         Assert.assertEquals(1, result.size());
-        Iterator allValuesIterator = result.get(0).generateInterestingValues().iterator();
+        Iterator interestingValuesIterator = result.get(0).generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (allValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) allValuesIterator.next());
+        while (interestingValuesIterator.hasNext()) {
+            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
         }
 
         final List<BigDecimal> expectedValues = Arrays.asList(
@@ -346,10 +347,10 @@ public class StandardFieldValueSourceEvaluatorTests {
         final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
 
         Assert.assertEquals(1, result.size());
-        Iterator allValuesIterator = result.get(0).generateInterestingValues().iterator();
+        Iterator interestingValuesIterator = result.get(0).generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (allValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) allValuesIterator.next());
+        while (interestingValuesIterator.hasNext()) {
+            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
         }
 
         final List<BigDecimal> expectedValues = Arrays.asList(
@@ -357,6 +358,39 @@ public class StandardFieldValueSourceEvaluatorTests {
             new BigDecimal("15.02"),
             new BigDecimal("15.98"),
             new BigDecimal("15.99")
+        );
+        Assert.assertEquals(expectedValues, valuesFromResult);
+    }
+
+    @Test
+    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryIntegerValues() {
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+            new NumericRestrictions(),
+            FieldSpecSource.Empty
+        ).withTypeRestrictions(
+            new DataTypeRestrictions(
+                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            ),
+            FieldSpecSource.Empty
+        ).withNullRestrictions(
+            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+            FieldSpecSource.Empty
+        );
+        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
+
+        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
+
+        Assert.assertEquals(1, result.size());
+        Iterator interestingValuesIterator = result.get(0).generateInterestingValues().iterator();
+        List<Integer> valuesFromResult = new ArrayList<>();
+        while (interestingValuesIterator.hasNext()) {
+            valuesFromResult.add((Integer) interestingValuesIterator.next());
+        }
+
+        final List<Integer> expectedValues = Arrays.asList(
+            -2147483648,
+            0,
+            2147483646
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
     }

@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -111,7 +110,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         int numericScale = getNumericScale(restrictions, fieldSpec);
 
-        if (isIntegerFieldValue(restrictions, numericScale)) {
+        if ((restrictions.min == null || restrictions.max == null) || isIntegerFieldValue(restrictions, numericScale)) {
             return new IntegerFieldValueSource(
                 restrictions,
                 getBlacklist(fieldSpec));

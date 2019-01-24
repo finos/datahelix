@@ -474,6 +474,26 @@ public class NumericRestrictionsTests {
 
         Assert.assertFalse(result);
     }
+
+    @Test
+    void numericValuesAreInteger_minValueIsNull_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void numericValuesAreInteger_maxValueIsNull_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal(100), false);
+
+        boolean result = restrictions.numericValuesAreInteger();
+
+        Assert.assertFalse(result);
+    }
 }
 
 
