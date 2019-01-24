@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class FileOutputTarget implements OutputTarget {
+public class FileOutputTarget {
     private final Path filePath;
     private final DataSetWriter dataSetWriter;
 
@@ -23,7 +23,6 @@ public class FileOutputTarget implements OutputTarget {
         this.dataSetWriter = dataSetWriter;
     }
 
-    @Override
     public void outputDataset(
         Stream<GeneratedObject> generatedObjects,
         ProfileFields profileFields)
@@ -47,9 +46,9 @@ public class FileOutputTarget implements OutputTarget {
         }
     }
 
-    @Override
-    public void outputTestCases(
-        TestCaseGenerationResult dataSets) {
-        throw new UnsupportedOperationException();
+    public FileOutputTarget withFilename(String filename){
+        return new FileOutputTarget(
+            filePath.resolve(dataSetWriter.getFileName(filename)),
+            dataSetWriter);
     }
 }

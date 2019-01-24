@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.targets.DirectoryOutputTarget;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -19,22 +18,19 @@ public class GenerateTestCasesExecute implements Runnable {
     private final GenerationConfig config;
     private final ProfileReader profileReader;
     private final GenerateTestCasesCommandLine commandLine;
-    private final GenerationEngine generationEngine;
-    private final DirectoryOutputTarget directoryOutputTarget;
+    private final ViolationGenerationEngineWrapper generationEngine;
 
     @Inject
     public GenerateTestCasesExecute(
         GenerationConfig config,
         ProfileReader profileReader,
         GenerateTestCasesCommandLine commandLine,
-        GenerationEngine generationEngine,
-        DirectoryOutputTarget directoryOutputTarget){
+        ViolationGenerationEngineWrapper generationEngine){
 
         this.config = config;
         this.profileReader = profileReader;
         this.commandLine = commandLine;
         this.generationEngine = generationEngine;
-        this.directoryOutputTarget = directoryOutputTarget;
     }
 
     @Override
@@ -42,7 +38,7 @@ public class GenerateTestCasesExecute implements Runnable {
         try {
             final Profile profile = profileReader.read(this.commandLine.getProfileFile().toPath());
 
-            this.generationEngine.generateTestCases(profile, config, directoryOutputTarget);
+            this.generationEngine.generateTestCases(profile, config);
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
