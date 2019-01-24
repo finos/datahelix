@@ -62,6 +62,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
+    @CommandLine.Option(
+        names = {"--violate"},
+        description = "Defines whether to generate violating data")
+    private boolean violateProfile;
+
     @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
@@ -75,6 +80,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public File getProfileFile() {
         return this.profileFile;
+    }
+
+    @Override
+    public boolean shouldViolate() {
+        return this.violateProfile;
     }
 
     @Override

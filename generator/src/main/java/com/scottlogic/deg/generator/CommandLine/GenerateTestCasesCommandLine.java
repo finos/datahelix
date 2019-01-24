@@ -110,6 +110,11 @@ public class GenerateTestCasesCommandLine extends CommandLineBase implements Gen
     }
 
     @Override
+    public boolean shouldViolate() {
+        return true;
+    }
+
+    @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
