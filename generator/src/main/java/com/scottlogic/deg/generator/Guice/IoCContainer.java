@@ -5,7 +5,10 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
+import com.scottlogic.deg.generator.ValidGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.InvalidGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -44,6 +47,7 @@ public class IoCContainer extends AbstractModule {
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
+        bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
@@ -60,6 +64,9 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
+        bind(GenerationEngine.class).annotatedWith(Names.named("valid")).to(ValidGenerationEngine.class);
+        bind(GenerationEngine.class).annotatedWith(Names.named("invalid")).to(InvalidGenerationEngine.class);
+
     }
 
     private void bindAllCommandLineTypes() {

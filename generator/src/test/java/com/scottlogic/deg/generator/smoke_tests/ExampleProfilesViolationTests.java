@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
-import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.ValidGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.violations.ViolationGenerationEngineWrapper;
+import com.scottlogic.deg.generator.InvalidGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -76,17 +76,17 @@ class ExampleProfilesViolationTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                GenerationEngine engine = new GenerationEngine(
+                ValidGenerationEngine engine = new ValidGenerationEngine(
                     new DecisionTreeDataGenerator(
                         walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
-                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget(), new ManifestWriter());
+                InvalidGenerationEngine invalidGenerationEngine = new InvalidGenerationEngine(null, engine, new ManifestWriter());
 
                 consumer.generate(
-                    wrapper,
+                    invalidGenerationEngine,
                     profileFile);
             });
 
@@ -133,6 +133,6 @@ class ExampleProfilesViolationTests {
 
     @FunctionalInterface
     private interface GenerateConsumer {
-        void generate(ViolationGenerationEngineWrapper engine, File profileFile) throws IOException, InvalidProfileException;
+        void generate(InvalidGenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }
