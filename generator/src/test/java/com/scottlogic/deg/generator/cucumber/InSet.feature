@@ -654,6 +654,7 @@ Scenario: Running a 'inSet' request alongside a contradicting matchingRegex cons
        | foo  |
        | null |
 
+
 Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
      Given there is a field foo
        And foo is in set:
@@ -782,7 +783,7 @@ Scenario: Running a 'inSet' request alongside a contradicting shorterThan (equal
        | foo  |
        | null |
 
-Scenario: Running a 'inSet' request alongside a greaterThan constraint should produce null
+Scenario: Running a 'inSet' request alongside a greaterThan constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -791,10 +792,14 @@ Scenario: Running a 'inSet' request alongside a greaterThan constraint should pr
        | "Test7" |
        And foo is greater than 1
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint should produce null
+Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -803,10 +808,14 @@ Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint 
        | "Test7" |
        And foo is greater than or equal to 1
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a lessThan constraint should produce null
+Scenario: Running a 'inSet' request alongside a lessThan constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -815,10 +824,14 @@ Scenario: Running a 'inSet' request alongside a lessThan constraint should produ
        | "Test7" |
        And foo is less than 1
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint should produce null
+Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -827,11 +840,14 @@ Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint sho
        | "Test7" |
        And foo is less than or equal to 1
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-@ignore
-Scenario: Running a 'inSet' request alongside a granularTo constraint should produce null
+Scenario: Running a 'inSet' request alongside a granularTo constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -840,10 +856,14 @@ Scenario: Running a 'inSet' request alongside a granularTo constraint should pro
        | "Test7" |
        And foo is granular to 0.1
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a after constraint should produce null
+Scenario: Running a 'inSet' request alongside a after constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -852,10 +872,14 @@ Scenario: Running a 'inSet' request alongside a after constraint should produce 
        | "Test7" |
        And foo is after 2010-01-01T00:00:00.000
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a afterOrAt constraint should produce null
+Scenario: Running a 'inSet' request alongside a afterOrAt constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -864,10 +888,14 @@ Scenario: Running a 'inSet' request alongside a afterOrAt constraint should prod
        | "Test7" |
        And foo is after or at 2010-01-01T00:00:00.000
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a before constraint should produce null
+Scenario: Running a 'inSet' request alongside a before constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -876,10 +904,14 @@ Scenario: Running a 'inSet' request alongside a before constraint should produce
        | "Test7" |
        And foo is before 2010-01-01T00:00:00.000
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
-Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should produce null
+Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -888,8 +920,12 @@ Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should pro
        | "Test7" |
        And foo is before or at 2010-01-01T00:00:00.000
      Then the following data should be generated:
-       | foo  |
-       | null |
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
 
 Scenario: Running a 'inSet' request with a not constraint should be successful
      Given there is a field foo
