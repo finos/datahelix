@@ -40,6 +40,7 @@ We adopt a modified subset of the [Google Java Coding Style](https://google.gith
 * [4.3](https://google.github.io/styleguide/javaguide.html#s4.3-one-statement-per-line) One statement per line
 * [4.4](https://google.github.io/styleguide/javaguide.html#s4.4-column-limit) Column limit: 100
 * [4.5.1](https://google.github.io/styleguide/javaguide.html#s4.5.1-line-wrapping-where-to-break) Where to break (but _**not**_ [4.5.2](https://google.github.io/styleguide/javaguide.html#s4.5.2-line-wrapping-indent))
+* The `this.` qualifier should not be included, except where required.
 
 
 ### Scala Coding Style
