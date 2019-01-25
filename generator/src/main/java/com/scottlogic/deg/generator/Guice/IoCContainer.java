@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import com.scottlogic.deg.generator.ValidGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
@@ -73,11 +72,6 @@ public class IoCContainer extends AbstractModule {
         if (this.commandLine instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
-        }
-
-        if (this.commandLine instanceof GenerateTestCasesCommandLine) {
-            bind(GenerateTestCasesCommandLine.class).toInstance((GenerateTestCasesCommandLine) this.commandLine);
-            bind(GenerationConfigSource.class).to(GenerateTestCasesCommandLine.class);
         }
     }
 }
