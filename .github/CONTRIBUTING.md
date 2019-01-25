@@ -64,7 +64,7 @@ To make review of PRs easier, please:
 
  * Please make sure your PRs will merge cleanly - PRs that don't are unlikely to be accepted.
  * For code contributions, follow the existing code layout.
- * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/{program name}/{project name}/wiki).
+ * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/scottlogic/datahelix/wiki).
  * Keep commits small and cohesive - if you have multiple contributions, please submit them as independent commits (and ideally as independent PRs too).
  * Reference issue #s if your PR has anything to do with an issue (even if it doesn't address it).
  * Minimise non-functional changes (e.g. whitespace shenanigans).
