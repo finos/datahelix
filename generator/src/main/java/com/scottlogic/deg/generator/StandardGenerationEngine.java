@@ -11,12 +11,12 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class ValidGenerationEngine implements GenerationEngine {
+public class StandardGenerationEngine implements GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private final DataGenerator dataGenerator;
 
     @Inject
-    public ValidGenerationEngine(
+    public StandardGenerationEngine(
         DataGenerator dataGenerator,
         DecisionTreeFactory decisionTreeGenerator) {
         this.dataGenerator = dataGenerator;

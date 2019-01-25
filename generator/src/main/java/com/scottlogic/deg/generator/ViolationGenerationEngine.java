@@ -19,13 +19,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InvalidGenerationEngine implements GenerationEngine {
+public class ViolationGenerationEngine implements GenerationEngine {
     private final GenerationEngine generationEngine;
     private final Path outputPath;
     private final ManifestWriter manifestWriter;
 
     @Inject
-    public InvalidGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter){
+    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter){
         this.outputPath = outputPath;
         this.generationEngine = generationEngine;
         this.manifestWriter = manifestWriter;

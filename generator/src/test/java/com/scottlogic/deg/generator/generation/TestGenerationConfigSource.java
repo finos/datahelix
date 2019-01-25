@@ -9,7 +9,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.TreeWalkerType walkerType;
     public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
     public boolean validateProfile = false;
-    public boolean violate = false;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -75,6 +74,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public boolean shouldViolate() {
-        return violate;
+        return false;
     }
 }

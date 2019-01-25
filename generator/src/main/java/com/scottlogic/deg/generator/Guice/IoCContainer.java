@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.ValidGenerationEngine;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
-import com.scottlogic.deg.generator.InvalidGenerationEngine;
+import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -63,8 +63,8 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
-        bind(GenerationEngine.class).annotatedWith(Names.named("valid")).to(ValidGenerationEngine.class);
-        bind(GenerationEngine.class).annotatedWith(Names.named("invalid")).to(InvalidGenerationEngine.class);
+        bind(GenerationEngine.class).annotatedWith(Names.named("valid")).to(StandardGenerationEngine.class);
+        bind(GenerationEngine.class).annotatedWith(Names.named("invalid")).to(ViolationGenerationEngine.class);
 
     }
 
