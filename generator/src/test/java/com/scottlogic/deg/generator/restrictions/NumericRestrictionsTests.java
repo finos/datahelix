@@ -494,6 +494,39 @@ public class NumericRestrictionsTests {
 
         Assert.assertFalse(result);
     }
+
+    @Test
+    void areLimitValuesInteger_minValueIsOneBelowEdgeCaseIntegerValue_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal("-2147483649"), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal("100"), false);
+
+        boolean result = restrictions.areLimitValuesInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void areLimitValuesInteger_maxValueIsOneAboveEdgeCaseIntegerValue_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = new NumericLimit<>(new BigDecimal("0"), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal("2147483648"), false);
+
+        boolean result = restrictions.areLimitValuesInteger();
+
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    void areLimitValuesInteger_minAndMaxHaveValuesWithTrailingZeros_returnsFalse() {
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.max = new NumericLimit<>(new BigDecimal(5.00), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal(10.00), false);
+
+        boolean result = restrictions.areLimitValuesInteger();
+
+        Assert.assertFalse(result);
+    }
 }
 
 

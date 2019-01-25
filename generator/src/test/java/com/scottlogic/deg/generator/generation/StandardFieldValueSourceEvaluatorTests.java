@@ -394,6 +394,44 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
+    @Test
+    void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+            new NumericRestrictions() {{
+                min = new NumericLimit<>(new BigDecimal("-0.3"), false);
+                max = new NumericLimit<>(new BigDecimal("0.3"), false);
+            }},
+            FieldSpecSource.Empty
+        ).withTypeRestrictions(
+            new DataTypeRestrictions(
+                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            ),
+            FieldSpecSource.Empty
+        ).withNullRestrictions(
+            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+            FieldSpecSource.Empty
+        );
+        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
+
+        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
+
+        Assert.assertEquals(1, result.size());
+        Iterator allValuesIterator = result.get(0).generateAllValues().iterator();
+        List<BigDecimal> valuesFromResult = new ArrayList<>();
+        while (allValuesIterator.hasNext()) {
+            valuesFromResult.add((BigDecimal) allValuesIterator.next());
+        }
+
+        final List<BigDecimal> expectedValues = Arrays.asList(
+            new BigDecimal("-0.2"),
+            new BigDecimal("-0.1"),
+            new BigDecimal("0.0"),
+            new BigDecimal("0.1"),
+            new BigDecimal("0.2")
+        );
+        Assert.assertEquals(expectedValues, valuesFromResult);
+    }
+
     private void AssertLastSourceIsNullOnlySource(List<FieldValueSource> sources) {
         int lastSourceIndex = sources.size() - 1;
         Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
