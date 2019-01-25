@@ -587,7 +587,6 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | "a"  | null  |
       | "c"  | null  |
 
-@ignore ''' test is inconsistent, it passes *most* of the time when debugging, and fails *most* of the time when running normally
   Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
     Given there is a field bar
     And the combination strategy is exhaustive
@@ -602,10 +601,10 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
     Then the following data should be generated in order:
       | foo  | bar  | lee  |
       | "a"  | "AA" | 1    |
-      | "a"  | "AA" | null |
       | null | "AA" | 1    |
+      | "a"  | "AA" | null |
       | null | "AA" | null |
       | "a"  | null | 1    |
-      | "a"  | null | null |
       | null | null | 1    |
+      | "a"  | null | null |
       | null | null | null |
