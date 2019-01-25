@@ -111,6 +111,14 @@ class IntegerFieldValueSourceTests {
         expectInterestingValues(Integer.MIN_VALUE, 0, Integer.MAX_VALUE - 1);
     }
 
+    @Test
+    void shouldNotEmitInterestingValueTwice(){
+        givenLowerBound(0, true);
+        givenUpperBound(Integer.MAX_VALUE, false);
+
+        expectInterestingValues(0, Integer.MAX_VALUE - 1);
+    }
+
     private NumericLimit<BigDecimal> upperLimit;
     private NumericLimit<BigDecimal> lowerLimit;
     private Set<Object> blacklist;
