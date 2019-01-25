@@ -80,4 +80,9 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public File getProfileFile() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
+    }
 }
