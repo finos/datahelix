@@ -79,7 +79,7 @@ public class GenerateTestCasesCommandLine extends CommandLineBase implements Gen
     @CommandLine.Option(
         names = {"--dont-violate"},
         arity = "0..",
-        description = "//TODO")
+        description = "Choose types of constraint should not be violated")
     private List<AtomicConstraintType> filteredTypes;
 
     @Override

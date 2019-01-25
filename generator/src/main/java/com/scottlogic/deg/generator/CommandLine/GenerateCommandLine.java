@@ -65,6 +65,12 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
+    @CommandLine.Option(
+        names = {"--dont-violate"},
+        arity = "0..",
+        description = "Choose types of constraint should not be violated")
+    private List<AtomicConstraintType> filteredTypes;
+
     @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
@@ -107,7 +113,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @Override
     public List<AtomicConstraintType> getFilteredTypes() {
-        return new ArrayList<>();
+        return filteredTypes;
     }
 
     @Override
