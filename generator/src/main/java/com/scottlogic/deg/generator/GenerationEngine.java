@@ -23,7 +23,7 @@ public class GenerationEngine {
         this.decisionTreeGenerator = decisionTreeGenerator;
     }
 
-    void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
+    public void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
 
         final DecisionTreeCollection analysedProfile = this.decisionTreeGenerator.analyse(profile);
 

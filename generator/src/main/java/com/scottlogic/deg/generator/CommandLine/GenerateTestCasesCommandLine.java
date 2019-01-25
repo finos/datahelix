@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.CommandLine;
 
-import com.scottlogic.deg.generator.GenerateTestCasesExecute;
+import com.scottlogic.deg.generator.violations.GenerateTestCasesExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import picocli.CommandLine;

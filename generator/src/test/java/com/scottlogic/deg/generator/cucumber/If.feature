@@ -1583,7 +1583,6 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
        | foo    | bar    |
        | "dddd" | "4444" |
 
-@ignore
 Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "GB0002634946" |
@@ -1668,7 +1667,6 @@ Scenario: Running an if request that contains a non contradictory aValid constra
        | "ccc"          | "GB0002634946" |
        | "dddd"         | "GB0002634946" |
 
-@ignore
 Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "aa"   |
@@ -1692,12 +1690,11 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        """
      Then the following data should be generated:
        | foo    | bar   |
-       | "a"    | "333" |
+       | "aa"   | "333" |
        | "bb"   | "333" |
        | "ccc"  | "333" |
        | "dddd" | "333" |
 
-@ignore
 Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
        Given foo is in set:
          | "aa"   |
@@ -1721,7 +1718,7 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        """
      Then the following data should be generated:
        | foo    | bar   |
-       | "a"    | "333" |
+       | "aa"   | "333" |
        | "bb"   | "333" |
        | "dddd" | "333" |
 
