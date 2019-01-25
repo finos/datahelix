@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -83,7 +84,7 @@ class ExampleProfilesViolationTests {
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
-                ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());
+                ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
 
                 consumer.generate(
                     violationGenerationEngine,
