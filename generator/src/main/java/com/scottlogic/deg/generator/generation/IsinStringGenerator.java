@@ -25,7 +25,9 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        throw new UnsupportedOperationException();
+        return new NoStringsStringGenerator(
+            RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
+        );
     }
 
     @Override
@@ -47,7 +49,8 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public boolean match(String subject) {
-        return IsinUtils.isValidIsin(subject);
+        boolean matches = IsinUtils.isValidIsin(subject);
+        return matches != isNegated;
     }
 
     @Override

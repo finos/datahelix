@@ -102,6 +102,8 @@ Is satisfied if `field` is a string with length less than `value`.
 Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Possible options for `value` are:
 * ISIN
 
+**NOTE**: This constraint cannot be combined with any other textual constraint, doing so will mean no string data is created. See [Frequently asked questions](FrequentlyAskedQuestions.md) for more detail.
+
 ## Numeric constraints
 These constraints imply `ofType numeric`.
 
