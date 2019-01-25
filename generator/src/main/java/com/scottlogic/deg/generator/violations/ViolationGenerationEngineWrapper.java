@@ -89,6 +89,8 @@ public class ViolationGenerationEngineWrapper {
             return rule;
         }
 
+        // The ViolateConstraint wraps the violated constraints.
+        // It is used in the tree factory to create the violated tree
         ViolateConstraint violatedConstraint = new ViolateConstraint(
             violate.size() == 1
                 ? violate.iterator().next()
