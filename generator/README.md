@@ -17,13 +17,13 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 
 `java -jar <path to JAR file> <command> [options] <arguments>`
 
-* `<command>` one of the commands described below, `generate`, `generateTestCases`, and so on
+* `<command>` one of the commands described below, `generate`, `visualise`, and so on
 * `[options]` optionally a combination of options to configure how the command operates
 * `<arguments>` required inputs for the command to operate
 
 ## Examples
 * `java -jar generator.jar generate profile.json profile.csv`
-* `java -jar generator.jar generateTestCases profile.json violated-data-files/`
+* `java -jar generator.jar generate --violate=true profile.json violated-data-files/`
 
 ## Commands
 ### Generate
@@ -32,22 +32,12 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 Generates data to a specified endpoint.
 
 * `<profile path>`, a path to the profile JSON file
-* `<output path>`, a file path to where the data should be emitted to. This will be a UTF-8 encoded CSV file.
+* `<output path>`, a file path to where the data should be emitted to. This will be a UTF-8 encoded CSV file or directory, option dependent.
 
 The full list of generate options can be viewed [here](../docs/Options/GenerateOptions.md).
 
 #
-### Generate Test Cases
-#### `generateTestCases [options] <profile path> <output directory>`
 
-Generates data to a specified directory, including both valid and [invalid data](./docs/DeliberateViolation.md).
-
-* `<profile path>`, a path to the profile JSON file
-* `<output directory>`, a directory path to where the output file/s should be emitted to. Files will be created for each rule, numbered relative to the position of the rule in the profile.
-
-The full list of generate test cases options can be viewed [here](../docs/Options/GenerateTestCasesOptions.md).
-
-#
 ### Visualise
 #### `visualise [options] <profile path> <output path>`
 

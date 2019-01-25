@@ -2,7 +2,7 @@
 
 ## Invocation
 
-Violation is invoked using the `generateTestCases` sub-command. An output directory must be specified rather than a single file.
+Violation is invoked using the `--violate` option. An output directory must be specified rather than a single file.
 
 ## Algorithm
 

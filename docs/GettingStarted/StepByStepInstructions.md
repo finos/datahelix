@@ -10,5 +10,4 @@ The generator will then be run from the command line using the commands detailed
 
 1. [ Creating a Profile. ](CreatingAProfile.md)
 2. [Using a profile to Generate data](GeneratingData.md)
-3. [Generating Violating data](GenerateTestCases.md)
-4. [Visualising the Decision Tree](Visualise.md)
+3. [Visualising the Decision Tree](Visualise.md)

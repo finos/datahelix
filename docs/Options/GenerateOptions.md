@@ -1,6 +1,8 @@
 # Generate Options
 Options are optional and case-insensitive
 
+* `--violate` 
+    * generate data which violates profile constraints. Options are: `true` or `false` (default)
 * `-n <rows>` or `--max-rows <rows>`
    * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows
 * `-t <generationType>` or `--t <generationType>`

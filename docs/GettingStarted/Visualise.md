@@ -52,5 +52,5 @@ This is a very simple tree, more complex profiles will generate more complex tre
     - gv files can include HTML encoded entities, visualisers should support this feature.
 
 #
-[< Previous](GenerateTestCases.md) | [Contents](StepByStepInstructions.md)
+[< Previous](GeneratingData.md) | [Contents](StepByStepInstructions.md)
 
