@@ -40,6 +40,7 @@ We adopt a modified subset of the [Google Java Coding Style](https://google.gith
 * [4.3](https://google.github.io/styleguide/javaguide.html#s4.3-one-statement-per-line) One statement per line
 * [4.4](https://google.github.io/styleguide/javaguide.html#s4.4-column-limit) Column limit: 100
 * [4.5.1](https://google.github.io/styleguide/javaguide.html#s4.5.1-line-wrapping-where-to-break) Where to break (but _**not**_ [4.5.2](https://google.github.io/styleguide/javaguide.html#s4.5.2-line-wrapping-indent))
+* The `this.` qualifier should not be included, except where required.
 
 
 ### Scala Coding Style
@@ -63,12 +64,13 @@ To make review of PRs easier, please:
 
  * Please make sure your PRs will merge cleanly - PRs that don't are unlikely to be accepted.
  * For code contributions, follow the existing code layout.
- * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/{program name}/{project name}/wiki).
+ * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/scottlogic/datahelix/wiki).
  * Keep commits small and cohesive - if you have multiple contributions, please submit them as independent commits (and ideally as independent PRs too).
  * Reference issue #s if your PR has anything to do with an issue (even if it doesn't address it).
  * Minimise non-functional changes (e.g. whitespace shenanigans).
  * Ensure all new files include a header comment block containing the [Apache License v2.0 and your copyright information](http://www.apache.org/licenses/LICENSE-2.0#apply).
- * If necessary (e.g. due to 3rd party dependency licensing requirements), update the [NOTICE file](https://github.com/{program name}/{project name}/blob/master/NOTICE) with any new attribution or other notices
+ * If necessary (e.g. due to 3rd party dependency licensing requirements), update the [NOTICE file](../NOTICE) with any new attribution or other notices
+* See [Coding Guidelines](https://github.com/ScottLogic/datahelix/wiki/Coding-Guidelines) for additional information.
 
 
 ## Commit and PR Messages
