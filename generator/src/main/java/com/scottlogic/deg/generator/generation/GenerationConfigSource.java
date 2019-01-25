@@ -24,7 +24,7 @@ public interface GenerationConfigSource {
      * @return Enum value of the current decision tree walker.
      */
     GenerationConfig.TreeWalkerType getWalkerType();
-
+    GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
     long getMaxRows();
     boolean getValidateProfile();
@@ -34,4 +34,5 @@ public interface GenerationConfigSource {
     boolean isEnableTracing();
     File getProfileFile();
     boolean shouldViolate();
+
 }

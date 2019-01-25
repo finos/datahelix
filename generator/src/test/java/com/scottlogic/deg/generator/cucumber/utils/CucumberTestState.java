@@ -33,6 +33,7 @@ public class CucumberTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
+    public GenerationConfig.MonitorType monitorType;
 
     public void addConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)

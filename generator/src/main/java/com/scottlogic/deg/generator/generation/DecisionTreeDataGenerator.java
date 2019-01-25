@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
-    private final DataGeneratorMonitor monitor;
+    private final ReductiveDataGeneratorMonitor monitor;
     private final RowSpecDataBagSourceFactory dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
@@ -29,7 +29,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeWalker treeWalker,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
-        DataGeneratorMonitor monitor,
+            ReductiveDataGeneratorMonitor monitor) {
         RowSpecDataBagSourceFactory dataBagSourceFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;

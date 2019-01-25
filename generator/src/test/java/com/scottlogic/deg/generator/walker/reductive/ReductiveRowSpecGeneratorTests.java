@@ -57,7 +57,8 @@ class ReductiveRowSpecGeneratorTests {
         GenerationConfig config = new GenerationConfig(new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
             GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE,
+            GenerationConfig.MonitorType.NOOP
         ));
         RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory(
             new FieldSpecValueGenerator(

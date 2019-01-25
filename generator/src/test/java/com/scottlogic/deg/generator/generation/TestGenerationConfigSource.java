@@ -13,15 +13,18 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.CombinationStrategyType combinationStrategy;
     public GenerationConfig.TreeWalkerType walkerType;
     public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+    public GenerationConfig.MonitorType monitorType;
     public boolean validateProfile = false;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
         GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
+        GenerationConfig.CombinationStrategyType combinationStrategy,
+        GenerationConfig.MonitorType monitorType) {
         this.generationType = generationType;
         this.combinationStrategy = combinationStrategy;
         this.walkerType = walkerType;
+        this.monitorType = monitorType;
     }
 
     @Override
