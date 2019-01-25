@@ -40,7 +40,7 @@ See [additional details here](./docs/Options/GenerateTestCasesOptions.md) on the
 
 ## How it works
 
-There are 3 discrete primary elements:
+There are 2 discrete primary elements:
 
 | Product | Description | Status | Notes |
 | ---- | ---- | ---- | ---- |
