@@ -1,10 +1,12 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.violations;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.violations.ViolationGenerationEngineWrapper;
 import picocli.CommandLine;
 
 import java.io.IOException;

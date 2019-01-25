@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.utils.IsinUtils;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class IsinStringGeneratorTest {
+public class IsinStringGeneratorTests {
 
     @Test
     public void shouldEndAllIsinsWithValidCheckDigit() {
@@ -85,5 +86,41 @@ public class IsinStringGeneratorTest {
             final String nextIsin = allIsins.next();
             assertThat(IsinUtils.isValidIsin(nextIsin), is(false));
         }
+    }
+
+    @Test
+    public void shouldMatchAValidIsinCodeWhenNotNegated(){
+        StringGenerator isinGenerator = new IsinStringGenerator();
+
+        boolean matches = isinGenerator.match("GB0002634946");
+
+        Assert.assertTrue(matches);
+    }
+
+    @Test
+    public void shouldNotMatchAnInvalidIsinCodeWhenNotNegated(){
+        StringGenerator isinGenerator = new IsinStringGenerator();
+
+        boolean matches = isinGenerator.match("not an isin");
+
+        Assert.assertFalse(matches);
+    }
+
+    @Test
+    public void shouldNotMatchAValidIsinCodeWhenNegated(){
+        StringGenerator isinGenerator = new IsinStringGenerator().complement();
+
+        boolean matches = isinGenerator.match("GB0002634946");
+
+        Assert.assertFalse(matches);
+    }
+
+    @Test
+    public void shouldMatchAnInvalidIsinCodeWhenNegated(){
+        StringGenerator isinGenerator = new IsinStringGenerator().complement();
+
+        boolean matches = isinGenerator.match("not an isin");
+
+        Assert.assertTrue(matches);
     }
 }

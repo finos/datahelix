@@ -1,4 +1,8 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.violations;
+
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.Rule;
 
 import java.util.Collection;
 
