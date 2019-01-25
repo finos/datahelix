@@ -10,7 +10,7 @@ public interface GenerationConfigSource {
     GenerationConfig.DataGenerationType getGenerationType();
     GenerationConfig.CombinationStrategyType getCombinationStrategyType();
     GenerationConfig.TreeWalkerType getWalkerType();
-    List<AtomicConstraintType> getFilteredTypes();
+    List<AtomicConstraintType> getConstraintsToNotViolate();
     long getMaxRows();
     boolean getValidateProfile();
     boolean shouldDoPartitioning();

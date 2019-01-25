@@ -8,7 +8,6 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
@@ -80,7 +79,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         names = {"--dont-violate"},
         arity = "0..",
         description = "Choose types of constraint should not be violated")
-    private List<AtomicConstraintType> filteredTypes;
+    private List<AtomicConstraintType> constraintsToNotViolate;
 
     @Override
     public boolean shouldDoPartitioning() {
@@ -128,8 +127,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public List<AtomicConstraintType> getFilteredTypes() {
-        return filteredTypes;
+    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+        return constraintsToNotViolate;
     }
 
     @Override

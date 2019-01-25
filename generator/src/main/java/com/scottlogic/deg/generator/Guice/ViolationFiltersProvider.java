@@ -21,7 +21,7 @@ public class ViolationFiltersProvider implements Provider<List<ViolationFilter>>
 
     @Override
     public List<ViolationFilter> get() {
-        return commandLine.getFilteredTypes().stream()
+        return commandLine.getConstraintsToNotViolate().stream()
             .map(mapper::toConstraintClass)
             .map(ConstraintTypeFilter::new)
             .collect(Collectors.toList());

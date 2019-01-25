@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class AtomicConstraintTypeMapper {
     public Class toConstraintClass(AtomicConstraintType type) {
@@ -47,7 +46,7 @@ public class AtomicConstraintTypeMapper {
             case ISINSET:
                 return IsInSetConstraint.class;
             default:
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
         }
     }
 }

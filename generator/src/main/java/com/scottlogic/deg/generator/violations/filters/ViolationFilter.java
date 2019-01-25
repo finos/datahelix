@@ -7,9 +7,4 @@ import java.util.stream.Stream;
 
 public interface ViolationFilter {
     boolean accept(Constraint constraint);
-
-    static Stream<Constraint> applyFilters(Stream<Constraint> constraints, Iterator<ViolationFilter> filters){
-        if (!filters.hasNext()) { return constraints; }
-        return applyFilters(constraints.filter(filters.next()::accept), filters);
-    }
 }

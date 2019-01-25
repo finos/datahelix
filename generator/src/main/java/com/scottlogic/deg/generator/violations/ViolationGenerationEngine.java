@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.io.IOException;
@@ -24,14 +23,14 @@ public class ViolationGenerationEngine implements GenerationEngine {
     private final GenerationEngine generationEngine;
     private final Path outputPath;
     private final ManifestWriter manifestWriter;
-    private final List<ViolationFilter> filters;
+    private final List<ViolationFilter> constraintsToNotViolate;
 
     @Inject
-    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter, List<ViolationFilter> filters){
+    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter, List<ViolationFilter> constraintsToNotViolate){
         this.outputPath = outputPath;
         this.generationEngine = generationEngine;
         this.manifestWriter = manifestWriter;
-        this.filters = filters;
+        this.constraintsToNotViolate = constraintsToNotViolate;
     }
 
     public void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
@@ -99,7 +98,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
     }
 
     private boolean acceptConstraint(Constraint constraint){
-        for (ViolationFilter filter : filters) {
+        for (ViolationFilter filter : constraintsToNotViolate) {
             if (!filter.accept(constraint)){
                 return false;
             }
