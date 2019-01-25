@@ -427,20 +427,19 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting shorterTha
      Then I am presented with an error message
        And no data is created
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should be successful
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should only emit null
        Given foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
      Then the following data should be included in what is generated:
        | foo            |
        | null           |
-       | "GB0000000009" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should only emit null
        Given foo is matching regex /[b]{2}/
        And foo is a valid "ISIN"
-     Then I am presented with an error message
-       And no data is created
+       Then the following data should be generated:
+        | foo |
+        | null |
 
 @ignore
 Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should fail with an error message
