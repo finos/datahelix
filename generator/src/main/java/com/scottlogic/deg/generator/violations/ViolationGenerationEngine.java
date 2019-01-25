@@ -1,7 +1,10 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.violations;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
