@@ -6,7 +6,6 @@ import org.hamcrest.Description;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
@@ -20,43 +19,40 @@ public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public boolean matches(Object o) {
-        List<List<Objects>> actualRows = (List<List<Objects>>) o;
+        List<List<Object>> actualRows = (List<List<Object>>) o;
         return getFoundRowMatchers(actualRows).isEmpty();
     }
 
     @Override
     public void describeTo(Description description) {
         description.appendText(
-            String.join(
-                ", ",
-                getExpectedMatchers()
-                    .stream()
-                    .map(matcher -> matcher.toString())
-                    .collect(Collectors.toList())));
+            getExpectedMatchers()
+                .stream()
+                .map(BaseMatcher::toString)
+                .collect(Collectors.joining(", ")));
     }
 
     public void describeMismatch(Object item, Description description) {
-        List<List<Objects>> actualRows = (List<List<Objects>>) item;
+        List<List<Object>> actualRows = (List<List<Object>>) item;
         Collection<RowMatcher> foundRowMatchers = getFoundRowMatchers(actualRows);
 
         description.appendText(
-            String.join(
-                ", ",
-                actualRows
-                    .stream()
-                    .map(row -> row.toString())
-                    .collect(Collectors.toList())));
+            actualRows
+                .stream()
+                .map(RowMatcher::formatDatesInRow)
+                .map(Object::toString)
+                .collect(Collectors.joining(", ")));
 
         description.appendText("\n");
         description.appendList("   found: ",", ", "", foundRowMatchers);
     }
 
-    private Collection<RowMatcher> getFoundRowMatchers(List<List<Objects>> actualRows) {
+    private Collection<RowMatcher> getFoundRowMatchers(List<List<Object>> actualRows) {
         Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
         ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
 
         for (RowMatcher expectedMatcher : expectedMatchers){
-            if (actualRows.stream().anyMatch(actualRow -> expectedMatcher.matches(actualRow))){
+            if (actualRows.stream().anyMatch(expectedMatcher::matches)){
                 missingRowMatchers.add(expectedMatcher);
             }
         }
@@ -67,7 +63,7 @@ public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
     private List<RowMatcher> getExpectedMatchers() {
         return expectedRows
             .stream()
-            .map(expectedRow -> new RowMatcher(expectedRow))
+            .map(RowMatcher::new)
             .collect(Collectors.toList());
     }
 }
