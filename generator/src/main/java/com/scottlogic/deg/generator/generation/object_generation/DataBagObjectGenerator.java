@@ -21,7 +21,7 @@ public class DataBagObjectGenerator implements ObjectGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generate(Profile profile, Stream<RowSpec> rowSpecs) {
+    public Stream<GeneratedObject> generateObjectsFromRowSpecs(Profile profile, Stream<RowSpec> rowSpecs) {
 
         DataBagSource allDataBagSources = new ConcatenatingDataBagSource(
             rowSpecs.map(RowSpec::createDataBagSource));

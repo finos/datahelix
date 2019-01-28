@@ -7,5 +7,5 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import java.util.stream.Stream;
 
 public interface ObjectGenerator {
-    Stream<GeneratedObject> generate(Profile profile, Stream<RowSpec> rowSpecs);
+    Stream<GeneratedObject> generateObjectsFromRowSpecs(Profile profile, Stream<RowSpec> rowSpecs);
 }

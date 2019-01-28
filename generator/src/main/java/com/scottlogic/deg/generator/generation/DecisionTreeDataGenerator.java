@@ -38,7 +38,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         DecisionTree optimisedTree = treeOptimiser.optimiseTree(decisionTree);
         Stream<RowSpec> rowSpecStream = treeWalker.walk(optimisedTree);
-        Stream<GeneratedObject> dataRows = objectGenerator.generate(profile, rowSpecStream);
+        Stream<GeneratedObject> dataRows = objectGenerator.generateObjectsFromRowSpecs(profile, rowSpecStream);
 
         return dataRows
             .limit(generationConfig.getMaxRows())
