@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.violations.filters.ConstraintTypeFilter;
+import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class ViolationFiltersProvider implements Provider<List<ViolationFilter>>
     public List<ViolationFilter> get() {
         return commandLine.getConstraintsToNotViolate().stream()
             .map(mapper::toConstraintClass)
-            .map(ConstraintTypeFilter::new)
+            .map(ConstraintTypeViolationFilter::new)
             .collect(Collectors.toList());
     }
 
