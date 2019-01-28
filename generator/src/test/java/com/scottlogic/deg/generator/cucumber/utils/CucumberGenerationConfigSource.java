@@ -40,6 +40,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
+    public GenerationConfig.MonitorType getMonitorType() {
+        return state.monitorType;
+    }
+
+    @Override
     public long getMaxRows() {
         return state.maxRows;
     }

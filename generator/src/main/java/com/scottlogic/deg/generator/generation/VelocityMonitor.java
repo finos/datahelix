@@ -8,52 +8,55 @@ import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.math.BigInteger;
-import java.time.Duration;
-import java.time.Instant;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
-    private Instant startedGenerating;
+    private String startedGenerating;
     private long rowsSinceLastSample;
-    private Instant lastSampleTime;
     private BigInteger rowsEmitted;
     private BigInteger maxRows;
-
+    private Timer timer = new Timer(true);
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
 
     @Override
     public void generationStarting(GenerationConfig generationConfig) {
-        this.startedGenerating = Instant.now();
-        this.lastSampleTime = this.startedGenerating;
+        this.startedGenerating = simpleDateFormat.format( new Date());
         this.rowsSinceLastSample = 0;
         this.rowsEmitted = BigInteger.ZERO;
         this.maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
+
+        System.out.println("Generation started at: " + this.startedGenerating + "\n");
+        System.out.println("Number of rows | Current velocity");
     }
 
     @Override
     public void rowEmitted(GeneratedObject row) {
         this.rowsSinceLastSample++;
         this.rowsEmitted = rowsEmitted.add(BigInteger.ONE);
-
-        if (this.rowsSinceLastSample >= 1000){
-            Instant newSampleTime = Instant.now();
-            reportVelocity(this.rowsSinceLastSample, this.lastSampleTime, newSampleTime);
-            this.lastSampleTime = newSampleTime;
-            this.rowsSinceLastSample = 0;
-        }
     }
 
-    private void reportVelocity(float rowsEmittedInDuration, Instant lastSampleTime, Instant newSampleTime) {
-        Duration duration = Duration.between(lastSampleTime, newSampleTime);
-        double fractionOfSecondToProduceRows = duration.getSeconds() + (duration.getNano() / 1_000_000_000.0);
-        double rowsPerSecond = rowsEmittedInDuration / fractionOfSecondToProduceRows;
-
+    @Override
+    public void reportVelocity(long rowsSinceLastSample) {
         System.out.print(
-            String.format(
-                "%s rows emitted since %s: %.0f rows/sec\r",
-                this.rowsEmitted.toString(),
-                this.startedGenerating.toString(),
-                rowsPerSecond));
+        String.format(
+            "%-14s | %d \r",
+            this.rowsEmitted.toString(),
+            rowsSinceLastSample)
+        );
+    }
 
+    public void startTimer() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                reportVelocity(rowsSinceLastSample);
+                rowsSinceLastSample = 0;
+            }
+        }, 1000L, 1000L);
     }
 
     @Override

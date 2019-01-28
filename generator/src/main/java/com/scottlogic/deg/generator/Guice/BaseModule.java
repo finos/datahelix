@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
@@ -77,6 +78,8 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
+
+        bind(VelocityMonitor.class).in(Singleton.class);
     }
 
     private void bindAllCommandLineTypes() {

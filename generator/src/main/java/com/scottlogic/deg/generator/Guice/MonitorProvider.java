@@ -2,32 +2,40 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.VelocityMonitor;
+import com.scottlogic.deg.generator.generation.*;
 
 public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> {
 
-    private GenerateCommandLine commandLine;
+    private GenerationConfigSource commandLine;
+    private VelocityMonitor velocityMonitor;
+    private NoopDataGeneratorMonitor noopDataGeneratorMonitor;
+    private SystemOutDataGeneratorMonitor systemOutDataGeneratorMonitor;
 
     @Inject
-    MonitorProvider(GenerateCommandLine commandLine) {
+    MonitorProvider(GenerationConfigSource commandLine,
+                    VelocityMonitor velocityMonitor,
+                    NoopDataGeneratorMonitor noopDataGeneratorMonitor,
+                    SystemOutDataGeneratorMonitor systemOutDataGeneratorMonitor) {
         this.commandLine = commandLine;
+        this.velocityMonitor = velocityMonitor;
+        this.noopDataGeneratorMonitor = noopDataGeneratorMonitor;
+        this.systemOutDataGeneratorMonitor = systemOutDataGeneratorMonitor;
     }
 
     @Override
     public ReductiveDataGeneratorMonitor get() {
         switch (commandLine.getMonitorType()){
             case NOOP:
-                return new NoopDataGeneratorMonitor();
+                return this.noopDataGeneratorMonitor;
 
             case VELOCITY:
-                return new VelocityMonitor();
+                return this.velocityMonitor;
+
+            case SYSTEM:
+                return this.systemOutDataGeneratorMonitor;
 
             default:
-                return new VelocityMonitor();
+                return this.velocityMonitor;
         }
     }
 }

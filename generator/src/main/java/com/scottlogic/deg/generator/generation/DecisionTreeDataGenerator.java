@@ -44,6 +44,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
+        monitor.startTimer();
+
         final List<DecisionTree> partitionedTrees =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
