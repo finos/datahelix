@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 public class GeneralTestStep {
 
     private TestState state;
-    private TestHelper testHelper;
+    private CucumberTestHelper cucumberTestHelper;
 
     public GeneralTestStep(TestState state){
         this.state = state;
@@ -28,7 +28,7 @@ public class GeneralTestStep {
     @Before
     public void BeforeEach() {
         this.state.clearState();
-        this.testHelper = new TestHelper(state);
+        this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
     @Given("there is a field (.+)$")
@@ -68,11 +68,11 @@ public class GeneralTestStep {
 
     @Then("^the profile is invalid$")
     public void theProfileIsInvalid() {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
         Assert.assertThat(
             "Expected invalid profile",
-            this.testHelper.getThrownExceptions(),
+            this.cucumberTestHelper.getThrownExceptions(),
             hasItem(
                 either((Matcher)isA(InvalidProfileException.class))
                     .or(isA(JsonParseException.class))
@@ -82,9 +82,9 @@ public class GeneralTestStep {
 
     @But("^the profile is invalid because \"(.+)\"$")
     public void fieldIsInvalidWithError(String error) {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
-        List<Exception> thrownExceptions = new ArrayList<>(this.testHelper.getThrownExceptions());
+        List<Exception> thrownExceptions = new ArrayList<>(this.cucumberTestHelper.getThrownExceptions());
         Assert.assertThat(
             "Expected invalid profile",
             thrownExceptions,
@@ -98,16 +98,16 @@ public class GeneralTestStep {
 
     @Then("^I am presented with an error message$")
     public void dataGeneratorShouldError() {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
-        Assert.assertThat(testHelper.generatorHasThrownException(), is(true));
+        Assert.assertThat(cucumberTestHelper.generatorHasThrownException(), is(true));
     }
 
     @And("^no data is created$")
     public void noDataIsCreated() {
-        List<List<Object>> data = testHelper.generateAndGetData();
+        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
 
-        if (!testHelper.hasDataBeenGenerated()){
+        if (!cucumberTestHelper.hasDataBeenGenerated()){
             return; //pass
         }
 
@@ -133,7 +133,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
@@ -144,7 +144,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, equalTo(data.expectedData));
     }
@@ -155,7 +155,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
@@ -166,7 +166,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
@@ -202,7 +202,7 @@ public class GeneralTestStep {
 
     private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
         List <List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List <List<Object>> data = testHelper.generateAndGetData();
+        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 

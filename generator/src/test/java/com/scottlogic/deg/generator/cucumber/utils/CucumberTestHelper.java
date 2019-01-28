@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * Responsible for generating data in cucumber tests.
  */
-public class TestHelper {
+public class CucumberTestHelper {
 
     private TestState testState;
 
-    public TestHelper(TestState testState){
+    public CucumberTestHelper(TestState testState){
         this.testState = testState;
     }
 
