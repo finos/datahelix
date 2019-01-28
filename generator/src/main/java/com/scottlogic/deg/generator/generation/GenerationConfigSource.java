@@ -9,7 +9,6 @@ public interface GenerationConfigSource {
     GenerationConfig.TreeWalkerType getWalkerType();
     long getMaxRows();
     boolean getValidateProfile();
-    boolean shouldDoPartitioning();
     boolean dontOptimise();
     Path getOutputPath();
     boolean isEnableTracing();

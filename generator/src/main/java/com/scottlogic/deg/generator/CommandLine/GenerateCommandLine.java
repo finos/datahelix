@@ -39,12 +39,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         hidden = true)
     private boolean dontOptimise;
 
-    @CommandLine.Option(
-        names = {"--no-partition"},
-        description = "Prevents tree partitioning",
-        hidden = true)
-    private boolean dontPartitionTrees;
-
     @CommandLine.Option(names = {"-w", "--w", "--walker-type"},
         description = "Determines the tree walker that should be used.",
         defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
@@ -72,11 +66,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         names = {"--violate"},
         description = "Defines whether to generate violating data")
     private boolean violateProfile;
-
-    @Override
-    public boolean shouldDoPartitioning() {
-        return !this.dontPartitionTrees;
-    }
 
     @Override
     public boolean dontOptimise() {

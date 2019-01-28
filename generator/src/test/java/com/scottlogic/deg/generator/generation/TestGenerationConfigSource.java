@@ -48,11 +48,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean shouldDoPartitioning() {
-        return true;
-    }
-
-    @Override
     public boolean dontOptimise() {
         return false;
     }
