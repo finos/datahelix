@@ -30,7 +30,7 @@ to the desired range of values. They are formatted as JSON objects. There are th
     - [Presentational Constraints](../PresentationalConstraints.md) - used by output serialisers where
      string output is required 
      
-Here is an example of a rule comprised of two constraints:
+Here is a list of two rules comprised of one constraint each:
     
 ```
     "rules": [
