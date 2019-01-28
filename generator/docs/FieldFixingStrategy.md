@@ -10,7 +10,7 @@ One area that _could_ affect performance is the order in which we pick fields to
 
 Our current default is the **hierarchical dependency** strategy.
 
-##Hierarchical Dependency
+## Hierarchical Dependency
 
 This strategy picks fields to fix using a combination of factors. It sorts a list of fields into an order as follows: 
 - **First** favour picking fields that are **not dependent** on other fields

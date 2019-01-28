@@ -70,10 +70,10 @@ Now edit the run configuration on the top toolbar created by the initial run. Na
 generate "<path to an example JSON profile>" "<path to desired output CSV>"
 ```
 
-Additionally create another run configuration called GenerateTestCases and add the program arguments
+Additionally create another run configuration called GenerateViolating and add the program arguments
 
 ```
-generateTestCases "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
+generate --violate=true "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
 ```
 
 Run both of these configurations to test that installation is successful.
