@@ -21,7 +21,7 @@ interpret the profile fields and rules. The latest version is v3.
         }
     ]
 ```
-- **Rules** - Constraints are defined to reduce the data in each column from the universal set
+- **Rules** - Constraints are defined to reduce the data in each column from the [universal set](../../generator/docs/SetRestrictionAndGeneration.md)
 to the desired range of values. There are three types of constraints: 
     - [Epistemic Constraints](../EpistemicConstraints.md) - predicates that define any given value as being 
     _valid_ or _invalid_
@@ -54,6 +54,13 @@ Rules are defined as an array of constraint objects and are defined with a descr
 
 
 These three sections are combined to form the [complete profile](ExampleProfile1.json).
+
+## Further Information 
+* More detail on key decisions to make while constructing a profile can be found [here](../KeyDecisions.md)
+* FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
+* For a larger profile example see [here](../Schema.md)
+* Sometimes constraints can contradict one another, click [here](../../generator/docs/Contradictions.md) to find out what happens in these cases
+* To ensure your profile is able to generate data the validate option can be turned on, find out more [here](../../generator/docs/ProfileValidation.md)
 
 #
 
