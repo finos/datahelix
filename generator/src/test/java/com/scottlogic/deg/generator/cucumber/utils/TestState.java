@@ -16,12 +16,25 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DegTestState implements GenerationConfigSource {
+/**
+ * Class to represent the state during cucumber test running and execution
+ */
+public class TestState {
 
-    public GenerationConfig.DataGenerationType generationStrategy;
-    public GenerationConfig.CombinationStrategyType combinationStrategy;
+    public GenerationConfig.DataGenerationType dataGenerationType;
+    public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
-    public GenerationConfig.GenerationMode generationMode;
+    public GenerationConfig.GenerationMode generationMode = GenerationConfig.GenerationMode.VALIDATING;
+
+    /**
+     * Default value of 10 million rows is set here.
+     */
+    public long maxRows = 10_000_000;
+
+    /**
+     * Stores the output generated data.
+     */
+    public List<List<Object>> generatedObjects;
 
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
@@ -76,6 +89,7 @@ public class DegTestState implements GenerationConfigSource {
         this.profileFields.clear();
         this.constraints.clear();
         this.testExceptions.clear();
+        this.generatedObjects = null;
     }
 
     public void addField(String fieldName) {
@@ -117,56 +131,6 @@ public class DegTestState implements GenerationConfigSource {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
-    }
-
-    @Override
-    public GenerationConfig.DataGenerationType getGenerationType() {
-        return null;
-    }
-
-    @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return null;
-    }
-
-    @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
-        return null;
-    }
-
-    @Override
-    public long getMaxRows() {
-        return 0;
-    }
-
-    @Override
-    public boolean getValidateProfile() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldDoPartitioning() {
-        return false;
-    }
-
-    @Override
-    public boolean dontOptimise() {
-        return false;
-    }
-
-    @Override
-    public Path getOutputPath() {
-        return null;
-    }
-
-    @Override
-    public boolean isEnableTracing() {
-        return false;
-    }
-
-    @Override
-    public File getProfileFile() {
-        return null;
     }
 }
 

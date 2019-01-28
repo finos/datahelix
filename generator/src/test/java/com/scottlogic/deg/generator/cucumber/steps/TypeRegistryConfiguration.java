@@ -1,17 +1,14 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
-import cucumber.api.DataTable;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
 import io.cucumber.cucumberexpressions.Transformer;
-import io.cucumber.datatable.DataTableType;
 import io.cucumber.datatable.TableCellByTypeTransformer;
 
 import java.util.*;

@@ -1,13 +1,13 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
+import com.scottlogic.deg.generator.cucumber.utils.TestState;
 import cucumber.api.java.en.When;
 
 public class RegexValueStep {
 
-    private DegTestState state;
+    private TestState state;
 
-    public RegexValueStep(DegTestState state){
+    public RegexValueStep(TestState state){
         this.state = state;
     }
 

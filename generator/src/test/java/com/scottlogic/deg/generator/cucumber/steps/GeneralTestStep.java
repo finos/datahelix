@@ -18,10 +18,10 @@ import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
 
-    private DegTestState state;
+    private TestState state;
     private TestHelper testHelper;
 
-    public GeneralTestStep(DegTestState state){
+    public GeneralTestStep(TestState state){
         this.state = state;
     }
 
@@ -43,12 +43,12 @@ public class GeneralTestStep {
 
     @When("the generation strategy is {generationStrategy}")
     public void setTheGenerationStrategy(GenerationConfig.DataGenerationType strategy) {
-        this.state.generationStrategy = strategy;
+        this.state.dataGenerationType = strategy;
     }
 
     @When("the combination strategy is {combinationStrategy}")
     public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
-        this.state.combinationStrategy = strategy;
+        this.state.combinationStrategyType = strategy;
     }
 
     @When("the walker type is {walkerType}")
@@ -175,10 +175,10 @@ public class GeneralTestStep {
     public void setTheGenerationMode(String generationMode) {
         switch (generationMode) {
             case "violating":
-                this.state.generationMode = GenerationConfig.GenerationMode.VIOLATING;
+                state.generationMode = GenerationConfig.GenerationMode.VIOLATING;
                 break;
             case "validating":
-                this.state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
+                state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
                 break;
             default:
                 throw new IllegalArgumentException("Specified generation mode not supported");
@@ -193,7 +193,7 @@ public class GeneralTestStep {
                 try {
                     return GeneratorTestUtilities.parseExpected(cell);
                 } catch (JsonParseException | InvalidProfileException e) {
-                    this.state.addException(e);
+                    state.addException(e);
                     return "<exception thrown: " + e.getMessage() + ">";
                 }
             }).collect(Collectors.toList()))

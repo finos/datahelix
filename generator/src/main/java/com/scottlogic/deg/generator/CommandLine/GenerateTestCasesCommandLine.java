@@ -8,7 +8,7 @@ import picocli.CommandLine;
 import java.io.File;
 import java.nio.file.Path;
 
-public class GenerateTestCasesCommandLine extends CommandLineBase implements GenerationConfigSource {
+public class GenerateTestCasesCommandLine extends CommandLineBase {
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     @SuppressWarnings("unused")
     private File profileFile;

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
+import com.scottlogic.deg.generator.cucumber.utils.TestState;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import cucumber.api.java.en.And;
 
@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class JSONTestStep {
 
-    private DegTestState state;
+    private TestState state;
 
-    public JSONTestStep(DegTestState state){
+    public JSONTestStep(TestState state){
         this.state = state;
     }
 

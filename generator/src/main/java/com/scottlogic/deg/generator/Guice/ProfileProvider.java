@@ -6,15 +6,16 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.IOException;
 
 public class ProfileProvider implements Provider<Profile> {
     private final GenerationConfigSource commandLine;
-    private final JsonProfileReader profileReader;
+    private final ProfileReader profileReader;
 
     @Inject
-    public ProfileProvider(GenerationConfigSource commandLine, JsonProfileReader profileReader) {
+    public ProfileProvider(GenerationConfigSource commandLine, ProfileReader profileReader) {
         this.commandLine = commandLine;
         this.profileReader = profileReader;
     }
@@ -22,7 +23,7 @@ public class ProfileProvider implements Provider<Profile> {
     @Override
     public Profile get() {
         try {
-            return this.profileReader.read(commandLine.getProfileFile().toPath());
+            return profileReader.read(commandLine.getProfileFile().toPath());
         } catch (IOException | InvalidProfileException e) {
             throw new RuntimeException(e);
         }

@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.CommandLine.GenerateTestCasesCommandLine;
 import com.scottlogic.deg.generator.Profile;
@@ -29,10 +28,14 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.nio.file.Path;
 
-public class IoCContainer extends AbstractModule {
-    private final CommandLineBase commandLine;
+/**
+ * Class to define default bindings for Guice injection. Utilises the generation config source to determine which
+ * 'generate' classes should be bound for this execution run.
+ */
+public class BaseModule extends AbstractModule {
+    private final GenerationConfigSource commandLine;
 
-    public IoCContainer(CommandLineBase commandLine) {
+    public BaseModule(GenerationConfigSource commandLine) {
         this.commandLine = commandLine;
     }
 

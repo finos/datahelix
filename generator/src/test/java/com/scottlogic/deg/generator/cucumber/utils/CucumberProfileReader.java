@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
@@ -19,12 +20,11 @@ import java.util.stream.Collectors;
 
 public class CucumberProfileReader implements ProfileReader {
 
-    private DegTestState state;
-    private Set<RuleInformation> rules;
+    private TestState state;
 
-    public CucumberProfileReader(DegTestState state, Set<RuleInformation> rules) {
+    @Inject
+    public CucumberProfileReader(TestState state) {
         this.state = state;
-        this.rules = rules;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CucumberProfileReader implements ProfileReader {
 
             List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
                 try {
-                    return constraintReader.apply(dto, profileFields, this.rules);
+                    return constraintReader.apply(dto, profileFields, getRules());
                 } catch (InvalidProfileException e) {
                     state.addException(e);
                     exceptionInMapping.set(true);
@@ -57,5 +57,11 @@ public class CucumberProfileReader implements ProfileReader {
             state.addException(e);
             return null;
         }
+    }
+
+    private static Set<RuleInformation> getRules(){
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "getRules";
+        return Collections.singleton(new RuleInformation(rule));
     }
 }

@@ -2,121 +2,65 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.*;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.generator.Guice.BaseModule;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.MainConstraintReader;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 /**
- * Responsible for controlling the generation of data.
+ * Responsible for generating data in cucumber tests.
  */
 public class TestHelper {
 
-    private DegTestState state;
-    private List <List<Object>> generatedData;
+    private TestState testState;
 
-    public TestHelper(DegTestState state){
-        this.state = state;
-    }
-
-    public Object generate(){
-        try {
-             InMemoryOutputTarget outputTarget = new InMemoryOutputTarget();
-
-            Injector injector = Guice.createInjector();
-            new GenerateExecute(
-                new GenerationConfig(this.state),
-                new CucumberProfileReader(this.state, getRules()),
-                injector.getInstance(GenerationEngine.class),
-                this.state,
-                outputTarget
-            ).run();
-
-            return outputTarget.getRows();
-        } catch (Exception e) {
-            this.state.addException(e);
-            return null;
-        }
+    public TestHelper(TestState testState){
+        this.testState = testState;
     }
 
     public List <List<Object>> generateAndGetData() {
-        if (state.generationStrategy == null) {
+        if (testState.dataGenerationType == null) {
             throw new RuntimeException("Gherkin error: Please specify the data strategy");
-        }
-        
-        if (state.combinationStrategy == null) {
-            state.combinationStrategy = GenerationConfig.CombinationStrategyType.PINNING;
-        }
-
-        if (this.state.generationMode == null) {
-            this.state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
         }
 
         if (this.generatorHasRun()) {
-            return generatedData;
+            return testState.generatedObjects;
         }
 
         try {
-            MainConstraintReader constraintReader = new MainConstraintReader();
-            ProfileFields profileFields = new ProfileFields(state.profileFields);
-            AtomicBoolean exceptionInMapping = new AtomicBoolean();
+            Module concatenatedModule =
+                Modules
+                .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
+                .with(new CucumberTestModule(testState));
 
-            List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
-                try {
-                    return constraintReader.apply(dto, profileFields, getRules());
-                } catch (InvalidProfileException e) {
-                    state.addException(e);
-                    exceptionInMapping.set(true);
-                    return null;
-                }
-            }).collect(Collectors.toList());
+            Injector injector = Guice.createInjector(concatenatedModule);
 
-            if (exceptionInMapping.get()){
-                return null;
-            }
+            injector.getInstance(GenerateExecute.class).run();
 
-            return generatedData = GeneratorTestUtilities.getDEGGeneratedData(
-                state.profileFields,
-                mappedConstraints,
-                state.generationStrategy,
-                state.walkerType,
-                state.combinationStrategy
-            );
+            return testState.generatedObjects;
         } catch (Exception e) {
-            state.addException(e);
+            testState.addException(e);
             return null;
         }
     }
 
     public boolean generatorHasRun(){
-        return generatedData != null || this.generatorHasThrownException();
+        return testState.generatedObjects != null || generatorHasThrownException();
     }
 
     public boolean generatorHasThrownException() {
-        return state.testExceptions.size() > 0;
+        return testState.testExceptions.size() > 0;
     }
 
     public boolean hasDataBeenGenerated() {
-        return generatedData != null && generatedData.size() > 0;
+        return testState.generatedObjects != null && testState.generatedObjects.size() > 0;
     }
 
     public Collection<Exception> getThrownExceptions(){
-        return state.testExceptions;
-    }
-
-    private static Set<RuleInformation> getRules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "getRules";
-        return Collections.singleton(new RuleInformation(rule));
+        return testState.testExceptions;
     }
 }
