@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.generation.object_generation.DataBagObjectGenerator;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
@@ -35,15 +36,15 @@ import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesViolationTests {
     private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
+    private static final GenerationConfig config = new GenerationConfig(
+        new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+            GenerationConfig.CombinationStrategyType.PINNING));
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
@@ -52,12 +53,6 @@ class ExampleProfilesViolationTests {
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING));
-
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
@@ -79,6 +74,7 @@ class ExampleProfilesViolationTests {
                     new DecisionTreeDataGenerator(
                         walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                         new MostProlificConstraintOptimiser(),
+                        new DataBagObjectGenerator(config),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());

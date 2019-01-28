@@ -5,27 +5,27 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
+import com.scottlogic.deg.generator.generation.object_generation.ObjectGenerator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
-    private final DataGeneratorMonitor monitor;
     private final DecisionTreeOptimiser treeOptimiser;
+    private final ObjectGenerator objectGenerator;
+    private final DataGeneratorMonitor monitor;
 
     @Inject
     public DecisionTreeDataGenerator(
             DecisionTreeWalker treeWalker,
             DecisionTreeOptimiser optimiser,
+            ObjectGenerator objectGenerator,
             DataGeneratorMonitor monitor) {
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
+        this.objectGenerator = objectGenerator;
         this.monitor = monitor;
     }
 
@@ -38,19 +38,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         DecisionTree optimisedTree = treeOptimiser.optimiseTree(decisionTree);
         Stream<RowSpec> rowSpecStream = treeWalker.walk(optimisedTree);
-
-        DataBagSource allDataBagSources = new ConcatenatingDataBagSource(
-            rowSpecStream.map(RowSpec::createDataBagSource));
-
-        Stream<DataBag> dataBagStream = allDataBagSources
-            .generate(generationConfig);
-
-        Stream<GeneratedObject> dataRows = dataBagStream
-            .map(dataBag -> new GeneratedObject(
-                profile.fields.stream()
-                    .map(dataBag::getValueAndFormat)
-                    .collect(Collectors.toList()),
-                dataBag.getRowSource(profile.fields)));
+        Stream<GeneratedObject> dataRows = objectGenerator.generate(profile, rowSpecStream);
 
         return dataRows
             .limit(generationConfig.getMaxRows())

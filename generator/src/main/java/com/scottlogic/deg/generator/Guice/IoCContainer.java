@@ -12,6 +12,8 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.object_generation.DataBagObjectGenerator;
+import com.scottlogic.deg.generator.generation.object_generation.ObjectGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
@@ -56,6 +58,8 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
+        bind(ObjectGenerator.class).to(DataBagObjectGenerator.class);
+
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
