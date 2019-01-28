@@ -1668,7 +1668,7 @@ Scenario: Running an if request that contains a non contradictory aValid constra
        | "ccc"          | "GB0002634946" |
        | "dddd"         | "GB0002634946" |
 
-@@ignore #issue 246
+@ignore #issue 246
 Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "aa"   |

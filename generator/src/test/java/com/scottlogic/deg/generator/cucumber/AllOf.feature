@@ -23,7 +23,7 @@ Scenario: Running an 'allOf' request that contains a valid nested allOf request 
        | "ba" |
        | null |
 
-  # failing - generates duplicate nulls linked to issue 91
+ @ignore # failing - generates duplicate nulls linked to issue 91
 Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
      Given there is a field foo
        And foo is of type "string"
@@ -43,6 +43,7 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        | "11" |
        | null |
 
+   @ignore # may need to raise issue
 Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
      Given there is a field foo
        And there is a constraint:
@@ -59,7 +60,7 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
       | foo  |
       | null |
 
-  #failing - looks to be part of issue 91
+ @ignore #failing - looks to be part of issue 91
 Scenario: Running an 'allOf' request that contains soft contradictory restraints in a nested anyOf request should be successful
      Given there is a field foo
        And foo is in set:

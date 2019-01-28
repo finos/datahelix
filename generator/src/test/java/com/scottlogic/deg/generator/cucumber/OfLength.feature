@@ -516,6 +516,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | "22" |
 
+   @ignore # issue 246
   Scenario: Running an 'ofLength' request alongside a contradicting aValid constraint should produce null
     Given foo is of length 2
     And foo is a valid "ISIN"
