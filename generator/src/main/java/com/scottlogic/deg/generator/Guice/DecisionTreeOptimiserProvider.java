@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;

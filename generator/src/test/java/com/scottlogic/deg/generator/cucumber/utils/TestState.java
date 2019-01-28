@@ -1,18 +1,12 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 

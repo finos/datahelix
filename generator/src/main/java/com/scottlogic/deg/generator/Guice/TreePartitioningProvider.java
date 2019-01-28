@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;

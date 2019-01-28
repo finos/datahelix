@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;

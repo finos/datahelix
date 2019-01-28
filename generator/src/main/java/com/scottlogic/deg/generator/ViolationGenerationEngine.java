@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ViolationGenerationEngine implements GenerationEngine {
-    private final GenerationEngine generationEngine;
+    private final StandardGenerationEngine standardGenerationEngine;
     private final Path outputPath;
     private final ManifestWriter manifestWriter;
 
     @Inject
-    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter){
+    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, StandardGenerationEngine standardGenerationEngine, ManifestWriter manifestWriter){
         this.outputPath = outputPath;
-        this.generationEngine = generationEngine;
+        this.standardGenerationEngine = standardGenerationEngine;
         this.manifestWriter = manifestWriter;
     }
 
@@ -47,7 +47,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
         catch (Exception e){}
 
         for (ViolatedProfile violated: violatedProfiles) {
-            generationEngine.generateDataSet(violated, config,
+            standardGenerationEngine.generateDataSet(violated, config,
                 outputTarget.withFilename(intFormatter.format(filename)));
             filename++;
         }
