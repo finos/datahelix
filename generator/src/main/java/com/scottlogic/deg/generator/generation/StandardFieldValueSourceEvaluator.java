@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
@@ -66,8 +67,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         // If we have values that must be included we need to check that those values are included in the whitelist
         if (mustContainRestriction != null) {
             whitelist = Stream.concat(whitelist,
-            getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction)
-                .flatMap(o -> o.getSetRestrictions().getWhitelist().stream()));
+                FlatMappingSpliterator.flatMap(getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction),
+                    o -> o.getSetRestrictions().getWhitelist().stream()));
         }
 
         if (mayBeNull(fieldSpec)) {
@@ -96,9 +97,9 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
         }
 
-        return mustContainRestrictionFieldSpecs.stream()
-            .map(fs -> getFieldValueSources(fs))
-            .flatMap(List::stream)
+        return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
+            .map(fs -> getFieldValueSources(fs)),
+            List::stream)
             .filter(x->!x.equals(nullOnlySource))
             .collect(Collectors.toList());
     }
