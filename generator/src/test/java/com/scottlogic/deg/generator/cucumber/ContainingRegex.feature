@@ -291,12 +291,13 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting matc
        | null |
        | "bb" |
 
-Scenario: Running a 'containingRegex' request alongside a contradicting matchingRegex constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a contradicting matchingRegex constraint should be successful
      Given there is a field foo
        And foo is containing regex /[a]{1}/
        And foo is matching regex /[b]{2}/
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo  |
+        | null |
 
 Scenario: Running a 'containingRegex' request alongside a non-contradicting containingRegex constraint should be successful
      Given there is a field foo
@@ -324,12 +325,13 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting ofLe
        | null |
        | "bb" |
 
-Scenario: Running a 'containingRegex' request alongside a contradicting ofLength (too short) constraint should fail with an error message
+Scenario: Running a 'containingRegex' request alongside a contradicting ofLength (too short) constraint should be successful
      Given there is a field foo
        And foo is containing regex /[b]{2}/
        And foo is of length 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 @ignore
 Scenario: Running a 'containingRegex' request alongside a greaterThan constraint should fail with an error message

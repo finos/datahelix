@@ -275,12 +275,12 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalT
        | null  |
        | "aaa" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
        Given foo is matching regex /[a]{3}/
        And foo is equal to "bbb"
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
        Given foo is matching regex /[a]{1,3}/
@@ -293,16 +293,16 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet 
        | "a"   |
        | "aaa" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should be successful
        Given foo is matching regex /[a]{1,3}/
        And foo is in set:
          | "b"   |
          | "bbb" |
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a null constraint should ber successful
+Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
        Given foo is matching regex /[a]{1,3}/
        And foo is null
      Then the following data should be generated:
@@ -317,19 +317,19 @@ Scenario: Running a 'matchingRegex' request alongside an ofType = string should 
        | null |
        | "a"  |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside an ofType = numeric should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside an ofType = numeric should be successful
        Given foo is matching regex /[a]{1}/
        And foo is of type "numeric"
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside an ofType = temporal should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside an ofType = temporal should be successful
        Given foo is matching regex /[a]{1}/
        And foo is of type "temporal"
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting matchingRegex constraint should be successful
        Given foo is matching regex /[a-z]{1,3}/
@@ -339,11 +339,12 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting matchi
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should be successful
        Given foo is matching regex /[a]{1}/
        And foo is matching regex /[b]{2}/
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting containingRegex constraint should be successful
        Given foo is matching regex /[b]{2}/
@@ -353,11 +354,12 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting contai
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should be successful
        Given foo is matching regex /[b]{3}/
        And foo is containing regex /[a]{1,2}/
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradiction ofLength constraint should be successful
        Given foo is matching regex /[b]{2}/
@@ -367,17 +369,19 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradiction ofLeng
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should be successful
        Given foo is matching regex /[b]{2}/
        And foo is of length 1
-     Then I am presented with an error message
-       And no data is created
+       Then the following data should be generated:
+       | foo   |
+       | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should be successful
        Given foo is matching regex /[b]{2}/
        And foo is of length 3
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting longerThan constraint should be successful
        Given foo is matching regex /[b]{2}/
@@ -387,17 +391,19 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting longer
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (equal) constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (equal) constraint should be successful
        Given foo is matching regex /[b]{2}/
        And foo is longer than 2
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (too long) constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (too long) constraint should be successful
        Given foo is matching regex /[b]{2}/
        And foo is longer than 3
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting shorterThan constraint should be successful
        And foo is matching regex /[b]{1}/
@@ -407,12 +413,12 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting shorte
        | null |
        | "b"  |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (equal) constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (equal) constraint should be successful
        Given foo is matching regex /[b]{2}/
        And foo is shorter than 2
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+        | foo   |
+        | null  |
 
 @ignore
 Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (too short) constraint should fail with an error message
@@ -421,20 +427,19 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting shorterTha
      Then I am presented with an error message
        And no data is created
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should be successful
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should only emit null
        Given foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
      Then the following data should be included in what is generated:
        | foo            |
        | null           |
-       | "GB0000000009" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should only emit null
        Given foo is matching regex /[b]{2}/
        And foo is a valid "ISIN"
-     Then I am presented with an error message
-       And no data is created
+       Then the following data should be generated:
+        | foo |
+        | null |
 
 @ignore
 Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should fail with an error message
@@ -547,7 +552,7 @@ Scenario: Running a 'matchingRegex' request as part of a non-contradicting allOf
        | "c"  |
        | "d"  |
 
-Scenario: Running a 'matchingRegex' request as part of a contradicting allOf constraint should fail with an error message
+Scenario: Running a 'matchingRegex' request as part of a contradicting allOf constraint should be successful
        Given there is a constraint:
        """
        { "allOf": [
@@ -555,8 +560,9 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
          { "field": "foo", "is": "matchingRegex", "value": "[c-d]{1}" }
        ]}
        """
-     Then I am presented with an error message
-       And no data is created
+      Then the following data should be generated:
+          | foo   |
+          | null  |
 
   Scenario: Running a 'matchingRegex' request as part of an if constraint should be successful
     Given there is a field price

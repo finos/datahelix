@@ -229,6 +229,26 @@ public class RegexStringGeneratorTests {
                 infiniteGenerator::generateAllValues);
     }
 
+    @Test
+    void shouldReturnNoValuesWhenContradictingConstraints() {
+        StringGenerator firstGenerator = new RegexStringGenerator("[b]{2}", true);
+        StringGenerator secondGenerator = new RegexStringGenerator(".{0,1}", true);
+
+        StringGenerator contradictingGenerator = firstGenerator.intersect(secondGenerator);
+
+        Assert.assertEquals(0, contradictingGenerator.getValueCount());
+    }
+
+    @Test
+    void shouldReturnValuesWhenNonContradictingConstraints() {
+        StringGenerator firstGenerator = new RegexStringGenerator("[b]{2}", true);
+        StringGenerator secondGenerator = new RegexStringGenerator(".{0,2}", true);
+
+        StringGenerator nonContradictingGenerator = firstGenerator.intersect(secondGenerator);
+
+        Assert.assertNotEquals(0, nonContradictingGenerator.getValueCount());
+    }
+
 
     private final List<String> regexes = new ArrayList<>();
 

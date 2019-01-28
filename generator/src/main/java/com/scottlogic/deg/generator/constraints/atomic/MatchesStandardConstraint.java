@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
-    public final StringGenerator standard; // TODO: Change this to an enum member; string generators shouldn't exist on this level
+    public final StandardConstraintTypes standard;
     private final Set<RuleInformation> rules;
 
-    public MatchesStandardConstraint(Field field, StringGenerator standard, Set<RuleInformation> rules) {
+    public MatchesStandardConstraint(Field field, StandardConstraintTypes standard, Set<RuleInformation> rules) {
         this.field = field;
         this.standard = standard;
         this.rules = rules;
@@ -54,3 +54,4 @@ public class MatchesStandardConstraint implements AtomicConstraint {
         return new MatchesStandardConstraint(this.field, this.standard, rules);
     }
 }
+

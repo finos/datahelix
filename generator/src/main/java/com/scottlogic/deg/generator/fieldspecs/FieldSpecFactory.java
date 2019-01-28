@@ -2,19 +2,32 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
+    private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
+
+    private static final Map<StandardConstraintTypes, StringGenerator>
+        standardNameToStringGenerator = new HashMap<StandardConstraintTypes, StringGenerator>() {{
+            put(StandardConstraintTypes.ISIN, new IsinStringGenerator());
+            put(StandardConstraintTypes.SEDOL, new SedolStringGenerator());
+    }};
+
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
     }
@@ -37,8 +50,6 @@ public class FieldSpecFactory {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate, violated);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate, violated);
-        } else if (constraint instanceof IsEqualToConstantConstraint) {
-            return construct((IsEqualToConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             return construct((IsGreaterThanConstantConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
@@ -78,17 +89,6 @@ public class FieldSpecFactory {
         } else {
             throw new UnsupportedOperationException();
         }
-    }
-
-    private FieldSpec construct(IsEqualToConstantConstraint constraint, boolean negate, boolean violated) {
-        return construct(
-            new IsInSetConstraint(
-                constraint.field,
-                Collections.singleton(constraint.requiredValue),
-                constraint.getRules()
-            ),
-            negate,
-            violated);
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
@@ -242,7 +242,8 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return construct(constraint.standard, negate, constraint, violated);
+        StringGenerator generator = standardNameToStringGenerator.get(constraint.standard);
+        return construct(negate ? generator.complement() : generator, negate, constraint, violated);
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
@@ -275,7 +276,18 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
-        return construct(new RegexStringGenerator(pattern.toString(), matchFullString), negate, constraint, violated);
+        AtomicConstraintConstructTuple atomicConstraintConstructTuple = new AtomicConstraintConstructTuple(constraint, matchFullString, negate);
+        StringGenerator regexStringGenerator;
+        if (constraintToStringGeneratorMap.containsKey(atomicConstraintConstructTuple)) {
+            regexStringGenerator = constraintToStringGeneratorMap.get(atomicConstraintConstructTuple);
+        } else {
+            regexStringGenerator = new RegexStringGenerator(pattern.toString(), matchFullString);
+            if (negate) {
+                regexStringGenerator = regexStringGenerator.complement();
+            }
+            constraintToStringGeneratorMap.put(atomicConstraintConstructTuple, regexStringGenerator);
+        }
+        return construct(regexStringGenerator, negate, constraint, violated);
     }
 
     private FieldSpec construct(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
@@ -284,9 +296,7 @@ public class FieldSpecFactory {
                 ? constraint.negate()
                 : constraint));
 
-        stringRestrictions.stringGenerator = negate
-            ? generator.complement()
-            : generator;
+        stringRestrictions.stringGenerator = generator;
 
         return FieldSpec.Empty.withStringRestrictions(
             stringRestrictions,

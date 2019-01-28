@@ -5,12 +5,13 @@
 Clone the repository to your local development folder.
 
 ```
-git clone https://github.com/ScottLogic/data-engineering-generator.git 
+git clone https://github.com/ScottLogic/datahelix.git 
 ```
 
 ## Installation Requirements
 
 * Java version 1.8
+* Maven
 * Cucumber
 * One of IntelliJ/Eclipse IDE 
 
@@ -22,6 +23,10 @@ git clone https://github.com/ScottLogic/data-engineering-generator.git
 
 In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
 Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
+
+### Maven
+
+Download and install Apache Maven, following the [instructions on their project website](https://maven.apache.org/install.html).
 
 ### IntelliJ IDE
 
@@ -39,7 +44,7 @@ Currently the tests cannot be run from the TestRunner class
 
 To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field 
 
-An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/data-engineering-generator/blob/master/docs/CucumberSyntax.md) 
+An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/datahelix/blob/master/docs/CucumberSyntax.md) 
 
 ## First time setup
 
@@ -47,7 +52,7 @@ An explanation of the particular syntax used can be found [here](https://github.
 
 On IntelliJ's splash screen, choose "Open".
 
-Open the repository root directory, `data-engineering-generator`.
+Open the repository root directory, `datahelix`.
 
 Right-click the backend Module, `generator`, choose "Open Module Settings".
 
@@ -57,7 +62,7 @@ Set Project language level to 8.
 Open the "Maven Projects" Tool Window, and double-click _Lifecycle > compile_.  
 This is only necessary when your Maven dependencies change. Otherwise prefer the IDE's built-in Build.
 
-Navigate to the `App.java` file (...\data-engineering-generator\generator\src\main\java\com\scottlogic\deg\generator\App.java). Right click and debug - *this will fail*.
+Navigate to the `App.java` file (...\datahelix\generator\src\main\java\com\scottlogic\deg\generator\App.java). Right click and debug - *this will fail*.
 
 Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired locations:
 

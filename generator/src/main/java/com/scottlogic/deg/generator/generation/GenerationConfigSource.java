@@ -14,4 +14,5 @@ public interface GenerationConfigSource {
     Path getOutputPath();
     boolean isEnableTracing();
     File getProfileFile();
+    boolean shouldViolate();
 }

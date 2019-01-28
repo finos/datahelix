@@ -27,9 +27,13 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
     }
 
     @Override
-    public JsonArrayOutputWriter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) throws IOException {
-        File file = directory.resolve(filenameWithoutExtension + "-trace.json").toFile();
-        return new JsonArrayOutputWriter(new PrintWriter(new FileOutputStream(file, false)));
+    public JsonArrayOutputWriter openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
+        return new JsonArrayOutputWriter(new PrintWriter(new FileOutputStream(fileName, false)));
+    }
+
+    @Override
+    public String getFileName(String fileNameWithoutExtension) {
+        return fileNameWithoutExtension + "-trace.json";
     }
 
     @Override

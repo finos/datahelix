@@ -51,7 +51,7 @@ public class GeneratorTestUtilities {
     }
 
     /**
-     * Runs the data generator and returns list of generated result data.
+     * Runs the generator and returns list of generated result data.
      *
      * @return Generated data
      */

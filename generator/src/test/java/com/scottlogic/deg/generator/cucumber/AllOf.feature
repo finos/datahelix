@@ -37,7 +37,7 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        | "1"  |
        | "11" |
 
-Scenario: Running an 'allOf' request that contains an invalid nested allOf request should fail with an error message
+Scenario: Running an 'allOf' request that contains an invalid nested allOf request should be successful
      Given there is a field foo
        And there is a constraint:
        """
@@ -49,8 +49,9 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
            { "field": "foo", "is": "ofType", "value": "string" }
          ]}
        """
-     Then I am presented with an error message
-       And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
 @ignore
 Scenario: Running an 'allOf' request that contains an invalid nested anyOf request should fail with an error message

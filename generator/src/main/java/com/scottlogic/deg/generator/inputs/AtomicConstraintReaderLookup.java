@@ -16,9 +16,6 @@ public class AtomicConstraintReaderLookup {
     private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
-        Map<String, StringGenerator> standardNameToStringGenerator = new HashMap<>();
-        standardNameToStringGenerator.put("ISIN", new IsinStringGenerator());
-
         typeCodeToSpecificReader = new HashMap<>();
 
         add(AtomicConstraintType.FORMATTEDAS.toString(),
@@ -30,9 +27,9 @@ public class AtomicConstraintReaderLookup {
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
-                    new IsEqualToConstantConstraint(
+                    new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        potentialUnwrapDate(dto.value),
+                        mapValues(Collections.singleton(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISINSET.toString(),
@@ -60,7 +57,7 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new MatchesStandardConstraint(
                         fields.getByName(dto.field),
-                        standardNameToStringGenerator.get((String) dto.value),
+                        StandardConstraintTypes.valueOf((String) dto.value),
                         rules
                     ));
 
