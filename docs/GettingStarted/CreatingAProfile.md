@@ -14,41 +14,47 @@ interpret the profile fields and rules. The latest version is v3.
 ```
     "fields": [
         {
-            "name": "Column 1 Name"
+            "name": "Column 1"
         },
         {
-            "name": "Column 2 Name"
+            "name": "Column 2"
         }
     ]
 ```
-- **Rules** - Constraints are defined to reduce the data in each column from the [universal set](../../generator/docs/SetRestrictionAndGeneration.md)
-to the desired range of values. There are three types of constraints: 
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../../generator/docs/SetRestrictionAndGeneration.md)
+to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
+
     - [Epistemic Constraints](../EpistemicConstraints.md) - predicates that define any given value as being 
     _valid_ or _invalid_
     - [Grammatical Constraints](../GrammaticalConstraints.md) - used to combine or modify other constraints
     - [Presentational Constraints](../PresentationalConstraints.md) - used by output serialisers where
      string output is required 
      
-Rules are defined as an array of constraint objects and are defined with a description:
+Here is an example of a rule comprised of two constraints:
     
 ```
     "rules": [
         {
-            "rule": "Rule Description - column 1 and 2 are strings",
-            "constraints": [
-                {
-                    "field": "Column 1 Name",
-                    "is": "ofType",
-                    "value": "string"
-                },
-                {
-                    "field": "Column 2 Name",
-                    "is": "ofType",
-                    "value": "string"
-                }
-            ]
+          "rule": "Column 1 is a string",
+          "constraints": [
+            {
+              "field": "Column 1",
+              "is": "ofType",
+              "value": "string"
+            }
+          ]
+        },
+        {
+          "rule": "Column 2 is a number",
+          "constraints": [
+            {
+              "field": "Column 2",
+              "is": "ofType",
+              "value": "numeric"
+            }
+          ]
         }
-    ]
+      ]
 
 ```
 

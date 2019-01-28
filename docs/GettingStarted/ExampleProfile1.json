@@ -2,25 +2,30 @@
   "schemaVersion": "v3",
   "fields": [
     {
-      "name": "Column 1 Name"
+      "name": "Column 1"
     },
     {
-      "name": "Column 2 Name"
+      "name": "Column 2"
     }
   ],
   "rules": [
     {
-      "rule": "Rule Description",
+      "rule": "Column 1 is a string",
       "constraints": [
         {
-          "field": "Column 1 Name",
+          "field": "Column 1",
           "is": "ofType",
           "value": "string"
-        },
+        }
+      ]
+    },
+    {
+      "rule": "Column 2 is a number",
+      "constraints": [
         {
-          "field": "Column 2 Name",
+          "field": "Column 2",
           "is": "ofType",
-          "value": "string"
+          "value": "numeric"
         }
       ]
     }
