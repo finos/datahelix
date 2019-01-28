@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGeneratorFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
@@ -13,6 +13,12 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagSourceFactory {
+    private final FieldSpecValueGeneratorFactory generatorFactory;
+
+    public RowSpecDataBagSourceFactory(FieldSpecValueGeneratorFactory generatorFactory) {
+        this.generatorFactory = generatorFactory;
+    }
+
     public DataBagSource createDataBagSource(RowSpec rowSpec){
         if (rowSpec instanceof ReductiveRowSpec){
             return createDataBagSource((ReductiveRowSpec) rowSpec);
@@ -25,13 +31,13 @@ public class RowSpecDataBagSourceFactory {
             Field field = entry.getKey();
 
             fieldDataBagSources.add(
-                new FieldSpecValueGenerator(field, fieldSpec));
+                generatorFactory.getFieldSpecValueGenerator(field, fieldSpec));
         }
 
         return new MultiplexingDataBagSource(fieldDataBagSources.stream());
     }
 
-    public DataBagSource createDataBagSource(ReductiveRowSpec rowSpec) {
+    private DataBagSource createDataBagSource(ReductiveRowSpec rowSpec) {
         List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size() - 1);
 
         for (Map.Entry<Field, FieldSpec> entry: rowSpec.fieldToFieldSpec.entrySet()) {
@@ -45,19 +51,21 @@ public class RowSpecDataBagSourceFactory {
 
             fieldDataBagSources.add(
                 new SingleValueDataBagSource(
-                    new FieldSpecValueGenerator(field, fieldSpec)));
+                    generatorFactory.getFieldSpecValueGenerator(field, fieldSpec)));
         }
 
         DataBagSource sourceWithoutLastFixedField = new MultiplexingDataBagSource(fieldDataBagSources.stream());
         return new MultiplyingDataBagSource(
             sourceWithoutLastFixedField,
-            new FieldSpecValueGenerator(rowSpec.lastFixedField, rowSpec.fieldToFieldSpec.get(rowSpec.lastFixedField)));
+            generatorFactory.getFieldSpecValueGenerator(
+                rowSpec.lastFixedField,
+                rowSpec.fieldToFieldSpec.get(rowSpec.lastFixedField)));
     }
 
     class SingleValueDataBagSource implements DataBagSource {
         private final DataBagSource source;
 
-        public SingleValueDataBagSource(DataBagSource source) {
+        SingleValueDataBagSource(DataBagSource source) {
             this.source = source;
         }
 
@@ -73,7 +81,7 @@ public class RowSpecDataBagSourceFactory {
         private final DataBagSource fieldsForAllFixedFields;
         private final DataBagSource valuesForLastField;
 
-        public MultiplyingDataBagSource(DataBagSource fieldsForAllFixedFields, DataBagSource valuesForLastField) {
+        MultiplyingDataBagSource(DataBagSource fieldsForAllFixedFields, DataBagSource valuesForLastField) {
             this.fieldsForAllFixedFields = fieldsForAllFixedFields;
             this.valuesForLastField = valuesForLastField;
         }

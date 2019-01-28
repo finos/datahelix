@@ -5,13 +5,10 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
@@ -83,7 +80,7 @@ class ExampleProfilesViolationTests {
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
-                        new RowSpecDataBagSourceFactory()),
+                        new RowSpecDataBagSourceFactory(new FieldSpecValueGeneratorFactory(new StandardFieldValueSourceEvaluator()))),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());
 

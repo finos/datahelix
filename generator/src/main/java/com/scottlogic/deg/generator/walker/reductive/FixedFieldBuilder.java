@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGeneratorFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -24,17 +24,20 @@ public class FixedFieldBuilder {
     private final ConstraintReducer constraintReducer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
+    private final FieldSpecValueGeneratorFactory generatorFactory;
 
     @Inject
     public FixedFieldBuilder(
         GenerationConfig config,
         ConstraintReducer constraintReducer,
         FixFieldStrategy fixFieldStrategy,
-        ReductiveDataGeneratorMonitor monitor) {
+        ReductiveDataGeneratorMonitor monitor,
+        FieldSpecValueGeneratorFactory generatorFactory) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.generationConfig = config;
         this.constraintReducer = constraintReducer;
         this.monitor = monitor;
+        this.generatorFactory = generatorFactory;
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
@@ -68,7 +71,7 @@ public class FixedFieldBuilder {
             .orElse(FieldSpec.Empty);
 
         //use the FieldSpecValueGenerator to emit all possible values given the generation mode, interesting or full-sequential
-        Stream<Object> values = new FieldSpecValueGenerator(field, rootConstraintsFieldSpec)
+        Stream<Object> values = generatorFactory.getFieldSpecValueGenerator(field, rootConstraintsFieldSpec)
             .generate(this.generationConfig)
             .map(dataBag -> dataBag.getValue(field));
 

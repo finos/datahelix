@@ -101,12 +101,14 @@ public class GeneratorTestUtilities {
                 walkerType,
                 combinationStrategy));
 
+        FieldSpecValueGeneratorFactory generatorFactory = new FieldSpecValueGeneratorFactory(
+            new StandardFieldValueSourceEvaluator());
         final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             getWalker(config),
             new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser(),
             new NoopDataGeneratorMonitor(),
-            new RowSpecDataBagSourceFactory());
+            new RowSpecDataBagSourceFactory(generatorFactory));
 
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
@@ -124,9 +126,12 @@ public class GeneratorTestUtilities {
             case REDUCTIVE:
                 NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
                 FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
+                FieldSpecValueGeneratorFactory generatorFactory = new FieldSpecValueGeneratorFactory(
+                    new StandardFieldValueSourceEvaluator());
+
                 return new ReductiveDecisionTreeWalker(
                     new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor),
+                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor, generatorFactory),
                     monitor,
                     new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));

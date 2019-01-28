@@ -7,9 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
@@ -60,7 +58,9 @@ class ReductiveRowSpecGeneratorTests {
             GenerationConfig.TreeWalkerType.REDUCTIVE,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         ));
-        RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory();
+        RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory(
+            new FieldSpecValueGeneratorFactory(
+                new StandardFieldValueSourceEvaluator()));
 
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(state, rootNode);
         final Stream<List<Object>> fixed = result

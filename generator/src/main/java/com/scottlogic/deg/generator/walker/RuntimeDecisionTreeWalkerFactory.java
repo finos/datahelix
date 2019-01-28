@@ -53,7 +53,9 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         config,
                         constraintReducer,
                         fixFieldStrategy,
-                        reductiveMonitor),
+                        reductiveMonitor,
+                        new FieldSpecValueGeneratorFactory(
+                            new StandardFieldValueSourceEvaluator())),
                     reductiveMonitor,
                     new ReductiveDecisionTreeReducer(
                         fieldSpecFactory,
