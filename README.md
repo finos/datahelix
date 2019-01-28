@@ -38,7 +38,7 @@ See [additional details here](./generator/README.md) on the switches that can be
 
 ## How it works
 
-There are 3 discrete primary elements:
+There are 2 discrete primary elements:
 
 | Product | Description | Status | Notes |
 | ---- | ---- | ---- | ---- |
@@ -62,9 +62,25 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
-* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the generator, the remaining steps need to be actioned to be able to use the profiler.
-* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn install -pl :generator -am`) if you prefer.
+* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the generator, 
+the remaining steps need to be actioned to be able to use the profiler.
+* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. 
+You can use Maven if you prefer by executing the following command:
+    ```bash
+    mvn install -pl :generator -am
+    ```
 * Run the generator - see the [examples here](./generator/README.md).
+* to generate the project documentation website run the maven site goal
+    ```bash
+    mvn site
+    ```
+* to generate an executable jar file run the following command:
+    ```bash
+    mvn install
+    cd generator
+    mvn package assembly:single
+    ```
+    the jar file will be generated in the target directory with the suffix `-jar-with-dependencies.jar`
 
 ## License
 
