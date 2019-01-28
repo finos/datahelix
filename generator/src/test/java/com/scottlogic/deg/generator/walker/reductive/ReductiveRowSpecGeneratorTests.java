@@ -60,11 +60,12 @@ class ReductiveRowSpecGeneratorTests {
             GenerationConfig.TreeWalkerType.REDUCTIVE,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         ));
+        RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory();
 
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(state, rootNode);
         final Stream<List<Object>> fixed = result
             .map(o ->
-                o.createDataBagSource().generate(config)
+                dataBagSourceFactory.createDataBagSource(o).generate(config)
                     .map(dataBag -> dataBag.getValue(new Field("First Field")))
                 .collect(Collectors.toList()));
         final Stream<Object> actualStream = fixed.flatMap(Collection::stream);

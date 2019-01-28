@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.ViolationGenerationEngine;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -81,7 +82,8 @@ class ExampleProfilesViolationTests {
                         walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
-                        new NoopDataGeneratorMonitor()),
+                        new NoopDataGeneratorMonitor(),
+                        new RowSpecDataBagSourceFactory()),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());
 

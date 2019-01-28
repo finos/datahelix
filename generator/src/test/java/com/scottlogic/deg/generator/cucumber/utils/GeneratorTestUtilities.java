@@ -17,6 +17,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -104,7 +105,8 @@ public class GeneratorTestUtilities {
             getWalker(config),
             new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor());
+            new NoopDataGeneratorMonitor(),
+            new RowSpecDataBagSourceFactory());
 
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 

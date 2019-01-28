@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSou
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
