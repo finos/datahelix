@@ -65,4 +65,9 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     public File getProfileFile() {
         return new File("mockFilePath");
     }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
+    }
 }

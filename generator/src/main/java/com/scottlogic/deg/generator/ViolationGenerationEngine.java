@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
         this.manifestWriter = manifestWriter;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         final List<ViolatedProfile> violatedProfiles = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule))
@@ -48,11 +48,9 @@ public class ViolationGenerationEngine implements GenerationEngine {
 
         for (ViolatedProfile violated: violatedProfiles) {
             generationEngine.generateDataSet(violated, config,
-                fileOutputTarget.withFilename(intFormatter.format(filename)));
+                outputTarget.withFilename(intFormatter.format(filename)));
             filename++;
         }
-
-
     }
 
     private ViolatedProfile getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule violatedRule) {
@@ -67,9 +65,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
             profile.fields,
             newRules,
             String.format("%s -- Violating: %s", profile.description, violatedRule.rule.getDescription()));
-
     }
-
 
     private Rule violateRule(Rule rule) {
         Constraint constraintToViolate =

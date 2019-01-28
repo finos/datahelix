@@ -75,7 +75,6 @@ public class BaseModule extends AbstractModule {
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
         bind(GenerationEngine.class).annotatedWith(Names.named("valid")).to(StandardGenerationEngine.class);
         bind(GenerationEngine.class).annotatedWith(Names.named("invalid")).to(ViolationGenerationEngine.class);
-
     }
 
     private void bindAllCommandLineTypes() {
