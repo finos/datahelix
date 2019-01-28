@@ -156,13 +156,18 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting containi
        | null   |
        | "🍩🍩" |
 
-@ignore
-Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should produce null
-       And foo is shorter than 2
+Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
+       And foo is shorter than 1
+       And foo is matching regex /[💾]{2}/
+      Then the following data should be generated:
+        | foo    |
+        | null   |
+Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should be successful
+       And foo is shorter than 1
        And foo is containing regex /[🍩]{2}/
-     Then the following data should be generated:
-       | foo    |
-       | null   |
+      Then the following data should be generated:
+        | foo    |
+        | null   |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength constraint should be successful
        And foo is shorter than 3

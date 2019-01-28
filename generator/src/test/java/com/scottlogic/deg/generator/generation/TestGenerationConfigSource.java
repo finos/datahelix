@@ -1,5 +1,8 @@
 package com.scottlogic.deg.generator.generation;
 
+import java.io.File;
+import java.nio.file.Path;
+
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
     public GenerationConfig.CombinationStrategyType combinationStrategy;
@@ -44,4 +47,33 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
         return validateProfile;
     }
 
+    @Override
+    public boolean shouldDoPartitioning() {
+        return true;
+    }
+
+    @Override
+    public boolean dontOptimise() {
+        return false;
+    }
+
+    @Override
+    public Path getOutputPath() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isEnableTracing() {
+        return false;
+    }
+
+    @Override
+    public File getProfileFile() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
+    }
 }

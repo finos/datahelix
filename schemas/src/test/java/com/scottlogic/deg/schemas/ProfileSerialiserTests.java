@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -89,6 +90,47 @@ public class ProfileSerialiserTests {
         final String actualJson = normalise.apply(
                 new ProfileSerialiser()
                     .serialise(profile));
+
+        // Assert
+        Assert.assertThat(actualJson, Is.is(expectedJson));
+    }
+
+    @Test
+    public void shouldSerialiseExampleProfileWithIsConstraintMissing() throws IOException {
+        // Arrange
+        final V3ProfileDTO profile = new V3ProfileDTO();
+        profile.fields = Arrays.asList(
+            createField(f -> f.name = "typecode"),
+            createField(f -> f.name = "price"));
+
+        profile.rules = Collections.singletonList(
+            createConstraintAsRule(c -> {
+                c.field = "typecode";
+                c.value = "string";
+            }));
+
+        Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
+
+        final String expectedJson =
+            normalise.apply(
+                "{" +
+                    "\"schemaVersion\" : \"v3\"," +
+                    "\"fields\" : [" +
+                    "   { \"name\" : \"typecode\" }," +
+                    "   { \"name\" : \"price\" }" +
+                    "]," +
+                    "\"rules\" : [" +
+                    "   {" +
+                    "       \"field\" : \"typecode\"," +
+                    "       \"value\" : \"string\"" +
+                    "   }" +
+                    "]" +
+                    "}"); // normalise the line endings for comparison;
+
+        // Act
+        final String actualJson = normalise.apply(
+            new ProfileSerialiser()
+                .serialise(profile));
 
         // Assert
         Assert.assertThat(actualJson, Is.is(expectedJson));

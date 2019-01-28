@@ -347,7 +347,7 @@ Scenario: Running an 'ofType' = string request that includes a null entry (null)
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should produce null
+Scenario: Running an 'ofType' = numeric request that includes a null entry ("") characters should only emit null
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "numeric"
@@ -363,7 +363,7 @@ Scenario: Running an 'ofType' = numeric request that includes a null entry (null
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should produce null
+Scenario: Running an 'ofType' = temporal request that includes a null entry ("") characters should only emit null
      Given there is a field foo
        And foo is equal to ""
        And foo is of type "temporal"
@@ -379,7 +379,7 @@ Scenario: Running an 'ofType' = temporal request that includes a null entry (nul
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = string request that includes a number value should produce null
+Scenario: Running an 'ofType' = string request that includes a number value should only emit null
      Given there is a field foo
        And foo is equal to 2
        And foo is of type "string"
@@ -387,7 +387,7 @@ Scenario: Running an 'ofType' = string request that includes a number value shou
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = string request that includes a temporal value should produce null
+Scenario: Running an 'ofType' = string request that includes a temporal value should only emit null
      Given there is a field foo
        And foo is equal to 2010-01-01T00:00:00.000
        And foo is of type "string"
@@ -395,7 +395,7 @@ Scenario: Running an 'ofType' = string request that includes a temporal value sh
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = numeric request that includes a string value should produce null
+Scenario: Running an 'ofType' = numeric request that includes a string value should only emit null
      Given there is a field foo
        And foo is equal to "2"
        And foo is of type "numeric"
@@ -403,7 +403,7 @@ Scenario: Running an 'ofType' = numeric request that includes a string value sho
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = numeric request that includes a temporal value should produce null
+Scenario: Running an 'ofType' = numeric request that includes a temporal value should only emit null
      Given there is a field foo
        And foo is equal to 2010-01-01T00:00:00.000
        And foo is of type "numeric"
@@ -411,7 +411,7 @@ Scenario: Running an 'ofType' = numeric request that includes a temporal value s
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = temporal request that includes a string value should produce null
+Scenario: Running an 'ofType' = temporal request that includes a string value should only emit null
      Given there is a field foo
        And foo is equal to "2010-01-01T00:00:00.000"
        And foo is of type "temporal"
@@ -419,7 +419,7 @@ Scenario: Running an 'ofType' = temporal request that includes a string value sh
        | foo  |
        | null |
 
-Scenario: Running an 'ofType' = temporal request that includes a number value should produce null
+Scenario: Running an 'ofType' = temporal request that includes a number value should only emit null
      Given there is a field foo
        And foo is equal to 2
        And foo is of type "temporal"

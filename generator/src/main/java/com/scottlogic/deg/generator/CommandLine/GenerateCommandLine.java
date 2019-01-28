@@ -10,23 +10,28 @@ import java.nio.file.Path;
 
 public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
-    public static final String defaultTreeWalkerType = "cartesian_product";
-
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
     @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
     private Path outputPath;
 
-    @CommandLine.Option(names = {"-t", "--t"},
-        description = "Determines the type of data generation performed (FULL_SEQUENTIAL, INTERESTING, RANDOM).",
-        defaultValue = "INTERESTING")
+    @CommandLine.Option(names = {"-t", "--t", "--generation-type"},
+        description = "Determines the type of data generation performed (" +
+            GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
+            ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
+            ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
+        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
     private GenerationConfig.DataGenerationType generationType;
 
-    @CommandLine.Option(names = {"-c", "--c"},
-        description = "Determines the type of combination strategy used (pinning, exhaustive, minimal).",
-        defaultValue = "PINNING")
-    private GenerationConfig.CombinationStrategyType combinationType = GenerationConfig.CombinationStrategyType.PINNING;
+    @CommandLine.Option(names = {"-c", "--c", "--combination-strategy"},
+        description = "Determines the type of combination strategy used (" +
+            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
+            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
+            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
+        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
+    @SuppressWarnings("unused")
+    private GenerationConfig.CombinationStrategyType combinationType;
 
     @CommandLine.Option(
         names = {"--no-optimise"},
@@ -40,7 +45,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         hidden = true)
     private boolean dontPartitionTrees;
 
-    @CommandLine.Option(names = {"-w", "--w"},
+    @CommandLine.Option(names = {"-w", "--w", "--walker-type"},
         description = "Determines the tree walker that should be used.",
         defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
@@ -49,7 +54,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(
         names = {"-n", "--n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
@@ -64,53 +68,64 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         description = "Defines whether constraint tracing is enabled for the output")
     private boolean enableTracing;
 
+    @CommandLine.Option(
+        names = {"--violate"},
+        description = "Defines whether to generate violating data")
+    private boolean violateProfile;
+
+    @Override
     public boolean shouldDoPartitioning() {
-        return !dontPartitionTrees;
+        return !this.dontPartitionTrees;
     }
 
-    public boolean shouldValidateProfile() {
-        return validateProfile;
-    }
-
+    @Override
     public boolean dontOptimise() {
-        return dontOptimise;
+        return this.dontOptimise;
     }
 
+    @Override
     public File getProfileFile() {
-        return profileFile;
+        return this.profileFile;
     }
 
+    @Override
+    public boolean shouldViolate() {
+        return this.violateProfile;
+    }
+
+    @Override
     public Path getOutputPath() {
-        return outputPath;
+        return this.outputPath;
     }
 
+    @Override
     public boolean isEnableTracing() {
-        return enableTracing;
+        return this.enableTracing;
     }
 
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
-        return generationType;
+        return this.generationType;
     }
 
     @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return combinationType;
+        return this.combinationType;
     }
 
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
-        return walkerType;
+        return this.walkerType;
     }
 
     @Override
     public long getMaxRows() {
-        return maxRows;
+        return this.maxRows;
     }
 
     @Override
     public boolean getValidateProfile() {
-        return validateProfile;
+        return this.validateProfile;
     }
 
     @Override

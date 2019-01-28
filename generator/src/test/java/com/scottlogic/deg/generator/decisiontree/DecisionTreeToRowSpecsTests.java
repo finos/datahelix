@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsEqualToConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -63,9 +62,9 @@ public class DecisionTreeToRowSpecsTests {
                     rule("US country constrains city"),
                     Collections.singletonList(
                         new ConditionalConstraint(
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 country,
-                                "US",
+                                Collections.singleton("US"),
                                 rules()
                             ),
                             new IsInSetConstraint(
@@ -80,9 +79,9 @@ public class DecisionTreeToRowSpecsTests {
                     rule("GB country constrains city"),
                     Collections.singletonList(
                         new ConditionalConstraint(
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 country,
-                                "GB",
+                                Collections.singleton("GB"),
                                 rules()
                             ),
                             new IsInSetConstraint(
@@ -97,14 +96,14 @@ public class DecisionTreeToRowSpecsTests {
                     rule("US country constrains currency"),
                     Collections.singletonList(
                         new ConditionalConstraint(
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 country,
-                                "US",
+                                Collections.singleton("US"),
                                 rules()
                             ),
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 currency,
-                                "USD",
+                                Collections.singleton("USD"),
                                 rules()
                             )
                         )
@@ -114,14 +113,14 @@ public class DecisionTreeToRowSpecsTests {
                     rule("GB country constrains currency"),
                     Collections.singletonList(
                         new ConditionalConstraint(
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 country,
-                                "GB",
+                                Collections.singleton("GB"),
                                 rules()
                             ),
-                            new IsEqualToConstantConstraint(
+                            new IsInSetConstraint(
                                 currency,
-                                "GBP",
+                                Collections.singleton("GBP"),
                                 rules()
                             )
                         )

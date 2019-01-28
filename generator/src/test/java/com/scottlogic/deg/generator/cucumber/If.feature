@@ -1697,7 +1697,6 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        | "ccc"  | "333" |
        | "dddd" | "333" |
 
-
 Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
        Given foo is in set:
          | "aa"   |

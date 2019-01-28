@@ -110,11 +110,11 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should generate null
+  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is equal to "GB00026349"
     Then the following data should be generated:
-      | foo  |
+      | foo |
       | null |
 
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
@@ -126,7 +126,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should generate null
+  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is in set:
         | "GB0002634947"  |
@@ -138,25 +138,22 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
         | "GBP002634946"  |
         | "GB000263494z"  |
     Then the following data should be generated:
-      | foo  |
+      | foo |
       | null |
 
-  Scenario: Running an 'aValid' request alongside a null constraint should generate null
+  Scenario: Running an 'aValid' request alongside a null constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is null
     Then the following data should be generated:
-      | foo  |
+      | foo |
       | null |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
-      And foo is matching regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
-      | null           |
-
+    And foo is matching regex <regex>
+    Then the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | null                |
@@ -165,12 +162,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z0-9]{12}/      |
       | /[A-Z0-9]/          |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should generate null
+
+  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is matching regex <regex>
-    Then the following data should be generated:
-      | foo  |
+    And the following data should be generated:
+      | foo |
       | null |
     Examples:
       | regex               |
@@ -183,14 +180,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z0-9]{13}/      |
       | /[A-Z0-9]{11}/      |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is containing regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
-      | null           |
+    Then the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
       | /GB0002634946/      |
@@ -204,12 +199,11 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z]{2}[0-9]{9}/  |
       | /[A-Z0-9]{11}/      |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should generate null
+  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is containing regex <regex>
-    Then the following data should be generated:
-      | foo  |
+    And the following data should be generated:
+      | foo |
       | null |
     Examples:
       | regex               |
@@ -221,23 +215,20 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /GBZ/               |
       | /0002634947/        |
 
-  @ignore @bug # issue raised 246
-  Scenario: Running an 'aValid' request alongside a non-contradiction ofLength constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is of length 12
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
-      | null           |
+      | null |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should generate null
+  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
-      And foo is of length <length>
+    And foo is of length <length>
     Then the following data should be generated:
-      | foo  |
+      | foo |
       | null |
     Examples:
     | length |
@@ -247,60 +238,54 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     | 0      |
     | 9999   |
 
-  @ignore @bug # issue raised 246
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is longer than <length>
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
-      | null           |
+      | null |
     Examples:
       | length |
       | 0      |
       | 1      |
       | 11     |
 
-  @ignore @bug # issue raised 246
-  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should generate null
+  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
       And foo is longer than 12
     Then the following data should be generated:
-      | foo  |
+      | foo |
       | null |
 
-  @ignore @bug # issue raised 246
-  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
-      And foo is shorter than 13
-      And foo is in set:
-        | "GB0002634946" |
-    Then the following data should be generated:
-      | foo            |
+    And foo is shorter than 13
+    And foo is in set:
       | "GB0002634946" |
-      | null           |
-
-  @ignore @bug # issue raised 246
-  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should generate null
-    Given foo is a valid "ISIN"
-      And foo is shorter than 12
     Then the following data should be generated:
       | foo  |
       | null |
 
-    ########### is this a duplicate or is the test content incorrect? ############
+  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should only emit null
+    Given foo is a valid "ISIN"
+    And foo is shorter than 12
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful
     Given foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
       | null           |
+      | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request alongside a greaterThan constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a greaterThan constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is greater than 0
       And foo is in set:
@@ -313,7 +298,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
   Scenario: Running an 'aValid' request alongside a greaterThanOrEqualTo constraint should be successful
     Given foo is a valid "ISIN"
       And foo is greater than or equal to 1
@@ -327,7 +312,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside a lessThan constraint should fbe successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a lessThan constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is less than 13
       And foo is in set:
@@ -340,7 +326,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is less than or equal to 12
       And foo is in set:
@@ -353,7 +340,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside a granularTo constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a granularTo constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is granular to 1
       And foo is in set:
@@ -366,7 +354,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside an after constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside an after constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is after 2018-09-01T00:00:00.000
       And foo is in set:
@@ -379,7 +368,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside an afterOrAt constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside an afterOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is after or at 2018-09-01T00:00:00.000
       And foo is in set:
@@ -392,7 +382,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside a before constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a before constraint should fail with an error message
     Given foo is a valid "ISIN"
     And foo is before 2018-09-01T00:00:00.000
     And foo is in set:
@@ -405,7 +396,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should be successful
+  @ignore # profile is unconstrained, generation would run 'forever', all valid ISIN codes can be generated
+  Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should fail with an error message
     Given foo is a valid "ISIN"
       And foo is before or at 2018-09-01T00:00:00.000
       And foo is in set:
@@ -418,7 +410,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946" |
       | null           |
 
-  @ignore @bug #issue 246
   Scenario: Running an 'aValid' request with a not constraint should be successful
     Given foo is anything but a valid "ISIN"
     And foo is in set:
@@ -427,8 +418,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | 2018-09-01T00:00:00.000   |
       | "GB0002634946"            |
     Then the following data should be generated:
-      |  foo  |
-      |  null |
+      | foo                       |
+      | null                      |
       | "333" |
     And the following data should not be included in what is generated:
       | foo            |
@@ -471,7 +462,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should generate null
+  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should only emit null
     Given there is a constraint:
       """
         { "allOf": [
@@ -480,5 +471,5 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
         ]}
       """
     Then the following data should be generated:
-      | foo  |
-      | null |
+      | foo            |
+      | null           |

@@ -517,7 +517,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | "22" |
 
    @ignore # issue 246
-  Scenario: Running an 'ofLength' request alongside a contradicting aValid constraint should produce null
+  Scenario: Running an 'ofLength' request alongside a contradicting aValid constraint should only emit null
     Given foo is of length 2
     And foo is a valid "ISIN"
     And foo is in set:

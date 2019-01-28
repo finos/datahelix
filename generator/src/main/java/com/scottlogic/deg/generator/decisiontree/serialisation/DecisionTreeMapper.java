@@ -117,8 +117,6 @@ public class DecisionTreeMapper {
     static private ConstraintDto toDto(AtomicConstraint constraint) {
         if (constraint instanceof IsInSetConstraint) {
             return toDto((IsInSetConstraint) constraint);
-        } else if (constraint instanceof IsEqualToConstantConstraint) {
-            return toDto((IsEqualToConstantConstraint) constraint);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
             return toDto((IsStringShorterThanConstraint) constraint);
         } else if (constraint instanceof IsOfTypeConstraint) {
@@ -139,8 +137,6 @@ public class DecisionTreeMapper {
     static private AtomicConstraint fromDto(ConstraintDto constraintDto) {
         if (constraintDto instanceof IsInSetConstraintDto) {
             return fromDto((IsInSetConstraintDto) constraintDto);
-        } else if (constraintDto instanceof IsEqualToConstantConstraintDto) {
-            return fromDto((IsEqualToConstantConstraintDto) constraintDto);
         } else if (constraintDto instanceof IsStringShorterThanConstraintDto) {
             return fromDto((IsStringShorterThanConstraintDto) constraintDto);
         } else if (constraintDto instanceof IsOfTypeConstraintDto) {
@@ -160,13 +156,6 @@ public class DecisionTreeMapper {
     /*
      * Pair F1: 
      */
-    static private IsEqualToConstantConstraintDto toDto(IsEqualToConstantConstraint constraint) {
-        IsEqualToConstantConstraintDto dto = new IsEqualToConstantConstraintDto();
-        dto.field = new FieldDto(constraint.field.name);
-        dto.requiredValue = constraint.requiredValue.toString();
-        return dto;
-    }
-
     static private IsInSetConstraintDto toDto(IsInSetConstraint constraint) {
         IsInSetConstraintDto dto = new IsInSetConstraintDto();
         dto.field = new FieldDto(constraint.field.name);
@@ -213,11 +202,7 @@ public class DecisionTreeMapper {
     private static AtomicConstraint fromDto(IsInSetConstraintDto dto) {
         return new IsInSetConstraint(new Field(dto.field.name), new HashSet<>(dto.legalValues), rules(dto.rule));
     }
-    
-    private static AtomicConstraint fromDto(IsEqualToConstantConstraintDto dto) {
-        return new IsEqualToConstantConstraint(new Field(dto.field.name), dto.requiredValue, rules(dto.rule));
-    }
-    
+
     private static AtomicConstraint fromDto(IsStringShorterThanConstraintDto dto) {
         return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue, rules(dto.rule));
     }

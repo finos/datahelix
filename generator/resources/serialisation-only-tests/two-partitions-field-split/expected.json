@@ -80,21 +80,21 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "UserType"
             },
-            "requiredValue" : "UserTypeA"
+            "legalValues" : [ "UserTypeA" ]
           }
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "UserType"
           },
-          "requiredValue" : "UserTypeA"
+          "legalValues" : [ "UserTypeA" ]
         }, {
           "type" : "IsInSetConstraint",
           "field" : {
@@ -107,11 +107,11 @@
     }, {
       "options" : [ {
         "atomicConstraints" : [ {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "Parameter"
           },
-          "requiredValue" : "B"
+          "legalValues" : [ "B" ]
         }, {
           "type" : "IsInSetConstraint",
           "field" : {
@@ -124,11 +124,11 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "Parameter"
             },
-            "requiredValue" : "B"
+            "legalValues" : [ "B" ]
           }
         } ],
         "decisions" : [ ]
@@ -167,21 +167,21 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "Parameter"
             },
-            "requiredValue" : "A"
+            "legalValues" : [ "A" ]
           }
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "Parameter"
           },
-          "requiredValue" : "A"
+          "legalValues" : [ "A" ]
         }, {
           "type" : "IsInSetConstraint",
           "field" : {
@@ -200,22 +200,22 @@
           },
           "legalValues" : [ "GraphType2", "GraphType3" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "Parameter"
           },
-          "requiredValue" : "C"
+          "legalValues" : [ "C" ]
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "Parameter"
             },
-            "requiredValue" : "C"
+            "legalValues" : [ "C" ]
           }
         } ],
         "decisions" : [ ]

@@ -14,16 +14,21 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
 public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWriter> {
-    private static final SimpleDateFormat standardDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
 
     @Override
-    public JsonWriter openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) {
-        return new JsonWriter(directory.resolve(filenameWithoutExtension + ".json"), profileFields);
+    public JsonWriter openWriter(Path directory, String fileName, ProfileFields profileFields) {
+        return new JsonWriter(directory.resolve(fileName), profileFields);
+    }
+
+    @Override
+    public String getFileName(String fileNameWithoutExtension) {
+        return fileNameWithoutExtension + ".json";
     }
 
     @Override
@@ -52,7 +57,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
             } else if (value instanceof String) {
                 rowNode.put(fieldName, (String) value);
             } else if (value instanceof LocalDateTime) {
-                rowNode.put(fieldName, standardDateFormat.format(value));
+                rowNode.put(fieldName, standardDateFormat.format((LocalDateTime)value));
             } else {
                 rowNode.put(fieldName, value.toString());
             }

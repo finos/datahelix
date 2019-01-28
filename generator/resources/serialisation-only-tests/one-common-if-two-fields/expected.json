@@ -42,11 +42,11 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "C"
             },
-            "requiredValue" : "c1"
+            "legalValues" : [ "c1" ]
           }
         } ],
         "decisions" : [ ]
@@ -54,11 +54,11 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "A"
             },
-            "requiredValue" : "a1"
+            "legalValues" : [ "a1" ]
           }
         } ],
         "decisions" : [ ]
@@ -66,39 +66,39 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "B"
             },
-            "requiredValue" : "b1"
+            "legalValues" : [ "b1" ]
           }
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "A"
           },
-          "requiredValue" : "a1"
+          "legalValues" : [ "a1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "E"
           },
-          "requiredValue" : "e1"
+          "legalValues" : [ "e1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "C"
           },
-          "requiredValue" : "c1"
+          "legalValues" : [ "c1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "B"
           },
-          "requiredValue" : "b1"
+          "legalValues" : [ "b1" ]
         } ],
         "decisions" : [ ]
       } ]
@@ -107,50 +107,50 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "A"
             },
-            "requiredValue" : "a1"
+            "legalValues" : [ "a1" ]
           }
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "A"
           },
-          "requiredValue" : "a1"
+          "legalValues" : [ "a1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "F"
           },
-          "requiredValue" : "f1"
+          "legalValues" : [ "f1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "D"
           },
-          "requiredValue" : "d1"
+          "legalValues" : [ "d1" ]
         }, {
-          "type" : "IsEqualToConstantConstraint",
+          "type" : "IsInSetConstraint",
           "field" : {
             "name" : "B"
           },
-          "requiredValue" : "b1"
+          "legalValues" : [ "b1" ]
         } ],
         "decisions" : [ ]
       }, {
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "B"
             },
-            "requiredValue" : "b1"
+            "legalValues" : [ "b1" ]
           }
         } ],
         "decisions" : [ ]
@@ -158,11 +158,11 @@
         "atomicConstraints" : [ {
           "type" : "NotConstraint",
           "negatedConstraint" : {
-            "type" : "IsEqualToConstantConstraint",
+            "type" : "IsInSetConstraint",
             "field" : {
               "name" : "D"
             },
-            "requiredValue" : "d1"
+            "legalValues" : [ "d1" ]
           }
         } ],
         "decisions" : [ ]
