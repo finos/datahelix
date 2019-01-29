@@ -18,17 +18,17 @@ import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
 
-    private DegTestState state;
-    private DegTestHelper testHelper;
+    private final CucumberTestState state;
+    private CucumberTestHelper cucumberTestHelper;
 
-    public GeneralTestStep(DegTestState state){
+    public GeneralTestStep(CucumberTestState state){
         this.state = state;
     }
 
     @Before
     public void BeforeEach() {
         this.state.clearState();
-        this.testHelper = new DegTestHelper(state);
+        this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
     @Given("there is a field (.+)$")
@@ -43,17 +43,31 @@ public class GeneralTestStep {
 
     @When("the generation strategy is {generationStrategy}")
     public void setTheGenerationStrategy(GenerationConfig.DataGenerationType strategy) {
-        this.state.generationStrategy = strategy;
+        this.state.dataGenerationType = strategy;
     }
 
     @When("the combination strategy is {combinationStrategy}")
     public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
-        this.state.combinationStrategy = strategy;
+        this.state.combinationStrategyType = strategy;
     }
 
     @When("the walker type is {walkerType}")
     public void setTheCombinationStrategy(GenerationConfig.TreeWalkerType walkerType) {
         this.state.walkerType = walkerType;
+    }
+
+    @Given("the data requested is {generationMode}")
+    public void setTheGenerationMode(CucumberGenerationMode generationMode) {
+        switch (generationMode) {
+            case VIOLATING:
+                state.shouldViolate = true;
+                break;
+            case VALIDATING:
+                state.shouldViolate = false;
+                break;
+            default:
+                throw new IllegalArgumentException("Specified generation mode not supported");
+        }
     }
 
     @And("^(.+) is null$")
@@ -68,11 +82,11 @@ public class GeneralTestStep {
 
     @Then("^the profile is invalid$")
     public void theProfileIsInvalid() {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
         Assert.assertThat(
             "Expected invalid profile",
-            this.testHelper.getThrownExceptions(),
+            this.cucumberTestHelper.getThrownExceptions(),
             hasItem(
                 either((Matcher)isA(InvalidProfileException.class))
                     .or(isA(JsonParseException.class))
@@ -82,9 +96,9 @@ public class GeneralTestStep {
 
     @But("^the profile is invalid because \"(.+)\"$")
     public void fieldIsInvalidWithError(String error) {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
-        List<Exception> thrownExceptions = new ArrayList<>(this.testHelper.getThrownExceptions());
+        List<Exception> thrownExceptions = new ArrayList<>(this.cucumberTestHelper.getThrownExceptions());
         Assert.assertThat(
             "Expected invalid profile",
             thrownExceptions,
@@ -98,16 +112,16 @@ public class GeneralTestStep {
 
     @Then("^I am presented with an error message$")
     public void dataGeneratorShouldError() {
-        testHelper.generateAndGetData();
+        cucumberTestHelper.generateAndGetData();
 
-        Assert.assertThat(testHelper.generatorHasThrownException(), is(true));
+        Assert.assertThat(cucumberTestHelper.generatorHasThrownException(), is(true));
     }
 
     @And("^no data is created$")
     public void noDataIsCreated() {
-        List<List<Object>> data = testHelper.generateAndGetData();
+        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
 
-        if (!testHelper.hasDataBeenGenerated()){
+        if (!cucumberTestHelper.hasDataBeenGenerated()){
             return; //pass
         }
 
@@ -133,7 +147,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
@@ -144,7 +158,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, equalTo(data.expectedData));
     }
@@ -155,7 +169,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
@@ -166,7 +180,7 @@ public class GeneralTestStep {
 
         Assert.assertThat(
             "Exceptions thrown during generation",
-            testHelper.getThrownExceptions(),
+            cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
@@ -179,7 +193,7 @@ public class GeneralTestStep {
                 try {
                     return GeneratorTestUtilities.parseExpected(cell);
                 } catch (JsonParseException | InvalidProfileException e) {
-                    this.state.addException(e);
+                    state.addException(e);
                     return "<exception thrown: " + e.getMessage() + ">";
                 }
             }).collect(Collectors.toList()))
@@ -188,7 +202,7 @@ public class GeneralTestStep {
 
     private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
         List <List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List <List<Object>> data = testHelper.generateAndGetData();
+        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 
