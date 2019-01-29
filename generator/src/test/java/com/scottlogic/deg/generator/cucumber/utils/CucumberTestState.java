@@ -1,22 +1,34 @@
 package com.scottlogic.deg.generator.cucumber.utils;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DegTestState {
+/**
+ * Class to represent the state during cucumber test running and execution
+ */
+public class CucumberTestState {
 
-    public GenerationConfig.DataGenerationType generationStrategy;
-    public GenerationConfig.CombinationStrategyType combinationStrategy;
+    public GenerationConfig.DataGenerationType dataGenerationType;
+    public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
+
+    /**
+     * Boolean to represent if the generation mode is validating or violating.
+     * If true, generation is in violate mode.
+     */
+    public Boolean shouldViolate = false;
+
+    //Default value of 10 million rows is set here.
+    public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+
+    public List<List<Object>> generatedObjects;
 
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
@@ -71,6 +83,7 @@ public class DegTestState {
         this.profileFields.clear();
         this.constraints.clear();
         this.testExceptions.clear();
+        this.generatedObjects = null;
     }
 
     public void addField(String fieldName) {

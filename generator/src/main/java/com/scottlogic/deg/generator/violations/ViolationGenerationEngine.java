@@ -5,12 +5,14 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.io.IOException;
@@ -26,14 +28,15 @@ public class ViolationGenerationEngine implements GenerationEngine {
     private final List<ViolationFilter> constraintsToNotViolate;
 
     @Inject
-    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, @Named("valid") GenerationEngine generationEngine, ManifestWriter manifestWriter, List<ViolationFilter> constraintsToNotViolate){
+    public ViolationGenerationEngine(@Named("outputPath") Path outputPath, StandardGenerationEngine generationEngine, ManifestWriter manifestWriter, List<ViolationFilter> constraintsToNotViolate){
         this.outputPath = outputPath;
         this.generationEngine = generationEngine;
         this.manifestWriter = manifestWriter;
         this.constraintsToNotViolate = constraintsToNotViolate;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config, FileOutputTarget fileOutputTarget) throws IOException {
+    @Override
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         final List<ViolatedProfile> violatedProfiles = profile.rules
             .stream()
             .map(rule -> getViolationForRuleTestCaseDataSet(profile, config, rule))
@@ -50,11 +53,18 @@ public class ViolationGenerationEngine implements GenerationEngine {
 
         for (ViolatedProfile violated: violatedProfiles) {
             generationEngine.generateDataSet(violated, config,
-                fileOutputTarget.withFilename(intFormatter.format(filename)));
+                getOutputTargetWithFilename(outputTarget, intFormatter.format(filename)));
             filename++;
         }
+    }
 
-
+    private OutputTarget getOutputTargetWithFilename(OutputTarget outputTarget,  String filename) {
+        if (outputTarget instanceof FileOutputTarget) {
+            return ((FileOutputTarget)outputTarget).withFilename(filename);
+        }
+        else {
+            return outputTarget;
+        }
     }
 
     private ViolatedProfile getViolationForRuleTestCaseDataSet(Profile profile, GenerationConfig config, Rule violatedRule) {

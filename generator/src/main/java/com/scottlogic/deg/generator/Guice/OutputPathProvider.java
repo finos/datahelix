@@ -8,15 +8,15 @@ import java.nio.file.Path;
 
 public class OutputPathProvider implements Provider<Path> {
     final
-    GenerationConfigSource commandLine;
+    GenerationConfigSource configSource;
 
     @Inject
-    public OutputPathProvider(GenerationConfigSource commandLine){
-        this.commandLine = commandLine;
+    public OutputPathProvider(GenerationConfigSource configSource){
+        this.configSource = configSource;
     }
 
     @Override
     public Path get() {
-        return commandLine.getOutputPath();
+        return configSource.getOutputPath();
     }
 }

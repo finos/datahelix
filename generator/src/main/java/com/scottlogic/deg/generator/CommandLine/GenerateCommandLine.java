@@ -10,7 +10,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
+public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
