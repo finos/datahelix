@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FieldSpecValueGeneratorFactoryTests {
@@ -23,7 +22,7 @@ class FieldSpecValueGeneratorFactoryTests {
 
         DataBagSource result = factory.getFieldSpecValueGenerator(field, fieldSpec);
 
-        Assert.assertThat(result, instanceOf(FieldSpecValueGeneratorFactory.FieldSpecValueGeneratorInverter.class));
+        Assert.assertThat(result, instanceOf(FieldSpecValueGeneratorFactory.FieldSpecValueGeneratorAdapter.class));
     }
 
     @Test

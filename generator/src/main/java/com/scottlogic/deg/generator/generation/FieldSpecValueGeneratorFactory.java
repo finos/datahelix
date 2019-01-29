@@ -17,15 +17,15 @@ public class FieldSpecValueGeneratorFactory {
     }
 
     public DataBagSource getFieldSpecValueGenerator(Field field, FieldSpec fieldSpec){
-        return new FieldSpecValueGeneratorInverter(field, fieldSpec, evaluator);
+        return new FieldSpecValueGeneratorAdapter(field, fieldSpec, evaluator);
     }
 
-    class FieldSpecValueGeneratorInverter implements DataBagSource {
+    class FieldSpecValueGeneratorAdapter implements DataBagSource {
         private final FieldSpec fieldSpec;
         private final Field field;
         private final FieldValueSourceEvaluator evaluator;
 
-        FieldSpecValueGeneratorInverter(
+        FieldSpecValueGeneratorAdapter(
             Field field,
             FieldSpec fieldSpec,
             FieldValueSourceEvaluator evaluator) {
