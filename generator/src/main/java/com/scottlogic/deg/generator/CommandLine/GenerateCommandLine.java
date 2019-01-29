@@ -1,17 +1,13 @@
 package com.scottlogic.deg.generator.CommandLine;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.scottlogic.deg.generator.GenerateExecute;
-import com.scottlogic.deg.generator.Guice.BaseModule;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 
-public class GenerateCommandLine implements Runnable, GenerationConfigSource {
+public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
@@ -77,16 +73,6 @@ public class GenerateCommandLine implements Runnable, GenerationConfigSource {
     private boolean violateProfile;
 
     @Override
-    public void run() {
-        BaseModule container = new BaseModule(this);
-        Injector injector = Guice.createInjector(container);
-
-        Runnable task = injector.getInstance(GenerateExecute.class);
-
-        task.run();
-    }
-
-    @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
@@ -139,5 +125,10 @@ public class GenerateCommandLine implements Runnable, GenerationConfigSource {
     @Override
     public boolean getValidateProfile() {
         return this.validateProfile;
+    }
+
+    @Override
+    protected Class<? extends Runnable> getExecutorType() {
+        return GenerateExecute.class;
     }
 }
