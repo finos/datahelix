@@ -62,17 +62,25 @@ You can use Maven if you prefer by executing the following command:
     mvn install -pl :generator -am
     ```
 * Run the generator - see the [examples here](./generator/README.md).
-* to generate the project documentation website run the maven site goal
+* To generate a project documentation website run the 
+[maven site](https://maven.apache.org/guides/mini/guide-site.html) command. 
+The website will contain information about the projects such as libraries used and unit test report.
+Once generated the website can be found at `target\site\index.html` in each of the project directories.
     ```bash
     mvn site
     ```
-* to generate an executable jar file run the following command:
+* To generate an executable jar file:
+  * in the project root directory run this command to install the parent pom into the local 
+  maven repository (***.m2*** dir) and generate and install the 
+  schemas jar file (found in `.\schemas\target`)   
     ```bash
     mvn install
-    cd generator
-    mvn package assembly:single
     ```
-    the jar file will be generated in the target directory with the name `generator.jar`
+  * then run the following command to create the executable jar file:
+    ```bash
+    mvn assembly:single -pl :generator
+    ```
+    the jar file will be generated in the `generator\target` directory with the name `generator.jar`
 
 ## License
 
