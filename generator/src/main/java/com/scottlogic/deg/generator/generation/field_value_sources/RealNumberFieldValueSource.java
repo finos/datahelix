@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
@@ -76,11 +77,12 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     @Override
     public Iterable<Object> generateInterestingValues() {
         return () -> new UpCastingIterator<>(
+            FlatMappingSpliterator.flatMap(
             Stream.of(
                 streamOf(() -> new RealNumberIterator()).limit(2),
                 streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
                 streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2))
-            .flatMap(Function.identity())
+            , Function.identity())
             .distinct()
             .iterator());
     }
