@@ -2,13 +2,12 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 
-public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
+public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import picocli.CommandLine;
@@ -52,7 +52,7 @@ public class GenerateTreeCollectionJson implements Runnable {
         final Profile profile;
 
         try {
-            profile = new ProfileReader(new NoopProfileValidator()).read(inputPath.toPath());
+            profile = new JsonProfileReader(new NoopProfileValidator()).read(inputPath.toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();

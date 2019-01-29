@@ -10,23 +10,23 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
     private final DecisionTreeWalker reductiveDecisionTreeWalker;
     private final DecisionTreeWalker cartesianProductDecisionTreeWalker;
     private final DecisionTreeWalker routedDecisionTreeWalker;
-    private final GenerationConfigSource commandLine;
+    private final GenerationConfigSource configSource;
 
     @Inject
     public DecisionTreeWalkerProvider(
         @Named("reductive") DecisionTreeWalker reductiveDecisionTreeWalker,
         @Named("cartesian") DecisionTreeWalker cartesianProductDecisionTreeWalker,
         @Named("routed") DecisionTreeWalker routedDecisionTreeWalker,
-        GenerationConfigSource commandLine) {
+        GenerationConfigSource configSource) {
         this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
         this.cartesianProductDecisionTreeWalker = cartesianProductDecisionTreeWalker;
         this.routedDecisionTreeWalker = routedDecisionTreeWalker;
-        this.commandLine = commandLine;
+        this.configSource = configSource;
     }
 
     @Override
             public DecisionTreeWalker get() {
-          switch(this.commandLine.getWalkerType()) {
+          switch(this.configSource.getWalkerType()) {
               case CARTESIAN_PRODUCT:
                 return this.cartesianProductDecisionTreeWalker;
 
