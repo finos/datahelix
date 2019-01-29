@@ -8,16 +8,16 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartition
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class TreePartitioningProvider implements Provider<TreePartitioner> {
-    private final GenerationConfigSource commandLine;
+    private final GenerationConfigSource configSource;
 
     @Inject
-    public TreePartitioningProvider(GenerationConfigSource commandLine) {
-        this.commandLine = commandLine;
+    public TreePartitioningProvider(GenerationConfigSource configSource) {
+        this.configSource = configSource;
     }
 
     @Override
     public TreePartitioner get() {
-        if (this.commandLine.shouldDoPartitioning()){
+        if (configSource.shouldDoPartitioning()){
             return new RelatedFieldTreePartitioner();
         }
         return new NoopTreePartitioner();

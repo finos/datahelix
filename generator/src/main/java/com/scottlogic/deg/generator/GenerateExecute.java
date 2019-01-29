@@ -12,26 +12,26 @@ public class GenerateExecute implements Runnable {
     private final GenerationConfig config;
     private final ProfileReader profileReader;
     private final GenerationEngine generationEngine;
-    private final GenerationConfigSource commandLine;
+    private final GenerationConfigSource configSource;
     private final OutputTarget fileOutputTarget;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
                            ProfileReader profileReader,
                            GenerationEngine generationEngine,
-                           GenerationConfigSource commandLine,
+                           GenerationConfigSource configSource,
                            OutputTarget fileOutputTarget) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
-        this.commandLine = commandLine;
+        this.configSource = configSource;
         this.fileOutputTarget = fileOutputTarget;
     }
 
     @Override
     public void run() {
         try {
-            Profile profile = this.profileReader.read(this.commandLine.getProfileFile().toPath());
+            Profile profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
 
             generationEngine.generateDataSet(profile, config, fileOutputTarget);
 

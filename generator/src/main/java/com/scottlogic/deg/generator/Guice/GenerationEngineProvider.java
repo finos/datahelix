@@ -9,22 +9,22 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class GenerationEngineProvider implements Provider<GenerationEngine> {
 
-    private GenerationConfigSource commandLine;
+    private GenerationConfigSource configSource;
     private GenerationEngine generationEngine;
     private GenerationEngine violationEngine;
 
     @Inject
-    public GenerationEngineProvider(GenerationConfigSource commandLine,
+    public GenerationEngineProvider(GenerationConfigSource configSource,
                                     StandardGenerationEngine generationEngine,
                                     ViolationGenerationEngine violationEngine) {
-        this.commandLine = commandLine;
+        this.configSource = configSource;
         this.generationEngine = generationEngine;
         this.violationEngine = violationEngine;
     }
 
     @Override
     public GenerationEngine get() {
-        if (commandLine.shouldViolate()) {
+        if (configSource.shouldViolate()) {
             return this.violationEngine;
         }
         return this.generationEngine;

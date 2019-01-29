@@ -3,10 +3,8 @@ package com.scottlogic.deg.generator.Guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
-import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -35,10 +33,10 @@ import java.nio.file.Path;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final GenerationConfigSource commandLine;
+    private final GenerationConfigSource configSource;
 
-    public BaseModule(GenerationConfigSource commandLine) {
-        this.commandLine = commandLine;
+    public BaseModule(GenerationConfigSource configSource) {
+        this.configSource = configSource;
     }
 
     @Override
@@ -76,8 +74,8 @@ public class BaseModule extends AbstractModule {
     }
 
     private void bindAllCommandLineTypes() {
-        if (this.commandLine instanceof GenerateCommandLine) {
-            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
+        if (this.configSource instanceof GenerateCommandLine) {
+            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
     }

@@ -6,5 +6,5 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import java.io.IOException;
 
 public interface GenerationEngine {
-    void generateDataSet(Profile profile, GenerationConfig config, OutputTarget fileOutputTarget) throws IOException;
+    void generateDataSet(Profile profile, GenerationConfig config, OutputTarget OutputTarget) throws IOException;
 }
