@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
 import java.util.*;
@@ -25,10 +26,10 @@ public class ExhaustiveCombinationStrategy implements CombinationStrategy {
         if (bagSequenceIndex < bagSequences.size()) {
             List<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
 
-            return nextStream
+            return FlatMappingSpliterator.flatMap(nextStream
                 .stream()
-                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag))
-                .flatMap(innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
+                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
+                innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else
             return Stream.of(accumulatingBag);

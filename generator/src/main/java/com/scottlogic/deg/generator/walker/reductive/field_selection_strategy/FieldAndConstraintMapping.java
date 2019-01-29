@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.Collection;
@@ -31,11 +32,11 @@ public class FieldAndConstraintMapping {
     }
 
     private static int getConstraintPriority(Collection<AtomicConstraint> constraints) {
-        Set<Object> allLegalValuesForField = constraints
+        Set<Object> allLegalValuesForField = FlatMappingSpliterator.flatMap(constraints
             .stream()
             .filter(c -> (c instanceof IsInSetConstraint))
             .map(c -> (IsInSetConstraint)c)
-            .flatMap(setConstraint -> setConstraint.legalValues.stream())
+            , setConstraint -> setConstraint.legalValues.stream())
             .collect(Collectors.toSet());
 
         int setConstraintPriority = allLegalValuesForField.isEmpty()
