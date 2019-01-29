@@ -53,14 +53,11 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 ### Development setup
 
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
-* Clone the repository
-* Follow the steps in the [setup instructions](./generator/README.md). 
-The following need to be actioned for the generator, 
-the remaining steps need to be actioned to be able to use the profiler.
+* Follow the steps in the [setup instructions](./generator/docs/GeneratorSetup.md) then continue with these steps.
 * Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. 
-You can use Maven if you prefer by executing the following command:
+You can use Maven if you prefer by executing the following command in the project root directory:
     ```bash
-    mvn install -pl :generator -am
+    mvn install
     ```
 * Run the generator - see the [examples here](./generator/README.md).
 * To generate a project documentation website run the 
