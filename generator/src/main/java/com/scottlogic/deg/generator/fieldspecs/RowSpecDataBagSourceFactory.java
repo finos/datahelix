@@ -21,7 +21,7 @@ public class RowSpecDataBagSourceFactory {
 
     public DataBagSource createDataBagSource(RowSpec rowSpec){
         if (rowSpec instanceof ReductiveRowSpec){
-            return createDataBagSource((ReductiveRowSpec) rowSpec);
+            return createReductiveDataBagSourceFor((ReductiveRowSpec) rowSpec);
         }
 
         List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.fieldToFieldSpec.size());
@@ -37,7 +37,7 @@ public class RowSpecDataBagSourceFactory {
         return new MultiplexingDataBagSource(fieldDataBagSources.stream());
     }
 
-    private DataBagSource createDataBagSource(ReductiveRowSpec rowSpec) {
+    private DataBagSource createReductiveDataBagSourceFor(ReductiveRowSpec rowSpec) {
         List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size() - 1);
 
         for (Map.Entry<Field, FieldSpec> entry: rowSpec.fieldToFieldSpec.entrySet()) {
