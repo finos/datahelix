@@ -47,8 +47,7 @@ public class FileOutputTarget implements OutputTarget{
         }
     }
 
-    @Override
-    public OutputTarget withFilename(String filename){
+    public FileOutputTarget withFilename(String filename){
         return new FileOutputTarget(
             filePath.resolve(dataSetWriter.getFileName(filename)),
             dataSetWriter);

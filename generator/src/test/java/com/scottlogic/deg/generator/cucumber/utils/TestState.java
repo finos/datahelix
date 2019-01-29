@@ -18,16 +18,16 @@ public class TestState {
     public GenerationConfig.DataGenerationType dataGenerationType;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
-    public GenerationConfig.GenerationMode generationMode = GenerationConfig.GenerationMode.VALIDATING;
 
     /**
-     * Default value of 10 million rows is set here.
+     * Boolean to represent if the generation mode is validating or violating.
+     * If true, generation is in violate mode.
      */
+    public Boolean shouldViolate = false;
+
+    //Default value of 10 million rows is set here.
     public long maxRows = 10_000_000;
 
-    /**
-     * Stores the output generated data.
-     */
     public List<List<Object>> generatedObjects;
 
     final List<Field> profileFields = new ArrayList<>();

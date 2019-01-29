@@ -175,10 +175,10 @@ public class GeneralTestStep {
     public void setTheGenerationMode(String generationMode) {
         switch (generationMode) {
             case "violating":
-                state.generationMode = GenerationConfig.GenerationMode.VIOLATING;
+                state.shouldViolate = true;
                 break;
             case "validating":
-                state.generationMode = GenerationConfig.GenerationMode.VALIDATING;
+                state.shouldViolate = false;
                 break;
             default:
                 throw new IllegalArgumentException("Specified generation mode not supported");

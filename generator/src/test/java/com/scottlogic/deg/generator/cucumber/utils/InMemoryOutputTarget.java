@@ -26,12 +26,6 @@ public class InMemoryOutputTarget implements OutputTarget {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
-    //TODO: Don't Want This
-    @Override
-    public OutputTarget withFilename(String filename) {
-        return this;
-    }
-
     private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
         return generatedObjects
             .collect(Collectors.toList())

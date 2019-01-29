@@ -8,6 +8,4 @@ import java.util.stream.Stream;
 
 public interface OutputTarget {
     void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException;
-
-    OutputTarget withFilename(String filename);
 }
