@@ -406,7 +406,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | null |
 
-  Scenario: Running an 'ofLength' request alongside a non-contradiction ofLength constraint should be successful
+  Scenario: Running an 'ofLength' request alongside a non-contradicting ofLength constraint should be successful
     Given foo is of length 1
     And foo is of length 1
     And foo is in set:
