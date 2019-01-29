@@ -5,7 +5,7 @@ import cucumber.api.java.en.When;
 
 public class NullValueStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
 
     public NullValueStep(CucumberTestState state){
         this.state = state;

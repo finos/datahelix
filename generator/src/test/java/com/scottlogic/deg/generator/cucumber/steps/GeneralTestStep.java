@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
     private CucumberTestHelper cucumberTestHelper;
 
     public GeneralTestStep(CucumberTestState state){

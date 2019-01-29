@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SetValueStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
 
     public SetValueStep(CucumberTestState state){
         this.state = state;

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class JSONTestStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
 
     public JSONTestStep(CucumberTestState state){
         this.state = state;

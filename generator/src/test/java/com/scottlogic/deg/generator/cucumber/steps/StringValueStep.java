@@ -5,7 +5,7 @@ import cucumber.api.java.en.When;
 
 public class StringValueStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
 
     public StringValueStep(CucumberTestState state){
         this.state = state;

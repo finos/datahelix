@@ -5,7 +5,7 @@ import cucumber.api.java.en.When;
 
 public class RegexValueStep {
 
-    private CucumberTestState state;
+    private final CucumberTestState state;
 
     public RegexValueStep(CucumberTestState state){
         this.state = state;

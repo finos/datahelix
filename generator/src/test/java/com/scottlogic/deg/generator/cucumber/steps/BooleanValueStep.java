@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.When;
 
 public class BooleanValueStep {
-    private CucumberTestState state;
+    private final CucumberTestState state;
     public BooleanValueStep(CucumberTestState state){
         this.state = state;
     }
