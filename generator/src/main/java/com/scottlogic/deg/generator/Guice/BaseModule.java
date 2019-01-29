@@ -65,6 +65,7 @@ public class BaseModule extends AbstractModule {
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
+        bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);

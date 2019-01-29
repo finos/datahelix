@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGeneratorFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 public class RowSpecDataBagSourceFactory {
     private final FieldSpecValueGeneratorFactory generatorFactory;
 
+    @Inject
     public RowSpecDataBagSourceFactory(FieldSpecValueGeneratorFactory generatorFactory) {
         this.generatorFactory = generatorFactory;
     }
