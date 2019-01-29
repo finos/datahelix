@@ -655,7 +655,7 @@ Scenario: Running a 'inSet' request alongside a contradicting matchingRegex cons
        | null |
 
 
-Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
+Scenario: Running a 'inSet' request alongside a non-contradicting containingRegex constraint should be successful
      Given there is a field foo
        And foo is in set:
        | "Test"  |
@@ -668,6 +668,18 @@ Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex 
        | null    |
        | "test"  |
        | "Testt" |
+
+Scenario: Running a 'inSet' request alongside a contradicting containingRegex constraint should generate null
+  Given there is a field foo
+  And foo is in set:
+    | "Test"  |
+    | "test"  |
+    | "Testt" |
+    | "Tes7"  |
+  And foo is containing regex /[A-Z]{4}/
+  Then the following data should be generated:
+    | foo     |
+    | null    |
 
 Scenario: Running a 'inSet' request alongside a non-contradicting ofLength constraint should be successful
      Given there is a field foo
