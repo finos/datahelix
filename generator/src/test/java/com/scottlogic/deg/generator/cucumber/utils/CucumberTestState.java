@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Class to represent the state during cucumber test running and execution
  */
-public class TestState {
+public class CucumberTestState {
 
     public GenerationConfig.DataGenerationType dataGenerationType;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;

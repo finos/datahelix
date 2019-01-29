@@ -6,7 +6,6 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.Guice.BaseModule;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,9 +15,9 @@ import java.util.List;
  */
 public class CucumberTestHelper {
 
-    private final TestState testState;
+    private final CucumberTestState testState;
 
-    public CucumberTestHelper(TestState testState){
+    public CucumberTestHelper(CucumberTestState testState){
         this.testState = testState;
     }
 

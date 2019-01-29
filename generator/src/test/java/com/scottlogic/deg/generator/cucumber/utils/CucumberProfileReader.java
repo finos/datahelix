@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 
 public class CucumberProfileReader implements ProfileReader {
 
-    private TestState state;
+    private CucumberTestState state;
 
     @Inject
-    public CucumberProfileReader(TestState state) {
+    public CucumberProfileReader(CucumberTestState state) {
         this.state = state;
     }
 

@@ -1,14 +1,14 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.cucumber.utils.TestState;
+import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.When;
 
 public class DateValueStep {
 
     public static final String DATE_REGEX = "((\\d{4})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$";
-    private TestState state;
+    private CucumberTestState state;
 
-    public DateValueStep(TestState state){
+    public DateValueStep(CucumberTestState state){
         this.state = state;
     }
 

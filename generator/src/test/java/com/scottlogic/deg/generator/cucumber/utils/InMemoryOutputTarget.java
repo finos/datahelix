@@ -14,10 +14,10 @@ import java.util.stream.Stream;
  */
 public class InMemoryOutputTarget implements OutputTarget {
 
-    private final TestState testState;
+    private final CucumberTestState testState;
 
     @Inject
-    public InMemoryOutputTarget(TestState testState) {
+    public InMemoryOutputTarget(CucumberTestState testState) {
         this.testState = testState;
     }
 
