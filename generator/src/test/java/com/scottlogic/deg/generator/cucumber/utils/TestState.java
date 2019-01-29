@@ -26,7 +26,7 @@ public class TestState {
     public Boolean shouldViolate = false;
 
     //Default value of 10 million rows is set here.
-    public long maxRows = 10_000_000;
+    public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 
     public List<List<Object>> generatedObjects;
 

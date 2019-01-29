@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
-    private TestState state;
+    private final TestState state;
 
     @Inject
     public CucumberGenerationConfigSource(TestState state) {

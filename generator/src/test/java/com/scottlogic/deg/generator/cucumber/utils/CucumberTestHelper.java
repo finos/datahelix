@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CucumberTestHelper {
 
-    private TestState testState;
+    private final TestState testState;
 
     public CucumberTestHelper(TestState testState){
         this.testState = testState;

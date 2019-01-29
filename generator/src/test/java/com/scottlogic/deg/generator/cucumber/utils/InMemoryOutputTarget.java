@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public class InMemoryOutputTarget implements OutputTarget {
 
-    private TestState testState;
+    private final TestState testState;
 
     @Inject
     public InMemoryOutputTarget(TestState testState) {

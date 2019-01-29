@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.cucumber.utils.CucumberGenerationMode;
 import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -29,6 +30,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineCombinationStrategyType(tr);
         this.defineWalkerType(tr);
         this.defineOperationParameterType(tr);
+        this.defineGenerationMode(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"regex", "/(.+)/$");
         tr.setDefaultDataTableCellTransformer(new DataTableCellTransformer());
@@ -105,6 +107,19 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "walkerType",
             "(.*)$",
             GenerationConfig.TreeWalkerType.class,
+            transformer));
+    }
+
+    private void defineGenerationMode(TypeRegistry tr) {
+        Transformer<CucumberGenerationMode> transformer = strategyString ->
+            Arrays.stream(CucumberGenerationMode.values())
+                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
+                .findFirst().orElse(CucumberGenerationMode.VALIDATING);
+
+        tr.defineParameterType(new ParameterType<>(
+            "generationMode",
+            "(.*)$",
+            CucumberGenerationMode.class,
             transformer));
     }
 

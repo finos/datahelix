@@ -55,7 +55,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
     }
 
     private OutputTarget getOutputTargetWithFilename(OutputTarget outputTarget,  String filename) {
-        if (outputTarget.getClass() == FileOutputTarget.class) {
+        if (outputTarget instanceof FileOutputTarget) {
             return ((FileOutputTarget)outputTarget).withFilename(filename);
         }
         else {

@@ -56,6 +56,20 @@ public class GeneralTestStep {
         this.state.walkerType = walkerType;
     }
 
+    @Given("the data requested is {generationMode}")
+    public void setTheGenerationMode(CucumberGenerationMode generationMode) {
+        switch (generationMode) {
+            case VIOLATING:
+                state.shouldViolate = true;
+                break;
+            case VALIDATING:
+                state.shouldViolate = false;
+                break;
+            default:
+                throw new IllegalArgumentException("Specified generation mode not supported");
+        }
+    }
+
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
         this.state.addConstraint(fieldName, "null", null);
@@ -169,20 +183,6 @@ public class GeneralTestStep {
             cucumberTestHelper.getThrownExceptions(),
             empty());
         Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
-    }
-
-    @Given("^the data requested is (violating|validating)$")
-    public void setTheGenerationMode(String generationMode) {
-        switch (generationMode) {
-            case "violating":
-                state.shouldViolate = true;
-                break;
-            case "validating":
-                state.shouldViolate = false;
-                break;
-            default:
-                throw new IllegalArgumentException("Specified generation mode not supported");
-        }
     }
 
     private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
