@@ -116,7 +116,8 @@ public class IntegerFieldValueSource implements FieldValueSource {
                     ? 0
                     : null,
                 decrementWhile(exclusiveUpper - 1, blacklist::contains))
-            .filter(x -> x != null)
+            .filter(Objects::nonNull)
+            .distinct()
             .iterator()
         );
     }
