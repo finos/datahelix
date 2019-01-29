@@ -2,21 +2,22 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.CommandLine.CommandLineBase;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
-import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
@@ -27,11 +28,15 @@ import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.nio.file.Path;
 
-public class IoCContainer extends AbstractModule {
-    private final CommandLineBase commandLine;
+/**
+ * Class to define default bindings for Guice injection. Utilises the generation config source to determine which
+ * 'generate' classes should be bound for this execution run.
+ */
+public class BaseModule extends AbstractModule {
+    private final GenerationConfigSource configSource;
 
-    public IoCContainer(CommandLineBase commandLine) {
-        this.commandLine = commandLine;
+    public BaseModule(GenerationConfigSource configSource) {
+        this.configSource = configSource;
     }
 
     @Override
@@ -58,19 +63,19 @@ public class IoCContainer extends AbstractModule {
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
+        bind(ProfileReader.class).to(JsonProfileReader.class);
+        bind(OutputTarget.class).to(FileOutputTarget.class);
+
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
-        bind(GenerationEngine.class).annotatedWith(Names.named("valid")).to(StandardGenerationEngine.class);
-        bind(GenerationEngine.class).annotatedWith(Names.named("invalid")).to(ViolationGenerationEngine.class);
-
     }
 
     private void bindAllCommandLineTypes() {
-        if (this.commandLine instanceof GenerateCommandLine) {
-            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.commandLine);
+        if (this.configSource instanceof GenerateCommandLine) {
+            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
     }
