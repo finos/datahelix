@@ -8,9 +8,11 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.mockito.cglib.core.Local;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 public class CsvDataSetWriterTests {
@@ -36,7 +38,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getBigDecimalValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
+            Collections.singletonList(getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
@@ -68,7 +70,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(new DataBagValue(new Float(1.2), DataBagValueSource.Empty)),
+            Collections.singletonList(new DataBagValue(1.2f, DataBagValueSource.Empty)),
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
@@ -84,7 +86,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getStringValueWithFormat("Hello World", "%.5s")), // Format string to max 5 chars
+            Collections.singletonList(getValueWithFormat("Hello World", "%.5s")), // Format string to max 5 chars
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
@@ -95,15 +97,45 @@ public class CsvDataSetWriterTests {
         Assert.assertEquals("\"Hello\"", stringBuffer.toString().trim());
     }
 
-    private DataBagValue getValue(BigDecimal value) {
+    @Test
+    void dateTimeWithNoFormatShouldUseDefaultFormat() throws IOException {
+        // Arrange
+        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = new GeneratedObject(
+            Collections.singletonList(getValue(date)), // Format string to max 5 chars
+            new RowSource(Collections.emptyList()));
+        CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+
+        // Act
+        WriteToBuffer(printer, generatedObject);
+
+        // Assert
+        Assert.assertEquals("03-02-2001 04:05:06", stringBuffer.toString().trim());
+    }
+
+    @Test
+    void dateTimeWithNFormatShouldUsePrescribedFormat() throws IOException {
+        // Arrange
+        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = new GeneratedObject(
+            Collections.singletonList(getValueWithFormat(date, "%tF")), // Format string to max 5 chars
+            new RowSource(Collections.emptyList()));
+        CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+
+        // Act
+        WriteToBuffer(printer, generatedObject);
+
+        // Assert
+        Assert.assertEquals("\"2001-02-03\"", stringBuffer.toString().trim());
+    }
+
+    private DataBagValue getValue(Object value) {
         return new DataBagValue(value, DataBagValueSource.Empty);
     }
 
-    private DataBagValue getBigDecimalValueWithFormat(BigDecimal value, String format) {
-        return new DataBagValue(value, format, DataBagValueSource.Empty);
-    }
-
-    private DataBagValue getStringValueWithFormat(String value, String format) {
+    private DataBagValue getValueWithFormat(Object value, String format) {
         return new DataBagValue(value, format, DataBagValueSource.Empty);
     }
 
