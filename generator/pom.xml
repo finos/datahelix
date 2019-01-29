@@ -5,6 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>generator</artifactId>
+    <packaging>jar</packaging>
+    <name>DataHelix Generator</name>
+    <description>Generator for Scott Logic's DataHelix project</description>
 
     <parent>
         <groupId>com.scottlogic.deg</groupId>
@@ -146,15 +149,37 @@
             <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>
+
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <finalName>generator</finalName>
+                        <archive>
+                            <manifest>
+                                <mainClass>com.scottlogic.deg.generator.App</mainClass>
+                            </manifest>
+                        </archive>
+                        <descriptorRefs>
+                            <descriptorRef>jar-with-dependencies</descriptorRef>
+                        </descriptorRefs>
+                        <appendAssemblyId>false</appendAssemblyId>
+                    </configuration>
                 </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
+
 </project>
