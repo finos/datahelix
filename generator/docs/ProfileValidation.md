@@ -61,7 +61,7 @@ Example profiles may include:
 
 | Constraint 1                     |          Constraint 2         |  Validity - Logging | Reason                                                                                  |
 |----------------------------------|:-----------------------------:|------:|-----------------------------------------------------------------------------------------|
-| C is less than 10                | C is great than 20            | Valid - N/A | C is between 10 and 20.                                                                 |
+| C is greater than 10             | C is less than 20            | Valid - N/A | C is between 10 and 20.                                                                 |
 | C is greater than or equal to 10 | C is less than or equal to 10 | Valid - N/A | C is equal to 10.                                                                       |
 | C is greater than 10             | C is less than 5              | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
 
@@ -88,7 +88,7 @@ Example profiles may include:
 |-----------------------|-----------------------|:------------------------------------------------------:|------------------------------------------------------------------------------:|
 | E is granular to 0.1  | E is granular to 0.01 |                          Valid - Information                         | Both granularities are valid and so the smallest one (0.01) will be selected. |
 | E is granular to 0.01 | E is granular to 0.01 |                          Valid - N/A                         |           Both granularities are valid and the same so 0.01 will be selected. |
-| E is granular to 1e-8 | E is granular to 1-e6 |                          Valid - Information                         | Both granularities are valid and so the smallest one (1-e6) will be selected. |
+| E is granular to 1e-8 | E is granular to 1-e6 |                          Valid - Information                         | Both granularities are valid and so the smallest one (1-e8) will be selected. |
 
 
 ## String validation

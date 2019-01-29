@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.analysis;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.Constraint;
@@ -103,8 +104,7 @@ public class FieldDependencyAnalyser {
     }
 
     private Stream<Constraint> constraintsFromProfile(Profile profile){
-        return profile.rules.stream()
-            .flatMap(rule -> rule.constraints.stream());
+        return FlatMappingSpliterator.flatMap(profile.rules.stream(), rule -> rule.constraints.stream());
     }
 
     private Stream<ConditionalConstraint> conditionalConstraintsFromProfile(Profile profile){

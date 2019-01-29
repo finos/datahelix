@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
-import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.violations.ViolationGenerationEngineWrapper;
+import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
@@ -46,7 +46,7 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config);
+            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
@@ -60,7 +60,7 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.CombinationStrategyType.PINNING));
 
             final Profile profile = new ProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateTestCases(profile, config);
+            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
@@ -76,17 +76,17 @@ class ExampleProfilesViolationTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                GenerationEngine engine = new GenerationEngine(
+                StandardGenerationEngine engine = new StandardGenerationEngine(
                     new DecisionTreeDataGenerator(
                         walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
-                ViolationGenerationEngineWrapper wrapper = new ViolationGenerationEngineWrapper(null, engine, new NullOutputTarget(), new ManifestWriter());
+                ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());
 
                 consumer.generate(
-                    wrapper,
+                    violationGenerationEngine,
                     profileFile);
             });
 
@@ -133,6 +133,6 @@ class ExampleProfilesViolationTests {
 
     @FunctionalInterface
     private interface GenerateConsumer {
-        void generate(ViolationGenerationEngineWrapper engine, File profileFile) throws IOException, InvalidProfileException;
+        void generate(ViolationGenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
     }
 }

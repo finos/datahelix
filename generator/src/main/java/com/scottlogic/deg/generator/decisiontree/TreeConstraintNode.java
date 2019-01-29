@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
@@ -151,8 +152,9 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     @Override
     public ConstraintNode markNode(NodeMarking marking) {
-        Set<NodeMarking> newMarkings = Stream.of(Collections.singleton(marking), this.nodeMarkings)
-            .flatMap(Collection::stream)
+        Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
+            Stream.of(Collections.singleton(marking), this.nodeMarkings),
+            Collection::stream)
             .collect(Collectors.toSet());
         return new TreeConstraintNode(this.atomicConstraints, this.decisions, newMarkings);
     }
