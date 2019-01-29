@@ -290,7 +290,7 @@ Scenario: Running a 'containingRegex' request alongside a non-contradicting matc
        | null |
        | "bb" |
 
-Scenario: Running a 'containingRegex' request alongside a contradicting matchingRegex constraint should be successful
+Scenario: Running a 'containingRegex' request alongside a contradicting matchingRegex constraint should generate null
      Given there is a field foo
        And foo is containing regex /[a]{1}/
        And foo is matching regex /[b]{2}/
