@@ -17,13 +17,27 @@ public class ConstraintTypeViolationFilter implements ViolationFilter{
         }
         if (constraint instanceof ConditionalConstraint){
             ConditionalConstraint conditional = (ConditionalConstraint) constraint;
-            if (isConstraintType(conditional.whenConditionIsTrue)){
-                return false;
+            if (conditional.whenConditionIsTrue != null) {
+                if (isConstraintType(conditional.whenConditionIsTrue)) {
+                    return false;
+                }
+                if (conditional.whenConditionIsTrue instanceof AndConstraint) {
+                    for (Constraint subConstraint : ((AndConstraint) (conditional).whenConditionIsTrue).subConstraints) {
+                        if (isConstraintType(subConstraint)) {
+                            return false;
+                        }
+                    }
+                }
             }
-            if (conditional.whenConditionIsTrue instanceof AndConstraint){
-                for (Constraint subConstraint:((AndConstraint)(conditional).whenConditionIsTrue).subConstraints) {
-                    if (isConstraintType(subConstraint)){
-                        return false;
+            if (conditional.whenConditionIsFalse != null) {
+                if (isConstraintType(conditional.whenConditionIsFalse)) {
+                    return false;
+                }
+                if (conditional.whenConditionIsFalse instanceof AndConstraint) {
+                    for (Constraint subConstraint : ((AndConstraint) (conditional).whenConditionIsFalse).subConstraints) {
+                        if (isConstraintType(subConstraint)) {
+                            return false;
+                        }
                     }
                 }
             }

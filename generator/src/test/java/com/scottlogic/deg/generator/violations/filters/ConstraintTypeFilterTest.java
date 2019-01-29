@@ -42,6 +42,16 @@ class ConstraintTypeFilterTest {
     }
 
     @Test
+    void inSetConstraintTypeFilter_doesNotAccept_ifSomethingElseAllOfInSetConstraint() {
+        ViolationFilter violationFilter = new ConstraintTypeViolationFilter(IsInSetConstraint.class);
+        Constraint inSet = new IsInSetConstraint(null, Collections.singleton(""), null);
+        AndConstraint andConstraint = new AndConstraint(inSet);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(null, null, andConstraint);
+
+        Assert.assertThat(violationFilter.accept(conditionalConstraint), is(false));
+    }
+
+    @Test
     void greaterThanConstraintTypeFilter_accepts_inSetConstraint() {
         ViolationFilter violationFilter = new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class);
         Constraint inSet = new IsInSetConstraint(null, Collections.singleton(""), null);
@@ -64,6 +74,16 @@ class ConstraintTypeFilterTest {
         Constraint inSet = new IsInSetConstraint(null, Collections.singleton(""), null);
         AndConstraint andConstraint = new AndConstraint(inSet);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(null, andConstraint);
+
+        Assert.assertThat(violationFilter.accept(conditionalConstraint), is(true));
+    }
+
+    @Test
+    void greaterThanConstraintTypeFilter_accepts_ifSomethingElseAllOfInSetConstraint() {
+        ViolationFilter violationFilter = new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class);
+        Constraint inSet = new IsInSetConstraint(null, Collections.singleton(""), null);
+        AndConstraint andConstraint = new AndConstraint(inSet);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(null, null, andConstraint);
 
         Assert.assertThat(violationFilter.accept(conditionalConstraint), is(true));
     }
