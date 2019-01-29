@@ -72,7 +72,7 @@ You can use Maven if you prefer by executing the following command:
     cd generator
     mvn package assembly:single
     ```
-    the jar file will be generated in the target directory with the suffix `-jar-with-dependencies.jar`
+    the jar file will be generated in the target directory with the name `generator-<VERSION>-jar-with-dependencies.jar`
 
 ## License
 
