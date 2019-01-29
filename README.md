@@ -54,9 +54,33 @@ See [contributing](./.github/CONTRIBUTING.md) guidance and the [key decisions lo
 
 This product requires **Java version 1.8** to be installed. Later versions are not supported at present.
 * Clone the repository
-* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the generator, the remaining steps need to be actioned to be able to use the profiler.
-* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. You can use Maven (`mvn install -pl :generator -am`) if you prefer.
+* Follow the steps in the [setup instructions](./generator/README.md). The following need to be actioned for the generator, 
+the remaining steps need to be actioned to be able to use the profiler.
+* Build the solution using your preferred method - the project is fully compatible with IntelliJ and Eclipse. 
+You can use Maven if you prefer by executing the following command:
+    ```bash
+    mvn install -pl :generator -am
+    ```
 * Run the generator - see the [examples here](./generator/README.md).
+* To generate a project documentation website run the 
+[maven site](https://maven.apache.org/guides/mini/guide-site.html) command. 
+The website will contain information about the projects such as libraries used and unit test report.
+Once generated the website can be found at `target\site\index.html` in each of the project directories.
+    ```bash
+    mvn site
+    ```
+* To generate an executable jar file:
+  * in the project root directory run this command to install the parent pom into the local 
+  maven repository (***.m2*** dir) and generate and install the 
+  schemas jar file (found in `.\schemas\target`)   
+    ```bash
+    mvn install
+    ```
+  * then run the following command to create the executable jar file:
+    ```bash
+    mvn assembly:single -pl :generator
+    ```
+    the jar file will be generated in the `generator\target` directory with the name `generator.jar`
 
 ## License
 

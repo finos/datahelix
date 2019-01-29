@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
@@ -78,8 +79,8 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     private ConstraintNode convertRule(Rule rule) {
-        Iterator<ConstraintNode> rootConstraintNodeFragments = rule.constraints.stream()
-            .flatMap(c -> convertConstraint(c).stream())
+        Iterator<ConstraintNode> rootConstraintNodeFragments = FlatMappingSpliterator.flatMap(rule.constraints.stream(),
+            c -> convertConstraint(c).stream())
             .iterator();
 
         return ConstraintNode.merge(rootConstraintNodeFragments);
@@ -198,8 +199,8 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         else if (constraintToConvert instanceof AndConstraint) {
             Collection<Constraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
 
-            return subConstraints.stream()
-                .flatMap(c -> convertConstraint(c).stream())
+            return FlatMappingSpliterator.flatMap(subConstraints.stream(),
+                c -> convertConstraint(c).stream())
                 .collect(Collectors.toList());
         }
         // OR(X, Y, Z) becomes a decision node

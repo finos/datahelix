@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
@@ -14,8 +15,9 @@ public class ConcatenatingDataBagSource implements DataBagSource {
 
     @Override
     public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        return this.subSources
-            .map(source -> source.generate(generationConfig))
-            .flatMap(streamOfStreams -> streamOfStreams);
+        return FlatMappingSpliterator.flatMap(
+            this.subSources
+                .map(source -> source.generate(generationConfig)),
+            streamOfStreams -> streamOfStreams);
     }
 }

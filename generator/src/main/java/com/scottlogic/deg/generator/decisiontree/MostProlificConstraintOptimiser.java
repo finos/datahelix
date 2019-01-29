@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
@@ -126,10 +127,12 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
-        Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints = decisions
-            .stream()
-            .flatMap(dn -> dn.getOptions().stream())
-            .flatMap(option -> option.getAtomicConstraints().stream())
+        Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints =
+            FlatMappingSpliterator.flatMap(
+                FlatMappingSpliterator.flatMap(
+                    decisions.stream(),
+                    dn -> dn.getOptions().stream()),
+                option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity()));
 
         Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
@@ -148,9 +151,9 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private AtomicConstraint getAtomicConstraintWithAllRules(List<AtomicConstraint> identicalAtomicConstraints) {
-        Set<RuleInformation> rules = identicalAtomicConstraints
-            .stream()
-            .flatMap(ac -> ac.getRules().stream())
+        Set<RuleInformation> rules = FlatMappingSpliterator.flatMap(identicalAtomicConstraints
+            .stream(),
+            ac -> ac.getRules().stream())
             .collect(Collectors.toSet());
 
         AtomicConstraint firstAtomicConstraint = identicalAtomicConstraints.iterator().next();

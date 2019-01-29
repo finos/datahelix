@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
@@ -39,11 +40,12 @@ class ConstraintToFieldMapper {
                 .stream()
                 .map(decision -> new ConstraintToFields(
                     new RootLevelConstraint(decision),
-                    decision
-                        .getOptions()
-                        .stream()
-                        .flatMap(this::mapConstraintToFields)
-                        .flatMap(objectField -> objectField.fields.stream())
+                    FlatMappingSpliterator.flatMap(
+                        FlatMappingSpliterator.flatMap(decision
+                            .getOptions()
+                            .stream(),
+                            this::mapConstraintToFields),
+                        objectField -> objectField.fields.stream())
                         .collect(Collectors.toSet()))
                 ));
     }
