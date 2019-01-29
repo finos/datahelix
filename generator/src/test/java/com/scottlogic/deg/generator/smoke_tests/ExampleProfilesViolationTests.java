@@ -3,7 +3,11 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngineWrapper;
 import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
@@ -19,7 +23,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.walker.DecisionTreeWalkerFactory;
+import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -36,7 +40,6 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.notNullValue;
 
 class ExampleProfilesViolationTests {
-    private static final DecisionTreeWalkerFactory walkerFactory = new SmokeTestsDecisionTreeWalkerFactory();
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
@@ -79,7 +82,13 @@ class ExampleProfilesViolationTests {
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 StandardGenerationEngine engine = new StandardGenerationEngine(
                     new DecisionTreeDataGenerator(
-                        walkerFactory.getDecisionTreeWalker(profileFile.toPath().getParent()),
+                        new CartesianProductDecisionTreeWalker(
+                            new ConstraintReducer(
+                                new FieldSpecFactory(),
+                                new FieldSpecMerger()
+                            ),
+                            new RowSpecMerger(new FieldSpecMerger())
+                        ),
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor()),
