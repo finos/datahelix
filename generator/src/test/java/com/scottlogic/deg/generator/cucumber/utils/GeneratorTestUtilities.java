@@ -27,10 +27,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.FixedFieldBuilder;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
+import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.RankedConstraintFixFieldStrategy;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -101,14 +98,12 @@ public class GeneratorTestUtilities {
                 walkerType,
                 combinationStrategy));
 
-        FieldSpecValueGeneratorFactory generatorFactory = new FieldSpecValueGeneratorFactory(
-            new StandardFieldValueSourceEvaluator());
         final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             getWalker(config),
             new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser(),
             new NoopDataGeneratorMonitor(),
-            new RowSpecDataBagSourceFactory(generatorFactory));
+            new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator())));
 
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
@@ -126,12 +121,11 @@ public class GeneratorTestUtilities {
             case REDUCTIVE:
                 NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
                 FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
-                FieldSpecValueGeneratorFactory generatorFactory = new FieldSpecValueGeneratorFactory(
-                    new StandardFieldValueSourceEvaluator());
+                FieldSpecValueGenerator generator = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
 
                 return new ReductiveDecisionTreeWalker(
                     new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor, generatorFactory),
+                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor, generator),
                     monitor,
                     new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));

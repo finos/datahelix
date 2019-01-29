@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
@@ -17,7 +18,8 @@ public class FieldSpecValueGenerator {
     private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
 
-    FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator) {
+    @Inject
+    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator) {
         this.generationConfig = generationConfig;
         this.sourceFactory = sourceEvaluator;
     }

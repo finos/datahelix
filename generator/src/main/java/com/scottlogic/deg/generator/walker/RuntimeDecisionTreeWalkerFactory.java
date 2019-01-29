@@ -18,12 +18,14 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
     private final FixFieldStrategy fixFieldStrategy;
     private final GenerationConfig config;
     private final DataGeneratorMonitor monitor;
+    private final FieldSpecValueGenerator valueGenerator;
 
     @Inject
-    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy) {
+    public RuntimeDecisionTreeWalkerFactory(GenerationConfig config, DataGeneratorMonitor monitor, FixFieldStrategy fixFieldStrategy, FieldSpecValueGenerator valueGenerator) {
         this.fixFieldStrategy = fixFieldStrategy;
         this.config = config;
         this.monitor = monitor;
+        this.valueGenerator = valueGenerator;
     }
 
     @Override
@@ -54,8 +56,7 @@ public class RuntimeDecisionTreeWalkerFactory implements  DecisionTreeWalkerFact
                         constraintReducer,
                         fixFieldStrategy,
                         reductiveMonitor,
-                        new FieldSpecValueGeneratorFactory(
-                            new StandardFieldValueSourceEvaluator())),
+                        valueGenerator),
                     reductiveMonitor,
                     new ReductiveDecisionTreeReducer(
                         fieldSpecFactory,

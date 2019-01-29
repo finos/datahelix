@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGeneratorFactory;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 import org.junit.Assert;
@@ -25,7 +25,7 @@ class RowSpecDataBagSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGeneratorFactory generatorFactory = mock(FieldSpecValueGeneratorFactory.class);
+        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
@@ -38,12 +38,12 @@ class RowSpecDataBagSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGeneratorFactory generatorFactory = mock(FieldSpecValueGeneratorFactory.class);
+        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
 
         factory.createDataBagSource(rowSpec);
 
-        verify(generatorFactory, times(1)).getFieldSpecValueGenerator(field, fieldSpec);
+        verify(generatorFactory, times(1)).generate(field, fieldSpec);
     }
 
     @Test
@@ -51,7 +51,7 @@ class RowSpecDataBagSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
-        FieldSpecValueGeneratorFactory generatorFactory = mock(FieldSpecValueGeneratorFactory.class);
+        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
@@ -64,11 +64,11 @@ class RowSpecDataBagSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
-        FieldSpecValueGeneratorFactory generatorFactory = mock(FieldSpecValueGeneratorFactory.class);
+        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
 
         factory.createDataBagSource(rowSpec);
 
-        verify(generatorFactory, times(1)).getFieldSpecValueGenerator(field, fieldSpec);
+        verify(generatorFactory, times(1)).generate(field, fieldSpec);
     }
 }

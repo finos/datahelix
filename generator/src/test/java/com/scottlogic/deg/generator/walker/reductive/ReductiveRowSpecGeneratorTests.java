@@ -59,7 +59,8 @@ class ReductiveRowSpecGeneratorTests {
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         ));
         RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory(
-            new FieldSpecValueGeneratorFactory(
+            new FieldSpecValueGenerator(
+                config,
                 new StandardFieldValueSourceEvaluator()));
 
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(state, rootNode);

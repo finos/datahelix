@@ -38,12 +38,13 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
+
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
@@ -51,19 +52,19 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -81,7 +82,7 @@ class ExampleProfilesViolationTests {
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
-                        new RowSpecDataBagSourceFactory(new FieldSpecValueGeneratorFactory(new StandardFieldValueSourceEvaluator()))),
+                        new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter());
 
