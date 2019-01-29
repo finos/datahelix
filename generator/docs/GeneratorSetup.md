@@ -28,6 +28,8 @@ Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bi
 
 Download and install Apache Maven, following the [instructions on their project website](https://maven.apache.org/install.html).
 
+Add Maven binary directory to your `PATH` (e.g. `C:\Program Files\apache-maven-3.6.0\bin`).
+
 ### IntelliJ IDE
 
 Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all features of Ultimate (improves framework support and polyglot).
