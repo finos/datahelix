@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.field_value_sources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -109,20 +110,42 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? new NumericRestrictions()
             : fieldSpec.getNumericRestrictions();
 
-        int numericScale = fieldSpec.getGranularityRestrictions() != null
-            ? fieldSpec.getGranularityRestrictions().getNumericScale()
-            : 0;
+        int numericScale = getNumericScale(restrictions, fieldSpec.getGranularityRestrictions());
 
-        if (numericScale == 0) {
+        if ((restrictions.min == null && restrictions.max == null) || isFieldValueAnInteger(restrictions, numericScale)) {
             return new IntegerFieldValueSource(
                 restrictions,
                 getBlacklist(fieldSpec));
-        } else {
-            return new RealNumberFieldValueSource(
-                restrictions,
-                getBlacklist(fieldSpec),
-                numericScale);
         }
+
+        return new RealNumberFieldValueSource(
+            restrictions,
+            getBlacklist(fieldSpec),
+            numericScale);
+    }
+
+    private int getNumericScale(NumericRestrictions numericRestrictions, GranularityRestrictions granularityRestrictions) {
+        if (granularityRestrictions != null) {
+            return granularityRestrictions.getNumericScale();
+        }
+
+        if (numericRestrictions.min != null && numericRestrictions.max != null) {
+            return Math.max(numericRestrictions.min.getLimit().scale(), numericRestrictions.max.getLimit().scale());
+        }
+
+        NumericLimit<BigDecimal> numericLimit = numericRestrictions.min != null
+            ? numericRestrictions.min
+            : numericRestrictions.max;
+
+        return numericLimit != null ? numericLimit.getLimit().scale() : 0;
+    }
+
+    private boolean isFieldValueAnInteger(NumericRestrictions numericRestrictions, int numericScale) {
+        if (numericScale > 0) {
+            return false;
+        }
+
+        return numericRestrictions.areLimitValuesInteger();
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
