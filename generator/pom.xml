@@ -171,6 +171,7 @@
                         </execution>
                     </executions>
                     <configuration>
+                        <finalName>generator</finalName>
                         <archive>
                             <manifest>
                                 <mainClass>com.scottlogic.deg.generator.App</mainClass>
@@ -179,6 +180,7 @@
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
                         </descriptorRefs>
+                        <appendAssemblyId>false</appendAssemblyId>
                     </configuration>
                 </plugin>
 
