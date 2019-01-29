@@ -3,9 +3,12 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 
 public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
@@ -29,6 +32,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return state.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+        return Collections.emptyList();
     }
 
     @Override
