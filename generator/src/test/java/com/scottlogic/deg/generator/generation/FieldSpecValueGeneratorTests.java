@@ -51,16 +51,16 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
+            .collect(Collectors.toSet());
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -114,16 +114,16 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
+            .collect(Collectors.toSet());
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -177,16 +177,15 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
         assertTrue(result.size() > 2);
         assertTrue(
@@ -239,16 +238,15 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -284,17 +282,15 @@ class FieldSpecValueGeneratorTests {
                     null
                 ),
                 fieldSpecSource);
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
-
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -330,16 +326,15 @@ class FieldSpecValueGeneratorTests {
                     Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
                 ),
                 fieldSpecSource);
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(new Field("First Field"), fieldSpec);
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(
-            new GenerationConfig(
-                new TestGenerationConfigSource(
-                    GenerationConfig.DataGenerationType.INTERESTING,
-                    GenerationConfig.TreeWalkerType.REDUCTIVE,
-                    GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-            )
-        ).collect(Collectors.toSet());
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(

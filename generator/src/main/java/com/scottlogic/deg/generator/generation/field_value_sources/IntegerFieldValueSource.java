@@ -112,11 +112,12 @@ public class IntegerFieldValueSource implements FieldValueSource {
         return () -> new UpCastingIterator<>(
             Stream.of(
                 incrementWhile(inclusiveLower, blacklist::contains),
-                inclusiveLower <= 0 && 0 < exclusiveUpper && !blacklist.contains(0)
+                inclusiveLower < 0 && 0 < exclusiveUpper && !blacklist.contains(0)
                     ? 0
                     : null,
                 decrementWhile(exclusiveUpper - 1, blacklist::contains))
-            .filter(x -> x != null)
+            .filter(Objects::nonNull)
+            .distinct()
             .iterator()
         );
     }
