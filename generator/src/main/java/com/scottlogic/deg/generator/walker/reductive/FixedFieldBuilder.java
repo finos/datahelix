@@ -7,20 +7,20 @@ import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FixedFieldBuilder {
 
-    private final GenerationConfig generationConfig;
     private final ConstraintReducer constraintReducer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -28,13 +28,11 @@ public class FixedFieldBuilder {
 
     @Inject
     public FixedFieldBuilder(
-        GenerationConfig config,
         ConstraintReducer constraintReducer,
         FixFieldStrategy fixFieldStrategy,
         ReductiveDataGeneratorMonitor monitor,
         FieldSpecValueGenerator generator) {
         this.fixFieldStrategy = fixFieldStrategy;
-        this.generationConfig = config;
         this.constraintReducer = constraintReducer;
         this.monitor = monitor;
         this.generator = generator;

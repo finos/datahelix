@@ -125,7 +125,7 @@ public class GeneratorTestUtilities {
 
                 return new ReductiveDecisionTreeWalker(
                     new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor, generator),
+                    new FixedFieldBuilder(constraintReducer, fixFieldStrategy, monitor, generator),
                     monitor,
                     new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
