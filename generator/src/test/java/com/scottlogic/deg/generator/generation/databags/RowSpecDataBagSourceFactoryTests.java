@@ -6,9 +6,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
-import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

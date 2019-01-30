@@ -62,20 +62,6 @@ public class RowSpecDataBagSourceFactory {
                     rowSpec.getSpecForField(lastFixedField))));
     }
 
-    class SingleValueDataBagSource implements DataBagSource {
-        private final DataBagSource source;
-
-        SingleValueDataBagSource(DataBagSource source) {
-            this.source = source;
-        }
-
-        @Override
-        public Stream<DataBag> generate(GenerationConfig generationConfig) {
-            return source.generate(generationConfig)
-                .limit(1);
-        }
-    }
-
     class MultiplyingDataBagSource implements DataBagSource {
 
         private final DataBagSource fieldsForAllFixedFields;
@@ -112,3 +98,4 @@ public class RowSpecDataBagSourceFactory {
         }
     }
 }
+
