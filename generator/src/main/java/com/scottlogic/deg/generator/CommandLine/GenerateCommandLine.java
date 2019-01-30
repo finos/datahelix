@@ -2,10 +2,13 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 public class GenerateCommandLine extends CommandLineBase {
 
@@ -66,6 +69,12 @@ public class GenerateCommandLine extends CommandLineBase {
         description = "Defines whether to generate violating data")
     private boolean violateProfile;
 
+    @CommandLine.Option(
+        names = {"--dont-violate"},
+        arity = "0..",
+        description = "Choose types of constraint should not be violated")
+    private List<AtomicConstraintType> constraintsToNotViolate;
+
     @Override
     public boolean dontOptimise() {
         return this.dontOptimise;
@@ -104,6 +113,11 @@ public class GenerateCommandLine extends CommandLineBase {
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+        return constraintsToNotViolate;
     }
 
     @Override
