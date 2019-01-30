@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
+
 import java.util.*;
 import java.util.Objects;
 import java.util.function.Function;
@@ -40,8 +42,9 @@ public final class TreeDecisionNode implements DecisionNode {
 
     @Override
     public DecisionNode markNode(NodeMarking marking) {
-        Set<NodeMarking> newMarkings = Stream.of(Collections.singleton(marking), this.nodeMarkings)
-            .flatMap(Collection::stream)
+        Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
+                Stream.of(Collections.singleton(marking), this.nodeMarkings),
+                Collection::stream)
             .collect(Collectors.toSet());
         return new TreeDecisionNode(this.options, newMarkings);
     }

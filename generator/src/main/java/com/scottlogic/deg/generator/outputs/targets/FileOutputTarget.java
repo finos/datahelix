@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class FileOutputTarget {
+public class FileOutputTarget implements OutputTarget{
     private final Path filePath;
     private final DataSetWriter dataSetWriter;
 
@@ -23,6 +23,7 @@ public class FileOutputTarget {
         this.dataSetWriter = dataSetWriter;
     }
 
+    @Override
     public void outputDataset(
         Stream<GeneratedObject> generatedObjects,
         ProfileFields profileFields)

@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ProfileReaderTests {
+public class JsonProfileReaderTests {
     private String json;
     private Profile profile;
 
@@ -41,7 +41,7 @@ public class ProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException, InvalidProfileException {
         if (this.profile == null) {
-            ProfileReader objectUnderTest = new ProfileReader(new NoopProfileValidator());
+            JsonProfileReader objectUnderTest = new JsonProfileReader(new NoopProfileValidator());
             this.profile = objectUnderTest.read(this.json);
         }
 
