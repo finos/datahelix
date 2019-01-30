@@ -40,12 +40,6 @@ public class GenerateTreeCollectionJson implements Runnable {
             hidden = true)
     private boolean doOptimise = false;
 
-    @CommandLine.Option(
-            names = {"--partition"},
-            description = "Applies tree partitioning",
-            hidden = true)
-    private boolean doPartition = false;
-
     @Override
     public void run() {
         final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();

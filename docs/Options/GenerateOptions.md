@@ -11,8 +11,6 @@ Options are optional and case-insensitive
    * When producing data combine each data point using the `<combinationType>` strategy. Options are: `PINNING` (default), `EXHAUSTIVE`, `MINIMAL`, see [Combination strategies](../../generator/docs/CombinationStrategies.md) for more details.
 * `-w <walker>` or `--w <walker>`
    * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT` (default), `ROUTED`, `REDUCTIVE`, see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
-* `--no-partition`
-   * Prevent rules from being partitioned during generation. Partitioning allows for a (unproven) performance improvement when processing larger profiles.
 * `--no-optimise`
    * Prevent profiles from being optimised during generation. Optimisation enables the generator to process profiles more efficiently, but adds more compute in other areas. See [Decision tree optimiser](../../generator/docs/OptimisationProcess.md) for more details.
 * `-v`, `--v` or `--validate-profile`

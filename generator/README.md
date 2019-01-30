@@ -64,8 +64,6 @@ Generates a JSON file representing the in-memory decision tree.  This is a utili
 #### Options
 Options are optional and case-insensitive
 
-* `--partition`
-   * Enables tree partitioning during transformation.
 * `--optimise`
    * Enables tree optimisation during transformation. See [Decision tree optimiser](./docs/OptimisationProcess.md) for more details.
 

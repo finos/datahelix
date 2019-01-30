@@ -12,6 +12,4 @@ The `profile.json` has the same format as that used by the generator. The tester
 
 The `expected.json` file represents the "expected" side of the test and describes the expected state of the in-memory decision trees after optimisation.
 
-Note that since the tests for the Optimiser and the Tree Partitioner share the same code, and the latter has a collection of trees (after partitioning) in each expected result, we also make each `expected.json` file here stores a collection of trees, but there is always only one member in the collection.
-
 You can manually create the `expected.json` files, based on your understanding of the expected state of the in-memory tree after optimisation.  But if you have a known good profile representing a profile after optimisation, you may also use the `genTreeJson` mode of the generator as a tool to help you create the `expected.json` file.

@@ -1,6 +1,6 @@
 # Decision tree generation
 
-Given a set of rules, generate a [decision tree](../../docs/DecisionTrees/DecisionTrees.md) (or multiple if [partitioning](../../docs/DecisionTrees/Optimisation.md#Partitioning) was successful).
+Given a set of rules, generate a [decision tree](../../docs/DecisionTrees/DecisionTrees.md).
 
 ## Decision tree interpretation
 
