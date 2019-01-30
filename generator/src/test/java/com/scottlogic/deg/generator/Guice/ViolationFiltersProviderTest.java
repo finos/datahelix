@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.Guice;
 
+import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
@@ -39,7 +40,7 @@ class ViolationFiltersProviderTest {
     }
 
     @Test
-    void hasLengthConstraintsToViolate_ReturnListWithOneHasLengthFilter() {
+    void hasLengthConstraintsToViolate_ReturnsOneFilter_ThatDoesNotAcceptHasLengthConstraints() {
         GenerationConfigSource configSource = mock(GenerationConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HASLENGTH));
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
@@ -48,7 +49,15 @@ class ViolationFiltersProviderTest {
         assertThat(filters, hasSize(1));
         assertThat(filters.get(0), instanceOf(ConstraintTypeViolationFilter.class));
         ConstraintTypeViolationFilter filter = (ConstraintTypeViolationFilter) filters.get(0);
-        assertThat(filter.constraintType, equalTo(StringHasLengthConstraint.class));
+
+
+        assertThat(filter.accept(
+            new StringHasLengthConstraint(null, 2, Collections.emptySet())),
+            is(false));
+
+        assertThat(filter.accept(
+            new IsStringShorterThanConstraint(null, 5, Collections.emptySet())),
+            is(true));
     }
 
     @Test
