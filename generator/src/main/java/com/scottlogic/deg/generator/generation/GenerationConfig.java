@@ -156,7 +156,7 @@ public class GenerationConfig {
 
         public static class MonitoringTypes {
             public static final String VELOCITY = "VELOCITY";
-            public static final String NOOP = "NOOP";
+            public static final String NOOP = "NONE";
             public static final String SYSTEM = "SYSTEM";
 
             public static final String DEFAULT = "VELOCITY";

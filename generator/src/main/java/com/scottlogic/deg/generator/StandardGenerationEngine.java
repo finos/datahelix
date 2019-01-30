@@ -38,9 +38,9 @@ public class StandardGenerationEngine implements GenerationEngine {
 
         outputTarget.outputDataset(generatedDataItems, profile.fields);
 
-        monitor.reportVelocity(0);
-
-        System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
-
+        if (monitor instanceof VelocityMonitor) {
+            monitor.reportVelocity(0);
+            System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
+        }
     }
 }
