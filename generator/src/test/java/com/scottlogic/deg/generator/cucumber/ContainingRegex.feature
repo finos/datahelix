@@ -137,7 +137,7 @@ Scenario: Running a 'containingRegex' request that includes special characters (
        | "け" |
        | "げ" |
 
-@ignore
+@ignore #issue 294
 Scenario: Running a 'containingRegex' request that includes special characters (emoji) only should be successful
      Given there is a field foo
        And foo is containing regex /[😁-😘]{1}/

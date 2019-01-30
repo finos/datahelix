@@ -10,12 +10,9 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
-
-  @ignore @bug
   Scenario: Negating the 'null' operator generates non-null values
     Given foo is in set:
       | "notNull" |
-      | null      |
     And foo is anything but null
     Then the following data should not be included in what is generated:
       | foo  |

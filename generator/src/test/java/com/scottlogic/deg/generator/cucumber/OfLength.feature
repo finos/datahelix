@@ -129,13 +129,14 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | 1.00000 | "1"      | "22"        |
 
 
-  @ignore
+  @ignore #issue 234
   Scenario Outline: Running an 'ofLength' request that includes a decimal number containing non zero digits should fail with an error message
     Given foo is of length <length>
     And foo is in set:
       | "1" |
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
     Examples:
       | length      |
       | 1.1         |
@@ -299,8 +300,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | null |
 
-  @ignore
-  Scenario Outline: Running an 'ofLength' request alongside a contradicting numeric type inSet constraint should be successful
+  Scenario Outline: Running an 'ofLength' request alongside a contradicting numeric type inSet constraint should generate null
     Given foo is of length <length>
     And foo is in set:
       | 1  |
@@ -308,15 +308,12 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Then the following data should be generated:
       | foo  |
       | null |
-      | 1    |
-      | 22   |
   Examples:
       | length |
       | 1      |
       | 2      |
 
-  @ignore
-  Scenario: Running an 'ofLength' request alongside a contradicting temporal type inSet constraint should fail with an error message
+  Scenario: Running an 'ofLength' request alongside a contradicting temporal type inSet constraint should generate null
     Given foo is of length 23
     And foo is in set:
       | 2010-01-01T00:00:00.000 |
@@ -324,8 +321,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Then the following data should be generated:
       | foo                     |
       | null                    |
-      | 2010-01-01T00:00:00.000 |
-      | 2018-04-29T03:05:02.168 |
 
 
   Scenario: Running an 'ofLength' request alongside a partially-contradicting inSet constraint should be successful
@@ -499,7 +494,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | null |
 
- @ignore
+ @ignore #issue 487
   Scenario: Running an 'ofLength' request alongside a non-contradicting aValid constraint should be successful
     Given foo is of length 12
     And foo is a valid "ISIN"
@@ -516,7 +511,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | "22" |
 
-   @ignore # issue 246
   Scenario: Running an 'ofLength' request alongside a contradicting aValid constraint should only emit null
     Given foo is of length 2
     And foo is a valid "ISIN"

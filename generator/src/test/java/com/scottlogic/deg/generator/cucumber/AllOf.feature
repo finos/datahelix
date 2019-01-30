@@ -43,7 +43,6 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
        | "11" |
        | null |
 
-   @ignore # may need to raise issue
 Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
      Given there is a field foo
        And there is a constraint:

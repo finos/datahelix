@@ -148,7 +148,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | foo  |
       | null |
 
-    @ignore
+    @ignore #linked to issue 487
   Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is matching regex <regex>
