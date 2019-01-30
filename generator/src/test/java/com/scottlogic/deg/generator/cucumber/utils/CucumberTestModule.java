@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 /**
  * Class which defines bindings for Guice injection specific for cucumber testing. The test state is persisted through

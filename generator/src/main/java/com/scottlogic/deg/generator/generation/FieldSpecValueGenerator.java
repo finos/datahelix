@@ -1,38 +1,31 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecValueGenerator implements DataBagSource {
-    private final Field field;
-    private final FieldSpec spec;
+public class FieldSpecValueGenerator {
+    private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
 
-    public FieldSpecValueGenerator(Field field, FieldSpec spec) {
-        this(field, spec, new StandardFieldValueSourceEvaluator());
-    }
-
-    public FieldSpecValueGenerator(Field field, FieldSpec spec, FieldValueSourceEvaluator sourceEvaluator) {
-        this.field = field;
-        this.spec = spec;
+    @Inject
+    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator) {
+        this.generationConfig = generationConfig;
         this.sourceFactory = sourceEvaluator;
     }
 
-    @Override
-    public Stream<DataBag> generate(GenerationConfig generationConfig) {
-        List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(this.spec);
+    public Stream<DataBag> generate(Field field, FieldSpec spec) {
+        List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
@@ -42,14 +35,14 @@ public class FieldSpecValueGenerator implements DataBagSource {
             .map(value -> {
                 DataBagValue dataBagValue = new DataBagValue(
                     value,
-                    this.spec.getFormatRestrictions() != null
-                        ? this.spec.getFormatRestrictions().formatString
+                    spec.getFormatRestrictions() != null
+                        ? spec.getFormatRestrictions().formatString
                         : null,
-                    new DataBagValueSource(this.spec.getFieldSpecSource()));
+                    new DataBagValueSource(spec.getFieldSpecSource()));
 
                 return DataBag.startBuilding()
                     .set(
-                        this.field,
+                        field,
                         dataBagValue)
                     .build();
             });
