@@ -17,6 +17,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -26,10 +27,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.FixedFieldBuilder;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
+import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.RankedConstraintFixFieldStrategy;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -104,7 +102,8 @@ public class GeneratorTestUtilities {
             getWalker(config),
             new RelatedFieldTreePartitioner(),
             new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor());
+            new NoopDataGeneratorMonitor(),
+            new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator())));
 
         final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
@@ -122,9 +121,11 @@ public class GeneratorTestUtilities {
             case REDUCTIVE:
                 NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
                 FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
+                FieldSpecValueGenerator generator = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
+
                 return new ReductiveDecisionTreeWalker(
                     new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor),
+                    new FixedFieldBuilder(constraintReducer, fixFieldStrategy, monitor, generator),
                     monitor,
                     new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
                     new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
