@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
 import java.util.stream.Collectors;
@@ -14,17 +15,19 @@ import java.util.stream.Stream;
 
 public class DataBagObjectGenerator implements ObjectGenerator {
     private final GenerationConfig generationConfig;
+    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
 
     @Inject
-    public DataBagObjectGenerator(GenerationConfig generationConfig){
+    public DataBagObjectGenerator(GenerationConfig generationConfig, RowSpecDataBagSourceFactory dataBagSourceFactory){
         this.generationConfig = generationConfig;
+        this.dataBagSourceFactory = dataBagSourceFactory;
     }
 
     @Override
     public Stream<GeneratedObject> generateObjectsFromRowSpecs(Profile profile, Stream<RowSpec> rowSpecs) {
 
         DataBagSource allDataBagSources = new ConcatenatingDataBagSource(
-            rowSpecs.map(RowSpec::createDataBagSource));
+            rowSpecs.map(dataBagSourceFactory::createDataBagSource));
 
         Stream<DataBag> dataBagStream = allDataBagSources
             .generate(generationConfig);

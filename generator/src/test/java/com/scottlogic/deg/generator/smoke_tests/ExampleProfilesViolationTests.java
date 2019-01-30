@@ -14,13 +14,15 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.generation.object_generation.DataBagObjectGenerator;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
@@ -48,7 +50,8 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
+
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
@@ -56,13 +59,13 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -84,7 +87,7 @@ class ExampleProfilesViolationTests {
                             new RowSpecMerger(new FieldSpecMerger())
                         ),
                         new MostProlificConstraintOptimiser(),
-                        new DataBagObjectGenerator(config),
+                        new DataBagObjectGenerator(config, new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
                         new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());

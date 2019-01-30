@@ -68,6 +68,7 @@ public class BaseModule extends AbstractModule {
         bind(ObjectGenerator.class).to(DataBagObjectGenerator.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
+        bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 

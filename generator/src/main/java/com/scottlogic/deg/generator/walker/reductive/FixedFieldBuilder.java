@@ -7,34 +7,35 @@ import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FixedFieldBuilder {
 
-    private final GenerationConfig generationConfig;
     private final ConstraintReducer constraintReducer;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
+    private final FieldSpecValueGenerator generator;
 
     @Inject
     public FixedFieldBuilder(
-        GenerationConfig config,
         ConstraintReducer constraintReducer,
         FixFieldStrategy fixFieldStrategy,
-        ReductiveDataGeneratorMonitor monitor) {
+        ReductiveDataGeneratorMonitor monitor,
+        FieldSpecValueGenerator generator) {
         this.fixFieldStrategy = fixFieldStrategy;
-        this.generationConfig = config;
         this.constraintReducer = constraintReducer;
         this.monitor = monitor;
+        this.generator = generator;
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
@@ -68,8 +69,7 @@ public class FixedFieldBuilder {
             .orElse(FieldSpec.Empty);
 
         //use the FieldSpecValueGenerator to emit all possible values given the generation mode, interesting or full-sequential
-        Stream<Object> values = new FieldSpecValueGenerator(field, rootConstraintsFieldSpec)
-            .generate(this.generationConfig)
+        Stream<Object> values = generator.generate(field, rootConstraintsFieldSpec)
             .map(dataBag -> dataBag.getValue(field));
 
         return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
