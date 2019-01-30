@@ -8,6 +8,8 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.stream.Stream;
 
 public class StandardGenerationEngine implements GenerationEngine {
@@ -15,6 +17,7 @@ public class StandardGenerationEngine implements GenerationEngine {
     private ReductiveDataGeneratorMonitor monitor;
     private final DataGenerator dataGenerator;
     public static int counter;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
 
     @Inject
     public StandardGenerationEngine(
@@ -37,7 +40,7 @@ public class StandardGenerationEngine implements GenerationEngine {
 
         monitor.reportVelocity(0);
 
-        System.out.println("\n\nProcess completed");
+        System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
 
     }
 }

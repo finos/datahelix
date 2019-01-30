@@ -30,7 +30,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         this.maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
 
         System.out.println("Generation started at: " + this.startedGenerating + "\n");
-        System.out.println("Number of rows | Current velocity");
+        System.out.println("Number of rows | Current velocity (rows/sec)");
     }
 
     @Override
