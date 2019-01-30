@@ -7,14 +7,12 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.generation.DecisionTreeDataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -43,12 +41,13 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
+
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
@@ -56,19 +55,19 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        return forEachProfileFile(((generationEngine, profileFile) -> {
-            GenerationConfig config = new GenerationConfig(
-                new TestGenerationConfigSource(
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
+        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -91,7 +90,8 @@ class ExampleProfilesViolationTests {
                         ),
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
-                        new NoopDataGeneratorMonitor()),
+                        new NoopDataGeneratorMonitor(),
+                        new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
                     new ProfileDecisionTreeFactory());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
 
