@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,10 @@ public class ViolationFiltersProvider implements Provider<List<ViolationFilter>>
 
     @Override
     public List<ViolationFilter> get() {
+        if (commandLine.getConstraintsToNotViolate() == null){
+            return Collections.emptyList();
+        }
+
         return commandLine.getConstraintsToNotViolate().stream()
             .map(mapper::toConstraintClass)
             .map(ConstraintTypeViolationFilter::new)
