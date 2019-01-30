@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.fieldspecs.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;

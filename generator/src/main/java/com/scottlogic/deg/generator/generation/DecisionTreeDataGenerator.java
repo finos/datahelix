@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;

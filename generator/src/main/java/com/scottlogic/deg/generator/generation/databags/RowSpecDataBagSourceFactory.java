@@ -1,16 +1,15 @@
-package com.scottlogic.deg.generator.fieldspecs;
+package com.scottlogic.deg.generator.generation.databags;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
-import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagSourceFactory {
@@ -26,11 +25,10 @@ public class RowSpecDataBagSourceFactory {
             return createReductiveDataBagSourceFor((ReductiveRowSpec) rowSpec);
         }
 
-        List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.fieldToFieldSpec.size());
+        List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
 
-        for (Map.Entry<Field, FieldSpec> entry : rowSpec.fieldToFieldSpec.entrySet()) {
-            FieldSpec fieldSpec = entry.getValue();
-            Field field = entry.getKey();
+        for (Field field: rowSpec.getFields()) {
+            FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldDataBagSources.add(
                 new StreamDataBagSource(generator.generate(field, fieldSpec)));
@@ -41,15 +39,14 @@ public class RowSpecDataBagSourceFactory {
 
     private DataBagSource createReductiveDataBagSourceFor(ReductiveRowSpec rowSpec) {
         List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size() - 1);
+        Field lastFixedField = rowSpec.lastFixedField;
 
-        for (Map.Entry<Field, FieldSpec> entry: rowSpec.fieldToFieldSpec.entrySet()) {
-            Field field = entry.getKey();
-
-            if (field.equals(rowSpec.lastFixedField)){
+        for (Field field: rowSpec.getFields()) {
+            if (field.equals(lastFixedField)){
                 continue;
             }
 
-            FieldSpec fieldSpec = entry.getValue();
+            FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldDataBagSources.add(
                 new SingleValueDataBagSource(
@@ -61,8 +58,8 @@ public class RowSpecDataBagSourceFactory {
             sourceWithoutLastFixedField,
             new StreamDataBagSource(
                 generator.generate(
-                    rowSpec.lastFixedField,
-                    rowSpec.fieldToFieldSpec.get(rowSpec.lastFixedField))));
+                    lastFixedField,
+                    rowSpec.getSpecForField(lastFixedField))));
     }
 
     class SingleValueDataBagSource implements DataBagSource {
