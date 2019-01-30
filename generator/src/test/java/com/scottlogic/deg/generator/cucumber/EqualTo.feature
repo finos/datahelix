@@ -373,7 +373,7 @@ Scenario: Running an 'equalTo' request that includes a null entry (null) charact
          """
           { "field": "foo", "is": "equalTo", "value": null }
          """
-     Then the profile is invalid because "Cannot create an IsEqualToConstantConstraint for field 'foo' with the null value."
+     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
 
 Scenario: Running an 'equalTo' request that includes an invalid date value should fail with an error message
      Given there is a field foo
