@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 public class GenerationEngineProvider implements Provider<GenerationEngine> {
 
