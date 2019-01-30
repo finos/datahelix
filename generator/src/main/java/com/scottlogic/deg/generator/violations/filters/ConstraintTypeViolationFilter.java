@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 
 public class ConstraintTypeViolationFilter implements ViolationFilter{
-    private final Class constraintType;
+    public final Class constraintType;
     public ConstraintTypeViolationFilter(Class constraintType){
         this.constraintType = constraintType;
     }
