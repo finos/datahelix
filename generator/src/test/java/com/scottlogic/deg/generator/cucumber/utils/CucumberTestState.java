@@ -4,14 +4,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.scottlogic.deg.generator.generation.GenerationConfig.MonitorType.NOOP;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -21,13 +18,18 @@ public class CucumberTestState {
     public GenerationConfig.DataGenerationType dataGenerationType;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
-    public GenerationConfig.MonitorType monitorType = NOOP;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.
      * If true, generation is in violate mode.
      */
     public Boolean shouldViolate = false;
+
+    /**
+     * Boolean to represent if a reporting monitor is used.
+     * If true, no monitor is implemented
+     */
+    public boolean quiet = true;
 
     //Default value of 10 million rows is set here.
     public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;

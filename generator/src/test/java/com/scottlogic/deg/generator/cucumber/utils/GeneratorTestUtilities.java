@@ -59,9 +59,8 @@ public class GeneratorTestUtilities {
         List<Constraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
         GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy,
-        GenerationConfig.MonitorType monitorType) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy, monitorType)
+        GenerationConfig.CombinationStrategyType combinationStrategy) {
+        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
             .stream()
             .map(genObj ->{
 
@@ -86,8 +85,7 @@ public class GeneratorTestUtilities {
         List<Constraint> constraints,
         GenerationConfig.DataGenerationType generationStrategy,
         GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy,
-        GenerationConfig.MonitorType monitorType) {
+        GenerationConfig.CombinationStrategyType combinationStrategy) {
         Profile profile = new Profile(
             new ProfileFields(profileFields),
             Collections.singleton(new Rule(rule("TEST_RULE"), constraints)));
@@ -98,8 +96,7 @@ public class GeneratorTestUtilities {
             new TestGenerationConfigSource(
                 generationStrategy,
                 walkerType,
-                combinationStrategy,
-                monitorType));
+                combinationStrategy));
 
         final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
             getWalker(config),

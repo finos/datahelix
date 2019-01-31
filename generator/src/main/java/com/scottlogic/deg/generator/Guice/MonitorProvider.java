@@ -24,18 +24,18 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
 
     @Override
     public ReductiveDataGeneratorMonitor get() {
-        switch (commandLine.getMonitorType()){
-            case NOOP:
-                return this.noopDataGeneratorMonitor;
-
-            case VELOCITY:
-                return this.velocityMonitor;
-
-            case SYSTEM:
-                return this.systemOutDataGeneratorMonitor;
-
-            default:
-                return this.velocityMonitor;
+        if (commandLine.getQuiet() && commandLine.getVerbose()) {
+            throw new RuntimeException();
         }
+
+        if (commandLine.getVerbose()) {
+            return this.systemOutDataGeneratorMonitor;
+        }
+
+        if (commandLine.getQuiet()) {
+            return this.noopDataGeneratorMonitor;
+        }
+
+        return this.velocityMonitor;
     }
 }

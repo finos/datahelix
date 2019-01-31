@@ -19,8 +19,7 @@ class ConcatenatingDataBagSourceTests {
         new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
             GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-            GenerationConfig.CombinationStrategyType.PINNING,
-            GenerationConfig.MonitorType.NOOP)
+            GenerationConfig.CombinationStrategyType.PINNING)
     );
 
     @Test

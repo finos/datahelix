@@ -13,7 +13,6 @@ public class GenerationConfig {
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
-    private final MonitorType monitorType;
     private final long maxRows;
     private final boolean validateProfile;
 
@@ -24,7 +23,6 @@ public class GenerationConfig {
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
         this.validateProfile = source.getValidateProfile();
-        this.monitorType = source.getMonitorType();
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -112,23 +110,6 @@ public class GenerationConfig {
         }
     }
 
-    public enum MonitorType {
-
-        VELOCITY(Constants.MonitoringTypes.VELOCITY),
-        NOOP(Constants.MonitoringTypes.NOOP),
-        SYSTEM(Constants.MonitoringTypes.SYSTEM);
-        private final String text;
-
-        MonitorType(String text){
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
@@ -152,14 +133,6 @@ public class GenerationConfig {
             public static final String RANDOM = "RANDOM";
 
             public static final String DEFAULT = INTERESTING;
-        }
-
-        public static class MonitoringTypes {
-            public static final String VELOCITY = "VELOCITY";
-            public static final String NOOP = "NONE";
-            public static final String SYSTEM = "SYSTEM";
-
-            public static final String DEFAULT = "VELOCITY";
         }
 
         public static final long DEFAULT_MAX_ROWS = 10_000_000;

@@ -56,7 +56,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
@@ -119,7 +118,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
@@ -182,7 +180,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
@@ -243,7 +240,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
@@ -287,7 +283,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
@@ -331,7 +326,6 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-                    GenerationConfig.MonitorType.NOOP)
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());

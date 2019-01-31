@@ -81,6 +81,16 @@ public class GenerateCommandLine extends CommandLineBase {
         description = "Choose types of constraint should not be violated")
     private List<AtomicConstraintType> constraintsToNotViolate;
 
+    @CommandLine.Option(
+        names = {"--quiet"},
+        description = "Turns OFF default monitoring")
+    private Boolean quiet = false;
+
+    @CommandLine.Option(
+        names = {"--verbose"},
+        description = "Turns ON system out monitoring")
+    private Boolean verbose = false;
+
     @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;

@@ -45,8 +45,7 @@ class ExampleProfilesViolationTests {
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING,
-                GenerationConfig.MonitorType.NOOP));
+                GenerationConfig.CombinationStrategyType.PINNING));
                 
         return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
@@ -60,8 +59,7 @@ class ExampleProfilesViolationTests {
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING,
-                GenerationConfig.MonitorType.NOOP));
+                GenerationConfig.CombinationStrategyType.PINNING));
 
         return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
