@@ -37,6 +37,8 @@ Other than the fact that we can use the state machine to generate strings, the m
 * Finding the intersection of two regexes, used when there are multiple regex constraints on the same field.
 * Finding the complement of a regex, which we use for generating invalid regexes for violation.
 
+Due to the way that the Automaton library computes Regex strings internally the generation of strings is not deterministic and may output valid strings in a different order between generation runs. 
+
 ## Anchors
 
 dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](https://github.com/ScottLogic/datahelix/blob/generator-documentation/docs/EpistemicConstraints.md#matchingregex-field-value) and [containingRegex](https://github.com/ScottLogic/datahelix/blob/generator-documentation/docs/EpistemicConstraints.md#containingregex-field-value). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
@@ -44,4 +46,3 @@ dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead m
 ## Character support
 
 The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
-
