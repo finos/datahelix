@@ -2,6 +2,7 @@ Feature: User can set the generation strategy to violate mode and see test cases
 
 Background:
   Given the generation strategy is interesting
+  And the combination strategy is exhaustive
   And there is a field foo
   And the data requested is violating
   And the generator can generate at most 20 rows
@@ -93,3 +94,43 @@ Background:
       | 9           |
       | 8           |
       | null        |
+
+  @ignore
+  Scenario: Running the generator in violate mode for multiple constraints with strings is successful
+    Given there is a constraint:
+       """
+         {
+            "not" : {"field": "foo", "is": "ofType", "value": "string"}
+         }
+       """
+    And there is a constraint:
+       """
+         {
+           "not" : {"field": "foo", "is": "equalTo", "value": "hello"}
+         }
+       """
+    Then the following data should be included in what is generated:
+      | foo           |
+      | "hello"       |
+      | "Lorem Ipsum" |
+      | null          |
+
+  @ignore
+  Scenario: Running the generator in violate mode for multiple constraints with numbers is successful
+    Given there is a constraint:
+       """
+         {
+            "field": "foo", "is": "ofType", "value": "numeric"
+         }
+       """
+    And there is a constraint:
+       """
+         {
+           "not" : {"field": "foo", "is": "equalTo", "value": 8 }
+         }
+       """
+    Then the following data should be included in what is generated:
+      | foo           |
+      | "hello"       |
+      | "Lorem Ipsum" |
+      | null          |
