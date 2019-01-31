@@ -8,36 +8,21 @@ Background:
   And the generator can generate at most 20 rows
 
   Scenario: Running the generator in violate mode for negated equal to is successful
-   Given there is a constraint:
-       """
-         {
-           "not": { "field": "foo", "is": "equalTo", "value": 8 }
-         }
-       """
+   Given foo is anything but equal to 8
    Then the following data should be generated:
      | foo  |
      | 8    |
      | null |
 
   Scenario: Running the generator in violate mode for negated string type is successful
-    Given there is a constraint:
-       """
-         {
-           "not": { "field": "foo", "is": "ofType", "value": "string" }
-         }
-       """
+    Given foo is anything but of type "string"
     Then the following data should be generated:
       | foo            |
       | "Lorem Ipsum"  |
       | null           |
 
   Scenario: Running the generator in violate mode for negated numeric type is successful
-    Given there is a constraint:
-       """
-         {
-           "not": { "field": "foo", "is": "ofType", "value": "numeric" }
-         }
-       """
+    Given foo is anything but of type "numeric"
     Then the following data should be generated:
       | foo         |
       | -2147483648 |
