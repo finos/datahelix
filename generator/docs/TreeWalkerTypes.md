@@ -21,4 +21,4 @@ This strategy is identical to the cartesian product walker but attempts to overc
 ## Reductive
 This strategy takes a different approach to the others above and follows the following process. The strategy focuses on reducing the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.) 
 
-See [Reductive tree walker](./docs/ReductiveTreeWalker.md) for more details.
+See [Reductive tree walker](../docs/ReductiveTreeWalker.md) for more details.

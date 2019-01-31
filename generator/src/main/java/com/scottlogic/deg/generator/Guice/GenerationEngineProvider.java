@@ -2,28 +2,29 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 public class GenerationEngineProvider implements Provider<GenerationEngine> {
 
-    private GenerateCommandLine commandLine;
+    private GenerationConfigSource configSource;
     private GenerationEngine generationEngine;
     private GenerationEngine violationEngine;
 
     @Inject
-    public GenerationEngineProvider(GenerateCommandLine commandLine,
-                                    @Named("valid") GenerationEngine generationEngine,
-                                    @Named("invalid") GenerationEngine violationEngine) {
-        this.commandLine = commandLine;
+    public GenerationEngineProvider(GenerationConfigSource configSource,
+                                    StandardGenerationEngine generationEngine,
+                                    ViolationGenerationEngine violationEngine) {
+        this.configSource = configSource;
         this.generationEngine = generationEngine;
         this.violationEngine = violationEngine;
     }
 
     @Override
     public GenerationEngine get() {
-        if (commandLine.shouldViolate()) {
+        if (configSource.shouldViolate()) {
             return this.violationEngine;
         }
         return this.generationEngine;

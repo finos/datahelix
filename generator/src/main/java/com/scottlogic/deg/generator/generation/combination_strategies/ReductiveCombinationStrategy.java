@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.combination_strategies;
 
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.utils.RestartableIterator;
 
@@ -25,9 +26,9 @@ public class ReductiveCombinationStrategy implements CombinationStrategy {
             RestartableIterator<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
             nextStream.restart();
 
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
-                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag))
-                .flatMap(innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
+            return FlatMappingSpliterator.flatMap(StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
+                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
+                innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else
             return Stream.of(accumulatingBag);

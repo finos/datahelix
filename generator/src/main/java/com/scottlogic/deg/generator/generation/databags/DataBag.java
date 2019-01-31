@@ -1,9 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.RowSource;
 
@@ -38,9 +35,9 @@ public class DataBag {
     public static DataBag merge(DataBag... bags) {
         Map<Field, DataBagValue> newFieldToValue = new HashMap<>();
 
-        Arrays.stream(bags)
-            .map(r -> r.fieldToValue.entrySet().stream())
-            .flatMap(entrySetStream -> entrySetStream)
+        FlatMappingSpliterator.flatMap(Arrays.stream(bags)
+            .map(r -> r.fieldToValue.entrySet().stream()),
+            entrySetStream -> entrySetStream)
             .forEach(entry -> {
                 if (newFieldToValue.containsKey(entry.getKey()))
                     throw new IllegalArgumentException("Databags can't be merged because they overlap on field " + entry.getKey().name);
