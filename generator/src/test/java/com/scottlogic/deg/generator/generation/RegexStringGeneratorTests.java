@@ -60,7 +60,7 @@ public class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldGenerateStringsInLexicographicalOrder() {
+    void shouldMatchAllExpectedStringsFromRegex() {
         givenRegex("^aa(bb|cc)d?$");
 
         expectAnyOrder(
