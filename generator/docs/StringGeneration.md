@@ -37,7 +37,7 @@ Other than the fact that we can use the state machine to generate strings, the m
 * Finding the intersection of two regexes, used when there are multiple regex constraints on the same field.
 * Finding the complement of a regex, which we use for generating invalid regexes for violation.
 
-Due to the way that the Automaton library computes Regex strings internally the generation of strings is not deterministic and may output valid strings in a different order between generation runs. 
+Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run. 
 
 ## Anchors
 
