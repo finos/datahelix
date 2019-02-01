@@ -19,3 +19,11 @@ Options are optional and case-insensitive
     * Validate the profile, check to see if known [contradictions](../../generator/docs/Contradictions.md) exist, see [Profile validation](../../generator/docs/ProfileValidation.md) for more details
 * `--trace-constraints`
    * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
+
+Standard monitoring shows velocity and row data, alternatives are:
+* `--verbose`
+    * Enables the system monitor, which details the profile(s) used for generation
+* `--quiet`
+    * Disables all monitoring
+    
+If multiple monitor options are requested the most detailed monitor will be implemented.
