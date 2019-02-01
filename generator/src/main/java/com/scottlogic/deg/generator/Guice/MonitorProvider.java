@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.*;
 
-public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> {
+public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor>  {
 
     private GenerationConfigSource commandLine;
     private VelocityMonitor velocityMonitor;
@@ -24,18 +24,15 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
 
     @Override
     public ReductiveDataGeneratorMonitor get() {
-        if (commandLine.getQuiet() && commandLine.getVerbose()) {
-            throw new RuntimeException();
-        }
+        switch (commandLine.getMonitorType()) {
+            case VERBOSE:
+                return this.systemOutDataGeneratorMonitor;
 
-        if (commandLine.getVerbose()) {
-            return this.systemOutDataGeneratorMonitor;
-        }
+            case QUIET:
+                return this.noopDataGeneratorMonitor;
 
-        if (commandLine.getQuiet()) {
-            return this.noopDataGeneratorMonitor;
+            default:
+                return this.velocityMonitor;
         }
-
-        return this.velocityMonitor;
     }
 }

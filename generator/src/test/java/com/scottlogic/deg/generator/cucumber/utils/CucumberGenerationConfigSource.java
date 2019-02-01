@@ -40,6 +40,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
+    public GenerationConfig.MonitorType getMonitorType() {
+        return GenerationConfig.MonitorType.QUIET;
+    }
+
+    @Override
     public long getMaxRows() {
         return state.maxRows;
     }
@@ -77,15 +82,5 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
-    }
-
-    @Override
-    public boolean getVerbose() {
-        return false;
-    }
-
-    @Override
-    public boolean getQuiet() {
-        return state.quiet;
     }
 }

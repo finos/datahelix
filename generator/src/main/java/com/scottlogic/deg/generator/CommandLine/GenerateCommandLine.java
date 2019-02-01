@@ -139,6 +139,16 @@ public class GenerateCommandLine extends CommandLineBase {
     @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return constraintsToNotViolate;
+
+    @Override
+    public GenerationConfig.MonitorType getMonitorType() {
+        if (this.verbose) {
+            return GenerationConfig.MonitorType.VERBOSE;
+        }
+        if (this.quiet) {
+            return GenerationConfig.MonitorType.QUIET;
+        }
+        return GenerationConfig.MonitorType.STANDARD;
     }
 
     @Override

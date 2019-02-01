@@ -93,6 +93,23 @@ public class GenerationConfig {
         }
     }
 
+    public enum MonitorType {
+        VERBOSE(Constants.MonitorTypes.VERBOSE),
+        QUIET(Constants.MonitorTypes.QUIET),
+        STANDARD(Constants.MonitorTypes.STANDARD);
+
+        private final String text;
+
+        MonitorType(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
     public enum CombinationStrategyType {
 
         EXHAUSTIVE(Constants.CombinationStrategies.EXHAUSTIVE),
@@ -133,6 +150,12 @@ public class GenerationConfig {
             public static final String RANDOM = "RANDOM";
 
             public static final String DEFAULT = INTERESTING;
+        }
+
+        public static class MonitorTypes {
+            public static final String QUIET = "QUIET";
+            public static final String VERBOSE = "VERBOSE";
+            public static final String STANDARD = "STANDARD";
         }
 
         public static final long DEFAULT_MAX_ROWS = 10_000_000;

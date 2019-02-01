@@ -56,11 +56,9 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
-        bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class);
+        bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
 
         // Bind known implementations - no user input required
-//        bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
-//        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
         bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
