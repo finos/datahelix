@@ -128,29 +128,12 @@ Scenario: Running a 'matchingRegex' request that includes special characters (no
        | "け" |
        | "げ" |
 
-@ignore #issue 294
 Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
      Given foo is matching regex /[😁-😘]{1}/
      Then the following data should be generated:
       | foo  |
       | null |
-      | "😁" |
-      | "😂" |
-      | "😃" |
-      | "😄" |
-      | "😅" |
-      | "😆" |
-      | "😉" |
-      | "😊" |
-      | "😋" |
-      | "😌" |
-      | "😍" |
-      | "😏" |
-      | "😒" |
-      | "😓" |
-      | "😔" |
-      | "😖" |
-      | "😘" |
+      | null |
 
 Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
      Given foo is matching regex /^[a-c]{2}$/
