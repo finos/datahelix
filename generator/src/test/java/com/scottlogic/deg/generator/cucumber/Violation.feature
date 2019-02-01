@@ -69,7 +69,7 @@ Background:
     Then the following data should be included in what is generated:
       | foo         |
       | 10          |
-      | 9          |
+      | 9           |
       | null        |
 
   Scenario: Running the generator in violate mode for greater than or equal to is successful
