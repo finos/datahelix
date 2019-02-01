@@ -511,17 +511,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | "22" |
 
-  Scenario: Running an 'ofLength' request alongside a contradicting aValid constraint should only emit null
-    Given foo is of length 2
-    And foo is a valid "ISIN"
-    And foo is in set:
-      | "AU0000XVGZA3" |
-      | "US0378331005" |
-      | "22"           |
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: Running an 'ofLength' request alongside a greaterThan constraint should be successful
     Given foo is of length 2
     And foo is greater than 1
