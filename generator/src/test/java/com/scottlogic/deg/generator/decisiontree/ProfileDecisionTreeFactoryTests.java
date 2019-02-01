@@ -625,14 +625,16 @@ class ProfileDecisionTreeFactoryTests {
                     eIsString)));
 
 
-        new TreeConstraintNode(
-            new TreeDecisionNode(
-                new TreeConstraintNode(
-                    aIsNull,
-                    bEquals10.negate()),
-                new TreeConstraintNode(
-                    aIsNull.negate(),
-                    eIsString.negate())));
+        treeRootShouldMatch(
+            new TreeConstraintNode(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(
+                        aIsNull,
+                        bEquals10.negate()),
+                    new TreeConstraintNode(
+                        aIsNull.negate(),
+                        eIsString.negate())))
+        );
     }
 
     @Test
