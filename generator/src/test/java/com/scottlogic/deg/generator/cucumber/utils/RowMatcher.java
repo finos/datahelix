@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -54,7 +56,43 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         if (actual == null || expected == null)
             return false;
 
+        if (actual instanceof Number && expected instanceof Number && actual.getClass() != expected.getClass()){
+            return numbersEqual((Number) actual, (Number) expected);
+        }
+
         return actual.equals(expected);
+    }
+
+    /**
+     * Compares two numbers by casting up to the widest supported number type, BigDecimal.
+     * @param actual Actual number of any Number type
+     * @param expected Expected number of any Number type
+     * @return True if numbers are mathematically equal, i.e. have the same value
+     */
+    private boolean numbersEqual(Number actual, Number expected) {
+        BigDecimal decimalActual = convertToBigDecimal(actual);
+        BigDecimal decimalExpected = convertToBigDecimal(expected);
+        return decimalActual.compareTo(decimalExpected) == 0;
+    }
+
+    private BigDecimal convertToBigDecimal(Number number) {
+        if (number instanceof BigDecimal) {
+            return (BigDecimal) number;
+        }
+
+        if (number instanceof Integer) {
+            return BigDecimal.valueOf((int)number);
+        }
+
+        if (number instanceof BigInteger) {
+            return new BigDecimal((BigInteger) number);
+        }
+
+        if (number instanceof Long) {
+            return new BigDecimal((long) number);
+        }
+
+        throw new UnsupportedOperationException("Number type unsupported for conversion to BigDecimal");
     }
 
     @Override
