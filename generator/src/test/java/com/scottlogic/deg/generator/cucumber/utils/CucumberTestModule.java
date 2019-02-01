@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 /**
  * Class which defines bindings for Guice injection specific for cucumber testing. The test state is persisted through
@@ -25,6 +26,11 @@ public class CucumberTestModule extends AbstractModule {
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
-        bind(GenerationEngine.class).to(StandardGenerationEngine.class);
+
+        if (testState.shouldViolate) {
+            bind(GenerationEngine.class).to(ViolationGenerationEngine.class);
+        } else {
+            bind(GenerationEngine.class).to(StandardGenerationEngine.class);
+        }
     }
 }

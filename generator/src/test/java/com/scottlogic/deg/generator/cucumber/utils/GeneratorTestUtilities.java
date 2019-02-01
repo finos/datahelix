@@ -49,95 +49,6 @@ public class GeneratorTestUtilities {
         return mapper;
     }
 
-    /**
-     * Runs the generator and returns list of generated result data.
-     *
-     * @return Generated data
-     */
-    static List<List<Object>> getDEGGeneratedData(
-        List<Field> profileFields,
-        List<Constraint> constraints,
-        GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
-            .stream()
-            .map(genObj ->{
-
-                if (genObj == null){
-                    throw new IllegalStateException("GeneratedObject is null");
-                }
-
-                return genObj.values
-                    .stream()
-                    .map(obj -> {
-                        if (obj.value != null && obj.format != null) {
-                            return String.format(obj.format, obj.value);
-                        }
-                        return obj.value;
-                    })
-                    .collect(Collectors.toList());
-            }).collect(Collectors.toList());
-    }
-
-    private static List<GeneratedObject> getGeneratedDataAsList(
-        List<Field> profileFields,
-        List<Constraint> constraints,
-        GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
-        Profile profile = new Profile(
-            new ProfileFields(profileFields),
-            Collections.singleton(new Rule(rule("TEST_RULE"), constraints)));
-
-        final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
-
-        final GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                generationStrategy,
-                walkerType,
-                combinationStrategy));
-
-        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
-            getWalker(config),
-            new RelatedFieldTreePartitioner(),
-            new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor(),
-            new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator())));
-
-        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-
-        return dataSet.collect(Collectors.toList());
-    }
-
-    private static DecisionTreeWalker getWalker(GenerationConfig config){
-        FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-        ConstraintReducer constraintReducer = new ConstraintReducer(
-            fieldSpecFactory,
-            fieldSpecMerger);
-
-        switch (config.getWalkerType()){
-            case REDUCTIVE:
-                NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-                FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
-                FieldSpecValueGenerator generator = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
-
-                return new ReductiveDecisionTreeWalker(
-                    new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(constraintReducer, fixFieldStrategy, monitor, generator),
-                    monitor,
-                    new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
-                    new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
-            default:
-            case CARTESIAN_PRODUCT:
-                return new CartesianProductDecisionTreeWalker(
-                    constraintReducer,
-                    new RowSpecMerger(
-                        fieldSpecMerger));
-        }
-    }
-
     public static Object parseInput(String input) throws JsonParseException, InvalidProfileException {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
@@ -172,11 +83,5 @@ public class GeneratorTestUtilities {
             return LocalDateTime.parse(input);
         }
         return parseInput(input);
-    }
-
-    private static RuleInformation rule(String description){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = description;
-        return new RuleInformation(rule);
     }
 }
