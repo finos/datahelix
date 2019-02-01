@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -49,6 +50,11 @@ public class GeneralTestStep {
     @When("the combination strategy is {combinationStrategy}")
     public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
         this.state.combinationStrategyType = strategy;
+    }
+
+    @When("{atomicConstraintType} is not violated")
+    public void constraintTypeIsNotViolated(AtomicConstraintType atomicConstraintType){
+        this.state.addConstraintToNotViolate(atomicConstraintType);
     }
 
     @When("the walker type is {walkerType}")
