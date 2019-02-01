@@ -635,6 +635,44 @@ class ProfileDecisionTreeFactoryTests {
                     eIsString.negate())));
     }
 
+    @Test
+    void analyse_violatingProfileWithSingleFieldThatHasNotAllOf_returnsExpectedTreeCollection() {
+        givenRule(
+            new ViolateConstraint(
+                new AndConstraint(
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test"); }}, null),
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test2"); }}, null)
+                ).negate()
+            )
+        );
+
+        treeRootShouldMatch(
+            new TreeConstraintNode(
+                Collections.emptyList(),
+                Arrays.asList(
+                    new TreeDecisionNode(
+                        new TreeConstraintNode(
+                            Collections.singletonList(
+                                new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
+                                    add("Test");
+                                }}, null).negate()
+                            ),
+                            Collections.emptyList()
+                        ),
+                        new TreeConstraintNode(
+                            Collections.singletonList(
+                                new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
+                                    add("Test2");
+                                }}, null).negate()
+                            ),
+                            Collections.emptyList()
+                        )
+                    )
+                )
+            )
+        );
+    }
+
     private void assertOptionContainsSingleConstraint(ConstraintNode option, Constraint constraint) {
         Assert.assertThat("Option contains no decisions", option.getDecisions().size(), Is.is(0));
         Assert.assertThat("Option contains one atomic constraint", option.getAtomicConstraints().size(),

@@ -141,9 +141,12 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             );
         }
 
-        // we've got an atomic constraint
-        AtomicConstraint violatedAtomicConstraint = (AtomicConstraint) violatedConstraint;
-        return convertConstraint(new ViolatedAtomicConstraint(violatedAtomicConstraint.negate()));
+        if (violatedConstraint instanceof AtomicConstraint) {
+            AtomicConstraint violatedAtomicConstraint = (AtomicConstraint) violatedConstraint;
+            return convertConstraint(new ViolatedAtomicConstraint(violatedAtomicConstraint.negate()));
+        }
+
+        return convertConstraint(violatedConstraint);
     }
 
     private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
