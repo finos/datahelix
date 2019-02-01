@@ -1583,6 +1583,7 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
        | foo    | bar    |
        | "dddd" | "4444" |
 
+@ignore #issue 246
 Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "GB0002634946" |
@@ -1667,6 +1668,7 @@ Scenario: Running an if request that contains a non contradictory aValid constra
        | "ccc"          | "GB0002634946" |
        | "dddd"         | "GB0002634946" |
 
+@ignore #issue 246
 Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
        Given foo is in set:
          | "aa"   |
@@ -2432,7 +2434,7 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
        | foo | bar |
        | 10  | 1   |
 
-@ignore
+@ignore #may need to raise bug for this
 Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
       Given foo is in set:
          | 1     |
@@ -2461,7 +2463,7 @@ Scenario: Running an if request that contains a non contradictory granularTo con
        | 1.11  | 2.2 |
        | 1.111 | 2.2 |
 
-@ignore
+@ignore #may need to raise issue
 Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
        Given foo is in set:
          | 1     |
@@ -2490,7 +2492,7 @@ Scenario: Running an if request that contains a non contradictory granularTo con
        | 1.11  | 3.33 |
        | 1.111 | 3.33 |
 
-@ignore
+@ignore #may need to raise issue
 Scenario: Running an if request that contains a contradictory granularTo constraint within its if statement should be successful
        Given foo is in set:
          | 1     |
@@ -2519,7 +2521,7 @@ Scenario: Running an if request that contains a contradictory granularTo constra
        | 1.11  | 2.2 |
        | 1.111 | 2.2 |
 
-@ignore
+@ignore #may need to raise issue
 Scenario: Running an if request that contains a contradictory granularTo constraint within its then statement should be successful
        Given foo is in set:
          | 1     |
@@ -2547,7 +2549,7 @@ Scenario: Running an if request that contains a contradictory granularTo constra
        | 1.11  | 2.2 |
        | 1.111 | 2.2 |
 
-@ignore
+@ignore #may need to raise issue
 Scenario: Running an if request that contains a contradictory granularTo constraint within its else statement should be successful
        Given foo is in set:
          | 1     |
