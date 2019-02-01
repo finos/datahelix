@@ -20,7 +20,7 @@ Options are optional and case-insensitive
 * `--trace-constraints`
    * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
 
-Standard monitoring shows velocity and row data, alternatives are:
+By default the generator will report how much data has been generated over time, the other options are below:
 * `--verbose`
     * Will report in-depth detail of data generation
 * `--quiet`
