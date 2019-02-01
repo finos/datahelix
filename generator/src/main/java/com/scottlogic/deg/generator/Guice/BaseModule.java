@@ -59,6 +59,7 @@ public class BaseModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
 
         // Bind known implementations - no user input required
+        bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);

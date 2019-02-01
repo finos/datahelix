@@ -25,12 +25,6 @@ public class CucumberTestState {
      */
     public Boolean shouldViolate = false;
 
-    /**
-     * Boolean to represent if a reporting monitor is used.
-     * If true, no monitor is implemented
-     */
-    public boolean quiet = true;
-
     //Default value of 10 million rows is set here.
     public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 

@@ -72,11 +72,5 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
                 reductiveState.getFixedFieldsExceptLast().size(),
                 Objects.toString(emptyFieldSpecs)));
     }
-
-    @Override
-    public void startTimer() { }
-
-    @Override
-    public void reportVelocity(long rowsSinceLastSample) { }
 }
 

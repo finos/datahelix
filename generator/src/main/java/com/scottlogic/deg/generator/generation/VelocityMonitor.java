@@ -25,20 +25,28 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
     public void generationStarting(GenerationConfig generationConfig) {
-        this.startedGenerating = simpleDateFormat.format( new Date());
-        this.rowsSinceLastSample = 0;
-        this.rowsEmitted = BigInteger.ZERO;
-        this.maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
+        startedGenerating = simpleDateFormat.format( new Date());
+        rowsSinceLastSample = 0;
+        rowsEmitted = BigInteger.ZERO;
+        maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
 
-        System.out.println("Generation started at: " + this.startedGenerating + "\n");
+        System.out.println("Generation started at: " + startedGenerating + "\n");
         System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
         System.out.println("---------------+---------------------+---------------");
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                reportVelocity(rowsSinceLastSample);
+                rowsSinceLastSample = 0;
+            }
+        }, 1000L, 1000L);
     }
 
     @Override
     public void rowEmitted(GeneratedObject row) {
-        this.rowsSinceLastSample++;
-        this.rowsEmitted = rowsEmitted.add(BigInteger.ONE);
+        rowsSinceLastSample++;
+        rowsEmitted = rowsEmitted.add(BigInteger.ONE);
     }
 
     @Override
@@ -47,27 +55,16 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
     }
 
-    @Override
     public void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
         System.out.print(
         String.format(
             "%-14s | %-19d | %s \n",
-            this.rowsEmitted.toString(),
+            rowsEmitted.toString(),
             rowsSinceLastSample,
             trend)
         );
         previousVelocity = rowsSinceLastSample;
-    }
-
-    public void startTimer() {
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                reportVelocity(rowsSinceLastSample);
-                rowsSinceLastSample = 0;
-            }
-        }, 1000L, 1000L);
     }
 
     @Override
