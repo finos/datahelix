@@ -42,6 +42,12 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
+    public void endGeneration() {
+        reportVelocity(0);
+        System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
+    }
+
+    @Override
     public void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
         System.out.print(

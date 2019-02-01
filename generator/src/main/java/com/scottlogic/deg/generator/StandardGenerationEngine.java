@@ -16,8 +16,6 @@ public class StandardGenerationEngine implements GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private ReductiveDataGeneratorMonitor monitor;
     private final DataGenerator dataGenerator;
-    public static int counter;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
 
     @Inject
     public StandardGenerationEngine(
@@ -38,9 +36,6 @@ public class StandardGenerationEngine implements GenerationEngine {
 
         outputTarget.outputDataset(generatedDataItems, profile.fields);
 
-        if (monitor instanceof VelocityMonitor) {
-            monitor.reportVelocity(0);
-            System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
-        }
+        monitor.endGeneration();
     }
 }
