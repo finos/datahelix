@@ -29,7 +29,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeWalker treeWalker,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
-            ReductiveDataGeneratorMonitor monitor) {
+        ReductiveDataGeneratorMonitor monitor,
         RowSpecDataBagSourceFactory dataBagSourceFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
