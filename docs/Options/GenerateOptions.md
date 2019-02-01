@@ -10,7 +10,7 @@ Options are optional and case-insensitive
 * `-c <combinationType>` or `--c <combinationTye>`
    * When producing data combine each data point using the `<combinationType>` strategy. Options are: `PINNING` (default), `EXHAUSTIVE`, `MINIMAL`, see [Combination strategies](../../generator/docs/CombinationStrategies.md) for more details.
 * `-w <walker>` or `--w <walker>`
-   * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT` (default), `ROUTED`, `REDUCTIVE`, see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
+   * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT`, `ROUTED`, `REDUCTIVE` (default), see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
 * `--no-partition`
    * Prevent rules from being partitioned during generation. Partitioning allows for a (unproven) performance improvement when processing larger profiles.
 * `--no-optimise`
@@ -26,4 +26,4 @@ By default the generator will report how much data has been generated over time,
 * `--quiet`
     * Will disable velocity reporting
     
-If multiple monitor options are requested the most detailed monitor will be implemented.
+`--quiet` will be ignored if `--verbose` is supplied.

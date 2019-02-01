@@ -34,8 +34,6 @@ Generates data to a specified endpoint.
 * `<profile path>`, a path to the profile JSON file
 * `<output path>`, a file path to where the data should be emitted to. This will be a UTF-8 encoded CSV file or directory, option dependent.
 
-As standard the velocity monitor is implemented.
-
 The full list of generate options can be viewed [here](../docs/Options/GenerateOptions.md).
 
 #
