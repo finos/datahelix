@@ -128,29 +128,12 @@ Scenario: Running a 'matchingRegex' request that includes special characters (no
        | "け" |
        | "げ" |
 
-@ignore
 Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
      Given foo is matching regex /[😁-😘]{1}/
      Then the following data should be generated:
       | foo  |
       | null |
-      | "😁" |
-      | "😂" |
-      | "😃" |
-      | "😄" |
-      | "😅" |
-      | "😆" |
-      | "😉" |
-      | "😊" |
-      | "😋" |
-      | "😌" |
-      | "😍" |
-      | "😏" |
-      | "😒" |
-      | "😓" |
-      | "😔" |
-      | "😖" |
-      | "😘" |
+      | null |
 
 Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
      Given foo is matching regex /^[a-c]{2}$/
@@ -338,7 +321,6 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting matchi
        | null |
        | "bb" |
 
-  @ignore #may need to raise issue
 Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should generate null
      Given foo is matching regex /[a]{1}/
        And foo is matching regex /[b]{2}/
@@ -354,7 +336,6 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting contai
        | null |
        | "bb" |
 
-  @ignore #may need to raise issue
 Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should generate null
      Given foo is matching regex /[b]{3}/
        And foo is containing regex /[a]{1,2}/
@@ -370,7 +351,6 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradiction ofLeng
        | null |
        | "bb" |
 
-  @ignore #may need to raise issue
 Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should generate null
      Given foo is matching regex /[b]{2}/
        And foo is of length 1
@@ -378,7 +358,6 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (
        | foo   |
        | null  |
 
-  @ignore #may need to raise issue
 Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too long) constraint should generate null
      Given foo is matching regex /[b]{2}/
        And foo is of length 3
