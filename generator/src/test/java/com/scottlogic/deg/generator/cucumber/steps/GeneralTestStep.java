@@ -209,7 +209,7 @@ public class GeneralTestStep {
     @Then("some data should be generated")
     public void someDataShouldBeGenerated() {
         List <List<Object>> data = cucumberTestHelper.generateAndGetData();
-        Assert.assertFalse(data.isEmpty());
+        Assert.assertFalse("No data was generated but some was expected", data.isEmpty());
     }
 
     @Given("the generator can generate at most {int} rows")
