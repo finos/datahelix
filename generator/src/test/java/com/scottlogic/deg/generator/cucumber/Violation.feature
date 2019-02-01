@@ -80,42 +80,26 @@ Background:
       | 8           |
       | null        |
 
-  @ignore
   Scenario: Running the generator in violate mode for multiple constraints with strings is successful
-    Given there is a constraint:
-       """
-         {
-            "not" : {"field": "foo", "is": "ofType", "value": "string"}
-         }
-       """
-    And there is a constraint:
-       """
-         {
-           "not" : {"field": "foo", "is": "equalTo", "value": "hello"}
-         }
-       """
+    Given foo is of type "string"
+    And foo is anything but equal to "hello"
     Then the following data should be included in what is generated:
-      | foo           |
-      | "hello"       |
-      | "Lorem Ipsum" |
-      | null          |
+      | foo                     |
+      | "hello"                 |
+      | 0                       |
+      | -2147483648             |
+      | 2147483646              |
+      | 1900-01-01T00:00:00.000 |
+      | 2100-01-01T00:00:00.000 |
+      | null                    |
 
-  @ignore
   Scenario: Running the generator in violate mode for multiple constraints with numbers is successful
-    Given there is a constraint:
-       """
-         {
-            "field": "foo", "is": "ofType", "value": "numeric"
-         }
-       """
-    And there is a constraint:
-       """
-         {
-           "not" : {"field": "foo", "is": "equalTo", "value": 8 }
-         }
-       """
+    Given foo is of type "numeric"
+    And foo is anything but equal to 8
     Then the following data should be included in what is generated:
-      | foo           |
-      | "hello"       |
-      | "Lorem Ipsum" |
-      | null          |
+      | foo                     |
+      | "Lorem Ipsum"           |
+      | 1900-01-01T00:00:00.000 |
+      | 2100-01-01T00:00:00.000 |
+      | 8                       |
+      | null                    |
