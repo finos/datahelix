@@ -24,6 +24,6 @@ Standard monitoring shows velocity and row data, alternatives are:
 * `--verbose`
     * Will report in-depth detail of data generation
 * `--quiet`
-    * Disables all monitoring
+    * Will disable velocity reporting
     
 If multiple monitor options are requested the most detailed monitor will be implemented.
