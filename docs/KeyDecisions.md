@@ -53,3 +53,29 @@ We currently only support generation of characters represented in range 0000-FFF
 Either we can:
 1) Update the tool to reject any regular expressions that contain characters outside of this range.
 2) Update the tool to accept & generate these characters
+
+## Is the order of rows emitted between each run consistent?
+
+We currently do not guarantee that the order of valid rows is consistent between each generation run. For example on one execution we may produce the following output for three fields:
+
+| Field A | Field B | Field C |
+|---------|---------|---------|
+| 1       | Z       | 100.5   |
+| 1       | Z       | 95.2    |
+| 2       | Z       | 100.5   |
+| 2       | Z       | 95.2    |
+| 1       | Y       | 100.5   |
+| 1       | Y       | 95.2    |
+
+However on another using the same profile we may produce the following output:
+
+| Field A | Field B | Field C |
+|---------|---------|---------|
+| 1       | Z       | 100.5   |
+| 1       | Z       | 95.2    |
+| 1       | Y       | 100.5   |
+| 1       | Y       | 95.2    |
+| 2       | Z       | 100.5   |
+| 2       | Z       | 95.2    |
+
+Both produce valid output and both produce the same values as a whole but in slightly different order.
