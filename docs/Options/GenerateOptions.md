@@ -22,7 +22,7 @@ Options are optional and case-insensitive
 
 Standard monitoring shows velocity and row data, alternatives are:
 * `--verbose`
-    * Enables the system monitor, which details the profile(s) used for generation
+    * Will report in-depth detail of data generation
 * `--quiet`
     * Disables all monitoring
     
