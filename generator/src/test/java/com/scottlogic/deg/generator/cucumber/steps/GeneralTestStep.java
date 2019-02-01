@@ -52,7 +52,7 @@ public class GeneralTestStep {
         this.state.combinationStrategyType = strategy;
     }
 
-    @When("{atomicConstraintType} is not violated")
+    @When("we do not violate constraint {atomicConstraintType}")
     public void constraintTypeIsNotViolated(AtomicConstraintType atomicConstraintType){
         this.state.addConstraintToNotViolate(atomicConstraintType);
     }

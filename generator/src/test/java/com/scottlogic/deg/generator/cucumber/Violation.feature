@@ -55,6 +55,15 @@ Background:
       | 11         |
       | null       |
 
+  Scenario: Running the generator in violate but also saying not to violate the constraint is successful
+    Given foo is less than 10
+    When we do not violate constraint lessThan
+    Then the following data should be included in what is generated:
+      | foo        |
+      | 0         |
+      | 9         |
+      | null       |
+
   Scenario: Running the generator in violate mode for less than or equal to is successful
     Given foo is less than or equal to 10
     And foo is of type "numeric"
