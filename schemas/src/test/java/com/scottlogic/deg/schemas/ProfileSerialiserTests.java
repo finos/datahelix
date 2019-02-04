@@ -68,11 +68,18 @@ public class ProfileSerialiserTests {
                     "   { \"name\" : \"price\" }" +
                     "]," +
                     "\"rules\" : [" +
+                    " { \"rule\" : null," +
+                    "\"constraints\" : [" +
                     "   {" +
                     "       \"field\" : \"typecode\"," +
                     "       \"is\" : \"ofType\"," +
                     "       \"value\" : \"string\"" +
-                    "   }," +
+                    "   }" +
+                    "  ]" +
+                    "}," +
+                    "{" +
+                    "  \"rule\" : null," +
+                    "  \"constraints\" : [" +
                     "   {" +
                     "       \"if\" : {" +
                     "           \"anyOf\" : [" +
@@ -83,6 +90,7 @@ public class ProfileSerialiserTests {
                     "       \"then\" : { \"field\": \"price\", \"is\": \"greaterThanOrEqualTo\", \"value\" : 42.1 }," +
                     "       \"else\" : { \"field\" : \"price\", \"is\" : \"lessThan\", \"value\" : 42.1 }" +
                     "   }" +
+                    " ] } " +
                     "]" +
                 "}"); // normalise the line endings for comparison;
 
@@ -120,10 +128,14 @@ public class ProfileSerialiserTests {
                     "   { \"name\" : \"price\" }" +
                     "]," +
                     "\"rules\" : [" +
+                    " { " +
+                    "  \"rule\": null," +
+                    "  \"constraints\": [" +
                     "   {" +
                     "       \"field\" : \"typecode\"," +
                     "       \"value\" : \"string\"" +
                     "   }" +
+                        " ] }" +
                     "]" +
                     "}"); // normalise the line endings for comparison;
 
