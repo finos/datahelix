@@ -148,6 +148,51 @@ public class ProfileSerialiserTests {
         Assert.assertThat(actualJson, Is.is(expectedJson));
     }
 
+    @Test
+    public void shouldSerialiseExampleProfileWithRuleName() throws IOException {
+        // Arrange
+        final V3ProfileDTO profile = new V3ProfileDTO();
+        profile.fields = Arrays.asList(
+            createField(f -> f.name = "typecode"),
+            createField(f -> f.name = "price"));
+
+        profile.rules = Collections.singletonList(
+            createConstraintAsRule("rule name", c -> {
+                c.field = "typecode";
+                c.value = "string";
+            }));
+
+        Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
+
+        final String expectedJson =
+            normalise.apply(
+                "{" +
+                    "\"schemaVersion\" : \"v3\"," +
+                    "\"fields\" : [" +
+                    "   { \"name\" : \"typecode\" }," +
+                    "   { \"name\" : \"price\" }" +
+                    "]," +
+                    "\"rules\" : [" +
+                    " { " +
+                    "  \"rule\": \"rule name\"," +
+                    "  \"constraints\": [" +
+                    "   {" +
+                    "       \"field\" : \"typecode\"," +
+                    "       \"value\" : \"string\"" +
+                    "   }" +
+                    " ] }" +
+                    "]" +
+                    "}"); // normalise the line endings for comparison;
+
+        // Act
+        final String actualJson = normalise.apply(
+            new ProfileSerialiser()
+                .serialise(profile));
+
+        // Assert
+        Assert.assertThat(actualJson, Is.is(expectedJson));
+    }
+
     private static FieldDTO createField(Consumer<FieldDTO> setupField) {
         FieldDTO newField = new FieldDTO();
         setupField.accept(newField);
@@ -175,5 +220,11 @@ public class ProfileSerialiserTests {
         ConstraintDTO newConstraint = createConstraint(setupConstraint);
 
         return createRule(null, newConstraint);
+    }
+
+    private static RuleDTO createConstraintAsRule(String name, Consumer<ConstraintDTO> setupConstraint) {
+        ConstraintDTO newConstraint = createConstraint(setupConstraint);
+
+        return createRule(name, newConstraint);
     }
 }
