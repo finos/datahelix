@@ -92,17 +92,5 @@ public class RowSpec {
     public String toString() {
         return Objects.toString(fieldToFieldSpec);
     }
-
-    public DataBagSource createDataBagSource() {
-        List<DataBagSource> fieldDataBagSources = new ArrayList<>(fields.size());
-
-        for (Field field : fields) {
-            FieldSpec fieldSpec = getSpecForField(field);
-
-            fieldDataBagSources.add(
-                new FieldSpecValueGenerator(field, fieldSpec));
-        }
-
-        return new MultiplexingDataBagSource(fieldDataBagSources.stream());
-    }
 }
+

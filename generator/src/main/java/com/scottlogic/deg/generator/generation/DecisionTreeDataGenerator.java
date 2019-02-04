@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
@@ -19,19 +20,22 @@ import java.util.stream.Stream;
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
+    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
 
     @Inject
     public DecisionTreeDataGenerator(
-            DecisionTreeWalker treeWalker,
-            TreePartitioner treePartitioner,
-            DecisionTreeOptimiser optimiser,
-            DataGeneratorMonitor monitor) {
+        DecisionTreeWalker treeWalker,
+        TreePartitioner treePartitioner,
+        DecisionTreeOptimiser optimiser,
+        DataGeneratorMonitor monitor,
+        RowSpecDataBagSourceFactory dataBagSourceFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
+        this.dataBagSourceFactory = dataBagSourceFactory;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
                 .map(rowSpecs ->
                     new ConcatenatingDataBagSource(
                         rowSpecs
-                            .map(RowSpec::createDataBagSource)));
+                            .map(dataBagSourceFactory::createDataBagSource)));
 
         Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
             .generate(generationConfig)

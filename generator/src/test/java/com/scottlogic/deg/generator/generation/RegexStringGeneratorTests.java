@@ -8,9 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -61,16 +59,15 @@ public class RegexStringGeneratorTests {
         expectNoMatch("testtest", true);
     }
 
-    @Disabled
     @Test
-    void shouldGenerateStringsInLexicographicalOrder() {
+    void shouldMatchAllExpectedStringsFromRegex() {
         givenRegex("^aa(bb|cc)d?$");
 
-        expectOrderedResults(
-                "aabb",
-                "aabbd",
-                "aacc",
-                "aaccd");
+        expectAnyOrder(
+            "aabb",
+            "aabbd",
+            "aacc",
+            "aaccd");
     }
 
     @Test
@@ -279,20 +276,22 @@ public class RegexStringGeneratorTests {
         StringGenerator generator = constructGenerator(true);
 
         List<String> generatedValues = new ArrayList<>();
-        for (String generatedValue : generator.generateAllValues()) {
-//            System.out.println("generated: " + generatedValue);
-            generatedValues.add(generatedValue);
+        generator.generateAllValues().iterator().forEachRemaining(generatedValues::add);
+
+        Assert.assertEquals(expectedValues.length, generatedValues.size());
+        for (int i = 0; i < expectedValues.length; i++) {
+            Assert.assertEquals(expectedValues[i], generatedValues.get(i));
         }
+    }
 
-        String actual = generatedValues.get(0);
-        String expected = Arrays.asList(expectedValues).get(0);
+    private void expectAnyOrder(String... expectedValues) {
+        StringGenerator generator = constructGenerator(true);
 
-//        System.out.println("actual: " + actual);
-//        System.out.println("expected: " + expected);
+        List<String> generatedValues = new ArrayList<>();
+        generator.generateAllValues().iterator().forEachRemaining(generatedValues::add);
 
-        Assert.assertThat(
-                actual,
-                equalTo(expected));
+        Assert.assertEquals(expectedValues.length, generatedValues.size());
+        generatedValues.containsAll(Arrays.asList(expectedValues));
     }
 
     private void expectFirstResult(String expectedValue) {

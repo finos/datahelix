@@ -17,6 +17,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -26,10 +27,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.FixedFieldBuilder;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveDecisionTreeReducer;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
+import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.RankedConstraintFixFieldStrategy;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -49,92 +47,6 @@ public class GeneratorTestUtilities {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper;
-    }
-
-    /**
-     * Runs the generator and returns list of generated result data.
-     *
-     * @return Generated data
-     */
-    static List<List<Object>> getDEGGeneratedData(
-        List<Field> profileFields,
-        List<Constraint> constraints,
-        GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
-        return getGeneratedDataAsList(profileFields, constraints, generationStrategy, walkerType, combinationStrategy)
-            .stream()
-            .map(genObj ->{
-
-                if (genObj == null){
-                    throw new IllegalStateException("GeneratedObject is null");
-                }
-
-                return genObj.values
-                    .stream()
-                    .map(obj -> {
-                        if (obj.value != null && obj.format != null) {
-                            return String.format(obj.format, obj.value);
-                        }
-                        return obj.value;
-                    })
-                    .collect(Collectors.toList());
-            }).collect(Collectors.toList());
-    }
-
-    private static List<GeneratedObject> getGeneratedDataAsList(
-        List<Field> profileFields,
-        List<Constraint> constraints,
-        GenerationConfig.DataGenerationType generationStrategy,
-        GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
-        Profile profile = new Profile(
-            new ProfileFields(profileFields),
-            Collections.singleton(new Rule(rule("TEST_RULE"), constraints)));
-
-        final DecisionTreeCollection analysedProfile = new ProfileDecisionTreeFactory().analyse(profile);
-
-        final GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                generationStrategy,
-                walkerType,
-                combinationStrategy));
-
-        final DataGenerator dataGenerator = new DecisionTreeDataGenerator(
-            getWalker(config),
-            new RelatedFieldTreePartitioner(),
-            new NoopDecisionTreeOptimiser(),
-            new NoopDataGeneratorMonitor());
-
-        final Stream<GeneratedObject> dataSet = dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
-
-        return dataSet.collect(Collectors.toList());
-    }
-
-    private static DecisionTreeWalker getWalker(GenerationConfig config){
-        FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-        ConstraintReducer constraintReducer = new ConstraintReducer(
-            fieldSpecFactory,
-            fieldSpecMerger);
-
-        switch (config.getWalkerType()){
-            case REDUCTIVE:
-                NoopDataGeneratorMonitor monitor = new NoopDataGeneratorMonitor();
-                FixFieldStrategy fixFieldStrategy = new RankedConstraintFixFieldStrategy();
-                return new ReductiveDecisionTreeWalker(
-                    new NoOpIterationVisualiser(),
-                    new FixedFieldBuilder(config, constraintReducer, fixFieldStrategy, monitor),
-                    monitor,
-                    new ReductiveDecisionTreeReducer(fieldSpecFactory, fieldSpecMerger, new DecisionTreeSimplifier()),
-                    new ReductiveRowSpecGenerator(constraintReducer, fieldSpecMerger, monitor));
-            default:
-            case CARTESIAN_PRODUCT:
-                return new CartesianProductDecisionTreeWalker(
-                    constraintReducer,
-                    new RowSpecMerger(
-                        fieldSpecMerger));
-        }
     }
 
     public static Object parseInput(String input) throws JsonParseException, InvalidProfileException {
@@ -171,11 +83,5 @@ public class GeneratorTestUtilities {
             return LocalDateTime.parse(input);
         }
         return parseInput(input);
-    }
-
-    private static RuleInformation rule(String description){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = description;
-        return new RuleInformation(rule);
     }
 }

@@ -601,7 +601,7 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
     And lee is granular to 1
     And lee is less than 2
     And lee is greater than 0
-    Then the following data should be generated in order:
+    Then the following data should be generated:
       | foo  | bar  | lee  |
       | "a"  | "AA" | 1    |
       | "a"  | "AA" | null |
