@@ -173,6 +173,10 @@ public class RegexStringGenerator implements StringGenerator {
          *     issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
          *     has been raised on the dk.brics.automaton library
          * </p>
+         * <p>
+         *     issue #537 has been created to track when the dk.brics.automaton library
+         *     is updated.
+         * </p>
          */
         if (!containsValidUtf8Chars(result)) {
             return null;
