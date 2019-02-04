@@ -10,7 +10,7 @@ Options are optional and case-insensitive
 * `-c <combinationType>` or `--c <combinationTye>`
    * When producing data combine each data point using the `<combinationType>` strategy. Options are: `PINNING` (default), `EXHAUSTIVE`, `MINIMAL`, see [Combination strategies](../../generator/docs/CombinationStrategies.md) for more details.
 * `-w <walker>` or `--w <walker>`
-   * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT` (default), `ROUTED`, `REDUCTIVE`, see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
+   * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT`, `ROUTED`, `REDUCTIVE` (default), see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
 * `--no-partition`
    * Prevent rules from being partitioned during generation. Partitioning allows for a (unproven) performance improvement when processing larger profiles.
 * `--no-optimise`
@@ -19,3 +19,11 @@ Options are optional and case-insensitive
     * Validate the profile, check to see if known [contradictions](../../generator/docs/Contradictions.md) exist, see [Profile validation](../../generator/docs/ProfileValidation.md) for more details
 * `--trace-constraints`
    * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
+
+By default the generator will report how much data has been generated over time, the other options are below:
+* `--verbose`
+    * Will report in-depth detail of data generation
+* `--quiet`
+    * Will disable velocity reporting
+    
+`--quiet` will be ignored if `--verbose` is supplied.
