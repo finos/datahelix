@@ -45,6 +45,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
+    public GenerationConfig.MonitorType getMonitorType() {
+        return GenerationConfig.MonitorType.QUIET;
+    }
+
+    @Override
     public long getMaxRows() {
         return this.maxRows;
     }
