@@ -484,30 +484,6 @@ public class RegexStringGenerator implements StringGenerator {
         }
     }
 
-    /**
-     * <p>
-     * check to see if the character generated is a valid utf-8 single word value.
-     * </p>
-     * <p>
-     * from chapter 2.5 of
-     * the Unicode Standard v11.0
-     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
-     * </p>
-     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
-     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
-     * </code>
-     */
-    public static boolean containsValidUtf8Chars(String str) {
-        if (str != null) {
-            for (char c : str.toCharArray()) {
-                if (c >= 0xD800 && c <= 0xDFFF) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass())
