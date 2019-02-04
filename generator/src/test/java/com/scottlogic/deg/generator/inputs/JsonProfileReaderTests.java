@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
@@ -123,6 +123,21 @@ public class JsonProfileReaderTests {
         expectFields(
                 fieldWithName("f1"),
                 fieldWithName("f2"));
+    }
+
+    @Test
+    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       { \"field\": \"foo\", \"is\": \"null\" } " +
+                "    ]" +
+                "}");
+
+        Assert.assertThat(this.getResultingProfile().rules, not(empty()));
+        expectRules(rule -> Assert.assertThat(rule.constraints, empty()));
     }
 
     @Test
