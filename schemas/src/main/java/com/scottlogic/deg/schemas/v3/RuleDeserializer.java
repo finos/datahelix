@@ -22,14 +22,16 @@ public class RuleDeserializer extends JsonDeserializer<RuleDTO> {
 
         JsonNode node = mapper.readTree(jsonParser);
 
-        RuleDTO rule = new RuleDTO();
-        rule.rule = node.has("rule")
+        RuleDTO dto = new RuleDTO();
+        dto.rule = node.has("rule")
             ? node.get("rule").asText()
             : null;
-        rule.constraints = node.has("constraints")
+
+        dto.constraints = node.has("constraints")
             ? readConstraintsFromArrayNode(node.get("constraints"), mapper)
             : Collections.emptySet();
-        return rule;
+
+        return dto;
     }
 
     private Collection<ConstraintDTO> readConstraintsFromArrayNode(
