@@ -132,7 +132,11 @@ public class JsonProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
-                        "        { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "            { \"field\": \"foo\", \"is\": \"null\" } " +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -167,7 +171,11 @@ public class JsonProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -187,7 +195,11 @@ public class JsonProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"foo\", \"is\": \"formattedAs\", \"value\": \"%.5s\" }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -207,7 +219,11 @@ public class JsonProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"id\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"id\", \"is\": \"ofLength\", \"value\": 5 }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -226,7 +242,11 @@ public class JsonProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"not\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -247,12 +267,18 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"anyOf\": [" +
-                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"anyOf\": [" +
+                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "              { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "            ]" +
+                        "          }" +
                         "        ]" +
-                        "    }]" +
+                        "      }" +
+                        "   ]" +
                         "}");
 
         expectRules(
@@ -270,12 +296,18 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"allOf\": [" +
-                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "           \"allOf\": [" +
+                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "             { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "            ]" +
+                        "          }" +
                         "        ]" +
-                        "    }]" +
+                        "      }" +
+                        "    ]" +
                         "}");
 
         expectRules(
@@ -293,11 +325,17 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
-                        "        \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
-                        "    }]" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "            \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
+                        "            \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
+                        "          }" +
+                        "        ]" +
+                        "      }" +
+                        "   ]" +
                         "}");
 
         expectRules(
@@ -325,10 +363,16 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
-                        "    }]" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "            \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
+                        "          }" +
+                        "        ]" +
+                        "      }" +
+                        "    ]" +
                         "}");
 
         expectRules(
@@ -357,7 +401,11 @@ public class JsonProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 1 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -379,7 +427,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.1 }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -401,7 +453,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.100000000 }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -423,8 +479,12 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": { \"date\": \"2019-01-01T00:00:00.000\" } }," +
                 "        { \"field\": \"foo\", \"is\": \"before\", \"value\": { \"date\": \"2019-01-03T00:00:00.000\" } }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -436,9 +496,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.referenceValue,
                             equalTo(LocalDateTime.parse("2019-01-01T00:00:00.000")));
-                    })
-                ),
-            ruleWithConstraints(
+                    }),
                 typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
@@ -446,7 +504,7 @@ public class JsonProfileReaderTests {
                             c.referenceValue,
                             equalTo(LocalDateTime.parse("2019-01-03T00:00:00.000")));
                     })
-            )
+                )
         );
     }
 
@@ -457,7 +515,11 @@ public class JsonProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 2 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -471,7 +533,11 @@ public class JsonProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.15 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -485,7 +551,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"after\", \"value\": \"2018-01-12\" }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -499,7 +569,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": null }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -513,7 +587,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ null ] }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -525,9 +603,13 @@ public class JsonProfileReaderTests {
         givenJson("{" +
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [{" +
-            "        \"allOf\": []" +
-            "    }]" +
+            "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
+            "        { \"allOf\": [] }" +
+            "        ]" +
+            "      }" +
+            "    ]" +
             "}");
 
         this.expectInvalidProfileException();
@@ -556,7 +638,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": null }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -587,7 +673,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
