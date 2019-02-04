@@ -30,6 +30,14 @@ public class GenerateExecute implements Runnable {
 
     @Override
     public void run() {
+
+        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
+            && config.getMaxRows() == GenerationConfig.Constants.DEFAULT_MAX_ROWS) {
+
+            System.err.println("RANDOM mode requires max row limit\nuse -n=<row limit> option");
+            return;
+        }
+
         try {
             Profile profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
 
