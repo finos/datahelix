@@ -68,11 +68,18 @@ public class ProfileSerialiserTests {
                     "   { \"name\" : \"price\" }" +
                     "]," +
                     "\"rules\" : [" +
+                    " { \"rule\" : null," +
+                    "\"constraints\" : [" +
                     "   {" +
                     "       \"field\" : \"typecode\"," +
                     "       \"is\" : \"ofType\"," +
                     "       \"value\" : \"string\"" +
-                    "   }," +
+                    "   }" +
+                    "  ]" +
+                    "}," +
+                    "{" +
+                    "  \"rule\" : null," +
+                    "  \"constraints\" : [" +
                     "   {" +
                     "       \"if\" : {" +
                     "           \"anyOf\" : [" +
@@ -83,6 +90,7 @@ public class ProfileSerialiserTests {
                     "       \"then\" : { \"field\": \"price\", \"is\": \"greaterThanOrEqualTo\", \"value\" : 42.1 }," +
                     "       \"else\" : { \"field\" : \"price\", \"is\" : \"lessThan\", \"value\" : 42.1 }" +
                     "   }" +
+                    " ] } " +
                     "]" +
                 "}"); // normalise the line endings for comparison;
 
@@ -120,10 +128,59 @@ public class ProfileSerialiserTests {
                     "   { \"name\" : \"price\" }" +
                     "]," +
                     "\"rules\" : [" +
+                    " { " +
+                    "  \"rule\": null," +
+                    "  \"constraints\": [" +
                     "   {" +
                     "       \"field\" : \"typecode\"," +
                     "       \"value\" : \"string\"" +
                     "   }" +
+                        " ] }" +
+                    "]" +
+                    "}"); // normalise the line endings for comparison;
+
+        // Act
+        final String actualJson = normalise.apply(
+            new ProfileSerialiser()
+                .serialise(profile));
+
+        // Assert
+        Assert.assertThat(actualJson, Is.is(expectedJson));
+    }
+
+    @Test
+    public void shouldSerialiseExampleProfileWithRuleName() throws IOException {
+        // Arrange
+        final V3ProfileDTO profile = new V3ProfileDTO();
+        profile.fields = Arrays.asList(
+            createField(f -> f.name = "typecode"),
+            createField(f -> f.name = "price"));
+
+        profile.rules = Collections.singletonList(
+            createConstraintAsRule("rule name", c -> {
+                c.field = "typecode";
+                c.value = "string";
+            }));
+
+        Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
+
+        final String expectedJson =
+            normalise.apply(
+                "{" +
+                    "\"schemaVersion\" : \"v3\"," +
+                    "\"fields\" : [" +
+                    "   { \"name\" : \"typecode\" }," +
+                    "   { \"name\" : \"price\" }" +
+                    "]," +
+                    "\"rules\" : [" +
+                    " { " +
+                    "  \"rule\": \"rule name\"," +
+                    "  \"constraints\": [" +
+                    "   {" +
+                    "       \"field\" : \"typecode\"," +
+                    "       \"value\" : \"string\"" +
+                    "   }" +
+                    " ] }" +
                     "]" +
                     "}"); // normalise the line endings for comparison;
 
@@ -163,5 +220,11 @@ public class ProfileSerialiserTests {
         ConstraintDTO newConstraint = createConstraint(setupConstraint);
 
         return createRule(null, newConstraint);
+    }
+
+    private static RuleDTO createConstraintAsRule(String name, Consumer<ConstraintDTO> setupConstraint) {
+        ConstraintDTO newConstraint = createConstraint(setupConstraint);
+
+        return createRule(name, newConstraint);
     }
 }
