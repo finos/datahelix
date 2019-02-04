@@ -134,6 +134,7 @@ Scenario: Running a 'matchingRegex' request that includes special characters (em
       | foo  |
       | null |
       | null |
+      | null |
 
 Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
      Given foo is matching regex /^[a-c]{2}$/

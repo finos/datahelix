@@ -163,7 +163,45 @@ public class RegexStringGenerator implements StringGenerator {
         }
         String result = buildStringFromNode(rootNode, indexOrder);
         result = result.substring(1, result.length() - 1);
+
+        /**
+         * <p>
+         *     FIXME - This check will be removed if/when the dk.brics.automaton
+         *     library is fixed to support surrogate pairs,
+         * </p>
+         * <p>
+         *     issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+         *     has been raised on the dk.brics.automaton library
+         * </p>
+         */
+        if (!containsValidUtf8Chars(result)) {
+            return null;
+        }
+
         return result;
+    }
+
+    /**
+     * <p>
+     * check to see if the character generated is a valid utf-8 single word value.
+     * </p>
+     * <p>
+     * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
+     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
+     * </p>
+     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
+     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
+     * </code>
+     */
+    public static boolean containsValidUtf8Chars(String str) {
+        if (str != null) {
+            for (char c : str.toCharArray()) {
+                if (c >= 0xD800 && c <= 0xDFFF) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -174,7 +212,7 @@ public class RegexStringGenerator implements StringGenerator {
 
         buildRootNode();
 
-        if(rootNode.nextNodes.isEmpty()){
+        if (rootNode.nextNodes.isEmpty()) {
             return 0;
         }
 
@@ -437,40 +475,12 @@ public class RegexStringGenerator implements StringGenerator {
 
         @Override
         public String next() {
-            String str = "";
-            do {
-                currentIndex++; // starts at 1
-                str = stringGenerator.getMatchedString(currentIndex);
-            } while (!containsValidUtf8Chars(str));
-            return str;
+            currentIndex++; // starts at 1
+            return stringGenerator.getMatchedString(currentIndex);
         }
     }
 
-    /**
-     * <p>
-     * check to see if the character generated is a valid utf-8 single word value.
-     * </p>
-     * <p>
-     * from chapter 2.5 of
-     * the Unicode Standard v11.0
-     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
-     * </p>
-     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
-     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
-     * </code>
-     */
-    public static boolean containsValidUtf8Chars(String str) {
-        if (str != null) {
-            for (char c : str.toCharArray()) {
-                if (c >= 0xD800 && c <= 0xDFFF) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass())
             return false;
@@ -478,7 +488,7 @@ public class RegexStringGenerator implements StringGenerator {
         return this.automaton.equals(constraint.automaton);
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
     }
 }
