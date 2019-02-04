@@ -46,7 +46,7 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
-
+                
         return forEachProfileFile(config, ((generationEngine, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
             generationEngine.generateDataSet(profile, config, new NullOutputTarget());
@@ -92,7 +92,8 @@ class ExampleProfilesViolationTests {
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
                         new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
-                    new ProfileDecisionTreeFactory());
+                    new ProfileDecisionTreeFactory(),
+                    new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
 
                 consumer.generate(
