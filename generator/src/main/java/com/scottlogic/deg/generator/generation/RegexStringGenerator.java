@@ -464,23 +464,36 @@ public class RegexStringGenerator implements StringGenerator {
     private class FiniteStringAutomatonIterator implements Iterator<String> {
 
         private final RegexStringGenerator stringGenerator;
+        private final long matches;
         private int currentIndex;
+        private String currentValue;
 
         FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
+            this.matches = stringGenerator.getValueCount();
             currentIndex = 0;
         }
 
         @Override
         public boolean hasNext() {
-            long matches = stringGenerator.getValueCount();
-            return currentIndex < matches;
+            if (currentValue != null) {
+                return true;
+            }
+            currentIndex++; // starts at 1
+            if (currentIndex > matches) {
+                return false;
+            }
+            currentValue = stringGenerator.getMatchedString(currentIndex);
+            return currentValue != null;
         }
 
         @Override
         public String next() {
-            currentIndex++; // starts at 1
-            return stringGenerator.getMatchedString(currentIndex);
+            try {
+                return currentValue;
+            } finally {
+                currentValue = null;
+            }
         }
     }
 
