@@ -4,38 +4,29 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
-import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
+import com.scottlogic.deg.generator.generation.row_generation.RowGenerator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
-    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
-    private final TreePartitioner treePartitioner;
+    private final RowGenerator rowGenerator;
     private final DecisionTreeOptimiser treeOptimiser;
 
     @Inject
     public DecisionTreeDataGenerator(
         DecisionTreeWalker treeWalker,
-        TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
-        DataGeneratorMonitor monitor,
-        RowSpecDataBagSourceFactory dataBagSourceFactory) {
-        this.treePartitioner = treePartitioner;
+        RowGenerator rowGenerator,
+        DataGeneratorMonitor monitor) {
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
+        this.rowGenerator = rowGenerator;
         this.monitor = monitor;
-        this.dataBagSourceFactory = dataBagSourceFactory;
     }
 
     @Override
@@ -44,32 +35,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
-        final List<DecisionTree> partitionedTrees =
-            treePartitioner
-                .splitTreeIntoPartitions(decisionTree)
-                    .map(this.treeOptimiser::optimiseTree)
-                .collect(Collectors.toList());
-
-        final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
-            .stream()
-            .map(treeWalker::walk);
-
-        final Stream<DataBagSource> allDataBagSources =
-            rowSpecsByPartition
-                .map(rowSpecs ->
-                    new ConcatenatingDataBagSource(
-                        rowSpecs
-                            .map(dataBagSourceFactory::createDataBagSource)));
-
-        Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
-            .generate(generationConfig)
-            .map(dataBag -> new GeneratedObject(
-                profile.fields.stream()
-                    .map(dataBag::getValueAndFormat)
-                    .collect(Collectors.toList()),
-                dataBag.getRowSource(profile.fields)));
-
         monitor.generationStarting(generationConfig);
+
+        DecisionTree optimisedTree = treeOptimiser.optimiseTree(decisionTree);
+        Stream<RowSpec> rowSpecStream = treeWalker.walk(optimisedTree);
+        Stream<GeneratedObject> dataRows = rowGenerator.generateObjectsFromRowSpecs(profile, rowSpecStream);
 
         return dataRows
             .limit(generationConfig.getMaxRows())
