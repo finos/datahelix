@@ -75,7 +75,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator otherGenerator) {
-        if (otherGenerator instanceof NoStringsStringGenerator){
+        if (otherGenerator instanceof NoStringsStringGenerator) {
             return otherGenerator.intersect(this);
         }
 
@@ -98,11 +98,11 @@ public class RegexStringGenerator implements StringGenerator {
             complementaryRepresentation(this.regexRepresentation));
     }
 
-    private static String complementaryRepresentation(String representation){
+    private static String complementaryRepresentation(String representation) {
         return String.format("¬(%s)", representation);
     }
 
-    static String intersectRepresentation(String left, String right){
+    static String intersectRepresentation(String left, String right) {
         return String.format("%s ∩ %s", left, right);
     }
 
@@ -479,12 +479,8 @@ public class RegexStringGenerator implements StringGenerator {
 
         @Override
         public String next() {
-            String str = "";
-            do {
-                currentIndex++; // starts at 1
-                str = stringGenerator.getMatchedString(currentIndex);
-            } while (!containsValidUtf8Chars(str));
-            return str;
+            currentIndex++; // starts at 1
+            return stringGenerator.getMatchedString(currentIndex);
         }
     }
 
