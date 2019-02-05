@@ -250,7 +250,7 @@ public class RegexStringGeneratorTests {
 
     @Test
     void shouldNotGenerateInvalidUnicodeCodePoints() {
-        StringGenerator generator = new RegexStringGenerator("Test.Test", true);
+        StringGenerator generator = new RegexStringGenerator("[😁-😘]{1}", true);
         Iterable<String> resultsIterable = generator.generateAllValues();
         for (String s : resultsIterable) {
             if (s!=null){
