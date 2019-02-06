@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -161,7 +162,7 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto.value);
+                    int length = getIntegerLength(dto);
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -171,7 +172,7 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto.value);
+                    int length = getIntegerLength(dto);
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -181,7 +182,7 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto.value);
+                    int length = getIntegerLength(dto);
                     return new StringHasLengthConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -189,7 +190,8 @@ public class AtomicConstraintReaderLookup {
                 });
     }
 
-    private static int getIntegerLength(Object value) throws InvalidProfileException {
+    private static int getIntegerLength(ConstraintDTO dto) throws InvalidProfileException {
+        Object value = dto.value;
         BigDecimal decimal;
 
         if (value instanceof Integer){
@@ -200,13 +202,22 @@ public class AtomicConstraintReaderLookup {
         if (value instanceof BigDecimal){
             decimal = (BigDecimal)value;
         } else {
-            throw new InvalidProfileException("Constraint must contain a numeric value for its operand");
+            throw new InvalidProfileException(
+                String.format(
+                    "String-length operator must contain a numeric value for its operand found (%s) for field [%s]",
+                    dto.value == null ? "<null>" : dto.value.toString(),
+                    dto.field));
         }
 
         decimal = decimal.stripTrailingZeros();
 
         if (decimal.scale() > 0){
-            throw new InvalidProfileException("Constraint must contain an integer value for its operand");
+            throw new InvalidProfileException(
+                String.format(
+                    "String-length operator must contain a integer value for its operand found (%s <%s>) for field [%s]",
+                    dto.value,
+                    dto.value.getClass().getSimpleName(),
+                    dto.field));
         }
 
         return decimal.intValue();
