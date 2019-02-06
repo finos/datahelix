@@ -436,6 +436,7 @@ Scenario: Running an 'equalTo' request that includes a boolean value e.g. false 
       Then the following data should be generated:
         | foo   |
         | false |
+### EqualTo ###
 
 Scenario: Two non-contradictory equalTo statements should be successful
       Given there is a field foo
@@ -477,3 +478,73 @@ Scenario: A 'not equal to' statement should have no impact on an equal to statem
       | foo  |
       | "a"  |
       | null |
+
+### InSet ###
+
+Scenario: Running an 'inSet' request alongside a non-contradicting equalTo constraint should be successful
+    Given there is a field foo
+      And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+      And foo is equal to "Test 1"
+    Then the following data should be generated:
+      | foo      |
+      | null     |
+      | "Test 1" |
+
+Scenario: Running an 'inSet' request alongside a contradicting equalTo constraint should produce null
+    Given there is a field foo
+      And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+      And foo is equal to "Test 4"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: Running an 'inSet' request with a not constraint should be successful
+    Given there is a field foo
+      And foo is anything but in set:
+      | "Test"  |
+      | "test"  |
+      | "Testt" |
+      | "Test7" |
+      And foo is equal to "Test 01 is not in set"
+    Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | "Test 01 is not in set" |
+
+Scenario: Non-contradictory not equal to and in set should be successful
+    Given there is a field foo
+      And foo is in set:
+      | "Test1" |
+      | "Test2" |
+      | 1       |
+      And there is a constraint:
+        """
+          { "not": { "field": "foo", "is": "equalTo", "value": "Test1" }}
+        """
+    Then the following data should be generated:
+      | foo     |
+      | "Test2" |
+      | 1       |
+      | null    |
+
+Scenario: Not equal to and in set for same value should emit null
+    Given there is a field foo
+      And foo is in set:
+      | "Test1" |
+      And there is a constraint:
+        """
+          { "not": { "field": "foo", "is": "equalTo", "value": "Test1" }}
+        """
+    Then the following data should be generated:
+      | foo     |
+      | null    |
+
+### null ###
+
+
