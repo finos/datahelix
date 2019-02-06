@@ -2,7 +2,10 @@ package com.scottlogic.deg.schemas.v3;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,25 +16,22 @@ public class RuleDeserializer extends JsonDeserializer<RuleDTO> {
     public RuleDTO deserialize(
         JsonParser jsonParser,
         DeserializationContext deserializationContext)
-        throws IOException, JsonProcessingException {
+        throws IOException {
 
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
 
         JsonNode node = mapper.readTree(jsonParser);
 
-        if (node.has("rule")) {
-            RuleDTO rule = new RuleDTO();
-            rule.rule = node.get("rule").asText();
-            rule.constraints = readConstraintsFromArrayNode(node.get("constraints"), mapper);
-            return rule;
-        }
-        else {
-            ConstraintDTO constraint = mapper.treeToValue(node, ConstraintDTO.class);
+        RuleDTO dto = new RuleDTO();
+        dto.rule = node.has("rule")
+            ? node.get("rule").asText()
+            : null;
 
-            RuleDTO rule = new RuleDTO();
-            rule.constraints = Collections.singleton(constraint);
-            return rule;
-        }
+        dto.constraints = node.has("constraints")
+            ? readConstraintsFromArrayNode(node.get("constraints"), mapper)
+            : Collections.emptySet();
+
+        return dto;
     }
 
     private Collection<ConstraintDTO> readConstraintsFromArrayNode(

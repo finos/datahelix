@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -12,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,8 +22,13 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
     private final AtomicInteger currentIteration = new AtomicInteger();
     private final Path visualiseDirectoryPath;
 
-    public ReductiveIterationVisualiser(Path outputDirectory) {
-        this.visualiseDirectoryPath = outputDirectory.resolve("reductive-walker");
+    @Inject
+    public ReductiveIterationVisualiser(@Named("outputPath") Path outputPath) {
+        Path directoryPath = outputPath.getParent() == null
+            ? Paths.get(System.getProperty("user.dir"))
+            : outputPath.getParent();
+
+        this.visualiseDirectoryPath = directoryPath.resolve("reductive-walker");
     }
 
     @Override

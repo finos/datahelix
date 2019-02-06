@@ -18,6 +18,9 @@ public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
     public void rowEmitted(GeneratedObject row) { }
 
     @Override
+    public void endGeneration() { }
+
+    @Override
     public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) { }
 
     @Override
