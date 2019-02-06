@@ -56,6 +56,10 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
             : Optional.of(maxRows);
     }
 
+    public void setMaxRows(Long maxRows) {
+        this.maxRows = maxRows;
+    }
+
     @Override
     public boolean getValidateProfile() {
         return validateProfile;
