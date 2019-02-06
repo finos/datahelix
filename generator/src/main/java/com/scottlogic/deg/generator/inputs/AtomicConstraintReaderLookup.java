@@ -3,9 +3,11 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -159,7 +161,7 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = ((Number) dto.value).intValue();
+                    int length = getIntegerLength(dto.value);
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -169,7 +171,7 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = ((Number) dto.value).intValue();
+                    int length = getIntegerLength(dto.value);
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -179,12 +181,35 @@ public class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = ((Number) dto.value).intValue();
+                    int length = getIntegerLength(dto.value);
                     return new StringHasLengthConstraint(
                         fields.getByName(dto.field),
                         length,
                         rules);
                 });
+    }
+
+    private static int getIntegerLength(Object value) throws InvalidProfileException {
+        BigDecimal decimal;
+
+        if (value instanceof Integer){
+            value = BigDecimal.valueOf((Integer)value);
+        }
+
+        //the profile reader (jackson) has been told to deserialise all numbers as BigDecimal's
+        if (value instanceof BigDecimal){
+            decimal = (BigDecimal)value;
+        } else {
+            throw new InvalidProfileException("Constraint must contain a numeric value for its operand");
+        }
+
+        decimal = decimal.stripTrailingZeros();
+
+        if (decimal.scale() > 0){
+            throw new InvalidProfileException("Constraint must contain an integer value for its operand");
+        }
+
+        return decimal.intValue();
     }
 
     private static Set<Object> mapValues(Collection<Object> values) throws InvalidProfileException {
