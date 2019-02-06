@@ -200,7 +200,7 @@ public class RegexStringGenerator implements StringGenerator {
     public static boolean containsValidUtf8Chars(String str) {
         if (str != null) {
             for (char c : str.toCharArray()) {
-                if (c >= 0xD800 && c <= 0xDFFF) {
+                if ((c >= 0xD800 && c <= 0xDFFF) || (c == 0x200F)) {
                     return false;
                 }
             }
