@@ -28,11 +28,6 @@ Scenario: Running a 'shorterThan' request using a number (decimal number) to spe
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'shorterThan' request using a number (comma seperated) to specify a the length of a generated string should fail with an error message
-     Given foo is shorter than 1,000
-     Then I am presented with an error message
-       And no data is created
-
 Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than "5"
      Then I am presented with an error message
