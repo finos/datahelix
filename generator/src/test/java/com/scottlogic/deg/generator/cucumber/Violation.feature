@@ -57,7 +57,7 @@ Background:
 
   Scenario: Running the generator in violate but also saying not to violate the constraint is successful
     Given foo is less than 10
-    When we do not violate constraint lessThan
+    When we do not violate any less than constraints
     Then the following data should be included in what is generated:
       | foo        |
       | 0         |

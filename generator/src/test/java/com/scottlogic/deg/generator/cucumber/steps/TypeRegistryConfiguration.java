@@ -31,7 +31,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineWalkerType(tr);
         this.defineOperationParameterType(tr);
         this.defineGenerationMode(tr);
-        this.defineAtomicConstraintType(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
         this.defineParameterType(tr,"regex", "/(.+)/$");
         tr.setDefaultDataTableCellTransformer(new DataTableCellTransformer());
@@ -121,19 +120,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "generationMode",
             "(.*)$",
             CucumberGenerationMode.class,
-            transformer));
-    }
-
-    private void defineAtomicConstraintType(TypeRegistry tr) {
-        Transformer<AtomicConstraintType> transformer = strategyString ->
-            Arrays.stream(AtomicConstraintType.values())
-                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(AtomicConstraintType.ISOFTYPE);
-
-        tr.defineParameterType(new ParameterType<>(
-            "atomicConstraintType",
-            "(.*)$",
-            AtomicConstraintType.class,
             transformer));
     }
 
