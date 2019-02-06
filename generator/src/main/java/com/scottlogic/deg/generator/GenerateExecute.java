@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.CommandLine.CommandLineValidator;
+import com.scottlogic.deg.generator.CommandLine.ValidationResult;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -14,28 +16,31 @@ public class GenerateExecute implements Runnable {
     private final GenerationEngine generationEngine;
     private final GenerationConfigSource configSource;
     private final OutputTarget fileOutputTarget;
+    private CommandLineValidator validator;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
                            ProfileReader profileReader,
                            GenerationEngine generationEngine,
                            GenerationConfigSource configSource,
-                           OutputTarget fileOutputTarget) {
+                           OutputTarget fileOutputTarget,
+                           CommandLineValidator validator) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
         this.configSource = configSource;
         this.fileOutputTarget = fileOutputTarget;
+        this.validator = validator;
     }
 
     @Override
     public void run() {
 
-        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
-            && config.getMaxRows() == GenerationConfig.Constants.DEFAULT_MAX_ROWS) {
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
-            System.err.println("RANDOM mode requires max row limit\nuse -n=<row limit> option");
-            return;
+        if (!validationResult.isValid()) {
+                validationResult.errorMessages.forEach(System.err::println);
+                return;
         }
 
         try {
