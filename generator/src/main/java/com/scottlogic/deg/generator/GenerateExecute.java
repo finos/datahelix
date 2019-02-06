@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.CommandLine.CommandLineValidator;
+import com.scottlogic.deg.generator.CommandLine.GenerationConfigValidator;
 import com.scottlogic.deg.generator.CommandLine.ValidationResult;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -16,7 +16,8 @@ public class GenerateExecute implements Runnable {
     private final GenerationEngine generationEngine;
     private final GenerationConfigSource configSource;
     private final OutputTarget fileOutputTarget;
-    private CommandLineValidator validator;
+    private final GenerationConfigValidator validator;
+    private final ErrorReporter errorReporter;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
@@ -24,13 +25,15 @@ public class GenerateExecute implements Runnable {
                            GenerationEngine generationEngine,
                            GenerationConfigSource configSource,
                            OutputTarget fileOutputTarget,
-                           CommandLineValidator validator) {
+                           GenerationConfigValidator validator,
+                           ErrorReporter errorReporter) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
         this.configSource = configSource;
         this.fileOutputTarget = fileOutputTarget;
         this.validator = validator;
+        this.errorReporter = errorReporter;
     }
 
     @Override
@@ -39,8 +42,8 @@ public class GenerateExecute implements Runnable {
         ValidationResult validationResult = validator.validateCommandLine(config);
 
         if (!validationResult.isValid()) {
-                validationResult.errorMessages.forEach(System.err::println);
-                return;
+            errorReporter.display(validationResult);
+            return;
         }
 
         try {

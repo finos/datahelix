@@ -1,15 +1,17 @@
 package com.scottlogic.deg.generator.commandLine;
 
-import com.scottlogic.deg.generator.CommandLine.CommandLineValidator;
+import com.scottlogic.deg.generator.CommandLine.GenerationConfigValidator;
 import com.scottlogic.deg.generator.CommandLine.ValidationResult;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
-public class CommandLineValidatorTest {
+public class GenerationConfigValidatorTests {
     @Test
     public void validConfigShouldReturnValid() {
         //Arrange
@@ -20,15 +22,14 @@ public class CommandLineValidatorTest {
                 GenerationConfig.CombinationStrategyType.PINNING
                 )
         );
-        CommandLineValidator validator = new CommandLineValidator();
-        ArrayList<String> errorsReturned = new ArrayList<String>();
+        GenerationConfigValidator validator = new GenerationConfigValidator();
 
         //Act
         ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
-        Assert.assertEquals(validationResult.errorMessages, errorsReturned);
+        Assert.assertThat(validationResult.errorMessages, is(empty()));
     }
 
     @Test
@@ -41,16 +42,15 @@ public class CommandLineValidatorTest {
                 GenerationConfig.CombinationStrategyType.PINNING
             )
         );
-        ArrayList<String> errorsReturned = new ArrayList<>();
-        errorsReturned.add("RANDOM mode requires max row limit\nuse -n=<row limit> option\n");
-        CommandLineValidator validator = new CommandLineValidator();
+        GenerationConfigValidator validator = new GenerationConfigValidator();
 
         //Act
         ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
-        Assert.assertEquals(validationResult.errorMessages, errorsReturned);
+        Assert.assertThat(validationResult.errorMessages,
+            hasItem("RANDOM mode requires max row limit: use -n=<row limit> option"));
     }
 
     @Test
@@ -63,15 +63,14 @@ public class CommandLineValidatorTest {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        ArrayList<String> errorsReturned = new ArrayList<>();
-        CommandLineValidator validator = new CommandLineValidator();
+        GenerationConfigValidator validator = new GenerationConfigValidator();
 
         //Act
         ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
-        Assert.assertEquals(validationResult.errorMessages, errorsReturned);
+        Assert.assertThat(validationResult.errorMessages, is(empty()));
     }
 
 }
