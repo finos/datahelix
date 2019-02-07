@@ -146,6 +146,11 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             return convertConstraint(new ViolatedAtomicConstraint(violatedAtomicConstraint.negate()));
         }
 
+        if (violatedConstraint instanceof NegatedGrammaticalConstraint) {
+            NegatedGrammaticalConstraint violatedNegatedConstraint = (NegatedGrammaticalConstraint) violatedConstraint;
+            return convertConstraint(violatedNegatedConstraint.negate());
+        }
+
         return convertConstraint(violatedConstraint);
     }
 
