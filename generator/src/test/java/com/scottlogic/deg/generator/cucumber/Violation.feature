@@ -55,30 +55,6 @@ Background:
       | 11         |
       | null       |
 
-  Scenario: Running the generator in violate but also saying not to violate the constraint is successful
-    Given foo is less than 10
-    When we do not violate any less than constraints
-    Then the following data should be included in what is generated:
-      | foo        |
-      | 0         |
-      | 9         |
-      | null       |
-
-  Scenario: Running the generator in violate mode with multiple fields and selective violation is successful
-    Given foo is less than 10
-    Given foo is of type "numeric"
-    And there is a field bar
-    And bar is in set:
-      | "CCC" |
-      | "DDD" |
-    And we do not violate any in set constraints
-    And we do not violate any of type constraints
-    Then the following data should be included in what is generated:
-      | foo        | bar   |
-      | 10         | "CCC" |
-      | 11         | "DDD" |
-      | null       | null  |
-
   Scenario: Running the generator in violate mode for less than or equal to is successful
     Given foo is less than or equal to 10
     And foo is of type "numeric"
