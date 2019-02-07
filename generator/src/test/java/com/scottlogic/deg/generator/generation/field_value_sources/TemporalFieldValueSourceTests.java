@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.IsNot.not;
 
 public class TemporalFieldValueSourceTests {
 
@@ -145,6 +147,120 @@ public class TemporalFieldValueSourceTests {
         Assert.assertThat(iterator.next(),
                 equalTo(LocalDateTime.of(date, LocalTime.of(14, 59, 59, 999_000_000))));
 
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatch(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistInDifferentOrder(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MAX, LocalDateTime.MIN)));
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistEmpty(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            Collections.emptySet());
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            Collections.emptySet());
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeUnequalWhenAllPropertiesMatchExceptMin(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-28", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalWhenAllPropertiesMatchExceptMax(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-30"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalWhenAllPropertiesMatchExceptBlacklist(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalWhenOnlyBlacklistMatches(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-28", "2010-11-30"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalWhenAllPropertiesDontMatch(){
+        TemporalFieldValueSource a = new TemporalFieldValueSource(
+            restrictions("2001-02-28", "2010-11-30"),
+            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+        TemporalFieldValueSource b = new TemporalFieldValueSource(
+            restrictions("2001-02-03", "2010-11-12"),
+            new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    private DateTimeRestrictions restrictions(String min, String max){
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = min == null ? null : getTimeLimit(min);
+        restrictions.max = max == null ? null : getTimeLimit(max);
+        return restrictions;
+    }
+
+    private DateTimeRestrictions.DateTimeLimit getTimeLimit(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return new DateTimeRestrictions.DateTimeLimit(
+            LocalDate.parse(dateString, formatter).atStartOfDay(),
+            true);
     }
 
     private void givenLowerBound(LocalDateTime value, boolean inclusive) {
