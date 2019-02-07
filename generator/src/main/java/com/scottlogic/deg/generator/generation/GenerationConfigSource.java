@@ -5,6 +5,7 @@ import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 public interface GenerationConfigSource {
     /**
@@ -26,7 +27,7 @@ public interface GenerationConfigSource {
     GenerationConfig.TreeWalkerType getWalkerType();
     GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
-    long getMaxRows();
+    Optional<Long> getMaxRows();
     boolean getValidateProfile();
     boolean shouldDoPartitioning();
     boolean dontOptimise();
