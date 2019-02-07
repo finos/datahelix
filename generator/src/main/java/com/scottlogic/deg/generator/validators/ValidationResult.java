@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.CommandLine;
+package com.scottlogic.deg.generator.validators;
 
 import java.util.ArrayList;
 

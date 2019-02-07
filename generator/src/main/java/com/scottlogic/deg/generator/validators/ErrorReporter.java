@@ -1,6 +1,4 @@
-package com.scottlogic.deg.generator;
-
-import com.scottlogic.deg.generator.CommandLine.ValidationResult;
+package com.scottlogic.deg.generator.validators;
 
 public class ErrorReporter {
     public void display(ValidationResult validationResult) {

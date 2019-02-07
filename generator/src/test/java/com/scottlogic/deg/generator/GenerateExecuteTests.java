@@ -1,7 +1,8 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.CommandLine.GenerationConfigValidator;
-import com.scottlogic.deg.generator.CommandLine.ValidationResult;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
+import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;

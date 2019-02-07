@@ -1,7 +1,5 @@
-package com.scottlogic.deg.generator.commandLine;
+package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.generator.CommandLine.GenerationConfigValidator;
-import com.scottlogic.deg.generator.CommandLine.ValidationResult;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import org.junit.Assert;

@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.CommandLine.GenerationConfigValidator;
-import com.scottlogic.deg.generator.CommandLine.ValidationResult;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
+import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
