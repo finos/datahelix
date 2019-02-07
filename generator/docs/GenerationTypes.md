@@ -17,7 +17,7 @@ Examples:
 | `Field 1 in set [A, B, C]` | A, B, C | `null` |
 
 ## Random
-Generate some random data that abides by the given set of constraints. This mode could cause the tool to run forever unless some other conditions are applied, e.g. max number of rows. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
+Generate some random data that abides by the given set of constraints.It is mandatory for a maximum row limit `-n=<row limit>` to be specified otherwise the tool would attempt to run forever. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
 
 Examples:
 

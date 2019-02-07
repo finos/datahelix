@@ -25,8 +25,7 @@ public class CucumberTestState {
      */
     public Boolean shouldViolate = false;
 
-    //Default value of 10 million rows is set here.
-    public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+    public Optional<Long> maxRows = Optional.empty();
 
     public List<List<Object>> generatedObjects;
 
