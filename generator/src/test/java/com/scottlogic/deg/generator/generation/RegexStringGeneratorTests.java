@@ -7,10 +7,9 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
@@ -318,7 +317,14 @@ public class RegexStringGeneratorTests {
     private void expectFirstResult(String expectedValue) {
         StringGenerator generator = constructGenerator(true);
 
-        String actualValue = generator.generateAllValues().iterator().next();
+        String actualValue = StreamSupport
+            .stream(
+                Spliterators.spliteratorUnknownSize(
+                    generator.generateAllValues().iterator(),
+                    Spliterator.ORDERED),
+                false)
+            .limit(1)
+            .findFirst().orElse(null);
 
         Assert.assertThat(
                 actualValue,
