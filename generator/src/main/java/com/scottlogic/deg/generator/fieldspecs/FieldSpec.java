@@ -34,7 +34,7 @@ public class FieldSpec {
     private final MustContainRestriction mustContainRestriction;
     private final FieldSpecSource source;
 
-    private FieldSpec(
+    protected FieldSpec(
         SetRestrictions setRestrictions,
         NumericRestrictions numericRestrictions,
         StringRestrictions stringRestrictions,
