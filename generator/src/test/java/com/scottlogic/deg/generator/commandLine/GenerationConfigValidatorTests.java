@@ -13,15 +13,35 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class GenerationConfigValidatorTests {
     @Test
-    public void validConfigShouldReturnValid() {
+    public void interestingWithNoMaxRowsReturnsValid() {
         //Arrange
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
                 )
         );
+        GenerationConfigValidator validator = new GenerationConfigValidator();
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+        Assert.assertThat(validationResult.errorMessages, is(empty()));
+    }
+
+    @Test
+    public void interestingWithMaxRowsReturnsValid() {
+        //Arrange
+        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.REDUCTIVE,
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+        );
+        testConfigSource.setMaxRows(1234567L);
+        GenerationConfig config = new GenerationConfig(testConfigSource);
         GenerationConfigValidator validator = new GenerationConfigValidator();
 
         //Act
@@ -39,7 +59,7 @@ public class GenerationConfigValidatorTests {
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.RANDOM,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
             )
         );
         GenerationConfigValidator validator = new GenerationConfigValidator();
@@ -59,7 +79,7 @@ public class GenerationConfigValidatorTests {
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.RANDOM,
             GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.PINNING
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
@@ -74,12 +94,32 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void defaultWithMaxRowsReturnsValid() {
+    public void fullSequentialWithNoMaxRowsReturnsValid() {
+        //Arrange
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+            )
+        );
+        GenerationConfigValidator validator = new GenerationConfigValidator();
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+        Assert.assertThat(validationResult.errorMessages, is(empty()));
+    }
+
+    @Test
+    public void fullSequentialWithMaxRowsReturnsValid() {
         //Arrange
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
             GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.PINNING
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
