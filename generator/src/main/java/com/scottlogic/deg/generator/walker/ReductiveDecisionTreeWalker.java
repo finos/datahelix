@@ -56,6 +56,14 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+
+        if (nextFixedField == null){
+            //couldn't fix a field, maybe there are contradictions in the root node?
+
+            //this.monitor.unableToStepFurther(reductiveState);
+            return Stream.empty();
+        }
+
         return process(rootNode, initialState.with(nextFixedField));
     }
 
@@ -98,6 +106,13 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //find the next fixed field and continue
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode);
+        if (nextFixedField == null){
+            //couldn't fix a field, maybe there are contradictions in the root node?
+
+            //this.monitor.unableToStepFurther(reductiveState);
+            return Stream.empty();
+        }
+
         return process(reducedNode, reductiveState.with(nextFixedField));
     }
 
