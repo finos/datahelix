@@ -73,4 +73,23 @@ public class GenerationConfigValidatorTests {
         Assert.assertThat(validationResult.errorMessages, is(empty()));
     }
 
+    @Test
+    public void defaultWithMaxRowsReturnsValid() {
+        //Arrange
+        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.REDUCTIVE,
+            GenerationConfig.CombinationStrategyType.PINNING
+        );
+        testConfigSource.setMaxRows(1234567L);
+        GenerationConfig config = new GenerationConfig(testConfigSource);
+        GenerationConfigValidator validator = new GenerationConfigValidator();
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+        Assert.assertThat(validationResult.errorMessages, is(empty()));
+    }
 }
