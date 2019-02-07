@@ -253,14 +253,19 @@ public class RegexStringGeneratorTests {
         StringGenerator generator = new RegexStringGenerator("[😁-😘]{1}", true);
         Iterable<String> resultsIterable = generator.generateAllValues();
         for (String s : resultsIterable) {
-            if (s != null) {
-                for (char c : s.toCharArray()) {
-                    if (Character.isSurrogate(c)) {
-                        fail("string contains surrogate character");
-                    }
-                }
+            if (s != null && doesStringContainSurrogates(s)) {
+                fail("string contains surrogate character");
             }
         }
+    }
+
+    private final boolean doesStringContainSurrogates(String testString) {
+        for (char c : testString.toCharArray()) {
+            if (Character.isSurrogate(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private final List<String> regexes = new ArrayList<>();

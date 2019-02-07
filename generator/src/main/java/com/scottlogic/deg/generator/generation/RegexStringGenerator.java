@@ -163,49 +163,7 @@ public class RegexStringGenerator implements StringGenerator {
         }
         String result = buildStringFromNode(rootNode, indexOrder);
         result = result.substring(1, result.length() - 1);
-
-        /**
-         * <p>
-         *     FIXME - This check will be removed if/when the dk.brics.automaton
-         *     library is fixed to support surrogate pairs,
-         * </p>
-         * <p>
-         *     issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
-         *     has been raised on the dk.brics.automaton library
-         * </p>
-         * <p>
-         *     issue #537 has been created to track when the dk.brics.automaton library
-         *     is updated.
-         * </p>
-         */
-        if (!containsValidUtf8Chars(result)) {
-            return null;
-        }
-
         return result;
-    }
-
-    /**
-     * <p>
-     * check to see if the character generated is a valid utf-8 single word value.
-     * </p>
-     * <p>
-     * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
-     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
-     * </p>
-     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
-     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
-     * </code>
-     */
-    public static boolean containsValidUtf8Chars(String str) {
-        if (str != null) {
-            for (char c : str.toCharArray()) {
-                if ((c >= 0xD800 && c <= 0xDFFF) || (c == 0x200F)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @Override
@@ -474,16 +432,36 @@ public class RegexStringGenerator implements StringGenerator {
             currentIndex = 0;
         }
 
+        /**
+         * <p>
+         * This function has been updated to only allow valid single 16-bit
+         * word UTF-8 characters to be output.
+         * </p>
+         * <p>
+         *     FIXME - This check will be removed if/when the dk.brics.automaton
+         *     library is fixed to support surrogate pairs,
+         * </p>
+         * <p>
+         *     issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+         *     has been raised on the dk.brics.automaton library
+         * </p>
+         * <p>
+         *     issue #537 has been created to track when the dk.brics.automaton library
+         *     is updated.
+         * </p>
+         */
         @Override
         public boolean hasNext() {
             if (currentValue != null) {
                 return true;
             }
-            currentIndex++; // starts at 1
-            if (currentIndex > matches) {
-                return false;
-            }
-            currentValue = stringGenerator.getMatchedString(currentIndex);
+            do {
+                currentIndex++; // starts at 1
+                if (currentIndex > matches) {
+                    return false;
+                }
+                currentValue = stringGenerator.getMatchedString(currentIndex);
+            } while (!containsValidUtf8Chars(currentValue));
             return currentValue != null;
         }
 
@@ -494,6 +472,27 @@ public class RegexStringGenerator implements StringGenerator {
             } finally {
                 currentValue = null;
             }
+        }
+
+        /**
+         * <p>
+         * check to see if the character generated is a valid utf-8 single word value.
+         * </p>
+         * <p>
+         * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
+         * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
+         * </p>
+         * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
+         * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
+         * </code>
+         */
+        public boolean containsValidUtf8Chars(String str) {
+            for (char c : str.toCharArray()) {
+                if (Character.isSurrogate(c)) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
