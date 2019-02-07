@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -84,15 +85,17 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
                 .stream()
                 .reduce(
                     Stream.of(mergedRowSpec),
-                    (acc, decisionNode) -> acc.flatMap(aRowSpecFromCartesianProductsSoFar -> walk(decisionNode, aRowSpecFromCartesianProductsSoFar)),
+                    (acc, decisionNode) -> FlatMappingSpliterator.flatMap(
+                        acc,
+                        aRowSpecFromCartesianProductsSoFar -> walk(decisionNode, aRowSpecFromCartesianProductsSoFar)),
                     Stream::concat);
         }
 
         private Stream<RowSpec> walk(DecisionNode decision, RowSpec accumulatedSpec) {
-            return decision
+            return FlatMappingSpliterator.flatMap(decision
                     .getOptions()
-                    .stream()
-                    .flatMap(option -> walk(option, accumulatedSpec));
+                    .stream(),
+                    option -> walk(option, accumulatedSpec));
         }
     }
 }

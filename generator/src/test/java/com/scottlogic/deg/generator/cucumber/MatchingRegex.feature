@@ -128,7 +128,7 @@ Scenario: Running a 'matchingRegex' request that includes special characters (no
        | "け" |
        | "げ" |
 
-@ignore
+@ignore #issue 294
 Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
      Given foo is matching regex /[😁-😘]{1}/
      Then the following data should be generated:
@@ -219,7 +219,7 @@ Scenario: Running a 'matchingRegex' for a minimum length of 0 should be successf
        | ""   |
        | "a"  |
 
-@ignore
+@ignore #issue 520
 Scenario: Running a 'matchingRegex' for a minimum length of < 8000 should be successful
      Given foo is matching regex /[a]{7999}/
      Then the following data should be generated:
@@ -227,7 +227,7 @@ Scenario: Running a 'matchingRegex' for a minimum length of < 8000 should be suc
        | null |
        | "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" |
 
-@ignore
+@ignore #issue 520
 Scenario: Running a 'matchingRegex' for a minimum length of = 8000 should be successful
      Given foo is matching regex /[a]{8000}/
      Then the following data should be generated:
@@ -235,7 +235,7 @@ Scenario: Running a 'matchingRegex' for a minimum length of = 8000 should be suc
        | null |
        | "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" |
 
-@ignore
+@ignore #issue 520
 Scenario: Running a 'matchingRegex' for a minimum length of > 8000 should be successful
      Given foo is matching regex /[a]{8001}/
      Then the following data should be generated:
@@ -259,16 +259,16 @@ Scenario: Running a 'matchingRegex' for a minimum length that is less zero shoul
        And no data is created
 
 Scenario: User using matchingRegex operator to provide an exact set of values
-       Given foo is matching regex /[a]{1,3}/
+     Given foo is matching regex /[a]{1,3}/
        And foo is anything but null
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo   |
        | "a"   |
        | "aa"  |
        | "aaa" |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
-       Given foo is matching regex /[a]{3}/
+     Given foo is matching regex /[a]{3}/
        And foo is equal to "aaa"
      Then the following data should be generated:
        | foo   |
@@ -276,25 +276,25 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalT
        | "aaa" |
 
 Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
-       Given foo is matching regex /[a]{3}/
+     Given foo is matching regex /[a]{3}/
        And foo is equal to "bbb"
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
-       Given foo is matching regex /[a]{1,3}/
+     Given foo is matching regex /[a]{1,3}/
        And foo is in set:
-         | "a" |
+         |  "a"  |
          | "aaa" |
      Then the following data should be generated:
-       | foo   |
-       | null  |
-       | "a"   |
-       | "aaa" |
+         | foo   |
+         | null  |
+         | "a"   |
+         | "aaa" |
 
 Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should be successful
-       Given foo is matching regex /[a]{1,3}/
+     Given foo is matching regex /[a]{1,3}/
        And foo is in set:
          | "b"   |
          | "bbb" |
@@ -303,103 +303,102 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting inSet cons
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
-       Given foo is matching regex /[a]{1,3}/
+     Given foo is matching regex /[a]{1,3}/
        And foo is null
      Then the following data should be generated:
        | foo  |
        | null |
 
 Scenario: Running a 'matchingRegex' request alongside an ofType = string should be successful
-       Given foo is matching regex /[a]{1}/
-       And foo is of type "string"
+     Given foo is matching regex /[a]{1}/
      Then the following data should be generated:
        | foo  |
        | null |
        | "a"  |
 
 Scenario: Running a 'matchingRegex' request alongside an ofType = numeric should be successful
-       Given foo is matching regex /[a]{1}/
+     Given foo is matching regex /[a]{1}/
        And foo is of type "numeric"
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside an ofType = temporal should be successful
-       Given foo is matching regex /[a]{1}/
+     Given foo is matching regex /[a]{1}/
        And foo is of type "temporal"
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting matchingRegex constraint should be successful
-       Given foo is matching regex /[a-z]{1,3}/
+     Given foo is matching regex /[a-z]{1,3}/
        And foo is matching regex /[b]{2}/
      Then the following data should be generated:
        | foo  |
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should be successful
-       Given foo is matching regex /[a]{1}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should generate null
+     Given foo is matching regex /[a]{1}/
        And foo is matching regex /[b]{2}/
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting containingRegex constraint should be successful
-       Given foo is matching regex /[b]{2}/
+     Given foo is matching regex /[b]{2}/
        And foo is containing regex /[a-z]{1,3}/
      Then the following data should be generated:
        | foo  |
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should be successful
-       Given foo is matching regex /[b]{3}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should generate null
+     Given foo is matching regex /[b]{3}/
        And foo is containing regex /[a]{1,2}/
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradiction ofLength constraint should be successful
-       Given foo is matching regex /[b]{2}/
+     Given foo is matching regex /[b]{2}/
        And foo is of length 2
      Then the following data should be generated:
        | foo  |
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should be successful
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is of length 1
        Then the following data should be generated:
        | foo   |
        | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too short) constraint should be successful
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting ofLength (too long) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is of length 3
       Then the following data should be generated:
         | foo   |
         | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting longerThan constraint should be successful
-       Given foo is matching regex /[b]{2}/
+     Given foo is matching regex /[b]{2}/
        And foo is longer than 1
      Then the following data should be generated:
        | foo  |
        | null |
        | "bb" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (equal) constraint should be successful
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (equal) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is longer than 2
       Then the following data should be generated:
         | foo   |
         | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (too long) constraint should be successful
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting longerThan (too long) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is longer than 3
       Then the following data should be generated:
         | foo   |
@@ -413,107 +412,111 @@ Scenario: Running a 'matchingRegex' request alongside a non-contradicting shorte
        | null |
        | "b"  |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (equal) constraint should be successful
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (equal) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is shorter than 2
       Then the following data should be generated:
         | foo   |
         | null  |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (too short) constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting shorterThan (too short) constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is shorter than 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+        | foo  |
+        | null |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should be successful
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should only emit null
        Given foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
      Then the following data should be included in what is generated:
        | foo            |
        | null           |
-       | "GB0000000009" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a contradicting aValid constraint should generate null
+     Given foo is matching regex /[b]{2}/
        And foo is a valid "ISIN"
-     Then I am presented with an error message
-       And no data is created
+       Then the following data should be generated:
+        | foo |
+        | null |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should be successful
+     Given foo is matching regex /[b]{2}/
        And foo is greater than 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "bb" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a greaterThan constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
-       And foo is greater than 1
-     Then I am presented with an error message
-       And no data is created
-
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a greaterThanOrEqualTo constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a greaterThanOrEqualTo constraint should be successful
+     Given foo is matching regex /[b]{2}/
        And foo is greater than or equal to 1
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "bb" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a lessThan constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a lessThan constraint should be successful
+     Given foo is matching regex /[b]{2}/
        And foo is less than 3
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+        | foo  |
+        | null |
+        | "bb" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a lessThanOrEqualTo constraint should fail with an error message
-       Given foo is matching regex /[b]{2}/
+Scenario: Running a 'matchingRegex' request alongside a lessThanOrEqualTo constraint should be successful
+    Given foo is matching regex /[b]{2}/
        And foo is less than or equal to 3
-     Then I am presented with an error message
-       And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "bb" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a granularTo constraint should fail with an error message
-       Given foo is matching regex /[0-1]{2}/
+Scenario: Running a 'matchingRegex' request alongside a granularTo constraint should should be successful
+    Given foo is matching regex /[0-1]{2}/
        And foo is granular to 1
-     Then I am presented with an error message
-       And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "00" |
+      | "11" |
+      | "01" |
+      | "10" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a after constraint should fail with an error message
-       Given foo is matching regex /[0-z]{23}/
+Scenario: Running a 'matchingRegex' request alongside a after constraint should be successful
+     Given foo is matching regex /[0-z]{2}/
        And foo is after 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be included in what is generated:
+        | foo  |
+        | null |
+        | "ab" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a afterOrAt constraint should fail with an error message
-       Given foo is matching regex /[0-z]{23}/
-       And foo is after or at 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+Scenario: Running a 'matchingRegex' request alongside a afterOrAt constraint should be successful
+      Given foo is matching regex /[a-z]{2}/
+        And foo is after or at 2018-10-10T00:00:00.000
+      Then the following data should be included in what is generated:
+        | foo  |
+        | null |
+        | "ab" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a before constraint should fail with an error message
-       Given foo is matching regex /[0-z]{23}/
-       And foo is before 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+Scenario: Running a 'matchingRegex' request alongside a before constraint should be successful
+      Given foo is matching regex /[a-z]{2}/
+        And foo is before 2018-10-10T00:00:00.000
+      Then the following data should be included in what is generated:
+        | foo  |
+        | null |
+        | "ab" |
 
-@ignore
-Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should fail with an error message
-       Given foo is matching regex /[0-z]{23}/
-       And foo is before or at 2018-10-10T00:00:00.000
-     Then I am presented with an error message
-       And no data is created
+Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should be successful
+      Given foo is matching regex /[a-z]{2}/
+        And foo is before or at 2018-10-10T00:00:00.000
+      Then the following data should be included in what is generated:
+        | foo  |
+        | null |
+        | "ab" |
 
 Scenario: Running a 'matchingRegex' request with a not constraint should be successful
-       Given foo is matching regex /[0-9]{1}/
+     Given foo is matching regex /[0-9]{1}/
        And foo is anything but matching regex /[0-1]{1}/
      Then the following data should not be included in what is generated:
        | foo  |
@@ -553,7 +556,7 @@ Scenario: Running a 'matchingRegex' request as part of a non-contradicting allOf
        | "c"  |
        | "d"  |
 
-Scenario: Running a 'matchingRegex' request as part of a contradicting allOf constraint should be successful
+Scenario: Running a 'matchingRegex' request as part of a contradicting allOf constraint should generate null
        Given there is a constraint:
        """
        { "allOf": [
@@ -587,7 +590,6 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | "a"  | null  |
       | "c"  | null  |
 
-@ignore ''' test is inconsistent, it passes *most* of the time when debugging, and fails *most* of the time when running normally
   Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
     Given there is a field bar
     And the combination strategy is exhaustive
@@ -599,13 +601,13 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
     And lee is granular to 1
     And lee is less than 2
     And lee is greater than 0
-    Then the following data should be generated in order:
+    Then the following data should be generated:
       | foo  | bar  | lee  |
       | "a"  | "AA" | 1    |
       | "a"  | "AA" | null |
-      | null | "AA" | 1    |
-      | null | "AA" | null |
       | "a"  | null | 1    |
       | "a"  | null | null |
+      | null | "AA" | 1    |
+      | null | "AA" | null |
       | null | null | 1    |
       | null | null | null |

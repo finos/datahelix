@@ -21,11 +21,11 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class ProfileReaderTests {
+public class JsonProfileReaderTests {
     private String json;
     private Profile profile;
 
@@ -41,7 +41,7 @@ public class ProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException, InvalidProfileException {
         if (this.profile == null) {
-            ProfileReader objectUnderTest = new ProfileReader(new NoopProfileValidator());
+            JsonProfileReader objectUnderTest = new JsonProfileReader(new NoopProfileValidator());
             this.profile = objectUnderTest.read(this.json);
         }
 
@@ -126,13 +126,32 @@ public class ProfileReaderTests {
     }
 
     @Test
+    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException, InvalidProfileException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "       { \"field\": \"foo\", \"is\": \"null\" } " +
+                "    ]" +
+                "}");
+
+        Assert.assertThat(this.getResultingProfile().rules, not(empty()));
+        expectRules(rule -> Assert.assertThat(rule.constraints, empty()));
+    }
+
+    @Test
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
-                        "        { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "            { \"field\": \"foo\", \"is\": \"null\" } " +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -167,7 +186,11 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -187,7 +210,11 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"foo\", \"is\": \"formattedAs\", \"value\": \"%.5s\" }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -207,7 +234,11 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"id\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"field\": \"id\", \"is\": \"ofLength\", \"value\": 5 }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -226,7 +257,11 @@ public class ProfileReaderTests {
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
                         "        { \"not\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" } }" +
+                        "        ]" +
+                        "      }" +
                         "    ]" +
                         "}");
 
@@ -247,12 +282,18 @@ public class ProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"anyOf\": [" +
-                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"anyOf\": [" +
+                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "              { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "            ]" +
+                        "          }" +
                         "        ]" +
-                        "    }]" +
+                        "      }" +
+                        "   ]" +
                         "}");
 
         expectRules(
@@ -270,12 +311,18 @@ public class ProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"allOf\": [" +
-                        "          { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
-                        "          { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "           \"allOf\": [" +
+                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "             { \"field\": \"foo\", \"is\": \"null\" }" +
+                        "            ]" +
+                        "          }" +
                         "        ]" +
-                        "    }]" +
+                        "      }" +
+                        "    ]" +
                         "}");
 
         expectRules(
@@ -293,11 +340,17 @@ public class ProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
-                        "        \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
-                        "    }]" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "            \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
+                        "            \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
+                        "          }" +
+                        "        ]" +
+                        "      }" +
+                        "   ]" +
                         "}");
 
         expectRules(
@@ -325,10 +378,16 @@ public class ProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": \"v3\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [{" +
-                        "        \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                        "        \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
-                        "    }]" +
+                        "    \"rules\": [" +
+                        "      {" +
+                        "        \"constraints\": [" +
+                        "          {" +
+                        "            \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
+                        "            \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }" +
+                        "          }" +
+                        "        ]" +
+                        "      }" +
+                        "    ]" +
                         "}");
 
         expectRules(
@@ -357,7 +416,11 @@ public class ProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 1 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -379,7 +442,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.1 }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -401,7 +468,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.100000000 }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -423,8 +494,12 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": { \"date\": \"2019-01-01T00:00:00.000\" } }," +
                 "        { \"field\": \"foo\", \"is\": \"before\", \"value\": { \"date\": \"2019-01-03T00:00:00.000\" } }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -436,9 +511,7 @@ public class ProfileReaderTests {
                         Assert.assertThat(
                             c.referenceValue,
                             equalTo(LocalDateTime.parse("2019-01-01T00:00:00.000")));
-                    })
-                ),
-            ruleWithConstraints(
+                    }),
                 typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
@@ -446,7 +519,7 @@ public class ProfileReaderTests {
                             c.referenceValue,
                             equalTo(LocalDateTime.parse("2019-01-03T00:00:00.000")));
                     })
-            )
+                )
         );
     }
 
@@ -457,7 +530,11 @@ public class ProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 2 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -471,7 +548,11 @@ public class ProfileReaderTests {
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
             "        { \"field\": \"foo\", \"is\": \"granularTo\", \"value\": 0.15 }" +
+            "        ]" +
+            "      }" +
             "    ]" +
             "}");
 
@@ -485,7 +566,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"after\", \"value\": \"2018-01-12\" }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -499,7 +584,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": null }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -513,7 +602,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ null ] }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -525,9 +618,13 @@ public class ProfileReaderTests {
         givenJson("{" +
             "    \"schemaVersion\": \"v3\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
-            "    \"rules\": [{" +
-            "        \"allOf\": []" +
-            "    }]" +
+            "    \"rules\": [" +
+            "      {" +
+            "        \"constraints\": [" +
+            "        { \"allOf\": [] }" +
+            "        ]" +
+            "      }" +
+            "    ]" +
             "}");
 
         this.expectInvalidProfileException();
@@ -556,7 +653,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": null }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 
@@ -587,7 +688,11 @@ public class ProfileReaderTests {
                 "    \"schemaVersion\": \"v3\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
                 "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
+                "        ]" +
+                "      }" +
                 "    ]" +
                 "}");
 

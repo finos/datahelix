@@ -3,10 +3,8 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.NoopProfileValidationReporter;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -64,7 +62,7 @@ public class Visualise implements Runnable {
         final Profile profile;
 
         try {
-            profile = new ProfileReader(new NoopProfileValidator()).read(sourceFile.toPath());
+            profile = new JsonProfileReader(new NoopProfileValidator()).read(sourceFile.toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();

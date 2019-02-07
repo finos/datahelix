@@ -1,16 +1,15 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
-import com.scottlogic.deg.generator.cucumber.utils.DegTestState;
+import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.When;
 
 import java.util.List;
-import java.util.Set;
 
 public class SetValueStep {
 
-    private DegTestState state;
+    private final CucumberTestState state;
 
-    public SetValueStep(DegTestState state){
+    public SetValueStep(CucumberTestState state){
         this.state = state;
     }
 

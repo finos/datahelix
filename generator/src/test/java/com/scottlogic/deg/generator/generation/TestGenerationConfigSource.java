@@ -1,7 +1,12 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
@@ -19,9 +24,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
         this.walkerType = walkerType;
     }
 
-    public TestGenerationConfigSource() {
-    }
-
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return this.generationType;
@@ -35,6 +37,16 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
+    }
+
+    @Override
+    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public GenerationConfig.MonitorType getMonitorType() {
+        return GenerationConfig.MonitorType.QUIET;
     }
 
     @Override
@@ -70,5 +82,10 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public File getProfileFile() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
     }
 }

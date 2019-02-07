@@ -67,3 +67,62 @@ Both of the above operators will explicitly deny the inclusion of `null`, theref
 All fields permit the inclusion of the empty set (&#8709;) by default, to prevent the field from having a `null` emitted, ensure you use the `not(is null)` constraint.
 
 For more details see the [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) page.
+
+## Why can I not combine `aValid` and other textual constraints
+
+If a profile with these constraints exist, then no string values will be emitted:
+
+`aValid ISIN` & `longerThan 5`
+
+This is a limitation with the current implementation of the generator, there are plans to solve this issue - see [#487](https://github.com/ScottLogic/datahelix/issues/487) for progress. For now, combining the `aValid` constraint with any of following (textual) constraints will cause the generator to emit no strings.
+* `shorterThan`
+* `longerThan`
+* `matchingRegex`
+* `containingRegex`
+* `ofLength`
+
+Combining an `aValid` with any other constrains is still permitted including `inSet` and `equalTo` with a string value. Combining the use of both will ensure no string values are emitted.
+
+Valid examples are:
+* `aValid ISIN` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `"GB0002634947"`
+* `not(aValid ISIN)` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `123`
+* `aValid ISIN` & `equalTo "GB0002634947"` - will emit `null` and `"GB0002634947"`
+* `aValid ISIN` & `greaterThan 5` - will emit `null` and all valid ISIN codes
+
+## Why are we continuing to use an out-of-date JDK
+
+Currently we're using version 1.8 of the Java development toolkit (JDK), there are newer versions which fix some issues found in 1.8.
+
+Our product roadmap shows that we plan to develop a tool for analysing data sources and producing an indicative profile from them, a tool we call the profiler. It is currently planned for this tool to integrate with Apache Spark using Scala. This integration requires a compatible version of the JDK, version 1.8 is the latest compatible version.
+
+We could upgrade the version of the JDK for the generator independantly of this tool, however this would require an additional installation of Java on a users environment. We are trying to create a tool with the least friction when it comes to its use, as such we have decided - for now at least - to stick with version 1.8.
+
+## What problems have you had to solve when using an older JDK
+
+The following problems have been identified and resolved:
+
+### a) `flatMap` is a blocking call 
+The JDK version of `flatMap` calls onto `forEach` under the hood, which in turn evaluates the whole input `Stream` before returning any values.
+
+We are using the Java `Streams` api as a means to lazily create and consume data, as such we need to ensure that `flatMap` can accept a stream of values and emit them as soon as possible. Another example is where `RANDOM` data generation is employed. `RANDOM` will generate an infinite stream of data from the data sources (row limiting happens as a call to `limit` later, where the streams are consumed before emitting to the output). As such using the JDK edition of `flatMap` would never complete, as the `RANDOM` stream never finishes emitting data.
+
+We workaround this problem by using a _shim_ found on [Stackoverflow](https://stackoverflow.com/) (credits below), which is used widely across the generator. Whenever using a `flatMap` call it is advised that the shim be used instead of the JDK version. Only where calculated and express reasons should the JDK edition be used. This approach will reduce the chances that a blocking `flatMap` call will used by accident, especially in an area where we want to ensure data is streamed out.
+
+Therefore instead of:
+
+```
+return streamOfStreams.flatMap(
+    stream -> doSomethingToFlatten(stream));
+```
+
+We would use the following workaround:
+
+```
+return FlatMappingSpliterator.flatMap(
+    streamOfStreams,
+    stream -> doSomethingToFlatten(stream));
+```
+
+#### Credits
+Author: [Holger](https://stackoverflow.com/users/2711488/holger)  
+Question: [In Java, how do I efficiently and elegantly stream a tree node's descendants?](https://stackoverflow.com/questions/32749148/in-java-how-do-i-efficiently-and-elegantly-stream-a-tree-nodes-descendants/32767282#32767282)

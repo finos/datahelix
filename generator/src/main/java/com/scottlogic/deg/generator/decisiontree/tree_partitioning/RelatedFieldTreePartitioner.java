@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -146,9 +147,9 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
         }
 
         private <T> Set<T> getFromAllPartitions(Set<Partition> partitions, Function<Partition, Set<T>> getter) {
-            return partitions
-                .stream()
-                .flatMap(partition -> getter.apply(partition).stream())
+            return FlatMappingSpliterator.flatMap(partitions
+                .stream(),
+                partition -> getter.apply(partition).stream())
                 .collect(Collectors.toSet());
         }
 

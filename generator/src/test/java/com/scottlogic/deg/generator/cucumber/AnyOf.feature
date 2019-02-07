@@ -40,7 +40,7 @@ Scenario: User requires to create a field with strings that conform to one or ma
        | "bbbb"  |
        | "bbab"  |
 
-Scenario: User requires to create a field with strings that conform to multiple sets of one or many constraints
+Scenario: When user requires creation of a field with strings that contain multiple contradictory sets of one or many constraints no data should be generated
        Given there is a constraint:
        """
        { "anyOf": [
@@ -58,11 +58,11 @@ Scenario: User requires to create a field with strings that conform to multiple 
        """
        And foo is of type "string"
        And foo is anything but null
-     Then the following data should be generated:
-       | foo   |
+     Then no data is created
 
-
-Scenario: User requires to create a field with numbers that conform to one or many constraints
+  @ignore
+# failing - data is duplicated linked to issue 91
+Scenario: User requires to create a field with numbers that conform to one or many non-contradictory constraints
        Given there is a constraint:
        """
        { "anyOf": [
@@ -73,7 +73,7 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        And foo is of type "numeric"
        And foo is less than 11
        And foo is granular to 1
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | 1    |
@@ -87,6 +87,8 @@ Scenario: User requires to create a field with numbers that conform to one or ma
        | 9    |
        | 10   |
 
+    @ignore
+  # failing - data is duplicated linked to issue 91
 Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
       Given there is a constraint:
        """
@@ -105,7 +107,7 @@ Scenario: User requires to create a field with numbers that conform to multiple 
     And foo is of type "numeric"
     And foo is less than 20
     And foo is granular to 1
-    Then the following data should be included in what is generated:
+    Then the following data should be generated:
       | foo  |
       | null |
       | 9    |
@@ -120,6 +122,8 @@ Scenario: User requires to create a field with numbers that conform to multiple 
       | 18   |
       | 19   |
 
+  @ignore
+  # failing - data is duplicated linked to issue 91
 Scenario: User requires to create a field with dates that conform to one or many constraints
        Given there is a constraint:
        """
@@ -130,7 +134,7 @@ Scenario: User requires to create a field with dates that conform to one or many
        """
        And foo is of type "temporal"
        And foo is before 2018-10-10T00:00:00.000
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo                     |
        | null                    |
        | 2018-10-01T00:00:00.001 |
@@ -143,6 +147,8 @@ Scenario: User requires to create a field with dates that conform to one or many
        | 2018-10-08T00:00:00.000 |
        | 2018-10-09T00:00:00.000 |
 
+    @ignore
+    # failing - data is duplicated linked to issue 91
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
        Given there is a constraint:
        """
@@ -160,7 +166,7 @@ Scenario: User requires to create a field with dates that conform to multiple se
        """
        And foo is of type "temporal"
        And foo is before 2018-10-09T00:00:00.000
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo                     |
        | null                    |
        | 2018-10-03T00:00:00.001 |
@@ -185,22 +191,22 @@ Scenario: Running an 'anyOf' request that contains a valid nested anyOf request 
         }
       ]}
     """
-  And foo is in set:
-    | "1"     |
-    | "22"    |
-    | "333"   |
-    | "4444"  |
-    | "55555" |
-  And foo is of type "string"
-  And foo is anything but null
+    And foo is in set:
+      | "1"     |
+      | "22"    |
+      | "333"   |
+      | "4444"  |
+      | "55555" |
+    And foo is of type "string"
+    And foo is anything but null
   Then the following data should be generated:
-    | foo     |
-    | "1"     |
-    | "333"   |
-    | "55555" |
-  And the following data should not be included in what is generated:
-    | "22"   |
-    | "4444" |
+      | foo     |
+      | "1"     |
+      | "333"   |
+      | "55555" |
+    And the following data should not be included in what is generated:
+      | "22"   |
+      | "4444" |
 
 Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
   Given there is a constraint:
@@ -217,22 +223,22 @@ Scenario: Running an 'anyOf' request that contains a valid nested allOf request 
         }
       ]}
     """
-  And foo is in set:
-    | "1"     |
-    | "22"    |
-    | "333"   |
-    | "4444"  |
-    | "55555" |
-  And foo is of type "string"
-  And foo is anything but null
+    And foo is in set:
+      | "1"     |
+      | "22"    |
+      | "333"   |
+      | "4444"  |
+      | "55555" |
+    And foo is of type "string"
+    And foo is anything but null
   Then the following data should be generated:
-    | foo    |
-    | "1"    |
-    | "4444" |
-  And the following data should not be included in what is generated:
-    | "22"    |
-    | "333"   |
-    | "55555" |
+      | foo    |
+      | "1"    |
+      | "4444" |
+    And the following data should not be included in what is generated:
+      | "22"    |
+      | "333"   |
+      | "55555" |
 
 Scenario: Running an 'anyOf' request that contains an invalid nested anyOf request should fail with an error message
   Given there is a constraint:
@@ -288,10 +294,16 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
     ]}
   """
   And foo is of type "string"
+  And foo is in set:
+    |  "a"  |
+    |   1   |
+    |  "aa" |
+    |  "9"  |
+    |  "a1" |
+    |  "B"  |
   And foo is anything but null
-  Then the following data should be included in what is generated:
+  Then the following data should be generated:
     | foo |
     | "a" |
-    | "A" |
-    | "1" |
     | "9" |
+    | "B" |

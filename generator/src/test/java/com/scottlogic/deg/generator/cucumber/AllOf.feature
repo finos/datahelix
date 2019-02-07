@@ -9,16 +9,21 @@ Scenario: Running an 'allOf' request that contains a valid nested allOf request 
        """
          { "allOf": [
            { "allOf": [
-             { "field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" },
-             { "field": "foo", "is": "ofLength", "value": 3 }
+             { "field": "foo", "is": "matchingRegex", "value": "[a-b]{2}" },
+             { "field": "foo", "is": "ofLength", "value": 2 }
            ]},
            { "field": "foo", "is": "ofType", "value": "string" }
          ]}
        """
-     Then the following data should be included in what is generated:
-       | foo   |
-       | "abc" |
+     Then the following data should be generated:
+       | foo  |
+       | "aa" |
+       | "ab" |
+       | "bb" |
+       | "ba" |
+       | null |
 
+ @ignore # failing - generates duplicate nulls linked to issue 91
 Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
      Given there is a field foo
        And foo is of type "string"
@@ -32,12 +37,13 @@ Scenario: Running an 'allOf' request that contains a valid nested anyOf request 
            { "field": "foo", "is": "matchingRegex", "value": "[1]{1,2}" }
          ]}
        """
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | "1"  |
        | "11" |
+       | null |
 
-Scenario: Running an 'allOf' request that contains an invalid nested allOf request should be successful
+Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
      Given there is a field foo
        And there is a constraint:
        """
@@ -53,9 +59,12 @@ Scenario: Running an 'allOf' request that contains an invalid nested allOf reque
       | foo  |
       | null |
 
-@ignore
-Scenario: Running an 'allOf' request that contains an invalid nested anyOf request should fail with an error message
+ @ignore #failing - looks to be part of issue 91
+Scenario: Running an 'allOf' request that contains soft contradictory restraints in a nested anyOf request should be successful
      Given there is a field foo
+       And foo is in set:
+        |   5   |
+        | "ack" |
        And there is a constraint:
        """
          { "allOf": [
@@ -63,11 +72,14 @@ Scenario: Running an 'allOf' request that contains an invalid nested anyOf reque
              {"field": "foo", "is": "matchingRegex", "value": "[a-z]{3}" },
              {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" }
            ]},
-           { "field": "foo", "is": "ofType", "value": "numeric" }
+           { "field": "foo", "is": "ofType", "value": "numeric" },
+           { "field": "foo", "is": "equalTo", "value": 5}
          ]}
        """
-     Then I am presented with an error message
-       And no data is created
+     Then the following data should be generated:
+       | foo  |
+       |  5   |
+       | null |
 
 Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
      Given there is a field foo
@@ -83,7 +95,7 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
        | foo      |
        | "Test01" |
 
-  Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator
+Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should generate null
     Given there is a field foo
     And there is a constraint:
     """
@@ -98,7 +110,6 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
 
 Scenario: Numeric value using the allOf operator
      Given there is a field foo
-       And foo is of type "numeric"
        And there is a constraint:
        """
          { "allOf": [

@@ -8,11 +8,15 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
+    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
@@ -42,7 +46,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
         return fileNameWithoutExtension + ".csv";
     }
 
-    private static Object extractCellValue(DataBagValue cell){
+    private static Object extractCellValue(DataBagValue cell) {
         if (cell.value == null) {
             return null;
         }
@@ -55,6 +59,14 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     private static Object wrapInQuotesIfString(Object value){
         if (value == null){
             return null;
+        }
+
+        if (value instanceof BigDecimal) {
+            return ((BigDecimal) value).toPlainString();
+        }
+
+        if (value instanceof LocalDateTime){
+            return standardDateFormat.format((LocalDateTime) value);
         }
 
         if (value instanceof String){

@@ -15,3 +15,10 @@ about: I have a suggestion (and may want to implement it 🙂)!
 ...clearly and concisely describe what you want to happen. Add any considered drawbacks.
 
 ... if you've considered alternatives, clearly and concisely describe those too.
+
+### Acceptance Criteria:
+...describe the things that should be checked or changed to confirm the task is complete
+
+...think about behaviour rather than implementation
+
+...think about tests and the quality of the product

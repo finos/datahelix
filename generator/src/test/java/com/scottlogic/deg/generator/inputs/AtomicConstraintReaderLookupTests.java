@@ -1,12 +1,9 @@
-package com.scottlogic.deg.generator.constraints;
+package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.inputs.AtomicConstraintReaderLookup;
-import com.scottlogic.deg.generator.inputs.ConstraintReader;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -26,7 +23,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AtomicConstraintTests {
+public class AtomicConstraintReaderLookupTests {
 
     AtomicConstraintReaderLookup atomicConstraintReaderLookup;
     ProfileFields profileFields;

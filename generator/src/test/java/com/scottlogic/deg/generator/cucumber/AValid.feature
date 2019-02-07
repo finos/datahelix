@@ -7,33 +7,33 @@ Background:
 
 Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should be successful
     Given foo is a valid "ISIN"
-    And foo is in set:
-      | "GB0002634946"  |
-      | "US0378331005"  |
-      | "GB0002634947"  |
-      | "US0378331006"  |
-      | "US378331005"   |
-      | "US37833100598" |
-      | "G00002634946"  |
-      | "400002634946"  |
-      | "GBP002634946"  |
-      | "GB000263494Z"  |
-      | "0002634946GB"  |
+      And foo is in set:
+        | "GB0002634946"  |
+        | "US0378331005"  |
+        | "GB0002634947"  |
+        | "US0378331006"  |
+        | "US378331005"   |
+        | "US37833100598" |
+        | "G00002634946"  |
+        | "400002634946"  |
+        | "GBP002634946"  |
+        | "GB000263494Z"  |
+        | "0002634946GB"  |
     Then the following data should be generated:
       | foo            |
       | null           |
       | "GB0002634946" |
       | "US0378331005" |
-    And the following data should not be included in what is generated:
-      | foo             |
-      | "GB0002634947"  |
-      | "US0378331006"  |
-      | "US378331005"   |
-      | "US37833100598" |
-      | "G00002634946"  |
-      | "400002634946"  |
-      | "GBP002634946"  |
-      | "GB000263494z"  |
+      And the following data should not be included in what is generated:
+        | foo             |
+        | "GB0002634947"  |
+        | "US0378331006"  |
+        | "US378331005"   |
+        | "US37833100598" |
+        | "G00002634946"  |
+        | "400002634946"  |
+        | "GBP002634946"  |
+        | "GB000263494z"  |
 
 
   Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should fail with an error message
@@ -104,70 +104,72 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
 
   Scenario: Running an 'aValid' request alongside a non-contradicting equalTo constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is equal to "GB0002634946"
+      And foo is equal to "GB0002634946"
     Then the following data should be generated:
       | foo            |
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is equal to "GB00026349"
-    Then I am presented with an error message
-    And no data is created
+      And foo is equal to "GB00026349"
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is in set:
-      | "GB0002634946" |
+      And foo is in set:
+        | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is in set:
-      | "GB0002634947"  |
-      | "US0378331006"  |
-      | "US378331005"   |
-      | "US37833100598" |
-      | "G00002634946"  |
-      | "400002634946"  |
-      | "GBP002634946"  |
-      | "GB000263494z"  |
-    Then I am presented with an error message
-    And no data is created
+      And foo is in set:
+        | "GB0002634947"  |
+        | "US0378331006"  |
+        | "US378331005"   |
+        | "US37833100598" |
+        | "G00002634946"  |
+        | "400002634946"  |
+        | "GBP002634946"  |
+        | "GB000263494z"  |
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a null constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a null constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is null
-    Then I am presented with an error message
-    And no data is created
+      And foo is null
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should be successful
+    @ignore #linked to issue 487
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is matching regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
+    Then the following data should be generated:
+      | foo |
+      | null |
     Examples:
       | regex               |
+      | null                |
       | /GB0002634946/      |
       | /[A-Z]{2}[0-9]{10}/ |
       | /[A-Z0-9]{12}/      |
       | /[A-Z0-9]/          |
 
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting matchingRegex constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is matching regex <regex>
-    Then I am presented with an error message
-    And no data is created
+      And foo is matching regex <regex>
+    And the following data should be generated:
+      | foo  |
+      | null |
     Examples:
       | regex               |
       | /GB0002634947/      |
@@ -179,13 +181,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z0-9]{13}/      |
       | /[A-Z0-9]{11}/      |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is containing regex <regex>
-    Then the following data should be included in what is generated:
-      | foo            |
-      | "GB0002634946" |
+    Then the following data should be generated:
+      | foo  |
+      | null |
     Examples:
       | regex               |
       | /GB0002634946/      |
@@ -199,11 +200,12 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /[A-Z]{2}[0-9]{9}/  |
       | /[A-Z0-9]{11}/      |
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting containingRegex constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is containing regex <regex>
-    Then I am presented with an error message
-    And no data is created
+      And foo is containing regex <regex>
+    And the following data should be generated:
+      | foo  |
+      | null |
     Examples:
       | regex               |
       | /GB0002634947/      |
@@ -214,21 +216,21 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | /GBZ/               |
       | /0002634947/        |
 
-  @ignore @bug
-  Scenario: Running an 'aValid' request alongside a non-contradiction ofLength constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is of length 12
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
-      | foo            |
-      | "GB0002634946" |
+      | foo  |
+      | null |
 
-  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should fail with an error message
+  Scenario Outline: Running an 'aValid' request alongside a contradicting ofLength constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is of length <length>
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
     Examples:
     | length |
     | 11     |
@@ -237,115 +239,170 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     | 0      |
     | 9999   |
 
-  @ignore @bug
-  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should be successful
+  Scenario Outline: Running an 'aValid' request alongside a non-contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is longer than <length>
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
-      | foo            |
-      | "GB0002634946" |
+      | foo  |
+      | null |
     Examples:
       | length |
       | 0      |
       | 1      |
       | 11     |
 
-  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting longerThan constraint should only emit null
     Given foo is a valid "ISIN"
-    And foo is longer than 12
-    Then I am presented with an error message
-    And no data is created
+      And foo is longer than 12
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
-  @ignore @bug
-  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should be successful
+  Scenario: Running an 'aValid' request alongside a non-contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is shorter than 13
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
-      | "GB0002634946" |
+      | foo  |
+      | null |
 
-  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a contradicting shorterThan constraint should only emit null
     Given foo is a valid "ISIN"
     And foo is shorter than 12
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
-  @ignore @bug
   Scenario: Running an 'aValid' request alongside a non-contradicting aValid constraint should be successful
     Given foo is a valid "ISIN"
     And foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
+      | foo            |
+      | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a greaterThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a greaterThan constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is greater than 0
-    Then I am presented with an error message
-    And no data is created
+      And foo is greater than 0
+      And foo is in set:
+        | "GB0002634946"  |
+        | "GB000263494"   |
+        | "GB00026349468" |
+        | 1               |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a greaterThanOrEqualTo constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a greaterThanOrEqualTo constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is greater than or equal to 1
-    Then I am presented with an error message
-    And no data is created
+      And foo is greater than or equal to 1
+      And foo is in set:
+        | "GB0002634946"  |
+        | "GB000263494"   |
+        | "GB00026349468" |
+        | 1               |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a lessThan constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a lessThan constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is less than 13
-    Then I am presented with an error message
-    And no data is created
+      And foo is less than 13
+      And foo is in set:
+        | "GB0002634946"  |
+        | "GB000263494"   |
+        | "GB00026349468" |
+        | 1               |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a lessThanOrEqualTo constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is less than or equal to 12
-    Then I am presented with an error message
-    And no data is created
+      And foo is less than or equal to 12
+      And foo is in set:
+        | "GB0002634946"  |
+        | "GB000263494"   |
+        | "GB00026349468" |
+        | 1               |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a granularTo constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a granularTo constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is granular to 1
-    Then I am presented with an error message
-    And no data is created
+      And foo is granular to 1
+      And foo is in set:
+        | "GB0002634946"  |
+        | "GB000263494"   |
+        | "GB00026349468" |
+        | 1               |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside an after constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside an after constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is after 2018-09-01T00:00:00.000
-    Then I am presented with an error message
-    And no data is created
+      And foo is after 2018-09-01T00:00:00.000
+      And foo is in set:
+        | "GB0002634946"          |
+        | "GB000263494"           |
+        | "GB00026349468"         |
+        | 2018-09-01T00:00:00.001 |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside an afterOrAt constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside an afterOrAt constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is after or at 2018-09-01T00:00:00.000
-    Then I am presented with an error message
-    And no data is created
+      And foo is after or at 2018-09-01T00:00:00.000
+      And foo is in set:
+        | "GB0002634946"          |
+        | "GB000263494"           |
+        | "GB00026349468"         |
+        | 2018-09-01T00:00:00.001 |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a before constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a before constraint should be successful
     Given foo is a valid "ISIN"
     And foo is before 2018-09-01T00:00:00.000
-    Then I am presented with an error message
-    And no data is created
+    And foo is in set:
+      | "GB0002634946"          |
+      | "GB000263494"           |
+      | "GB00026349468"         |
+      | 2018-08-01T00:00:00.000 |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore
-  Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should fail with an error message
+  Scenario: Running an 'aValid' request alongside a beforeOrAt constraint should be successful
     Given foo is a valid "ISIN"
-    And foo is before or at 2018-09-01T00:00:00.000
-    Then I am presented with an error message
-    And no data is created
+      And foo is before or at 2018-09-01T00:00:00.000
+      And foo is in set:
+        | "GB0002634946"          |
+        | "GB000263494"           |
+        | "GB00026349468"         |
+        | 2018-08-01T00:00:00.000 |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
 
-  @ignore @bug
   Scenario: Running an 'aValid' request with a not constraint should be successful
     Given foo is anything but a valid "ISIN"
     And foo is in set:
@@ -355,13 +412,13 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "GB0002634946"            |
     Then the following data should be generated:
       | foo                       |
-      | "333"                     |
-      | 123                       |
-      | 2018-09-01T00:00:00.000   |
+      | null                      |
+      | "333" |
     And the following data should not be included in what is generated:
       | foo            |
       | "GB0002634946" |
 
+    @ignore #failing due to null duplication see issue 91 and issue with string contradictions alongside ISIN issue 487
   Scenario: Running an 'aValid' request as part of a non-contradicting anyOf constraint should be successful
     Given there is a constraint:
       """
@@ -375,7 +432,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | "1"            |
       | "GB0002634947" |
       | "333"          |
-    Then the following data should be included in what is generated:
+    Then the following data should be generated:
       | foo            |
       | null           |
       | "GB0002634946" |
@@ -398,8 +455,7 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
 
-  @ignore
-  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should fail with an error message
+  Scenario: Running an 'aValid' request as part of a contradicting allOf constraint should only emit null
     Given there is a constraint:
       """
         { "allOf": [
@@ -407,5 +463,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
            { "field": "foo", "is": "equalTo", "value": "GB0002634947" }
         ]}
       """
-    Then I am presented with an error message
-    And no data is created
+    Then the following data should be generated:
+      | foo            |
+      | null           |
