@@ -6,6 +6,8 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
+import com.scottlogic.deg.generator.inputs.IndividualRuleProfileValidator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -20,6 +22,7 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
+import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -94,7 +97,16 @@ class ExampleProfilesViolationTests {
                         new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
-                ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
+                ViolationGenerationEngine violationGenerationEngine =
+                    new ViolationGenerationEngine(
+                        Collections.emptyList(),
+                        new ManifestWriter(),
+                        null,
+                        new IndividualRuleProfileValidator(
+                            new ManifestWriter(),
+                            null,
+                            new IndividualConstraintRuleViolator(new ArrayList<>())),
+                        engine);
 
                 consumer.generate(
                     violationGenerationEngine,
