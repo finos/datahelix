@@ -10,11 +10,14 @@ import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFiel
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class FieldSpecValueGenerator {
+    private static final JavaUtilRandomNumberGenerator randomNumberGenerator = new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano());
+
     private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
 
@@ -56,7 +59,7 @@ public class FieldSpecValueGenerator {
             case INTERESTING:
                 return source.generateInterestingValues();
             case RANDOM:
-                return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+                return source.generateRandomValues(randomNumberGenerator);
         }
     }
 }
