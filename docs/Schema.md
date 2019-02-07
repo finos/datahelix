@@ -36,9 +36,9 @@
 		{ 
 			"rule": "allowed countries",
 			"constraints": [
-				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] },
+				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] }
 			]
-		}
+		},
 		{
 			"rule": "country tariffs",
 			"constraints": [

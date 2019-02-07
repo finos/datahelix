@@ -2,13 +2,13 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 public class GenerateCommandLine extends CommandLineBase {
 
@@ -56,7 +56,7 @@ public class GenerateCommandLine extends CommandLineBase {
     @CommandLine.Option(
         names = {"-n", "--n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+    private Long maxRows;
 
     @CommandLine.Option(
         names = {"-v", "--v", "--validate-profile"},
@@ -153,8 +153,10 @@ public class GenerateCommandLine extends CommandLineBase {
     }
 
     @Override
-    public long getMaxRows() {
-        return this.maxRows;
+    public Optional<Long> getMaxRows() {
+        return maxRows == null
+            ? Optional.empty()
+            : Optional.of(maxRows);
     }
 
     @Override
