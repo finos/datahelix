@@ -3,10 +3,11 @@ Options are optional and case-insensitive
 
 * `--violate` 
     * generate data which violates profile constraints. Options are: `true` or `false` (default)
-* `-n <rows>` or `--max-rows <rows>`
-   * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows
 * `-t <generationType>` or `--t <generationType>`
    * Emit `<generationType>` data. Options are: `INTERESTING` (default) or `RANDOM`, `FULL_SEQUENTIAL`, see [Generation types](../../generator/docs/GenerationTypes.md) for more details
+* `-n <rows>` or `--max-rows <rows>`
+   * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows
+   * Mandatory in `RANDOM` mode
 * `-c <combinationType>` or `--c <combinationTye>`
    * When producing data combine each data point using the `<combinationType>` strategy. Options are: `PINNING` (default), `EXHAUSTIVE`, `MINIMAL`, see [Combination strategies](../../generator/docs/CombinationStrategies.md) for more details.
 * `-w <walker>` or `--w <walker>`
