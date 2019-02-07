@@ -16,7 +16,8 @@ public class RowSpecDataBagSourceFactory {
     private final FieldSpecValueGenerator generator;
 
     @Inject
-    public RowSpecDataBagSourceFactory(FieldSpecValueGenerator generator) {
+    public RowSpecDataBagSourceFactory(
+        FieldSpecValueGenerator generator) {
         this.generator = generator;
     }
 
@@ -94,6 +95,10 @@ public class RowSpecDataBagSourceFactory {
 
         @Override
         public Stream<DataBag> generate(GenerationConfig generationConfig) {
+            if (generationConfig.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
+                return dataBags.limit(1);
+            }
+
             return dataBags;
         }
     }

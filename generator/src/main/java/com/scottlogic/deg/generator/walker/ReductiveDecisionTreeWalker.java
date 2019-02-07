@@ -5,11 +5,13 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -22,6 +24,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final FixedFieldBuilder fixedFieldBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
+    private final GenerationConfig config;
 
     @Inject
     public ReductiveDecisionTreeWalker(
@@ -29,12 +32,14 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixedFieldBuilder fixedFieldBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveDecisionTreeReducer treeReducer,
-        ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
+        ReductiveRowSpecGenerator reductiveRowSpecGenerator,
+        GenerationConfig config) {
         this.iterationVisualiser = iterationVisualiser;
         this.fixedFieldBuilder = fixedFieldBuilder;
         this.monitor = monitor;
         this.treeReducer = treeReducer;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
+        this.config = config;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
@@ -55,15 +60,29 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+        Integer maxRowSpecsPerSource = config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
+            ? 1
+            : null;
 
-        if (nextFixedField == null){
-            //couldn't fix a field, maybe there are contradictions in the root node?
+        Iterator<RowSpec> iterator = new SourceRepeatingIterator<>(
+            maxRowSpecsPerSource,
+            () -> {
+                FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
 
-            return Stream.empty();
-        }
+                if (nextFixedField == null){
+                    //couldn't fix a field, maybe there are contradictions in the root node?
 
-        return process(rootNode, initialState.with(nextFixedField));
+                    return Collections.emptyIterator();
+                }
+
+                return process(rootNode, initialState.with(nextFixedField)).iterator();
+            });
+
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(
+                iterator,
+                Spliterator.ORDERED
+            ), false);
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState) {
