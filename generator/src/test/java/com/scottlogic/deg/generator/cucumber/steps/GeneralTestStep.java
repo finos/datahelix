@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -56,7 +55,7 @@ public class GeneralTestStep {
 
     @When("we do not violate any {operator} constraints")
     public void constraintTypeIsNotViolated(String operator){
-        this.state.addConstraintToNotViolate(Arrays.stream(AtomicConstraintType.values()).filter(x->x.toString().equals(operator)).findFirst().get());
+        this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
     }
 
     @When("the walker type is {walkerType}")

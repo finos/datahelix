@@ -35,7 +35,7 @@ public class CucumberTestState {
     final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
 
-    List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
+    final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
     public void addConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)

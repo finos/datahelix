@@ -7,7 +7,7 @@ Background:
   And the data requested is violating
   And the generator can generate at most 20 rows
 
-  Scenario: Running the generator in violate but also saying not to violate the constraint is successful
+  Scenario: Running the generator in violate but also saying not to violate the less than constraint is successful
     Given foo is less than 10
     When we do not violate any less than constraints
     Then the following data should be included in what is generated:
@@ -30,3 +30,14 @@ Background:
       | 10         | "CCC" |
       | 11         | "DDD" |
       | null       | null  |
+
+  Scenario: Running the generator in violate but also saying not to violate an unrelated constraint is successful
+    Given foo is less than 10
+    When we do not violate any in set constraints
+    Then the following data should be included in what is generated:
+      | foo       |
+      | 10        |
+      | 11        |
+      | null      |
+
+
