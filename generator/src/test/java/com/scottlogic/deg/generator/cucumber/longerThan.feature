@@ -34,16 +34,33 @@ Scenario: Running a 'longerThan' request on a negative number should fail with a
     Then I am presented with an error message
     And no data is created
 
+
 Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string should fail with an error message
   And foo is longer than 1.1
   Then I am presented with an error message
   And no data is created
 
 
-Scenario: Running a 'longerThan' request on a negative number should fail with an error
-    Given foo is longer than -5
+  Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string test2 should fail with an error message
+    And foo is longer than "Test"
     Then I am presented with an error message
     And no data is created
+
+  Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string test2 should be successful
+    And foo is longer than 2.0
+    And foo is in set:
+    | 1.0 |
+    | 2.0 |
+    | "a" |
+    | "aaa" |
+    Then the following data should be generated:
+      | foo |
+      | null |
+      | 1.0  |
+      | 2.0  |
+      | "aaa" |
+
+
 
 Scenario: Running a 'longerThan' request on a character string should be successful
     Given foo is longer than 2
@@ -190,7 +207,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
     | 1  |
     | 2011-01-01T00:00:00.000 |
 
-@ignore
+  @ignore #issue 487
   Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
     Given foo is longer than 12
     And foo is a valid "ISIN"
@@ -206,7 +223,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
     And the following data should not be included in what is generated:
       | foo  |
       | "22" |
-@ignore
+@ignore #issue 487
    Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
      Given foo is longer than 2
      And foo is anything but a  valid "ISIN"
@@ -223,7 +240,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
      | foo  |
      | "22" |
 
-@ignore
+@ignore #issue 487
    Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
      Given foo is anything but  longer than 1
      And foo is a valid "ISIN"
@@ -240,7 +257,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
        | foo  |
        | "2" |
 
-@ignore
+@ignore #issue 487
    Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
       Given foo is anything but  longer than 1
         And foo is a valid "ISIN"
@@ -257,7 +274,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
           | foo  |
           | "2" |
 
-@ignore
+@ignore #issue 487
    Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
       Given foo is anything but longer than 1
         And foo is antyhing but valid "ISIN"
@@ -274,7 +291,7 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
           | foo  |
           | "2" |
 
-@ignore
+@ignore #issue 487
    Scenario: Running a 'longerThan' request against contradicting aValid constraint should only generate numeric,temporal and null
       Given foo is longer than 20
          And foo is a valid "ISIN"
@@ -523,7 +540,8 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
       | "2019-01-01T00:00:00.000" |
       |  2019-01-01T00:00:00.000  |
 
-  Scenario: Running an 'longerThan' request alongside a afterOrAt  constraint should be successful
+
+  Scenario: Running an 'longerThan' request alongside a afterOrAt test1  constraint should be successful
     Given foo is longer than 1
     And foo is after or at 2019-01-01T00:00:00.000
     And foo is in set:
@@ -546,7 +564,8 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
       | 2019-01-01T00:00:00.000   |
       | 2019-01-01T00:00:00.001   |
 
-  Scenario: Running an 'longerThan' request alongside a afterOrAt  constraint should be successful
+
+  Scenario: Running an 'longerThan' request alongside a  afterOrAt test2  constraint should be successful
     Given foo is longer than 1
     And foo is anything but after or at 2019-01-01T00:00:00.000
     And foo is in set:
@@ -554,16 +573,99 @@ Scenario: Running a 'longerThan' request against contradicting shorterThan const
       | "aa"   |
       | "aaaa" |
       | "aaaaaaaaaa" |
-      | "2018-01-01T00:00:00.001" |
+      | "2018-02-01T00:00:00.001" |
       | "2019-01-01T00:00:00.000" |
       | 2018-01-01T00:00:00.001   |
       | 2019-01-01T00:00:00.000   |
     Then the following data should be generated:
-      | foo     |
-      | null    |
+      | foo    |
+      | null   |
       | "aa"   |
       | "aaaa" |
       | "aaaaaaaaaa" |
-      | "2018-01-01T00:00:00.001" |
-      |  2018-01-01T00:00:00.001   |
+      | "2018-02-01T00:00:00.001" |
+      | "2019-01-01T00:00:00.000" |
+      |  2018-01-01T00:00:00.001  |
+
+  Scenario: Running a 'longerThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
+    Given foo is longer than 1.1
+    Then I am presented with an error message
+    And no data is created
+
+  Scenario: Running a 'longerThan' request alongside a before constraint should be successful
+    Given foo is longer than 1
+    And foo is before 2019-01-01T00:00:00.000
+    And foo is in set:
+      | "a"  |
+      | "aa"  |
+      | "aaaaa" |
+      | "2019-01-01T00:00:00.000" |
+      | 2018-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.000 |
+    Then the following data should be generated:
+      | foo     |
+      | null    |
+      | "aa"  |
+      | "aaaaa" |
+      | "2019-01-01T00:00:00.000" |
+      | 2018-01-01T00:00:00.000 |
+
+  Scenario: Running a 'longerThan' request alongside a before test 2 constraint should be successful
+    Given foo is longer than 1
+    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is in set:
+      | "a"  |
+      | "aa"  |
+      | "aaaaa" |
+      | "2019-01-01T00:00:00.000" |
+      | 2018-01-01T00:00:00.000 |
+      | 2019-02-01T00:00:00.000 |
+      | 2020-02-01T00:00:00.000 |
+    Then the following data should be generated:
+      | foo     |
+      | null    |
+      | "aa"  |
+      | "aaaaa" |
+      | "2019-01-01T00:00:00.000" |
+      | 2019-02-01T00:00:00.000 |
+      | 2020-02-01T00:00:00.000 |
+
+Scenario: Running a 'longerThan' request alongside a non contradicting  beforeOrAt constraint should be successful
+  Given foo is longer than 1
+  And foo is before or at 2019-01-01T00:00:00.000
+  And foo is in set:
+    | "a"  |
+    | "aa"  |
+    | "aaaa" |
+    | "2019-01-01T00:00:00.000" |
+    | 2019-01-01T00:00:00.000   |
+    | 2018-01-01T00:00:00.000   |
+    | 2020-01-01T00:00:00.000   |
+  Then the following data should be generated:
+    | foo     |
+    | null    |
+    | "aa"    |
+    | "aaaa"  |
+    | "2019-01-01T00:00:00.000" |
+    | 2019-01-01T00:00:00.000   |
+    | 2018-01-01T00:00:00.000   |
+
+Scenario: Running a 'longerThan' request alongside a non contradicting  beforeOrAt test 2 constraint should be successful
+  Given foo is longer than 1
+  And foo is anything but before or at 2019-01-01T00:00:00.000
+  And foo is in set:
+    | "a"  |
+    | "aa"  |
+    | "aaaa" |
+    | "2019-01-01T00:00:00.000" |
+    | 2019-01-01T00:00:00.000   |
+    | 2018-01-01T00:00:00.000   |
+    | 2020-01-01T00:00:00.000   |
+  Then the following data should be generated:
+    | foo     |
+    | null    |
+    | "aa"    |
+    | "aaaa"  |
+    | "2019-01-01T00:00:00.000" |
+    | 2020-01-01T00:00:00.000   |
 
