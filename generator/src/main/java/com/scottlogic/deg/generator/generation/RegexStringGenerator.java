@@ -254,10 +254,24 @@ public class RegexStringGenerator implements StringGenerator {
             if (!selectedTransitions.contains(nextInt)) {
                 selectedTransitions.add(nextInt);
 
-                Transition randomTransition = transitions.get(nextInt);
-                int diff = randomTransition.getMax() - randomTransition.getMin() + 1;
-                int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
-                char randomChar = (char) (randomOffset + randomTransition.getMin());
+
+                /**
+                 * <p>
+                 * We have to surround this functionality in a loop checking for invalid
+                 * UTF-8 characters until the automaton library is updated.
+                 * </p>
+                 * <p>
+                 *     see {@link FiniteStringAutomatonIterator::node.hasNext() hasNext()}
+                 * </p>
+                 */
+                Transition randomTransition;
+                char randomChar;
+                do {
+                    randomTransition = transitions.get(nextInt);
+                    int diff = randomTransition.getMax() - randomTransition.getMin() + 1;
+                    int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
+                    randomChar = (char) (randomOffset + randomTransition.getMin());
+                } while (!isCharValidUtf8(randomChar));
                 result = generateRandomStringInternal(strMatch + randomChar, randomTransition.getDest(), minLength, maxLength, random);
             }
         }
@@ -438,16 +452,16 @@ public class RegexStringGenerator implements StringGenerator {
          * word UTF-8 characters to be output.
          * </p>
          * <p>
-         *     FIXME - This check will be removed if/when the dk.brics.automaton
-         *     library is fixed to support surrogate pairs,
+         * FIXME - This check will be removed if/when the dk.brics.automaton
+         * library is fixed to support surrogate pairs,
          * </p>
          * <p>
-         *     issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
-         *     has been raised on the dk.brics.automaton library
+         * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+         * has been raised on the dk.brics.automaton library
          * </p>
          * <p>
-         *     issue #537 has been created to track when the dk.brics.automaton library
-         *     is updated.
+         * issue #537 has been created to track when the dk.brics.automaton library
+         * is updated.
          * </p>
          */
         @Override
@@ -461,7 +475,7 @@ public class RegexStringGenerator implements StringGenerator {
                     return false;
                 }
                 currentValue = stringGenerator.getMatchedString(currentIndex);
-            } while (!containsValidUtf8Chars(currentValue));
+            } while (!isStringValidUtf8(currentValue));
             return currentValue != null;
         }
 
@@ -473,27 +487,31 @@ public class RegexStringGenerator implements StringGenerator {
                 currentValue = null;
             }
         }
+    }
 
-        /**
-         * <p>
-         * check to see if the character generated is a valid utf-8 single word value.
-         * </p>
-         * <p>
-         * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
-         * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
-         * </p>
-         * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
-         * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
-         * </code>
-         */
-        public boolean containsValidUtf8Chars(String str) {
-            for (char c : str.toCharArray()) {
-                if (Character.isSurrogate(c)) {
-                    return false;
-                }
+    /**
+     * <p>
+     * check to see if the character generated is a valid utf-8 single word value.
+     * </p>
+     * <p>
+     * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
+     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
+     * </p>
+     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
+     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
+     * </code>
+     */
+    public boolean isStringValidUtf8(String str) {
+        for (char c : str.toCharArray()) {
+            if (!isCharValidUtf8(c)) {
+                return false;
             }
-            return true;
         }
+        return true;
+    }
+
+    public boolean isCharValidUtf8(char c) {
+        return Character.isSurrogate(c) ? false : true;
     }
 
     public boolean equals(Object o) {
