@@ -14,8 +14,7 @@ import java.util.stream.StreamSupport;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RegexStringGeneratorTests {
     @Test
@@ -106,7 +105,7 @@ public class RegexStringGeneratorTests {
 
         for (String interestingValue : resultsIterable) {
             for (char character : interestingValue.toCharArray()) {
-                Assert.assertThat(character, greaterThanOrEqualTo((char)32));
+                Assert.assertThat(character, greaterThanOrEqualTo((char) 32));
             }
         }
     }
@@ -146,14 +145,14 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
         String[] sampleValues =
-                IterableAsStream.convert(resultsIterable)
-                        .toArray(String[]::new);
+            IterableAsStream.convert(resultsIterable)
+                .toArray(String[]::new);
 
         Assert.assertThat(
-                sampleValues,
-                arrayContainingInAnyOrder(
-                        "",
-                        "Test"));
+            sampleValues,
+            arrayContainingInAnyOrder(
+                "",
+                "Test"));
     }
 
     @Test
@@ -163,9 +162,9 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         List<String> sampleValues =
-                IterableAsStream.convert(resultsIterable)
-                        .limit(1000)
-                        .collect(Collectors.toList());
+            IterableAsStream.convert(resultsIterable)
+                .limit(1000)
+                .collect(Collectors.toList());
 
         Assert.assertThat(sampleValues, not(contains(null, "")));
     }
@@ -200,12 +199,12 @@ public class RegexStringGeneratorTests {
         Assert.assertThat(complementedGenerator.isFinite(), equalTo(false));
 
         String sampleValue = complementedGenerator
-                .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
-                .iterator().next();
+            .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
+            .iterator().next();
 
         Assert.assertThat(
-                sampleValue,
-                not(matchesPattern("^[a-m]$")));
+            sampleValue,
+            not(matchesPattern("^[a-m]$")));
         //todo: more robust tests
     }
 
@@ -214,8 +213,8 @@ public class RegexStringGeneratorTests {
         StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
-                UnsupportedOperationException.class,
-                infiniteGenerator::getValueCount);
+            UnsupportedOperationException.class,
+            infiniteGenerator::getValueCount);
     }
 
     @Test
@@ -223,8 +222,8 @@ public class RegexStringGeneratorTests {
         StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
-                UnsupportedOperationException.class,
-                infiniteGenerator::generateAllValues);
+            UnsupportedOperationException.class,
+            infiniteGenerator::generateAllValues);
     }
 
     @Test
@@ -327,8 +326,8 @@ public class RegexStringGeneratorTests {
             .findFirst().orElse(null);
 
         Assert.assertThat(
-                actualValue,
-                equalTo(expectedValue));
+            actualValue,
+            equalTo(expectedValue));
     }
 
     private void expectMatch(String subject, boolean matchFullString) {
@@ -341,5 +340,27 @@ public class RegexStringGeneratorTests {
         StringGenerator generator = constructGenerator(matchFullString);
 
         Assert.assertFalse(generator.match(subject));
+    }
+
+    @Test
+    void isStringValidUtf8() {
+        RegexStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
+
+        String invalidStr = "a simple invalid 😘 string";
+        String validStr = "a simple valid 亮 string";
+
+        assertFalse(generator.isStringValidUtf8(invalidStr));
+        assertTrue(generator.isStringValidUtf8(validStr));
+    }
+
+    @Test
+    void isCharValidUtf8() {
+        RegexStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
+
+        char invalidChar = 0xD83D;
+        char validChar = '亮';
+
+        assertFalse(generator.isCharValidUtf8(invalidChar));
+        assertTrue(generator.isCharValidUtf8(validChar));
     }
 }
