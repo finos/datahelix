@@ -18,7 +18,6 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private String startedGenerating;
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
-    private BigInteger maxRows;
     private Timer timer = new Timer(true);
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
     private long previousVelocity = 0;
@@ -28,7 +27,6 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         startedGenerating = simpleDateFormat.format( new Date());
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
-        maxRows = BigInteger.valueOf(generationConfig.getMaxRows());
 
         System.out.println("Generation started at: " + startedGenerating + "\n");
         System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");

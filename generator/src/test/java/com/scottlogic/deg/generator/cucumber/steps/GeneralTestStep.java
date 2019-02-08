@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -219,9 +220,9 @@ public class GeneralTestStep {
         Assert.assertFalse("No data was generated but some was expected", data.isEmpty());
     }
 
-    @Given("the generator can generate at most {int} rows")
-    public void theGeneratorCanGenerateAtMostRows(int maxNumberOfRows) {
-        state.maxRows = maxNumberOfRows;
+    @Given("the generator can generate at most {long} rows")
+    public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
+        state.maxRows = Optional.of(maxNumberOfRows);
     }
 
     class GeneratedTestData {

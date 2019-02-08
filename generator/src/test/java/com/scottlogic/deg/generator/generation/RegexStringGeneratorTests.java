@@ -5,16 +5,17 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class RegexStringGeneratorTests {
     @Test
@@ -246,6 +247,25 @@ public class RegexStringGeneratorTests {
         Assert.assertNotEquals(0, nonContradictingGenerator.getValueCount());
     }
 
+    @Test
+    void shouldNotGenerateInvalidUnicodeCodePoints() {
+        StringGenerator generator = new RegexStringGenerator("[😁-😘]{1}", true);
+        Iterable<String> resultsIterable = generator.generateAllValues();
+        for (String s : resultsIterable) {
+            if (s != null && doesStringContainSurrogates(s)) {
+                fail("string contains surrogate character");
+            }
+        }
+    }
+
+    private final boolean doesStringContainSurrogates(String testString) {
+        for (char c : testString.toCharArray()) {
+            if (Character.isSurrogate(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private final List<String> regexes = new ArrayList<>();
 
@@ -297,7 +317,14 @@ public class RegexStringGeneratorTests {
     private void expectFirstResult(String expectedValue) {
         StringGenerator generator = constructGenerator(true);
 
-        String actualValue = generator.generateAllValues().iterator().next();
+        String actualValue = StreamSupport
+            .stream(
+                Spliterators.spliteratorUnknownSize(
+                    generator.generateAllValues().iterator(),
+                    Spliterator.ORDERED),
+                false)
+            .limit(1)
+            .findFirst().orElse(null);
 
         Assert.assertThat(
                 actualValue,
