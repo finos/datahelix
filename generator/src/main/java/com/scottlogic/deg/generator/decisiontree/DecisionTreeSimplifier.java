@@ -52,10 +52,14 @@ public class DecisionTreeSimplifier {
                 node,
                 (parentConstraint, decisionNode) -> {
                     ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
-                    return parentConstraint
-                        .addAtomicConstraints(firstOption.getAtomicConstraints())
-                        .addDecisions(firstOption.getDecisions())
-                        .removeDecisions(Collections.singletonList(decisionNode));
+                    if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)) {
+                        return parentConstraint.removeDecisions(Collections.singletonList(decisionNode));
+                    } else {
+                        return parentConstraint
+                            .addAtomicConstraints(firstOption.getAtomicConstraints())
+                            .addDecisions(firstOption.getDecisions())
+                            .removeDecisions(Collections.singletonList(decisionNode));
+                    }
                 },
                 (node1, node2) ->
                     new TreeConstraintNode(

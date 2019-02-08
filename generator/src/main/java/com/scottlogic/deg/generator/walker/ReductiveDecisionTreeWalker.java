@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -30,7 +31,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveDataGeneratorMonitor monitor,
         ReductiveDecisionTreeReducer treeReducer,
         ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
-        this.iterationVisualiser = iterationVisualiser;
+        this.iterationVisualiser = new ReductiveIterationVisualiser(Paths.get("\\"));
         this.fixedFieldBuilder = fixedFieldBuilder;
         this.monitor = monitor;
         this.treeReducer = treeReducer;

@@ -8,12 +8,10 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReductiveDecisionTreeReducer {
@@ -21,19 +19,22 @@ public class ReductiveDecisionTreeReducer {
     private final DecisionTreeSimplifier simplifier;
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
+    private final ConstraintReducer constraintReducer;
 
     @Inject
     public ReductiveDecisionTreeReducer(
         FieldSpecFactory fieldSpecFactory,
         FieldSpecMerger fieldSpecMerger,
-        DecisionTreeSimplifier simplifier){
+        DecisionTreeSimplifier simplifier,
+        ConstraintReducer constraintReducer) {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.simplifier = simplifier;
+        this.constraintReducer = constraintReducer;
     }
 
     public ReductiveConstraintNode reduce(ConstraintNode rootNode, ReductiveState fixedFields){
-        AdapterContext context = new AdapterContext();
+        AdapterContext context = new AdapterContext(rootNode);
         ConstraintNode node = reduce(rootNode, fixedFields, context);
 
         if (!context.isValid() || node == null){
@@ -76,7 +77,7 @@ public class ReductiveDecisionTreeReducer {
         Collection<AtomicConstraint> potentialResult = constraint
             .getAtomicConstraints().stream()
             .filter(atomicConstraint -> {
-                AtomicConstraintFixedFieldBehaviour behaviour = shouldIncludeAtomicConstraint(fixedFields, atomicConstraint);
+                AtomicConstraintFixedFieldBehaviour behaviour = shouldIncludeAtomicConstraint(fixedFields, atomicConstraint, context);
                 switch (behaviour) {
                     case NON_CONTRADICTORY:
                         context.addNonContradictoryAtomicConstraint(atomicConstraint);
@@ -110,12 +111,16 @@ public class ReductiveDecisionTreeReducer {
 
 
     //Given the current set of fixed fields, work out if the given atomic constraint is contradictory, whether the field is fixed or not
-    private AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(ReductiveState fixedFields, AtomicConstraint atomicConstraint) {
+    private AtomicConstraintFixedFieldBehaviour shouldIncludeAtomicConstraint(ReductiveState fixedFields, AtomicConstraint atomicConstraint, AdapterContext context) {
         //is the field for this atomic constraint fixed?
         //does the constraint complement or conflict with the fixed field?
 
         Field field = atomicConstraint.getField();
         FixedField fixedFieldValue = fixedFields.getFixedField(field);
+
+        if (atomicConstraintConflictsWithRootNode(atomicConstraint, context)) {
+            return AtomicConstraintFixedFieldBehaviour.CONSTRAINT_CONTRADICTS;
+        }
         if (fixedFieldValue == null){
             //field isn't fixed
             return AtomicConstraintFixedFieldBehaviour.FIELD_NOT_FIXED;
@@ -125,6 +130,31 @@ public class ReductiveDecisionTreeReducer {
         return fixedValueConflictsWithAtomicConstraint(fixedFieldValue, atomicConstraint)
             ? AtomicConstraintFixedFieldBehaviour.CONSTRAINT_CONTRADICTS
             : AtomicConstraintFixedFieldBehaviour.NON_CONTRADICTORY;
+    }
+
+    private boolean atomicConstraintConflictsWithRootNode(AtomicConstraint atomicConstraint, AdapterContext context) {
+        List<AtomicConstraint> atomicConstraintsAtRootNodeForField =
+            context.getRootNode()
+                .getAtomicConstraints()
+                .stream()
+                .filter(ac -> ac.getField().equals(atomicConstraint.getField()))
+                .collect(Collectors.toList());
+
+        if (atomicConstraintsAtRootNodeForField.isEmpty()) {
+            return false;
+        }
+
+        FieldSpec fieldSpecForAtomicConstraint = fieldSpecFactory.construct(atomicConstraint);
+        FieldSpec fieldSpecForRootNodeAtomicConstraints = constraintReducer.reduceConstraintsToFieldSpec(
+            atomicConstraintsAtRootNodeForField)
+            .orElse(FieldSpec.Empty);
+
+        if (fieldSpecForRootNodeAtomicConstraints == FieldSpec.Empty) {
+            return true;
+        }
+
+        Optional<FieldSpec> merged = this.fieldSpecMerger.merge(fieldSpecForAtomicConstraint, fieldSpecForRootNodeAtomicConstraints);
+        return !merged.isPresent();
     }
 
     //work out if the field is contradictory
