@@ -43,35 +43,8 @@ class MustContainRestrictionTests {
     }
 
     private FieldSpec fieldSpec(int hashCode){
-        return new MockFieldSpec(hashCode);
-    }
-
-    private class MockFieldSpec extends FieldSpec {
-        private final int hashCode;
-
-        public MockFieldSpec(int hashCode) {
-            super(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                FieldSpecSource.Empty);
-            this.hashCode = hashCode;
-        }
-
-        @Override
-        public int hashCode() {
-            return hashCode;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj.hashCode() == hashCode;
-        }
+        return FieldSpec.Empty.withSetRestrictions(
+            SetRestrictions.fromWhitelist(new HashSet<>(hashCode)),
+            FieldSpecSource.Empty);
     }
 }
