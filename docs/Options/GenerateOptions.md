@@ -19,7 +19,7 @@ Options are optional and case-insensitive
 * `-v`, `--v` or `--validate-profile`
     * Validate the profile, check to see if known [contradictions](../../generator/docs/Contradictions.md) exist, see [Profile validation](../../generator/docs/ProfileValidation.md) for more details
 * `--trace-constraints`
-   * When generating data emit a `<output path>.trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point.
+   * When generating data emit a `<output path>-trace.json` file which will contain details of which rules and constraints caused the generator to emit each data point. See [Tracing Output](../../generator/docs/TracingOutput.md) for more details.
 * `--visualise-reductions`
    * Debug mode for the generator. Turn on per-reduction visualisation of the profile decision tree. Will create a directory named `reductive-walker` under the output path for the files.
 
