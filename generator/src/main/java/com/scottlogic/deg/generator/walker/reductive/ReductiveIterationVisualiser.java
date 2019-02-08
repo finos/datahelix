@@ -24,9 +24,16 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
 
     @Inject
     public ReductiveIterationVisualiser(@Named("outputPath") Path outputPath) {
-        Path directoryPath = outputPath.getParent() == null
-            ? Paths.get(System.getProperty("user.dir"))
-            : outputPath.getParent();
+        boolean outputPathIsADirectory = outputPath != null && outputPath.toFile().isDirectory();
+
+        Path directoryPath;
+        if (outputPathIsADirectory) {
+            directoryPath = outputPath;
+        } else {
+            directoryPath = outputPath == null || outputPath.getParent() == null
+                ? Paths.get(System.getProperty("user.dir"))
+                : outputPath.getParent();
+        }
 
         this.visualiseDirectoryPath = directoryPath.resolve("reductive-walker");
     }
