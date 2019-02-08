@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,6 +52,11 @@ public class GeneralTestStep {
     @When("the combination strategy is {combinationStrategy}")
     public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
         this.state.combinationStrategyType = strategy;
+    }
+
+    @When("we do not violate any {operator} constraints")
+    public void constraintTypeIsNotViolated(String operator){
+        this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
     }
 
     @When("the walker type is {walkerType}")

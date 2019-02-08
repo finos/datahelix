@@ -37,7 +37,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
-        return Collections.emptyList();
+        return state.getConstraintsToNotViolate();
     }
 
     @Override
