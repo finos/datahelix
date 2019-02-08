@@ -8,6 +8,7 @@
     <packaging>jar</packaging>
     <name>DataHelix Generator</name>
     <description>Generator for Scott Logic's DataHelix project</description>
+    <url>https://github.com/ScottLogic/datahelix</url>
 
     <parent>
         <groupId>com.scottlogic.deg</groupId>
@@ -61,6 +62,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
