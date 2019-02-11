@@ -261,7 +261,16 @@ public class RegexStringGenerator implements StringGenerator {
                  * UTF-8 characters until the automaton library is updated.
                  * </p>
                  * <p>
-                 *     see {@link FiniteStringAutomatonIterator::node.hasNext() hasNext()}
+                 * FIXME - This check will be removed if/when the dk.brics.automaton
+                 * library is fixed to support surrogate pairs,
+                 * </p>
+                 * <p>
+                 * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+                 * has been raised on the dk.brics.automaton library
+                 * </p>
+                 * <p>
+                 * issue #537 has been created to track when the dk.brics.automaton library
+                 * is updated.
                  * </p>
                  */
                 Transition randomTransition;
@@ -511,7 +520,7 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     public boolean isCharValidUtf8(char c) {
-        return Character.isSurrogate(c) ? false : true;
+        return !Character.isSurrogate(c);
     }
 
     public boolean equals(Object o) {
