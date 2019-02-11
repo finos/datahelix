@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
@@ -55,11 +56,11 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
+        bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
+        bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
-        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
-        bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
@@ -76,6 +77,8 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
+
+        bind(VelocityMonitor.class).in(Singleton.class);
     }
 
     private void bindAllCommandLineTypes() {

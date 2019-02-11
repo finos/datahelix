@@ -124,7 +124,6 @@ Scenario: User requires to create a field with numbers that conform to multiple 
 
   @ignore
   # failing - data is duplicated linked to issue 91
-  # failing - trims seconds off dates with timestamp T00:00:000. Issue 478
 Scenario: User requires to create a field with dates that conform to one or many constraints
        Given there is a constraint:
        """
@@ -150,7 +149,6 @@ Scenario: User requires to create a field with dates that conform to one or many
 
     @ignore
     # failing - data is duplicated linked to issue 91
-    # failing - trims seconds off dates with timestamp T00:00:000. Issue 479
 Scenario: User requires to create a field with dates that conform to multiple sets of constraints
        Given there is a constraint:
        """

@@ -33,23 +33,31 @@
 				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
 			]
 		},
-
-		{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] },
-
+		{ 
+			"rule": "allowed countries",
+			"constraints": [
+				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] }
+			]
+		},
 		{
-			"if": {
-				"anyOf": [
-					{ "field": "country", "is": "equalTo", "value": "USA" },
-					{ "field": "country", "is": "null" }
-				]
-			},
-			"then": {
-				"allOf": [
-					{ "field": "tariff", "is": "null" },
-					{ "field": "time", "is": "after", "value": { "date": "2014-01-01" } }
-				]
-			},
-			"else": { "not": { "field": "tariff", "is": "null" } }
+			"rule": "country tariffs",
+			"constraints": [
+				{
+					"if": {
+						"anyOf": [
+							{ "field": "country", "is": "equalTo", "value": "USA" },
+							{ "field": "country", "is": "null" }
+						]
+					},
+					"then": {
+						"allOf": [
+							{ "field": "tariff", "is": "null" },
+							{ "field": "time", "is": "after", "value": { "date": "2014-01-01" } }
+						]
+					},
+					"else": { "not": { "field": "tariff", "is": "null" } }
+				}
+			]
 		}
 	]
 }
@@ -60,7 +68,7 @@
 ### `Profile`
 * `"description"`: A description of what data the profile is modelling
 * `"fields"`: A set of `Field` objects
-* `"rules"`: A set of objects, each either a `Rule` object or a `Constraint` object. If a `Constraint` object is supplied, it is implicitly interpreted as a `Rule`, with a description automatically generated from the constraint itself.
+* `"rules"`: A set of `Rule` objects which can contain any number of `Constraint` objects.
 
 ### `Field`
 

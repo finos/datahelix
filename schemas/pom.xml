@@ -6,11 +6,14 @@
 
     <artifactId>schemas</artifactId>
     <packaging>jar</packaging>
+    <name>DataHelix Schema Library</name>
+    <description>Schema Library for Scott Logic's DataHelix project</description>
+    <url>https://github.com/ScottLogic/datahelix</url>
 
     <parent>
-      <groupId>com.scottlogic.deg</groupId>
-      <artifactId>parent</artifactId>
-      <version>1.0-SNAPSHOT</version>
+        <groupId>com.scottlogic.deg</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -58,10 +61,33 @@
             <artifactId>java-hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shazam</groupId>
+            <artifactId>shazamcrest</artifactId>
+            <version>0.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
     </build>
 
 </project>

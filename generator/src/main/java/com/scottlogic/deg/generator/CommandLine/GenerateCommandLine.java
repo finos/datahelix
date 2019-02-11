@@ -2,13 +2,13 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 public class GenerateCommandLine extends CommandLineBase {
 
@@ -56,7 +56,7 @@ public class GenerateCommandLine extends CommandLineBase {
     @CommandLine.Option(
         names = {"-n", "--n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    private long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+    private Long maxRows;
 
     @CommandLine.Option(
         names = {"-v", "--v", "--validate-profile"},
@@ -80,6 +80,21 @@ public class GenerateCommandLine extends CommandLineBase {
         arity = "0..",
         description = "Choose types of constraint should not be violated")
     private List<AtomicConstraintType> constraintsToNotViolate;
+
+    @CommandLine.Option(
+        names = {"--quiet"},
+        description = "Turns OFF default monitoring")
+    private Boolean quiet = false;
+
+    @CommandLine.Option(
+        names = {"--verbose"},
+        description = "Turns ON system out monitoring")
+    private Boolean verbose = false;
+
+    @CommandLine.Option(
+        names = {"--visualise-reductions"},
+        description = "Visualise each tree reduction")
+    private Boolean visualiseReductions = false;
 
     @Override
     public boolean shouldDoPartitioning() {
@@ -132,13 +147,31 @@ public class GenerateCommandLine extends CommandLineBase {
     }
 
     @Override
-    public long getMaxRows() {
-        return this.maxRows;
+    public GenerationConfig.MonitorType getMonitorType() {
+        if (this.verbose) {
+            return GenerationConfig.MonitorType.VERBOSE;
+        }
+        if (this.quiet) {
+            return GenerationConfig.MonitorType.QUIET;
+        }
+        return GenerationConfig.MonitorType.STANDARD;
+    }
+
+    @Override
+    public Optional<Long> getMaxRows() {
+        return maxRows == null
+            ? Optional.empty()
+            : Optional.of(maxRows);
     }
 
     @Override
     public boolean getValidateProfile() {
         return this.validateProfile;
+    }
+
+    @Override
+    public boolean visualiseReductions() {
+        return visualiseReductions;
     }
 
     @Override

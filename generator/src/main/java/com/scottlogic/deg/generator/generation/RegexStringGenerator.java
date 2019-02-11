@@ -1,18 +1,16 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class RegexStringGenerator implements StringGenerator {
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES;
@@ -77,7 +75,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator otherGenerator) {
-        if (otherGenerator instanceof NoStringsStringGenerator){
+        if (otherGenerator instanceof NoStringsStringGenerator) {
             return otherGenerator.intersect(this);
         }
 
@@ -100,11 +98,11 @@ public class RegexStringGenerator implements StringGenerator {
             complementaryRepresentation(this.regexRepresentation));
     }
 
-    private static String complementaryRepresentation(String representation){
+    private static String complementaryRepresentation(String representation) {
         return String.format("¬(%s)", representation);
     }
 
-    static String intersectRepresentation(String left, String right){
+    static String intersectRepresentation(String left, String right) {
         return String.format("%s ∩ %s", left, right);
     }
 
@@ -176,7 +174,7 @@ public class RegexStringGenerator implements StringGenerator {
 
         buildRootNode();
 
-        if(rootNode.nextNodes.isEmpty()){
+        if (rootNode.nextNodes.isEmpty()) {
             return 0;
         }
 
@@ -256,10 +254,33 @@ public class RegexStringGenerator implements StringGenerator {
             if (!selectedTransitions.contains(nextInt)) {
                 selectedTransitions.add(nextInt);
 
-                Transition randomTransition = transitions.get(nextInt);
-                int diff = randomTransition.getMax() - randomTransition.getMin() + 1;
-                int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
-                char randomChar = (char) (randomOffset + randomTransition.getMin());
+
+                /**
+                 * <p>
+                 * We have to surround this functionality in a loop checking for invalid
+                 * UTF-8 characters until the automaton library is updated.
+                 * </p>
+                 * <p>
+                 * FIXME - This check will be removed if/when the dk.brics.automaton
+                 * library is fixed to support surrogate pairs,
+                 * </p>
+                 * <p>
+                 * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+                 * has been raised on the dk.brics.automaton library
+                 * </p>
+                 * <p>
+                 * issue #537 has been created to track when the dk.brics.automaton library
+                 * is updated.
+                 * </p>
+                 */
+                Transition randomTransition;
+                char randomChar;
+                do {
+                    randomTransition = transitions.get(nextInt);
+                    int diff = randomTransition.getMax() - randomTransition.getMin() + 1;
+                    int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
+                    randomChar = (char) (randomOffset + randomTransition.getMin());
+                } while (!isCharValidUtf8(randomChar));
                 result = generateRandomStringInternal(strMatch + randomChar, randomTransition.getDest(), minLength, maxLength, random);
             }
         }
@@ -424,27 +445,85 @@ public class RegexStringGenerator implements StringGenerator {
     private class FiniteStringAutomatonIterator implements Iterator<String> {
 
         private final RegexStringGenerator stringGenerator;
+        private final long matches;
         private int currentIndex;
+        private String currentValue;
 
         FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
             this.stringGenerator = stringGenerator;
+            this.matches = stringGenerator.getValueCount();
             currentIndex = 0;
         }
 
+        /**
+         * <p>
+         * This function has been updated to only allow valid single 16-bit
+         * word UTF-8 characters to be output.
+         * </p>
+         * <p>
+         * FIXME - This check will be removed if/when the dk.brics.automaton
+         * library is fixed to support surrogate pairs,
+         * </p>
+         * <p>
+         * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
+         * has been raised on the dk.brics.automaton library
+         * </p>
+         * <p>
+         * issue #537 has been created to track when the dk.brics.automaton library
+         * is updated.
+         * </p>
+         */
         @Override
         public boolean hasNext() {
-            long matches = stringGenerator.getValueCount();
-            return currentIndex < matches;
+            if (currentValue != null) {
+                return true;
+            }
+            do {
+                currentIndex++; // starts at 1
+                if (currentIndex > matches) {
+                    return false;
+                }
+                currentValue = stringGenerator.getMatchedString(currentIndex);
+            } while (!isStringValidUtf8(currentValue));
+            return currentValue != null;
         }
 
         @Override
         public String next() {
-            currentIndex++; // starts at 1
-            return stringGenerator.getMatchedString(currentIndex);
+            try {
+                return currentValue;
+            } finally {
+                currentValue = null;
+            }
         }
     }
 
-    public boolean equals(Object o){
+    /**
+     * <p>
+     * check to see if the character generated is a valid utf-8 single word value.
+     * </p>
+     * <p>
+     * from chapter 3.9, page 126 of `the Unicode Standard v11.0`
+     * (https://www.unicode.org/versions/Unicode11.0.0/ch02.pdf):
+     * </p>
+     * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
+     * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
+     * </code>
+     */
+    public boolean isStringValidUtf8(String str) {
+        for (char c : str.toCharArray()) {
+            if (!isCharValidUtf8(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isCharValidUtf8(char c) {
+        return !Character.isSurrogate(c);
+    }
+
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass())
             return false;
@@ -452,7 +531,7 @@ public class RegexStringGenerator implements StringGenerator {
         return this.automaton.equals(constraint.automaton);
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
     }
 }

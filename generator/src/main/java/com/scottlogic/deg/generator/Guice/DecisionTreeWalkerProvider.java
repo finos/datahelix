@@ -28,14 +28,16 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
             public DecisionTreeWalker get() {
           switch(this.configSource.getWalkerType()) {
               case CARTESIAN_PRODUCT:
-                return this.cartesianProductDecisionTreeWalker;
+                  return this.cartesianProductDecisionTreeWalker;
 
               case REDUCTIVE:
-                return this.reductiveDecisionTreeWalker;
+                  return this.reductiveDecisionTreeWalker;
 
               case ROUTED:
-                return this.routedDecisionTreeWalker;
+                  return this.routedDecisionTreeWalker;
+
+              default:
+                  return this.reductiveDecisionTreeWalker;
         }
-        return null;
     }
 }
