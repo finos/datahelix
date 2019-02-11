@@ -23,15 +23,8 @@ Scenario: Running a 'shorterThan' request using a number (negative number) to sp
      Then I am presented with an error message
        And no data is created
 
-@ignore #may be linked to issue 234
 Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 1.1
-     Then I am presented with an error message
-       And no data is created
-
-@ignore #may be linked to issue 234
-Scenario: Running a 'shorterThan' request using a number (comma seperated) to specify a the length of a generated string should fail with an error message
-     Given foo is shorter than 1,000
      Then I am presented with an error message
        And no data is created
 
@@ -281,3 +274,14 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        | foo   |
        | "%1"  |
        | "%12" |
+
+Scenario: Running a 'shorterThan' request using a number round (decimal number) to specify a the length of a generated string should be successful
+    Given foo is shorter than 2.0
+    And foo is in set:
+      | "xxx" |
+      | "xx"  |
+      | "x"   |
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "x"  |

@@ -91,6 +91,11 @@ public class GenerateCommandLine extends CommandLineBase {
         description = "Turns ON system out monitoring")
     private Boolean verbose = false;
 
+    @CommandLine.Option(
+        names = {"--visualise-reductions"},
+        description = "Visualise each tree reduction")
+    private Boolean visualiseReductions = false;
+
     @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
@@ -162,6 +167,11 @@ public class GenerateCommandLine extends CommandLineBase {
     @Override
     public boolean getValidateProfile() {
         return this.validateProfile;
+    }
+
+    @Override
+    public boolean visualiseReductions() {
+        return visualiseReductions;
     }
 
     @Override

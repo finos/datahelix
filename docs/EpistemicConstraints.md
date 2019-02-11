@@ -75,7 +75,7 @@ Is satisfied if `field` is a string containing the regular expression expressed 
 { "field": "name", "is": "ofLength", "value": 5 }
 ```
 
-Is satisfied if `field` is a string whose length exactly matches `value`.
+Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number.
     
 ### `longerThan` _(field, value)_
 
@@ -83,7 +83,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`.
 { "field": "name", "is": "longerThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length greater than `value`.
+Is satisfied if `field` is a string with length greater than `value`, must be a whole number.
 
 ### `shorterThan` _(field, value)_
 
@@ -91,7 +91,7 @@ Is satisfied if `field` is a string with length greater than `value`.
 { "field": "name", "is": "shorterThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length less than `value`.   
+Is satisfied if `field` is a string with length less than `value`, must be a whole number.   
 
 ### `aValid` _(field, value)_
 

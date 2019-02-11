@@ -37,7 +37,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
-        return Collections.emptyList();
+        return state.getConstraintsToNotViolate();
     }
 
     @Override
@@ -83,5 +83,10 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
+    }
+
+    @Override
+    public boolean visualiseReductions() {
+        return false;
     }
 }
