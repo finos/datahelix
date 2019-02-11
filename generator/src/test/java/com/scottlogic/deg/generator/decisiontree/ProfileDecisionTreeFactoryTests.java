@@ -650,27 +650,12 @@ class ProfileDecisionTreeFactoryTests {
 
         treeRootShouldMatch(
             new TreeConstraintNode(
-                Collections.emptyList(),
                 Arrays.asList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(
-                            Collections.singletonList(
-                                new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
-                                    add("Test");
-                                }}, null).negate()
-                            ),
-                            Collections.emptyList()
-                        ),
-                        new TreeConstraintNode(
-                            Collections.singletonList(
-                                new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
-                                    add("Test2");
-                                }}, null).negate()
-                            ),
-                            Collections.emptyList()
-                        )
-                    )
-                )
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>(){{ add("Test"); }}, null),
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
+                        add("Test2");
+                    }}, null)),
+                Collections.emptyList()
             )
         );
     }
