@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -44,7 +45,7 @@ class MustContainRestrictionTests {
 
     private FieldSpec fieldSpec(int hashCode){
         return FieldSpec.Empty.withSetRestrictions(
-            SetRestrictions.fromWhitelist(new HashSet<>(hashCode)),
+            SetRestrictions.fromWhitelist(Collections.singleton(hashCode)),
             FieldSpecSource.Empty);
     }
 }
