@@ -94,4 +94,9 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public boolean shouldViolate() {
         return false;
     }
+
+    @Override
+    public boolean visualiseReductions() {
+        return false;
+    }
 }
