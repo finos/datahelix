@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -47,7 +47,7 @@ class ParsedGranularityTests {
         Assert.assertThat(parsed.getNumericGranularity(), equalTo(BigDecimal.valueOf(1)));
     }
 
-    @Ignore("Converting 0.01f (or other fractions) to a BigDecimal results in rounding errors, BigDecimal holds the value 0.009999999776482582, which isn't a fractional power of ten.")
+    @Disabled("Converting 0.01f (or other fractions) to a BigDecimal results in rounding errors, BigDecimal holds the value 0.009999999776482582, which isn't a fractional power of ten.")
     @Test
     public void shouldBeAbleToParseFloatGranularity(){
         ParsedGranularity parsed = ParsedGranularity.parse(0.01f);
