@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.io.IOException;
@@ -32,6 +33,8 @@ public class CucumberTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
+
+    final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
     public void addConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)
@@ -91,6 +94,14 @@ public class CucumberTestState {
 
     public void addException(Exception e){
         this.testExceptions.add(e);
+    }
+
+    public void addConstraintToNotViolate(AtomicConstraintType atomicConstraintType){
+        contstraintsToNotViolate.add(atomicConstraintType);
+    }
+
+    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+        return contstraintsToNotViolate;
     }
 
     private ConstraintDTO createConstraint(String fieldName, String constraintName, Object value) {
