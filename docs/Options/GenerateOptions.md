@@ -3,6 +3,8 @@ Options are optional and case-insensitive
 
 * `--violate` 
     * generate data which violates profile constraints. Options are: `true` or `false` (default)
+* `--dont-violate` <epistemic constraints...>
+    * choose specific [epicstemic constraints](../EpistemicConstraints.md) to not violate, e.g. "--dont-violate=typeOf" will not violate ANY data type constraints
 * `-t <generationType>` or `--t <generationType>`
    * Emit `<generationType>` data. Options are: `INTERESTING` (default) or `RANDOM`, `FULL_SEQUENTIAL`, see [Generation types](../../generator/docs/GenerationTypes.md) for more details
 * `-n <rows>` or `--max-rows <rows>`
