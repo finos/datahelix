@@ -105,7 +105,7 @@ public class RegexStringGeneratorTests {
 
         for (String interestingValue : resultsIterable) {
             for (char character : interestingValue.toCharArray()) {
-                Assert.assertThat(character, greaterThanOrEqualTo((char) 32));
+                Assert.assertThat(character, greaterThanOrEqualTo((char)32));
             }
         }
     }
@@ -145,14 +145,14 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
         String[] sampleValues =
-            IterableAsStream.convert(resultsIterable)
-                .toArray(String[]::new);
+                IterableAsStream.convert(resultsIterable)
+                        .toArray(String[]::new);
 
         Assert.assertThat(
-            sampleValues,
-            arrayContainingInAnyOrder(
-                "",
-                "Test"));
+                sampleValues,
+                arrayContainingInAnyOrder(
+                        "",
+                        "Test"));
     }
 
     @Test
@@ -162,9 +162,9 @@ public class RegexStringGeneratorTests {
         Iterable<String> resultsIterable = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         List<String> sampleValues =
-            IterableAsStream.convert(resultsIterable)
-                .limit(1000)
-                .collect(Collectors.toList());
+                IterableAsStream.convert(resultsIterable)
+                        .limit(1000)
+                        .collect(Collectors.toList());
 
         Assert.assertThat(sampleValues, not(contains(null, "")));
     }
@@ -199,12 +199,12 @@ public class RegexStringGeneratorTests {
         Assert.assertThat(complementedGenerator.isFinite(), equalTo(false));
 
         String sampleValue = complementedGenerator
-            .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
-            .iterator().next();
+                .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
+                .iterator().next();
 
         Assert.assertThat(
-            sampleValue,
-            not(matchesPattern("^[a-m]$")));
+                sampleValue,
+                not(matchesPattern("^[a-m]$")));
         //todo: more robust tests
     }
 
@@ -213,8 +213,8 @@ public class RegexStringGeneratorTests {
         StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
-            UnsupportedOperationException.class,
-            infiniteGenerator::getValueCount);
+                UnsupportedOperationException.class,
+                infiniteGenerator::getValueCount);
     }
 
     @Test
@@ -222,8 +222,8 @@ public class RegexStringGeneratorTests {
         StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
 
         assertThrows(
-            UnsupportedOperationException.class,
-            infiniteGenerator::generateAllValues);
+                UnsupportedOperationException.class,
+                infiniteGenerator::generateAllValues);
     }
 
     @Test
@@ -326,8 +326,8 @@ public class RegexStringGeneratorTests {
             .findFirst().orElse(null);
 
         Assert.assertThat(
-            actualValue,
-            equalTo(expectedValue));
+                actualValue,
+                equalTo(expectedValue));
     }
 
     private void expectMatch(String subject, boolean matchFullString) {
