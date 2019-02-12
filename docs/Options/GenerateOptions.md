@@ -1,6 +1,8 @@
 # Generate Options
 Options are optional and case-insensitive
 
+* `--overwrite` 
+    * Overwrite existing output files. Options are: `true` or `false` (default)
 * `--violate` 
     * generate data which violates profile constraints. Options are: `true` or `false` (default)
 * `--dont-violate` <epistemic constraints...>

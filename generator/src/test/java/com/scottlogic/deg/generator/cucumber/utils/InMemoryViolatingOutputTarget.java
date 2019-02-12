@@ -12,12 +12,12 @@ import java.util.stream.Stream;
 /**
  * Defines an output target which stores the output data into the test state.
  */
-public class InMemoryOutputTarget implements OutputTarget {
+public class InMemoryViolatingOutputTarget implements OutputTarget {
 
-     final CucumberTestState testState;
+    final CucumberTestState testState;
 
     @Inject
-    public InMemoryOutputTarget(CucumberTestState testState) {
+    public InMemoryViolatingOutputTarget(CucumberTestState testState) {
         this.testState = testState;
     }
 
@@ -33,7 +33,7 @@ public class InMemoryOutputTarget implements OutputTarget {
 
     @Override
     public boolean isDirectory() {
-        return false;
+        return true;
     }
 
     private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {

@@ -26,6 +26,8 @@ public class CucumberTestState {
      */
     public Boolean shouldViolate = false;
 
+    public Boolean overwriteOutputFiles = true;
+
     public Optional<Long> maxRows = Optional.empty();
 
     public List<List<Object>> generatedObjects;
@@ -38,14 +40,14 @@ public class CucumberTestState {
 
     public void addConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)
-            addConstraint(fieldName, constraintName, (Object)value);
+            addConstraint(fieldName, constraintName, (Object) value);
         else
             addConstraint(fieldName, constraintName, getSetValues(value));
     }
 
     public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)
-            addNotConstraint(fieldName, constraintName, (Object)value);
+            addNotConstraint(fieldName, constraintName, (Object) value);
         else
             addNotConstraint(fieldName, constraintName, getSetValues(value));
     }
@@ -67,13 +69,13 @@ public class CucumberTestState {
     }
 
     private Collection<Object> getSetValues(List<Object> values) {
-        if (values == null){
+        if (values == null) {
             throw new IllegalArgumentException("Values cannot be null");
         }
 
         values.stream()
             .filter(value -> value instanceof Exception)
-            .map(value -> (Exception)value)
+            .map(value -> (Exception) value)
             .forEach(this::addException);
 
         return values.stream()
@@ -81,7 +83,7 @@ public class CucumberTestState {
             .collect(Collectors.toSet());
     }
 
-    public void clearState(){
+    public void clearState() {
         this.profileFields.clear();
         this.constraints.clear();
         this.testExceptions.clear();
@@ -92,11 +94,11 @@ public class CucumberTestState {
         this.profileFields.add(new Field(fieldName));
     }
 
-    public void addException(Exception e){
+    public void addException(Exception e) {
         this.testExceptions.add(e);
     }
 
-    public void addConstraintToNotViolate(AtomicConstraintType atomicConstraintType){
+    public void addConstraintToNotViolate(AtomicConstraintType atomicConstraintType) {
         contstraintsToNotViolate.add(atomicConstraintType);
     }
 
@@ -108,8 +110,8 @@ public class CucumberTestState {
         ConstraintDTO dto = new ConstraintDTO();
         dto.field = fieldName;
         dto.is = this.extractConstraint(constraintName);
-        if (value != null){
-            if (value instanceof Collection){
+        if (value != null) {
+            if (value instanceof Collection) {
                 dto.values = (Collection<Object>) value;
             } else {
                 dto.value = value;
@@ -140,5 +142,7 @@ public class CucumberTestState {
 
 class ConstraintHolder {
     public Collection<ConstraintDTO> constraints;
-    public ConstraintHolder(){}
+
+    public ConstraintHolder() {
+    }
 }
