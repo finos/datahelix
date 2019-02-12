@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.generation.TestGenerationConfig;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import org.hamcrest.BaseMatcher;
@@ -31,36 +31,27 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 class ReductiveDecisionTreeWalkerTests {
-    private ProfileFields fields;
     private ReductiveConstraintNode rootNode;
     private DecisionTree tree;
-    private ReductiveDecisionTreeReducer treeReducer;
     private FixedFieldBuilder fixedFieldBuilder;
     private ReductiveRowSpecGenerator rowSpecGenerator;
+    private TestGenerationConfig config;
+    private ReductiveDecisionTreeWalker walker;
 
     @BeforeEach
     public void beforeEach(){
-        fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
+        ProfileFields fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
         rootNode = new ReductiveConstraintNode(new TreeConstraintNode(), Collections.emptySet());
         tree = new DecisionTree(rootNode, fields, "");
-        treeReducer = mock(ReductiveDecisionTreeReducer.class);
+        ReductiveDecisionTreeReducer treeReducer = mock(ReductiveDecisionTreeReducer.class);
         when(treeReducer.reduce(eq(rootNode), any(ReductiveState.class))).thenReturn(rootNode);
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
         rowSpecGenerator = mock(ReductiveRowSpecGenerator.class);
-    }
 
-    /**
-     * If no field can be fixed initially, the walker should exit early, with an empty stream of RowSpecs
-     */
-    @Test
-    public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.RANDOM,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE));
-        ReductiveDecisionTreeWalker walker = new ReductiveDecisionTreeWalker(
+        config = new TestGenerationConfig();
+
+        walker = new ReductiveDecisionTreeWalker(
             new NoOpIterationVisualiser(),
             fixedFieldBuilder,
             new NoopDataGeneratorMonitor(),
@@ -68,6 +59,14 @@ class ReductiveDecisionTreeWalkerTests {
             rowSpecGenerator,
             config
         );
+    }
+
+    /**
+     * If no field can be fixed initially, the walker should exit early, with an empty stream of RowSpecs
+     */
+    @Test
+    public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
+        config.dataGenerationType = GenerationConfig.DataGenerationType.RANDOM;
         when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(null);
 
         List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
@@ -82,19 +81,7 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.RANDOM,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE));
-        ReductiveDecisionTreeWalker walker = new ReductiveDecisionTreeWalker(
-            new NoOpIterationVisualiser(),
-            fixedFieldBuilder,
-            new NoopDataGeneratorMonitor(),
-            treeReducer,
-            rowSpecGenerator,
-            config
-        );
+        config.dataGenerationType = GenerationConfig.DataGenerationType.RANDOM;
         FixedField firstFixedField = fixedField("field1", 123);
         when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(firstFixedField, null);
 
@@ -106,19 +93,7 @@ class ReductiveDecisionTreeWalkerTests {
 
     @Test
     public void shouldProduceTwoRowsOfRandomData() {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.RANDOM,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE));
-        ReductiveDecisionTreeWalker walker = new ReductiveDecisionTreeWalker(
-            new NoOpIterationVisualiser(),
-            fixedFieldBuilder,
-            new NoopDataGeneratorMonitor(),
-            treeReducer,
-            rowSpecGenerator,
-            config
-        );
+        config.dataGenerationType = GenerationConfig.DataGenerationType.RANDOM;
         FixedField fixedField1_1 = fixedField("field1", 1, 2, 3);
         FixedField fixedField2_1 = fixedField("field2", 4, 5, 6);
         FixedField fixedField1_2 = fixedField("field1", 10, 20, 30);
@@ -147,19 +122,7 @@ class ReductiveDecisionTreeWalkerTests {
 
     @Test
     public void shouldProduceTwoRowsOfNormalData() {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE));
-        ReductiveDecisionTreeWalker walker = new ReductiveDecisionTreeWalker(
-            new NoOpIterationVisualiser(),
-            fixedFieldBuilder,
-            new NoopDataGeneratorMonitor(),
-            treeReducer,
-            rowSpecGenerator,
-            config
-        );
+        config.dataGenerationType = GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
         FixedField fixedField1 = fixedField("field1", 1, 2, 3);
         FixedField fixedField2 = fixedField("field2", 7, 8, 9);
         when(rowSpecGenerator.createRowSpecsFromFixedValues(
