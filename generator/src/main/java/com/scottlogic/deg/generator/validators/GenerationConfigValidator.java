@@ -1,19 +1,32 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
  * Class used to determine whether the command line options are valid for generation
- * */
+ */
 public class GenerationConfigValidator {
 
-    public ValidationResult validateCommandLine(GenerationConfig config, OutputTarget fileOutputTarget) {
+    private final GenerationConfig config;
+    private final OutputTarget outputTarget;
+    private final GenerationConfigSource configSource;
+
+    @Inject
+    public GenerationConfigValidator(GenerationConfig config,
+                                     GenerationConfigSource configSource,
+                                     OutputTarget outputTarget) {
+        this.config = config;
+        this.configSource = configSource;
+        this.outputTarget = outputTarget;
+    }
+
+
+    public ValidationResult validateCommandLine() {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
@@ -23,18 +36,40 @@ public class GenerationConfigValidator {
             errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
         }
 
-        if (outputFileAlreadyExists(fileOutputTarget)) {
-            errorMessages.add("Output file already exists, please use a different output filename");
+        if (configSource.shouldViolate()) {
+            checkViolationGenerateOutputTarget(errorMessages, outputTarget);
+        } else {
+            checkGenerateOutputTarget(errorMessages, outputTarget);
         }
 
         return validationResult;
     }
 
-    private boolean outputFileAlreadyExists(OutputTarget fileOutputTarget) {
-        if (fileOutputTarget instanceof FileOutputTarget) {
-            Path path = (((FileOutputTarget) fileOutputTarget).getFilePath());
-            return Files.exists(path);
+    private void checkGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
+        if (outputTarget.isDirectory()) {
+            errorMessages.add("Invalid Output - target is a directory, please use a different output filename");
+        } else if (outputTarget.exists()) {
+            errorMessages.add("Invalid Output - file already exists, please use a different output filename");
         }
-        return false;
+    }
+
+    private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
+        if (!outputTarget.isDirectory()) {
+            errorMessages.add("Invalid Output - not a directory. please enter a valid directory name");
+        }
+    }
+
+    private boolean isOutputFileValid(OutputTarget outputTarget) {
+        if (outputTarget.isDirectory()) {
+            return false;
+        }
+        return outputTarget.exists();
+    }
+
+    private boolean isOutputDirectoryValid(OutputTarget outputTarget) {
+        if (!outputTarget.isDirectory()) {
+            return false;
+        }
+        return outputTarget.exists();
     }
 }

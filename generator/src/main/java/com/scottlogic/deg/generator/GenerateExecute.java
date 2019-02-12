@@ -40,7 +40,7 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
 
-        ValidationResult validationResult = validator.validateCommandLine(config, fileOutputTarget);
+        ValidationResult validationResult = validator.validateCommandLine();
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);

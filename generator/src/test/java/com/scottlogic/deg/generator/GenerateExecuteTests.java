@@ -1,14 +1,10 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.validators.ValidationResult;
@@ -37,7 +33,7 @@ public class GenerateExecuteTests {
     @Test
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
-        when(validator.validateCommandLine(config, outputTarget)).thenReturn(validationResult);
+        when(validator.validateCommandLine()).thenReturn(validationResult);
         when(validationResult.isValid()).thenReturn(false);
 
         //Act
@@ -52,7 +48,7 @@ public class GenerateExecuteTests {
     public void validConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
-        when(validator.validateCommandLine(config, outputTarget)).thenReturn(validationResult);
+        when(validator.validateCommandLine()).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(validationResult.isValid()).thenReturn(true);
 
