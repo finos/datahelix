@@ -22,7 +22,6 @@ import static org.mockito.Mockito.*;
 
 public class GenerateExecuteTests {
 
-    private OutputTarget fileOutputTarget= mock(OutputTarget.class);
     private GenerationConfig config = mock(GenerationConfig.class);
     private JsonProfileReader profileReader = mock(JsonProfileReader.class);
     private StandardGenerationEngine generationEngine = mock(StandardGenerationEngine.class);
