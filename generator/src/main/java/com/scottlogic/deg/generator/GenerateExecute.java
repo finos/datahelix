@@ -9,6 +9,10 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 
