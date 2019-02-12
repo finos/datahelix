@@ -76,6 +76,11 @@ public class GenerateCommandLine extends CommandLineBase {
     private boolean violateProfile;
 
     @CommandLine.Option(
+        names = {"--overwrite"},
+        description = "Defines whether to overwrite existing output files")
+    private boolean overwriteOutputFiles;
+
+    @CommandLine.Option(
         names = {"--dont-violate"},
         arity = "0..",
         description = "Choose types of constraint should not be violated")
@@ -114,6 +119,11 @@ public class GenerateCommandLine extends CommandLineBase {
     @Override
     public boolean shouldViolate() {
         return this.violateProfile;
+    }
+
+    @Override
+    public boolean overwriteOutputFiles() {
+        return this.overwriteOutputFiles;
     }
 
     @Override
