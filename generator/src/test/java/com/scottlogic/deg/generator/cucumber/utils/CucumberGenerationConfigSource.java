@@ -7,7 +7,6 @@ import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +82,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
+    }
+
+    @Override
+    public boolean overwriteOutputFiles() {
+        return state.overwriteOutputFiles;
     }
 
     @Override

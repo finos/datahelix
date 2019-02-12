@@ -36,10 +36,12 @@ public class GenerationConfigValidator {
             errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
         }
 
-        if (configSource.shouldViolate()) {
-            checkViolationGenerateOutputTarget(errorMessages, outputTarget);
-        } else {
-            checkGenerateOutputTarget(errorMessages, outputTarget);
+        if (!configSource.overwriteOutputFiles()) {
+            if (configSource.shouldViolate()) {
+                checkViolationGenerateOutputTarget(errorMessages, outputTarget);
+            } else {
+                checkGenerateOutputTarget(errorMessages, outputTarget);
+            }
         }
 
         return validationResult;
