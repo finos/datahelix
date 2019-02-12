@@ -111,7 +111,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         RealNumberFieldValueSource otherSource = (RealNumberFieldValueSource) obj;
-        return inclusiveUpperLimit.equals(otherSource.inclusiveLowerLimit) &&
+        return inclusiveUpperLimit.equals(otherSource.inclusiveUpperLimit) &&
             inclusiveLowerLimit.equals(otherSource.inclusiveLowerLimit) &&
             stepSize.equals(otherSource.stepSize) &&
             blacklist.equals(otherSource.blacklist) &&

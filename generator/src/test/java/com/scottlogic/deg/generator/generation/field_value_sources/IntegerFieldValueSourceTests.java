@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.IsNot.not;
 
 class IntegerFieldValueSourceTests {
     @Test
@@ -125,6 +126,112 @@ class IntegerFieldValueSourceTests {
         givenUpperBound(1, false);
 
         expectInterestingValues(-1, 0);
+    }
+
+    @Test
+    public void shouldBeEqualIfLimitsAndBlacklistMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualIfLimitsAndBlacklistMatchButBlacklistInDifferentOrder(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(2, 1)));
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualIfLimitsAndBlacklistMatchWhenBlacklistEmpty(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            Collections.emptySet());
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            Collections.emptySet());
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeUnequalIfLimitsMatchAndBlacklistDoesntMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(3, 4)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalIfMinDoesntMatchButBlacklistAndMaxDoMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(5, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalIfMaxDoesntMatchButBlacklistAndMinDoMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(1, 20),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalIfMaxAndMinDontMatchButBlacklistDoesMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(5, 20),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(1, 2)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeUnequalIfMaxMinAndBlacklistDontMatch(){
+        IntegerFieldValueSource a = new IntegerFieldValueSource(
+            numericRestrictions(5, 20),
+            new HashSet<>(Arrays.asList(1, 2)));
+        IntegerFieldValueSource b = new IntegerFieldValueSource(
+            numericRestrictions(0, 10),
+            new HashSet<>(Arrays.asList(3, 4)));
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    private NumericRestrictions numericRestrictions(Integer min, Integer max){
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = min == null ? null : new NumericLimit<>(BigDecimal.valueOf(min), true);
+        restrictions.max = max == null ? null : new NumericLimit<>(BigDecimal.valueOf(max), true);
+        return restrictions;
     }
 
     private NumericLimit<BigDecimal> upperLimit;

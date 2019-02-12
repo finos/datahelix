@@ -278,6 +278,142 @@ class RealNumberFieldValueSourceTests {
         expectInterestingValues(0);
     }
 
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatchBlacklistInDifferentOrder(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(2, 1)),
+            1);
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesMatchBlacklistEmpty(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            Collections.emptySet(),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            Collections.emptySet(),
+            1);
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesExceptMinMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(5, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesExceptMaxMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 20),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesExceptBlacklistMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(3, 4)),
+            1);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesExceptScaleMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            2);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesExceptMinAndMaxMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(5, 20),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void shouldBeEqualWhenAllPropertiesDontMatch(){
+        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+            numericRestrictions(5, 20),
+            new HashSet<>(Arrays.asList(1, 2)),
+            1);
+        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            numericRestrictions(1, 10),
+            new HashSet<>(Arrays.asList(3, 4)),
+            2);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    private NumericRestrictions numericRestrictions(Integer min, Integer max){
+        NumericRestrictions restrictions = new NumericRestrictions();
+        restrictions.min = min == null ? null : new NumericLimit<>(BigDecimal.valueOf(min), true);
+        restrictions.max = max == null ? null : new NumericLimit<>(BigDecimal.valueOf(max), true);
+        return restrictions;
+    }
+
     private NumericLimit<BigDecimal> upperLimit;
     private NumericLimit<BigDecimal> lowerLimit;
     private int scale;
