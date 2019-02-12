@@ -83,7 +83,7 @@ public class GenerateCommandLine extends CommandLineBase {
     @CommandLine.Option(
         names = {"--overwrite"},
         description = "Defines whether to overwrite existing output files")
-    private boolean overwriteOutputFiles;
+    private boolean overwriteOutputFiles = false;
 
     @CommandLine.Option(
         names = {"--dont-violate"},
