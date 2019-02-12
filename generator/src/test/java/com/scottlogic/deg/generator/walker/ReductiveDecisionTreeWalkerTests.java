@@ -62,7 +62,7 @@ class ReductiveDecisionTreeWalkerTests {
             treeReducer,
             rowSpecGenerator
         );
-        FixedField firstFixedField = new FixedField(new Field("field1"), Stream.of(123), FieldSpec.Empty, new NoopDataGeneratorMonitor());
+        FixedField firstFixedField = fixedField(123);
         when(treeReducer.reduce(eq(rootNode), any(ReductiveState.class))).thenReturn(rootNode);
         when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(firstFixedField, null);
 
@@ -70,5 +70,15 @@ class ReductiveDecisionTreeWalkerTests {
 
         verify(fixedFieldBuilder, times(2)).findNextFixedField(any(ReductiveState.class), eq(rootNode));
         Assert.assertThat(result, empty());
+    }
+
+    private static FixedField fixedField(Object... values){
+        FixedField mockFixedField = mock(FixedField.class);
+        when(mockFixedField.getStream()).thenReturn(Stream.of(values));
+        //when(mockFixedField.field).thenReturn(new Field(fieldName)); //mockito cannot mock member variables (fields).
+        when(mockFixedField.getFieldSpecForValues()).thenReturn(FieldSpec.Empty);
+        when(mockFixedField.getCurrentValue()).thenReturn(123);
+
+        return mockFixedField;
     }
 }

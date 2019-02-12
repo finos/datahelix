@@ -23,7 +23,7 @@ public class FixedField {
     private Object current = NOT_ITERATED;
     private FieldSpec fieldSpec;
 
-    public FixedField(
+    FixedField(
         Field field,
         Stream<Object> values,
         FieldSpec valuesFieldSpec,
