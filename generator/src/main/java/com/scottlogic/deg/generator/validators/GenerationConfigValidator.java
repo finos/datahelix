@@ -49,15 +49,15 @@ public class GenerationConfigValidator {
 
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (outputTarget.isDirectory()) {
-            errorMessages.add("Invalid Output - target is a directory, please use a different output filename");
+            errorMessages.add("Invalid Output - target is a directory, please use a different output filename or use the --overwrite option");
         } else if (outputTarget.exists()) {
-            errorMessages.add("Invalid Output - file already exists, please use a different output filename");
+            errorMessages.add("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
         }
     }
 
     private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (!outputTarget.isDirectory()) {
-            errorMessages.add("Invalid Output - not a directory. please enter a valid directory name");
+            errorMessages.add("Invalid Output - not a directory. please enter a valid directory name or use the --overwrite option");
         }
     }
 
