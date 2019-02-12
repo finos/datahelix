@@ -60,7 +60,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
 
-            //this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
         }
 
@@ -109,7 +108,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
 
-            //this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
         }
 
