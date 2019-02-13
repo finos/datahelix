@@ -50,7 +50,9 @@ public class GenerationConfigValidator {
     }
 
     private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
-        if (!outputTarget.isDirectory()) {
+        if (!outputTarget.exists()) {
+            errorMessages.add("Invalid Output - output directory must exist. please enter a valid directory name");
+        } else if (!outputTarget.isDirectory()) {
             errorMessages.add("Invalid Output - not a directory. please enter a valid directory name");
         } else if (!configSource.overwriteOutputFiles() && !outputTarget.isDirectoryEmpty()) {
             errorMessages.add("Invalid Output - directory not empty. please enter a valid directory name or use the --overwrite option");
