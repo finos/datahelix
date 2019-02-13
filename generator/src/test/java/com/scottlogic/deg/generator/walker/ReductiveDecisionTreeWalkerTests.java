@@ -91,6 +91,10 @@ class ReductiveDecisionTreeWalkerTests {
         Assert.assertThat(result, empty());
     }
 
+    /**
+     * If RANDOM mode is enabled there should be two rows of data where field1 & field2 have (synthetically) random
+     * values for each row
+     */
     @Test
     public void shouldProduceTwoRowsOfRandomData() {
         config.dataGenerationType = GenerationConfig.DataGenerationType.RANDOM;
@@ -120,6 +124,10 @@ class ReductiveDecisionTreeWalkerTests {
             hasItems("first-row-1&4", "second-row-10&40"));
     }
 
+    /**
+     * If NOT in RANDOM mode each row should be produced based on the exhaustive combination of
+     * field1[first-value] * field2[all-values]
+     */
     @Test
     public void shouldProduceTwoRowsOfNormalData() {
         config.dataGenerationType = GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
