@@ -49,11 +49,8 @@ class SourceRepeatingIterator<T> implements Iterator<T> {
             return false;
         }
 
-        if (!stopOnceSouceExhausted){
-            return true;
-        }
+        return !stopOnceSouceExhausted;
 
-        return false;
     }
 
     private void recordItemEmittedAndResetIfAtLimitForSource(){
