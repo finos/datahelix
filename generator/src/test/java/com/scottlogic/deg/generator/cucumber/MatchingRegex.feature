@@ -267,21 +267,6 @@ Scenario: User using matchingRegex operator to provide an exact set of values
        | "aa"  |
        | "aaa" |
 
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
-     Given foo is matching regex /[a]{3}/
-       And foo is equal to "aaa"
-     Then the following data should be generated:
-       | foo   |
-       | null  |
-       | "aaa" |
-
-Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
-     Given foo is matching regex /[a]{3}/
-       And foo is equal to "bbb"
-      Then the following data should be generated:
-        | foo   |
-        | null  |
-
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given foo is matching regex /[a]{1,3}/
        And foo is in set:

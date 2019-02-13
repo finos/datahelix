@@ -3,22 +3,6 @@ Feature: User can specify that a value is equalTo a required value
 Background:
      Given the generation strategy is full
 
-Scenario: Running an 'equalTo' request that includes strings with roman alphabet lowercase chars (a-z) only should be successful
-     Given there is a field foo
-       And foo is equal to "abcdefghijklmnopqrstuvwxyz"
-     Then the following data should be generated:
-       | foo                          |
-       | null                         |
-       | "abcdefghijklmnopqrstuvwxyz" |
-
-Scenario: Running an 'equalTo' request that includes strings with roman alphabet uppercase chars (A-Z) only should be successful
-     Given there is a field foo
-       And foo is equal to "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-     Then the following data should be generated:
-       | foo                          |
-       | null                         |
-       | "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |
-
 Scenario: Running an 'equalTo' request that includes strings with roman numeric chars (0-9) only should be successful
      Given there is a field foo
        And foo is equal to "0123456789"
@@ -565,16 +549,7 @@ Scenario: Equal to a value and must be null should emit null
 
 ### ofType ###
 
-Scenario: Running an 'ofType' = string request that includes strings with roman alphabet lowercase chars (a-z) only should be successful
-    Given there is a field foo
-      And foo is equal to "abcdefghijklmnopqrstuvwxyz"
-      And foo is of type "string"
-    Then the following data should be generated:
-      | foo                          |
-      | null                         |
-      | "abcdefghijklmnopqrstuvwxyz" |
-
-Scenario: Running an 'ofType' = String request that includes strings with roman numeric chars (0-9) only should be successful
+Scenario: 'ofType' string "equalTo" string of numerics should be successful
     Given there is a field foo
       And foo is equal to "0123456789"
       And foo is of type "string"
@@ -583,16 +558,7 @@ Scenario: Running an 'ofType' = String request that includes strings with roman 
       | null         |
       | "0123456789" |
 
-Scenario: Running an 'ofType' = String request that includes strings with roman alphabet uppercase chars (A-Z) only should be successful
-    Given there is a field foo
-    And foo is equal to "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    And foo is of type "string"
-    Then the following data should be generated:
-      | foo                          |
-      | null                         |
-      | "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |
-
-Scenario: Running an 'ofType' = String request that includes strings with both roman alphabet lowercase (a-z) and uppercase (A-Z) should be successful
+Scenario: 'ofType' string "equalTo" string of a-z, A-Z should be successful
     Given there is a field foo
     And foo is equal to "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     And foo is of type "string"
@@ -601,7 +567,7 @@ Scenario: Running an 'ofType' = String request that includes strings with both r
       | null                                                   |
       | "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" |
 
-Scenario: Running an 'ofType' = String request that includes strings with both roman alphabet (a-z, A-Z)and numeric chars (0-9) should be successful
+Scenario: 'ofType' String "equalTo" string of a-z, A-Z, 0-9 should be successful
     Given there is a field foo
     And foo is equal to "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     And foo is of type "string"
@@ -979,3 +945,93 @@ Scenario: EqualTo date and not ofType temporal emits null
   Then the following data should be generated:
     | foo  |
     | null |
+
+### matchingRegex ###
+
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
+  Given there is a field foo
+    And foo is equal to "aaa"
+    And foo is matching regex /[a]{3}/
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | "aaa" |
+
+Scenario: EqualTo a string and not matchingRegex of contradictory string should be successful
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "matchingRegex", "value": "[a]{3}"}}
+      """
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | "a"  |
+
+Scenario: Not equalTo a value and a non-contradicting matchingRegex should be successful
+  Given there is a field foo
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "equalTo", "value": "aa"}}
+      """
+    And foo is matching regex /[a]{1}/
+  Then the following data should be generated:
+    | foo  |
+    | "a"  |
+    | null |
+
+Scenario: EqualTo number and matchingReqex should be successful
+  Given there is a field foo
+    And foo is equal to 1
+    And foo is matching regex /[a]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: EqualTo date and matchingReqex should be successful
+  Given there is a field foo
+    And foo is equal to 2018-01-01T00:00:00.000
+    And foo is matching regex /[a]{1}/
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
+  Given foo is matching regex /[a]{3}/
+    And foo is equal to "bbb"
+  Then the following data should be generated:
+    | foo   |
+    | null  |
+
+Scenario: EqualTo staring with matchingRegex of contradicting length emits null
+  Given there is a field foo
+    And foo is equal to "a"
+    And foo is matching regex /[a]{2}/
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+Scenario: EqualTo and not matchingRegex for identical strings emits null
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "matchingRegex", "value": "[a]{1}"}}
+      """
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+Scenario: Not equalTo and matchingRegex for identical strings emits null
+  Given there is a field foo
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
+      """
+    And foo is matchingRegex /[a]{1}/
+  Then the following data should be generated:
+    | foo  |
+    | null | 
