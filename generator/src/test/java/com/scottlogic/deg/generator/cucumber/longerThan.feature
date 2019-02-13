@@ -1,276 +1,269 @@
 Feature: User can specify that a string length is longer than, a specified number of characters
 
-  Background:
-    Given the generation strategy is full
+Background:
+  Given the generation strategy is full
     And there is a field foo
 
 Scenario: Running a 'longerThan' request that includes positive value should be successful
   Given foo is longer than 5
     And foo is in set:
-      | "aaaa" |
-      | "aaaaa" |
+      | "aaaa"   |
+      | "aaaaa"  |
       | "aaaaaa" |
   Then the following data should be generated:
-      | foo  |
-      | null |
+      | foo      |
+      | null     |
       | "aaaaaa" |
 
 Scenario: Running a 'longerThan' request that includes the value zero should be successful
-   Given foo is longer than 0
-     And foo is in set:
-      | "" |
+  Given foo is longer than 0
+    And foo is in set:
+      | ""  |
       | "a" |
-   Then the following data should be generated:
-      | foo |
+  Then the following data should be generated:
+      | foo  |
       | null |
       | "a"  |
 
-Scenario: Running a 'longerThan' request on a negative number should fail with an error
-    Given foo is longer than -5
-    Then I am presented with an error message
-      And no data is created
+Scenario: 'longerThan' a negative number should fail with an error
+  Given foo is longer than -5
+  Then I am presented with an error message
+    And no data is created
 
-Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string should fail with an error message
-     And foo is longer than 1.1
-     Then I am presented with an error message
-     And no data is created
+Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message
+  Given foo is longer than 1.1
+  Then I am presented with an error message
+    And no data is created
 
-Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string test2 should fail with an error message
-     And foo is longer than "Test"
-     Then I am presented with an error message
-     And no data is created
+Scenario: 'longerThan' a string should fail with an error message
+  And foo is longer than "Test"
+  Then I am presented with an error message
+    And no data is created
 
-Scenario: Running a 'longerThan' request on a decimal number to specify a the length of a generated string test2 should be successful
-    And foo is longer than 2.0
+Scenario: 'longerThan' a decimal number with a zero mantissa should be successful
+  Given foo is longer than 2.0
     And foo is in set:
-      | 1.0 |
-      | 2.0 |
-      | "a" |
+      | 1.0   |
+      | 2.0   |
+      | "a"   |
       | "aaa" |
-    Then the following data should be generated:
-      | foo |
-      | null |
-      | 1.0  |
-      | 2.0  |
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | 1.0   |
+      | 2.0   |
       | "aaa" |
 
-Scenario: Running a 'longerThan' request on a character string should be successful
-    Given foo is longer than 2
-      And foo is longer than 1
-      And foo is in set:
-        | "a" |
-        | "aa" |
-        | "aaa" |
-        | "aab" |
-    Then the following data should be generated:
-       |  foo  |
-       | null  |
-       | "aaa" |
-       | "aab" |
+Scenario: Multiple non-contradictory 'longerThan' requests should be successful
+  Given foo is longer than 2
+    And foo is longer than 1
+    And foo is in set:
+      | "a"   |
+      | "aa"  |
+      | "aaa" |
+      | "aab" |
+  Then the following data should be generated:
+      |  foo  |
+      | null  |
+      | "aaa" |
+      | "aab" |
 
 
-Scenario: Running a 'longerThan' request on a character string should be successful
+Scenario: Valid 'longerThan' and not 'longerThan' requests should be successful
   Given foo is longer than 1
     And foo is anything but longer than 3
     And foo is in set:
-      | "a" |
-      | "aa" |
-      | "aaa" |
+      | "a"    |
+      | "aa"   |
+      | "aaa"  |
       | "aaaa" |
   Then the following data should be generated:
-      | foo |
-      | null |
-      | "aa" |
+      | foo   |
+      | null  |
+      | "aa"  |
       | "aaa" |
 
-Scenario: Running a 'longerThan' request on a character string should be successful
+Scenario: Multiple not 'longerThan' requests should be successful
   Given foo is anything but longer than 5
-     And foo is anything but longer than 6
-     And foo is in set:
-       | "a" |
-       | "aa" |
-       | "aaa" |
-       | "aaaa" |
-       | "aaaaa" |
-       | "aaaaaa" |
+    And foo is anything but longer than 6
+    And foo is in set:
+      | "a"      |
+      | "aa"     |
+      | "aaa"    |
+      | "aaaa"   |
+      | "aaaaa"  |
+      | "aaaaaa" |
   Then the following data should be generated:
-       | foo |
-       | null |
-       | "a" |
-       | "aa" |
-       | "aaa" |
-       | "aaaa" |
+       | foo     |
+       | null    |
+       | "a"     |
+       | "aa"    |
+       | "aaa"   |
+       | "aaaa"  |
        | "aaaaa" |
 
-Scenario:  Running a 'longerThan' request against contradicting not longerThan constraint should only generate numeric,temporal and null
+Scenario: 'longerThan' with contradicting not 'longerThan' should emit numeric,temporal and null
   Given foo is longer than 3
     And foo is anything but longer than 3
     And foo is in set:
-       | 1 |
-       | "abc" |
+       | 1                       |
+       | "abc"                   |
        | 2011-01-01T00:00:00.000 |
   Then the following data should be generated:
-       | foo |
-       | null |
-       | 1   |
+       | foo                     |
+       | null                    |
+       | 1                       |
        | 2011-01-01T00:00:00.000 |
 
-Scenario: Running a 'longerThan' request against non contradicting shorterThan should be succesful
+Scenario: Running a 'longerThan' request against non contradicting 'shorterThan' should be successful
   Given foo is longer than 2
-     And foo is shorter than 5
-     And foo is in set:
-       | "a" |
-       | "aa" |
-       | "aaa" |
-       | "aaaa" |
-       | "aaaaaa" |
+    And foo is shorter than 5
+    And foo is in set:
+      | "a"      |
+      | "aa"     |
+      | "aaa"    |
+      | "aaaa"   |
+      | "aaaaaa" |
   Then the following data should be generated:
-       | foo |
-       | null |
-       | "aaa" |
-       | "aaaa" |
+      | foo    |
+      | null   |
+      | "aaa"  |
+      | "aaaa" |
 
-Scenario: Running a 'longerThan' request against non contradicting shorterThan should be succesful
-    Given foo is longer than 2
-      And foo is anything but shorter than 1
-      And foo is in set:
-        | "a" |
-        | "aa" |
-        | "aaa" |
-        | "aaaa" |
-    Then the following data should be generated:
-        | foo |
-        | null |
-        | "aaa" |
-        | "aaaa" |
-
-Scenario: Running a 'longerThan' request against non contradicting shorterThan should be succesful
-   Given foo is anything but longer than 5
-      And foo is shorter than 3
-      And foo is in set:
-         | "a" |
-         | "aa" |
-         | "aaa" |
-         | "aaaa" |
-         | "aaaaa" |
+Scenario: Running a 'longerThan' against non contradicting not 'shorterThan' should be successful
+  Given foo is longer than 2
+    And foo is anything but shorter than 1
+    And foo is in set:
+      | "a"    |
+      | "aa"   |
+      | "aaa"  |
+      | "aaaa" |
   Then the following data should be generated:
-         | foo |
-         | null |
-         | "a"  |
-         |"aa" |
+      | foo    |
+      | null   |
+      | "aaa"  |
+      | "aaaa" |
 
-Scenario: Running a 'longerThan' request against non contradicting shorterThan should be successful
-   Given foo is anything but longer than 3
-     And foo is anything but shorter than 1
-     And foo is in set:
-        | "a" |
-        | "aa" |
-        | "aaa" |
-        | "aaaa" |
+Scenario: Not 'longerThan' with non contradicting 'shorterThan' should be successful
+  Given foo is anything but longer than 5
+    And foo is shorter than 3
+    And foo is in set:
+      | "a"     |
+      | "aa"    |
+      | "aaa"   |
+      | "aaaa"  |
+      | "aaaaa" |
   Then the following data should be generated:
-        | foo |
-        | null |
-        | "a"  |
-        | "aa" |
-        | "aaa" |
+      | foo  |
+      | null |
+      | "a"  |
+      | "aa" |
 
-Scenario: Running a 'longerThan' request against contradicting shorterThan constraint should only generate numeric,temporal and null
-    Given foo is longer than 3
-       And foo is shorter than 2
-       And foo is in set:
-         | 1 |
-         | "abc" |
-         | 2011-01-01T00:00:00.000 |
-    Then the following data should be generated:
-         | foo |
-         | null |
-         | 1    |
-         | 2011-01-01T00:00:00.000 |
-Scenario: Running a 'longerThan' request against contradicting shorterThan constraint should only generate numeric,temporal and null
-    Given foo is anything but longer than 3
-       And foo is anything but shorter than 4
-       And foo is in set:
-         | 1 |
-         | "abc" |
-         | 2011-01-01T00:00:00.000 |
-   Then the following data should be generated:
-         | foo |
-         | null |
-         | 1  |
-         | 2011-01-01T00:00:00.000 |
+Scenario: Not 'longerThan' with non contradicting not 'shorterThan' should be successful
+  Given foo is anything but longer than 3
+    And foo is anything but shorter than 1
+    And foo is in set:
+      | "a"    |
+      | "aa"   |
+      | "aaa"  |
+      | "aaaa" |
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | "a"   |
+      | "aa"  |
+      | "aaa" |
 
-  @ignore #issue 487
-Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint (too long) should be successful
-    Given foo is longer than 11
-      And foo is a valid "ISIN"
-      And foo is in set:
-        | "US0000XVGZA3" |
-        | "US0378331005" |
-        | "22"           |
-    Then the following data should be generated:
-        | foo            |
-        | null           |
-        | "US0000XVGZA3" |
-        | "US0378331005" |
-     And the following data should not be included in what is generated:
-        | foo  |
-        | "22" |
+Scenario: 'longerThan' with contradicting 'shorterThan' should emit numeric,temporal and null
+  Given foo is longer than 3
+    And foo is shorter than 2
+    And foo is in set:
+      | 1                       |
+      | "abc"                   |
+      | 2011-01-01T00:00:00.000 |
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 1                       |
+      | 2011-01-01T00:00:00.000 |
+
+Scenario: Not 'longerThan' with contradicting not 'shorterThan' should emit numeric,temporal and null
+  Given foo is anything but longer than 3
+    And foo is anything but shorter than 4
+    And foo is in set:
+      | 1                       |
+      | "abc"                   |
+      | "abcd"                  |
+      | 2011-01-01T00:00:00.000 |
+  Then the following data should be generated:
+       | foo                     |
+       | null                    |
+       | 1                       |
+       | 2011-01-01T00:00:00.000 |
 
 @ignore #issue 487
-Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
-   Given foo is longer than 2
-      And foo is anything but a  valid "ISIN"
-      And foo is in set:
-        | "US0000XVGZA3" |
-        | "US0378331005" |
-        | "22"           |
+Scenario: 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
+  Given foo is longer than 11
+    And foo is a valid "ISIN"
+    And foo is in set:
+      | "US0000XVGZA3" |
+      | "US0378331005" |
+      | "twelvedigits" |
   Then the following data should be generated:
-       | foo   |
-       | null  |
-       | "US0000XVGZA3" |
-       | "US0378331005" |
-     And the following data should not be included in what is generated:
-       | foo  |
-       | "22" |
+      | foo            |
+      | null           |
+      | "US0000XVGZA3" |
+      | "US0378331005" |
 
 @ignore #issue 487
-Scenario: Running an 'longerThan' request alongside a non-contradicting aValid constraint should be successful
-  Given foo is anything but  longer than 1
-     And foo is a valid "ISIN"
-     And foo is in set:
-       | "US0000XVGZA3" |
-       | "US0378331005" |
-       | "2"           |
+Scenario: 'longerThan' alongside a non-contradicting not 'aValid' constraint should be successful
+  Given foo is longer than 2
+    And foo is anything but a valid "ISIN"
+    And foo is in set:
+      | "US0000XVGZA3" |
+      | "U10378331005" |
+      | "twelvedigits" |
   Then the following data should be generated:
-       | foo            |
-       | null           |
-     And the following data should not be included in what is generated:
-       | foo  |
-       | "2" |
+      | foo            |
+      | null           |
+      | "U10378331005" |
+      | "twelvedigits" |
 
 @ignore #issue 487
-Scenario: Running a 'longerThan' request against contradicting aValid constraint should only generate numeric,temporal and null
+Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
+  Given foo is anything but longer than 1
+    And foo is a valid "ISIN"
+    And foo is in set:
+      | "US0000XVGZA3" |
+      | "US0378331005" |
+      | "2"            |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "2"  |
+
+Scenario: 'longerThan' against contradicting 'aValid' emits numeric,temporal and null
   Given foo is longer than 20
-     And foo is a valid "ISIN"
-     And foo is in set:
-       | 22 |
-       | "abc" |
-       | "US0000XVGZA3" |
-       | 2011-01-01T00:00:00.000 |
+    And foo is a valid "ISIN"
+    And foo is in set:
+      | 22                      |
+      | "abc"                   |
+      | "US0000XVGZA3"          |
+      | 2011-01-01T00:00:00.000 |
   Then the following data should be generated:
-       | foo |
-       | null |
-       | 22   |
+       | foo                     |
+       | null                    |
+       | 22                      |
        | 2011-01-01T00:00:00.000 |
 
-Scenario: Running a 'longerThan' request against non contradicting greaterThan should be successful
+Scenario: Running a 'longerThan' request against non contradicting 'greaterThan' should be successful
   Given foo is longer than 1
-     And foo is greater than 10
-     And foo is in set:
-       | "a"     |
-       | "aa"    |
-       | "aaaa " |
-       | 15      |
+    And foo is greater than 10
+    And foo is in set:
+      | "a"     |
+      | "aa"    |
+      | "aaaa " |
+      | 15      |
   Then the following data should be generated:
       | foo     |
       | null    |
@@ -278,87 +271,76 @@ Scenario: Running a 'longerThan' request against non contradicting greaterThan s
       | "aaaa " |
       | 15      |
 
-Scenario: Running a 'longerThan' request against non contradicting greaterThan (too long) should be successful
+Scenario: 'longerThan' against non contradicting not 'greaterThan' should be successful
   Given foo is longer than 10
-     And foo is anything but greater than 2
-     And foo is in set:
-       | "a"   |
-       | "aa"   |
-       | "aaaa" |
-       | "aaaaaaaaaa" |
-       | "aaaaaaaaaaa" |
-       | "aaaaaaaaaaaaa" |
-       | 1      |
-  Then the following data should be generated:
-      | foo   |
-      | null  |
-      | "aaaaaaaaaaa" |
+    And foo is anything but greater than 2
+    And foo is in set:
+      | "aaaaaaaaaa"    |
+      | "aaaaaaaaaaa"   |
       | "aaaaaaaaaaaaa" |
-      | 1 |
+      | 2               |
+      | 3               |
+  Then the following data should be generated:
+      | foo             |
+      | null            |
+      | "aaaaaaaaaaa"   |
+      | "aaaaaaaaaaaaa" |
+      | 2               |
 
-Scenario: Running a 'longerThan' request against non contradicting greaterThanOrEqualTo should be successful
+Scenario: 'longerThan' against non contradicting 'greaterThanOrEqualTo' should be successful
   Given foo is longer than 10
-     And foo is anything but greater than or equal to 2
-     And foo is in set:
-      | "a"  |
-      | "aa"  |
-      | "aaaa" |
-      | "aaaaaaaaaa" |
-      | "aaaaaaaaaaa" |
+    And foo is anything but greater than or equal to 2
+    And foo is in set:
+      | "aaaaaaaaaa"    |
+      | "aaaaaaaaaaa"   |
       | "aaaaaaaaaaaaa" |
-      | 1  |
-      | 2  |
-      | 5  |
+      | 1               |
+      | 2               |
+      | 5               |
   Then the following data should be generated:
-      | foo  |
-      | null |
-      | "aaaaaaaaaaa" |
+      | foo             |
+      | null            |
+      | "aaaaaaaaaaa"   |
       | "aaaaaaaaaaaaa" |
-      | 1  |
+      | 1               |
 
-Scenario: Running a 'longerThan' request against non contradicting lessThan (too long) should be successful
+Scenario: Running a 'longerThan' request against non contradicting 'lessThan' should be successful
   Given foo is longer than 10
-     And foo is less than 5
-     And foo is in set:
-       | "a"  |
-       | "aa"  |
-       | "aaaa" |
-       | "aaaaaaaaaa" |
-       | "aaaaaaaaaaa" |
-       | "aaaaaaaaaaaaa" |
-       | 1  |
-       | 2  |
-       | 5  |
+    And foo is less than 5
+    And foo is in set:
+      | "aaaaaaaaaa"    |
+      | "aaaaaaaaaaa"   |
+      | "aaaaaaaaaaaaa" |
+      | 4               |
+      | 5               |
   Then the following data should be generated:
-       | foo  |
-       | null |
-       | "aaaaaaaaaaa" |
-       | "aaaaaaaaaaaaa" |
-       | 1  |
-       | 2  |
+      | foo             |
+      | null            |
+      | "aaaaaaaaaaa"   |
+      | "aaaaaaaaaaaaa" |
+      | 4               |
 
-Scenario: Running a 'longerThan' request against non contradicting lessThan should be successful
+Scenario: Running a 'longerThan' request against non contradicting not 'lessThan' should be successful
   Given foo is longer than 1
-     And foo is anything but less than 10
-     And foo is in set:
-       | "a" |
-       | "aa" |
-       | "aaaa" |
-       | "aaaaaaaaaa" |
-       | "aaaaaaaaaaa" |
-       | "aaaaaaaaaaaaa" |
-       | 1  |
-       | 2  |
-       | 12 |
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "aa" |
-      | "aaaa" |
-      | "aaaaaaaaaa" |
+    And foo is anything but less than 10
+    And foo is in set:
+      | "a"             |
+      | "aa"            |
+      | "aaaaaaaaa"     |
+      | "aaaaaaaaaa"    |
+      | "aaaaaaaaaaa"   |
+      | 9               |
+      | 10              |
+      | 11              |
+  Then the following data should be generated:
+      | foo           |
+      | null          |
+      | "aa"          |
+      | "aaaaaaaaa"   |
+      | "aaaaaaaaaa"  |
       | "aaaaaaaaaaa" |
-      | "aaaaaaaaaaaaa" |
-      | 12 |
+      | 10            |
+      | 11            |
 
 Scenario: Running a 'longerThan' request against non contradicting lessThanOrEqualTo (too long) should be successful
   Given foo is longer than 10
