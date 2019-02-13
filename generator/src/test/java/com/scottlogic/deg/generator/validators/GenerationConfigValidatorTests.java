@@ -219,9 +219,24 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
+    public void generateViolationOutputDirNotExists() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(outputTarget.exists()).thenReturn(false);
+        when(outputTarget.isDirectory()).thenReturn(true);
+        when(outputTarget.isDirectoryEmpty()).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+    @Test
     public void generateViolationOutputDirNotFile() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(outputTarget.exists()).thenReturn(true);
         when(outputTarget.isDirectory()).thenReturn(true);
         when(outputTarget.isDirectoryEmpty()).thenReturn(true);
 

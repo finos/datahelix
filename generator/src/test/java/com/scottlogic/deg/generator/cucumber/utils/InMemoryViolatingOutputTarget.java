@@ -13,6 +13,11 @@ public class InMemoryViolatingOutputTarget extends InMemoryOutputTarget {
     }
 
     @Override
+    public boolean exists() {
+        return true;
+    }
+
+    @Override
     public boolean isDirectory() {
         return true;
     }
