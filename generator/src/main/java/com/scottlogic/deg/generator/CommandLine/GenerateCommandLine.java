@@ -10,6 +10,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+@picocli.CommandLine.Command(
+    name = "generate",
+    description = "Produces data using any options provided.",
+    mixinStandardHelpOptions = true,
+    version = "1.0")
 public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
