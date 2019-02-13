@@ -32,12 +32,10 @@ public class GenerationConfigValidator {
             errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
         }
 
-        if (!configSource.overwriteOutputFiles()) {
-            if (configSource.shouldViolate()) {
-                checkViolationGenerateOutputTarget(errorMessages, outputTarget);
-            } else {
-                checkGenerateOutputTarget(errorMessages, outputTarget);
-            }
+        if (configSource.shouldViolate()) {
+            checkViolationGenerateOutputTarget(errorMessages, outputTarget);
+        } else {
+            checkGenerateOutputTarget(errorMessages, outputTarget);
         }
 
         return validationResult;
@@ -46,7 +44,7 @@ public class GenerationConfigValidator {
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (outputTarget.isDirectory()) {
             errorMessages.add("Invalid Output - target is a directory, please use a different output filename");
-        } else if (outputTarget.exists()) {
+        } else if (!configSource.overwriteOutputFiles() && outputTarget.exists()) {
             errorMessages.add("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
         }
     }
@@ -54,6 +52,8 @@ public class GenerationConfigValidator {
     private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (!outputTarget.isDirectory()) {
             errorMessages.add("Invalid Output - not a directory. please enter a valid directory name");
+        } else if (!configSource.overwriteOutputFiles() && !outputTarget.isDirectoryEmpty()) {
+            errorMessages.add("Invalid Output - directory not empty. please enter a valid directory name or use the --overwrite option");
         }
     }
 
