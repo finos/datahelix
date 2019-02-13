@@ -31,9 +31,7 @@ public class GenerationConfigValidatorTests {
     @BeforeEach
     void setup() throws IOException {
         //Arrange
-        validator = new GenerationConfigValidator(config,
-            mockConfigSource,
-            outputTarget);
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
         when(outputTarget.isDirectory()).thenReturn(false);
         when(outputTarget.exists()).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
@@ -42,7 +40,7 @@ public class GenerationConfigValidatorTests {
     @Test
     public void interestingWithNoMaxRowsReturnsValid() {
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -61,7 +59,7 @@ public class GenerationConfigValidatorTests {
         GenerationConfig config = new GenerationConfig(testConfigSource);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -77,12 +75,10 @@ public class GenerationConfigValidatorTests {
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(config,
-            mockConfigSource,
-            outputTarget);
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -100,12 +96,10 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(config,
-            mockConfigSource,
-            outputTarget);
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -124,7 +118,7 @@ public class GenerationConfigValidatorTests {
         );
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -143,7 +137,7 @@ public class GenerationConfigValidatorTests {
         GenerationConfig config = new GenerationConfig(testConfigSource);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -156,7 +150,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -166,7 +160,7 @@ public class GenerationConfigValidatorTests {
     public void generateOutputFileDoesNotExist() {
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -178,7 +172,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectory()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -191,7 +185,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -205,7 +199,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(false);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -218,7 +212,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectory()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
