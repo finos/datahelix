@@ -75,7 +75,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
                 }
 
                 return process(rootNode, initialState.with(nextFixedField)).iterator();
-            });
+            },
+            true);
 
         return StreamSupport.stream(
             Spliterators.spliteratorUnknownSize(

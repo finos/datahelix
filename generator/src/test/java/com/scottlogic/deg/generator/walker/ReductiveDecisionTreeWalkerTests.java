@@ -151,6 +151,36 @@ class ReductiveDecisionTreeWalkerTests {
     }
 
     /**
+     * If NOT in RANDOM mode, processing should stop once all data has been emitted
+     */
+    @Test
+    public void shouldStopOnceAllDataProduced() {
+        LinkedList<Stream<RowSpec>> rowSpecsToEmit = new LinkedList<>(
+            Arrays.asList(Stream.of(rowSpec("first-row-1&7")),
+            Stream.of(rowSpec("shouldn't get here")),
+            Stream.of(rowSpec("shouldn't get here"))));
+
+        config.dataGenerationType = GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
+        when(rowSpecGenerator.createRowSpecsFromFixedValues(
+            argThat(new ReductiveStateMatcher("field1", 1, "field2")), any(ConstraintNode.class)))
+            .thenAnswer(__ -> rowSpecsToEmit.poll());
+        when(fixedFieldBuilder.findNextFixedField(argThat(new ReductiveStateMatcher()), eq(rootNode)))
+            .thenAnswer(__ -> fixedField("field1", 1));
+        when(fixedFieldBuilder.findNextFixedField(argThat(new ReductiveStateMatcher("field1", 1)), eq(rootNode)))
+            .thenAnswer(__ -> fixedField("field2", 7));
+
+        List<RowSpec> result = walker.walk(tree, config).limit(3).collect(Collectors.toList());
+
+        verify(rowSpecGenerator, times(1))
+            .createRowSpecsFromFixedValues(any(ReductiveState.class), any(ConstraintNode.class));
+        verify(fixedFieldBuilder, times(1))
+            .findNextFixedField(argThat(new ReductiveStateMatcher()), eq(rootNode));
+        Assert.assertThat(
+            result.stream().map(RowSpec::toString).collect(Collectors.toList()),
+            hasItems("first-row-1&7"));
+    }
+
+    /**
      * A matcher for the ReductiveState, check to see if the ReductiveState matches the given details
      * when a method is invoked with it as a parameter
      */
@@ -161,6 +191,14 @@ class ReductiveDecisionTreeWalkerTests {
         private final Object exectedLastFieldValue;
         private final boolean ignoreLastFixedFieldValue;
 
+        public ReductiveStateMatcher() {
+            this(null, null, null, null, true);
+        }
+
+        ReductiveStateMatcher(String field, Object expectedValue) {
+            this(field, expectedValue, null, null, true);
+        }
+
         ReductiveStateMatcher(String field, Object expectedValue, String lastFixedField) {
             this(field, expectedValue, lastFixedField, null, true);
         }
@@ -170,7 +208,7 @@ class ReductiveDecisionTreeWalkerTests {
         }
 
         private ReductiveStateMatcher(String field, Object expectedValue, String lastFixedField, Object exectedLastFieldValue, boolean ignoreLastFixedFieldValue) {
-            this.field = new Field(field);
+            this.field = field == null ? null : new Field(field);
             this.expectedValue = expectedValue;
             this.lastFixedField = lastFixedField == null ? null : new Field(lastFixedField);
             this.exectedLastFieldValue = lastFixedField == null ? null : exectedLastFieldValue;
@@ -184,6 +222,11 @@ class ReductiveDecisionTreeWalkerTests {
             }
 
             ReductiveState state = (ReductiveState) o;
+            if (field == null && lastFixedField == null){
+                return state.getLastFixedField() == null
+                    && state.getFixedFieldsExceptLast().isEmpty();
+            }
+
             FixedField lastFixedField = state.getLastFixedField();
 
             if (!state.isFieldFixed(field)) {

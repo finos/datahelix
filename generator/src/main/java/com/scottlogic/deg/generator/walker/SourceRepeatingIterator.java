@@ -18,19 +18,22 @@ import java.util.function.Supplier;
 class SourceRepeatingIterator<T> implements Iterator<T> {
     private final Integer maxItemsPerSource;
     private final Supplier<Iterator<T>> getNextSource;
+    private final boolean stopOnceSouceExhausted;
     private Integer itemsEmittedFromSource = 0;
     private Iterator<T> currentSource;
 
     SourceRepeatingIterator(
         Integer maxItemsPerSource,
-        Supplier<Iterator<T>> getNextSource) {
+        Supplier<Iterator<T>> getNextSource,
+        boolean stopOnceSouceExhausted) {
         this.maxItemsPerSource = maxItemsPerSource;
         this.getNextSource = getNextSource;
+        this.stopOnceSouceExhausted = stopOnceSouceExhausted;
     }
 
     @Override
     public boolean hasNext() {
-        if (currentSource != null && !currentSource.hasNext()){
+        if (shouldResetSource()){
             currentSource = null;
         }
 
@@ -39,6 +42,18 @@ class SourceRepeatingIterator<T> implements Iterator<T> {
         }
 
         return currentSource != null && currentSource.hasNext();
+    }
+
+    private boolean shouldResetSource(){
+        if (currentSource == null || currentSource.hasNext()){
+            return false;
+        }
+
+        if (!stopOnceSouceExhausted){
+            return true;
+        }
+
+        return false;
     }
 
     private void recordItemEmittedAndResetIfAtLimitForSource(){

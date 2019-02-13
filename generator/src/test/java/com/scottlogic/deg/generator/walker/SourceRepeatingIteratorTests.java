@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.common.collect.Iterators;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,8 @@ class SourceRepeatingIteratorTests {
     public void hasNextShouldReturnFalseIfSourceProviderReturnsEmptyIterator(){
         SourceRepeatingIterator<String> repeatingIterator = new SourceRepeatingIterator<>(
             1,
-            Collections::emptyIterator
+            Collections::emptyIterator,
+            false
         );
 
         boolean hasNext = repeatingIterator.hasNext();
@@ -26,7 +28,8 @@ class SourceRepeatingIteratorTests {
     public void hasNextShouldReturnTrueIfSourceProviderReturnsNonEmptyIterator(){
         SourceRepeatingIterator<String> repeatingIterator = new SourceRepeatingIterator<>(
             1,
-            () -> Collections.singletonList("abc").iterator()
+            () -> Collections.singletonList("abc").iterator(),
+            false
         );
 
         boolean hasNext = repeatingIterator.hasNext();
@@ -39,7 +42,8 @@ class SourceRepeatingIteratorTests {
         Iterator<String> underlyingIterator = mock(Iterator.class);
         SourceRepeatingIterator<String> repeatingIterator = new SourceRepeatingIterator<>(
             1,
-            () -> underlyingIterator
+            () -> underlyingIterator,
+            false
         );
         when(underlyingIterator.hasNext()).thenReturn(true);
 
@@ -55,7 +59,8 @@ class SourceRepeatingIteratorTests {
         AtomicInteger noOfSourcesProvided = new AtomicInteger();
         SourceRepeatingIterator<Integer> repeatingIterator = new SourceRepeatingIterator<>(
             1,
-            () -> Arrays.asList(0, noOfSourcesProvided.incrementAndGet()).iterator()
+            () -> Arrays.asList(0, noOfSourcesProvided.incrementAndGet()).iterator(),
+            false
         );
         if (repeatingIterator.hasNext()) {
             repeatingIterator.next();
@@ -73,7 +78,8 @@ class SourceRepeatingIteratorTests {
         AtomicInteger noOfSourcesProvided = new AtomicInteger();
         SourceRepeatingIterator<Integer> repeatingIterator = new SourceRepeatingIterator<>(
             null,
-            () -> Arrays.asList(0, noOfSourcesProvided.incrementAndGet()).iterator()
+            () -> Arrays.asList(0, noOfSourcesProvided.incrementAndGet()).iterator(),
+            false
         );
         if (repeatingIterator.hasNext()) {
             repeatingIterator.next();
@@ -97,12 +103,27 @@ class SourceRepeatingIteratorTests {
         ));
         SourceRepeatingIterator<String> repeatingIterator = new SourceRepeatingIterator<>(
             null,
-            queueOfIterators::poll //retrieves the head of the queue and removes it from <queueOfIterators> a.k.a. pop()
+            queueOfIterators::poll, //retrieves the head of the queue and removes it from <queueOfIterators> a.k.a. pop()
+            true
         );
 
         List<String> values = new ArrayList<>();
         repeatingIterator.forEachRemaining(values::add);
 
         Assert.assertThat(values, hasItems("a", "b"));
+    }
+
+    @Test
+    public void shouldCompleteWhenAllSourceItemsHaveBeenEmittedAndThereIsNoPerSourceLimit(){
+        SourceRepeatingIterator<String> repeatingIterator = new SourceRepeatingIterator<>(
+            null,
+            () -> Iterators.forArray("a", "b", "c"),
+            true
+        );
+
+        List<String> values = new ArrayList<>();
+        repeatingIterator.forEachRemaining(values::add);
+
+        Assert.assertThat(values, hasItems("a", "b", "c"));
     }
 }
