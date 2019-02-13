@@ -86,7 +86,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public boolean overwriteOutputFiles() {
-        return state.overwriteOutputFiles;
+        return false;
     }
 
     @Override

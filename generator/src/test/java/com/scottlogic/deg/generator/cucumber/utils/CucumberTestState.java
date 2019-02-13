@@ -26,8 +26,6 @@ public class CucumberTestState {
      */
     public Boolean shouldViolate = false;
 
-    public Boolean overwriteOutputFiles = true;
-
     public Optional<Long> maxRows = Optional.empty();
 
     public List<List<Object>> generatedObjects;
