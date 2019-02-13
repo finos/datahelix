@@ -157,6 +157,19 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
+    public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
+
+        when(outputTarget.exists()).thenReturn(true);
+        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+    }
+
+    @Test
     public void generateOutputFileDoesNotExist() {
 
         //Act
