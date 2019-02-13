@@ -98,9 +98,5 @@ public class FixedField {
         return this.current;
     }
 
-    public boolean hasCurrentValue(){
-        return this.current != NOT_ITERATED;
-    }
-
     private static class NotIterated { }
 }

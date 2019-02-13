@@ -150,6 +150,10 @@ class ReductiveDecisionTreeWalkerTests {
             hasItems("first-row-1&7", "first-row-1&8"));
     }
 
+    /**
+     * A matcher for the ReductiveState, check to see if the ReductiveState matches the given details
+     * when a method is invoked with it as a parameter
+     */
     private class ReductiveStateMatcher extends BaseMatcher<ReductiveState> {
         private final Field field;
         private final Object expectedValue;
@@ -203,12 +207,12 @@ class ReductiveDecisionTreeWalkerTests {
                 return false;
             }
 
-            if (field.hasCurrentValue()) {
-                return field.getCurrentValue() == expectedValue;
+            Object currentValue = field.getCurrentValue();
+            if (currentValue == AtomicCurrentValue.NOT_ITERATED){
+                currentValue = field.getStream().findFirst().orElseThrow(() -> new IllegalStateException("No values found in stream"));
             }
 
-            Optional<Object> firstValue = field.getStream().findFirst();
-            return expectedValue.equals(firstValue.orElse(null));
+            return currentValue.equals(expectedValue);
         }
 
         @Override
@@ -223,14 +227,13 @@ class ReductiveDecisionTreeWalkerTests {
             FieldSpecSource.Empty
         );
 
-        FixedField mockFixedField = mock(FixedField.class);
+        FixedField mockFixedField = mock(FixedField.class, fieldName);
 
         AtomicBoolean hasStartedReading = new AtomicBoolean();
         AtomicCurrentValue currentValue = new AtomicCurrentValue();
 
         when(mockFixedField.getField()).thenReturn(new Field(fieldName));
         when(mockFixedField.getFieldSpecForValues()).thenReturn(valuesFieldSpec);
-        when(mockFixedField.hasCurrentValue()).thenAnswer(__ -> hasStartedReading.get());
         when(mockFixedField.getCurrentValue()).thenAnswer(__ -> currentValue.value);
 
         when(mockFixedField.getStream()).thenReturn(Stream.of(values).peek(v -> {
@@ -246,7 +249,8 @@ class ReductiveDecisionTreeWalkerTests {
     }
 
     private static class AtomicCurrentValue {
-        public Object value = "NOT_ITERATED";
+        public static final Object NOT_ITERATED = "NOT_ITERATED";
+        public Object value = NOT_ITERATED;
 
         public void setValue(Object value) {
             this.value = value;
