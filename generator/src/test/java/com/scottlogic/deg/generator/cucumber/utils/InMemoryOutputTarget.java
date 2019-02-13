@@ -36,6 +36,11 @@ public class InMemoryOutputTarget implements OutputTarget {
         return false;
     }
 
+    @Override
+    public boolean isDirectoryEmpty() {
+        return true;
+    }
+
     private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
         return generatedObjects
             .collect(Collectors.toList())

@@ -223,12 +223,27 @@ public class GenerationConfigValidatorTests {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(outputTarget.isDirectory()).thenReturn(true);
+        when(outputTarget.isDirectoryEmpty()).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLine(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputDirNotEmpty() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(outputTarget.isDirectory()).thenReturn(true);
+        when(outputTarget.isDirectoryEmpty()).thenReturn(false);
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLine(config);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
     }
 
 }
