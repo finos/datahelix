@@ -3,13 +3,17 @@ package com.scottlogic.deg.generator;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.generator.validators.VisualiseConfigValidator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -28,6 +33,7 @@ import java.util.stream.Stream;
     mixinStandardHelpOptions = true,
     version = "1.0")
 public class Visualise implements Runnable {
+
     @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
 
@@ -56,8 +62,43 @@ public class Visualise implements Runnable {
         hidden = true)
     private boolean dontSimplify;
 
+    @picocli.CommandLine.Option(
+        names = {"--overwrite"},
+        description = "Defines whether to overwrite existing output files")
+    private boolean overwriteOutputFiles = false;
+
+    private  ErrorReporter errorReporter=new ErrorReporter();
+
+
+    public ValidationResult validateCommandLine() {
+        ArrayList<String> errorMessages = new ArrayList<>();
+        ValidationResult validationResult = new ValidationResult(errorMessages);
+
+        if (!configSource.overwriteOutputFiles()) {
+            checkOutputTarget(errorMessages, outputTarget);
+        }
+
+        return validationResult;
+    }
+
+    private void checkOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
+        if (outputTarget.isDirectory()) {
+            errorMessages.add("Invalid Output - target is a directory, please use a different output filename or use the --overwrite option");
+        } else if (outputTarget.exists()) {
+            errorMessages.add("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
+        }
+    }
+
     @Override
     public void run() {
+
+        ValidationResult validationResult = validateCommandLine();
+
+        if (!validationResult.isValid()) {
+            errorReporter.display(validationResult);
+            return;
+        }
+
         final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
         final Profile profile;
 
@@ -75,8 +116,8 @@ public class Visualise implements Runnable {
 
         final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
         final DecisionTreeOptimiser treeOptimiser = dontOptimise
-                ? new NoopDecisionTreeOptimiser()
-                : new MostProlificConstraintOptimiser();
+            ? new NoopDecisionTreeOptimiser()
+            : new MostProlificConstraintOptimiser();
 
         StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
             profile.fields,
@@ -84,18 +125,18 @@ public class Visualise implements Runnable {
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
 
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
-                .splitTreeIntoPartitions(mergedTree)
-                .map(treeOptimiser::optimiseTree)
-                .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
-                .map(treeValidator::markContradictions)
-                .collect(Collectors.toList());
+            .splitTreeIntoPartitions(mergedTree)
+            .map(treeOptimiser::optimiseTree)
+            .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
+            .map(treeValidator::markContradictions)
+            .collect(Collectors.toList());
 
         final String title = shouldHideTitle
             ? null
             : Stream.of(titleOverride, profile.description, profileBaseName)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
 
         try {
             if (treePartitions.size() == 1) {
@@ -131,8 +172,8 @@ public class Visualise implements Runnable {
         throws IOException {
 
         try (OutputStreamWriter outWriter = new OutputStreamWriter(
-                new FileOutputStream(outputFilePath.toString()),
-                StandardCharsets.UTF_8)) {
+            new FileOutputStream(outputFilePath.toString()),
+            StandardCharsets.UTF_8)) {
 
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,
