@@ -1,8 +1,20 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.google.common.collect.Iterators;
+
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
+/**
+ * Emit values from the given Iterator<T> as many times as required
+ * Provide a value for <maxItemsPerSource> to limit the number of items from the Iterator<T> before restarting it
+ *
+ * i.e. new SourceRepeatingIterator<T>(null, () -> Iterators.forArray(1, 2, 3)) -> 1, 2, 3
+ * i.e. new SourceRepeatingIterator<T>(2, () -> Iterators.forArray(1, 2, 3)) -> 1, 2, 1, 2, ...
+ *
+ * @param <T> - The type of item to be emitted
+ */
 class SourceRepeatingIterator<T> implements Iterator<T> {
     private final Integer maxItemsPerSource;
     private final Supplier<Iterator<T>> getNextSource;
@@ -12,7 +24,6 @@ class SourceRepeatingIterator<T> implements Iterator<T> {
     SourceRepeatingIterator(
         Integer maxItemsPerSource,
         Supplier<Iterator<T>> getNextSource) {
-
         this.maxItemsPerSource = maxItemsPerSource;
         this.getNextSource = getNextSource;
     }

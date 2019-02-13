@@ -95,6 +95,10 @@ public class RowSpecDataBagSourceFactory {
 
         @Override
         public Stream<DataBag> generate(GenerationConfig generationConfig) {
+            //The Reductive walker will emit a single RowSpec that can represent multiple rows
+            //each of these rows will have all fields (except the last one) fixed to a value
+            //if this RowSpec is emitted fully it will give the impression of a set of non-random rows therefore:
+            //emit only one row from the RowSpec then let the walker restart the generation for another random RowSpec
             if (generationConfig.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
                 return dataBags.limit(1);
             }

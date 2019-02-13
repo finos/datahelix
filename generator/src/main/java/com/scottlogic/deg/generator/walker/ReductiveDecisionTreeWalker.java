@@ -64,6 +64,8 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             ? 1
             : null;
 
+        //repeat the call to process() as many times as required, limiting the number of emitted RowSpec's based on
+        // <maxRowSpecsPerSource>. I.e. in RANDOM one call to process() per row otherwise one call to process() per tree
         Iterator<RowSpec> iterator = new SourceRepeatingIterator<>(
             maxRowSpecsPerSource,
             () -> {
