@@ -12,21 +12,17 @@ import java.util.ArrayList;
  */
 public class GenerationConfigValidator {
 
-    private final GenerationConfig config;
     private final OutputTarget outputTarget;
     private final GenerationConfigSource configSource;
 
     @Inject
-    public GenerationConfigValidator(GenerationConfig config,
-                                     GenerationConfigSource configSource,
+    public GenerationConfigValidator(GenerationConfigSource configSource,
                                      OutputTarget outputTarget) {
-        this.config = config;
         this.configSource = configSource;
         this.outputTarget = outputTarget;
     }
 
-
-    public ValidationResult validateCommandLine() {
+    public ValidationResult validateCommandLine(GenerationConfig config) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
