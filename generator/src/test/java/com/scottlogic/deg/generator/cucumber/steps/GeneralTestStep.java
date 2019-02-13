@@ -4,14 +4,17 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -49,6 +52,11 @@ public class GeneralTestStep {
     @When("the combination strategy is {combinationStrategy}")
     public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
         this.state.combinationStrategyType = strategy;
+    }
+
+    @When("we do not violate any {operator} constraints")
+    public void constraintTypeIsNotViolated(String operator){
+        this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
     }
 
     @When("the walker type is {walkerType}")
@@ -212,9 +220,9 @@ public class GeneralTestStep {
         Assert.assertFalse("No data was generated but some was expected", data.isEmpty());
     }
 
-    @Given("the generator can generate at most {int} rows")
-    public void theGeneratorCanGenerateAtMostRows(int maxNumberOfRows) {
-        state.maxRows = maxNumberOfRows;
+    @Given("the generator can generate at most {long} rows")
+    public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
+        state.maxRows = Optional.of(maxNumberOfRows);
     }
 
     class GeneratedTestData {

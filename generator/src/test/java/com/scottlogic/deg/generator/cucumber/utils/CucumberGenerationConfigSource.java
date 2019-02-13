@@ -6,10 +6,10 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.io.File;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
@@ -37,7 +37,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
-        return Collections.emptyList();
+        return state.getConstraintsToNotViolate();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public long getMaxRows() {
+    public Optional<Long> getMaxRows() {
         return state.maxRows;
     }
 
@@ -83,5 +83,10 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
+    }
+
+    @Override
+    public boolean visualiseReductions() {
+        return false;
     }
 }

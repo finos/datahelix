@@ -42,7 +42,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         Stream<GeneratedObject> dataRows = rowGenerator.generateObjectsFromRowSpecs(profile, rowSpecStream);
 
         return dataRows
-            .limit(generationConfig.getMaxRows())
+            .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
             .peek(this.monitor::rowEmitted);
 
     }

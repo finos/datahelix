@@ -4,15 +4,15 @@ import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
     public GenerationConfig.CombinationStrategyType combinationStrategy;
     public GenerationConfig.TreeWalkerType walkerType;
-    public long maxRows = GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+    public Long maxRows;
     public boolean validateProfile = false;
 
     public TestGenerationConfigSource(
@@ -50,8 +50,14 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public long getMaxRows() {
-        return this.maxRows;
+    public Optional<Long> getMaxRows() {
+        return maxRows == null
+            ? Optional.empty()
+            : Optional.of(maxRows);
+    }
+
+    public void setMaxRows(Long maxRows) {
+        this.maxRows = maxRows;
     }
 
     @Override
@@ -86,6 +92,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public boolean shouldViolate() {
+        return false;
+    }
+
+    @Override
+    public boolean visualiseReductions() {
         return false;
     }
 }

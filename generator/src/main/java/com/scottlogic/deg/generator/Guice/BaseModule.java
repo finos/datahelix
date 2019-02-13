@@ -59,10 +59,10 @@ public class BaseModule extends AbstractModule {
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
+        bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
-        bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
