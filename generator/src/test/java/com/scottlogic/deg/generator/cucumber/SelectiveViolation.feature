@@ -68,7 +68,7 @@ Background:
       | 10        |
       | null      |
 
-  Scenario: Running a 'containingRegex' request for a single character (a) should be successfull
+  Scenario: Running a 'containingRegex' request for a single character (a) should be successful
     And foo is of type "string"
     And foo is containing regex /[a]{1}/
     And foo is of length 1
