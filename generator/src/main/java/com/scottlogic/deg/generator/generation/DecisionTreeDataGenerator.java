@@ -52,7 +52,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
-            .map(treeWalker::walk);
+            .map(partition -> treeWalker.walk(partition, generationConfig));
 
         final Stream<DataBagSource> allDataBagSources =
             rowSpecsByPartition

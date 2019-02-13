@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.generator.generation.TestGenerationConfig;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
@@ -46,8 +47,9 @@ public class DecisionTreeToRowSpecsTests {
     @Test
     public void test() {
         final DecisionTreeCollection dTree = dTreeGenerator.analyse(makeProfile());
-        final List<RowSpec> rowSpecs = dTreeWalker.walk(new DecisionTree(reduceRules(dTree), dTree.getFields(), "DecisionTreeToRowSpecsTests"))
-                .collect(Collectors.toList());
+        final List<RowSpec> rowSpecs = dTreeWalker
+            .walk(new DecisionTree(reduceRules(dTree), dTree.getFields(), "DecisionTreeToRowSpecsTests"), new TestGenerationConfig())
+            .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }
 

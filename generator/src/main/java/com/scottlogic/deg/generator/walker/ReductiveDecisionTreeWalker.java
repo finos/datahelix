@@ -24,7 +24,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final FixedFieldBuilder fixedFieldBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
-    private final GenerationConfig config;
 
     @Inject
     public ReductiveDecisionTreeWalker(
@@ -32,18 +31,16 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixedFieldBuilder fixedFieldBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveDecisionTreeReducer treeReducer,
-        ReductiveRowSpecGenerator reductiveRowSpecGenerator,
-        GenerationConfig config) {
+        ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
         this.iterationVisualiser = iterationVisualiser;
         this.fixedFieldBuilder = fixedFieldBuilder;
         this.monitor = monitor;
         this.treeReducer = treeReducer;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
-        this.config = config;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<RowSpec> walk(DecisionTree tree, GenerationConfig config) {
         ConstraintNode rootNode = tree.getRootNode();
         ReductiveState initialState = new ReductiveState(tree.fields);
 

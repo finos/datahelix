@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -31,7 +32,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<RowSpec> walk(DecisionTree tree, GenerationConfig config) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
         return helper.walk(tree.getRootNode());
     }

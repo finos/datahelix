@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.generation.TestGenerationConfig;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -35,7 +36,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             routeProducer);
         DecisionTree tree = new DecisionTree(new TreeConstraintNode(), getFields(), "Test tree");
 
-        walker.walk(tree);
+        walker.walk(tree, new TestGenerationConfig());
 
         Assert.assertSame(routeProducer.actualDecisionTree, tree);
     }
@@ -67,7 +68,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             rowSpecMerger,
             routeProducer);
 
-        Stream<RowSpec> routes = walker.walk(tree);
+        Stream<RowSpec> routes = walker.walk(tree, new TestGenerationConfig());
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 1);
@@ -105,7 +106,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             rowSpecMerger,
             routeProducer);
 
-        Stream<RowSpec> routes = walker.walk(tree);
+        Stream<RowSpec> routes = walker.walk(tree, new TestGenerationConfig());
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.get(0).toString(), "right decision<left decision<root");
@@ -142,7 +143,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             rowSpecMerger,
             routeProducer);
 
-        Stream<RowSpec> routes = walker.walk(tree);
+        Stream<RowSpec> routes = walker.walk(tree, new TestGenerationConfig());
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 0);
@@ -179,7 +180,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             rowSpecMerger,
             routeProducer);
 
-        Stream<RowSpec> routes = walker.walk(tree);
+        Stream<RowSpec> routes = walker.walk(tree, new TestGenerationConfig());
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 2);
@@ -216,7 +217,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             rowSpecMerger,
             routeProducer);
 
-        Stream<RowSpec> routes = walker.walk(tree);
+        Stream<RowSpec> routes = walker.walk(tree, new TestGenerationConfig());
 
         List<RowSpec> routesList = routes.collect(Collectors.toList());
         Assert.assertEquals(routesList.size(), 1);

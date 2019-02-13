@@ -56,8 +56,7 @@ class ReductiveDecisionTreeWalkerTests {
             fixedFieldBuilder,
             new NoopDataGeneratorMonitor(),
             treeReducer,
-            rowSpecGenerator,
-            config
+            rowSpecGenerator
         );
     }
 
@@ -69,7 +68,7 @@ class ReductiveDecisionTreeWalkerTests {
         config.dataGenerationType = GenerationConfig.DataGenerationType.RANDOM;
         when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(null);
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, config).collect(Collectors.toList());
 
         verify(fixedFieldBuilder).findNextFixedField(any(ReductiveState.class), eq(rootNode));
         Assert.assertThat(result, empty());
@@ -85,7 +84,7 @@ class ReductiveDecisionTreeWalkerTests {
         FixedField firstFixedField = fixedField("field1", 123);
         when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(firstFixedField, null);
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, config).collect(Collectors.toList());
 
         verify(fixedFieldBuilder, times(2)).findNextFixedField(any(ReductiveState.class), eq(rootNode));
         Assert.assertThat(result, empty());
@@ -115,7 +114,7 @@ class ReductiveDecisionTreeWalkerTests {
             .thenReturn(
                 Stream.of(rowSpec("second-row-10&40")));
 
-        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, config).limit(2).collect(Collectors.toList());
 
         verify(rowSpecGenerator, times(2))
             .createRowSpecsFromFixedValues(any(ReductiveState.class), any(ConstraintNode.class));
@@ -142,7 +141,7 @@ class ReductiveDecisionTreeWalkerTests {
                 fixedField1,
                 fixedField2);
 
-        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, config).limit(2).collect(Collectors.toList());
 
         verify(rowSpecGenerator, times(1))
             .createRowSpecsFromFixedValues(any(ReductiveState.class), any(ConstraintNode.class));
