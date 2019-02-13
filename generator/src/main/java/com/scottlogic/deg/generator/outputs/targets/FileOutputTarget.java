@@ -61,4 +61,16 @@ public class FileOutputTarget implements OutputTarget {
     public boolean isDirectory() {
         return Files.isDirectory(filePath);
     }
+
+    @Override
+    public boolean isDirectoryEmpty() {
+        try {
+            if (Files.walk(filePath).filter(Files::isRegularFile).count() > 0) {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }
