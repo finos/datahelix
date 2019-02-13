@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,8 @@ class ReductiveRowSpecGeneratorTests {
         RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory(
             new FieldSpecValueGenerator(
                 config,
-                new StandardFieldValueSourceEvaluator()));
+                new StandardFieldValueSourceEvaluator(),
+                new JavaUtilRandomNumberGenerator()));
 
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(state, rootNode);
         final Stream<List<Object>> fixed = result

@@ -10,21 +10,20 @@ import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFiel
 import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class FieldSpecValueGenerator {
-    private static final JavaUtilRandomNumberGenerator randomNumberGenerator = new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano());
-
     private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
+    private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator) {
+    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.generationConfig = generationConfig;
         this.sourceFactory = sourceEvaluator;
+        this.randomNumberGenerator = randomNumberGenerator;
     }
 
     public Stream<DataBag> generate(Field field, FieldSpec spec) {

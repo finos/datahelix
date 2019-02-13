@@ -20,6 +20,7 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfile
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
@@ -30,6 +31,7 @@ import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -79,6 +81,7 @@ public class BaseModule extends AbstractModule {
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
+        bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
     }
 
     private void bindAllCommandLineTypes() {

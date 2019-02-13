@@ -19,6 +19,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
@@ -91,7 +92,11 @@ class ExampleProfilesViolationTests {
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
-                        new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
+                        new RowSpecDataBagSourceFactory(
+                            new FieldSpecValueGenerator(
+                                config,
+                                new StandardFieldValueSourceEvaluator(),
+                                new JavaUtilRandomNumberGenerator()))),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
