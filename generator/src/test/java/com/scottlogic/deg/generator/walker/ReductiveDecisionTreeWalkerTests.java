@@ -23,6 +23,10 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 class ReductiveDecisionTreeWalkerTests {
+
+    /**
+     * If no field can be fixed initially, the walker should exit early, with an empty stream of RowSpecs
+     */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed(){
         ProfileFields fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
@@ -47,6 +51,10 @@ class ReductiveDecisionTreeWalkerTests {
         Assert.assertThat(result, empty());
     }
 
+    /**
+     * If a field can be fixed initially, but subsequently another one cannot be fixed then exit as early as possible
+     * with an empty stream of RowSpecs
+     */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed(){
         ProfileFields fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
