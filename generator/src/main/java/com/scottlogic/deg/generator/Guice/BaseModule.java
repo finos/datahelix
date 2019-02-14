@@ -40,16 +40,16 @@ import java.util.List;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final GenerationConfigSource generateConfigSource;
+    private final GenerationConfigSource configSource;
     private final VisualiseConfigSource visualiseConfigSource;
 
     public BaseModule(GenerationConfigSource configSource) {
-        this.generateConfigSource = configSource;
+        this.configSource = configSource;
         visualiseConfigSource = null;
     }
 
     public BaseModule(VisualiseConfigSource configSource) {
-        this.generateConfigSource = null;
+        this.configSource = null;
         this.visualiseConfigSource = configSource;
     }
 
@@ -80,8 +80,7 @@ public class BaseModule extends AbstractModule {
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>() {
-        }).toProvider(ViolationFiltersProvider.class);
+        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
@@ -93,8 +92,8 @@ public class BaseModule extends AbstractModule {
     }
 
     private void bindAllCommandLineTypes() {
-        if (this.generateConfigSource instanceof GenerateCommandLine) {
-            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.generateConfigSource);
+        if (this.configSource instanceof GenerateCommandLine) {
+            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
     }

@@ -1,14 +1,20 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
@@ -16,7 +22,6 @@ import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualiseConfigValidator;
 import com.scottlogic.deg.generator.visualise.VisualiseConfig;
 import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -37,21 +42,18 @@ public class VisualiseExecute implements Runnable {
     private final VisualiseConfig config;
     private final ProfileReader profileReader;
     private final VisualiseConfigSource configSource;
-    private final OutputTarget fileOutputTarget;
     private final VisualiseConfigValidator validator;
     private final ErrorReporter errorReporter;
 
     @Inject
     public VisualiseExecute(VisualiseConfig config,
-                            ProfileReader profileReader,
-                            VisualiseConfigSource configSource,
-                            OutputTarget fileOutputTarget,
-                            VisualiseConfigValidator validator,
-                            ErrorReporter errorReporter) {
+        ProfileReader profileReader,
+        VisualiseConfigSource configSource,
+        VisualiseConfigValidator validator,
+        ErrorReporter errorReporter) {
         this.config = config;
         this.profileReader = profileReader;
         this.configSource = configSource;
-        this.fileOutputTarget = fileOutputTarget;
         this.validator = validator;
         this.errorReporter = errorReporter;
     }
@@ -81,7 +83,8 @@ public class VisualiseExecute implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
         final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
-        final String profileBaseName = configSource.getProfileFile().getName().replaceFirst("\\.[^.]+$", "");
+        final String profileBaseName = configSource.getProfileFile().getName()
+            .replaceFirst("\\.[^.]+$", "");
         final DecisionTreeOptimiser treeOptimiser = configSource.dontOptimise()
             ? new NoopDecisionTreeOptimiser()
             : new MostProlificConstraintOptimiser();
@@ -94,16 +97,17 @@ public class VisualiseExecute implements Runnable {
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
             .splitTreeIntoPartitions(mergedTree)
             .map(treeOptimiser::optimiseTree)
-            .map(tree -> configSource.dontSimplify() ? tree : new DecisionTreeSimplifier().simplify(tree))
+            .map(tree -> configSource.dontSimplify() ? tree
+                : new DecisionTreeSimplifier().simplify(tree))
             .map(treeValidator::markContradictions)
             .collect(Collectors.toList());
 
         final String title = configSource.shouldHideTitle()
             ? null
             : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
 
         try {
             if (treePartitions.size() == 1) {
@@ -123,7 +127,8 @@ public class VisualiseExecute implements Runnable {
                         title != null
                             ? title + " (partition " + (i + 1) + ")"
                             : null,
-                        configSource.getOutputPath().resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
+                        configSource.getOutputPath()
+                            .resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
                 }
             }
         } catch (IOException e) {

@@ -4,9 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class FileOutputTarget implements OutputTarget {
+
     private final Path filePath;
     private final DataSetWriter dataSetWriter;
 
@@ -35,10 +34,12 @@ public class FileOutputTarget implements OutputTarget {
             directoryPath = Paths.get(System.getProperty("user.dir"));
         }
 
-        String fileNameWithoutExtension = this.filePath.getFileName().toString().replaceAll("\\.[^.]+$", "");
+        String fileNameWithoutExtension = this.filePath.getFileName().toString()
+            .replaceAll("\\.[^.]+$", "");
         String fileName = this.dataSetWriter.getFileName(fileNameWithoutExtension);
 
-        try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileName, profileFields)) {
+        try (Closeable writer = this.dataSetWriter
+            .openWriter(directoryPath, fileName, profileFields)) {
             generatedObjects.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row);
@@ -66,7 +67,8 @@ public class FileOutputTarget implements OutputTarget {
     @Override
     public boolean isDirectoryEmpty(int fileCount) {
         try {
-            if (directoryContainsManifestJsonFile() || directoryContainsFilesWithExt("csv", fileCount)) {
+            if (directoryContainsManifestJsonFile() || directoryContainsFilesWithExt("csv",
+                fileCount)) {
                 return false;
             }
         } catch (IOException e) {
@@ -82,7 +84,7 @@ public class FileOutputTarget implements OutputTarget {
     private boolean directoryContainsFilesWithExt(String ext, int fileCount) throws IOException {
         for (int x = 0; x <= fileCount; x++) {
             final int fileNbr = x;
-            if (Files.exists( Paths.get(filePath.toString(), fileNbr + "." + ext))) {
+            if (Files.exists(Paths.get(filePath.toString(), fileNbr + "." + ext))) {
                 return true;
             }
         }

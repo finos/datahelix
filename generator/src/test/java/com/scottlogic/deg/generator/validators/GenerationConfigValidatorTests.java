@@ -1,22 +1,20 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import java.util.ArrayList;
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenerationConfigValidatorTests {
 
@@ -33,7 +31,7 @@ public class GenerationConfigValidatorTests {
     private GenerationConfigValidator validator;
 
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         //Arrange
         validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
         when(outputTarget.isDirectory()).thenReturn(false);
@@ -155,7 +153,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -168,7 +167,8 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -178,7 +178,8 @@ public class GenerationConfigValidatorTests {
     public void generateOutputFileDoesNotExist() {
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -190,7 +191,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectory()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -203,7 +205,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -217,7 +220,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(false);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -232,7 +236,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -247,7 +252,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -261,7 +267,8 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(false);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
