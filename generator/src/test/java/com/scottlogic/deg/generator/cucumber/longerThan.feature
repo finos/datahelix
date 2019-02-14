@@ -271,7 +271,20 @@ Scenario: 'longerThan' against contradicting 'aValid' emits numeric,temporal and
        | 22                      |
        | 2011-01-01T00:00:00.000 |
 
-Scenario: Running a 'longerThan' request against non contradicting 'greaterThan' should be successful
+Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
+  Given foo is anything but longer than 12
+    And foo is anything but a valid "ISIN"
+    And foo is in set:
+      | "US0000XVGZA3" |
+      | "U10000XVGZA3" |
+      | "twelvedigits" |
+  Then the following data should be generated:
+      | foo            |
+      | null           |
+      | "U10000XVGZA3" |
+      | "twelvedigits" |
+
+  Scenario: Running a 'longerThan' request against non contradicting 'greaterThan' should be successful
   Given foo is longer than 1
     And foo is greater than 10
     And foo is in set:
@@ -303,6 +316,21 @@ Scenario: 'longerThan' against non contradicting not 'greaterThan' should be suc
       | 2               |
 
 Scenario: 'longerThan' against non contradicting 'greaterThanOrEqualTo' should be successful
+  Given foo is longer than 2
+    And foo is greater than or equal to 2
+    And foo is in set:
+      | "aa"  |
+      | "aaa" |
+      | 2     |
+      | 3     |
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | "aaa" |
+      | 2     |
+      | 3     |
+
+Scenario: 'longerThan' against non contradicting not 'greaterThanOrEqualTo' should be successful
   Given foo is longer than 10
     And foo is anything but greater than or equal to 2
     And foo is in set:
