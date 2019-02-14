@@ -36,7 +36,22 @@ Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail wi
     And no data is created
 
 Scenario: 'longerThan' a string should fail with an error message
-  And foo is longer than "Test"
+  Given foo is longer than "Test"
+  Then I am presented with an error message
+    And no data is created
+
+Scenario: 'longerThan' an empty string should fail with an error message
+  Given foo is longer than ""
+  Then I am presented with an error message
+    And no data is created
+
+Scenario: 'longerThan' whitespace should fail with an error message
+  Given foo is longer than " "
+  Then I am presented with an error message
+    And no data is created
+
+Scenario: 'longerThan' null should fail with an error message
+  Given foo is longer than null
   Then I am presented with an error message
     And no data is created
 
