@@ -5,6 +5,8 @@ Options are optional and case-insensitive
     * Overwrite existing output files. Options are: `true` or `false` (default)
 * `--violate` 
     * generate data which violates profile constraints. Options are: `true` or `false` (default). When this switch is used the output target must be an empty directory.
+* `--dont-violate` <epistemic constraints...>
+    * choose specific [epicstemic constraints](../EpistemicConstraints.md) to [not violate](../generator/docs/SelectiveViolation.md), e.g. "--dont-violate=typeOf lessThan" will not violate ANY data type constraints and will also not violate ANY less than constraints
 * `-t <generationType>` or `--t <generationType>`
    * Emit `<generationType>` data. Options are: `INTERESTING` (default) or `RANDOM`, `FULL_SEQUENTIAL`, see [Generation types](../../generator/docs/GenerationTypes.md) for more details
 * `-n <rows>` or `--max-rows <rows>`
