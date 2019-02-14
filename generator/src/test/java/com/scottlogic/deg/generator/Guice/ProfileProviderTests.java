@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,9 +23,8 @@ public class ProfileProviderTests {
     @Test
     public void get_profileIsNull_profileReadIsCalled() throws IOException, InvalidProfileException {
         //Arrange
-        profileProvider.setProfile(null);
         when(configSource.getProfileFile()).thenReturn(file);
-        when(profileReader.read(configSource.getProfileFile().toPath())).thenReturn(profile);
+        when(profileReader.read(configSource.getProfileFile().toPath())).thenReturn(null);
 
         //Act
         profileProvider.get();
@@ -36,15 +36,16 @@ public class ProfileProviderTests {
     @Test
     public void get_profileIsNotNull_profileReadIsNotCalled() throws IOException, InvalidProfileException {
         //Arrange
-        profileProvider.setProfile(profile);
         when(configSource.getProfileFile()).thenReturn(file);
         when(profileReader.read(configSource.getProfileFile().toPath())).thenReturn(profile);
 
         //Act
-        profileProvider.get();
+        Profile profile1 = profileProvider.get();
+        Profile profile2 = profileProvider.get();
 
         //Assert
-        verify(profileReader, times(0)).read(configSource.getProfileFile().toPath());
+        verify(profileReader, times(1)).read(configSource.getProfileFile().toPath());
+        Assert.assertSame(profile1, profile2);
     }
 
 }

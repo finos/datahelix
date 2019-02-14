@@ -33,8 +33,4 @@ public class ProfileProvider implements Provider<Profile> {
             throw new RuntimeException(e);
         }
     }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 }
