@@ -10,5 +10,5 @@ public interface OutputTarget {
     void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException;
     boolean exists();
     boolean isDirectory();
-    boolean isDirectoryEmpty();
+    boolean isDirectoryEmpty(int ruleCount);
 }

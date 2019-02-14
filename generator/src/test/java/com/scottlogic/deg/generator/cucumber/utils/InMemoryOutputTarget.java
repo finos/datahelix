@@ -37,7 +37,7 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public boolean isDirectoryEmpty() {
+    public boolean isDirectoryEmpty(int ruleCount) {
         return true;
     }
 
