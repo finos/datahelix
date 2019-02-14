@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.visualise.VisualiseConfig;
 import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
-
 import java.util.ArrayList;
 
 /**
@@ -17,7 +16,7 @@ public class VisualiseConfigValidator {
 
     @Inject
     public VisualiseConfigValidator(VisualiseConfigSource configSource,
-                                    OutputTarget outputTarget) {
+        OutputTarget outputTarget) {
         this.configSource = configSource;
         this.outputTarget = outputTarget;
     }
@@ -33,9 +32,11 @@ public class VisualiseConfigValidator {
 
     private void checkOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (outputTarget.isDirectory()) {
-            errorMessages.add("Invalid Output - target is a directory, please use a different output filename");
+            errorMessages.add(
+                "Invalid Output - target is a directory, please use a different output filename");
         } else if (!configSource.overwriteOutputFiles() && outputTarget.exists()) {
-            errorMessages.add("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
+            errorMessages.add(
+                "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
         }
     }
 
