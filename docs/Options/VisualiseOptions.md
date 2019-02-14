@@ -9,3 +9,5 @@ Options are optional and case-insensitive
    * Prevents tree optimisation during visualisation.
 * `--no-simplify`
    * Prevents tree simplification during visualisation. Simplification is where decisions with only one option are folded into the parent.
+ * `--overwrite` 
+    * Overwrite existing output files. Options are: `true` or `false` (default)

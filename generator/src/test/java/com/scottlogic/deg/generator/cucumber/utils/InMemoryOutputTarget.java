@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public class InMemoryOutputTarget implements OutputTarget {
 
-     final CucumberTestState testState;
+    private final CucumberTestState testState;
 
     @Inject
     public InMemoryOutputTarget(CucumberTestState testState) {
