@@ -63,14 +63,28 @@ public class FileOutputTarget implements OutputTarget {
     }
 
     @Override
-    public boolean isDirectoryEmpty() {
+    public boolean isDirectoryEmpty(int fileCount) {
         try {
-            if (Files.walk(filePath).filter(Files::isRegularFile).count() > 0) {
+            if (directoryContainsManifestJsonFile() || directoryContainsFilesWithExt("csv", fileCount)) {
                 return false;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private boolean directoryContainsManifestJsonFile() {
+        return Files.exists(Paths.get(filePath.toString(), "manifest.json"));
+    }
+
+    private boolean directoryContainsFilesWithExt(String ext, int fileCount) throws IOException {
+        for (int x = 0; x <= fileCount; x++) {
+            final int fileNbr = x;
+            if (Files.exists( Paths.get(filePath.toString(), fileNbr + "." + ext))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

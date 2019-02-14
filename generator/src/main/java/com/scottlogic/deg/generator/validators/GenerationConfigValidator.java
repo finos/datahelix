@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -22,7 +23,7 @@ public class GenerationConfigValidator {
         this.outputTarget = outputTarget;
     }
 
-    public ValidationResult validateCommandLine(GenerationConfig config) {
+    public ValidationResult validateCommandLinePreProfile(GenerationConfig config) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
@@ -32,8 +33,15 @@ public class GenerationConfigValidator {
             errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
         }
 
+        return validationResult;
+    }
+
+    public ValidationResult validateCommandLinePostProfile(GenerationConfig config, Profile profile) {
+        ArrayList<String> errorMessages = new ArrayList<>();
+        ValidationResult validationResult = new ValidationResult(errorMessages);
+
         if (configSource.shouldViolate()) {
-            checkViolationGenerateOutputTarget(errorMessages, outputTarget);
+            checkViolationGenerateOutputTarget(errorMessages, outputTarget, profile.rules.size());
         } else {
             checkGenerateOutputTarget(errorMessages, outputTarget);
         }
@@ -49,13 +57,13 @@ public class GenerationConfigValidator {
         }
     }
 
-    private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
+    private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget, int ruleCount) {
         if (!outputTarget.exists()) {
             errorMessages.add("Invalid Output - output directory must exist. please enter a valid directory name");
         } else if (!outputTarget.isDirectory()) {
             errorMessages.add("Invalid Output - not a directory. please enter a valid directory name");
-        } else if (!configSource.overwriteOutputFiles() && !outputTarget.isDirectoryEmpty()) {
-            errorMessages.add("Invalid Output - directory not empty. please enter a valid directory name or use the --overwrite option");
+        } else if (!configSource.overwriteOutputFiles() && !outputTarget.isDirectoryEmpty(ruleCount)) {
+            errorMessages.add("Invalid Output - directory not empty. please remove any 'manfiest.json' and '[0-9].csv' files or use the --overwrite option");
         }
     }
 
