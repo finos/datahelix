@@ -271,6 +271,7 @@ Scenario: 'longerThan' against contradicting 'aValid' emits numeric,temporal and
        | 22                      |
        | 2011-01-01T00:00:00.000 |
 
+@ignore #issue 487
 Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
   Given foo is anything but longer than 12
     And foo is anything but a valid "ISIN"
