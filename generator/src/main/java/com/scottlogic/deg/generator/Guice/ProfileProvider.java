@@ -11,9 +11,12 @@ import java.io.IOException;
 
 /**
  * @Deprecated as Profile should not be passed around as a dependency
+ *
+ * Note: this is not a provider, it is a cache of the profile from the profile reader
+ *
  * */
 @Deprecated
-public class ProfileProvider implements Provider<Profile> {
+public class ProfileProvider {
     private final GenerationConfigSource configSource;
     private final ProfileReader profileReader;
     private Profile profile;
@@ -24,7 +27,6 @@ public class ProfileProvider implements Provider<Profile> {
         this.profileReader = profileReader;
     }
 
-    @Override
     public Profile get() {
         if (profile != null) {
             return profile;
