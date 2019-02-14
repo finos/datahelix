@@ -1,5 +1,7 @@
 package com.scottlogic.deg.schemas.v3;
 
+import java.util.Arrays;
+
 public enum AtomicConstraintType {
 
     ISEQUALTOCONSTANT("equalTo"),
@@ -40,5 +42,11 @@ public enum AtomicConstraintType {
     @Override
     public String toString() {
         return text;
+    }
+
+    public static AtomicConstraintType fromText(String text){
+        return Arrays.stream(AtomicConstraintType.values())
+            .filter(x->x.toString().equalsIgnoreCase(text))
+            .findFirst().orElse(null);
     }
 }

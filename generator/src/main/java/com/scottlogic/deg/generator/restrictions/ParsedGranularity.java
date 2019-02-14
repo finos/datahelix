@@ -19,6 +19,10 @@ public class ParsedGranularity {
         if (granularityExpression instanceof Number) {
             BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
 
+            if (asNumber == null){
+                throw new IllegalArgumentException("Numeric granularity input type is not supported");
+            }
+
             if (asNumber.compareTo(BigDecimal.ONE) > 0) {
                 throw new IllegalArgumentException("Numeric granularity must be <= 1");
             }

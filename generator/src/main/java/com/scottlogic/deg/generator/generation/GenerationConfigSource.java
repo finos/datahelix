@@ -35,4 +35,5 @@ public interface GenerationConfigSource {
     boolean isEnableTracing();
     File getProfileFile();
     boolean shouldViolate();
+    boolean visualiseReductions();
 }

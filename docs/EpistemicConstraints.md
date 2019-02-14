@@ -51,7 +51,6 @@ Is satisfied if `field` is null or absent.
 Is satisfied if `field` is of type represented by `value` (valid options: `numeric`, `string`, `temporal`)
 
 ## Textual constraints
-These constraints imply `ofType string`.
 
 ### `matchingRegex` _(field, value)_
 
@@ -75,7 +74,7 @@ Is satisfied if `field` is a string containing the regular expression expressed 
 { "field": "name", "is": "ofLength", "value": 5 }
 ```
 
-Is satisfied if `field` is a string whose length exactly matches `value`.
+Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number.
     
 ### `longerThan` _(field, value)_
 
@@ -83,7 +82,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`.
 { "field": "name", "is": "longerThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length greater than `value`.
+Is satisfied if `field` is a string with length greater than `value`, must be a whole number.
 
 ### `shorterThan` _(field, value)_
 
@@ -91,7 +90,7 @@ Is satisfied if `field` is a string with length greater than `value`.
 { "field": "name", "is": "shorterThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length less than `value`.   
+Is satisfied if `field` is a string with length less than `value`, must be a whole number.   
 
 ### `aValid` _(field, value)_
 
@@ -105,7 +104,6 @@ Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Poss
 **NOTE**: This constraint cannot be combined with any other textual constraint, doing so will mean no string data is created. See [Frequently asked questions](FrequentlyAskedQuestions.md) for more detail.
 
 ## Numeric constraints
-These constraints imply `ofType numeric`.
 
 ### `greaterThan` _(field, value)_
 
@@ -151,7 +149,7 @@ Is satisfied if `field` has the granularity specified in `value`. Numerical gran
 - `0.1` would permit `20` and `20.1`, but not `20.01` 
 
 ## Temporal constraints
-These constraints imply `ofType temporal`. All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
+All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
 
 Example: `{ "date": "2001-02-03T04:05:06.007" }`
 

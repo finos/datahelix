@@ -625,14 +625,39 @@ class ProfileDecisionTreeFactoryTests {
                     eIsString)));
 
 
-        new TreeConstraintNode(
-            new TreeDecisionNode(
-                new TreeConstraintNode(
-                    aIsNull,
-                    bEquals10.negate()),
-                new TreeConstraintNode(
-                    aIsNull.negate(),
-                    eIsString.negate())));
+        treeRootShouldMatch(
+            new TreeConstraintNode(
+                new TreeDecisionNode(
+                    new TreeConstraintNode(
+                        aIsNull,
+                        bEquals10.negate()),
+                    new TreeConstraintNode(
+                        aIsNull.negate(),
+                        eIsString.negate())))
+        );
+    }
+
+    @Test
+    void analyse_violatingProfileWithSingleFieldThatHasNotAllOf_returnsExpectedTreeCollection() {
+        givenRule(
+            new ViolateConstraint(
+                new AndConstraint(
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test"); }}, null),
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test2"); }}, null)
+                ).negate()
+            )
+        );
+
+        treeRootShouldMatch(
+            new TreeConstraintNode(
+                Arrays.asList(
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>(){{ add("Test"); }}, null),
+                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
+                        add("Test2");
+                    }}, null)),
+                Collections.emptyList()
+            )
+        );
     }
 
     private void assertOptionContainsSingleConstraint(ConstraintNode option, Constraint constraint) {
