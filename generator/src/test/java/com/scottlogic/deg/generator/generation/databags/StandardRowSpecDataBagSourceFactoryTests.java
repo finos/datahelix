@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.*;
 
-class RowSpecDataBagSourceFactoryTests {
+class StandardRowSpecDataBagSourceFactoryTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
@@ -27,7 +27,7 @@ class RowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
 
@@ -40,7 +40,7 @@ class RowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
 
         factory.createDataBagSource(rowSpec);
 
@@ -53,11 +53,11 @@ class RowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
 
-        Assert.assertThat(result, instanceOf(RowSpecDataBagSourceFactory.MultiplyingDataBagSource.class));
+        Assert.assertThat(result, instanceOf(StandardRowSpecDataBagSourceFactory.MultiplyingDataBagSource.class));
     }
 
     @Test
@@ -66,7 +66,7 @@ class RowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(generatorFactory);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
 
         factory.createDataBagSource(rowSpec);
 
