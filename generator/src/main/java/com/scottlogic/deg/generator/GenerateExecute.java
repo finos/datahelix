@@ -1,13 +1,14 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
-import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
+import com.scottlogic.deg.generator.validators.ValidationResult;
 
 import java.io.IOException;
 
@@ -40,7 +41,7 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
 
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
@@ -49,6 +50,13 @@ public class GenerateExecute implements Runnable {
 
         try {
             Profile profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
+
+            validationResult = validator.validateCommandLinePostProfile(config, profile);
+
+            if (!validationResult.isValid()) {
+                errorReporter.display(validationResult);
+                return;
+            }
 
             generationEngine.generateDataSet(profile, config, fileOutputTarget);
 

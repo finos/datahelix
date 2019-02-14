@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
@@ -8,15 +9,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GenerationConfigValidatorTests {
 
+    private Profile profile;
     private FileOutputTarget outputTarget = mock(FileOutputTarget.class);
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
     private GenerationConfig config = new GenerationConfig(
@@ -35,12 +39,13 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectory()).thenReturn(false);
         when(outputTarget.exists()).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
+        profile = new Profile(new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
     public void interestingWithNoMaxRowsReturnsValid() {
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -59,7 +64,7 @@ public class GenerationConfigValidatorTests {
         GenerationConfig config = new GenerationConfig(testConfigSource);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -78,7 +83,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -99,7 +104,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockConfigSource, outputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -118,7 +123,7 @@ public class GenerationConfigValidatorTests {
         );
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -137,7 +142,7 @@ public class GenerationConfigValidatorTests {
         GenerationConfig config = new GenerationConfig(testConfigSource);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -150,7 +155,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -163,7 +168,7 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -173,7 +178,7 @@ public class GenerationConfigValidatorTests {
     public void generateOutputFileDoesNotExist() {
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -185,7 +190,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.isDirectory()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -198,7 +203,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -212,7 +217,7 @@ public class GenerationConfigValidatorTests {
         when(outputTarget.exists()).thenReturn(false);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -224,24 +229,25 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(outputTarget.exists()).thenReturn(false);
         when(outputTarget.isDirectory()).thenReturn(true);
-        when(outputTarget.isDirectoryEmpty()).thenReturn(true);
+        when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
     }
+
     @Test
     public void generateViolationOutputDirNotFile() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(outputTarget.exists()).thenReturn(true);
         when(outputTarget.isDirectory()).thenReturn(true);
-        when(outputTarget.isDirectoryEmpty()).thenReturn(true);
+        when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -252,10 +258,10 @@ public class GenerationConfigValidatorTests {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(outputTarget.isDirectory()).thenReturn(true);
-        when(outputTarget.isDirectoryEmpty()).thenReturn(false);
+        when(outputTarget.isDirectoryEmpty(anyInt())).thenReturn(false);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(config, profile);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
