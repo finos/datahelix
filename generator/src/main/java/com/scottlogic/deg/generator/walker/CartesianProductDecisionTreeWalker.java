@@ -32,7 +32,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTree tree, GenerationConfig config) {
+    public Stream<RowSpec> walk(DecisionTree tree) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
         return helper.walk(tree.getRootNode());
     }

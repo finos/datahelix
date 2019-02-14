@@ -40,7 +40,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
-    public Stream<RowSpec> walk(DecisionTree tree, GenerationConfig config) {
+    public Stream<RowSpec> walk(DecisionTree tree) {
         ConstraintNode rootNode = tree.getRootNode();
         ReductiveState initialState = new ReductiveState(tree.fields);
 
@@ -57,32 +57,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Integer maxRowSpecsPerSource = config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
-            ? 1
-            : null;
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
 
-        //repeat the call to process() as many times as required, limiting the number of emitted RowSpec's based on
-        // <maxRowSpecsPerSource>. I.e. in RANDOM one call to process() per row otherwise one call to process() per tree
-        Iterator<RowSpec> iterator = new SourceRepeatingIterator<>(
-            maxRowSpecsPerSource,
-            () -> {
-                FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+        if (nextFixedField == null){
+            //couldn't fix a field, maybe there are contradictions in the root node?
 
-                if (nextFixedField == null){
-                    //couldn't fix a field, maybe there are contradictions in the root node?
+            return Stream.empty();
+        }
 
-                    return Collections.emptyIterator();
-                }
-
-                return process(rootNode, initialState.with(nextFixedField)).iterator();
-            },
-            true);
-
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(
-                iterator,
-                Spliterator.ORDERED
-            ), false);
+        return process(rootNode, initialState.with(nextFixedField));
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState) {

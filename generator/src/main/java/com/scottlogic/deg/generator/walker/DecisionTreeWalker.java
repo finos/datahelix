@@ -7,5 +7,5 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import java.util.stream.Stream;
 
 public interface DecisionTreeWalker {
-    Stream<RowSpec> walk(DecisionTree tree, GenerationConfig config);
+    Stream<RowSpec> walk(DecisionTree tree);
 }
