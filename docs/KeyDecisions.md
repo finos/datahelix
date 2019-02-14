@@ -8,8 +8,9 @@ For instance, what is generated for the price field in this example?
 { "field": "price", "is": "greaterThan", "value": 4 }
 ```
 
-- Option 1: Only numbers greater than 4 (and null)
-- Option 2: Everything except numbers less than or equal to 4 (eg, strings are valid). Users are expected to supplement with type constraints
+This constraint means :
+  * Everything except numbers less than or equal to 4 (eg, strings are valid). Users are expected to supplement with type constraints
+
 
 ## Does negating a constraint complement its denotation?
 
