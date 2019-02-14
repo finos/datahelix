@@ -4,7 +4,7 @@ Options are optional and case-insensitive
 * `--overwrite` 
     * Overwrite existing output files. Options are: `true` or `false` (default)
 * `--violate` 
-    * generate data which violates profile constraints. Options are: `true` or `false` (default)
+    * generate data which violates profile constraints. Options are: `true` or `false` (default). When this switch is used the output target must be an empty directory.
 * `-t <generationType>` or `--t <generationType>`
    * Emit `<generationType>` data. Options are: `INTERESTING` (default) or `RANDOM`, `FULL_SEQUENTIAL`, see [Generation types](../../generator/docs/GenerationTypes.md) for more details
 * `-n <rows>` or `--max-rows <rows>`
