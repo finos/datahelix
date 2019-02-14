@@ -151,7 +151,7 @@ public class GenerationConfigValidatorTests {
 
     @Test
     public void generateOutputFileAlreadyExists() {
-
+        //Arrange
         when(outputTarget.exists()).thenReturn(true);
 
         //Act
@@ -163,7 +163,7 @@ public class GenerationConfigValidatorTests {
 
     @Test
     public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
-
+        //Arrange
         when(outputTarget.exists()).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
@@ -186,7 +186,7 @@ public class GenerationConfigValidatorTests {
 
     @Test
     public void generateOutputDirNotFile() {
-
+        //Arrange
         when(outputTarget.isDirectory()).thenReturn(true);
 
         //Act
