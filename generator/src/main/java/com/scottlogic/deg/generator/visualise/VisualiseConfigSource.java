@@ -4,11 +4,12 @@ import java.io.File;
 import java.nio.file.Path;
 
 public interface VisualiseConfigSource {
-    String getTitle();
+
     Path getOutputPath();
     File getProfileFile();
+    String getTitleOverride();
     boolean shouldHideTitle();
-    boolean shouldSimplify();
+    boolean dontOptimise();
+    boolean dontSimplify();
     boolean overwriteOutputFiles();
-    boolean shouldOptimise();
 }

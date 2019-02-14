@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.TypeLiteral;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -21,9 +21,12 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.generator.walker.*;
+import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
+import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.DecisionTreeRoutesTreeWalker;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
@@ -37,10 +40,17 @@ import java.util.List;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final GenerationConfigSource configSource;
+    private final GenerationConfigSource generateConfigSource;
+    private final VisualiseConfigSource visualiseConfigSource;
 
     public BaseModule(GenerationConfigSource configSource) {
-        this.configSource = configSource;
+        this.generateConfigSource = configSource;
+        visualiseConfigSource = null;
+    }
+
+    public BaseModule(VisualiseConfigSource configSource) {
+        this.generateConfigSource = null;
+        this.visualiseConfigSource = configSource;
     }
 
     @Override
@@ -70,7 +80,8 @@ public class BaseModule extends AbstractModule {
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
+        bind(new TypeLiteral<List<ViolationFilter>>() {
+        }).toProvider(ViolationFiltersProvider.class);
 
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
         bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
@@ -82,8 +93,8 @@ public class BaseModule extends AbstractModule {
     }
 
     private void bindAllCommandLineTypes() {
-        if (this.configSource instanceof GenerateCommandLine) {
-            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
+        if (this.generateConfigSource instanceof GenerateCommandLine) {
+            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.generateConfigSource);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         }
     }

@@ -26,6 +26,21 @@ public class InMemoryOutputTarget implements OutputTarget {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
+    @Override
+    public boolean exists() {
+        return false;
+    }
+
+    @Override
+    public boolean isDirectory() {
+        return false;
+    }
+
+    @Override
+    public boolean isDirectoryEmpty() {
+        return true;
+    }
+
     private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
         return generatedObjects
             .collect(Collectors.toList())
