@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.generation.TestGenerationConfig;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;

@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.generation.TestGenerationConfig;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
