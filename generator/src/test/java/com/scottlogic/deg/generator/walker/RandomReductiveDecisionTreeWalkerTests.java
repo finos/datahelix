@@ -58,6 +58,22 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldProduceNoData() {
         when(underlyingWalker.walk(tree)).thenReturn(
+            Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
+            Stream.empty(),
+            Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
+        );
+
+        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+
+        verify(underlyingWalker, times(3)).walk(tree);
+        Assert.assertThat(
+            result.stream().map(RowSpec::toString).collect(Collectors.toList()),
+            hasItems("first-iteration-first-random-row", "third-iteration-first-random-row"));
+    }
+
+    @Test
+    public void shouldAccommodateNoDataInSubsequentIteration() {
+        when(underlyingWalker.walk(tree)).thenReturn(
             Stream.empty()
         );
 
