@@ -7,21 +7,21 @@ import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisua
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.generator.validators.VisualiseConfigValidator;
+import com.scottlogic.deg.generator.visualise.VisualiseConfig;
+import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,70 +32,34 @@ import java.util.stream.Stream;
     description = "Produces a decision tree in DOT format for the specified profile.",
     mixinStandardHelpOptions = true,
     version = "1.0")
-public class Visualise implements Runnable {
+public class VisualiseExecute implements Runnable {
 
-    @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
-    private File sourceFile;
+    private final VisualiseConfig config;
+    private final ProfileReader profileReader;
+    private final VisualiseConfigSource configSource;
+    private final OutputTarget fileOutputTarget;
+    private final VisualiseConfigValidator validator;
+    private final ErrorReporter errorReporter;
 
-    @picocli.CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
-    private Path outputDir;
-
-    @picocli.CommandLine.Option(
-        names = {"-t", "--title"},
-        description = "The title to place at the top of the file")
-    private String titleOverride;
-
-    @picocli.CommandLine.Option(
-        names = {"--no-title"},
-        description = "Hides the title from the output")
-    private boolean shouldHideTitle;
-
-    @picocli.CommandLine.Option(
-        names = {"--no-optimise"},
-        description = "Prevents tree optimisation",
-        hidden = true)
-    private boolean dontOptimise;
-
-    @picocli.CommandLine.Option(
-        names = {"--no-simplify"},
-        description = "Prevents tree simplification",
-        hidden = true)
-    private boolean dontSimplify;
-
-    @picocli.CommandLine.Option(
-        names = {"--overwrite"},
-        description = "Defines whether to overwrite existing output files")
-    private boolean overwriteOutputFiles = false;
-
-
-    private ErrorReporter errorReporter = new ErrorReporter();
-
-  //  ANDY - FIXME how do I inject this ???
     @Inject
-    private OutputTarget outputTarget;
-
-
-    public ValidationResult validateCommandLine() {
-        ArrayList<String> errorMessages = new ArrayList<>();
-        ValidationResult validationResult = new ValidationResult(errorMessages);
-
-        checkOutputTarget(errorMessages, outputTarget);
-
-        return validationResult;
-    }
-
-    private void checkOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
-        if (outputTarget.isDirectory()) {
-            errorMessages.add("Invalid Output - target is a directory, please use a different output filename");
-        } else if (!overwriteOutputFiles && outputTarget.exists()) {
-            errorMessages.add("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
-        }
+    public VisualiseExecute(VisualiseConfig config,
+                            ProfileReader profileReader,
+                            VisualiseConfigSource configSource,
+                            OutputTarget fileOutputTarget,
+                            VisualiseConfigValidator validator,
+                            ErrorReporter errorReporter) {
+        this.config = config;
+        this.profileReader = profileReader;
+        this.configSource = configSource;
+        this.fileOutputTarget = fileOutputTarget;
+        this.validator = validator;
+        this.errorReporter = errorReporter;
     }
 
     @Override
     public void run() {
 
-        ValidationResult validationResult = validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(config);
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
@@ -103,10 +67,10 @@ public class Visualise implements Runnable {
         }
 
         final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
-        final Profile profile;
 
+        final Profile profile;
         try {
-            profile = new JsonProfileReader(new NoopProfileValidator()).read(sourceFile.toPath());
+            profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();
@@ -117,8 +81,8 @@ public class Visualise implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
         final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
-        final String profileBaseName = sourceFile.getName().replaceFirst("\\.[^.]+$", "");
-        final DecisionTreeOptimiser treeOptimiser = dontOptimise
+        final String profileBaseName = configSource.getProfileFile().getName().replaceFirst("\\.[^.]+$", "");
+        final DecisionTreeOptimiser treeOptimiser = configSource.dontOptimise()
             ? new NoopDecisionTreeOptimiser()
             : new MostProlificConstraintOptimiser();
 
@@ -130,13 +94,13 @@ public class Visualise implements Runnable {
         final List<DecisionTree> treePartitions = new NoopTreePartitioner()
             .splitTreeIntoPartitions(mergedTree)
             .map(treeOptimiser::optimiseTree)
-            .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
+            .map(tree -> configSource.dontSimplify() ? tree : new DecisionTreeSimplifier().simplify(tree))
             .map(treeValidator::markContradictions)
             .collect(Collectors.toList());
 
-        final String title = shouldHideTitle
+        final String title = configSource.shouldHideTitle()
             ? null
-            : Stream.of(titleOverride, profile.description, profileBaseName)
+            : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
             .filter(Objects::nonNull)
             .findFirst()
             .orElse(null);
@@ -146,12 +110,12 @@ public class Visualise implements Runnable {
                 writeTreeTo(
                     treePartitions.get(0),
                     title,
-                    outputDir.resolve(profileBaseName + ".gv"));
+                    configSource.getOutputPath().resolve(profileBaseName + ".gv"));
             } else {
                 writeTreeTo(
                     mergedTree,
                     title,
-                    outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
+                    configSource.getOutputPath().resolve(profileBaseName + ".unpartitioned.gv"));
 
                 for (int i = 0; i < treePartitions.size(); i++) {
                     writeTreeTo(
@@ -159,7 +123,7 @@ public class Visualise implements Runnable {
                         title != null
                             ? title + " (partition " + (i + 1) + ")"
                             : null,
-                        outputDir.resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
+                        configSource.getOutputPath().resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
                 }
             }
         } catch (IOException e) {
