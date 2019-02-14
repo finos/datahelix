@@ -9,6 +9,10 @@ import com.scottlogic.deg.generator.inputs.ProfileReader;
 
 import java.io.IOException;
 
+/**
+ * @Deprecated as Profile should not be passed around as a dependency
+ * */
+@Deprecated
 public class ProfileProvider implements Provider<Profile> {
     private final GenerationConfigSource configSource;
     private final ProfileReader profileReader;
