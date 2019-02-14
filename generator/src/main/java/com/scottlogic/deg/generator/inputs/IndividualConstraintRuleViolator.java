@@ -3,12 +3,16 @@ package com.scottlogic.deg.generator.inputs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ViolateConstraint;
+import com.scottlogic.deg.generator.constraints.UnviolatableConstraintException;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Rule violator which violates rules by individually violating each constraint within the rule.
@@ -24,33 +28,110 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
 
     @Override
     public Rule violateRule(Rule rule) {
+        List<Constraint> newConstraints = new ArrayList<>();
         List<Constraint> violate = new ArrayList<>();
-        List<Constraint> unviolated = new ArrayList<>();
         for (Constraint constraint:rule.constraints) {
-            if (acceptConstraint(constraint)){
+            if (canViolate(constraint)){
                 violate.add(constraint);
             } else {
-                unviolated.add(constraint);
+                newConstraints.add(constraint);
             }
         }
-        if (violate.isEmpty()) {
-            return rule;
+
+        if (violate.size() > 0) {
+            newConstraints.add(
+                violateConstraint(
+                    violate.size() == 1
+                    ? violate.get(0)
+                    : new AndConstraint(violate)
+                )
+        );
+
         }
-
-        // TODO: REMOVE The ViolateConstraint wraps the violated constraints.
-        // It is used in the tree factory to create the violated tree
-        ViolateConstraint violatedConstraint = new ViolateConstraint(
-            violate.size() == 1
-                ? violate.iterator().next()
-                : new AndConstraint(violate));
-
-        unviolated.add(violatedConstraint);
-        return new Rule(rule.ruleInformation, unviolated);
+        return new Rule(rule.ruleInformation, newConstraints);
     }
 
-    private boolean acceptConstraint(Constraint constraint){
+    /**
+     * Violates a given input constraint according to negation rules.
+     * @param constraint Constraint to violate
+     * @return Constraint with violated logic
+     */
+    private Constraint violateConstraint(Constraint constraint) {
+        // VIOLATE(AND(X, Y, Z)) reduces to
+        //   OR(
+        //     AND(VIOLATE(X), Y, Z),
+        //     AND(X, VIOLATE(Y), Z),
+        //     AND(X, Y, VIOLATE(Z)))
+        if (constraint instanceof AndConstraint) {
+            Collection<Constraint> subConstraints = ((AndConstraint) constraint).subConstraints;
+
+            Collection<Constraint> violatedIndividually =
+                subConstraints.stream()
+                    // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
+                    .map(constraintToViolate ->
+                        subConstraints.stream()
+                            .map(c -> c == constraintToViolate
+                                ? violateConstraint(c)
+                                : c)
+                            .collect(Collectors.toList()))
+                    // make an AndConstraint out of each of the new lists
+                    .map(AndConstraint::new)
+                    .collect(Collectors.toList());
+
+            return new OrConstraint(violatedIndividually);
+        }
+        // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
+        else if (constraint instanceof OrConstraint) {
+            Collection<Constraint> subConstraints = ((OrConstraint) constraint).subConstraints;
+
+            Collection<Constraint> violatedAll =
+            subConstraints.stream()
+                .map(this::violateConstraint)
+                .collect(Collectors.toList());
+
+            return new AndConstraint(violatedAll);
+        }
+        // VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
+        // VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
+        else if (constraint instanceof ConditionalConstraint) {
+            ConditionalConstraint conditional = ((ConditionalConstraint) constraint);
+
+            Constraint positiveViolation = new AndConstraint(
+                conditional.condition,
+                violateConstraint(conditional.whenConditionIsTrue));
+
+            Constraint negativeViolation = conditional.whenConditionIsFalse == null
+                ? null
+                : new AndConstraint(
+                violateConstraint(conditional.condition),
+                violateConstraint(conditional.whenConditionIsFalse));
+
+            return  negativeViolation != null
+                    ? new OrConstraint(positiveViolation, negativeViolation)
+                    : positiveViolation;
+        }
+        // VIOLATE(AtomicConstraint) reduces to NEGATE(AtomicConstraint)
+        // We wrap this in a ViolatedAtomicConstraint to allow Visualise to show which constraint is being violated
+        else if (constraint instanceof AtomicConstraint) {
+            if (canViolate(constraint)) {
+                return new ViolatedAtomicConstraint((AtomicConstraint)constraint.negate());
+            }
+            return constraint;
+        }
+        else {
+            throw new UnviolatableConstraintException("Unable to find violation logic for specified constraint type: "
+                + constraint.getClass());
+        }
+    }
+
+    /**
+     * Checks that the constraint can be violated given all of the Violation Filters.
+     * @param constraint Constraint to check.
+     * @return True if constraint van be violated, otherwise false.
+     */
+    private boolean canViolate(Constraint constraint){
         for (ViolationFilter filter : constraintsToNotViolate) {
-            if (!filter.accept(constraint)){
+            if (!filter.canViolate(constraint)){
                 return false;
             }
         }

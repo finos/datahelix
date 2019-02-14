@@ -99,9 +99,6 @@ class ExampleProfilesViolationTests {
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
-                        Collections.emptyList(),
-                        new ManifestWriter(),
-                        null,
                         new IndividualRuleProfileValidator(
                             new ManifestWriter(),
                             null,

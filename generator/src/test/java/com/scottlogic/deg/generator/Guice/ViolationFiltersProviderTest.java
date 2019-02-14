@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,11 +50,11 @@ class ViolationFiltersProviderTest {
         ConstraintTypeViolationFilter filter = (ConstraintTypeViolationFilter) filters.get(0);
 
 
-        assertThat(filter.accept(
+        assertThat(filter.canViolate(
             new StringHasLengthConstraint(null, 2, Collections.emptySet())),
             is(false));
 
-        assertThat(filter.accept(
+        assertThat(filter.canViolate(
             new IsStringShorterThanConstraint(null, 5, Collections.emptySet())),
             is(true));
     }
