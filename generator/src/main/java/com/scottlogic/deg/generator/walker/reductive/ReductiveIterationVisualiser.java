@@ -48,7 +48,7 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
         String description = String.format("Iteration %d\n%s", iteration, reductiveState.toString(true));
         Path outputPath = visualiseDirectoryPath.resolve(String.format("Reduced-tree-%03d.gv", iteration));
 
-        //copy of Visualise.writeTreeTo()
+        //copy of VisualiseExecute.writeTreeTo()
         try (OutputStreamWriter outWriter = new OutputStreamWriter(
             new FileOutputStream(outputPath.toString()),
             StandardCharsets.UTF_8)) {
