@@ -60,7 +60,6 @@ public class BaseModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(Profile.class).toProvider(ProfileProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
@@ -89,6 +88,7 @@ public class BaseModule extends AbstractModule {
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
+        bind(ProfileProvider.class).in(Singleton.class);
     }
 
     private void bindAllCommandLineTypes() {
