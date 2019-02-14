@@ -32,7 +32,7 @@ public class RowSpecDataBagSourceFactory {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldDataBagSources.add(
-                new StreamDataBagSource(generator.generate(field, fieldSpec)));
+                new StreamDataBagSource(generator.generate(field, fieldSpec), false));
         }
 
         return new MultiplexingDataBagSource(fieldDataBagSources.stream());
@@ -51,7 +51,9 @@ public class RowSpecDataBagSourceFactory {
 
             fieldDataBagSources.add(
                 new SingleValueDataBagSource(
-                    new StreamDataBagSource(generator.generate(field, fieldSpec))));
+                    new StreamDataBagSource(
+                        generator.generate(field, fieldSpec),
+                        true)));
         }
 
         DataBagSource sourceWithoutLastFixedField = new MultiplexingDataBagSource(fieldDataBagSources.stream());
@@ -60,7 +62,8 @@ public class RowSpecDataBagSourceFactory {
             new StreamDataBagSource(
                 generator.generate(
                     lastFixedField,
-                    rowSpec.getSpecForField(lastFixedField))));
+                    rowSpec.getSpecForField(lastFixedField)),
+                true));
     }
 
     class MultiplyingDataBagSource implements DataBagSource {
@@ -88,9 +91,11 @@ public class RowSpecDataBagSourceFactory {
 
     class StreamDataBagSource implements DataBagSource{
         private final Stream<DataBag> dataBags;
+        private final boolean limitToOneIfRandom;
 
-        StreamDataBagSource(Stream<DataBag> dataBags) {
+        StreamDataBagSource(Stream<DataBag> dataBags, boolean limitToOneIfRandom) {
             this.dataBags = dataBags;
+            this.limitToOneIfRandom = limitToOneIfRandom;
         }
 
         @Override
@@ -99,7 +104,7 @@ public class RowSpecDataBagSourceFactory {
             //each of these rows will have all fields (except the last one) fixed to a value
             //if this RowSpec is emitted fully it will give the impression of a set of non-random rows therefore:
             //emit only one row from the RowSpec then let the walker restart the generation for another random RowSpec
-            if (generationConfig.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
+            if (limitToOneIfRandom && generationConfig.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
                 return dataBags.limit(1);
             }
 
