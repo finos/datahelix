@@ -5,13 +5,11 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
