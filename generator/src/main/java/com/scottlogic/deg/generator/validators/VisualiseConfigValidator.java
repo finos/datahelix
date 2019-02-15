@@ -2,8 +2,9 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
-import com.scottlogic.deg.generator.visualise.VisualiseConfig;
-import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+
 import java.util.ArrayList;
 
 /**
@@ -12,16 +13,16 @@ import java.util.ArrayList;
 public class VisualiseConfigValidator {
 
     private final OutputTarget outputTarget;
-    private final VisualiseConfigSource configSource;
+    private final VisualisationConfigSource configSource;
 
     @Inject
-    public VisualiseConfigValidator(VisualiseConfigSource configSource,
-        OutputTarget outputTarget) {
+    public VisualiseConfigValidator(VisualisationConfigSource configSource,
+                                    OutputTarget outputTarget) {
         this.configSource = configSource;
         this.outputTarget = outputTarget;
     }
 
-    public ValidationResult validateCommandLine(VisualiseConfig config) {
+    public ValidationResult validateCommandLine(VisualisationConfig config) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
