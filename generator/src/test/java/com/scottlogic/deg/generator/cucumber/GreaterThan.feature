@@ -40,8 +40,8 @@ Scenario: User requires negative numbers data
        | -96  |
        | -95  |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
-Scenario: User requires 0
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
+Scenario: Running a 'greaterThan' request that includes the value zero should be successful
      Given foo is greater than -1
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -75,7 +75,7 @@ Scenario: greaterThan run against a non contradicting not greaterThan should be 
        | 4   |
        | 5   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting not greaterThan should be successful (not greaterThan 5 AND not greaterThan 4)
      Given foo is anything but greater than 5
        And foo is anything but greater than 4
@@ -115,7 +115,7 @@ Scenario: greaterThan run against a non contradicting not greaterThanOrEqualTo s
        | 3   |
        | 4   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting not greaterThanOrEqualTo should be successful (not greaterThan 5 AND not greaterThanOrEqualTo 4)
      Given foo is anything but greater than 5
        And foo is anything but greater than or equal to 4
@@ -154,7 +154,7 @@ Scenario: greaterThan run against a non contradicting not lessThan should be suc
        | 5   |
        | 6   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting lessThan should be successful (not greaterThan 4 AND lessThan 2)
      Given foo is anything but greater than 4
        And foo is less than 2
@@ -209,7 +209,7 @@ Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo shou
        | 6   |
        | 7   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting lessThanOrEqualTo should be successful (not greaterThan 4 AND lessThanOrEqualTo 2)
      Given foo is anything but greater than 4
        And foo is less than or equal to 2
@@ -268,7 +268,7 @@ Scenario: greaterThan run against a non contradicting not granularTo should be s
        | 5   |
        | 6   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting granularTo should be successful (not greaterThan 4 AND granularTo 1)
      Given foo is anything but greater than 4
        And foo is granular to 1
@@ -282,7 +282,7 @@ Scenario: not greaterThan run against a non contradicting granularTo should be s
        | -2147482620 |
 
 #unsure on what the output should be here
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: not greaterThan run against a non contradicting not granularTo should be successful (not greaterThan 5 AND not granularTo 1)
      Given foo is anything but greater than 5
        And foo is anything but granular to 1
