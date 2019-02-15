@@ -35,7 +35,7 @@ Scenario: User requires decimal data
 Scenario: User requires negative numbers data
      Given foo is less than 0
        And the generator can generate at most 5 rows
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo |
        | -1  |
 
@@ -43,7 +43,7 @@ Scenario: User requires negative numbers data
 Scenario: User requires 0
      Given foo is less than 1
        And the generator can generate at most 5 rows
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo |
        | 0   |
 
