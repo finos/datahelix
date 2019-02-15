@@ -12,11 +12,11 @@ Scenario: Running a 'greaterThan' request that specifies an integer should be su
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
-       | 1   |
        | 2   |
        | 3   |
        | 4   |
        | 5   |
+       | 6   |
 
 Scenario: Running a 'greaterThan' request that specifies an integer with trailing zeros should be successful
      Given foo is greater than 100
