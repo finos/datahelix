@@ -1,9 +1,6 @@
-package com.scottlogic.deg.generator.visualise;
+package com.scottlogic.deg.generator.visualisation;
 
 import com.scottlogic.deg.generator.ConfigSource;
-
-import java.io.File;
-import java.nio.file.Path;
 
 public interface VisualisationConfigSource extends ConfigSource {
 
