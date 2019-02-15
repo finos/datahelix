@@ -8,8 +8,8 @@ Background:
 
 # alone
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
-Scenario: User requires integer data
-     Given foo is less than 100
+Scenario: Running a 'lessThan' request that specifies an integer should be successful
+     Given foo is less than 1
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -20,7 +20,19 @@ Scenario: User requires integer data
        | -2147482620 |
 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
-Scenario: User requires decimal data
+Scenario: Running a 'lessThan' request that specifies an integer with trailing zeros should be successful
+    Given foo is less than 100
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo         |
+      | -2147482624 |
+      | -2147482623 |
+      | -2147482622 |
+      | -2147482621 |
+      | -2147482620 |
+
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
+Scenario: Running a 'lessThan' request that specifies a decimal should be successful
      Given foo is less than 100.1
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -32,7 +44,35 @@ Scenario: User requires decimal data
        | -2147482623.6 |
 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
-Scenario: User requires negative numbers data
+Scenario: Running a 'lessThan' request that specifies a decimal with trailing zeros should be successful
+    Given foo is less than 100.0
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo           |
+      | -2147482624.0 |
+      | -2147482623.9 |
+      | -2147482623.8 |
+      | -2147482623.7 |
+      | -2147482623.6 |
+
+Scenario: Running a 'lessThan' request that specifies a string should be unsuccessful
+    Given foo is less than "bar"
+    Then the profile is invalid
+      And no data is created
+
+Scenario: Running a 'lessThan' request that specifies an empty string should be unsuccessful
+    Given foo is less than ""
+    Then the profile is invalid
+      And no data is created
+
+@ignore #595: Null pointer exception if null is provided to a greater than constraint
+Scenario: Running a 'lessThan' request that specifies null should be unsuccessful
+    Given foo is less than null
+    Then the profile is invalid
+      And no data is created
+
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
+Scenario: Running a 'lessThan' request that includes a negative value should be successful
      Given foo is less than 0
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -40,7 +80,7 @@ Scenario: User requires negative numbers data
        | -1  |
 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
-Scenario: User requires 0
+Scenario: Running a 'lessThan' request that includes the value zero should be successful
      Given foo is less than 1
        And the generator can generate at most 5 rows
      Then the following data should be generated:
