@@ -455,7 +455,38 @@ class ReductiveDecisionTreeReducerTests {
         Assert.assertThat(reduced, equalTo(null));
     }
 
+    @Test
+    void reduce_containsConstraintsThatContractWithRootNode_removesConstraintsThatContradictWithRootNode(){
+        DecisionNode decision1 = new TreeDecisionNode(
+            new TreeConstraintNode(
+                new IsNullConstraint(field1, null)
+            ),
+            new TreeConstraintNode(isLessThan2)
+        );
 
+        final AtomicConstraint field1NotNull = new IsNullConstraint(field1, null).negate();
+        ConstraintNode tree = new TreeConstraintNode(
+            Collections.singletonList(field1NotNull),
+            Collections.singletonList(decision1));
+        ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
+            fieldSpecFactory,
+            fieldSpecMerger,
+            simplifier,
+            constraintReducer);
+        FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
+        ReductiveState field2Fixed = initialState.with(field2FixedTo0);
+        field2FixedTo0.getStream().iterator().next(); //move to the first value for field2, i.e. 0
+
+        ReductiveConstraintNode reduced = reducer.reduce(tree, field2Fixed);
+
+        Assert.assertThat(reduced.getDecisions().isEmpty(), equalTo(true));
+        Assert.assertThat(
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(field1NotNull, isLessThan2));
+        Assert.assertThat(
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            not(containsInAnyOrder(new IsNullConstraint(field1, null))));
+    }
 
     private static class AtomicConstraintExtractor extends BaseVisitor{
         public ArrayList<AtomicConstraint> atomicConstraints = new ArrayList<>();
