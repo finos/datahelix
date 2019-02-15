@@ -13,7 +13,7 @@ CommandLineBase <|-- GenerationCommandLine
 CommandLineBase --|> ConfigSource
 Runnable <|-- CommandLineBase
 
-GenerateExecute --|> Runnable
+Runnable <|-- GenerateExecute
 GenerateExecute --* GenerationConfig
 GenerateExecute --* ProfileReader
 GenerateExecute --* GenerationEngine
