@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.visualise;
 import java.io.File;
 import java.nio.file.Path;
 
-public class TestVisualiseConfigSource implements VisualiseConfigSource {
+public class TestVisualiseConfigSource implements VisualisationConfigSource {
 
     public TestVisualiseConfigSource() {
     }

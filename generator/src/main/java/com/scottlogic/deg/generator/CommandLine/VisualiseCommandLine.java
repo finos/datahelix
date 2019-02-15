@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.VisualiseExecute;
+
 import java.io.File;
 import java.nio.file.Path;
 
-public class VisualiseCommandLine extends VisualiseCommandLineBase {
+public class VisualiseCommandLine extends CommandLineBase {
 
     @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
@@ -50,12 +51,10 @@ public class VisualiseCommandLine extends VisualiseCommandLineBase {
         return sourceFile;
     }
 
-    @Override
     public String getTitleOverride() {
         return titleOverride;
     }
 
-    @Override
     public boolean shouldHideTitle() {
         return shouldHideTitle;
     }
@@ -65,7 +64,6 @@ public class VisualiseCommandLine extends VisualiseCommandLineBase {
         return dontOptimise;
     }
 
-    @Override
     public boolean dontSimplify() {
         return dontSimplify;
     }

@@ -4,12 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 
-public class VisualiseConfig {
-
+public class VisualisationConfig {
 
     @Inject
-    public VisualiseConfig(VisualiseConfigSource source) {
-
+    public VisualisationConfig(VisualisationConfigSource source) {
     }
 
     public ProfileValidator getProfileValidator() {

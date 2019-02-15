@@ -1,0 +1,32 @@
+@startuml
+
+header Scott Logic DataHelix Project
+footer 15 February 2019
+title Visualisation Class Hierarchy
+
+abstract CommandLineBase
+abstract Runnable
+abstract CommandLineBase
+
+interface ConfigSource
+interface VisualisationConfigSource
+
+ConfigSource <|-- VisualisationConfigSource
+CommandLineBase <|-- VisualisationCommandLine
+
+CommandLineBase --|> ConfigSource
+Runnable <|-- CommandLineBase
+
+VisualiseConfigValidator --* OutputTarget
+VisualiseConfigValidator --* VisualisationConfigSource
+
+VisualiseExecute --|> Runnable
+VisualiseExecute --* VisualisationConfig
+VisualiseExecute --* ProfileReader
+VisualiseExecute --* VisualisationConfigSource
+VisualiseExecute --* VisualiseConfigValidator
+VisualiseExecute --* ErrorReporter
+
+OutputTarget <|-- FileOutputTarget
+
+@enduml
