@@ -31,8 +31,8 @@ public class Visualise implements Runnable {
     @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
 
-    @picocli.CommandLine.Parameters(index = "1", description = "The directory into which generated data should be saved.")
-    private Path outputDir;
+    @picocli.CommandLine.Parameters(index = "1", description = "The path to write the visualise file to.")
+    private File outputPath;
 
     @picocli.CommandLine.Option(
         names = {"-t", "--title"},
@@ -82,7 +82,7 @@ public class Visualise implements Runnable {
             profile.fields,
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
-        
+
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
         final String title = shouldHideTitle
@@ -96,7 +96,7 @@ public class Visualise implements Runnable {
             writeTreeTo(
                 validatedTree,
                 title,
-                outputDir.resolve(profileBaseName + ".gv"));
+                outputPath.toPath());
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
