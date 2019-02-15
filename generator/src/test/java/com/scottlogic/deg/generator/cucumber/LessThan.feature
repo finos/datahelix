@@ -7,7 +7,7 @@ Background:
        And foo is anything but null
 
 # alone
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: User requires integer data
      Given foo is less than 100
        And the generator can generate at most 5 rows
@@ -19,7 +19,7 @@ Scenario: User requires integer data
        | -2147482621 |
        | -2147482620 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: User requires decimal data
      Given foo is less than 100.1
        And the generator can generate at most 5 rows
@@ -31,7 +31,7 @@ Scenario: User requires decimal data
        | -2147482623.7 |
        | -2147482623.6 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: User requires negative numbers data
      Given foo is less than 0
        And the generator can generate at most 5 rows
@@ -39,7 +39,7 @@ Scenario: User requires negative numbers data
        | foo |
        | -1  |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: User requires 0
      Given foo is less than 1
        And the generator can generate at most 5 rows
@@ -48,7 +48,7 @@ Scenario: User requires 0
        | 0   |
 
 #lessThan
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting lessThan should be successful (lessThan 2 AND lessThan 5)
      Given foo is less than 2
        And foo is less than 5
@@ -98,7 +98,7 @@ Scenario: lessThan run against a contradicting not lessThan should only only gen
      Then no data is created
 
 #lessThanOrEqual
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting lessThanOrEqualTo should be successful (lessThan 6 AND lessThanOrEqualTo 5)
      Given foo is less than 6
        And foo is less than or equal to 5
@@ -151,7 +151,7 @@ Scenario: not lessThan run against a non contradicting not lessThanOrEqualTo sho
        | 8   |
        | 9   |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a contradicting lessThanOrEqualTo should only only generate string, temporal and null (lessThan 1 AND lessThanOrEqualTo 1)
      Given foo is less than 1
        And foo is less than or equal to 1
@@ -170,7 +170,7 @@ Scenario: not lessThan run against a contradicting not lessThanOrEqualTo should 
      Then no data is created
 
 #granularTo
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting granularTo should be successful (lessThan 2 AND granularTo 1)
      Given foo is less than 2
        And foo is granular to 1
@@ -210,7 +210,7 @@ Scenario: not lessThan run against a non contradicting not granularTo should be 
      Then some data should be generated
 
 #after
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND after 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is after 2019-01-01T00:00:00.000
@@ -223,7 +223,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
        | -2147482621 |
        | -2147482620 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not after 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but after 2019-01-01T00:00:00.000
@@ -237,7 +237,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
        | -2147482620 |
 
 #afterOrAt
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND afterOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is after or at 2019-01-01T00:00:00.000
@@ -250,7 +250,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
        | -2147482621 |
        | -2147482620 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not afterOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but after or at 2019-01-01T00:00:00.000
@@ -264,7 +264,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
        | -2147482620 |
 
 #before
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND before 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is before 2019-01-01T00:00:00.000
@@ -277,7 +277,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
        | -2147482621 |
        | -2147482620 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not before 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but before 2019-01-01T00:00:00.000
@@ -291,7 +291,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
        | -2147482620 |
 
 #beforeOrAt
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND beforeOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is before or at 2019-01-01T00:00:00.000
@@ -304,7 +304,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
        | -2147482621 |
        | -2147482620 |
 
-@ignore #589: produces big-integer numbers rather than integer values, not sure why
+@ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not beforeOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but before or at 2019-01-01T00:00:00.000
