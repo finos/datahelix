@@ -1,0 +1,20 @@
+@startuml
+
+GenerationConfigSource *-- GenerationConfigValidator
+
+GenerationConfigSource *-- DataSetWriterProvider
+GenerationConfigSource *-- DecisionTreeOptimiserProvider
+GenerationConfigSource *-- DecisionTreeWalkerProvider
+GenerationConfigSource *-- GenerationEngineProvider
+GenerationConfigSource *-- IterationVisualiserProvider
+GenerationConfigSource *-- MonitorProvider
+GenerationConfigSource *-- OutputPathProvider
+GenerationConfigSource *-- ProfileProvider
+GenerationConfigSource *-- RowSpecDataBagSourceFactoryProvider
+GenerationConfigSource *-- TreePartitioningProvider
+GenerationConfigSource *-- ViolationFiltersProvider
+
+GenerationConfigSource *-- GenerateExecute
+GenerationConfigSource *-- GenerationConfig
+
+@enduml

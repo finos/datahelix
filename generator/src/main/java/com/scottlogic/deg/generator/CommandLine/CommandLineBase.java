@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.Guice.BaseModule;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import picocli.CommandLine;
 
 /**
  * Abstract class to provide a generic run implementation for command line classes.
@@ -21,4 +22,5 @@ public abstract class CommandLineBase implements Runnable, ConfigSource {
     }
 
     protected abstract Class<? extends Runnable> getExecutorType();
+
 }

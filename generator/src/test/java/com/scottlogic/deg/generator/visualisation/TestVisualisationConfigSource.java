@@ -3,9 +3,9 @@ package com.scottlogic.deg.generator.visualisation;
 import java.io.File;
 import java.nio.file.Path;
 
-public class TestVisualiseConfigSource implements VisualisationConfigSource {
+public class TestVisualisationConfigSource implements VisualisationConfigSource {
 
-    public TestVisualiseConfigSource() {
+    public TestVisualisationConfigSource() {
     }
 
     @Override

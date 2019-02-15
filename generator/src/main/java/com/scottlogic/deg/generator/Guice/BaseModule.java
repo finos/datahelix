@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeRoutesTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
@@ -92,10 +93,10 @@ public class BaseModule extends AbstractModule {
     private void bindAllCommandLineTypes() {
         if (this.configSource instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
-            bind(ConfigSource.class).to(GenerateCommandLine.class);
+            bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
         } else if (this.configSource instanceof VisualiseCommandLine) {
             bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
-            bind(ConfigSource.class).to(VisualiseCommandLine.class);
+            bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
         }
     }
 }

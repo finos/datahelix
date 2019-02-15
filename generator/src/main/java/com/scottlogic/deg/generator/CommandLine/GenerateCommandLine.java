@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
@@ -15,7 +16,7 @@ import java.util.Optional;
     description = "Produces data using any options provided.",
     mixinStandardHelpOptions = true,
     version = "1.0")
-public class GenerateCommandLine extends CommandLineBase {
+public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
