@@ -5,10 +5,12 @@ import static org.mockito.Mockito.when;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.visualisation.TestVisualiseConfigSource;
+import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +19,7 @@ public class VisualisationConfigValidatorTests {
 
     private Profile profile;
     private FileOutputTarget outputTarget = mock(FileOutputTarget.class);
-    private TestVisualiseConfigSource mockConfigSource = mock(TestVisualiseConfigSource.class);
+    private TestVisualisationConfigSource mockConfigSource = mock(TestVisualisationConfigSource.class);
     private VisualisationConfig config = new VisualisationConfig(mockConfigSource);
     private VisualisationConfigValidator validator;
 

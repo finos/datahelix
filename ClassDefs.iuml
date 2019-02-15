@@ -30,6 +30,13 @@ package com.scottlogic.deg.generator.visualisation {
 }
 
 package com.scottlogic.deg.generator {
+	class DataBagValue {
+		Object value;
+		String format
+	}
+	class DataBagValueSource
+	class Profile
+	class ProfileFields
     class VisualiseExecute
     class GenerateExecute
 	interface GenerationEngine
@@ -51,7 +58,12 @@ package com.scottlogic.deg.generator.validators {
 }
 
 package com.scottlogic.deg.generator.outputs.targets {
-    interface OutputTarget
+    interface OutputTarget {
+	    void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields)
+		boolean exists();
+		boolean isDirectory();
+		boolean isDirectoryEmpty(int ruleCount);
+	}
     class FileOutputTarget
 }
 
@@ -59,10 +71,21 @@ package com.scottlogic.deg.generator.inputs {
 	interface ProfileReader
 }
 
+package com.scottlogic.deg.generator.outputs {
+	class GeneratedObject
+}
+
+StandardGenerationEngine --* OutputTarget
+StandardGenerationEngine --* DecisionTreeFactory
+StandardGenerationEngine --* ReductiveDataGeneratorMonitor
+StandardGenerationEngine --* DataGenerator
 
 OutputTarget <|-- FileOutputTarget
+OutputTarget --* ProfileFields
+OutputTarget --* GeneratedObject
 
-
+GeneratedObject --* DataBagValue
+DataBagValueSource *-- DataBagValue
 
 
 @enduml
