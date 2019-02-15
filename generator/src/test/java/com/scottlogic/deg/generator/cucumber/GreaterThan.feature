@@ -255,7 +255,7 @@ Scenario: greaterThan run against a non contradicting granularTo should be succe
        | 6   |
        | 7   |
 
-#unsure on what the output should be here
+@ignore #588: unsure on what the output should be here
 Scenario: greaterThan run against a non contradicting not granularTo should be successful (greaterThan 1 AND not granularTo 1)
      Given foo is greater than 1
        And foo is anything but granular to 1
@@ -281,8 +281,8 @@ Scenario: not greaterThan run against a non contradicting granularTo should be s
        | -2147482621 |
        | -2147482620 |
 
-#unsure on what the output should be here
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
+#588: unsure on what the output should be here
 Scenario: not greaterThan run against a non contradicting not granularTo should be successful (not greaterThan 5 AND not granularTo 1)
      Given foo is anything but greater than 5
        And foo is anything but granular to 1
