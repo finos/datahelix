@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -57,7 +58,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            config,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
@@ -120,7 +124,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
@@ -183,7 +190,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
@@ -244,7 +254,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
@@ -288,7 +301,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
@@ -332,7 +348,10 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(generationConfig, new StandardFieldValueSourceEvaluator());
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
 
         final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 

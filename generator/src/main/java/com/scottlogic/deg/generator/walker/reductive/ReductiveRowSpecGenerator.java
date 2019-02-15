@@ -46,12 +46,12 @@ public class ReductiveRowSpecGenerator {
         }
 
         FieldSpec fieldSpecForValuesInLastFixedField = reductiveState.getLastFixedField().getFieldSpecForValues();
-        fieldSpecsPerField.put(reductiveState.getLastFixedField().field, fieldSpecForValuesInLastFixedField);
+        fieldSpecsPerField.put(reductiveState.getLastFixedField().getField(), fieldSpecForValuesInLastFixedField);
 
         RowSpec rowSpecWithAllValuesForLastFixedField = new ReductiveRowSpec(
             reductiveState.getFields(),
             fieldSpecsPerField,
-            reductiveState.getLastFixedField().field
+            reductiveState.getLastFixedField().getField()
         );
 
         this.monitor.rowSpecEmitted(
@@ -71,9 +71,9 @@ public class ReductiveRowSpecGenerator {
         return reductiveState.getFixedFieldsExceptLast().values()
             .stream()
             .collect(Collectors.toMap(
-                ff -> ff.field,
+                ff -> ff.getField(),
                 ff -> {
-                    FieldSpec fieldSpec = createFieldSpec(ff, fieldToConstraints.get(ff.field));
+                    FieldSpec fieldSpec = createFieldSpec(ff, fieldToConstraints.get(ff.getField()));
                     return fieldSpec == null
                         ? FieldSpec.Empty
                         : fieldSpec;

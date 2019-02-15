@@ -17,7 +17,7 @@ Examples:
 | `Field 1 in set [A, B, C]` | A, B, C | `null` |
 
 ## Random
-Generate some random data that abides by the given set of constraints.It is mandatory for a maximum row limit `-n=<row limit>` to be specified otherwise the tool would attempt to run forever. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
+Generate some random data that abides by the given set of constraints. It is mandatory for a maximum row limit `-n=<row limit>` to be specified otherwise the tool would attempt to run forever. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
 
 Examples:
 
@@ -25,6 +25,10 @@ Examples:
 | ---- | ---- | ---- |
 | `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ | _(any values <= 10 or >= 20)_ |
 | `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ | `null` |
+
+Notes:
+- Random generation of data is infinite in its operation, therefore the `--max-rows` switch must be provided
+- Random generation can only be seen as random if partitioning is disabled, choosing random generation effectively implies `--no-partition`.
 
 ## Interesting
 See [this document](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) for more details on the _interesting generation mode_.

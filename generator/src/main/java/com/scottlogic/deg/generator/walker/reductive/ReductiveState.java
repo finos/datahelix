@@ -49,7 +49,7 @@ public class ReductiveState {
 
     //get a copy of the current fixed field for the given field, will return null if the field isn't fixed
     public FixedField getFixedField(Field field) {
-        if (lastFixedField != null && lastFixedField.field.equals(field)){
+        if (lastFixedField != null && lastFixedField.getField().equals(field)){
             return lastFixedField;
         }
 
@@ -71,7 +71,7 @@ public class ReductiveState {
 
     public Set<Field> getUnfixedFields(){
         return this.fields.stream()
-            .filter(f -> !this.fixedFields.containsKey(f) && !f.equals(this.lastFixedField.field))
+            .filter(f -> !this.fixedFields.containsKey(f) && !f.equals(this.lastFixedField.getField()))
             .collect(Collectors.toSet());
     }
 
@@ -80,7 +80,7 @@ public class ReductiveState {
             ? String.format("Fixed fields: %d of %d", this.fixedFields.size(), this.fields.size())
             : String.join(", ", this.fixedFields.values()
                 .stream()
-                .sorted(Comparator.comparing(ff -> ff.field.name))
+                .sorted(Comparator.comparing(ff -> ff.getField().name))
                 .map(FixedField::toString)
                 .collect(Collectors.toList()));
 
@@ -104,7 +104,7 @@ public class ReductiveState {
 
         Map<Field, FixedField> newFixedFieldsMap = Stream.concat
             (fixedFields.values().stream(), Stream.of(lastFixedField))
-            .collect(Collectors.toMap(x->x.field, Function.identity()));
+            .collect(Collectors.toMap(x->x.getField(), Function.identity()));
 
         return new ReductiveState(fields, newFixedFieldsMap, fixedField);
     }
