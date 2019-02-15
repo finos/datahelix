@@ -1014,7 +1014,7 @@ Scenario: EqualTo staring with matchingRegex of contradicting length emits null
     | foo  |
     | null |
 
-Scenario: EqualTo and not matchingRegex for identical strings emits null
+Scenario: 'EqualTo' and not 'matchingRegex' for identical strings emits null
   Given there is a field foo
     And foo is equal to "a"
     And there is a constraint:
@@ -1025,7 +1025,7 @@ Scenario: EqualTo and not matchingRegex for identical strings emits null
     | foo  |
     | null |
 
-Scenario: Not equalTo and matchingRegex for identical strings emits null
+Scenario: Not 'equalTo' and 'matchingRegex' for identical strings emits null
   Given there is a field foo
     And there is a constraint:
       """
@@ -1034,4 +1034,113 @@ Scenario: Not equalTo and matchingRegex for identical strings emits null
     And foo is matchingRegex /[a]{1}/
   Then the following data should be generated:
     | foo  |
-    | null | 
+    | null |
+
+### containingReqex ###
+
+Scenario: 'EqualTo' with a 'containingRegex' should be successful
+  Given there is a field foo
+    And foo is equal to "aaa"
+    And foo is containing regex /[a]{1}/
+  Then the following data should be generated:
+    | foo   |
+    | null  |
+    | "aaa" |
+
+Scenario: 'EqualTo' with a non-contradictory not 'containingRegex' is successful
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+       {"not": {"field": "foo", "is": "containingRegex", "value": "[b]{1}"}}
+      """
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | "a"  |
+
+Scenario: Not 'equalTo' with a non-contradictory 'containingRegex' is successful
+  Given there is a field foo
+    And there is a constraint:
+      """
+       {"not": {"field": "foo", "is": "equalTo", "value": "[a]{1}"}}
+      """
+    And foo is containing regex /[b]{1}/
+    And foo is in set:
+      | "a"   |
+      | "ab"  |
+      | "bbb" |
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | "ab"  |
+      | "bbb" |
+
+Scenario: 'EqualTo' a number with a non-contradictory 'containingRegex' is successful
+  Given there is a field foo
+    And foo is equal to 1
+    And foo is containing regex /[a]{1}/
+    And foo is in set:
+      | 1    |
+      | "1"  |
+      | "a"  |
+      | "1a" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: 'EqualTo' a date with a non-contradictory 'containingRegex' is successful
+  Given there is a field foo
+    And foo is equal to 2018-01-01T00:00:00.000
+    And foo is containing regex /[a]{1}/
+    And foo is in set:
+      | 2018-01-01T00:00:00.000    |
+      | "2018-01-01T00:00:00.000"  |
+      | "2018-01-01T00:00:00.000a" |
+      | "a"                        |
+  Then the following data should be generated:
+      | foo                        |
+      | null                       |
+      | 2018-01-01T00:00:00.000    |
+
+Scenario: 'EqualTo' with a contradictory 'containingRegex' emits null
+  Given there is a field foo
+    And foo is equal to "b"
+    And foo is containing regex /[a]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'EqualTo" with a 'containingReqex of contradictory length emits null
+  Given there is a field foo
+    And foo is equal to "a"
+    And foo is containing regex /[a]{2}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'EqualTo' with a contradictory not 'containingRegex' emits null
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "containingRegex", "value": "[a]{1}"}}
+      """
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: Not 'equalTo' with a contradictory 'containingRegex' emits null
+  Given there is a field foo
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
+      """
+    And foo is containing regex /[a]{1}/
+    And foo is in set
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+### ofLength ###
