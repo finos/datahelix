@@ -4,12 +4,12 @@ Background:
      Given the generation strategy is full
        And there is a field foo
        And foo is of type "numeric"
-       And foo is anything but null
 
 # alone
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that specifies an integer should be successful
      Given foo is less than 1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -22,6 +22,7 @@ Scenario: Running a 'lessThan' request that specifies an integer should be succe
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that specifies an integer with trailing zeros should be successful
     Given foo is less than 100
+       And foo is anything but null
       And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo         |
@@ -34,6 +35,7 @@ Scenario: Running a 'lessThan' request that specifies an integer with trailing z
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that specifies a decimal should be successful
      Given foo is less than 100.1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo           |
@@ -46,6 +48,7 @@ Scenario: Running a 'lessThan' request that specifies a decimal should be succes
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that specifies a decimal with trailing zeros should be successful
     Given foo is less than 100.0
+       And foo is anything but null
       And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo           |
@@ -74,6 +77,7 @@ Scenario: Running a 'lessThan' request that specifies null should be unsuccessfu
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that includes a negative value should be successful
      Given foo is less than 0
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
@@ -82,6 +86,7 @@ Scenario: Running a 'lessThan' request that includes a negative value should be 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: Running a 'lessThan' request that includes the value zero should be successful
      Given foo is less than 1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
@@ -92,6 +97,7 @@ Scenario: Running a 'lessThan' request that includes the value zero should be su
 Scenario: lessThan run against a non contradicting lessThan should be successful (lessThan 2 AND lessThan 5)
      Given foo is less than 2
        And foo is less than 5
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -104,6 +110,7 @@ Scenario: lessThan run against a non contradicting lessThan should be successful
 Scenario: lessThan run against a non contradicting not lessThan should be successful (lessThan 5 AND not lessThan 1)
      Given foo is less than 5
        And foo is anything but less than 1
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 1   |
@@ -114,6 +121,7 @@ Scenario: lessThan run against a non contradicting not lessThan should be succes
 Scenario: not lessThan run against a non contradicting lessThan should be successful (not lessThan 2 AND lessThan 5)
      Given foo is anything but less than 2
        And foo is less than 5
+       And foo is anything but null
      Then the following data should be generated:
        | foo |
        | 2   |
@@ -123,6 +131,7 @@ Scenario: not lessThan run against a non contradicting lessThan should be succes
 Scenario: not lessThan run against a non contradicting not lessThan should be successful (not lessThan 5 AND not lessThan 5)
      Given foo is anything but less than 5
        And foo is anything but less than 5
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
@@ -135,13 +144,16 @@ Scenario: not lessThan run against a non contradicting not lessThan should be su
 Scenario: lessThan run against a contradicting not lessThan should only only generate string, temporal and null (lessThan 2 AND not lessThan 2)
      Given foo is less than 2
        And foo is anything but less than 2
-     Then no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 #lessThanOrEqual
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting lessThanOrEqualTo should be successful (lessThan 6 AND lessThanOrEqualTo 5)
      Given foo is less than 6
        And foo is less than or equal to 5
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -154,6 +166,7 @@ Scenario: lessThan run against a non contradicting lessThanOrEqualTo should be s
 Scenario: lessThan run against a non contradicting not lessThanOrEqualTo should be successful (lessThan 10 AND not lessThanOrEqualTo 2)
      Given foo is less than 10
        And foo is anything but less than or equal to 2
+       And foo is anything but null
      Then the following data should be generated:
        | foo      |
        | 3        |
@@ -167,6 +180,7 @@ Scenario: lessThan run against a non contradicting not lessThanOrEqualTo should 
 Scenario: not lessThan run against a non contradicting lessThanOrEqualTo should be successful (not lessThan 2 AND lessThanOrEqualTo 10)
      Given foo is anything but less than 2
        And foo is less than or equal to 10
+       And foo is anything but null
      Then the following data should be generated:
        | foo      |
        | 2        |
@@ -182,6 +196,7 @@ Scenario: not lessThan run against a non contradicting lessThanOrEqualTo should 
 Scenario: not lessThan run against a non contradicting not lessThanOrEqualTo should be successful (not lessThan 3 AND not lessThanOrEqualTo 4)
      Given foo is anything but less than 3
        And foo is anything but less than or equal to 4
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
@@ -195,6 +210,7 @@ Scenario: not lessThan run against a non contradicting not lessThanOrEqualTo sho
 Scenario: lessThan run against a contradicting lessThanOrEqualTo should only only generate string, temporal and null (lessThan 1 AND lessThanOrEqualTo 1)
      Given foo is less than 1
        And foo is less than or equal to 1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -207,13 +223,16 @@ Scenario: lessThan run against a contradicting lessThanOrEqualTo should only onl
 Scenario: not lessThan run against a contradicting not lessThanOrEqualTo should only only generate string, temporal and null (lessThan 2 AND not lessThanOrEqualTo 3)
      Given foo is less than 2
        And foo is anything but less than or equal to 3
-     Then no data is created
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 #granularTo
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
 Scenario: lessThan run against a non contradicting granularTo should be successful (lessThan 2 AND granularTo 1)
      Given foo is less than 2
        And foo is granular to 1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -228,11 +247,14 @@ Scenario: lessThan run against a non contradicting not granularTo should be succ
      Given foo is less than 1
        And foo is anything but granular to 1
        And the generator can generate at most 5 rows
-     Then some data should be generated
+     Then the following data should be generated:
+       | foo  |
+       | null |
 
 Scenario: not lessThan run against a non contradicting granularTo should be successful (not lessThan 4 AND granularTo 1)
      Given foo is anything but less than 4
        And foo is granular to 1
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo |
@@ -254,6 +276,7 @@ Scenario: not lessThan run against a non contradicting not granularTo should be 
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND after 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is after 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -267,6 +290,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not after 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but after 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -281,6 +305,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND afterOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is after or at 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -294,6 +319,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not afterOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but after or at 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -308,6 +334,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND before 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is before 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -321,6 +348,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not before 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but before 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -335,6 +363,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND beforeOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is before or at 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
@@ -348,6 +377,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not beforeOrAt 2019-01-01T00:00:00.00)
      Given foo is less than 1
        And foo is anything but before or at 2019-01-01T00:00:00.000
+       And foo is anything but null
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
