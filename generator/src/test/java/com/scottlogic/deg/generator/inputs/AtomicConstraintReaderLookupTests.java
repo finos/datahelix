@@ -8,14 +8,12 @@ import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -49,7 +47,7 @@ public class AtomicConstraintReaderLookupTests {
 
         ConstraintDTO numberValueDto = new ConstraintDTO();
         numberValueDto.field = "test";
-        numberValueDto.value = 10;
+        numberValueDto.value = BigDecimal.valueOf(10);
 
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
@@ -89,6 +87,62 @@ public class AtomicConstraintReaderLookupTests {
                 Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
                 Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
                 Arguments.of(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME, dateValueDto, IsBeforeOrEqualToConstantDateTimeConstraint.class));
+    }
+
+    private static Stream<Arguments> stringLengthInvalidOperandProvider() {
+
+        ConstraintDTO numberValueDto = new ConstraintDTO();
+        numberValueDto.field = "test";
+        numberValueDto.value = new BigDecimal(10.11);
+
+        ConstraintDTO stringValueDto = new ConstraintDTO();
+        stringValueDto.field = "test";
+        stringValueDto.value = "value";
+
+        ConstraintDTO nullValueDto = new ConstraintDTO();
+        stringValueDto.field = "test";
+        stringValueDto.value = null;
+
+        return Stream.of(
+            Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, numberValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, numberValueDto),
+
+            Arguments.of(AtomicConstraintType.HASLENGTH, stringValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, stringValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, stringValueDto),
+
+            Arguments.of(AtomicConstraintType.HASLENGTH, nullValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, nullValueDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, nullValueDto));
+    }
+
+    private static Stream<Arguments> stringLengthValidOperandProvider() {
+
+        ConstraintDTO integerAsDecimalDto = new ConstraintDTO();
+        integerAsDecimalDto.field = "test";
+        integerAsDecimalDto.value = new BigDecimal(10);
+
+        ConstraintDTO integerAsIntegerDto = new ConstraintDTO();
+        integerAsIntegerDto.field = "test";
+        integerAsIntegerDto.value = 10;
+
+        ConstraintDTO integerAsDecimalWith0Fraction = new ConstraintDTO();
+        integerAsDecimalWith0Fraction.field = "test";
+        integerAsDecimalWith0Fraction.value = new BigDecimal(10.0);
+
+        return Stream.of(
+            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsDecimalDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsDecimalDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsDecimalDto),
+
+            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsIntegerDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsIntegerDto),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsIntegerDto),
+
+            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsDecimalWith0Fraction),
+            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsDecimalWith0Fraction),
+            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsDecimalWith0Fraction));
     }
 
     @Test
@@ -136,4 +190,29 @@ public class AtomicConstraintReaderLookupTests {
         }
     }
 
+    @DisplayName("Should fail when string lengths have an invalid operand")
+    @ParameterizedTest(name = "{0} should be invalid")
+    @MethodSource("stringLengthInvalidOperandProvider")
+    public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+
+        Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields, ruleInformation));
+    }
+
+    @DisplayName("Should pass when string lengths have an integer operand")
+    @ParameterizedTest(name = "{0} should be valid")
+    @MethodSource("stringLengthValidOperandProvider")
+    public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
+
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+
+        Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields, ruleInformation));
+    }
 }

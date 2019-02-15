@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive.field_selection_strategy;
 
 import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.Guice.ProfileProvider;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
@@ -15,6 +16,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.google.inject.Provider;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestHierarchicalDependencyFixFieldStrategy {
 
@@ -208,7 +214,10 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
         Profile profile = new Profile(fields, rules);
-        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser());
+        ProfileProvider provider = mock(ProfileProvider.class);
+        when(provider.get()).thenReturn(profile);
+
+        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(provider, new FieldDependencyAnalyser());
         return strategy.getFieldFixingPriorityList();
     }
 

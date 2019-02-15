@@ -129,14 +129,11 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | 1.00000 | "1"      | "22"        |
 
 
-  @ignore #issue 234
   Scenario Outline: Running an 'ofLength' request that includes a decimal number containing non zero digits should fail with an error message
     Given foo is of length <length>
     And foo is in set:
       | "1" |
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then I am presented with an error message
     Examples:
       | length      |
       | 1.1         |

@@ -95,7 +95,7 @@ Currently we're using version 1.8 of the Java development toolkit (JDK), there a
 
 Our product roadmap shows that we plan to develop a tool for analysing data sources and producing an indicative profile from them, a tool we call the profiler. It is currently planned for this tool to integrate with Apache Spark using Scala. This integration requires a compatible version of the JDK, version 1.8 is the latest compatible version.
 
-We could upgrade the version of the JDK for the generator independantly of this tool, however this would require an additional installation of Java on a users environment. We are trying to create a tool with the least friction when it comes to its use, as such we have decided - for now at least - to stick with version 1.8.
+We could upgrade the version of the JDK for the generator independently of this tool, however this would require an additional installation of Java on a users environment. We are trying to create a tool with the least friction when it comes to its use, as such we have decided - for now at least - to stick with version 1.8.
 
 ## What problems have you had to solve when using an older JDK
 

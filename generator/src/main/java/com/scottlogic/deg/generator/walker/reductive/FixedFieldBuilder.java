@@ -15,6 +15,7 @@ import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.Fi
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,16 +64,20 @@ public class FixedFieldBuilder {
         Set<AtomicConstraint> constraintsForDecisions = getAtomicConstraintsInDecisions(field, rootNode);
 
         //produce a fieldspec for all the atomic constraints
-        FieldSpec rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
+        Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
             constraintsForRootNode,
-            constraintsForDecisions)
-            .orElse(FieldSpec.Empty);
+            constraintsForDecisions);
+
+        if (!rootConstraintsFieldSpec.isPresent() && !constraintsForRootNode.isEmpty()) {
+            //contradiction in the root node
+            return null;
+        }
 
         //use the FieldSpecValueGenerator to emit all possible values given the generation mode, interesting or full-sequential
-        Stream<Object> values = generator.generate(field, rootConstraintsFieldSpec)
+        Stream<Object> values = generator.generate(field, rootConstraintsFieldSpec.orElse(FieldSpec.Empty))
             .map(dataBag -> dataBag.getValue(field));
 
-        return new FixedField(field, values, rootConstraintsFieldSpec, this.monitor);
+        return new FixedField(field, values, rootConstraintsFieldSpec.orElse(FieldSpec.Empty), this.monitor);
     }
 
     private Set<AtomicConstraint> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {

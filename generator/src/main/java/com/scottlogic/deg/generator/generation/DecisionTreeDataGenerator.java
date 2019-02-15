@@ -72,7 +72,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting(generationConfig);
 
         return dataRows
-            .limit(generationConfig.getMaxRows())
+            .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
             .peek(this.monitor::rowEmitted);
 
     }
