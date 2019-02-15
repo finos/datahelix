@@ -1,0 +1,68 @@
+@startuml
+
+skinparam titleBorderRoundCorner 15
+skinparam titleBorderThickness 2
+skinparam titleBorderColor red
+skinparam titleBackgroundColor Aqua-CadetBlue
+
+header Scott Logic DataHelix Project
+footer 15 February 2019
+title Generate Class Hierarchy
+
+package java.lang {
+	interface Runnable
+}
+package com.scottlogic.deg.generator.CommandLine {
+    abstract CommandLineBase
+    abstract GenerationCommandLine
+    abstract VisualiseCommandLine
+}
+
+package com.scottlogic.deg.generator.generation {
+	class GenerationConfig
+	interface GenerationConfigSource
+}
+
+package com.scottlogic.deg.generator.visualisation {
+	class VisualisationConfig
+	interface VisualisationConfigSource
+
+}
+
+package com.scottlogic.deg.generator {
+    class VisualiseExecute
+    class GenerateExecute
+	interface GenerationEngine
+    interface ConfigSource {
+        Path getOutputPath();
+        File getProfileFile();
+        boolean dontOptimise();
+        boolean overwriteOutputFiles();
+    }
+}
+interface GenerationConfigSource
+
+package com.scottlogic.deg.generator.validators {
+    class VisualisationConfigValidator
+    class GenerationConfigValidator
+    class ValidationResult
+    class ErrorReporter
+    class StaticContradictionDecisionTreeValidator
+}
+
+package com.scottlogic.deg.generator.outputs.targets {
+    interface OutputTarget
+    class FileOutputTarget
+}
+
+package com.scottlogic.deg.generator.inputs {
+	interface ProfileReader
+}
+
+
+OutputTarget <|-- FileOutputTarget
+
+
+
+
+@enduml
