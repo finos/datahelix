@@ -225,7 +225,7 @@ Scenario: not greaterThan run against a contradicting not lessThan should only o
        | foo |
        | 2   |
 
-#lessThanOrQualTo
+#lessThanOrEqualTo
 Scenario: greaterThan run against a non contradicting lessThanOrEqualTo should be successful (greaterThan 2 AND lessThanOrEqualTo 5)
      Given foo is greater than 2
        And foo is less than or equal to 5
