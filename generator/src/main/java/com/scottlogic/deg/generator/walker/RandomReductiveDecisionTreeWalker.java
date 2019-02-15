@@ -29,13 +29,13 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Stream<Stream<RowSpec>> rowSpecsPerIteration = Stream.concat(
+        Stream<Stream<RowSpec>> infiniteRandomisingIterations = Stream.concat(
             Stream.of(Stream.of(firstRowSpec.get())),
             Stream.generate(rowGenerator));
 
         return FlatMappingSpliterator.flatMap(
-            rowSpecsPerIteration,
-            (rowSpecsInIteration) -> rowSpecsInIteration.limit(1)
+            infiniteRandomisingIterations,
+            streamOfRandomData -> streamOfRandomData.limit(1)
         );
     }
 }
