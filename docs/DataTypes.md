@@ -1,6 +1,6 @@
 # Data Types
 
-DataHelix currently recognises three distinct data types. Keeping this set small is a deliberate goal; it would be possible to have types like _FirstName_ or _Postcode_, but instead these are considered specialisations of the _String_ type, so they can be constrained by the normal string operators (e.g. "Generate first names shorter than 10 characters, starting with a vowel").
+DataHelix currently recognises three distinct data types. Keeping this set small is a deliberate goal; it would be possible to have types like _FirstName_ or _Postcode_, but instead these are considered specialisations of the _String_ type, so they can be constrained by the normal string operators (e.g. a user could generate all first names shorter than 10 characters, starting with a vowel).
 
 ## Numeric
 
@@ -25,4 +25,12 @@ Strings are sequences of unicode characters. Currently, only characters from the
 
 ## Temporal
 
-Temporal values represent specific moments in time, to the precision supported by Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+Temporal values represent specific moments in time, and are specified in profiles through specialised objects:
+
+```javascript
+{ "date": "2000-01-01T09:00:00.000" }
+```
+
+The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, with precisely 3 digits of milliseconds, plus an optional offset specifier of either "Z" or a "+HH" format. Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+
+Temporal values are by default output per the user's locale, adjusted to their time zone.
