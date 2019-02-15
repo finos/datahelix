@@ -32,7 +32,7 @@ public class Visualise implements Runnable {
     private File profileFile;
 
     @CommandLine.Parameters(index = "1", description = "The path of the output visualise file.")
-    private File outputFile;
+    private Path outputPath;
 
     @CommandLine.Option(
         names = {"-t", "--title"},
@@ -102,7 +102,7 @@ public class Visualise implements Runnable {
             writeTreeTo(
                 validatedTree,
                 title,
-                outputFile.toPath());
+                outputPath);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
