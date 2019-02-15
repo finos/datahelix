@@ -13,8 +13,10 @@ import java.util.Optional;
 @picocli.CommandLine.Command(
     name = "generate",
     description = "Produces data using any options provided.",
-    mixinStandardHelpOptions = true,
-    version = "1.0")
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    abbreviateSynopsis = true)
 public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
@@ -100,6 +102,12 @@ public class GenerateCommandLine extends CommandLineBase {
         names = {"--visualise-reductions"},
         description = "Visualise each tree reduction")
     private Boolean visualiseReductions = false;
+
+    @CommandLine.Option(
+        names = "--help",
+        usageHelp = true,
+        description = "Display these available command line options")
+    boolean help;
 
     @Override
     public boolean shouldDoPartitioning() {
