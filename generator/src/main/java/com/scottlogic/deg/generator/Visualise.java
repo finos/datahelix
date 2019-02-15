@@ -82,13 +82,8 @@ public class Visualise implements Runnable {
             profile.fields,
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
-
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
-                .splitTreeIntoPartitions(mergedTree)
-                .map(treeOptimiser::optimiseTree)
-                .map(tree -> this.dontSimplify ? tree : new DecisionTreeSimplifier().simplify(tree))
-                .map(treeValidator::markContradictions)
-                .collect(Collectors.toList());
+        
+        DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
         final String title = shouldHideTitle
             ? null
@@ -98,26 +93,10 @@ public class Visualise implements Runnable {
                 .orElse(null);
 
         try {
-            if (treePartitions.size() == 1) {
-                writeTreeTo(
-                    treePartitions.get(0),
-                    title,
-                    outputDir.resolve(profileBaseName + ".gv"));
-            } else {
-                writeTreeTo(
-                    mergedTree,
-                    title,
-                    outputDir.resolve(profileBaseName + ".unpartitioned.gv"));
-
-                for (int i = 0; i < treePartitions.size(); i++) {
-                    writeTreeTo(
-                        treePartitions.get(i),
-                        title != null
-                            ? title + " (partition " + (i + 1) + ")"
-                            : null,
-                        outputDir.resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
-                }
-            }
+            writeTreeTo(
+                validatedTree,
+                title,
+                outputDir.resolve(profileBaseName + ".gv"));
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
