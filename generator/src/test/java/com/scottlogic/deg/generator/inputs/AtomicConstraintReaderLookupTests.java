@@ -28,7 +28,6 @@ public class AtomicConstraintReaderLookupTests {
 
     @BeforeAll
     public void before() {
-
         atomicConstraintReaderLookup = new AtomicConstraintReaderLookup();
 
         List<Field> fields = new ArrayList<>();
@@ -38,8 +37,13 @@ public class AtomicConstraintReaderLookupTests {
         profileFields = new ProfileFields(fields);
     }
 
-    private static Stream<Arguments> testProvider() {
+    private static Object createDateObject(String dateStr) {
+        Map<String, String> date = new HashMap<>();
+        date.put("date", dateStr);
+        return date;
+    }
 
+    private static Stream<Arguments> testProvider() {
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
         stringValueDto.is = AtomicConstraintType.ISEQUALTOCONSTANT.toString();
@@ -51,10 +55,7 @@ public class AtomicConstraintReaderLookupTests {
 
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
-
-        Map date = new HashMap();
-        date.put("date", "2020-01-01T01:02:03.456");
-        dateValueDto.value = date;
+        dateValueDto.value = createDateObject("2020-01-01T01:02:03.456");
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
@@ -90,7 +91,6 @@ public class AtomicConstraintReaderLookupTests {
     }
 
     private static Stream<Arguments> stringLengthInvalidOperandProvider() {
-
         ConstraintDTO numberValueDto = new ConstraintDTO();
         numberValueDto.field = "test";
         numberValueDto.value = new BigDecimal(10.11);
@@ -118,7 +118,6 @@ public class AtomicConstraintReaderLookupTests {
     }
 
     private static Stream<Arguments> stringLengthValidOperandProvider() {
-
         ConstraintDTO integerAsDecimalDto = new ConstraintDTO();
         integerAsDecimalDto.field = "test";
         integerAsDecimalDto.value = new BigDecimal(10);
@@ -147,7 +146,6 @@ public class AtomicConstraintReaderLookupTests {
 
     @Test
     public void shouldRecogniseAllAtomicConstraints() {
-
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
@@ -214,5 +212,40 @@ public class AtomicConstraintReaderLookupTests {
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields, ruleInformation));
+    }
+
+    @Test
+    void shouldParseValidDates() {
+        assertUnsuccessfulParse(createDateObject("2010-01-01"));
+        assertUnsuccessfulParse(createDateObject("2010-01-01T12:30:00"));
+        assertSuccessfulParse(createDateObject("2010-01-01T12:30:00.000"));
+        assertSuccessfulParse(createDateObject("2010-01-01T12:30:00.000Z"));
+        assertSuccessfulParse(createDateObject("2010-01-01T12:30:00.000+01"));
+    }
+
+    private void assertSuccessfulParse(Object value) {
+        Assertions.assertDoesNotThrow(
+            () -> tryParseConstraintValue(value));
+    }
+
+    private void assertUnsuccessfulParse(Object value) {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> tryParseConstraintValue(value));
+    }
+
+    private void tryParseConstraintValue(Object value) throws InvalidProfileException {
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(
+            AtomicConstraintType.ISEQUALTOCONSTANT.toString());
+
+        ConstraintDTO dateDto = new ConstraintDTO();
+        dateDto.field = "test";
+        dateDto.value = value;
+
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+
+        reader.apply(dateDto, profileFields, ruleInformation);
     }
 }

@@ -10,8 +10,9 @@ import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.chrono.IsoChronology;
+import java.time.format.*;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -261,11 +262,16 @@ public class AtomicConstraintReaderLookup {
     }
 
     private static LocalDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'.'SSS"))
+            .optionalStart()
+            .appendOffset("+HH", "Z")
+            .toFormatter();
+
         try {
             return LocalDateTime.parse(value, formatter);
         } catch (DateTimeParseException dtpe){
-            throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS", value));
+            throw new InvalidProfileException(String.format("Date string '%s' must be in a subset of ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS (with optional timezone specifier)", value));
         }
     }
 
