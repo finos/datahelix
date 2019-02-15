@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
-import com.scottlogic.deg.generator.visualise.VisualisationConfig;
-import com.scottlogic.deg.generator.visualise.VisualisationConfigSource;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 
 import java.util.ArrayList;
 

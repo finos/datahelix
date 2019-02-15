@@ -5,8 +5,8 @@ import static org.mockito.Mockito.when;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.visualise.TestVisualiseConfigSource;
-import com.scottlogic.deg.generator.visualise.VisualisationConfig;
+import com.scottlogic.deg.generator.visualisation.TestVisualiseConfigSource;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Assert;

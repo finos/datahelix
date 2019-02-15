@@ -20,8 +20,8 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
-import com.scottlogic.deg.generator.visualise.VisualisationConfig;
-import com.scottlogic.deg.generator.visualise.VisualisationConfigSource;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

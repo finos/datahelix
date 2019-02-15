@@ -1,15 +1,10 @@
 @startuml
 
+!include ClassDefs.iuml
+
 header Scott Logic DataHelix Project
 footer 15 February 2019
 title Generate Class Hierarchy
-
-abstract CommandLineBase
-abstract Runnable
-abstract CommandLineBase
-
-interface ConfigSource
-interface GenerationConfigSource
 
 GenerationConfigSource --|> ConfigSource
 
@@ -31,6 +26,10 @@ GenerationConfigValidator --* OutputTarget
 GenerationConfigValidator --* GenerationConfigSource
 
 
-OutputTarget <|-- FileOutputTarget
+hide VisualiseExecute
+hide VisualisationConfig
+hide VisualisationConfigSource
+hide VisualisationConfigValidator
+hide StaticContradictionDecisionTreeValidator
 
 @enduml
