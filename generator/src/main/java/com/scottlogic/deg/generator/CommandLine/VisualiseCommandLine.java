@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.VisualiseExecute;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+
 import java.io.File;
 import java.nio.file.Path;
 
@@ -12,7 +14,7 @@ import java.nio.file.Path;
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true,
     mixinStandardHelpOptions = true)
-public class VisualiseCommandLine extends CommandLineBase {
+public class VisualiseCommandLine extends CommandLineBase implements VisualisationConfigSource {
 
     @picocli.CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File sourceFile;
