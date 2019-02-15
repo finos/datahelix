@@ -22,6 +22,8 @@ VisualiseExecute --* VisualisationConfigSource
 VisualiseExecute --* VisualisationConfigValidator
 VisualiseExecute --* ErrorReporter
 
+VisualisationConfigSource *-- VisualisationConfig
+
 
 hide GenerateExecute
 hide GenerationConfig
