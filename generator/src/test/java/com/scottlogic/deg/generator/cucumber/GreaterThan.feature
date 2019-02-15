@@ -1,13 +1,24 @@
 Feature: User can specify that a numeric value is higher than, but not equal to, a specified threshold
 
-  Background:
-    Given the generation strategy is full
-    And there is a field foo
-    And foo is of type "numeric"
-    And foo is anything but null
+Background:
+     Given the generation strategy is full
+       And there is a field foo
+       And foo is of type "numeric"
+       And foo is anything but null
 
 #alone
-Scenario: User requires integer data
+Scenario: Running a 'greaterThan' request that specifies an integer should be successful
+     Given foo is greater than 1
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo |
+       | 1   |
+       | 2   |
+       | 3   |
+       | 4   |
+       | 5   |
+
+Scenario: Running a 'greaterThan' request that specifies an integer with trailing zeros should be successful
      Given foo is greater than 100
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -18,7 +29,7 @@ Scenario: User requires integer data
        | 104 |
        | 105 |
 
-Scenario: User requires decimal data
+Scenario: Running a 'greaterThan' request that specifies a decimal should be successful
      Given foo is greater than 100.1
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -29,7 +40,34 @@ Scenario: User requires decimal data
        | 100.5 |
        | 100.6 |
 
-Scenario: User requires negative numbers data
+Scenario: Running a 'greaterThan' request that specifies a decimal with trailing zeros should be successful
+    Given foo is greater than 100.0
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo   |
+      | 100.1 |
+      | 100.2 |
+      | 100.3 |
+      | 100.4 |
+      | 100.5 |
+
+Scenario: Running a 'greaterThan' request that specifies a string should be unsuccessful
+    Given foo is greater than "bar"
+    Then the profile is invalid
+      And no data is created
+
+Scenario: Running a 'greaterThan' request that specifies an empty string should be unsuccessful
+    Given foo is greater than ""
+    Then the profile is invalid
+      And no data is created
+
+@ignore #595: Null pointer exception if null is provided to a greater than constraint
+Scenario: Running a 'greaterThan' request that specifies null should be unsuccessful
+    Given foo is greater than null
+    Then the profile is invalid
+      And no data is created
+
+  Scenario: User requires negative numbers data
      Given foo is greater than -100
        And the generator can generate at most 5 rows
      Then the following data should be generated:
