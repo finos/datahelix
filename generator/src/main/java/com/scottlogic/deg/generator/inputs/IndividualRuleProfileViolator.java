@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
  * Within each violated ruleInformation we violate each constraint independently. This is consistent with the current
  * implementation of violation.
  */
-public class IndividualRuleProfileValidator implements ProfileViolator {
+public class IndividualRuleProfileViolator implements ProfileViolator {
 
     private final ManifestWriter manifestWriter;
     private final Path outputPath;
     private final RuleViolator ruleViolator;
 
     @Inject
-    public IndividualRuleProfileValidator(ManifestWriter manifestWriter,
+    public IndividualRuleProfileViolator(ManifestWriter manifestWriter,
                                           @Named("outputPath") Path outputPath,
                                           RuleViolator ruleViolator) {
         this.manifestWriter = manifestWriter;

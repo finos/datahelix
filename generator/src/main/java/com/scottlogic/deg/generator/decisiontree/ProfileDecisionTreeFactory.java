@@ -28,10 +28,6 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         return wrapEach(constraints, Constraint::negate);
     }
 
-    private static Collection<Constraint> violateEach(Collection<Constraint> constraints) {
-        return wrapEach(constraints, ViolateConstraint::new);
-    }
-
     private static Constraint reduceConditionalConstraint(ConditionalConstraint constraint) {
         Constraint ifConstraint = constraint.condition;
         Constraint thenConstraint = constraint.whenConditionIsTrue;
@@ -86,71 +82,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         return ConstraintNode.merge(rootConstraintNodeFragments);
     }
 
-    private Collection<ConstraintNode> convertConstraint(ViolateConstraint constraintToConvert){
-        Constraint violatedConstraint = constraintToConvert.violatedConstraint;
-
-        // VIOLATE(AND(X, Y, Z)) reduces to
-        //   OR(
-        //     AND(VIOLATE(X), Y, Z),
-        //     AND(X, VIOLATE(Y), Z),
-        //     AND(X, Y, VIOLATE(Z)))
-        if (violatedConstraint instanceof AndConstraint) {
-            Collection<Constraint> subConstraints = ((AndConstraint) violatedConstraint).subConstraints;
-
-            Collection<Constraint> possibleFulfilments =
-                subConstraints.stream()
-                    // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
-                    .map(constraintToViolate ->
-                        subConstraints.stream()
-                            .map(c -> c == constraintToViolate
-                                ? new ViolateConstraint(c)
-                                : c)
-                            .collect(Collectors.toList()))
-                    // make an AndConstraint out of each of the new lists
-                    .map(AndConstraint::new)
-                    .collect(Collectors.toList());
-
-            return convertConstraint(new OrConstraint(possibleFulfilments));
-        }
-        // VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
-        else if (violatedConstraint instanceof OrConstraint) {
-            Collection<Constraint> subConstraints = ((OrConstraint) violatedConstraint).subConstraints;
-
-            return convertConstraint(
-                new AndConstraint(violateEach(subConstraints)));
-        }
-        // VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
-        // VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
-        else if (violatedConstraint instanceof ConditionalConstraint) {
-            ConditionalConstraint conditional = ((ConditionalConstraint) violatedConstraint);
-
-            Constraint positiveViolation = new AndConstraint(
-                conditional.condition,
-                new ViolateConstraint(conditional.whenConditionIsTrue));
-
-            Constraint negativeViolation = conditional.whenConditionIsFalse == null
-                ? null
-                : new AndConstraint(
-                new ViolateConstraint(conditional.condition),
-                new ViolateConstraint(conditional.whenConditionIsFalse));
-
-            return convertConstraint(
-                negativeViolation != null
-                    ? positiveViolation.or(negativeViolation)
-                    : positiveViolation
-            );
-        }
-
-        // we've got an atomic constraint
-        AtomicConstraint violatedAtomicConstraint = (AtomicConstraint) violatedConstraint;
-        return convertConstraint(new ViolatedAtomicConstraint(violatedAtomicConstraint.negate()));
-    }
-
     private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
-        if (constraintToConvert instanceof ViolateConstraint) {
-            return convertConstraint((ViolateConstraint)constraintToConvert);
-        }
-
         if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
             Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).negatedConstraint;
 

@@ -14,8 +14,8 @@ import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -24,6 +24,7 @@ import java.util.*;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -43,7 +44,7 @@ public class IndividualConstraintRuleViolatorTests {
 
     private Collection<Constraint> inputConstraints = new ArrayList<>();
 
-    @Before
+    @BeforeEach
     public void commonTestSetup() {
         MockitoAnnotations.initMocks(this);
 
@@ -257,7 +258,7 @@ public class IndividualConstraintRuleViolatorTests {
     /**
      * Tests that the violate method with unsupported constraint type throws UnviolatableConstraintException exception.
      */
-    @Test(expected = UnviolatableConstraintException.class)
+    @Test
     public void violateRule_withUnsupportedConstraints_throwsRuntimeException() {
         //Arrange
         Constraint mockConstraint = Mockito.mock(Constraint.class);
@@ -265,12 +266,12 @@ public class IndividualConstraintRuleViolatorTests {
 
         Rule inputRule = new Rule(ruleInformation, inputConstraints);
 
-        //Act
-        target.violateRule(inputRule);
-
-        //Assert
-        Assert.fail("The violate method with unsupported constraint type should have thrown an " +
-            "UnviolatableConstraintException exception");
+        //Act/Assert
+        assertThrows(
+            UnviolatableConstraintException.class,
+            () -> target.violateRule(inputRule),
+            "Violate method should throw with a non-specific Constraint type object."
+        );
     }
 
     /**

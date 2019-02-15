@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
-import com.scottlogic.deg.generator.inputs.IndividualRuleProfileValidator;
+import com.scottlogic.deg.generator.inputs.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -35,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -99,7 +97,7 @@ class ExampleProfilesViolationTests {
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
-                        new IndividualRuleProfileValidator(
+                        new IndividualRuleProfileViolator(
                             new ManifestWriter(),
                             null,
                             new IndividualConstraintRuleViolator(new ArrayList<>())),
