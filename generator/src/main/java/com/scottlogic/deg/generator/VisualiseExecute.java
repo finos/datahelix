@@ -19,9 +19,10 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.validators.ValidationResult;
-import com.scottlogic.deg.generator.validators.VisualiseConfigValidator;
-import com.scottlogic.deg.generator.visualise.VisualiseConfig;
-import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
+import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
+import com.scottlogic.deg.generator.visualise.VisualisationConfig;
+import com.scottlogic.deg.generator.visualise.VisualisationConfigSource;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -39,18 +40,18 @@ import java.util.stream.Stream;
     version = "1.0")
 public class VisualiseExecute implements Runnable {
 
-    private final VisualiseConfig config;
+    private final VisualisationConfig config;
     private final ProfileReader profileReader;
-    private final VisualiseConfigSource configSource;
-    private final VisualiseConfigValidator validator;
+    private final VisualisationConfigSource configSource;
+    private final VisualisationConfigValidator validator;
     private final ErrorReporter errorReporter;
 
     @Inject
-    public VisualiseExecute(VisualiseConfig config,
-        ProfileReader profileReader,
-        VisualiseConfigSource configSource,
-        VisualiseConfigValidator validator,
-        ErrorReporter errorReporter) {
+    public VisualiseExecute(VisualisationConfig config,
+                            ProfileReader profileReader,
+                            VisualisationConfigSource configSource,
+                            VisualisationConfigValidator validator,
+                            ErrorReporter errorReporter) {
         this.config = config;
         this.profileReader = profileReader;
         this.configSource = configSource;
@@ -105,32 +106,15 @@ public class VisualiseExecute implements Runnable {
         final String title = configSource.shouldHideTitle()
             ? null
             : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
 
         try {
-            if (treePartitions.size() == 1) {
-                writeTreeTo(
-                    treePartitions.get(0),
-                    title,
-                    configSource.getOutputPath().resolve(profileBaseName + ".gv"));
-            } else {
-                writeTreeTo(
-                    mergedTree,
-                    title,
-                    configSource.getOutputPath().resolve(profileBaseName + ".unpartitioned.gv"));
-
-                for (int i = 0; i < treePartitions.size(); i++) {
-                    writeTreeTo(
-                        treePartitions.get(i),
-                        title != null
-                            ? title + " (partition " + (i + 1) + ")"
-                            : null,
-                        configSource.getOutputPath()
-                            .resolve(profileBaseName + ".partition" + (i + 1) + ".gv"));
-                }
-            }
+            writeTreeTo(
+                treePartitions.get(0),
+                title,
+                configSource.getOutputPath().resolve(profileBaseName + ".gv"));
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();

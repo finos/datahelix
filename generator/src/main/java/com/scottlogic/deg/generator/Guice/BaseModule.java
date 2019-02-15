@@ -5,8 +5,9 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
+import com.scottlogic.deg.generator.CommandLine.VisualiseCommandLine;
+import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -23,7 +24,6 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeRoutesTreeWalker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
@@ -43,17 +43,10 @@ import java.util.List;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final GenerationConfigSource configSource;
-    private final VisualiseConfigSource visualiseConfigSource;
+    private final ConfigSource configSource;
 
-    public BaseModule(GenerationConfigSource configSource) {
+    public BaseModule(ConfigSource configSource) {
         this.configSource = configSource;
-        visualiseConfigSource = null;
-    }
-
-    public BaseModule(VisualiseConfigSource configSource) {
-        this.configSource = null;
-        this.visualiseConfigSource = configSource;
     }
 
     @Override
@@ -83,7 +76,8 @@ public class BaseModule extends AbstractModule {
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
+        bind(new TypeLiteral<List<ViolationFilter>>() {
+        }).toProvider(ViolationFiltersProvider.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
@@ -95,7 +89,10 @@ public class BaseModule extends AbstractModule {
     private void bindAllCommandLineTypes() {
         if (this.configSource instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
-            bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+            bind(ConfigSource.class).to(GenerateCommandLine.class);
+        } else if (this.configSource instanceof VisualiseCommandLine) {
+            bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
+            bind(ConfigSource.class).to(VisualiseCommandLine.class);
         }
     }
 }

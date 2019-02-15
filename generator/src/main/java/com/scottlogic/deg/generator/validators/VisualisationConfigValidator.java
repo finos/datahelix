@@ -2,26 +2,27 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
-import com.scottlogic.deg.generator.visualise.VisualiseConfig;
-import com.scottlogic.deg.generator.visualise.VisualiseConfigSource;
+import com.scottlogic.deg.generator.visualise.VisualisationConfig;
+import com.scottlogic.deg.generator.visualise.VisualisationConfigSource;
+
 import java.util.ArrayList;
 
 /**
  * Class used to determine whether the command line options are valid for generation
  */
-public class VisualiseConfigValidator {
+public class VisualisationConfigValidator {
 
     private final OutputTarget outputTarget;
-    private final VisualiseConfigSource configSource;
+    private final VisualisationConfigSource configSource;
 
     @Inject
-    public VisualiseConfigValidator(VisualiseConfigSource configSource,
-        OutputTarget outputTarget) {
+    public VisualisationConfigValidator(VisualisationConfigSource configSource,
+                                        OutputTarget outputTarget) {
         this.configSource = configSource;
         this.outputTarget = outputTarget;
     }
 
-    public ValidationResult validateCommandLine(VisualiseConfig config) {
+    public ValidationResult validateCommandLine(VisualisationConfig config) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 

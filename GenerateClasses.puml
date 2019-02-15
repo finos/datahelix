@@ -1,0 +1,36 @@
+@startuml
+
+header Scott Logic DataHelix Project
+footer 15 February 2019
+title Generate Class Hierarchy
+
+abstract CommandLineBase
+abstract Runnable
+abstract CommandLineBase
+
+interface ConfigSource
+interface GenerationConfigSource
+
+GenerationConfigSource --|> ConfigSource
+
+CommandLineBase <|-- GenerationCommandLine
+
+CommandLineBase --|> ConfigSource
+Runnable <|-- CommandLineBase
+
+GenerateExecute --|> Runnable
+GenerateExecute --* GenerationConfig
+GenerateExecute --* ProfileReader
+GenerateExecute --* GenerationEngine
+GenerateExecute --* GenerationConfigSource
+GenerateExecute --* OutputTarget
+GenerateExecute --* GenerationConfigValidator
+GenerateExecute --* ErrorReporter
+
+GenerationConfigValidator --* OutputTarget
+GenerationConfigValidator --* GenerationConfigSource
+
+
+OutputTarget <|-- FileOutputTarget
+
+@enduml
