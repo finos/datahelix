@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.VisualiseExecute;
-
 import java.io.File;
 import java.nio.file.Path;
 
