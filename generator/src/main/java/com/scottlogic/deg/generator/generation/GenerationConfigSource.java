@@ -33,5 +33,6 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean shouldDoPartitioning();
     boolean isEnableTracing();
     boolean shouldViolate();
+    boolean overwriteOutputFiles();
     boolean visualiseReductions();
 }

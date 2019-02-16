@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.CommandLine;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
@@ -18,7 +19,7 @@ import java.util.Optional;
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class GenerateCommandLine extends CommandLineBase {
+public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
@@ -115,7 +116,6 @@ public class GenerateCommandLine extends CommandLineBase {
         description = "Display these available command line options")
     boolean help;
 
-    @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
@@ -130,7 +130,6 @@ public class GenerateCommandLine extends CommandLineBase {
         return this.profileFile;
     }
 
-    @Override
     public boolean shouldViolate() {
         return this.violateProfile;
     }
@@ -145,32 +144,26 @@ public class GenerateCommandLine extends CommandLineBase {
         return this.outputPath;
     }
 
-    @Override
     public boolean isEnableTracing() {
         return this.enableTracing;
     }
 
-    @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return this.generationType;
     }
 
-    @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
     }
 
-    @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
-    @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return constraintsToNotViolate;
     }
 
-    @Override
     public GenerationConfig.MonitorType getMonitorType() {
         if (this.verbose) {
             return GenerationConfig.MonitorType.VERBOSE;
@@ -181,19 +174,16 @@ public class GenerateCommandLine extends CommandLineBase {
         return GenerationConfig.MonitorType.STANDARD;
     }
 
-    @Override
     public Optional<Long> getMaxRows() {
         return maxRows == null
             ? Optional.empty()
             : Optional.of(maxRows);
     }
 
-    @Override
     public boolean getValidateProfile() {
         return this.validateProfile;
     }
 
-    @Override
     public boolean visualiseReductions() {
         return visualiseReductions;
     }
