@@ -6,6 +6,8 @@ DataHelix currently recognises three distinct data types. Keeping this set small
 
 In principle, any real number. In practice, any number that can be represented in a Java [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) object.
 
+In profile files, numbers must be expressed as JSON numbers, without quotation marks.
+
 ### Granularity
 
 The granularity of a numeric field is a measure of how small the distinctions in that field can be; it is the smallest positive number of which every valid value is a multiple. For instance:
@@ -16,8 +18,6 @@ The granularity of a numeric field is a measure of how small the distinctions in
 At present, only granularities less than or equal to 1 are supported (in future, it may be possible to specify higher granularities - a granularity of 2 would admit only even numbers). Additionally, granularities must be powers of ten, so 0.01 is legal but 0.02 is not.
 
 Numeric fields currently default to a granularity of 1. Post-[#135](https://github.com/ScottLogic/datahelix/issues/135), they'll default to a minimal granularity.
-
-In profile files, numbers must be expressed as JSON numbers, without quotation marks.
 
 ## Strings
 
@@ -31,6 +31,10 @@ Temporal values represent specific moments in time, and are specified in profile
 { "date": "2000-01-01T09:00:00.000" }
 ```
 
-The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, with precisely 3 digits of milliseconds, plus an optional offset specifier of either "Z" or a "+HH" format. Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, with precisely 3 digits of sub-second precision, plus an optional offset specifier of either "Z" or a "+HH" format. Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
 
 Temporal values are by default output per the user's locale, adjusted to their time zone.
+
+### Granularity
+
+Temporal values currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141) will make this configurable.
