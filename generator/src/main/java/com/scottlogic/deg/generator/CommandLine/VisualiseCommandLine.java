@@ -93,6 +93,11 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     }
 
     @Override
+    public boolean getValidateProfile() {
+        return false;
+    }
+
+    @Override
     protected Class<? extends Runnable> getExecutorType() {
         return VisualiseExecute.class;
     }

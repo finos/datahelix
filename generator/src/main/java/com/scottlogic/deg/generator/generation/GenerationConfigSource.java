@@ -27,7 +27,6 @@ public interface GenerationConfigSource extends ConfigSource {
     GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
     Optional<Long> getMaxRows();
-    boolean getValidateProfile();
     boolean shouldDoPartitioning();
     boolean isEnableTracing();
     boolean overwriteOutputFiles();

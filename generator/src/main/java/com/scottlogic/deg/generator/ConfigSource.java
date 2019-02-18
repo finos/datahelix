@@ -11,5 +11,6 @@ public interface ConfigSource {
     boolean overwriteOutputFiles();
 
     boolean shouldViolate();
+    boolean getValidateProfile();
 
 }
