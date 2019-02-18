@@ -1,26 +1,27 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
-import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
 import com.scottlogic.deg.generator.inputs.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
@@ -92,7 +93,11 @@ class ExampleProfilesViolationTests {
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
-                        new RowSpecDataBagSourceFactory(new FieldSpecValueGenerator(config, new StandardFieldValueSourceEvaluator()))),
+                        new StandardRowSpecDataBagSourceFactory(
+                            new FieldSpecValueGenerator(
+                                config,
+                                new StandardFieldValueSourceEvaluator(),
+                                new JavaUtilRandomNumberGenerator()))),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
