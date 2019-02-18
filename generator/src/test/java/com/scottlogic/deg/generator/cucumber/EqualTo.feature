@@ -1138,9 +1138,83 @@ Scenario: Not 'equalTo' with a contradictory 'containingRegex' emits null
         {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
       """
     And foo is containing regex /[a]{1}/
-    And foo is in set
+    And foo is in set:
+      | "Aa"  |
+      | "a"  |
+      | "aa" |
+  Then the following data should be generated:
+      | foo   |
+      | null  |
+      | "Aa"  |
+      | "aa"  |
+
+### ofLength ###
+
+Scenario: 'EqualTo' alongside a non-contradicting 'ofLength' constraint should be successful
+  Given there is a field foo
+    And foo is equal to "1"
+    And foo is of length 1
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | "1"  |
+
+Scenario: 'EqualTo' with a non-contradictory not 'ofLength' is successful
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+       {"not": {"field": "foo", "is": "ofLength", "value": 2}}
+      """
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | "a"  |
+
+Scenario: Not 'equalTo' with a non-contradictory 'ofLength' is successful
+  Given there is a field foo
+    And there is a constraint:
+      """
+       {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
+      """
+    And foo is of length 2
+    And foo is in set:
+      | "a"  |
+      | "b"  |
+      | "ab" |
   Then the following data should be generated:
       | foo  |
       | null |
+      | "ab" |
 
-### ofLength ###
+Scenario Outline: 'EqualTo' a non-string type with an 'ofLength' zero is successful
+  Given there is a field foo
+    And foo is equal to <value>
+    And foo is of length 0
+  Then the following data should be generated:
+    | foo     |
+    | null    |
+    | <value> |
+  Examples:
+    | value                   |
+    | 1                       |
+    | 2018-01-01T00:00:00.000 |
+
+Scenario: 'EqualTo' request alongside a contradicting 'ofLength' constraint emits null
+  Given there is a field foo
+    And foo is equal to "22"
+    And foo is of length 1
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+Scenario: 'EqualTo' with a contradictory not 'ofLength' constraint emits null
+  Given there is a field foo
+    And foo is equal to "a"
+    And there is a constraint:
+      """
+        {"not": {"field": "foo", "is": "ofLength", "value": 1}}
+      """
+  Then the following data should be generated:
+    | foo  |
+    | null |

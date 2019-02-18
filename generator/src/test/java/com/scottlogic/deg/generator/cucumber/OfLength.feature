@@ -260,21 +260,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
 
   # COMBINATION OF CONSTRAINTS #
 
-  Scenario: Running a 'ofLength' request alongside a non-contradicting equalTo constraint should be successful
-    Given foo is of length 1
-    And foo is equal to "1"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "1"  |
-
-  Scenario: Running a 'ofLength' request alongside a contradicting equalTo constraint should produce null
-    Given foo is of length 1
-    And foo is equal to "22"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: Running an 'ofLength' request alongside a non-contradicting inSet constraint should be successful
     Given foo is of length 1
     And foo is in set:
