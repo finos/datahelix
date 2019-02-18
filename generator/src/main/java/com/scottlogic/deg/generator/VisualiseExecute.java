@@ -1,20 +1,14 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeSimplifier;
-import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
-import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
@@ -22,22 +16,23 @@ import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfig;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+import picocli.CommandLine;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@picocli.CommandLine.Command(
+@CommandLine.Command(
     name = "visualise",
     description = "Produces a decision tree in DOT format for the specified profile.",
-    mixinStandardHelpOptions = true,
-    version = "1.0")
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    abbreviateSynopsis = true)
 public class VisualiseExecute implements Runnable {
 
     private final VisualisationConfig config;
@@ -73,7 +68,7 @@ public class VisualiseExecute implements Runnable {
 
         final Profile profile;
         try {
-            profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
+            profile = new JsonProfileReader(new NoopProfileValidator()).read(this.configSource.getProfileFile().toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();
@@ -95,13 +90,7 @@ public class VisualiseExecute implements Runnable {
             new RowSpecMerger(fieldSpecMerger),
             new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
 
-        final List<DecisionTree> treePartitions = new NoopTreePartitioner()
-            .splitTreeIntoPartitions(mergedTree)
-            .map(treeOptimiser::optimiseTree)
-            .map(tree -> configSource.dontSimplify() ? tree
-                : new DecisionTreeSimplifier().simplify(tree))
-            .map(treeValidator::markContradictions)
-            .collect(Collectors.toList());
+        DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
         final String title = configSource.shouldHideTitle()
             ? null
@@ -112,7 +101,7 @@ public class VisualiseExecute implements Runnable {
 
         try {
             writeTreeTo(
-                treePartitions.get(0),
+                validatedTree,
                 title,
                 configSource.getOutputPath().resolve(profileBaseName + ".gv"));
         } catch (IOException e) {

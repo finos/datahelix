@@ -1,20 +1,21 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import java.util.ArrayList;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class GenerationConfigValidatorTests {
 
@@ -242,7 +243,6 @@ public class GenerationConfigValidatorTests {
         //Assert
         Assert.assertFalse(validationResult.isValid());
     }
-
     @Test
     public void generateViolationOutputDirNotFile() {
         //Arrange
