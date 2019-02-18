@@ -15,6 +15,7 @@ import java.nio.file.Path;
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
 public class VisualiseCommandLine extends CommandLineBase implements VisualisationConfigSource {
+
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     private File profileFile;
 
@@ -84,6 +85,11 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     @Override
     public boolean overwriteOutputFiles() {
         return overwriteOutputFiles;
+    }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
     }
 
     @Override

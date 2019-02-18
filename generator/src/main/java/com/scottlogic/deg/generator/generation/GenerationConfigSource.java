@@ -3,8 +3,6 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +30,6 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean getValidateProfile();
     boolean shouldDoPartitioning();
     boolean isEnableTracing();
-    boolean shouldViolate();
     boolean overwriteOutputFiles();
     boolean visualiseReductions();
 }

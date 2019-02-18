@@ -10,4 +10,6 @@ public interface ConfigSource {
     boolean dontOptimise();
     boolean overwriteOutputFiles();
 
+    boolean shouldViolate();
+
 }

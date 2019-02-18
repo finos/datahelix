@@ -42,4 +42,9 @@ public class TestVisualisationConfigSource implements VisualisationConfigSource 
     public boolean overwriteOutputFiles() {
         return false;
     }
+
+    @Override
+    public boolean shouldViolate() {
+        return false;
+    }
 }
