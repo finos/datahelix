@@ -1,5 +1,5 @@
 # Generate Options
-Options are optional and case-insensitive
+Option switches are case-sensitive, arguments are case-insensitive
 
 * `--violate` 
    * Generate data which violates profile constraints.
