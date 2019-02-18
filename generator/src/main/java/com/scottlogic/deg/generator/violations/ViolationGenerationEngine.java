@@ -37,8 +37,11 @@ public class ViolationGenerationEngine implements GenerationEngine {
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {
-            generationEngine.generateDataSet(violatedProfile, config,
-                getOutputTargetWithFilename(outputTarget, intFormatter.format(filename)));
+            generationEngine.generateDataSet(
+                violatedProfile,
+                config,
+                getOutputTargetWithFilename(outputTarget, intFormatter.format(filename))
+            );
             filename++;
         }
     }
