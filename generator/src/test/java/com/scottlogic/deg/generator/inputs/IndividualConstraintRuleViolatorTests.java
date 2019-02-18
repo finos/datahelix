@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
@@ -61,11 +59,10 @@ public class IndividualConstraintRuleViolatorTests {
 
     /**
      * Tests that the violate method with an AND constraint returns the correct OR constraint.
-     * VIOLATE(AND(X, Y, Z)) reduces to
+     * VIOLATE(AND(X, Y)) reduces to
      *         OR(
-     *            AND(VIOLATE(X), Y, Z),
-     *            AND(X, VIOLATE(Y), Z),
-     *            AND(X, Y, VIOLATE(Z)))
+     *            AND(VIOLATE(X), Y),
+     *            AND(X, VIOLATE(Y)))
      */
     @Test
     public void violateRule_withAndConstraint_returnsOrConstraint() {
@@ -93,8 +90,33 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
+     * Tests that the violate method with a negated AND constraint returns the inner AND constraint.
+     * VIOLATE(NOT(AND(X,Y))) reduces to AND(X,Y)
+     */
+    @Test
+    public void violateRule_withNegatedAndConstraint_returnsAndConstraint() {
+        //Arrange
+        AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
+        inputConstraints.add(andConstraint.negate());
+
+        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+
+        //Act
+        Rule outputRule = target.violateRule(inputRule);
+
+        //Assert
+        Rule expectedRule = new Rule(
+            ruleInformation,
+            Collections.singleton(andConstraint)
+        );
+
+        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
+        assertRuleTypeEquality(expectedRule, outputRule);
+    }
+
+    /**
      * Tests that the violate method with an OR constraint returns the correct AND constraint.
-     * VIOLATE(OR(X, Y, Z)) reduces to AND(VIOLATE(X), VIOLATE(Y), VIOLATE(Z))
+     * VIOLATE(OR(X, Y)) reduces to AND(VIOLATE(X), VIOLATE(Y))
      */
     @Test
     public void violateRule_withOrConstraint_returnsAndConstraint() {
@@ -115,6 +137,31 @@ public class IndividualConstraintRuleViolatorTests {
                     new ViolatedAtomicConstraint(atomicConstraint1.negate()),
                     new ViolatedAtomicConstraint(atomicConstraint2.negate())
                 ))
+        );
+
+        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
+        assertRuleTypeEquality(expectedRule, outputRule);
+    }
+
+    /**
+     * Tests that the violate method with a negated OR constraint returns the inner OR constraint.
+     * VIOLATE(NOT(OR(X, Y))) reduces to OR(X,Y)
+     */
+    @Test
+    public void violateRule_withNegatedOrConstraint_returnsOrConstraint() {
+        //Arrange
+        OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
+        inputConstraints.add(orConstraint.negate());
+
+        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+
+        //Act
+        Rule outputRule = target.violateRule(inputRule);
+
+        //Assert
+        Rule expectedRule = new Rule(
+            ruleInformation,
+            Collections.singleton(orConstraint)
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -151,6 +198,31 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
+     * Tests that the violate method with a negated IF constraint returns the inner IF constraint.
+     * VIOLATE(NOT(IF(X, then: Y))) reduces to IF(X, then: Y)
+     */
+    @Test
+    public void violateRule_withNegatedIfThenConstraint_returnsIfThenConstraint() {
+        //Arrange
+        ConditionalConstraint ifThenConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
+        inputConstraints.add(ifThenConstraint.negate());
+
+        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+
+        //Act
+        Rule outputRule = target.violateRule(inputRule);
+
+        //Assert
+        Rule expectedRule = new Rule(
+            ruleInformation,
+            Collections.singleton(ifThenConstraint)
+        );
+
+        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
+        assertRuleTypeEquality(expectedRule, outputRule);
+    }
+
+    /**
      * Tests that the violate method with an IF THEN ELSE constraint (conditional constraint) returns the correct OR
      * constraint.
      * VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
@@ -178,6 +250,31 @@ public class IndividualConstraintRuleViolatorTests {
                         new ViolatedAtomicConstraint(atomicConstraint1.negate()),
                         new ViolatedAtomicConstraint(atomicConstraint3.negate()))
                 ))
+        );
+
+        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
+        assertRuleTypeEquality(expectedRule, outputRule);
+    }
+
+    /**
+     * Tests that the violate method with a negated OR constraint returns the inner OR constraint.
+     * VIOLATE(NOT(IF(X, then: Y, else: Z))) reduces to IF(X, then: Y, else: Z)
+     */
+    @Test
+    public void violateRule_withNegatedIfThenElseConstraint_returnsIfThenElseConstraint() {
+        //Arrange
+        ConditionalConstraint ifThenElseConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
+        inputConstraints.add(ifThenElseConstraint.negate());
+
+        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+
+        //Act
+        Rule outputRule = target.violateRule(inputRule);
+
+        //Assert
+        Rule expectedRule = new Rule(
+            ruleInformation,
+            Collections.singleton(ifThenElseConstraint)
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -416,6 +513,9 @@ public class IndividualConstraintRuleViolatorTests {
      * @param actualConstraint The constraint under test.
      */
     private void assertConstraintTypeEquality(Constraint expectedConstraint, Constraint actualConstraint) {
+        if (expectedConstraint == null && actualConstraint == null) {
+            return;
+        }
         Assert.assertEquals("Class types do not match for constraints. Expected: "
                 + expectedConstraint.getClass() + " but was: " + actualConstraint.getClass(),
             expectedConstraint.getClass(),

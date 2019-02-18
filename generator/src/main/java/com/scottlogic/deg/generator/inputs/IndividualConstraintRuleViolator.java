@@ -110,6 +110,13 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
                     ? new OrConstraint(positiveViolation, negativeViolation)
                     : positiveViolation;
         }
+        // VIOLATE(NOT(AND(X,Y))) reduces to AND(X,Y)
+        // VIOLATE(NOT(OR(X,Y))) reduces to OR(X,Y)
+        // VIOLATE(NOT(IF(X,Y))) reduces to IF(X,Y)
+        // VIOLATE(NOT(IF(X,Y,Z))) reduces to IF(X,Y,Z)
+        else if (constraint instanceof NegatedGrammaticalConstraint) {
+            return ((NegatedGrammaticalConstraint)constraint).negatedConstraint;
+        }
         // VIOLATE(AtomicConstraint) reduces to NEGATE(AtomicConstraint)
         // We wrap this in a ViolatedAtomicConstraint to allow Visualise to show which constraint is being violated
         else if (constraint instanceof AtomicConstraint) {

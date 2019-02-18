@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 /**
  * Defines tests for the ConstraintTypeViolationFilter
  */
-public class ConstraintTypeViolationFilterTest {
+public class ConstraintTypeViolationFilterTests {
     private ConstraintTypeViolationFilter target;
 
     @Before

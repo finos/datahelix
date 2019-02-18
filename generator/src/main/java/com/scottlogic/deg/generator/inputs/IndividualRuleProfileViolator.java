@@ -35,21 +35,20 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
 
     @Override
     public List<Profile> violate(Profile profile) {
-        ArrayList<ViolatedProfile> violatedProfiles = new ArrayList<>();
-
-        // Foreach rule in the profile generate a profile with this one rule violated
-        for (Rule rule : profile.rules) {
-            violatedProfiles.add(violateRuleOnProfile(profile, rule));
-        }
+        // For each rule in the profile generate a profile with this one rule violated
+        List<ViolatedProfile> violatedProfiles =
+            profile.rules.stream()
+                .map(rule -> violateRuleOnProfile(profile, rule))
+                .collect(Collectors.toList());
 
         try {
             manifestWriter.writeManifest(violatedProfiles, outputPath);
         }
         catch (Exception e){
-            System.out.println("Failed to write manifest for violated profiles, continuing...");
+            System.err.println("Failed to write manifest for violated profiles, continuing...");
         }
 
-        // The following will allow the conversion to a list of profiles from a list of violated profiles.
+        // The following will allow the conversion to a List<Profile> from a List<ViolatedProfile>.
         return new ArrayList<>(violatedProfiles);
     }
 
