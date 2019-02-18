@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
 import com.scottlogic.deg.generator.Profile;
@@ -11,6 +12,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
@@ -19,6 +21,7 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfile
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
@@ -29,6 +32,7 @@ import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -49,17 +53,17 @@ public class BaseModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(Profile.class).toProvider(ProfileProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
+        bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
+        bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
+        bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
-        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
-        bind(IterationVisualiser.class).to(NoOpIterationVisualiser.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
@@ -71,11 +75,11 @@ public class BaseModule extends AbstractModule {
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
-        bind(DecisionTreeWalker.class).annotatedWith(Names.named("cartesian")).to(CartesianProductDecisionTreeWalker.class);
-        bind(DecisionTreeWalker.class).annotatedWith(Names.named("reductive")).to(ReductiveDecisionTreeWalker.class);
-        bind(DecisionTreeWalker.class).annotatedWith(Names.named("routed")).to(DecisionTreeRoutesTreeWalker.class);
-
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
+
+        bind(VelocityMonitor.class).in(Singleton.class);
+        bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
+        bind(ProfileProvider.class).in(Singleton.class);
     }
 
     private void bindAllCommandLineTypes() {

@@ -34,9 +34,10 @@ public class FileOutputTarget implements OutputTarget{
             directoryPath = Paths.get(System.getProperty("user.dir"));
         }
 
-        String fileNameWithoutExtension = this.filePath.getFileName().toString();
+        String fileNameWithoutExtension = this.filePath.getFileName().toString().replaceAll("\\.[^.]+$", "");
+        String fileName = this.dataSetWriter.getFileName(fileNameWithoutExtension);
 
-        try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileNameWithoutExtension, profileFields)) {
+        try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileName, profileFields)) {
             generatedObjects.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row);

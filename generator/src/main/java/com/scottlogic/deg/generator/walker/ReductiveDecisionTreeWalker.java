@@ -5,8 +5,8 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
 
 import java.io.IOException;
@@ -56,6 +56,13 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+
+        if (nextFixedField == null){
+            //couldn't fix a field, maybe there are contradictions in the root node?
+
+            return Stream.empty();
+        }
+
         return process(rootNode, initialState.with(nextFixedField));
     }
 
@@ -98,6 +105,12 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         //find the next fixed field and continue
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode);
+        if (nextFixedField == null){
+            //couldn't fix a field, maybe there are contradictions in the root node?
+
+            return Stream.empty();
+        }
+
         return process(reducedNode, reductiveState.with(nextFixedField));
     }
 

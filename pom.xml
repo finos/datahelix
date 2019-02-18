@@ -11,6 +11,33 @@
     <name>DataHelix</name>
     <description>Scott Logic's DataHelix project</description>
     <inceptionYear>2018</inceptionYear>
+    <url>https://github.com/ScottLogic/datahelix</url>
+    <organization>
+        <name>Scott Logic</name>
+        <url>https://scottlogic.com/</url>
+    </organization>
+
+    <licenses></licenses>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/ScottLogic/datahelix/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:http://github.com/ScottLogic/datahelix.git</connection>
+        <developerConnection>scm:git:https://github.com/ScottLogic/datahelix.git</developerConnection>
+        <url>https://github.com/ScottLogic/datahelix</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <email></email>
+            <name>Scott Logic</name>
+            <url>http://www.scottlogic.com/</url>
+            <id>scottlogic</id>
+        </developer>
+    </developers>
 
     <modules>
         <module>schemas</module>
@@ -86,6 +113,12 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.0.0</version>
                 <reportSets>
@@ -96,7 +129,60 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.12.1</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>github-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
         </plugins>
     </reporting>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.junit.platform</groupId>
+                            <artifactId>junit-platform-surefire-provider</artifactId>
+                            <version>1.2.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

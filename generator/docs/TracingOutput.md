@@ -9,7 +9,6 @@ Enabling this facility when generating data will:
 * Generate (progressively)*** a JSON formatted file named _&lt;output-file-name&gt;_-trace.json with the meta information (see structure below)
 
 ## Notes on output
-__\*\*__ Note: this facility is not currently configurable, it requires a rebuild with the `SourceTracingDataSetWriter` used with the `MultiDataSetWriter` in  `Generate.java`.   
 __\*\*\*__ This JSON file is generated progressively, as such you can read the file with a text-editor during generation but it will not be valid JSON until the generator has exited. In the above example the final `]` will only be emitted after rows have been emitted.
 
 ## JSON structure

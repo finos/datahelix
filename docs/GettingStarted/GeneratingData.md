@@ -2,6 +2,7 @@
 
 This page details how to generate data with a given profile.
 
+
 ## Using the Command Line
 
 To generate data run the following command from the command line
@@ -90,6 +91,9 @@ The manifest shows which rules are violated in which file.
 
 ## Hints and Tips
 
+* The generator will output velocity and row data to the console as standard
+(see [options](../Options/GenerateOptions.md) for other monitoring choices).
+    * If multiple monitoring options are selected the most detailed monitor will be implemented
 * Ensure any desired output files are not being used by any other programs or the generator will not be able to run
     * If a file already exists it will be overwritten
 * Violated data generation will produce one output file per rule being violated
