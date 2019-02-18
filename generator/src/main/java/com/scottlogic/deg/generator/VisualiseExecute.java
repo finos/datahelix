@@ -103,7 +103,7 @@ public class VisualiseExecute implements Runnable {
             writeTreeTo(
                 validatedTree,
                 title,
-                configSource.getOutputPath().resolve(profileBaseName + ".gv"));
+                configSource.getOutputPath());
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();

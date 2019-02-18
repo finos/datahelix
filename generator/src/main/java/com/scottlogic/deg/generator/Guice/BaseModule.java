@@ -50,6 +50,8 @@ public class BaseModule extends AbstractModule {
     @Override
     protected void configure() {
         // Bind command line to correct implementation
+        bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+        bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
         bindAllCommandLineTypes();
 
         // Bind providers - used to retrieve implementations based on user input
@@ -87,12 +89,10 @@ public class BaseModule extends AbstractModule {
     private void bindAllCommandLineTypes() {
         if (this.configSource instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
-            bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
-            bind(ConfigSource.class).to(GenerateCommandLine.class);
+            bind(ConfigSource.class).to(GenerationConfigSource.class);
         } else if (this.configSource instanceof VisualiseCommandLine) {
             bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
-            bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
-            bind(ConfigSource.class).to(VisualiseCommandLine.class);
+            bind(ConfigSource.class).to(VisualisationConfigSource.class);
         }
     }
 }
