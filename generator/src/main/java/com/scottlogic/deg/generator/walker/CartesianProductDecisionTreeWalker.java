@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
-    private final ConstraintReducer constraintReducer;
+    private final ConstraintMapper constraintMapper;
     private final RowSpecMerger rowSpecMerger;
 
     @Inject
     public CartesianProductDecisionTreeWalker(
-        ConstraintReducer constraintReducer,
+        ConstraintMapper constraintMapper,
         RowSpecMerger rowSpecMerger) {
-        this.constraintReducer = constraintReducer;
+        this.constraintMapper = constraintMapper;
         this.rowSpecMerger = rowSpecMerger;
     }
 
@@ -55,7 +55,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
-            final Optional<RowSpec> nominalRowSpec = option.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+            final Optional<RowSpec> nominalRowSpec = option.getOrCreateRowSpec(() -> constraintMapper.mapToRowSpec(
                     profileFields,
                     option.getAtomicConstraints()
             ));

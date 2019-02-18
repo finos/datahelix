@@ -25,9 +25,9 @@ import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
 
-class ConstraintReducerTest {
+class ConstraintMapperTest {
 
-    private final ConstraintReducer constraintReducer = new ConstraintReducer(
+    private final ConstraintMapper constraintMapper = new ConstraintMapper(
         new FieldSpecFactory(),
         new FieldSpecMerger()
     );
@@ -51,7 +51,7 @@ class ConstraintReducerTest {
             new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.STRING, rules()));
 
         // ACT
-        final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
+        final RowSpec reducedConstraints = constraintMapper.mapToRowSpec(
             fieldList,
             constraints).get();
 
@@ -130,7 +130,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -164,7 +164,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -199,7 +199,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -233,7 +233,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -268,7 +268,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -303,7 +303,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -337,7 +337,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -372,7 +372,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -407,7 +407,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -442,7 +442,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -477,7 +477,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -512,7 +512,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -548,7 +548,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -584,7 +584,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -619,7 +619,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -655,7 +655,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -692,7 +692,7 @@ class ConstraintReducerTest {
             new IsAfterConstantDateTimeConstraint(field, startTimestamp, rules()),
             new IsBeforeConstantDateTimeConstraint(field, endTimestamp, rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -732,7 +732,7 @@ class ConstraintReducerTest {
         List<AtomicConstraint> constraints = Collections.singletonList(
             new MatchesRegexConstraint(field, Pattern.compile(pattern), rules()));
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -763,9 +763,9 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Hello '$1'", rules())
         );
 
-        ConstraintReducer testObject = new ConstraintReducer(new FieldSpecFactory(), new FieldSpecMerger());
+        ConstraintMapper testObject = new ConstraintMapper(new FieldSpecFactory(), new FieldSpecMerger());
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -800,11 +800,11 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Ipsum '$1'", rules())
         );
 
-        ConstraintReducer testObject = new ConstraintReducer(new FieldSpecFactory(), new FieldSpecMerger());
+        ConstraintMapper testObject = new ConstraintMapper(new FieldSpecFactory(), new FieldSpecMerger());
 
         Assertions.assertThrows(
             UnsupportedOperationException.class,
-            () -> constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints));
+            () -> constraintMapper.mapToRowSpec(profileFields, constraints));
     }
 
     @Test
@@ -816,7 +816,7 @@ class ConstraintReducerTest {
             new IsStringLongerThanConstraint(field, 5, rules())
         );
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -847,7 +847,7 @@ class ConstraintReducerTest {
             new IsStringShorterThanConstraint(field, 5, rules())
         );
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -877,7 +877,7 @@ class ConstraintReducerTest {
             new StringHasLengthConstraint(field, 5, rules())
         );
 
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
+        RowSpec testOutput = constraintMapper.mapToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
@@ -909,7 +909,7 @@ class ConstraintReducerTest {
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)), rules())
         );
 
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Optional<RowSpec> testOutput = constraintMapper.mapToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
@@ -930,7 +930,7 @@ class ConstraintReducerTest {
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", temporalValue)), rules())
         );
 
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Optional<RowSpec> testOutput = constraintMapper.mapToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
@@ -951,7 +951,7 @@ class ConstraintReducerTest {
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, temporalValue)), rules())
         );
 
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Optional<RowSpec> testOutput = constraintMapper.mapToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
@@ -973,7 +973,7 @@ class ConstraintReducerTest {
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, temporalValue, oneHourLaterTemporalValue)), rules())
         );
 
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Optional<RowSpec> testOutput = constraintMapper.mapToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
@@ -994,7 +994,7 @@ class ConstraintReducerTest {
             new MatchesRegexConstraint(field, Pattern.compile(infinitePattern), rules()),
             new MatchesRegexConstraint(field, Pattern.compile(singletonPattern), rules()));
 
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Optional<RowSpec> testOutput = constraintMapper.mapToRowSpec(profileFields, constraints);
 
         FieldSpec outputSpec = testOutput.get().getSpecForField(field);
 
@@ -1014,7 +1014,7 @@ class ConstraintReducerTest {
         AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100, rules());
         AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"), rules());
 
-        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
+        Optional<FieldSpec> result = this.constraintMapper.mapToFieldSpec(
             Arrays.asList(violatedConstraint, ofLengthConstraint, matchesRegexConstraint));
 
         Assert.assertThat(result.isPresent(), is(true));
@@ -1027,7 +1027,7 @@ class ConstraintReducerTest {
         Field field = new Field("field");
         AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules());
 
-        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
+        Optional<FieldSpec> result = this.constraintMapper.mapToFieldSpec(
             Arrays.asList(ofTypeString, ofTypeString.negate()));
 
         Assert.assertThat(result.isPresent(), is(true));

@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
@@ -17,17 +17,17 @@ import java.util.stream.Stream;
 
 public class ReductiveRowSpecGenerator {
 
-    private final ConstraintReducer constraintReducer;
+    private final ConstraintMapper constraintMapper;
     private final FieldSpecMerger fieldSpecMerger;
     private final ReductiveDataGeneratorMonitor monitor;
 
     @Inject
     public ReductiveRowSpecGenerator(
-        ConstraintReducer constraintReducer,
+        ConstraintMapper constraintMapper,
         FieldSpecMerger fieldSpecMerger,
         ReductiveDataGeneratorMonitor monitor) {
         this.fieldSpecMerger = fieldSpecMerger;
-        this.constraintReducer = constraintReducer;
+        this.constraintMapper = constraintMapper;
         this.monitor = monitor;
     }
 
@@ -84,7 +84,7 @@ public class ReductiveRowSpecGenerator {
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
     private FieldSpec createFieldSpec(FixedField fixedField, Collection<AtomicConstraint> constraintsForField) {
         FieldSpec fixedFieldSpec = fixedField.getFieldSpecForCurrentValue();
-        Optional<FieldSpec> constrainedFieldSpecOpt = this.constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
+        Optional<FieldSpec> constrainedFieldSpecOpt = this.constraintMapper.mapToFieldSpec(constraintsForField);
 
         if (!constrainedFieldSpecOpt.isPresent()){
             return null; //this shouldn't happen: caused by constraints for one of the fixed fields contradicting each other (issue in optimising and/or reducing) - see issue #250

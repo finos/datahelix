@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.notNullValue;
 class CartesianProductDecisionTreeWalkerTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
-            new ConstraintReducer(
+            new ConstraintMapper(
                     new FieldSpecFactory(),
                     fieldSpecMerger
             ),

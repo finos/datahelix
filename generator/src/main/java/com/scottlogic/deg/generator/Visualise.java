@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
@@ -87,7 +87,7 @@ public class Visualise implements Runnable {
         StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
             profile.fields,
             new RowSpecMerger(fieldSpecMerger),
-            new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
+            new ConstraintMapper(new FieldSpecFactory(), fieldSpecMerger));
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 

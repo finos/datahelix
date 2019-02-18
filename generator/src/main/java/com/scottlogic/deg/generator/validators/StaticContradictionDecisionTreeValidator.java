@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -16,12 +16,12 @@ public class StaticContradictionDecisionTreeValidator {
 
     private final ProfileFields profileFields;
     private final RowSpecMerger rowSpecMerger;
-    private final ConstraintReducer constraintReducer;
+    private final ConstraintMapper constraintMapper;
 
-    public StaticContradictionDecisionTreeValidator(ProfileFields profileFields, RowSpecMerger rowSpecMerger, ConstraintReducer constraintReducer){
+    public StaticContradictionDecisionTreeValidator(ProfileFields profileFields, RowSpecMerger rowSpecMerger, ConstraintMapper constraintMapper){
         this.profileFields = profileFields;
         this.rowSpecMerger = rowSpecMerger;
-        this.constraintReducer = constraintReducer;
+        this.constraintMapper = constraintMapper;
     }
 
     public DecisionTree markContradictions(DecisionTree tree) {
@@ -33,7 +33,7 @@ public class StaticContradictionDecisionTreeValidator {
     }
 
     public ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec){
-        final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+        final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintMapper.mapToRowSpec(
             profileFields,
             node.getAtomicConstraints()
         ));

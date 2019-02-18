@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -93,8 +93,8 @@ class ReductiveRowSpecGeneratorTests {
 
     @Test
     void createRowSpecFromFixedValues_reducerReturnsEmptyOptionalFieldSpec_returnsEmptyStream() {
-        ConstraintReducer reducer = mock(ConstraintReducer.class);
-        when(reducer.reduceConstraintsToFieldSpec(Matchers.<Collection<AtomicConstraint>>any()))
+        ConstraintMapper reducer = mock(ConstraintMapper.class);
+        when(reducer.mapToFieldSpec(Matchers.<Collection<AtomicConstraint>>any()))
             .thenReturn(Optional.empty());
 
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
@@ -137,11 +137,11 @@ class ReductiveRowSpecGeneratorTests {
     }
 
     private ReductiveRowSpecGenerator getRowSpecGenerator(
-        ConstraintReducer reducer) {
+        ConstraintMapper reducer) {
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         if (reducer == null){
-            reducer = new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger);
+            reducer = new ConstraintMapper(new FieldSpecFactory(), fieldSpecMerger);
         }
         return new ReductiveRowSpecGenerator(
             reducer,

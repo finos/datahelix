@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ConstraintReducer {
+public class ConstraintMapper {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
 
     @Inject
-    public ConstraintReducer(
+    public ConstraintMapper(
             FieldSpecFactory fieldSpecFactory,
             FieldSpecMerger fieldSpecMerger
     ) {
@@ -31,7 +31,7 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
+    public Optional<RowSpec> mapToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
         final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
             .collect(
@@ -44,7 +44,7 @@ public class ConstraintReducer {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    field ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
+                    field ->  mapToFieldSpec(fieldToConstraints.get(field))));
 
         final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
             .filter(map -> map.values().stream().allMatch(Optional::isPresent))
@@ -62,12 +62,12 @@ public class ConstraintReducer {
                 map));
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
-        return reduceConstraintsToFieldSpec(constraints, Collections.emptySet());
+    public Optional<FieldSpec> mapToFieldSpec(Iterable<AtomicConstraint> constraints) {
+        return mapToFieldSpec(constraints, Collections.emptySet());
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
-                                                            Iterable<AtomicConstraint> decisionConstraints) {
+    public Optional<FieldSpec> mapToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
+                                              Iterable<AtomicConstraint> decisionConstraints) {
         if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
             return Optional.of(FieldSpec.Empty);
         }

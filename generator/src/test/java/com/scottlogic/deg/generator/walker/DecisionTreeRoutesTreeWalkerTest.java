@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -26,7 +26,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
     @Test
     void shouldEnumerateRoutes() {
-        ConstraintReducer reducer = new TestConstraintReducer();
+        ConstraintMapper reducer = new TestConstraintReducer();
         RowSpecMerger rowSpecMerger = new TestRowSpecMerger();
         TestRowSpecRouteProducer routeProducer = new TestRowSpecRouteProducer();
         DecisionTreeRoutesTreeWalker walker = new DecisionTreeRoutesTreeWalker(
@@ -57,7 +57,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         RowSpecRoute route1 = route(null, route(singleDecisionOption));
         RowSpec expectedRowSpec = rowSpec("single decision");
-        ConstraintReducer reducer = new TestConstraintReducer(
+        ConstraintMapper reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(singleDecisionOption, expectedRowSpec)
         );
@@ -94,7 +94,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
         RowSpecRoute route1 = route(null, route(leftDecisionOption), route(rightDecisionOption));
-        ConstraintReducer reducer = new TestConstraintReducer(
+        ConstraintMapper reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
             new ConstraintNodeToRowSpecMap(rightDecisionOption, rowSpec("right decision"))
@@ -131,7 +131,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
         RowSpecRoute route1 = route(null, route(leftDecisionOption), route(conflictingOption));
-        ConstraintReducer reducer = new TestConstraintReducer(
+        ConstraintMapper reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
             new ConstraintNodeToRowSpecMap(conflictingOption, null)
@@ -168,7 +168,7 @@ class DecisionTreeRoutesTreeWalkerTest {
 
         RowSpecRoute route1 = route(null, route(leftDecisionOption));
         RowSpecRoute route2 = route(null, route(rightDecisionOption));
-        ConstraintReducer reducer = new TestConstraintReducer(
+        ConstraintMapper reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
             new ConstraintNodeToRowSpecMap(rightDecisionOption, rowSpec("right decision"))
@@ -205,7 +205,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         );
         RowSpecRoute route1 = route(null, route(leftDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
-        ConstraintReducer reducer = new TestConstraintReducer(
+        ConstraintMapper reducer = new TestConstraintReducer(
             new ConstraintNodeToRowSpecMap(rootNode, rowSpec("root")),
             new ConstraintNodeToRowSpecMap(leftDecisionOption, rowSpec("left decision")),
             new ConstraintNodeToRowSpecMap(rightDecisionOption, rowSpec("right decision"))
@@ -243,7 +243,7 @@ class DecisionTreeRoutesTreeWalkerTest {
             Arrays.asList(decisions));
     }
 
-    private class TestConstraintReducer extends ConstraintReducer {
+    private class TestConstraintReducer extends ConstraintMapper {
         private final ConstraintNodeToRowSpecMap[] maps;
 
         TestConstraintReducer(ConstraintNodeToRowSpecMap... maps) {
@@ -252,7 +252,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         }
 
         @Override
-        public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> atomicConstraints) {
+        public Optional<RowSpec> mapToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> atomicConstraints) {
             for (ConstraintNodeToRowSpecMap map : maps){
                 if (constraintsMatch(map.constraint, atomicConstraints.iterator())){
                     return map.rowSpec == null

@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 
 import java.util.HashSet;
@@ -22,19 +22,19 @@ import java.util.stream.Stream;
 
 public class FixedFieldBuilder {
 
-    private final ConstraintReducer constraintReducer;
+    private final ConstraintMapper constraintMapper;
     private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator generator;
 
     @Inject
     public FixedFieldBuilder(
-        ConstraintReducer constraintReducer,
+        ConstraintMapper constraintMapper,
         FixFieldStrategy fixFieldStrategy,
         ReductiveDataGeneratorMonitor monitor,
         FieldSpecValueGenerator generator) {
         this.fixFieldStrategy = fixFieldStrategy;
-        this.constraintReducer = constraintReducer;
+        this.constraintMapper = constraintMapper;
         this.monitor = monitor;
         this.generator = generator;
     }
@@ -64,7 +64,7 @@ public class FixedFieldBuilder {
         Set<AtomicConstraint> constraintsForDecisions = getAtomicConstraintsInDecisions(field, rootNode);
 
         //produce a fieldspec for all the atomic constraints
-        Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
+        Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintMapper.mapToFieldSpec(
             constraintsForRootNode,
             constraintsForDecisions);
 

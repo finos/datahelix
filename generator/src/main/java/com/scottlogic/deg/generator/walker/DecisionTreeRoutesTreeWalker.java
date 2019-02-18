@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.reducer.ConstraintMapper;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
@@ -16,16 +16,16 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
-    private final ConstraintReducer constraintReducer;
+    private final ConstraintMapper constraintMapper;
     private final RowSpecMerger rowSpecMerger;
     private final RowSpecRouteProducer producer;
 
     @Inject
     public DecisionTreeRoutesTreeWalker(
-        ConstraintReducer constraintReducer,
+        ConstraintMapper constraintMapper,
         RowSpecMerger rowSpecMerger,
         RowSpecRouteProducer producer) {
-        this.constraintReducer = constraintReducer;
+        this.constraintMapper = constraintMapper;
         this.rowSpecMerger = rowSpecMerger;
         this.producer = producer;
     }
@@ -59,7 +59,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
     }
 
     private RowSpec getMergedRowSpec(ProfileFields fields, RowSpec accumulatedSpec, ConstraintNode decisionOption, RowSpecRoute route) {
-        Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
+        Optional<RowSpec> nominalRowSpec = constraintMapper.mapToRowSpec(
             fields,
             decisionOption.getAtomicConstraints());
 
@@ -89,7 +89,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
     }
 
     private RowSpec getRootRowSpec(ProfileFields fields, ConstraintNode rootNode) {
-        return constraintReducer.reduceConstraintsToRowSpec(
+        return constraintMapper.mapToRowSpec(
             fields,
             rootNode.getAtomicConstraints()).get();
     }
