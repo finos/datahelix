@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public class InMemoryOutputTarget implements OutputTarget {
 
-     final CucumberTestState testState;
+    final CucumberTestState testState;
 
     @Inject
     public InMemoryOutputTarget(CucumberTestState testState) {
@@ -22,18 +22,18 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException{
+    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
     @Override
     public boolean exists() {
-        return false;
+        return testState.shouldViolate;
     }
 
     @Override
     public boolean isDirectory() {
-        return false;
+        return testState.shouldViolate;
     }
 
     @Override
@@ -45,9 +45,9 @@ public class InMemoryOutputTarget implements OutputTarget {
         return generatedObjects
             .collect(Collectors.toList())
             .stream()
-            .map(genObj ->{
+            .map(genObj -> {
 
-                if (genObj == null){
+                if (genObj == null) {
                     throw new IllegalStateException("GeneratedObject is null");
                 }
 

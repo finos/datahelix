@@ -27,12 +27,11 @@ public class CucumberTestModule extends AbstractModule {
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
+        bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
 
         if (testState.shouldViolate) {
-            bind(OutputTarget.class).to(InMemoryViolateOutputTarget.class).in(Singleton.class);
             bind(GenerationEngine.class).to(ViolationGenerationEngine.class);
         } else {
-            bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
             bind(GenerationEngine.class).to(StandardGenerationEngine.class);
         }
     }
