@@ -88,9 +88,11 @@ public class BaseModule extends AbstractModule {
         if (this.configSource instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
             bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+            bind(ConfigSource.class).to(GenerateCommandLine.class);
         } else if (this.configSource instanceof VisualiseCommandLine) {
             bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
             bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
+            bind(ConfigSource.class).to(VisualiseCommandLine.class);
         }
     }
 }
