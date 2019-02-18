@@ -1,9 +1,8 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 
@@ -17,12 +16,12 @@ import java.io.IOException;
  * */
 @Deprecated
 public class ProfileProvider {
-    private final GenerationConfigSource configSource;
+    private final ConfigSource configSource;
     private final ProfileReader profileReader;
     private Profile profile;
 
     @Inject
-    public ProfileProvider(GenerationConfigSource configSource, ProfileReader profileReader) {
+    public ProfileProvider(ConfigSource configSource, ProfileReader profileReader) {
         this.configSource = configSource;
         this.profileReader = profileReader;
     }
