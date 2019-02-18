@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/*
+ * Takes multiple AtomicConstraints and combines them into FieldSpec's or RowSpec's
+ * Which can then be used to generate data
+ */
 public class ConstraintMapper {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
