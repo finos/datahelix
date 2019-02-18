@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
@@ -24,6 +25,7 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
+        bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
 
         if (testState.shouldViolate) {
