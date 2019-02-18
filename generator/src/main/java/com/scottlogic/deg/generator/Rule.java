@@ -9,12 +9,12 @@ import java.util.Collection;
 
 public class Rule implements VisitableProfileElement
 {
-    public final RuleInformation rule;
+    public final RuleInformation ruleInformation;
     public final Collection<Constraint> constraints;
 
-    public Rule(RuleInformation rule, Collection<Constraint> constraints)
+    public Rule(RuleInformation ruleInformation, Collection<Constraint> constraints)
     {
-        this.rule = rule;
+        this.ruleInformation = ruleInformation;
         this.constraints = constraints;
     }
 

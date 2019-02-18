@@ -9,16 +9,18 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
+import com.scottlogic.deg.generator.inputs.IndividualRuleProfileViolator;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
@@ -33,7 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -99,7 +100,13 @@ class ExampleProfilesViolationTests {
                                 new JavaUtilRandomNumberGenerator()))),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
-                ViolationGenerationEngine violationGenerationEngine = new ViolationGenerationEngine(null, engine, new ManifestWriter(), Collections.emptyList());
+                ViolationGenerationEngine violationGenerationEngine =
+                    new ViolationGenerationEngine(
+                        new IndividualRuleProfileViolator(
+                            new ManifestWriter(),
+                            null,
+                            new IndividualConstraintRuleViolator(new ArrayList<>())),
+                        engine);
 
                 consumer.generate(
                     violationGenerationEngine,
