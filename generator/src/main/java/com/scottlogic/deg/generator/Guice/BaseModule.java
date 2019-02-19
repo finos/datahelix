@@ -1,20 +1,20 @@
 package com.scottlogic.deg.generator.Guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.TypeLiteral;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
+import com.scottlogic.deg.generator.CommandLine.VisualiseCommandLine;
+import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.inputs.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.*;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
@@ -23,7 +23,8 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.generator.walker.*;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
@@ -39,15 +40,17 @@ import java.util.List;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final GenerationConfigSource configSource;
+    private final ConfigSource configSource;
 
-    public BaseModule(GenerationConfigSource configSource) {
+    public BaseModule(ConfigSource configSource) {
         this.configSource = configSource;
     }
 
     @Override
     protected void configure() {
         // Bind command line to correct implementation
+        bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+        bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
         bindAllCommandLineTypes();
 
         // Bind providers - used to retrieve implementations based on user input
@@ -86,7 +89,10 @@ public class BaseModule extends AbstractModule {
     private void bindAllCommandLineTypes() {
         if (this.configSource instanceof GenerateCommandLine) {
             bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
-            bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
+            bind(ConfigSource.class).to(GenerationConfigSource.class);
+        } else if (this.configSource instanceof VisualiseCommandLine) {
+            bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
+            bind(ConfigSource.class).to(VisualisationConfigSource.class);
         }
     }
 }

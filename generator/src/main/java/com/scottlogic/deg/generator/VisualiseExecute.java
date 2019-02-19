@@ -1,17 +1,22 @@
 package com.scottlogic.deg.generator;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
+import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import picocli.CommandLine;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -27,48 +32,38 @@ import java.util.stream.Stream;
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class Visualise implements Runnable {
-    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
-    private File profileFile;
+public class VisualiseExecute implements Runnable {
 
-    @CommandLine.Parameters(index = "1", description = "The path of the output visualise file.")
-    private Path outputPath;
+    private final ProfileReader profileReader;
+    private final VisualisationConfigSource configSource;
+    private final VisualisationConfigValidator validator;
+    private final ErrorReporter errorReporter;
 
-    @CommandLine.Option(
-        names = {"-t", "--title"},
-        description = "The title to place at the top of the file")
-    private String titleOverride;
-
-    @CommandLine.Option(
-        names = {"--no-title"},
-        description = "Hides the title from the output")
-    private boolean shouldHideTitle;
-
-    @CommandLine.Option(
-            names = {"--no-optimise"},
-            description = "Prevents tree optimisation",
-            hidden = true)
-    private boolean dontOptimise;
-
-    @CommandLine.Option(
-        names = {"--no-simplify"},
-        description = "Prevents tree simplification",
-        hidden = true)
-    private boolean dontSimplify;
-
-    @CommandLine.Option(
-        names = "--help",
-        usageHelp = true,
-        description = "Display these available command line options")
-    boolean help;
+    @Inject
+    public VisualiseExecute(ProfileReader profileReader,
+                            VisualisationConfigSource configSource,
+                            VisualisationConfigValidator validator,
+                            ErrorReporter errorReporter) {
+        this.profileReader = profileReader;
+        this.configSource = configSource;
+        this.validator = validator;
+        this.errorReporter = errorReporter;
+    }
 
     @Override
     public void run() {
-        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
-        final Profile profile;
 
+        final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
+
+        final Profile profile;
         try {
-            profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
+            profile = new JsonProfileReader(new NoopProfileValidator()).read(this.configSource.getProfileFile().toPath());
+
+            ValidationResult validationResult = validator.validateCommandLine();
+            if (!validationResult.isValid()) {
+                errorReporter.display(validationResult);
+                return;
+            }
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();
@@ -79,10 +74,11 @@ public class Visualise implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
         final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
-        final String profileBaseName = profileFile.getName().replaceFirst("\\.[^.]+$", "");
-        final DecisionTreeOptimiser treeOptimiser = dontOptimise
-                ? new NoopDecisionTreeOptimiser()
-                : new MostProlificConstraintOptimiser();
+        final String profileBaseName = configSource.getProfileFile().getName()
+            .replaceFirst("\\.[^.]+$", "");
+        final DecisionTreeOptimiser treeOptimiser = configSource.dontOptimise()
+            ? new NoopDecisionTreeOptimiser()
+            : new MostProlificConstraintOptimiser();
 
         StaticContradictionDecisionTreeValidator treeValidator = new StaticContradictionDecisionTreeValidator(
             profile.fields,
@@ -91,18 +87,18 @@ public class Visualise implements Runnable {
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
-        final String title = shouldHideTitle
+        final String title = configSource.shouldHideTitle()
             ? null
-            : Stream.of(titleOverride, profile.description, profileBaseName)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+            : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
 
         try {
             writeTreeTo(
                 validatedTree,
                 title,
-                outputPath);
+                configSource.getOutputPath());
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -116,8 +112,8 @@ public class Visualise implements Runnable {
         throws IOException {
 
         try (OutputStreamWriter outWriter = new OutputStreamWriter(
-                new FileOutputStream(outputFilePath.toString()),
-                StandardCharsets.UTF_8)) {
+            new FileOutputStream(outputFilePath.toString()),
+            StandardCharsets.UTF_8)) {
 
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
                 decisionTree,
