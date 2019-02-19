@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.utils;
 
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,26 +27,17 @@ public class FileUtils {
     }
 
 
-    public boolean exists(OutputTarget target) {
-        if (!(target instanceof FileOutputTarget)) {
-            return false;
-        }
-        return Files.exists(((FileOutputTarget) target).getFilePath());
+    public boolean exists(FileOutputTarget target) {
+        return Files.exists(target.getFilePath());
     }
 
-    public boolean isDirectory(OutputTarget target) {
-        if (!(target instanceof FileOutputTarget)) {
-            return false;
-        }
-        return Files.isDirectory(((FileOutputTarget) target).getFilePath());
+    public boolean isDirectory(FileOutputTarget target) {
+        return Files.isDirectory(target.getFilePath());
     }
 
-    public boolean isDirectoryEmpty(OutputTarget target, int fileCount) {
-        if (!(target instanceof FileOutputTarget)) {
-            return false;
-        }
+    public boolean isDirectoryEmpty(FileOutputTarget target, int fileCount) {
         try {
-            Path filepath = ((FileOutputTarget) target).getFilePath();
+            Path filepath = target.getFilePath();
             if (directoryContainsManifestJsonFile(filepath) ||
                 directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
                 return false;
