@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.utils;
 
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,13 +35,9 @@ public class FileUtils {
     }
 
     public boolean isDirectoryEmpty(FileOutputTarget target, int fileCount) {
-        try {
-            Path filepath = target.getFilePath();
-            if (directoryContainsManifestJsonFile(filepath) ||
-                directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
-                return false;
-            }
-        } catch (IOException e) {
+        Path filepath = target.getFilePath();
+        if (directoryContainsManifestJsonFile(filepath) ||
+            directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
             return false;
         }
         return true;
@@ -52,7 +47,7 @@ public class FileUtils {
         return Files.exists(Paths.get(filePath.toString(), "manifest.json"));
     }
 
-    private boolean directoryContainsFilesWithExt(Path filePath, String ext, int fileCount) throws IOException {
+    private boolean directoryContainsFilesWithExt(Path filePath, String ext, int fileCount) {
         DecimalFormat intFormatter = FileUtils.getDecimalFormat(fileCount);
         for (int x = 1; x <= fileCount; x++) {
             if (Files.exists(Paths.get(filePath.toString(), intFormatter.format(x) + "." + ext))) {

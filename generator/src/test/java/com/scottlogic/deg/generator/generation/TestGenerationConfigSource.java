@@ -94,6 +94,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public boolean shouldViolate() {
         return false;
     }
+
     @Override
     public boolean overwriteOutputFiles() {
         return false;

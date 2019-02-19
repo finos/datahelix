@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
 public class GenerationConfigValidatorTests {
 
     private Profile profile;
-    private FileUtils fileUtils=mock(FileUtils.class);
-    private FileOutputTarget outputTarget = mock(FileOutputTarget.class);
+    private FileUtils mockFileUtils = mock(FileUtils.class);
+    private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
     private GenerationConfig config = new GenerationConfig(
         new TestGenerationConfigSource(
@@ -36,9 +36,9 @@ public class GenerationConfigValidatorTests {
     @BeforeEach
     void setup() {
         //Arrange
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
-        when(fileUtils.isDirectory(anyObject())).thenReturn(false);
-        when(fileUtils.exists(anyObject())).thenReturn(false);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
     }
@@ -63,7 +63,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -82,7 +82,7 @@ public class GenerationConfigValidatorTests {
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -103,7 +103,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -123,7 +123,7 @@ public class GenerationConfigValidatorTests {
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE
             )
         );
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -143,7 +143,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -156,7 +156,7 @@ public class GenerationConfigValidatorTests {
     @Test
     public void generateOutputFileAlreadyExists() {
         //Arrange
-        when(fileUtils.exists(anyObject())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator
@@ -169,7 +169,7 @@ public class GenerationConfigValidatorTests {
     @Test
     public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
         //Arrange
-        when(fileUtils.exists(anyObject())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
@@ -194,7 +194,7 @@ public class GenerationConfigValidatorTests {
     @Test
     public void generateOutputDirNotFile() {
         //Arrange
-        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator
@@ -208,7 +208,7 @@ public class GenerationConfigValidatorTests {
     public void generateViolationOutputFileAlreadyExists() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(fileUtils.exists(anyObject())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator
@@ -222,8 +222,8 @@ public class GenerationConfigValidatorTests {
     public void generateViolationOutputFileDoesNotExist() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(fileUtils.isDirectory(anyObject())).thenReturn(false);
-        when(fileUtils.exists(anyObject())).thenReturn(false);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
 
         //Act
         ValidationResult validationResult = validator
@@ -237,9 +237,9 @@ public class GenerationConfigValidatorTests {
     public void generateViolationOutputDirNotExists() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(fileUtils.exists(anyObject())).thenReturn(false);
-        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
-       when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator
@@ -253,9 +253,9 @@ public class GenerationConfigValidatorTests {
     public void generateViolationOutputDirNotFile() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(fileUtils.exists(anyObject())).thenReturn(true);
-        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
-        when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(true);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
@@ -268,8 +268,8 @@ public class GenerationConfigValidatorTests {
     public void generateViolationOutputDirNotEmpty() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
-        when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(false);
+        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(false);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
