@@ -13,8 +13,10 @@ import java.util.Optional;
 @picocli.CommandLine.Command(
     name = "generate",
     description = "Produces data using any options provided.",
-    mixinStandardHelpOptions = true,
-    version = "1.0")
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    abbreviateSynopsis = true)
 public class GenerateCommandLine extends CommandLineBase {
 
     @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
@@ -23,7 +25,7 @@ public class GenerateCommandLine extends CommandLineBase {
     @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
     private Path outputPath;
 
-    @CommandLine.Option(names = {"-t", "--t", "--generation-type"},
+    @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (" +
             GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
             ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
@@ -31,7 +33,7 @@ public class GenerateCommandLine extends CommandLineBase {
         defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
     private GenerationConfig.DataGenerationType generationType;
 
-    @CommandLine.Option(names = {"-c", "--c", "--combination-strategy"},
+    @CommandLine.Option(names = {"-c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (" +
             GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
             GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
@@ -52,19 +54,19 @@ public class GenerateCommandLine extends CommandLineBase {
         hidden = true)
     private boolean dontPartitionTrees;
 
-    @CommandLine.Option(names = {"-w", "--w", "--walker-type"},
+    @CommandLine.Option(names = {"-w", "--walker-type"},
         description = "Determines the tree walker that should be used.",
         defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 
     @CommandLine.Option(
-        names = {"-n", "--n", "--max-rows"},
+        names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
     private Long maxRows;
 
     @CommandLine.Option(
-        names = {"-v", "--v", "--validate-profile"},
+        names = {"--validate-profile"},
         description = "Defines whether to validate the profile (" +
             true+ ", " +
             false + ").")
@@ -100,6 +102,12 @@ public class GenerateCommandLine extends CommandLineBase {
         names = {"--visualise-reductions"},
         description = "Visualise each tree reduction")
     private Boolean visualiseReductions = false;
+
+    @CommandLine.Option(
+        names = "--help",
+        usageHelp = true,
+        description = "Display these available command line options")
+    boolean help;
 
     @Override
     public boolean shouldDoPartitioning() {

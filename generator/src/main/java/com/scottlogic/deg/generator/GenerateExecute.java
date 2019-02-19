@@ -48,7 +48,7 @@ public class GenerateExecute implements Runnable {
         }
 
         try {
-            Profile profile = this.profileReader.read(this.configSource.getProfileFile().toPath());
+            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
             generationEngine.generateDataSet(profile, config, fileOutputTarget);
 
