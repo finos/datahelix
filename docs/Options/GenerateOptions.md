@@ -2,7 +2,7 @@
 Option switches are case-sensitive, arguments are case-insensitive
 
 * `--overwrite`
-    * Overwrite existing output files. Options are: `true` or `false` (default)
+    * Overwrite existing output files.
 * `--violate`
    * Generate data which violates profile constraints.
 * `--dont-violate` <epistemic constraints...>
