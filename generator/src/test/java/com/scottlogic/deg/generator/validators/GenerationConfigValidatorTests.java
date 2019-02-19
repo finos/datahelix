@@ -1,29 +1,52 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.utils.FileUtils;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GenerationConfigValidatorTests {
+
+    private Profile profile;
+    private FileUtils fileUtils=mock(FileUtils.class);
+    private FileOutputTarget outputTarget = mock(FileOutputTarget.class);
+    private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
+    private GenerationConfig config = new GenerationConfig(
+        new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.INTERESTING,
+            GenerationConfig.TreeWalkerType.REDUCTIVE,
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+        )
+    );
+    private GenerationConfigValidator validator;
+
+    @BeforeEach
+    void setup() {
+        //Arrange
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
+        when(fileUtils.isDirectory(anyObject())).thenReturn(false);
+        when(fileUtils.exists(anyObject())).thenReturn(false);
+        when(mockConfigSource.shouldViolate()).thenReturn(false);
+        profile = new Profile(new ArrayList<>(), new ArrayList<>());
+    }
+
     @Test
     public void interestingWithNoMaxRowsReturnsValid() {
-        //Arrange
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-                )
-        );
-        GenerationConfigValidator validator = new GenerationConfigValidator();
-
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -40,10 +63,10 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        GenerationConfigValidator validator = new GenerationConfigValidator();
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -53,17 +76,16 @@ public class GenerationConfigValidatorTests {
     @Test
     public void randomWithNoMaxRowsReturnsNotValid() {
         //Arrange
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.RANDOM,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-            )
+        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
+            GenerationConfig.DataGenerationType.RANDOM,
+            GenerationConfig.TreeWalkerType.REDUCTIVE,
+            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
-        GenerationConfigValidator validator = new GenerationConfigValidator();
+        GenerationConfig config = new GenerationConfig(testConfigSource);
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -81,10 +103,10 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        GenerationConfigValidator validator = new GenerationConfigValidator();
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -101,10 +123,10 @@ public class GenerationConfigValidatorTests {
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE
             )
         );
-        GenerationConfigValidator validator = new GenerationConfigValidator();
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -121,13 +143,139 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        GenerationConfigValidator validator = new GenerationConfigValidator();
+        validator = new GenerationConfigValidator(mockConfigSource, outputTarget, fileUtils);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
         Assert.assertThat(validationResult.errorMessages, is(empty()));
     }
+
+    @Test
+    public void generateOutputFileAlreadyExists() {
+        //Arrange
+        when(fileUtils.exists(anyObject())).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
+    @Test
+    public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
+        //Arrange
+        when(fileUtils.exists(anyObject())).thenReturn(true);
+        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+    }
+
+    @Test
+    public void generateOutputFileDoesNotExist() {
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+    }
+
+    @Test
+    public void generateOutputDirNotFile() {
+        //Arrange
+        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputFileAlreadyExists() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(fileUtils.exists(anyObject())).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputFileDoesNotExist() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(fileUtils.isDirectory(anyObject())).thenReturn(false);
+        when(fileUtils.exists(anyObject())).thenReturn(false);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputDirNotExists() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(fileUtils.exists(anyObject())).thenReturn(false);
+        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
+       when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator
+            .validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputDirNotFile() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(fileUtils.exists(anyObject())).thenReturn(true);
+        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
+        when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(true);
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertTrue(validationResult.isValid());
+    }
+
+    @Test
+    public void generateViolationOutputDirNotEmpty() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
+        when(fileUtils.isDirectory(anyObject())).thenReturn(true);
+        when(fileUtils.isDirectoryEmpty(anyObject(), anyInt())).thenReturn(false);
+
+        //Act
+        ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
+
+        //Assert
+        Assert.assertFalse(validationResult.isValid());
+    }
+
 }

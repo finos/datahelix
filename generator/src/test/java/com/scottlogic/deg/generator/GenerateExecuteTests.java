@@ -33,7 +33,7 @@ public class GenerateExecuteTests {
     @Test
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
-        when(validator.validateCommandLine(config)).thenReturn(validationResult);
+        when(validator.validateCommandLinePreProfile(config)).thenReturn(validationResult);
         when(validationResult.isValid()).thenReturn(false);
 
         //Act
@@ -48,7 +48,8 @@ public class GenerateExecuteTests {
     public void validConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
-        when(validator.validateCommandLine(config)).thenReturn(validationResult);
+        when(validator.validateCommandLinePreProfile(config)).thenReturn(validationResult);
+        when(validator.validateCommandLinePostProfile(anyObject())).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(validationResult.isValid()).thenReturn(true);
 
