@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;

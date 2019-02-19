@@ -9,8 +9,8 @@ import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldT
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
-import com.scottlogic.deg.generator.inputs.IndividualRuleProfileViolator;
+import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
+import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.generation.*;

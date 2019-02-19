@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Rule;
@@ -9,6 +9,8 @@ import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstra
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
