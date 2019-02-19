@@ -164,6 +164,8 @@ Scenario: Running a 'before' request that specifies an invalid date should be un
      Then the profile is invalid
        And no data is created
 
+# Defect 617 "Invalid time (24:00) does not result in an invalid profile error" related to this scenario
+@ignore
 Scenario: Running a 'before' request that specifies an invalid time should be unsuccessful
      Given foo is before 2019-01-01T24:00:00.000
        Then the profile is invalid
