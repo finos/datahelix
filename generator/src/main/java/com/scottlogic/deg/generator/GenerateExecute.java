@@ -40,7 +40,7 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
 
-        ValidationResult validationResult = validator.validateCommandLine(config);
+        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
@@ -49,6 +49,12 @@ public class GenerateExecute implements Runnable {
 
         try {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+
+            validationResult = validator.validateCommandLinePostProfile(profile);
+            if (!validationResult.isValid()) {
+                errorReporter.display(validationResult);
+                return;
+            }
 
             generationEngine.generateDataSet(profile, config, fileOutputTarget);
 
