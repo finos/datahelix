@@ -45,8 +45,11 @@ public class GenerationConfigValidatorTests {
 
     @Test
     public void interestingWithNoMaxRowsReturnsValid() {
+        //Arrange
+
+
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -66,7 +69,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -85,7 +88,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -106,7 +109,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -126,7 +129,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -146,7 +149,7 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());

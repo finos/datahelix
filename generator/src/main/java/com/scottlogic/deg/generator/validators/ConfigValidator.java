@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 public interface ConfigValidator {
 
-    ValidationResult validateCommandLinePreProfile(GenerationConfig config);
+    ValidationResult validatePreProfile(GenerationConfig config);
 
     ValidationResult validateCommandLinePostProfile(Profile profile);
 

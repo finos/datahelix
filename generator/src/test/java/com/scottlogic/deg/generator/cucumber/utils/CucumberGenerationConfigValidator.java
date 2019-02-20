@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class CucumberGenerationConfigValidator implements ConfigValidator {
 
     @Override
-    public ValidationResult validateCommandLinePreProfile(GenerationConfig config) {
+    public ValidationResult validatePreProfile(GenerationConfig config) {
         return new ValidationResult(new ArrayList<>());
     }
 
@@ -18,4 +18,6 @@ public class CucumberGenerationConfigValidator implements ConfigValidator {
     public ValidationResult validateCommandLinePostProfile(Profile profile) {
         return new ValidationResult(new ArrayList<>());
     }
+
+
 }

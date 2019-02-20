@@ -30,21 +30,20 @@ public class GenerationConfigValidator implements ConfigValidator {
         this.fileUtils = fileUtils;
     }
 
-    public ValidationResult validateCommandLinePreProfile(GenerationConfig config) {
+    @Override
+    public ValidationResult validatePreProfile(GenerationConfig config) {
+
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
-        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
-            && !config.getMaxRows().isPresent()) {
+        validateCommandLineOptions(config, errorMessages);
 
-            errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
-        }
-
-        checkProfileInputFile(errorMessages);
+        validateProfileInputFile(errorMessages);
 
         return validationResult;
     }
 
+    @Override
     public ValidationResult validateCommandLinePostProfile(Profile profile) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
@@ -58,18 +57,27 @@ public class GenerationConfigValidator implements ConfigValidator {
         return validationResult;
     }
 
-    private void checkProfileInputFile(ArrayList<String> errorMessages) {
+    private void validateCommandLineOptions(GenerationConfig config, ArrayList<String> errorMessages) {
+        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
+            && !config.getMaxRows().isPresent()) {
+
+            errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
+        }
+    }
+
+
+    private void validateProfileInputFile(ArrayList<String> errorMessages) {
         if (!configSource.getProfileFile().exists()){
             errorMessages.add("Invalid Input - Profile file does not exist");
 
-            if (configSource.getProfileFile().toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$")) {
+            if (fileUtils.containsInvalidChars(configSource.getProfileFile())) {
                 errorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters ? : %% \" | > < ", configSource.getProfileFile().toString()));
             }
         }
         else if (configSource.getProfileFile().isDirectory()) {
             errorMessages.add("Invalid Input - Profile file path provided is to a directory");
         }
-        else if (configSource.getProfileFile().length() == 0) {
+        else if (fileUtils.isEmpty(configSource.getProfileFile())) {
             errorMessages.add("Invalid Input - Profile file has no content");
         }
         else {
