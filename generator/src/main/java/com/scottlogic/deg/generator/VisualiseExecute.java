@@ -15,7 +15,6 @@ import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeVa
 import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
-import picocli.CommandLine;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,13 +24,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-@CommandLine.Command(
-    name = "visualise",
-    description = "Produces a decision tree in DOT format for the specified profile.",
-    descriptionHeading = "%nDescription:%n",
-    parameterListHeading = "%nParameters:%n",
-    optionListHeading = "%nOptions:%n",
-    abbreviateSynopsis = true)
 public class VisualiseExecute implements Runnable {
 
     private final ProfileReader profileReader;

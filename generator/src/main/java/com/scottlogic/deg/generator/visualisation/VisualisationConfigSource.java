@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.visualisation;
 
 import com.scottlogic.deg.generator.ConfigSource;
 
+/**
+ * Command line options specific to visualisation of a profile.
+ */
 public interface VisualisationConfigSource extends ConfigSource {
 
     String getTitleOverride();

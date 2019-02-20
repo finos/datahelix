@@ -7,6 +7,9 @@ import picocli.CommandLine;
 import java.io.File;
 import java.nio.file.Path;
 
+/**
+ * This class holds the visualisation specific command line options.
+ */
 @CommandLine.Command(
     name = "visualise",
     description = "Produces a decision tree in DOT format for the specified profile.",
@@ -15,9 +18,6 @@ import java.nio.file.Path;
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
 public class VisualiseCommandLine extends CommandLineBase implements VisualisationConfigSource {
-
-    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
-    private File profileFile;
 
     @CommandLine.Parameters(index = "1", description = "The path of the output visualise file.")
     private Path outputPath;
@@ -33,27 +33,10 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     private boolean shouldHideTitle;
 
     @CommandLine.Option(
-            names = {"--no-optimise"},
-            description = "Prevents tree optimisation",
-            hidden = true)
-    private boolean dontOptimise;
-
-    @CommandLine.Option(
         names = {"--no-simplify"},
         description = "Prevents tree simplification",
         hidden = true)
     private boolean dontSimplify;
-
-    @CommandLine.Option(
-        names = "--help",
-        usageHelp = true,
-        description = "Display these available command line options")
-    boolean help;
-
-    @CommandLine.Option(
-        names = {"--overwrite"},
-        description = "Defines whether to overwrite existing output files")
-    private boolean overwriteOutputFiles = false;
 
     @Override
     public Path getOutputPath() {

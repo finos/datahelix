@@ -26,6 +26,10 @@ public class VisualisationConfigValidator {
         this.fileUtils = fileUtils;
     }
 
+    /**
+     * @return the result of command line validation. Contains a list of error messages.
+     *         if the list is empty then the validation was successful.
+     */
     public ValidationResult validateCommandLine() {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
@@ -35,6 +39,12 @@ public class VisualisationConfigValidator {
         return validationResult;
     }
 
+    /**
+     * make sure the output file specified on the command line is valid.
+     *
+     * @param errorMessages the list of error messages to append to if the output target is not valid.
+     * @param outputTarget  the output target to check for validity.
+     */
     private void checkOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
         if (outputTarget instanceof FileOutputTarget) {
             if (fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
