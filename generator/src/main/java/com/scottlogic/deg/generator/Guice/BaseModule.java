@@ -5,13 +5,13 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.inputs.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -25,7 +25,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.*;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.HierarchicalDependencyFixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
@@ -72,6 +71,8 @@ public class BaseModule extends AbstractModule {
         bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
+        bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
+        bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
