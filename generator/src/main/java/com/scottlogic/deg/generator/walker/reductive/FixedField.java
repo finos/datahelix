@@ -14,8 +14,7 @@ import java.util.stream.Stream;
 public class FixedField {
     private static final Object NOT_ITERATED = new NotIterated();
 
-    public final Field field;
-
+    private final Field field;
     private final Stream<Object> values;
     private final FieldSpec valuesFieldSpec;
     private final ReductiveDataGeneratorMonitor monitor;
@@ -32,6 +31,10 @@ public class FixedField {
         this.values = values;
         this.valuesFieldSpec = valuesFieldSpec;
         this.monitor = monitor;
+    }
+
+    public Field getField(){
+        return field;
     }
 
     public Stream<Object> getStream() {

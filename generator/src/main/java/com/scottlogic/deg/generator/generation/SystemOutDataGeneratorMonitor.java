@@ -31,7 +31,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%s %s",
-                lastFixedField.field.name,
+                lastFixedField.getField().name,
                 fieldSpecForValuesInLastFixedField.toString()));
     }
 
@@ -55,7 +55,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
             String.format(
                 "%d: No values for field %s: %s ",
                 reductiveState.getFixedFieldsExceptLast().size(),
-                reductiveState.getLastFixedField().field.name,
+                reductiveState.getLastFixedField().getField().name,
                 reductiveState.toString(true)));
     }
 

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.outputs.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestDTO;
+import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;
@@ -18,17 +19,17 @@ public class ManifestWriter {
 
     public void writeManifest(
         List<ViolatedProfile> result,
-        Path directoryPath,
-        DecimalFormat intFormatter,
-        int initialFileNumber) throws IOException {
+        Path directoryPath) throws IOException {
 
-        AtomicInteger dataSetIndex = new AtomicInteger(initialFileNumber);
+        AtomicInteger dataSetIndex = new AtomicInteger(1);
+        DecimalFormat intFormatter = FileUtils.getDecimalFormat(result.size());
+
 
         List<ManifestDTO.TestCaseDTO> testCaseDtos = result
             .stream()
             .map(profile -> new ManifestDTO.TestCaseDTO(
                 intFormatter.format(dataSetIndex.getAndIncrement()),
-                Collections.singleton(profile.violatedRule.rule.getDescription())))
+                Collections.singleton(profile.violatedRule.ruleInformation.getDescription())))
             .collect(Collectors.toList());
 
         System.out.println("Writing manifest");
