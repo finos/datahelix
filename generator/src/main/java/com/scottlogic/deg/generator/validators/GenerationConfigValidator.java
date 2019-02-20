@@ -8,6 +8,8 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
@@ -38,6 +40,8 @@ public class GenerationConfigValidator {
             errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
         }
 
+        checkProfileInputFile(errorMessages);
+
         return validationResult;
     }
 
@@ -52,6 +56,32 @@ public class GenerationConfigValidator {
         }
 
         return validationResult;
+    }
+
+    private void checkProfileInputFile(ArrayList<String> errorMessages) {
+        if (!configSource.getProfileFile().exists()){
+            errorMessages.add("Invalid Input - Profile file does not exist");
+
+            if (configSource.getProfileFile().toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$")) {
+                errorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters ? : %% \" | > < ", configSource.getProfileFile().toString()));
+            }
+        }
+        else if (configSource.getProfileFile().isDirectory()) {
+            errorMessages.add("Invalid Input - Profile file path provided is to a directory");
+        }
+        else if (configSource.getProfileFile().length() == 0) {
+            errorMessages.add("Invalid Input - Profile file has no content");
+        }
+        else {
+            try {
+                String fileType = Files.probeContentType(configSource.getProfileFile().toPath());
+                if (!fileType.equals("application/json")) {
+                    errorMessages.add(String.format("Invalid Input - File is of type %s\nFile type application/json required", fileType));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
