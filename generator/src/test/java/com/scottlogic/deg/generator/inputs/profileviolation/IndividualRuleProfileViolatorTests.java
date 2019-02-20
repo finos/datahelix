@@ -8,8 +8,6 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
-import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
@@ -24,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Matchers.anyListOf;
@@ -58,7 +57,7 @@ public class IndividualRuleProfileViolatorTests {
     }
 
     /**
-     * Violate with a profile with a single returns a single violated profile.
+     * Violate with a profile with a single rule returns a single violated profile.
      */
     @Test
     public void violate_withSingleRuleProfile_returnsSingleViolatedProfile() {
@@ -90,10 +89,11 @@ public class IndividualRuleProfileViolatorTests {
             outputProfileList,
             sameBeanAs(expectedProfileList)
         );
+        assertListProfileTypeEquality(outputProfileList, expectedProfileList);
     }
 
     /**
-     * Violate with a profile with a single returns a single violated profile.
+     * Violate with a profile with a multiple rules returns a 2 violated profiles.
      */
     @Test
     public void violate_withMultipleRuleProfile_returnsMultipleViolatedProfile() {
@@ -132,6 +132,7 @@ public class IndividualRuleProfileViolatorTests {
             outputProfileList,
             sameBeanAs(expectedProfileList)
         );
+        assertListProfileTypeEquality(outputProfileList, expectedProfileList);
     }
 
     /**
