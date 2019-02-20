@@ -24,6 +24,10 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * this class performs the visualisation of a profile and output's the visualisation
+ * as a graphviz dot file..
+ */
 public class VisualiseExecute implements Runnable {
 
     private final ProfileReader profileReader;
