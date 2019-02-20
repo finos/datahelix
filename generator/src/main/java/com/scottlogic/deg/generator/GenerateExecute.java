@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
@@ -16,7 +17,7 @@ public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
     private final GenerationConfig config;
     private final GenerationConfigSource configSource;
-    private final GenerationConfigValidator validator;
+    private final ConfigValidator validator;
     private final GenerationEngine generationEngine;
     private final OutputTarget fileOutputTarget;
     private final ProfileReader profileReader;
@@ -27,7 +28,7 @@ public class GenerateExecute implements Runnable {
                            GenerationEngine generationEngine,
                            GenerationConfigSource configSource,
                            OutputTarget fileOutputTarget,
-                           GenerationConfigValidator validator,
+                           ConfigValidator validator,
                            ErrorReporter errorReporter) {
         this.config = config;
         this.profileReader = profileReader;

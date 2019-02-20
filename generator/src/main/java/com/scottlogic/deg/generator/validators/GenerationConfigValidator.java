@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Class used to determine whether the command line options are valid for generation
  */
-public class GenerationConfigValidator {
+public class GenerationConfigValidator implements ConfigValidator {
 
     private final FileUtils fileUtils;
     private final GenerationConfigSource configSource;

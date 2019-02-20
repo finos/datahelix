@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.utils;
 
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +26,14 @@ public class FileUtils {
         return new DecimalFormat(new String(zeroes));
     }
 
-    /**
+    public boolean containsInvalidChars(File file) {
+        return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
+    }
+
+    public boolean isEmpty(File file) {
+        return file.length() == 0;
+    }
+     /**
      * @param target the FileOutputTarget to check the existence of.
      * @return true if the supplied FileOutputTarget exists on disk, false otherwise.
      */

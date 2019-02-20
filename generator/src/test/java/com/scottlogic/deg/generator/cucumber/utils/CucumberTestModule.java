@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 /**
@@ -30,6 +31,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
+        bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
 
         if (testState.shouldViolate) {
             bind(GenerationEngine.class).to(ViolationGenerationEngine.class);
