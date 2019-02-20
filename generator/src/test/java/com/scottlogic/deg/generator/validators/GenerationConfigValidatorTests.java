@@ -31,6 +31,7 @@ public class GenerationConfigValidatorTests {
     );
     private GenerationConfigValidator validator;
     private Profile profile;
+    private ArrayList<String> errorMessages;
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
     @BeforeEach
@@ -41,19 +42,21 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
+        errorMessages = new ArrayList<>();
     }
+
+    //first test has been refactored to new format
+    //validateCommandLineOptions replaces validatePreProfile and now returns the errorMessages array list rather than a validationResult
+    //fix the rest of the tests to match and write new tests for validateProfileInputFile method
 
     @Test
     public void interestingWithNoMaxRowsReturnsValid() {
-        //Arrange
-
-
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+//        Assert.assertTrue(validationResult.isValid());
+        Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test
@@ -69,11 +72,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test
@@ -88,12 +90,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages,
-            hasItem("RANDOM mode requires max row limit: use -n=<row limit> option"));
+        Assert.assertThat(errorMessages, hasItem("RANDOM mode requires max row limit: use -n=<row limit> option"));
     }
 
     @Test
@@ -109,11 +109,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test
@@ -129,11 +128,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test
@@ -149,11 +147,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test

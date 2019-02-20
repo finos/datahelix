@@ -57,7 +57,7 @@ public class GenerationConfigValidator implements ConfigValidator {
         return validationResult;
     }
 
-    private void validateCommandLineOptions(GenerationConfig config, ArrayList<String> errorMessages) {
+    public void validateCommandLineOptions(GenerationConfig config, ArrayList<String> errorMessages) {
         if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
             && !config.getMaxRows().isPresent()) {
 
@@ -66,7 +66,7 @@ public class GenerationConfigValidator implements ConfigValidator {
     }
 
 
-    private void validateProfileInputFile(ArrayList<String> errorMessages) {
+    public void validateProfileInputFile(ArrayList<String> errorMessages) {
         if (!configSource.getProfileFile().exists()){
             errorMessages.add("Invalid Input - Profile file does not exist");
 
