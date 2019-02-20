@@ -53,22 +53,6 @@ Scenario: Running a 'shorterThan' request using a string (special character) to 
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated numeric type field should generate null
-     Given foo is shorter than 5
-       And foo is equal to 1234
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated temporal type field should generate null
-     Given foo is shorter than 25
-       And foo is equal to 2010-01-01T00:00:00.000
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than ""
      Then I am presented with an error message
@@ -78,21 +62,6 @@ Scenario: Running a 'shorterThan' request using null to specify a the length of 
      Given foo is shorter than null
      Then I am presented with an error message
        And no data is created
-
-Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo constraint should be successful
-     Given foo is shorter than 5
-       And foo is equal to "1234"
-     Then the following data should be generated:
-       | foo    |
-       | null   |
-       | "1234" |
-
-Scenario: Running a 'shorterThan' request alongside a contradicting equalTo constraint should produce null
-     Given foo is shorter than 5
-       And foo is equal to "12345"
-     Then the following data should be generated:
-       | foo    |
-       | null   |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
      Given foo is shorter than 5
