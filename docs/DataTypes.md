@@ -19,7 +19,7 @@ Granularities must be powers of ten less than or equal to one (1, 0.1, 0.01, etc
 
 Numeric fields currently default to a granularity of 1. Post-[#135](https://github.com/ScottLogic/datahelix/issues/135), they'll default to an extremely small granularity.
 
-Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](../FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
+Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](./FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
 
 ## Strings
 
