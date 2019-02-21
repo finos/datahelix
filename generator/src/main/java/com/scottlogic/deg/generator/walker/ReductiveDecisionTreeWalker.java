@@ -40,7 +40,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree) {
         ConstraintNode rootNode = tree.getRootNode();
-        ReductiveState initialState = new ReductiveState(tree.fields);
+        ReductiveState initialState = new ReductiveState(tree.getProfile());
 
         visualise(rootNode, initialState);
 

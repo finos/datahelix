@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 
 import java.util.Collection;
@@ -8,16 +9,16 @@ import java.util.stream.Collectors;
 
 
 public class DecisionTreeCollection {
-    private final ProfileFields fields;
+    private final Profile profile;
     private final Collection<DecisionTree> decisionTrees;
 
-    DecisionTreeCollection(ProfileFields fields, Collection<DecisionTree> decisionTrees) {
-        this.fields = fields;
+    DecisionTreeCollection(Profile profile, Collection<DecisionTree> decisionTrees) {
+        this.profile = profile;
         this.decisionTrees = decisionTrees;
     }
 
-    public ProfileFields getFields() {
-        return fields;
+    public Profile getProfile() {
+        return profile;
     }
 
     public Collection<DecisionTree> getDecisionTrees() {
@@ -30,7 +31,7 @@ public class DecisionTreeCollection {
                 .stream()
                 .map(DecisionTree::getRootNode)
                 .iterator()),
-            fields,
+            profile,
             decisionTrees.isEmpty() ? null : decisionTrees.iterator().next().getDescription());
     }
 }

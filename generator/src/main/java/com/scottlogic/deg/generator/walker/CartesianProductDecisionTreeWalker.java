@@ -32,7 +32,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     public Stream<RowSpec> walk(DecisionTree tree) {
-        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
+        final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getProfile().fields);
         return helper.walk(tree.getRootNode());
     }
 

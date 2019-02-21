@@ -1,13 +1,13 @@
 package com.scottlogic.deg.generator.decisiontree.tree_partitioning;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
+import java.net.CookieHandler;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -56,7 +56,8 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
 
         // any leftover fields must be grouped into their own partition
         final Stream<Field> unpartitionedFields = decisionTree
-            .getFields()
+            .getProfile()
+            .fields
             .stream()
             .filter(field -> Objects.isNull(partitions.getPartitionId(field)));
 
@@ -67,15 +68,34 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
                     new TreeConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                    new ProfileFields(new ArrayList<>(partition.fields)),
+                    new Profile(
+                        new ArrayList<>(partition.fields),
+                        Collections.singletonList(
+                            new Rule(
+                                new RuleInformation(null),
+                                partition.constraints
+                                    .stream()
+                                    .map(c -> c.getAtomicConstraint())
+                                    .collect(Collectors.toList())
+                            )
+                        )
+                    ),
                     "Partitioned Tree"
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new TreeConstraintNode(),
-                    new ProfileFields(Collections.singletonList(field)),
+                    new Profile(
+                        Collections.singletonList(field),
+                        Collections.singletonList(
+                            new Rule(
+                                new RuleInformation(null),
+                                Collections.EMPTY_LIST)
+                            )
+                        ),
                     "Tree with Unpartitioned Fields"
-                ))
+                    )
+                )
             );
     }
 

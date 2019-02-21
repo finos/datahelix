@@ -55,51 +55,6 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
-        ProfileFields profileFields = new ProfileFields(
-            profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name))
-                .collect(Collectors.toList()));
-
-        ConstraintReader constraintReader = new MainConstraintReader();
-
-        Collection<Rule> rules = mapDtos(
-            profileDto.rules,
-            r -> {
-                RuleInformation constraintRule = new RuleInformation(r);
-                return new Rule(
-                    constraintRule,
-                    mapDtos(
-                        r.constraints,
-                        dto -> {
-                            try {
-                                return constraintReader.apply(
-                                    dto,
-                                    profileFields,
-                                    Collections.singleton(constraintRule));
-                            } catch (InvalidProfileException e) {
-                                throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
-                            }
-                        }));
-            });
-
-        return new Profile(profileFields, rules, profileDto.description);
-    }
-
-    static <TInput, TOutput> Collection<TOutput> mapDtos(
-        Collection<TInput> dtos,
-        DtoConverterFunction<TInput, TOutput> mapFunc) throws InvalidProfileException {
-
-        Collection<TOutput> resultSet = new ArrayList<>();
-
-        for (TInput dto : dtos) {
-            resultSet.add(mapFunc.apply(dto));
-        }
-
-        return resultSet;
-    }
-
-    @FunctionalInterface
-    interface DtoConverterFunction<TInput, TOutput> {
-        TOutput apply(TInput t) throws InvalidProfileException;
+        return ProfileDtoMapper.mapToProfile(profileDto);
     }
 }

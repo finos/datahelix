@@ -12,12 +12,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 final class SetBasedFixFieldStrategy extends ProfileBasedFixFieldStrategy {
-    private final Profile profile;
-
-    SetBasedFixFieldStrategy(Profile currentProfile) {
-        this.profile = currentProfile;
-    }
-
     Comparator<Field> getFieldOrderingStrategy() {
         Comparator<Field> fieldHasSetConstraint = Comparator.comparing(this::fieldConstrainedBySet);
         Comparator<Field> preferSmallerSets = Comparator.comparingInt(this::numValuesInSet);

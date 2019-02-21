@@ -25,7 +25,7 @@ public class StaticContradictionDecisionTreeValidator {
     }
 
     public DecisionTree markContradictions(DecisionTree tree) {
-        return new DecisionTree(markContradictions(tree.rootNode), tree.fields, tree.description);
+        return new DecisionTree(markContradictions(tree.getRootNode()), tree.getProfile(), tree.getDescription());
     }
 
     public ConstraintNode markContradictions(ConstraintNode node){

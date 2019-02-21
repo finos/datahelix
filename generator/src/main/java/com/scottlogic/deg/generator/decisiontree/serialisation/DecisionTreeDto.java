@@ -1,9 +1,12 @@
 package com.scottlogic.deg.generator.decisiontree.serialisation;
 
-import java.util.List;
+import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
 
+/**
+ * Data transfer object for a Decision Tree.
+ */
 public class DecisionTreeDto {
     public ConstraintNodeDto rootNode;
-    public List<FieldDto> fields;
+    public V3ProfileDTO profile;
     public String description;
 }

@@ -78,7 +78,7 @@ class ProfileDecisionTreeFactoryTests {
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
-        ProfileFields actualFields = testOutput.getFields();
+        ProfileFields actualFields = testOutput.getProfile().fields;
 
         pairwiseAssert(
             actualFields,

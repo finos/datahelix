@@ -54,7 +54,7 @@ public class MainConstraintReader implements ConstraintReader {
                 throw new InvalidProfileException("AllOf must contain at least one constraint.");
             }
             return new AndConstraint(
-                JsonProfileReader.mapDtos(
+                ProfileDtoMapper.mapDtos(
                     dto.allOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
@@ -64,7 +64,7 @@ public class MainConstraintReader implements ConstraintReader {
 
         if (dto.anyOf != null) {
             return new OrConstraint(
-                JsonProfileReader.mapDtos(
+                ProfileDtoMapper.mapDtos(
                     dto.anyOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,

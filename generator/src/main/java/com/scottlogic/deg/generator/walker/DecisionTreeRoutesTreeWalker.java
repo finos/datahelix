@@ -33,7 +33,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
     @Override
     public Stream<RowSpec> walk(DecisionTree tree){
         ConstraintNode rootNode = tree.getRootNode();
-        ProfileFields fields = tree.getFields();
+        ProfileFields fields = tree.getProfile().fields;
         Stream<RowSpecRoute> routes = this.producer.produceRoutes(tree);
 
         return routes

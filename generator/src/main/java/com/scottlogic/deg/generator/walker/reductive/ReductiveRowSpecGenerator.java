@@ -49,7 +49,7 @@ public class ReductiveRowSpecGenerator {
         fieldSpecsPerField.put(reductiveState.getLastFixedField().getField(), fieldSpecForValuesInLastFixedField);
 
         RowSpec rowSpecWithAllValuesForLastFixedField = new ReductiveRowSpec(
-            reductiveState.getFields(),
+            reductiveState.getProfile().fields,
             fieldSpecsPerField,
             reductiveState.getLastFixedField().getField()
         );

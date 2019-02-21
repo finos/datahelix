@@ -1,7 +1,10 @@
 package com.scottlogic.deg.generator.decisiontree.serialisation;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.ProfileDtoMapper;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -16,7 +19,7 @@ public class DecisionTreeMapper {
     public DecisionTree fromDto(DecisionTreeDto decisionTreeDto) {
         return new DecisionTree(
             fromDto(decisionTreeDto.rootNode),
-            getMappedProfileFields(decisionTreeDto),
+            getMappedProfile(decisionTreeDto),
             decisionTreeDto.description);
     }
     
@@ -24,20 +27,19 @@ public class DecisionTreeMapper {
     public DecisionTreeDto toDto(DecisionTree tree) {
         DecisionTreeDto dto = new DecisionTreeDto();
         dto.rootNode = toDto(tree.getRootNode());
-        dto.fields = tree
-                .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
-        dto.description = tree.description;
+        dto.profile = ProfileDtoMapper.mapToProfileDto(tree.getProfile());
+        dto.description = tree.getDescription();
         return dto;
     }
     
     // Used by A1
-    private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
-        final List<Field> mappedFields = decisionTreeDto.fields
-                .stream()
-                .map(f -> new Field(f.name))
-                .collect(Collectors.toList());
-        
-        return new ProfileFields(mappedFields);
+    private Profile getMappedProfile(DecisionTreeDto decisionTreeDto) {
+        try {
+            return ProfileDtoMapper.mapToProfile(decisionTreeDto.profile);
+        } catch (InvalidProfileException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     // Pair B1

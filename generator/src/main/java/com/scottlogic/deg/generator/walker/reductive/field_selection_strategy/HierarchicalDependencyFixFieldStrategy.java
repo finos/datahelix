@@ -9,21 +9,18 @@ import com.scottlogic.deg.generator.analysis.FieldDependencyAnalysisResult;
 import java.util.Comparator;
 
 public final class HierarchicalDependencyFixFieldStrategy extends ProfileBasedFixFieldStrategy {
-
     private final SetBasedFixFieldStrategy setBasedFixFieldStrategy;
     private final FieldDependencyAnalyser analyser;
-    private final CurrentProfileCache currentProfileCache;
 
     @Inject
-    public HierarchicalDependencyFixFieldStrategy(CurrentProfileCache currentProfileCache, FieldDependencyAnalyser analyser) {
-        this.currentProfileCache = currentProfileCache;
+    public HierarchicalDependencyFixFieldStrategy(FieldDependencyAnalyser analyser) {
         this.analyser = analyser;
 
-        this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(currentProfileCache.profile);
+        this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy();
     }
 
     Comparator<Field> getFieldOrderingStrategy() {
-        FieldDependencyAnalysisResult result = this.analyser.analyse(currentProfileCache.profile);
+        FieldDependencyAnalysisResult result = this.analyser.analyse(profile);
         Comparator<Field> firstComparison = Comparator.comparingInt(field -> result.getDependenciesOf(field).size());
         Comparator<Field> secondComparison = Comparator.comparingInt((Field field) -> result.getDependentsOf(field).size()).reversed();
         return firstComparison.thenComparing(secondComparison)
