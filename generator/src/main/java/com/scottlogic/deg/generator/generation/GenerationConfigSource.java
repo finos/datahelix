@@ -36,4 +36,5 @@ public interface GenerationConfigSource {
     File getProfileFile();
     boolean shouldViolate();
     boolean visualiseReductions();
+    boolean overwriteOutputFiles();
 }
