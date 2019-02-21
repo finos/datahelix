@@ -45,22 +45,17 @@ public class GenerationConfigValidatorTests {
         errorMessages = new ArrayList<>();
     }
 
-    //first test has been refactored to new format
-    //validateCommandLineOptions replaces validatePreProfile and now returns the errorMessages array list rather than a validationResult
-    //fix the rest of the tests to match and write new tests for validateProfileInputFile method
-
     @Test
-    public void interestingWithNoMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_validOptions_noErrorMessages() {
         //Act
         validator.validateCommandLineOptions(config, errorMessages);
 
         //Assert
-//        Assert.assertTrue(validationResult.isValid());
         Assert.assertThat(errorMessages, is(empty()));
     }
 
     @Test
-    public void interestingWithMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_interestingWithMaxRows_noErrorMessages() {
         //Arrange
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
@@ -79,7 +74,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void randomWithNoMaxRowsReturnsNotValid() {
+    public void validateCommandLineOptions_randomWithNoMaxRows_correctErrorMessage() {
         //Arrange
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.RANDOM,
@@ -97,7 +92,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void randomWithMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_randomWithMaxRows_noErrorMessages() {
         //Arrange
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.RANDOM,
@@ -116,7 +111,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void fullSequentialWithNoMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_fullSequentialWithNoMaxRows_noErrorMessages() {
         //Arrange
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
@@ -135,7 +130,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void fullSequentialWithMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_fullSequentialWithMaxRows_noErrorMessages() {
         //Arrange
         TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
@@ -154,7 +149,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateOutputFileAlreadyExists() {
+    public void validateCommandLinePostProfile_generateOutputFileAlreadyExists_isNotValid() {
         //Arrange
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
 
@@ -167,7 +162,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
+    public void validateCommandLinePostProfile_generateOutputFileAlreadyExistsCommandLineOverwrite_isValid() {
         //Arrange
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
@@ -181,7 +176,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateOutputFileDoesNotExist() {
+    public void validateCommandLinePostProfile_generateOutputFileDoesNotExist_isValid() {
 
         //Act
         ValidationResult validationResult = validator
@@ -192,7 +187,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateOutputDirNotFile() {
+    public void validateCommandLinePostProfile_generateOutputDirNotFile_isNotValid() {
         //Arrange
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
 
@@ -205,7 +200,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateViolationOutputFileAlreadyExists() {
+    public void validateCommandLinePostProfile_generateViolationOutputFileAlreadyExists_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
@@ -219,7 +214,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateViolationOutputFileDoesNotExist() {
+    public void validateCommandLinePostProfile_generateViolationOutputFileDoesNotExist_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
@@ -234,7 +229,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateViolationOutputDirNotExists() {
+    public void validateCommandLinePostProfile_generateViolationOutputDirNotExists_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
@@ -250,7 +245,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateViolationOutputDirNotFile() {
+    public void validateCommandLinePostProfile_generateViolationOutputDirNotFile_isValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
@@ -265,7 +260,7 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void generateViolationOutputDirNotEmpty() {
+    public void validateCommandLinePostProfile_generateViolationOutputDirNotEmpty_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
