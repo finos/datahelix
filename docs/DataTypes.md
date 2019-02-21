@@ -8,16 +8,18 @@ In principle, any real number. In practice, any number that can be represented i
 
 In profile files, numbers must be expressed as JSON numbers, without quotation marks.
 
-### Granularity
+### Numeric granularity
 
 The granularity of a numeric field is a measure of how small the distinctions in that field can be; it is the smallest positive number of which every valid value is a multiple. For instance:
 
 - if a numeric field has a granularity of 1, it can only be satisfied with multiples of 1, a.k.a. integers
 - if a numeric field has a granularity of 0.1, it can be satified by 1, or 1.1, but not 1.11
 
-At present, only granularities less than or equal to 1 are supported (in future, it may be possible to specify higher granularities - a granularity of 2 would admit only even numbers). Additionally, granularities must be powers of ten, so 0.01 is legal but 0.02 is not.
+Granularities must be powers of ten less than or equal to one (1, 0.1, 0.01, etc). Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported.
 
-Numeric fields currently default to a granularity of 1. Post-[#135](https://github.com/ScottLogic/datahelix/issues/135), they'll default to a minimal granularity.
+Numeric fields currently default to a granularity of 1. Post-[#135](https://github.com/ScottLogic/datahelix/issues/135), they'll default to an extremely small granularity.
+
+Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](../FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
 
 ## Strings
 
@@ -35,6 +37,6 @@ The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); th
 
 Temporal values are by default output per the user's locale, adjusted to their time zone.
 
-### Granularity
+### Temporal granularity
 
-Temporal values currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141) will make this configurable.
+Temporal values currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
