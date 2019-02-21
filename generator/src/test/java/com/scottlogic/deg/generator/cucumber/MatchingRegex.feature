@@ -136,7 +136,7 @@ Scenario: Running a 'matchingRegex' request that includes special characters (em
 
 Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
      Given foo is matching regex /^[a-c]{2}$/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -151,7 +151,7 @@ Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should
 
 Scenario: Running a 'matchingRegex' request that includes only anchor ^ should be successful
      Given foo is matching regex /^[a-c]{2}/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -166,7 +166,7 @@ Scenario: Running a 'matchingRegex' request that includes only anchor ^ should b
 
 Scenario: Running a 'matchingRegex' request that includes only anchor $ should be successful
      Given foo is matching regex /[a-c]{2}$/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -411,7 +411,7 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting shorterTha
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should only emit null
        Given foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo            |
        | null           |
 
@@ -466,44 +466,66 @@ Scenario: Running a 'matchingRegex' request alongside a granularTo constraint sh
       | "10" |
 
 Scenario: Running a 'matchingRegex' request alongside a after constraint should be successful
-     Given foo is matching regex /[0-z]{2}/
+     Given foo is matching regex /[a-z]{2}/
        And foo is after 2018-10-10T00:00:00.000
-     Then the following data should be included in what is generated:
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
         | foo  |
-        | null |
+        | "aa" |
         | "ab" |
+        | "ac" |
+        | "ad" |
+        | "ae" |
 
 Scenario: Running a 'matchingRegex' request alongside a afterOrAt constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is after or at 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
+     Given foo is matching regex /[a-z]{2}/
+       And foo is after or at 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
+       | "ae" |
 
 Scenario: Running a 'matchingRegex' request alongside a before constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is before 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
+     Given foo is matching regex /[a-z]{2}/
+       And foo is before 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
+       | "ae" |
 
 Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is before or at 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
+     Given foo is matching regex /[a-z]{2}/
+       And foo is before or at 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
+       | "ae" |
 
+# Defect 621 "Matching Regex with a complementary not matching regex results in the test failing when it finds the expected dat" related to this scenario
+@ignore
 Scenario: Running a 'matchingRegex' request with a not constraint should be successful
-     Given foo is matching regex /[0-9]{1}/
-       And foo is anything but matching regex /[0-1]{1}/
+     Given foo is matching regex /[a-j]{1}/
+       And foo is anything but matching regex /[a-b]{1}/
+       And the generator can generate at most 5 rows
      Then the following data should not be included in what is generated:
        | foo  |
-       | "0"  |
-       | "1"  |
+       | "c"  |
+       | "d"  |
+       | "e"  |
+       | "f"  |
+       | "g"  |
 
 Scenario: Running a 'matchingRegex' request as part of a non-contradicting anyOf constraint should be successful
        Given there is a constraint:

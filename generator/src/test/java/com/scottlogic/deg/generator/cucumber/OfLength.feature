@@ -614,8 +614,9 @@ Feature: User can specify the length of generated string data using 'ofLength'
          { "field": "foo", "is": "ofLength", "value": 1 }
        ]}
        """
-    Then the following data should be included in what is generated:
+    Then the following data should be generated:
       | foo   |
+      | null  |
       | null  |
       | "1"   |
       | "22"  |
@@ -648,6 +649,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
          { "field": "foo", "is": "ofLength", "value": 1 }
        ]}
        """
-    Then the following data should be included in what is generated:
+    Then the following data should be generated:
       | foo   |
       | null  |
