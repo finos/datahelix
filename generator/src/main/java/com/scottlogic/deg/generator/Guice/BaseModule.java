@@ -80,7 +80,7 @@ public class BaseModule extends AbstractModule {
 
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
-        bind(ProfileProvider.class).in(Singleton.class);
+        bind(CurrentProfileCache.class).in(Singleton.class);
     }
 
     private void bindAllCommandLineTypes() {

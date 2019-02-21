@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.smoke_tests;
 
+import com.scottlogic.deg.generator.Guice.CurrentProfileCache;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
@@ -82,6 +83,7 @@ class ExampleProfilesViolationTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 StandardGenerationEngine engine = new StandardGenerationEngine(
+                    new CurrentProfileCache(),
                     new DecisionTreeDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
