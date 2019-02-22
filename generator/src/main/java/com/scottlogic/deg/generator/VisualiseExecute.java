@@ -25,8 +25,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * This class performs the visualisation of a profile and outputs the visualisation
- * as a graphviz dot file..
+ * This class performs the visualisation of a profile and outputs the visualisation as a graphviz dot file..
  */
 public class VisualiseExecute implements Runnable {
 
@@ -37,9 +36,9 @@ public class VisualiseExecute implements Runnable {
 
     @Inject
     public VisualiseExecute(ProfileReader profileReader,
-                            VisualisationConfigSource configSource,
-                            VisualisationConfigValidator validator,
-                            ErrorReporter errorReporter) {
+        VisualisationConfigSource configSource,
+        VisualisationConfigValidator validator,
+        ErrorReporter errorReporter) {
         this.profileReader = profileReader;
         this.configSource = configSource;
         this.validator = validator;
@@ -59,7 +58,7 @@ public class VisualiseExecute implements Runnable {
 
         final Profile profile;
         try {
-            profile = new JsonProfileReader(new NoopProfileValidator()).read(this.configSource.getProfileFile().toPath());
+            profile = new JsonProfileReader(new NoopProfileValidator()).read(configSource.getProfileFile().toPath());
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();
@@ -86,9 +85,9 @@ public class VisualiseExecute implements Runnable {
         final String title = configSource.shouldHideTitle()
             ? null
             : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
 
         try {
             writeTreeTo(
