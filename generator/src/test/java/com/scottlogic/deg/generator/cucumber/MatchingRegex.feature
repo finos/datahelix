@@ -513,13 +513,11 @@ Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint sh
        | "ad" |
        | "ae" |
 
-# Defect 621 "Matching Regex with a complementary not matching regex results in the test failing when it finds the expected dat" related to this scenario
-@ignore
 Scenario: Running a 'matchingRegex' request with a not constraint should be successful
      Given foo is matching regex /[a-j]{1}/
        And foo is anything but matching regex /[a-b]{1}/
        And the generator can generate at most 5 rows
-     Then the following data should not be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | "c"  |
        | "d"  |
