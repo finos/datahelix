@@ -176,7 +176,6 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
      Given foo is shorter than 3
        And foo is longer than 1
        And foo is matching regex /[♀]{0,3}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
        | null |
@@ -193,23 +192,17 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
      Given foo is shorter than 4
        And foo is shorter than 3
        And foo is matching regex /[♀]{1,5}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
        | null |
        | "♀"  |
        | "♀♀" |
-       And the following data should not be included in what is generated:
-       | foo    |
-       | "♀aa"  |
-       | "♀aaa" |
 
 @ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should be successful
      Given foo is shorter than 10
        And foo is greater than 8
        And foo is matching regex /[a]{1,10}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo         |
        | "aaaaaaaaa" |
@@ -220,7 +213,6 @@ Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo const
      Given foo is shorter than 3
        And foo is greater than or equal to 2
        And foo is matching regex /[a]{1,10}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo    |
        | "aa"   |
@@ -230,7 +222,6 @@ Scenario: Running a 'shorterThan' request alongside a lessThan constraint should
      Given foo is shorter than 2
        And foo is less than 15
        And foo is matching regex /[a]{1,10}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo    |
        | "a"    |
@@ -240,7 +231,6 @@ Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constrai
      Given foo is shorter than 2
        And foo is less than or equal to 19
        And foo is matching regex /[a]{1,10}/
-       And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo    |
        | "a"    |
@@ -262,9 +252,6 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
        | null |
        | "%"  |
        | "%%" |
-       And the following data should not be included in what is generated:
-       | foo   |
-       | "%12" |
 
 Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf constraint should be successful
      Given there is a constraint:
@@ -280,10 +267,6 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        | foo  |
        | null |
        | "%"  |
-       And the following data should not be included in what is generated:
-       | foo   |
-       | "%1"  |
-       | "%12" |
 
 Scenario: Running a 'shorterThan' request using a number round (decimal number) to specify a the length of a generated string should be successful
     Given foo is shorter than 2.0
