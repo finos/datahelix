@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 /**
- * Super class for command line configuration options.
+ * Parent for command line configuration options.
  */
 public interface ConfigSource {
 

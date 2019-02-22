@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * this class performs the visualisation of a profile and output's the visualisation
+ * This class performs the visualisation of a profile and outputs the visualisation
  * as a graphviz dot file..
  */
 public class VisualiseExecute implements Runnable {
@@ -51,15 +51,15 @@ public class VisualiseExecute implements Runnable {
 
         final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
 
+        ValidationResult validationResult = validator.validateCommandLine();
+        if (!validationResult.isValid()) {
+            errorReporter.display(validationResult);
+            return;
+        }
+
         final Profile profile;
         try {
             profile = new JsonProfileReader(new NoopProfileValidator()).read(this.configSource.getProfileFile().toPath());
-
-            ValidationResult validationResult = validator.validateCommandLine();
-            if (!validationResult.isValid()) {
-                errorReporter.display(validationResult);
-                return;
-            }
         } catch (Exception e) {
             System.err.println("Failed to read file!");
             e.printStackTrace();
