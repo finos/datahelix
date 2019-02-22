@@ -3,6 +3,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 Background:
      Given the generation strategy is full
 
+### inSet alone ###
 Scenario: Running an 'inSet' request that includes strings with roman alphabet lowercase chars (a-z) only should be successful
      Given there is a field foo
        And foo is in set:
@@ -515,6 +516,8 @@ Scenario: Running a 'inSet' request alongside a contradicting equalTo constraint
        | foo  |
        | null |
 
+### inSet ###
+
 Scenario: Running a 'inSet' request alongside a non-contradicting inSet constraint should be successful
      Given there is a field foo
        And foo is in set:
@@ -544,6 +547,8 @@ Scenario: Running a 'inSet' request alongside a contradicting inSet constraint s
        | foo  |
        | null |
 
+### null ###
+
 Scenario: Running a 'inSet' request alongside a null constraint should produce null
      Given there is a field foo
        And foo is in set:
@@ -554,6 +559,8 @@ Scenario: Running a 'inSet' request alongside a null constraint should produce n
      Then the following data should be generated:
        | foo  |
        | null |
+
+### ofType ###
 
 Scenario: Running a 'inSet' request alongside an ofType = string should be successful
      Given there is a field foo
@@ -630,6 +637,8 @@ Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal 
        | foo  |
        | null |
 
+### matchingRegex ###
+
 Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
      Given there is a field foo
        And foo is in set:
@@ -654,6 +663,7 @@ Scenario: Running a 'inSet' request alongside a contradicting matchingRegex cons
        | foo  |
        | null |
 
+### containingRegex ###
 
 Scenario: Running a 'inSet' request alongside a non-contradicting containingRegex constraint should be successful
      Given there is a field foo
