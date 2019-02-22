@@ -336,10 +336,7 @@ Scenario: Running an 'equalTo' request that includes a date value (system max fu
 
 Scenario: Running an 'equalTo' request that includes an empty string("") characters should be successful
   Given there is a field foo
-    And there is a constraint:
-   """
-     { "field": "foo", "is": "equalTo", "value": "" }
-   """
+    And foo is equal to ""
   Then the following data should be generated:
    | foo  |
    | null |
@@ -347,10 +344,7 @@ Scenario: Running an 'equalTo' request that includes an empty string("") charact
 
 Scenario: Running an 'equalTo' request that includes a null entry (null) characters should fail with an error message
   Given there is a field foo
-    And there is a constraint:
-     """
-      { "field": "foo", "is": "equalTo", "value": null }
-     """
+    And foo is equal to null
   Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
 
 Scenario: Running an 'equalTo' request that includes an invalid date value should fail with an error message
@@ -435,10 +429,7 @@ Scenario: Two non-contradictory 'equalTo' statements should be successful
 Scenario: A not 'equalTo' statement should have no impact on an 'equalTo' statement
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        { "not": { "field": "foo", "is": "equalTo", "value": "A" }}
-      """
+    And foo is anything but equal to "A"
   Then the following data should be generated:
     | foo  |
     | "a"  |
@@ -496,10 +487,7 @@ Scenario: Non-contradictory not 'equalTo' and 'inSet' should be successful
       | "Test1" |
       | "Test2" |
       | 1       |
-    And there is a constraint:
-      """
-      { "not": { "field": "foo", "is": "equalTo", "value": "Test1" }}
-      """
+    And foo is anything but equal to "Test1"
   Then the following data should be generated:
       | foo     |
       | "Test2" |
@@ -510,10 +498,7 @@ Scenario: Not 'equalTo' and in set for same value should emit null
   Given there is a field foo
     And foo is in set:
       | "Test1" |
-    And there is a constraint:
-      """
-        { "not": { "field": "foo", "is": "equalTo", "value": "Test1" }}
-      """
+    And foo is anything but equal to "Test1"
   Then the following data should be generated:
       | foo     |
       | null    |
@@ -672,10 +657,7 @@ Scenario: Running an 'ofType' = temporal request that includes an invalid time v
 Scenario: 'EqualTo' a number and not 'ofType' string is successful
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "string"}}
-      """
+    And foo is anything but of type "string"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -684,10 +666,7 @@ Scenario: 'EqualTo' a number and not 'ofType' string is successful
 Scenario: 'EqualTo' a date and not 'ofType' string is successful
   Given there is a field foo
     And foo is equal to 9999-12-31T23:59:59.999
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "string"}}
-      """
+    And foo is anything but of type "string"
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -696,10 +675,7 @@ Scenario: 'EqualTo' a date and not 'ofType' string is successful
 Scenario: 'EqualTo' a string and not 'ofType' numeric is successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "numeric"}}
-      """
+    And foo is anything but of type "numeric"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -708,10 +684,7 @@ Scenario: 'EqualTo' a string and not 'ofType' numeric is successful
 Scenario: 'EqualTo' a date and not 'ofType' numeric is successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "numeric"}}
-      """
+    And foo is anything but of type "numeric"
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -720,10 +693,7 @@ Scenario: 'EqualTo' a date and not 'ofType' numeric is successful
 Scenario: 'EqualTo' a string and not 'ofType' temporal is successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "temporal"}}
-      """
+    And foo is anything but of type "temporal"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -732,10 +702,7 @@ Scenario: 'EqualTo' a string and not 'ofType' temporal is successful
 Scenario: 'EqualTo' a number and not 'ofType' temporal is successful
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "temporal"}}
-      """
+    And foo is anything but of type "temporal"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -743,10 +710,7 @@ Scenario: 'EqualTo' a number and not 'ofType' temporal is successful
 
 Scenario: Not 'equalTo' a number and 'ofType' string is successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": 1}}
-      """
+    And foo is anything but equal to 1
     And foo is of type "string"
     And foo is in set:
       | 1         |
@@ -760,10 +724,7 @@ Scenario: Not 'equalTo' a number and 'ofType' string is successful
 
 Scenario: Not 'equalTo' a date and 'ofType' string is successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": {"date" : "2019-01-01T00:00:00.000"}}}
-      """
+    And foo is anything but equal to 2019-01-01T00:00:00.000
     And foo is of type "string"
     And foo is in set:
     | 1                         |
@@ -777,10 +738,7 @@ Scenario: Not 'equalTo' a date and 'ofType' string is successful
 
 Scenario: Not 'equalTo' a string value and 'ofType' numeric is successful
     Given there is a field foo
-      And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-        """
+      And foo is anything but equal to "a"
       And foo is of type "numeric"
       And foo is in set:
       | 1   |
@@ -792,10 +750,7 @@ Scenario: Not 'equalTo' a string value and 'ofType' numeric is successful
 
 Scenario: Not 'equalTo' a date value and 'ofType' numeric is successful
     Given there is a field foo
-      And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": {"date" : "2019-01-01T00:00:00.000"}}}
-        """
+      And foo is anything but equal to 2019-01-01T00:00:00.000
       And foo is of type "numeric"
       And foo is in set:
       | 1                       |
@@ -808,10 +763,7 @@ Scenario: Not 'equalTo' a date value and 'ofType' numeric is successful
 
 Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
     Given there is a field foo
-      And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-        """
+      And foo is anything but equal to "a"
       And foo is of type "temporal"
       And foo is in set:
       | 2019-01-01T00:00:00.000   |
@@ -824,10 +776,7 @@ Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
 
 Scenario: Not 'equalTo' a numeric value and 'ofType' temporal is successful
     Given there is a field foo
-      And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": 1}}
-        """
+      And foo is anything but equal to 1
       And foo is of type "temporal"
       And foo is in set:
       | 2019-01-01T00:00:00.000 |
@@ -905,10 +854,7 @@ Scenario: 'EqualTo' a numeric value and 'ofType' temporal emits null
 Scenario: 'EqualTo' string and not 'ofType' string emits null
   Given there is a field foo
     And foo is equal to "this is a string"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "string"}}
-      """
+    And foo is anything but of type "string"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -916,10 +862,7 @@ Scenario: 'EqualTo' string and not 'ofType' string emits null
 Scenario: 'EqualTo' number and not 'ofType' numeric emits null
   Given there is a field foo
     And foo is equal to 1.12
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "numeric"}}
-      """
+    And foo is anything but of type "numeric"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -927,10 +870,7 @@ Scenario: 'EqualTo' number and not 'ofType' numeric emits null
 Scenario: 'EqualTo' date and not 'ofType' temporal emits null
   Given there is a field foo
     And foo is equal to 2019-02-12T09:11:53.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofType", "value": "temporal"}}
-      """
+    And foo is anything but of type "temporal"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -949,10 +889,7 @@ Scenario: 'EqualTo' with a non-contradictory 'matchingRegex' should be successfu
 Scenario: 'EqualTo' a string and not 'matchingRegex' of contradictory string should be successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "matchingRegex", "value": "[a]{3}"}}
-      """
+    And foo is anything but matching regex /[a]{3}/
   Then the following data should be generated:
     | foo  |
     | null |
@@ -961,10 +898,7 @@ Scenario: 'EqualTo' a string and not 'matchingRegex' of contradictory string sho
 @ignore #running out of memory
 Scenario: Not 'equalTo' a value and a non-contradicting 'matchingRegex' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": "aa"}}
-      """
+    And foo is anything but equal to "aa"
     And foo is matching regex /[a]{1}/
   Then the following data should be generated:
     | foo  |
@@ -1008,10 +942,7 @@ Scenario: 'EqualTo' staring with 'matchingRegex' of contradicting length emits n
 Scenario: 'EqualTo' and not 'matchingRegex' for identical strings emits null
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "matchingRegex", "value": "[a]{1}"}}
-      """
+    And foo is anything but matching regex /[a]{1}/
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1019,10 +950,7 @@ Scenario: 'EqualTo' and not 'matchingRegex' for identical strings emits null
 @ignore #running out of memory
 Scenario: Not 'equalTo' and 'matchingRegex' for identical strings emits null
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-      """
+    And foo is anything but equal to "a"
     And foo is matching regex /[a]{1}/
   Then the following data should be generated:
     | foo  |
@@ -1042,10 +970,7 @@ Scenario: 'EqualTo' with a 'containingRegex' should be successful
 Scenario: 'EqualTo' with a non-contradictory not 'containingRegex' is successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-       {"not": {"field": "foo", "is": "containingRegex", "value": "[b]{1}"}}
-      """
+    And foo is anything but containing regex /[b]{1}/
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1053,10 +978,7 @@ Scenario: 'EqualTo' with a non-contradictory not 'containingRegex' is successful
 
 Scenario: Not 'equalTo' with a non-contradictory 'containingRegex' is successful
   Given there is a field foo
-    And there is a constraint:
-      """
-       {"not": {"field": "foo", "is": "equalTo", "value": "[a]{1}"}}
-      """
+    And foo is anything but equal to /[a]{1}/
     And foo is containing regex /[b]{1}/
     And foo is in set:
       | "a"   |
@@ -1115,20 +1037,14 @@ Scenario: 'EqualTo" with a 'containingReqex of contradictory length emits null
 Scenario: 'EqualTo' with a contradictory not 'containingRegex' emits null
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "containingRegex", "value": "[a]{1}"}}
-      """
+    And foo is anything but containing regex /[a]{1}/
   Then the following data should be generated:
       | foo  |
       | null |
 
 Scenario: Not 'equalTo' with a contradictory 'containingRegex' emits null
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-      """
+    And foo is anything but equal to "a"
     And foo is containing regex /[a]{1}/
     And foo is in set:
       | "Aa"  |
@@ -1154,10 +1070,7 @@ Scenario: 'EqualTo' alongside a non-contradicting 'ofLength' constraint should b
 Scenario: 'EqualTo' with a non-contradictory not 'ofLength' is successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-       {"not": {"field": "foo", "is": "ofLength", "value": 2}}
-      """
+    And foo is anything but of length 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1165,10 +1078,7 @@ Scenario: 'EqualTo' with a non-contradictory not 'ofLength' is successful
 
 Scenario: Not 'equalTo' with a non-contradictory 'ofLength' is successful
   Given there is a field foo
-    And there is a constraint:
-      """
-       {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-      """
+    And foo is anything but equal to "a"
     And foo is of length 2
     And foo is in set:
       | "a"  |
@@ -1203,10 +1113,7 @@ Scenario: 'EqualTo' request alongside a contradicting 'ofLength' constraint emit
 Scenario: 'EqualTo' with a contradictory not 'ofLength' constraint emits null
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "ofLength", "value": 1}}
-      """
+    And foo is anything but of length 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1225,10 +1132,7 @@ Scenario: 'EqualTo' run against a non contradicting 'longerThan' should be succe
 Scenario: 'EqualTo' run against a non contradicting not 'longerThan' should be successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "longerThan", "value": 2}}
-      """
+    And foo is anything but longer than 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1236,10 +1140,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'longerThan' should be s
 
 Scenario: Not 'EqualTo' run against a non contradicting 'longerThan' should be successful
   Given there is a field foo
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-        """
+    And foo is anything but equal to "a"
     And foo is longer than 2
     And foo is in set:
       | "aaa" |
@@ -1276,10 +1177,7 @@ Scenario: 'EqualTo' run against a contradicting 'longerThan' should only generat
 Scenario: 'EqualTo' run against a contradicting not 'longerThan' should only generate null
   Given there is a field foo
     And foo is equal to "aa"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "longerThan", "value": 1}}
-      """
+    And foo is anything but longer than 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1298,10 +1196,7 @@ Scenario: 'EqualTo' run against a non contradicting 'shorterThan' should be succ
 Scenario: 'EqualTo' run against a non contradicting not 'shorterThan' should be successful
   Given there is a field foo
     And foo is equal to "aa"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "shorterThan", "value": 1}}
-      """
+    And foo is anything but shorter than 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1309,10 +1204,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'shorterThan' should be 
 
 Scenario: Not 'equalTo' run against a non contradicting 'shorterThan' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-      """
+    And foo is anything but equal to "a"
     And foo is shorter than 2
     And foo is in set:
       | 1    |
@@ -1349,10 +1241,7 @@ Scenario: 'EqualTo' run against a contradicting 'shorterThan' should only genera
 Scenario: 'EqualTo' run against a contradicting not 'shorterThan' should only generate null
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "shorterThan", "value": 2}}
-      """
+    And foo is anything but shorter than 2
   Then the following data should be generated:
     | foo    |
     | null   |
@@ -1371,10 +1260,7 @@ Scenario: 'equalTo' with a non-contradicting 'aValid' constraint should be succe
 Scenario: 'EqualTo' run against a non contradicting not 'aValid' ISIN should be successful
   Given there is a field foo
     And foo is equal to "a"
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "aValid", "value": "ISIN"}}
-        """
+    And foo is anything but a valid "ISIN"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1382,10 +1268,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'aValid' ISIN should be 
 
 Scenario: Not 'equalTo' run against a non contradicting 'aValid' ISIN should be successful
   Given there is a field foo
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": "a"}}
-        """
+    And foo is anything but equal to "a"
     And foo is a valid "ISIN"
     And foo is in set:
       | "a"            |
@@ -1429,10 +1312,7 @@ Scenario: 'EqualTo' run against a contradicting 'aValid' ISIN should only genera
 Scenario: 'EqualTo' a valid ISIN with a contradicting not 'aValid' ISIN emits null
   Given there is a field foo
     And foo is equal to "GB0002634947"
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "aValid", "value": "ISIN"}}
-      """
+    And foo is anything but a valid "ISIN"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1451,10 +1331,7 @@ Scenario: 'EqualTo' run against a non contradicting 'greaterThan' should be succ
 Scenario: 'EqualTo' run against a non contradicting not 'greaterThan' should be successful
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "greaterThan", "value": 1}}
-      """
+    And foo is anything but greater than 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1462,10 +1339,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'greaterThan' should be 
 
 Scenario: Not 'equalTo' run against a non contradicting 'greaterThan' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": 1}}
-      """
+    And foo is anything but equal to 1
     And foo is greater than 1
     And foo is in set:
       | 1   |
@@ -1504,10 +1378,7 @@ Scenario: 'EqualTo' run against a contradicting 'greaterThan' should only genera
 Scenario: 'EqualTo' run against a contradicting not 'greaterThan' should generate null
   Given there is a field foo
     And foo is equal to 2
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "greaterThan", "value": 1}}
-      """
+    And foo is anything but greater than 1
   Then the following data should be generated:
   | foo  |
   | null |
@@ -1526,10 +1397,7 @@ Scenario: 'EqualTo' run against a non contradicting 'greaterThanOrEqualToOrEqual
 Scenario: 'EqualTo' run against a non contradicting not 'greaterThanOrEqualToOrEqualTo' should be successful
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "greaterThanOrEqualTo", "value": 2}}
-      """
+    And foo is anything but greater than or equal to 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1537,10 +1405,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'greaterThanOrEqualToOrE
 
 Scenario: Not 'equalTo' run against a non contradicting 'greaterThanOrEqualToOrEqualTo' should be successful
   Given there is a field foo
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "equalTo", "value": 1}}
-        """
+    And foo is anything but equal to 1
     And foo is greater than or equal to 2
     And foo is in set:
       | 1         |
@@ -1577,10 +1442,7 @@ Scenario: 'EqualTo' run against a contradicting 'greaterThanOrEqualToOrEqualTo' 
 Scenario: 'EqualTo' run against a contradicting not 'greaterThanOrEqualToOrEqualTo' should only generate null
   Given there is a field foo
     And foo is equal to 2
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "greaterThanOrEqualTo", "value": 2}}
-      """
+    And foo is anything but greater than or equal to 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1599,10 +1461,7 @@ Scenario: 'EqualTo' run against a non contradicting 'lessThan' should be success
 Scenario: 'EqualTo' run against a non contradicting not 'lessThan' should be successful
   Given there is a field foo
     And foo is equal to 2
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "lessThan", "value": 2}}
-      """
+    And foo is anything but less than 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1610,10 +1469,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'lessThan' should be suc
 
 Scenario: Not 'equalTo' run against a non contradicting 'lessThan' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": 2}}
-      """
+    And foo is anything but equal to 2
     And foo is less than 2
     And foo is in set:
       | 2      |
@@ -1651,10 +1507,7 @@ Scenario: 'EqualTo' run against a contradicting 'lessThan' should only generate 
 Scenario: 'EqualTo' run against a contradicting not 'lessThan' should only generate null
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "lessThan", "value": 2}}
-      """
+    And foo is anything but less than 2
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1673,10 +1526,7 @@ Scenario: 'EqualTo' run against a non contradicting 'lessThanOrEqualTo' is succe
 Scenario: 'EqualTo' run against a non contradicting not 'lessThanOrEqualTo' is successful
   Given there is a field foo
     And foo is equal to 2
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "lessThanOrEqualTo", "value": 1}}
-      """
+    And foo is anything but less than or equal to 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1684,10 +1534,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'lessThanOrEqualTo' is s
 
 Scenario: Not 'equalTo' run against a non contradicting 'lessThanOrEqualTo' is successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": 3}}
-      """
+    And foo is anything but equal to 3
     And foo is less than or equal to 2
     And foo is in set:
       | -1       |
@@ -1726,10 +1573,7 @@ Scenario: 'EqualTo' run against a contradicting 'lessThanOrEqualTo' should only 
 Scenario: 'EqualTo' run against a contradicting not 'lessThanOrEqualTo' should only generate null
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "lessThanOrEqualTo", "value": 1}}
-        """
+    And foo is anything but less than or equal to 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1749,10 +1593,7 @@ Scenario: 'EqualTo' run against a non contradicting 'granularTo' should be succe
 Scenario: 'EqualTo' run against a non contradicting not 'granularTo' should be successful
   Given there is a field foo
     And foo is equal to 1.1
-    And there is a constraint:
-        """
-          {"not": {"field": "foo", "is": "granularTo", "value": 1}}
-        """
+    And foo is anything but granular to 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1761,10 +1602,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'granularTo' should be s
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'granularTo' should only generate null
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": 1.1}}
-      """
+    And foo is anything but equal to 1.1
     And foo is granular to 1
     And foo is in set:
       | 1.1 |
@@ -1805,10 +1643,7 @@ Scenario: 'EqualTo' run against a contradicting 'granularTo' should only generat
 Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only generate null
   Given there is a field foo
     And foo is equal to 1
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "granularTo", "value": 1}}
-      """
+    And foo is anything but granular to 1
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1827,10 +1662,7 @@ Scenario: 'EqualTo' run against a non contradicting 'after' should be successful
 Scenario: 'EqualTo' run against a non contradicting not 'after' should be successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "after", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but after 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -1839,10 +1671,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'after' should be succes
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'after' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": { "date": "2019-01-01T00:00:00.002" }}}
-      """
+    And foo is anything but equal to 2019-01-01T00:00:00.002
     And foo is after 2019-01-01T00:00:00.000
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -1877,10 +1706,7 @@ Scenario: 'EqualTo' run against a contradicting 'after' should only generate nul
 Scenario: 'EqualTo' run against a contradicting not 'after' should only generate null
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.001
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "after", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but after 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1898,10 +1724,7 @@ Scenario: 'EqualTo' run against a non contradicting 'afterOrAt' should be succes
 Scenario: 'EqualTo' run against a non contradicting not 'afterOrAt' should be successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "afterOrAt", "value": { "date": "2019-01-01T00:00:00.001" }}}
-      """
+    And foo is anything but after or at 2019-01-01T00:00:00.001
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -1910,10 +1733,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'afterOrAt' should be su
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'afterOrAt' should only be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but equal to 2019-01-01T00:00:00.000
     And foo is after or at 2019-01-01T00:00:00.000
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -1948,10 +1768,7 @@ Scenario: 'EqualTo' run against a contradicting 'afterOrAt' should only generate
 Scenario: 'EqualTo' run against a contradicting not 'afterOrAt' should only generate null
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "afterOrAt", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but after or at 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1970,10 +1787,7 @@ Scenario: 'EqualTo' run against a non contradicting 'before' should be successfu
 Scenario: 'EqualTo' run against a non contradicting not 'before' should be successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "before", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but before 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -1982,10 +1796,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'before' should be succe
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'before' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": { "date": "2018-12-31T23:59:59.998" }}}
-      """
+    And foo is anything but equal to 2018-12-31T23:59:59.998
     And foo is before 2019-01-01T00:00:00.000
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -2020,10 +1831,7 @@ Scenario: 'EqualTo' run against a contradicting 'before' should only generate nu
 Scenario: 'EqualTo' run against a contradicting not 'before' should only generate null
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-       """
-        {"not": {"field": "foo", "is": "before", "value": { "date": "2019-01-01T00:00:00.001" }}}
-      """
+    And foo is anything but before 2019-01-01T00:00:00.001
   Then the following data should be generated:
     | foo  |
     | null |
@@ -2042,10 +1850,7 @@ Scenario: 'EqualTo' run against a non contradicting 'beforeOrAt' should be succe
 Scenario: 'EqualTo' run against a non contradicting not 'beforeOrAt' should be successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.001
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "beforeOrAt", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but before or at 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -2054,10 +1859,7 @@ Scenario: 'EqualTo' run against a non contradicting not 'beforeOrAt' should be s
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be successful
   Given there is a field foo
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "equalTo", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but equal to 2019-01-01T00:00:00.000
     And foo is before or at 2019-01-01T00:00:00.000
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -2092,10 +1894,7 @@ Scenario: 'EqualTo' run against a contradicting 'beforeOrAt' should only generat
 Scenario: 'EqualTo' run against a contradicting not 'beforeOrAt' should only generate null
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And there is a constraint:
-      """
-        {"not": {"field": "foo", "is": "beforeOrAt", "value": { "date": "2019-01-01T00:00:00.000" }}}
-      """
+    And foo is anything but before or at 2019-01-01T00:00:00.000
   Then the following data should be generated:
     | foo  |
     | null |
