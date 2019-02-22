@@ -3,6 +3,8 @@ Feature: User can specify that a value is equalTo a required value
 Background:
      Given the generation strategy is full
 
+### alone ###
+
 Scenario: Running an 'equalTo' request that includes strings with roman numeric chars (0-9) only should be successful
   Given there is a field foo
     And foo is equal to "0123456789"
@@ -523,7 +525,7 @@ Scenario: 'EqualTo' a value and must be null should emit null
 
 ### ofType ###
 
-Scenario: 'OfType' string 'equalTo' string of numerics should be successful
+Scenario: 'OfType' string 'equalTo' a string value should be successful
   Given there is a field foo
     And foo is equal to "0123456789"
     And foo is of type "string"
@@ -532,52 +534,8 @@ Scenario: 'OfType' string 'equalTo' string of numerics should be successful
     | null         |
     | "0123456789" |
 
-Scenario: 'OfType' string 'equalTo' string of a-z, A-Z should be successful
-  Given there is a field foo
-    And foo is equal to "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    And foo is of type "string"
-  Then the following data should be generated:
-    | foo                                                    |
-    | null                                                   |
-    | "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" |
 
-Scenario: 'OfType' String "equalTo" string of a-z, A-Z, 0-9 should be successful
-  Given there is a field foo
-    And foo is equal to "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    And foo is of type "string"
-  Then the following data should be generated:
-    | foo                                                              |
-    | null                                                             |
-    | "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" |
-
-Scenario: Running an 'ofType' = String request that includes roman character strings that include profanity should be successful
-  Given there is a field foo
-   And foo is equal to "Dick Van Dyke"
-   And foo is of type "string"
-  Then the following data should be generated:
-    | foo             |
-    | null            |
-    | "Dick Van Dyke" |
-
-Scenario: Running an 'ofType' = String request that includes roman character strings that is null should be successful
-  Given there is a field foo
-    And foo is equal to "null"
-    And foo is of type "string"
-  Then the following data should be generated:
-    | foo    |
-    | null   |
-    | "null" |
-
-Scenario: Running an 'ofType' = string request that includes a null entry ("") characters should be successful
-  Given there is a field foo
-    And foo is equal to ""
-    And foo is of type "string"
-  Then the following data should be generated:
-    | foo  |
-    | null |
-    | ""   |
-
-Scenario: Running an 'ofType' = numeric request that includes a number value (not a string) should be successful
+Scenario: 'EqualTo' a number with 'ofType' numeric is successful
   Given there is a field foo
     And foo is equal to 1
     And foo is of type "numeric"
@@ -586,34 +544,7 @@ Scenario: Running an 'ofType' = numeric request that includes a number value (no
     | null |
     | 1    |
 
-Scenario: Running an 'ofType' = numeric request that includes a decimal number value should be successful
-  Given there is a field foo
-    And foo is equal to 0.66
-    And foo is of type "numeric"
-  Then the following data should be generated:
-    | foo  |
-    | null |
-    | 0.66 |
-
-Scenario: Running an 'ofType' = numeric request that includes a negative number value should be successful
-  Given there is a field foo
-    And foo is equal to -99.4
-    And foo is of type "numeric"
-  Then the following data should be generated:
-    | foo   |
-    | null  |
-    | -99.4 |
-
-Scenario: Running an 'ofType' = numeric request that includes the number zero should be successful
-  Given there is a field foo
-    And foo is equal to 0
-    And foo is of type "numeric"
-  Then the following data should be generated:
-    | foo   |
-    | null  |
-    | 0     |
-
-Scenario: Running an 'ofType' = temporal request that includes a date value (not a string) should be successful
+Scenario: 'EqualTo' a date value with 'ofType' temporal is successful
   Given there is a field foo
     And foo is equal to 2010-01-01T00:00:00.000
     And foo is of type "temporal"
@@ -621,38 +552,6 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (not
     | foo                     |
     | null                    |
     | 2010-01-01T00:00:00.000 |
-
-Scenario: Running an 'ofType' = temporal request that includes a date value (leap year) should be successful
-  Given there is a field foo
-    And foo is equal to 2020-02-29T09:15:00.000
-    And foo is of type "temporal"
-  Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2020-02-29T09:15:00.000 |
-
-Scenario: Running an 'ofType' = temporal request that includes a date value (system max future dates) should be successful
-  Given there is a field foo
-    And foo is equal to 9999-12-31T23:59:59.999
-    And foo is of type "temporal"
-  Then the following data should be generated:
-    | foo                      |
-    | null                     |
-    | 9999-12-31T23:59:59.999  |
-
-Scenario: Running an 'ofType' = temporal request that includes an invalid date value should fail with an error message
-  Given there is a field foo
-    And foo is equal to 2010-13-40T00:00:00.000
-    And foo is of type "temporal"
-  Then I am presented with an error message
-    And no data is created
-
-Scenario: Running an 'ofType' = temporal request that includes an invalid time value should fail with an error message
-  Given there is a field foo
-    And foo is equal to 2010-01-01T75:00:00.000
-    And foo is of type "temporal"
-  Then I am presented with an error message
-    And no data is created
 
 Scenario: 'EqualTo' a number and not 'ofType' string is successful
   Given there is a field foo
