@@ -7,11 +7,15 @@ Background:
 
 Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
      Given foo is shorter than 5
-       And foo is matching regex /[x]{0,5}/
-     Then the following data should not be included in what is generated:
+       And foo is matching regex /[x]{1,5}/
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
        | foo      |
-       | "xxxxx"  |
-       | "xxxxxx" |
+       | null     |
+       | "x"      |
+       | "xx"     |
+       | "xxx"    |
+       | "xxxx"   |
 
 Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 0
@@ -105,32 +109,22 @@ Scenario: Running a 'shorterThan' request alongside a contradicting matchingRege
        | foo    |
        | null   |
 
-@ignore #issue 294
 Scenario: Running a 'shorterThan' request alongside a non-contradicting containingRegex constraint should be successful
      Given foo is shorter than 3
-       And foo is containing regex /[🍩]{2}/
-     Then the following data should be included in what is generated:
-       | foo    |
-       | null   |
-       | "🍩🍩" |
+       And foo is containing regex /[Æ]{2}/
+       And the generator can generate at most 2 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "ÆÆ" |
 
-@ignore #issue 294
-Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should generate null
-     Given foo is shorter than 1
-       And foo is matching regex /[💾]{2}/
-      Then the following data should be generated:
-        | foo    |
-        | null   |
-
-@ignore #issue 294
 Scenario: Running a 'shorterThan' request alongside a contradicting containingRegex constraint should generate null
      Given foo is shorter than 1
-       And foo is containing regex /[🍩]{2}/
+       And foo is containing regex /[Ū]{2}/
       Then the following data should be generated:
         | foo    |
         | null   |
 
-@ignore #issue 294
 Scenario: Running a 'shorterThan' request alongside a non-contradicting ofLength constraint should be successful
      Given foo is shorter than 3
        And foo is of length 2
@@ -151,7 +145,7 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting longerTh
      Given foo is shorter than 3
        And foo is longer than 1
        And foo is matching regex /[♀]{0,3}/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "♀♀" |
@@ -166,36 +160,38 @@ Scenario: Running a 'shorterThan' request alongside a contradicting longerThan (
 Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterThan constraint should be successful
      Given foo is shorter than 4
        And foo is shorter than 3
-       And foo is matching regex /[♀]{0,5}/
-     Then the following data should be included in what is generated:
+       And foo is matching regex /[♀]{1,5}/
+     Then the following data should be generated:
        | foo  |
        | null |
+       | "♀"  |
        | "♀♀" |
-       And the following data should not be included in what is generated:
-       | foo    |
-       | "♀aa"  |
-       | "♀aaa" |
 
+@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should be successful
-      Given foo is shorter than 2
-       And foo is greater than 10
-      Then the following data should be included in what is generated:
-       | foo    |
-       | "a"    |
-       | null   |
+     Given foo is shorter than 10
+       And foo is greater than 8
+       And foo is matching regex /[a]{1,10}/
+     Then the following data should be generated:
+       | foo         |
+       | "aaaaaaaaa" |
+       | null        |
 
+@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should be successful
-     Given foo is shorter than 2
-       And foo is greater than or equal to 3
-     Then the following data should be included in what is generated:
+     Given foo is shorter than 3
+       And foo is greater than or equal to 2
+       And foo is matching regex /[a]{1,10}/
+     Then the following data should be generated:
        | foo    |
-       | "a"    |
+       | "aa"   |
        | null   |
 
 Scenario: Running a 'shorterThan' request alongside a lessThan constraint should be successful
      Given foo is shorter than 2
        And foo is less than 15
-     Then the following data should be included in what is generated:
+       And foo is matching regex /[a]{1,10}/
+     Then the following data should be generated:
        | foo    |
        | "a"    |
        | null   |
@@ -203,11 +199,13 @@ Scenario: Running a 'shorterThan' request alongside a lessThan constraint should
 Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should be successful
      Given foo is shorter than 2
        And foo is less than or equal to 19
-     Then the following data should be included in what is generated:
+       And foo is matching regex /[a]{1,10}/
+     Then the following data should be generated:
        | foo    |
        | "a"    |
        | null   |
 
+@ignore
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a constraint:
        """
@@ -216,15 +214,13 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf c
          { "field": "foo", "is": "shorterThan", "value": 3 }
        ]}
        """
-       And foo is containing regex /[%]{1}/
-     Then the following data should be included in what is generated:
+       And foo is matching regex /[%]{1,10}/
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
        | foo  |
        | null |
-       | "%1" |
        | "%"  |
-       And the following data should not be included in what is generated:
-       | foo   |
-       | "%12" |
+       | "%%" |
 
 Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf constraint should be successful
      Given there is a constraint:
@@ -234,15 +230,12 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
          { "field": "foo", "is": "shorterThan", "value": 2 }
        ]}
        """
-       And foo is containing regex /[%]{1}/
-     Then the following data should be included in what is generated:
+       And foo is matching regex /[%]{1,10}/
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
        | foo  |
        | null |
        | "%"  |
-       And the following data should not be included in what is generated:
-       | foo   |
-       | "%1"  |
-       | "%12" |
 
 Scenario: Running a 'shorterThan' request using a number round (decimal number) to specify a the length of a generated string should be successful
     Given foo is shorter than 2.0
