@@ -1,11 +1,11 @@
 package com.scottlogic.deg.generator.outputs.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class ManifestWriterImpl implements ManifestWriter{
+public class JsonManifestWriter implements ManifestWriter {
 
     public void writeManifest(
         List<ViolatedProfile> result,
@@ -30,7 +30,6 @@ public class ManifestWriterImpl implements ManifestWriter{
                 Collections.singleton(profile.violatedRule.ruleInformation.getDescription())))
             .collect(Collectors.toList());
 
-        System.out.println("Writing manifest.json file");
         write(
             new ManifestDTO(testCaseDtos),
             directoryPath.resolve(
@@ -45,6 +44,6 @@ public class ManifestWriterImpl implements ManifestWriter{
         Files.write(
             filepath,
             manifestAsJson.getBytes(
-                Charset.forName("UTF-8")));
+                Charsets.UTF_8));
     }
 }
