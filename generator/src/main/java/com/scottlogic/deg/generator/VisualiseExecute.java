@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
@@ -29,20 +30,23 @@ import java.util.stream.Stream;
  */
 public class VisualiseExecute implements Runnable {
 
+    private final ErrorReporter errorReporter;
+    private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
     private final VisualisationConfigSource configSource;
     private final VisualisationConfigValidator validator;
-    private final ErrorReporter errorReporter;
 
     @Inject
-    public VisualiseExecute(ProfileReader profileReader,
-        VisualisationConfigSource configSource,
-        VisualisationConfigValidator validator,
-        ErrorReporter errorReporter) {
-        this.profileReader = profileReader;
-        this.configSource = configSource;
-        this.validator = validator;
+    public VisualiseExecute(OutputTarget outputTarget,
+                            ProfileReader profileReader,
+                            VisualisationConfigSource configSource,
+                            VisualisationConfigValidator validator,
+                            ErrorReporter errorReporter) {
         this.errorReporter = errorReporter;
+        this.configSource = configSource;
+        this.outputTarget = outputTarget;
+        this.profileReader = profileReader;
+        this.validator = validator;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class VisualiseExecute implements Runnable {
 
         final DecisionTreeFactory profileAnalyser = new ProfileDecisionTreeFactory();
 
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputTarget);
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
             return;
@@ -85,9 +89,9 @@ public class VisualiseExecute implements Runnable {
         final String title = configSource.shouldHideTitle()
             ? null
             : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
 
         try {
             writeTreeTo(

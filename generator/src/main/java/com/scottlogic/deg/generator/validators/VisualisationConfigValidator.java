@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 
 import java.util.ArrayList;
 
@@ -14,15 +13,9 @@ import java.util.ArrayList;
 public class VisualisationConfigValidator {
 
     private final FileUtils fileUtils;
-    private final OutputTarget outputTarget;
-    private final VisualisationConfigSource configSource;
 
     @Inject
-    public VisualisationConfigValidator(FileUtils fileUtils,
-                                        OutputTarget outputTarget,
-                                        VisualisationConfigSource configSource) {
-        this.configSource = configSource;
-        this.outputTarget = outputTarget;
+    public VisualisationConfigValidator(FileUtils fileUtils) {
         this.fileUtils = fileUtils;
     }
 
@@ -30,8 +23,8 @@ public class VisualisationConfigValidator {
      * @return the result of command line validation. Contains a list of error messages.
      * if the list is empty then the validation was successful.
      */
-    public ValidationResult validateCommandLine() {
-        return new ValidationResult(checkOutputTarget(outputTarget));
+    public ValidationResult validateCommandLine(boolean overwite, OutputTarget outputTarget) {
+        return new ValidationResult(checkOutputTarget(overwite, outputTarget));
     }
 
     /**
@@ -41,13 +34,13 @@ public class VisualisationConfigValidator {
      * @param outputTarget the output target to check for validity.
      * @return the list of error messages to append to if the output target is not valid.
      */
-    private ArrayList<String> checkOutputTarget(OutputTarget outputTarget) {
+    private ArrayList<String> checkOutputTarget(boolean overwite, OutputTarget outputTarget) {
         ArrayList<String> errorMessages = new ArrayList<>();
         if (outputTarget instanceof FileOutputTarget) {
             if (fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
                     "Invalid Output - target is a directory, please use a different output filename");
-            } else if (!configSource.overwriteOutputFiles() && fileUtils.exists((FileOutputTarget) outputTarget)) {
+            } else if (!overwite && fileUtils.exists((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
                     "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
             }

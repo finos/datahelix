@@ -26,7 +26,7 @@ public class VisualisationConfigValidatorTests {
     @BeforeEach
     void setup() throws IOException {
         //Arrange
-        validator = new VisualisationConfigValidator(mockFileUtils, mockOutputTarget, mockConfigSource);
+        validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
@@ -38,7 +38,7 @@ public class VisualisationConfigValidatorTests {
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -48,10 +48,9 @@ public class VisualisationConfigValidatorTests {
     public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
         //Arrange
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
-        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(true, mockOutputTarget);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -61,7 +60,7 @@ public class VisualisationConfigValidatorTests {
     public void generateOutputFileDoesNotExist() {
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -73,7 +72,7 @@ public class VisualisationConfigValidatorTests {
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine();
+        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
