@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+/**
+ * write out a JSON manifest file during violation.
+ * This file shows which rule has been violated in which output file.
+ */
 public class JsonManifestWriter implements ManifestWriter {
 
     public void writeManifest(
