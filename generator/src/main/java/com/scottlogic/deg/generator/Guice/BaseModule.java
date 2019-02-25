@@ -19,6 +19,8 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
+import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -65,6 +67,7 @@ public class BaseModule extends AbstractModule {
         bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
 
         // Bind known implementations - no user input required
+        bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(FixFieldStrategy.class).to(HierarchicalDependencyFixFieldStrategy.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
@@ -77,7 +80,8 @@ public class BaseModule extends AbstractModule {
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
+        bind(new TypeLiteral<List<ViolationFilter>>() {
+        }).toProvider(ViolationFiltersProvider.class);
 
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
