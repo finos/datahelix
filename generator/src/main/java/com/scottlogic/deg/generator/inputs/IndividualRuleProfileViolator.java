@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,19 +35,14 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
     }
 
     @Override
-    public List<Profile> violate(Profile profile) {
+    public List<Profile> violate(Profile profile) throws IOException {
         // For each rule in the profile generate a profile with this one rule violated
         List<ViolatedProfile> violatedProfiles =
             profile.rules.stream()
                 .map(rule -> violateRuleOnProfile(profile, rule))
                 .collect(Collectors.toList());
 
-        try {
-            manifestWriter.writeManifest(violatedProfiles, outputPath);
-        }
-        catch (Exception e){
-            System.err.println("Failed to write manifest for violated profiles, continuing...");
-        }
+        manifestWriter.writeManifest(violatedProfiles, outputPath);
 
         // The following will allow the conversion to a List<Profile> from a List<ViolatedProfile>.
         return new ArrayList<>(violatedProfiles);
