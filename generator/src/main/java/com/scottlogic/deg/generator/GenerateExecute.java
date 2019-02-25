@@ -27,14 +27,14 @@ public class GenerateExecute implements Runnable {
                            ProfileReader profileReader,
                            GenerationEngine generationEngine,
                            GenerationConfigSource configSource,
-                           OutputTarget fileOutputTarget,
+                           OutputTarget outputTarget,
                            ConfigValidator validator,
                            ErrorReporter errorReporter) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
         this.configSource = configSource;
-        this.fileOutputTarget = fileOutputTarget;
+        this.outputTarget = outputTarget;
         this.validator = validator;
         this.errorReporter = errorReporter;
     }
@@ -42,7 +42,7 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
 
-        ValidationResult validationResult = validator.validatePreProfile(config);
+        ValidationResult validationResult = validator.validatePreProfile(config, configSource);
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
@@ -52,13 +52,13 @@ public class GenerateExecute implements Runnable {
         try {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            validationResult = validator.validateCommandLinePostProfile(profile);
+            validationResult = validator.validateCommandLinePostProfile(profile, configSource, outputTarget);
             if (!validationResult.isValid()) {
                 errorReporter.display(validationResult);
                 return;
             }
 
-            generationEngine.generateDataSet(profile, config, fileOutputTarget);
+            generationEngine.generateDataSet(profile, config, outputTarget);
 
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();

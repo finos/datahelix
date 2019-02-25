@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.utils;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,6 +65,10 @@ public class FileUtils {
             return false;
         }
         return true;
+    }
+
+    public String probeContentType(Path path) throws IOException {
+        return Files.probeContentType(path);
     }
 
     private boolean directoryContainsManifestJsonFile(Path filePath) {

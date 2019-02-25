@@ -34,7 +34,7 @@ public class GenerateExecuteTests {
     @Test
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
-        when(validator.validatePreProfile(config)).thenReturn(validationResult);
+        when(validator.validatePreProfile(config, configSource)).thenReturn(validationResult);
         when(mockValidationResult.isValid()).thenReturn(false);
 
         //Act
@@ -49,7 +49,7 @@ public class GenerateExecuteTests {
     public void validConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
-        when(validator.validatePreProfile(config)).thenReturn(validationResult);
+        when(validator.validatePreProfile(config, configSource)).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
 
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
