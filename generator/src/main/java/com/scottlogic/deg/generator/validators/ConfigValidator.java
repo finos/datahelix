@@ -7,9 +7,9 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 public interface ConfigValidator {
 
-    ValidationResult validatePreProfile(GenerationConfig config, GenerationConfigSource configSource);
+    ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource configSource);
 
-    ValidationResult validateCommandLinePostProfile(
+    ValidationResult postProfileChecks(
         Profile profile,
         GenerationConfigSource configSource,
         OutputTarget outputTarget

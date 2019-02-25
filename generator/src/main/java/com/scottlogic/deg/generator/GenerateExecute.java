@@ -42,7 +42,7 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
 
-        ValidationResult validationResult = validator.validatePreProfile(config, configSource);
+        ValidationResult validationResult = validator.preProfileChecks(config, configSource);
 
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
@@ -52,7 +52,7 @@ public class GenerateExecute implements Runnable {
         try {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            validationResult = validator.validateCommandLinePostProfile(profile, configSource, outputTarget);
+            validationResult = validator.postProfileChecks(profile, configSource, outputTarget);
             if (!validationResult.isValid()) {
                 errorReporter.display(validationResult);
                 return;

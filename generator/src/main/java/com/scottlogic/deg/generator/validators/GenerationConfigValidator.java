@@ -28,24 +28,20 @@ public class GenerationConfigValidator implements ConfigValidator {
     }
 
     @Override
-    public ValidationResult validatePreProfile(GenerationConfig config, GenerationConfigSource generationConfigSource) {
+    public ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource generationConfigSource) {
         ArrayList<String> errorMessages = new ArrayList<>();
 
-        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
-            && !config.getMaxRows().isPresent()) {
+        checkSwitches(config, errorMessages);
 
-            errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
-        }
-
-        validateProfileInputFile(errorMessages, generationConfigSource.getProfileFile());
+        checkProfileInputFile(errorMessages, generationConfigSource.getProfileFile());
 
         return new ValidationResult(errorMessages);
     }
 
     @Override
-    public ValidationResult validateCommandLinePostProfile(Profile profile,
-                                                           GenerationConfigSource configSource,
-                                                           OutputTarget outputTarget) {
+    public ValidationResult postProfileChecks(Profile profile,
+                                              GenerationConfigSource configSource,
+                                              OutputTarget outputTarget) {
         ArrayList<String> errorMessages = new ArrayList<>();
         ValidationResult validationResult = new ValidationResult(errorMessages);
 
@@ -65,7 +61,15 @@ public class GenerationConfigValidator implements ConfigValidator {
         return validationResult;
     }
 
-    private void validateProfileInputFile(ArrayList<String> errorMessages, File profileFile) {
+    private void checkSwitches (GenerationConfig config, ArrayList<String> errorMessages) {
+        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
+            && !config.getMaxRows().isPresent()) {
+
+            errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
+        }
+    }
+
+    private void checkProfileInputFile(ArrayList<String> errorMessages, File profileFile) {
         if (fileUtils.containsInvalidChars(profileFile)) {
             errorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters ? : %% \" | > < ", profileFile.toString()));
         }
@@ -75,7 +79,7 @@ public class GenerationConfigValidator implements ConfigValidator {
         else if (profileFile.isDirectory()) {
             errorMessages.add("Invalid Input - Profile file path provided is to a directory");
         }
-        else if (fileUtils.isEmpty(profileFile)) {
+        else if (fileUtils.isFileEmpty(profileFile)) {
             errorMessages.add("Invalid Input - Profile file has no content");
         }
         else {

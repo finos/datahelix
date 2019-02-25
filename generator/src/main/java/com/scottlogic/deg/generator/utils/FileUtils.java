@@ -31,7 +31,7 @@ public class FileUtils {
         return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
     }
 
-    public boolean isEmpty(File file) {
+    public boolean isFileEmpty(File file) {
         return file.length() == 0;
     }
      /**

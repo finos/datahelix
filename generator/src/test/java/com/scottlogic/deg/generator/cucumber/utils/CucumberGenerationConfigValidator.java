@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class CucumberGenerationConfigValidator implements ConfigValidator {
 
     @Override
-    public ValidationResult validatePreProfile(GenerationConfig config, GenerationConfigSource configSource) {
+    public ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource configSource) {
         return new ValidationResult(new ArrayList<>());
     }
 
     @Override
-    public ValidationResult validateCommandLinePostProfile(Profile profile, GenerationConfigSource configSource, OutputTarget outputTarget) {
+    public ValidationResult postProfileChecks(Profile profile, GenerationConfigSource configSource, OutputTarget outputTarget) {
         return new ValidationResult(new ArrayList<>());
     }
 }
