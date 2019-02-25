@@ -28,24 +28,21 @@ public class VisualisationConfigValidator {
 
     /**
      * @return the result of command line validation. Contains a list of error messages.
-     *         if the list is empty then the validation was successful.
+     * if the list is empty then the validation was successful.
      */
     public ValidationResult validateCommandLine() {
-        ArrayList<String> errorMessages = new ArrayList<>();
-        ValidationResult validationResult = new ValidationResult(errorMessages);
-
-        checkOutputTarget(errorMessages, outputTarget);
-
-        return validationResult;
+        return new ValidationResult(checkOutputTarget(outputTarget));
     }
 
     /**
-     * make sure the output file specified on the command line is valid.
+     * make sure the output file specified on the command line is valid. to be a valid output target file
+     * the target must not be a directory, and must not already exist.
      *
-     * @param errorMessages the list of error messages to append to if the output target is not valid.
-     * @param outputTarget  the output target to check for validity.
+     * @param outputTarget the output target to check for validity.
+     * @return the list of error messages to append to if the output target is not valid.
      */
-    private void checkOutputTarget(ArrayList<String> errorMessages, OutputTarget outputTarget) {
+    private ArrayList<String> checkOutputTarget(OutputTarget outputTarget) {
+        ArrayList<String> errorMessages = new ArrayList<>();
         if (outputTarget instanceof FileOutputTarget) {
             if (fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
@@ -55,6 +52,7 @@ public class VisualisationConfigValidator {
                     "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
             }
         }
+        return errorMessages;
     }
 
 }
