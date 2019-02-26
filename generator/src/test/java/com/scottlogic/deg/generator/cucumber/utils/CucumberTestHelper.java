@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.*;
-import com.scottlogic.deg.generator.Guice.BaseModule;
+import com.scottlogic.deg.generator.guice.BaseModule;
 
 import java.util.Collection;
 import java.util.List;

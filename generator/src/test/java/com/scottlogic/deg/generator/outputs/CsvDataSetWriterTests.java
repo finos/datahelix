@@ -2,13 +2,12 @@ package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.outputs.dataset_writers.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.CsvDataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.cglib.core.Local;
 
 import java.io.IOException;
 import java.math.BigDecimal;
