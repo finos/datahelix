@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
@@ -81,17 +80,6 @@ public class GenerationConfigValidator implements ConfigValidator {
         }
         else if (fileUtils.isFileEmpty(profileFile)) {
             errorMessages.add("Invalid Input - Profile file has no content");
-        }
-        else {
-            try {
-                String fileType = fileUtils.probeContentType(profileFile.toPath());
-                if (!fileType.equals("application/json")) {
-                    errorMessages.add(String.format("Invalid Input - File is of type %s\nFile type application/json required", fileType));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                errorMessages.add("Invalid Input - Unable to determine content type of profile file");
-            }
         }
     }
 

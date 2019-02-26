@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -34,7 +32,7 @@ public class GenerationConfigValidatorTests {
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         //Arrange
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
@@ -50,7 +48,6 @@ public class GenerationConfigValidatorTests {
         when(mockFile.isDirectory()).thenReturn(false);
         when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(false);
         when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(false);
-        when(mockFileUtils.probeContentType(any(Path.class))).thenReturn("application/json");
         //Post Profile Checks
         when(mockFileUtils.exists(mockOutputTarget)).thenReturn(true);
         when(mockFileUtils.isDirectory(mockOutputTarget)).thenReturn(false);
@@ -148,21 +145,6 @@ public class GenerationConfigValidatorTests {
         //Arrange
         when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(true);
         expectedErrorMessages.add("Invalid Input - Profile file has no content");
-
-        //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void preProfileChecks_profileFileNotTypeJSON_returnsCorrectErrorMessage() throws IOException {
-        //Arrange
-        when(mockFileUtils.probeContentType(mockFile.toPath())).thenReturn("invalid_file_type");
-        expectedErrorMessages.add("Invalid Input - File is of type invalid_file_type" +
-            "\nFile type application/json required");
 
         //Act
         ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
