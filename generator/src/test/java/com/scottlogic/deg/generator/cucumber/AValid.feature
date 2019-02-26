@@ -102,21 +102,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
 
   # COMBINATION OF CONSTRAINTS #
 
-  Scenario: Running an 'aValid' request alongside a non-contradicting equalTo constraint should be successful
-    Given foo is a valid "ISIN"
-      And foo is equal to "GB0002634946"
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "GB0002634946" |
-
-  Scenario: Running an 'aValid' request alongside a contradicting equalTo constraint should only emit null
-    Given foo is a valid "ISIN"
-      And foo is equal to "GB00026349"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
     Given foo is a valid "ISIN"
       And foo is in set:
