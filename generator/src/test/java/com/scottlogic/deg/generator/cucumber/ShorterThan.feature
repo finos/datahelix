@@ -57,22 +57,6 @@ Scenario: Running a 'shorterThan' request using a string (special character) to 
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated numeric type field should generate null
-     Given foo is shorter than 5
-       And foo is equal to 1234
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated temporal type field should generate null
-     Given foo is shorter than 25
-       And foo is equal to 2010-01-01T00:00:00.000
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than ""
      Then I am presented with an error message
@@ -82,21 +66,6 @@ Scenario: Running a 'shorterThan' request using null to specify a the length of 
      Given foo is shorter than null
      Then I am presented with an error message
        And no data is created
-
-Scenario: Running a 'shorterThan' request alongside a non-contradicting equalTo constraint should be successful
-     Given foo is shorter than 5
-       And foo is equal to "1234"
-     Then the following data should be generated:
-       | foo    |
-       | null   |
-       | "1234" |
-
-Scenario: Running a 'shorterThan' request alongside a contradicting equalTo constraint should produce null
-     Given foo is shorter than 5
-       And foo is equal to "12345"
-     Then the following data should be generated:
-       | foo    |
-       | null   |
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
      Given foo is shorter than 5
@@ -198,45 +167,39 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
        | "♀"  |
        | "♀♀" |
 
-@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should be successful
-     Given foo is shorter than 10
+     Given foo is shorter than 1
        And foo is greater than 8
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo         |
-       | "aaaaaaaaa" |
-       | null        |
+       | foo  |
+       | ""   |
+       | null |
 
-@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should be successful
-     Given foo is shorter than 3
+     Given foo is shorter than 1
        And foo is greater than or equal to 2
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "aa"   |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
 Scenario: Running a 'shorterThan' request alongside a lessThan constraint should be successful
-     Given foo is shorter than 2
+     Given foo is shorter than 1
        And foo is less than 15
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "a"    |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
 Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should be successful
-     Given foo is shorter than 2
+     Given foo is shorter than 1
        And foo is less than or equal to 19
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "a"    |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
-@ignore
+@ignore #91 values are emitted from both constraints in the anyOf, where they should be 'unique' for the field
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a constraint:
        """

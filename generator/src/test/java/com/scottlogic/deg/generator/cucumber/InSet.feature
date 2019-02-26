@@ -492,29 +492,6 @@ Scenario: Running an 'inSet' request that includes multiples of the same entry s
        | 1    |
        | 2    |
 
-Scenario: Running a 'inSet' request alongside a non-contradicting equalTo constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is equal to "Test 1"
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | "Test 1" |
-
-Scenario: Running a 'inSet' request alongside a contradicting equalTo constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is equal to "Test 4"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'inSet' request alongside a non-contradicting inSet constraint should be successful
      Given there is a field foo
        And foo is in set:
@@ -938,19 +915,6 @@ Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should be 
        | "test"  |
        | "Testt" |
        | "Test7" |
-
-Scenario: Running a 'inSet' request with a not constraint should be successful
-     Given there is a field foo
-       And foo is anything but in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-    And foo is equal to "Test 01 is not in set"
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | "Test 01 is not in set" |
 
 Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a field foo
