@@ -24,7 +24,7 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void whenGeneratingUnboundSet() {
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1),
                 createDate(2100, 1, 1));
     }
@@ -32,14 +32,14 @@ public class TemporalFieldValueSourceTests {
     @Test
     public void whenGeneratingUnboundSetWithBlacklist() {
         givenBlacklist(createDate(2100, 1, 1));
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1));
     }
 
     @Test
     public void whenGivenUpperBound() {
         givenUpperBound(createDate(2018, 01, 01), true);
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1),
                 createDate(2018, 1, 1));
     }
@@ -47,7 +47,7 @@ public class TemporalFieldValueSourceTests {
     @Test
     public void whenGivenLowerBound() {
         givenLowerBound(createDate(2018, 01, 01), true);
-        expectAllValues(
+        expectInterestingValues(
                 createDate(2018, 1, 1),
                 createDate(2100, 1, 1));
     }
@@ -299,6 +299,21 @@ public class TemporalFieldValueSourceTests {
         fieldSource = new TemporalFieldValueSource(restrictions, blackList);
 
         fieldSource.generateAllValues().forEach(actualValues::add);
+
+        Assert.assertThat(actualValues, equalTo(expectedValues));
+    }
+
+    private void expectInterestingValues(Object... expectedValuesArray) {
+        List<Object> expectedValues = Arrays.asList(expectedValuesArray);
+        List<Object> actualValues = new ArrayList<>();
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        fieldSource.generateInterestingValues().forEach(actualValues::add);
 
         Assert.assertThat(actualValues, equalTo(expectedValues));
     }
