@@ -31,4 +31,6 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean isEnableTracing();
     boolean overwriteOutputFiles();
     boolean visualiseReductions();
+    boolean shouldViolate();
+
 }

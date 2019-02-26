@@ -69,11 +69,6 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     }
 
     @Override
-    public boolean shouldViolate() {
-        return false;
-    }
-
-    @Override
     public boolean getValidateProfile() {
         return false;
     }

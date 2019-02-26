@@ -39,11 +39,6 @@ public class TestVisualisationConfigSource implements VisualisationConfigSource 
     }
 
     @Override
-    public boolean shouldViolate() {
-        return false;
-    }
-
-    @Override
     public boolean getValidateProfile() {
         return false;
     }
