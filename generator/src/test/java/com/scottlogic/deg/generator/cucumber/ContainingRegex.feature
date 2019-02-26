@@ -250,28 +250,6 @@ Scenario: Running a 'containingRegex' request alongside a contradicting equalTo 
        | foo  |
        | null |
 
-Scenario: Running a 'containingRegex' request alongside a non-contradicting inSet constraint should be successful
-     Given there is a field foo
-       And foo is containing regex /[a]{1,3}/
-       And foo is in set:
-         | "a"   |
-         | "aaa" |
-       And foo is anything but null
-       Then the following data should be generated:
-       | foo   |
-       | "a"   |
-       | "aaa" |
-
-Scenario: Running a 'containingRegex' request alongside a contradicting inSet constraint should produce null
-     Given there is a field foo
-       And foo is containing regex /[a]{1,3}/
-       And foo is in set:
-         | "b"   |
-         | "bbb" |
-     Then the following data should be generated:
-         | foo  |
-         | null |
-
 Scenario: Running a 'containingRegex' request alongside a null constraint should be successful
      Given there is a field foo
        And foo is containing regex /[a]{1,3}/

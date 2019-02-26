@@ -264,26 +264,6 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo co
         | foo   |
         | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         |  "a"  |
-         | "aaa" |
-     Then the following data should be generated:
-         | foo   |
-         | null  |
-         | "a"   |
-         | "aaa" |
-
-Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         | "b"   |
-         | "bbb" |
-      Then the following data should be generated:
-        | foo   |
-        | null  |
-
 Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
      Given foo is matching regex /[a]{1,3}/
        And foo is null
@@ -572,24 +552,3 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | "a"  | null  |
       | "c"  | null  |
 
-  Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
-    Given there is a field bar
-    And the combination strategy is exhaustive
-    And foo is matching regex /[a]{1}/
-    And bar is in set:
-      | "AA" |
-    And there is a field lee
-    And lee is of type "numeric"
-    And lee is granular to 1
-    And lee is less than 2
-    And lee is greater than 0
-    Then the following data should be generated:
-      | foo  | bar  | lee  |
-      | "a"  | "AA" | 1    |
-      | "a"  | "AA" | null |
-      | "a"  | null | 1    |
-      | "a"  | null | null |
-      | null | "AA" | 1    |
-      | null | "AA" | null |
-      | null | null | 1    |
-      | null | null | null |

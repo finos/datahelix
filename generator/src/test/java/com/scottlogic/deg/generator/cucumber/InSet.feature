@@ -381,205 +381,393 @@ Scenario: Running an 'inSet' request that includes multiples of the same entry s
       | 1    |
       | 2    |
 
-### EqualTo ###
-
-Scenario: Running a 'inSet' request alongside a non-contradicting equalTo constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is equal to "Test 1"
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | "Test 1" |
-
-Scenario: Running a 'inSet' request alongside a contradicting equalTo constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is equal to "Test 4"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 ### inSet ###
 
 Scenario: Running a 'inSet' request alongside a non-contradicting inSet constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is in set:
-       | "Test 3" |
-       | "Test 4" |
-       | "Test 5" |
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | "Test 3" |
+  Given there is a field foo
+    And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+    And foo is in set:
+      | "Test 3" |
+      | "Test 4" |
+      | "Test 5" |
+  Then the following data should be generated:
+      | foo      |
+      | null     |
+      | "Test 3" |
+
+Scenario: 'InSet' with a non-contradictory not 'inSet' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but in set:
+      | "A" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
 Scenario: Running a 'inSet' request alongside a contradicting inSet constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-     And foo is in set:
-       | "Test 4" |
-       | "Test 5" |
-       | "Test 6" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
+  Given there is a field foo
+    And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+    And foo is in set:
+      | "Test 4" |
+      | "Test 5" |
+      | "Test 6" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'inSet' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but in set:
+      | "a" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### null ###
 
+Scenario: 'InSet' with not null is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but null
+  Then the following data should be generated:
+      | foo |
+      | 1   |
+
+Scenario: Not 'inSet' with null emits null
+  Given there is a field foo
+    And foo is anything but in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is null
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
 Scenario: Running a 'inSet' request alongside a null constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
+  Given there is a field foo
+    And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+    And foo is null
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### ofType ###
 
-Scenario: Running a 'inSet' request alongside an ofType = string should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is of type "string"
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
+Scenario: 'InSet' with non-contradicting 'ofType' string should be successful
+  Given there is a field foo
+    And foo is in set:
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
+    And foo is of type "string"
+  Then the following data should be generated:
+      | foo      |
+      | null     |
+      | "Test 1" |
+      | "Test 2" |
+      | "Test 3" |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
-     Given there is a field foo
-       And foo is in set:
-       | 1 |
-       | 2 |
-       | 3 |
-       And foo is of type "string"
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: 'InSet' with non-contradicting 'ofType' numeric should be successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is of type "numeric"
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
 
-Scenario: Running a 'inSet' request alongside an ofType = numeric should be successful
-     Given there is a field foo
-       And foo is in set:
-       | 1 |
-       | 2 |
-       | 3 |
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | 1    |
-       | 2    |
-       | 3    |
+Scenario: 'InSet' with non-contradicting 'ofType' temporal should be successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000  |
+    And foo is of type "temporal"
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofType = numeric should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "1" |
-       | "2" |
-       | "3" |
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario Outline: 'InSet' type values with non-contradicting not 'ofType' are successful
+  Given there is a field foo
+    And foo is in set:
+      | <setValue> |
+    And foo is anything but of type <type>
+  Then the following data should be generated:
+      | foo        |
+      | null       |
+      | <setValue> |
+  Examples:
+      | setValue                | type       |
+      | 1                       | "string"   |
+      | 2019-01-01T00:00:00.000 | "string"   |
+      | "a"                     | "numeric"  |
+      | 2019-01-01T00:00:00.000 | "numeric"  |
+      | 1                       | "temporal" |
+      | "a"                     | "temporal" |
 
-Scenario: Running a 'inSet' request alongside an ofType = temporal should be successful
-     Given there is a field foo
-       And foo is in set:
-       | 2010-01-01T00:00:00.000 |
-       | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2010-01-01T00:00:00.000 |
-       | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
+Scenario Outline: Not 'inSet' type values with non-contradicting 'ofType' are successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | <setValue> |
+    And foo is of type <type>
+    And foo is in set:
+      | 1                       |
+      | "a"                     |
+      | 2019-01-01T00:00:00.000 |
+  Then the following data should be generated:
+      | foo             |
+      | null            |
+      | <expectedValue> |
+  Examples:
+      | setValue                | type       | expectedValue           |
+      | 1                       | "string"   | "a"                     |
+      | 2019-01-01T00:00:00.000 | "string"   | "a"                     |
+      | "a"                     | "numeric"  | 1                       |
+      | 2019-01-01T00:00:00.000 | "numeric"  | 1                       |
+      | 1                       | "temporal" | 2019-01-01T00:00:00.000 |
+      | "a"                     | "temporal" | 2019-01-01T00:00:00.000 |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "2010-01-01T00:00:00.000" |
-       | "2010-01-01T00:00:00.001" |
-       | "2011-01-01T00:00:00.000" |
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo  |
-       | null |
+
+Scenario Outline: Running a 'inSet' of string values with a contradicting ofType emits null
+  Given there is a field foo
+    And foo is in set:
+      | "1" |
+      | "2" |
+      | "3" |
+    And foo is of type <type>
+  Then the following data should be generated:
+      | foo  |
+      | null |
+  Examples:
+      | type       |
+      | "numeric"  |
+      | "temporal" |
+
+Scenario Outline: Running a 'inSet' of numeric values with a contradicting ofType emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is of type <type>
+  Then the following data should be generated:
+      | foo  |
+      | null |
+  Examples:
+      | type       |
+      | "string"   |
+      | "temporal" |
+
+Scenario Outline: Running a 'inSet' of date values with a contradicting ofType emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2010-01-01T00:00:00.000 |
+      | 2010-01-01T00:00:00.001 |
+      | 2011-01-01T00:00:00.000 |
+    And foo is of type <type>
+  Then the following data should be generated:
+      | foo  |
+      | null |
+  Examples:
+      | type      |
+      | "numeric" |
+      | "string"  |
+
+Scenario Outline: : 'InSet' equal to a type value and with not 'ofType' for the same type should emit null
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is anything but of type <type>
+  Then the following data should be generated:
+      | foo  |
+      | null |
+  Examples:
+      | typeValue               | type       |
+      | "a"                     | "string"   |
+      | 1                       | "numeric"  |
+      | 2010-01-01T00:00:00.000 | "temporal" |
 
 ### matchingRegex ###
 
-Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Tes7"  |
-     And foo is matching regex /[a-z]{4}/
-       Then the following data should be generated:
-       | foo    |
-       | null   |
-       | "test" |
+Scenario: Running a 'inSet' request alongside a non-contradicting 'matchingRegex' constraint should be successful
+  Given there is a field foo
+    And foo is in set:
+      | "Test"  |
+      | "test"  |
+      | "Testt" |
+      | "Tes7"  |
+    And foo is matching regex /[a-z]{4}/
+  Then the following data should be generated:
+      | foo    |
+      | null   |
+      | "test" |
 
-Scenario: Running a 'inSet' request alongside a contradicting matchingRegex constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "Testt" |
-       | "Tes7"  |
-       And foo is matching regex /[a-z]{4}/
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: 'InSet' string value with a not 'matchingRegex' of contradictory value is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but matching regex /[b]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+@ignore #out of memory
+Scenario: Not 'inSet' string value with a 'matchingRegex' of contradictory value is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is matching regex /[b]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "b"  |
+
+Scenario Outline: 'InSet' value of non-string type with 'matchingRegex' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is matching regex /[a]{1}/
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+      | true                    |
+
+Scenario: 'InSet' alongside a contradicting 'matchingRegex' constraint should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is matching regex /[b]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' alongside a 'matchingRegex' constraint of contradictory length should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is matching regex /[a]{2}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' alongside a contradicting not 'matchingRegex' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but matching regex /[a]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+@ignore #out of memory
+Scenario: Not 'inSet' alongside a contradicting 'matchingRegex' emits null
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is matching regex /[a]{1}/
+  Then the following data should be generated:
+    | foo  |
+    | null |
 
 ### containingRegex ###
 
-Scenario: Running a 'inSet' request alongside a non-contradicting containingRegex constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Tes7"  |
-       And foo is containing regex /[a-z]{4}/
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "test"  |
-       | "Testt" |
-
-Scenario: Running a 'inSet' request alongside a contradicting containingRegex constraint should generate null
+Scenario: Running a 'inSet' request alongside a non-contradicting 'containingRegex' constraint should be successful
   Given there is a field foo
-  And foo is in set:
-    | "Test"  |
-    | "test"  |
-    | "Testt" |
-    | "Tes7"  |
-  And foo is containing regex /[A-Z]{4}/
+    And foo is in set:
+      | "aa" |
+      | "b"  |
+    And foo is containing regex /[a]{1}/
   Then the following data should be generated:
-    | foo     |
-    | null    |
+      | foo  |
+      | null |
+      | "aa" |
+
+Scenario: 'InSet' string value with a not 'containingRegex' of contradictory value is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a"  |
+      | "ab" |
+      | "b"  |
+    And foo is anything but containing regex /[b]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+Scenario: Not 'inSet' string value with a 'containingRegex' of contradictory value is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is containing regex /[b]{1}/
+    And foo is in set:
+      | "a"  |
+      | "b"  |
+      | "ab" |
+      | "aa" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "b"  |
+      | "ab" |
+
+Scenario Outline: 'InSet' value of non-string type with 'containingRegex' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is containing regex /[a]{1}/
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+      | true                    |
+
+Scenario: 'InSet' alongside a contradicting 'containingRegex' constraint should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is containing regex /[b]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' alongside a 'containingRegex' constraint of contradictory length should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is containing regex /[a]{2}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' alongside a contradicting not 'containingRegex' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but containing regex /[a]{1}/
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
  ### ofLength ###
 
