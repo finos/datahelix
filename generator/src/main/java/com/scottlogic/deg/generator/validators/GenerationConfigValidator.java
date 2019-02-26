@@ -79,7 +79,7 @@ public class GenerationConfigValidator {
             } else if (!configSource.overwriteOutputFiles() && !fileUtils
                 .isDirectoryEmpty((FileOutputTarget) outputTarget, ruleCount)) {
                 errorMessages.add(
-                    "Invalid Output - directory not empty, please remove any 'manfiest.json' and '[0-9].csv' files or use the --overwrite option");
+                    "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --overwrite option");
             }
         }
     }
