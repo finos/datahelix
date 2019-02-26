@@ -143,10 +143,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 { "field": "price", "is": "granularTo", "value": 0.1 }
 ```
 
-Is satisfied if `field` has the granularity specified in `value`. Numerical granularities must be numbers, either 1 or a fractional power of ten; valid values can have no more meaningful decimal places than the granularity. Example values:
-
-- `1` would permit only integers
-- `0.1` would permit `20` and `20.1`, but not `20.01` 
+Is satisfied if `field` has at least the [granularity](./DataTypes.md#Granularity) specified in `value`.
 
 ## Temporal constraints
 All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
