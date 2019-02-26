@@ -31,6 +31,7 @@ public class VisualiseExecute implements Runnable {
 
     private final DecisionTreeFactory profileAnalyser;
     private final ErrorReporter errorReporter;
+    private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
     private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
@@ -40,6 +41,7 @@ public class VisualiseExecute implements Runnable {
     @Inject
     public VisualiseExecute(DecisionTreeFactory profileAnalyser,
                             ErrorReporter errorReporter,
+                            FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
                             OutputTarget outputTarget,
                             ProfileReader profileReader,
@@ -47,6 +49,7 @@ public class VisualiseExecute implements Runnable {
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
         this.errorReporter = errorReporter;
+        this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.configSource = configSource;
         this.outputTarget = outputTarget;
@@ -83,7 +86,7 @@ public class VisualiseExecute implements Runnable {
             new StaticContradictionDecisionTreeValidator(
                 profile.fields,
                 new RowSpecMerger(fieldSpecMerger),
-                new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger));
+                new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
