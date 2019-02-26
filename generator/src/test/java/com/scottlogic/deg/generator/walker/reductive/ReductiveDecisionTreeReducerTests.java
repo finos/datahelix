@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,7 @@ class ReductiveDecisionTreeReducerTests {
     private static final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private static final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
     private static final ReductiveDataGeneratorMonitor nullMonitor = new NoopDataGeneratorMonitor();
+    private static final ConstraintReducer constraintReducer = new ConstraintReducer(fieldSpecFactory, fieldSpecMerger);
 
     @Test
     public void shouldNoOpReduceEmptyTree(){
@@ -40,7 +42,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
 
         ReductiveConstraintNode reduced = reducer.reduce(tree, initialState);
 
@@ -63,7 +66,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
 
         ReductiveConstraintNode reduced = reducer.reduce(tree, initialState);
 
@@ -86,7 +90,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
         ReductiveState field2Fixed = initialState.with(field2FixedTo0);
         field2FixedTo0.getStream().iterator().next(); //move to the first value for field2, i.e. 0
@@ -115,7 +120,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field1FixedTo1 = new FixedField(field1, Stream.of(1), FieldSpec.Empty, nullMonitor);
         ReductiveState field1Fixed = initialState.with(field1FixedTo1);
         field1FixedTo1.getStream().iterator().next(); //move to the first value for field1, i.e. 1
@@ -141,7 +147,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field1FixedTo1 = new FixedField(field1, Stream.of(1), FieldSpec.Empty, nullMonitor);
         ReductiveState field1Fixed = initialState.with(field1FixedTo1);
         field1FixedTo1.getStream().iterator().next(); //move to the first value for field1, i.e. 1
@@ -174,7 +181,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
         ReductiveState field2Fixed = initialState.with(field2FixedTo0);
         field2FixedTo0.getStream().iterator().next(); //move to the first value for field2, i.e. 0
@@ -206,7 +214,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
         ReductiveState field2Fixed = initialState.with(field2FixedTo0);
         field2FixedTo0.getStream().iterator().next(); //move to the first value for field2, i.e. 0
@@ -234,7 +243,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
 
         ReductiveConstraintNode reduced = reducer.reduce(tree, initialState);
 
@@ -255,7 +265,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field1FixedTo1 = new FixedField(field1, Stream.of(1), FieldSpec.Empty, nullMonitor);
         ReductiveState field1Fixed = initialState.with(field1FixedTo1);
         field1FixedTo1.getStream().iterator().next(); //move to the first value for field1, i.e. 1
@@ -279,7 +290,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
         FixedField field3FixedTo4 = new FixedField(field3, Stream.of(4), FieldSpec.Empty, nullMonitor);
         ReductiveState fields2And3Fixed = initialState.with(field2FixedTo0).with(field3FixedTo4);
@@ -313,7 +325,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field3FixedTo3 = new FixedField(field3, Stream.of(3), FieldSpec.Empty, nullMonitor);
         ReductiveState field3Fixed = initialState.with(field3FixedTo3);
         field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. 3
@@ -344,7 +357,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field3FixedTo3 = new FixedField(field3, Collections.singletonList(null).stream(), FieldSpec.Empty, nullMonitor);
         ReductiveState field3Fixed = initialState.with(field3FixedTo3);
         field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
@@ -388,7 +402,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field3FixedTo3 = new FixedField(field3, Stream.of(3), FieldSpec.Empty, nullMonitor);
         ReductiveState field3Fixed = initialState.with(field3FixedTo3);
         field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
@@ -427,7 +442,8 @@ class ReductiveDecisionTreeReducerTests {
         ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
             fieldSpecFactory,
             fieldSpecMerger,
-            simplifier);
+            simplifier,
+            constraintReducer);
         FixedField field3FixedTo3 = new FixedField(field3, Collections.singletonList(null).stream(), FieldSpec.Empty, nullMonitor);
         ReductiveState field3Fixed = initialState.with(field3FixedTo3);
         field3FixedTo3.getStream().iterator().next(); //move to the first value for field3, i.e. null
@@ -439,7 +455,38 @@ class ReductiveDecisionTreeReducerTests {
         Assert.assertThat(reduced, equalTo(null));
     }
 
+    @Test
+    void reduce_containsConstraintsThatContractWithRootNode_removesConstraintsThatContradictWithRootNode(){
+        DecisionNode decision1 = new TreeDecisionNode(
+            new TreeConstraintNode(
+                new IsNullConstraint(field1, null)
+            ),
+            new TreeConstraintNode(isLessThan2)
+        );
 
+        final AtomicConstraint field1NotNull = new IsNullConstraint(field1, null).negate();
+        ConstraintNode tree = new TreeConstraintNode(
+            Collections.singletonList(field1NotNull),
+            Collections.singletonList(decision1));
+        ReductiveDecisionTreeReducer reducer = new ReductiveDecisionTreeReducer(
+            fieldSpecFactory,
+            fieldSpecMerger,
+            simplifier,
+            constraintReducer);
+        FixedField field2FixedTo0 = new FixedField(field2, Stream.of(0), FieldSpec.Empty, nullMonitor);
+        ReductiveState field2Fixed = initialState.with(field2FixedTo0);
+        field2FixedTo0.getStream().iterator().next(); //move to the first value for field2, i.e. 0
+
+        ReductiveConstraintNode reduced = reducer.reduce(tree, field2Fixed);
+
+        Assert.assertThat(reduced.getDecisions().isEmpty(), equalTo(true));
+        Assert.assertThat(
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            containsInAnyOrder(field1NotNull, isLessThan2));
+        Assert.assertThat(
+            AtomicConstraintExtractor.getAllAtomicConstraintsRecursively(reduced),
+            not(containsInAnyOrder(new IsNullConstraint(field1, null))));
+    }
 
     private static class AtomicConstraintExtractor extends BaseVisitor{
         public ArrayList<AtomicConstraint> atomicConstraints = new ArrayList<>();
