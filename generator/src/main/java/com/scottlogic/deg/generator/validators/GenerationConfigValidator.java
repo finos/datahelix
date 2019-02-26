@@ -42,7 +42,6 @@ public class GenerationConfigValidator implements ConfigValidator {
                                               GenerationConfigSource configSource,
                                               OutputTarget outputTarget) {
         ArrayList<String> errorMessages = new ArrayList<>();
-        ValidationResult validationResult = new ValidationResult(errorMessages);
 
         if (outputTarget instanceof FileOutputTarget ) {
             if (configSource.shouldViolate()) {
@@ -57,7 +56,7 @@ public class GenerationConfigValidator implements ConfigValidator {
             }
         }
 
-        return validationResult;
+        return new ValidationResult(errorMessages);
     }
 
     private void checkSwitches (GenerationConfig config, ArrayList<String> errorMessages) {
