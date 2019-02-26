@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.field_value_sources;
 
+import com.scottlogic.deg.generator.restrictions.DataTypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
@@ -246,6 +247,18 @@ public class TemporalFieldValueSourceTests {
             new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
 
         Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void temporalGenerateAllValues_withNoMin_startsAtLocalDateTimeMin(){
+        //Arrange
+        DateTimeRestrictions max = new DateTimeRestrictions();
+        max.max = new DateTimeRestrictions.DateTimeLimit(LocalDateTime.MAX, false);
+        TemporalFieldValueSource noMin = new TemporalFieldValueSource(max, Collections.emptySet());
+        //Act
+        LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
+        //Assert
+        Assert.assertThat(firstValue, equalTo(LocalDateTime.MIN));
     }
 
     private DateTimeRestrictions restrictions(String min, String max){

@@ -80,15 +80,12 @@ public class TemporalFieldValueSource implements FieldValueSource {
 
     @Override
     public Iterable<Object> generateAllValues() {
-
-        if (this.isFinite()) {
-            return () -> new UpCastingIterator<>(
-                    new FilteringIterator<>(new SequentialDateIterator(inclusiveLower, exclusiveUpper),
-                            i -> !blacklist.contains(i)));
-        } else {
-            return generateInterestingValues();
-        }
-
+        return () -> new UpCastingIterator<>(
+            new FilteringIterator<>(
+                new SequentialDateIterator(
+                    inclusiveLower != null ? inclusiveLower : LocalDateTime.MIN,
+                    exclusiveUpper != null ? exclusiveUpper : LocalDateTime.MAX),
+                i -> !blacklist.contains(i)));
     }
 
     @Override
