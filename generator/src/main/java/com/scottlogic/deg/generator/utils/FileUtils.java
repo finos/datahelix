@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.utils;
 
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 import java.io.File;
@@ -78,5 +79,10 @@ public class FileUtils {
             }
         }
         return false;
+    }
+
+    public File getTraceFile(GenerationConfigSource configSource) {
+        String filenameWithoutExtension = configSource.getOutputPath().toString().replaceAll("\\.[^.]+$", "");
+        return Paths.get(filenameWithoutExtension + "-trace.json").toFile();
     }
 }

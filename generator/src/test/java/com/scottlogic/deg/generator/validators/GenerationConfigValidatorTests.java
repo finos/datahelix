@@ -44,6 +44,7 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.getProfileFile()).thenReturn(mockFile);
         //Pre Profile Checks
         when(config.getMaxRows()).thenReturn(Optional.empty());
+        when(mockConfigSource.isEnableTracing()).thenReturn(false);
         when(mockFile.exists()).thenReturn(true);
         when(mockFile.isDirectory()).thenReturn(false);
         when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(false);
@@ -95,6 +96,52 @@ public class GenerationConfigValidatorTests {
         //Assert
         assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
         Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void validateCommandLineOptions_traceConstraintsOutputFileDoesNotExist_returnsNoErrorMessages() {
+        //Arrange
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
+    }
+
+    @Test
+    public void validateCommandLineOptions_traceConstraintsOutputFileAlreadyExistsNoOverwrite_returnsCorrectErrorMessage() {
+        //Arrange
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
+        when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
+        expectedErrorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --overwrite option");
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void validateCommandLineOptions_traceConstraintsOutputFileAlreadyExistsOverwrite_returnsNoErrorMessages() {
+        //Arrange
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
+        when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
+        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
