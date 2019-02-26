@@ -21,8 +21,7 @@ public class RuleBuilder extends ConstraintChainBuilder<Rule> {
         this.ruleInformation = new RuleInformation(new RuleDTO(ruleName, null));
     }
 
-    public Rule build() {
-        saveConstraint();
+    public Rule buildInner() {
         return new Rule(ruleInformation, constraints);
     }
 }

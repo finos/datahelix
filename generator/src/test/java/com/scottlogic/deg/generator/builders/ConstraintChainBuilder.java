@@ -19,7 +19,12 @@ public abstract class ConstraintChainBuilder<T> {
     protected Collection<Constraint> constraints = new ArrayList<>();
     private Constraint constraintToAdd;
 
-    public abstract T build();
+    public T build() {
+        saveConstraint();
+        return buildInner();
+    }
+
+    abstract T buildInner();
 
     public ConstraintChainBuilder<T> withConstraint(Constraint constraint) {
         return saveAndAddConstraint(constraint);
@@ -62,13 +67,12 @@ public abstract class ConstraintChainBuilder<T> {
         else if (!(constraintToAdd instanceof AtomicConstraint)) {
             throw new RuntimeException("Can only mark atomic constraints as violated.");
         }
-        else {
-            constraintToAdd = new ViolatedAtomicConstraint(((AtomicConstraint) constraintToAdd).negate());
-        }
+
+        constraintToAdd = new ViolatedAtomicConstraint(((AtomicConstraint) constraintToAdd).negate());
         return this;
     }
 
-    protected void saveConstraint() {
+    void saveConstraint() {
         if (constraintToAdd != null) {
             constraints.add(constraintToAdd);
             constraintToAdd = null;

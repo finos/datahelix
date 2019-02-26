@@ -48,7 +48,8 @@ public class ProfileViolationTests {
     }
 
     /**
-     * Tests that the violator can take a profile
+     * Tests that the violator can take a profile of two simple rules and return two violated profiles with the correct
+     * negation combinations.
      *  Input: Profile with 2 fields foo and bar, 2 single atomic constraint rules affecting foo and bar
      *  Output: 2 Profiles, one with rule 1 negated and rule 2 unaffected, one with rule 1 unaffected and rule 2 negated
      */
