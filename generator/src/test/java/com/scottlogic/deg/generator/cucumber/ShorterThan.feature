@@ -167,45 +167,39 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting shorterT
        | "♀"  |
        | "♀♀" |
 
-@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThan constraint should be successful
-     Given foo is shorter than 10
+     Given foo is shorter than 1
        And foo is greater than 8
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo         |
-       | "aaaaaaaaa" |
-       | null        |
+       | foo  |
+       | ""   |
+       | null |
 
-@ignore
 Scenario: Running a 'shorterThan' request alongside a greaterThanOrEqualTo constraint should be successful
-     Given foo is shorter than 3
+     Given foo is shorter than 1
        And foo is greater than or equal to 2
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "aa"   |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
 Scenario: Running a 'shorterThan' request alongside a lessThan constraint should be successful
-     Given foo is shorter than 2
+     Given foo is shorter than 1
        And foo is less than 15
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "a"    |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
 Scenario: Running a 'shorterThan' request alongside a lessThanOrEqualTo constraint should be successful
-     Given foo is shorter than 2
+     Given foo is shorter than 1
        And foo is less than or equal to 19
-       And foo is matching regex /[a]{1,10}/
      Then the following data should be generated:
-       | foo    |
-       | "a"    |
-       | null   |
+       | foo  |
+       | ""   |
+       | null |
 
-@ignore
+@ignore #91 values are emitted from both constraints in the anyOf, where they should be 'unique' for the field
 Scenario: Running a 'shorterThan' request as part of a non-contradicting anyOf constraint should be successful
      Given there is a constraint:
        """
