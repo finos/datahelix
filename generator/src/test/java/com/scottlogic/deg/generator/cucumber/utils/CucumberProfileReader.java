@@ -49,13 +49,13 @@ public class CucumberProfileReader implements ProfileReader {
             }).collect(Collectors.toList());
 
             if (exceptionInMapping.get()){
-                return null;
+                return new Profile(Collections.emptyList(), Collections.emptySet(), "Error creating profile");
             }
 
             return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(new RuleDTO()), mappedConstraints)));
         } catch (Exception e) {
             state.addException(e);
-            return null;
+            return new Profile(Collections.emptyList(), Collections.emptySet(), "Error creating profile: " + e.getMessage());
         }
     }
 
