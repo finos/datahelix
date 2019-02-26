@@ -113,6 +113,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         return this.profileFile;
     }
 
+    @Override
     public boolean shouldViolate() {
         return this.violateProfile;
     }
@@ -127,26 +128,32 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         return this.outputPath;
     }
 
+    @Override
     public boolean isEnableTracing() {
         return this.enableTracing;
     }
 
+    @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return this.generationType;
     }
 
+    @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
     }
 
+    @Override
     public GenerationConfig.TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
+    @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return constraintsToNotViolate;
     }
 
+    @Override
     public GenerationConfig.MonitorType getMonitorType() {
         if (this.verbose) {
             return GenerationConfig.MonitorType.VERBOSE;
@@ -157,16 +164,19 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         return GenerationConfig.MonitorType.STANDARD;
     }
 
+    @Override
     public Optional<Long> getMaxRows() {
         return maxRows == null
             ? Optional.empty()
             : Optional.of(maxRows);
     }
 
+    @Override
     public boolean getValidateProfile() {
         return this.validateProfile;
     }
 
+    @Override
     public boolean visualiseReductions() {
         return visualiseReductions;
     }
