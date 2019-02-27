@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
-import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
 import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
