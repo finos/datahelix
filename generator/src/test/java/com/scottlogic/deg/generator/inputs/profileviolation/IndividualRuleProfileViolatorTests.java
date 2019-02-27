@@ -25,6 +25,7 @@ import java.util.List;
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.*;
 
@@ -60,7 +61,7 @@ public class IndividualRuleProfileViolatorTests {
      * Violate with a profile with a single rule returns a single violated profile.
      */
     @Test
-    public void violate_withSingleRuleProfile_returnsSingleViolatedProfile() {
+    public void violate_withSingleRuleProfile_returnsSingleViolatedProfile() throws IOException {
         //Arrange
         Profile inputProfile = new Profile(
             Arrays.asList(fooField, barField),
@@ -96,7 +97,7 @@ public class IndividualRuleProfileViolatorTests {
      * Violate with a profile with a multiple rules returns a 2 violated profiles.
      */
     @Test
-    public void violate_withMultipleRuleProfile_returnsMultipleViolatedProfile() {
+    public void violate_withMultipleRuleProfile_returnsMultipleViolatedProfile() throws IOException {
         //Arrange
         Profile inputProfile = new Profile(
             Arrays.asList(fooField, barField),
@@ -176,7 +177,10 @@ public class IndividualRuleProfileViolatorTests {
             .writeManifest(anyListOf(ViolatedProfile.class), eq(mockPath));
 
         //Act
-        target.violate(inputProfile);
+        IOException thrown =
+            assertThrows(IOException.class,
+                () -> target.violate(inputProfile),
+                "Expected violate() to throw IOException, but it didn't");
 
         //Assert
         verify(mockManifestWriter, times(1))

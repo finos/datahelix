@@ -1,7 +1,9 @@
 # Generate Options
 Option switches are case-sensitive, arguments are case-insensitive
 
-* `--violate` 
+* `--overwrite`
+    * Overwrite existing output files.
+* `--violate`
    * Generate data which violates profile constraints.
 * `--dont-violate` <epistemic constraints...>
    * Choose specific [epicstemic constraints](../EpistemicConstraints.md) to [not violate](../generator/docs/SelectiveViolation.md), e.g. "--dont-violate=typeOf lessThan" will not violate ANY data type constraints and will also not violate ANY less than constraints.

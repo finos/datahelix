@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.scottlogic.deg.generator.Profile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,5 +16,5 @@ public interface ProfileViolator {
      * @param profile Input profile.
      * @return List of profile objects that represent the multiple violations.
      */
-    List<Profile> violate(Profile profile);
+    List<Profile> violate(Profile profile) throws IOException;
 }

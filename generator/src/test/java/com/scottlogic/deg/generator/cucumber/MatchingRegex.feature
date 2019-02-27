@@ -136,7 +136,7 @@ Scenario: Running a 'matchingRegex' request that includes special characters (em
 
 Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
      Given foo is matching regex /^[a-c]{2}$/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -151,7 +151,7 @@ Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should
 
 Scenario: Running a 'matchingRegex' request that includes only anchor ^ should be successful
      Given foo is matching regex /^[a-c]{2}/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -166,7 +166,7 @@ Scenario: Running a 'matchingRegex' request that includes only anchor ^ should b
 
 Scenario: Running a 'matchingRegex' request that includes only anchor $ should be successful
      Given foo is matching regex /[a-c]{2}$/
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo  |
        | null |
        | "aa" |
@@ -248,21 +248,6 @@ Scenario: User using matchingRegex operator to provide an exact set of values
        | "a"   |
        | "aa"  |
        | "aaa" |
-
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
-     Given foo is matching regex /[a]{3}/
-       And foo is equal to "aaa"
-     Then the following data should be generated:
-       | foo   |
-       | null  |
-       | "aaa" |
-
-Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
-     Given foo is matching regex /[a]{3}/
-       And foo is equal to "bbb"
-      Then the following data should be generated:
-        | foo   |
-        | null  |
 
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given foo is matching regex /[a]{1,3}/
@@ -411,7 +396,7 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting shorterTha
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting aValid constraint should only emit null
        Given foo is matching regex /[0-9A-Za-z]{12}/
        And foo is a valid "ISIN"
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo            |
        | null           |
 
@@ -465,46 +450,78 @@ Scenario: Running a 'matchingRegex' request alongside a granularTo constraint sh
       | "01" |
       | "10" |
 
+# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+@ignore
 Scenario: Running a 'matchingRegex' request alongside a after constraint should be successful
-     Given foo is matching regex /[0-z]{2}/
+     Given foo is matching regex /[a-e]{2}/
        And foo is after 2018-10-10T00:00:00.000
-     Then the following data should be included in what is generated:
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
         | foo  |
         | null |
+        | "aa" |
         | "ab" |
+        | "ac" |
+        | "ad" |
 
+# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+@ignore
 Scenario: Running a 'matchingRegex' request alongside a afterOrAt constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is after or at 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
-
-Scenario: Running a 'matchingRegex' request alongside a before constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is before 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
-
-Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should be successful
-      Given foo is matching regex /[a-z]{2}/
-        And foo is before or at 2018-10-10T00:00:00.000
-      Then the following data should be included in what is generated:
-        | foo  |
-        | null |
-        | "ab" |
-
-Scenario: Running a 'matchingRegex' request with a not constraint should be successful
-     Given foo is matching regex /[0-9]{1}/
-       And foo is anything but matching regex /[0-1]{1}/
-     Then the following data should not be included in what is generated:
+     Given foo is matching regex /[a-e]{2}/
+       And foo is after or at 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
        | foo  |
-       | "0"  |
-       | "1"  |
+       | null |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
 
+# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+@ignore
+Scenario: Running a 'matchingRegex' request alongside a before constraint should be successful
+     Given foo is matching regex /[a-e]{2}/
+       And foo is before 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
+
+# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+@ignore
+Scenario: Running a 'matchingRegex' request alongside a beforeOrAt constraint should be successful
+     Given foo is matching regex /[a-e]{2}/
+       And foo is before or at 2018-10-10T00:00:00.000
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "aa" |
+       | "ab" |
+       | "ac" |
+       | "ad" |
+
+# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+@ignore
+Scenario: Running a 'matchingRegex' request with a not constraint should be successful
+     Given foo is matching regex /[a-j]{1}/
+       And foo is anything but matching regex /[a-b]{1}/
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | "c"  |
+       | "d"  |
+       | "e"  |
+       | "f"  |
+
+# Defect 91
+@ignore
 Scenario: Running a 'matchingRegex' request as part of a non-contradicting anyOf constraint should be successful
        Given there is a constraint:
        """
@@ -515,7 +532,6 @@ Scenario: Running a 'matchingRegex' request as part of a non-contradicting anyOf
        """
      Then the following data should be generated:
        | foo  |
-       | null |
        | null |
        | "a"  |
        | "b"  |
