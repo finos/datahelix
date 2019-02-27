@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.cucumber.utils.CucumberManifestWriter;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;

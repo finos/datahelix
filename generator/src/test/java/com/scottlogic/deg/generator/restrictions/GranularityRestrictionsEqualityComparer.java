@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
+import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 
 public class GranularityRestrictionsEqualityComparer implements EqualityComparer {
 

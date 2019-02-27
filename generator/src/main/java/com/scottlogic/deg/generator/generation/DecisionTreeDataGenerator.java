@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
