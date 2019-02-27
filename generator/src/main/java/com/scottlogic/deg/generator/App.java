@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.CommandLine.GenerateCommandLine;
-import com.scottlogic.deg.generator.CommandLine.VisualiseCommandLine;
+import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import picocli.CommandLine;
 
 import java.util.stream.Collectors;

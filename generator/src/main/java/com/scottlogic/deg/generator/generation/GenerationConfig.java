@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.generation.combination_strategies.*;
-import com.scottlogic.deg.generator.generation.combination_strategies.PinningCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combinationstrategies.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
