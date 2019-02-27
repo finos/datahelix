@@ -1,8 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.test_utils.EqualityComparer;
-import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
+import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 import com.scottlogic.deg.generator.restrictions.FieldToFieldSpecComparer;
 
 public class ReductiveRowSpecEqualityComparer implements EqualityComparer {
