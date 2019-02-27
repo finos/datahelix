@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.utils;
 
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +27,14 @@ public class FileUtils {
         return new DecimalFormat(new String(zeroes));
     }
 
-    /**
+    public boolean containsInvalidChars(File file) {
+        return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
+    }
+
+    public boolean isFileEmpty(File file) {
+        return file.length() == 0;
+    }
+     /**
      * @param target the FileOutputTarget to check the existence of.
      * @return true if the supplied FileOutputTarget exists on disk, false otherwise.
      */
@@ -70,5 +79,10 @@ public class FileUtils {
             }
         }
         return false;
+    }
+
+    public File getTraceFile(GenerationConfigSource configSource) {
+        String filenameWithoutExtension = configSource.getOutputPath().toString().replaceAll("\\.[^.]+$", "");
+        return Paths.get(filenameWithoutExtension + "-trace.json").toFile();
     }
 }
