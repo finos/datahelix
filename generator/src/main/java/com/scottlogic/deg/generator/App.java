@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import picocli.CommandLine;
 
 import java.util.stream.Collectors;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
         .addSubcommand("generate", new GenerateCommandLine())
-        .addSubcommand("visualise", new Visualise())
+        .addSubcommand("visualise", new VisualiseCommandLine())
         .addSubcommand("genTreeJson", new GenerateTreeCollectionJson())
         .setCaseInsensitiveEnumValuesAllowed(true);
 

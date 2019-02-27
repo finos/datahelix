@@ -20,9 +20,9 @@ public class GenerationConfigValidator {
     private final OutputTarget outputTarget;
 
     @Inject
-    public GenerationConfigValidator(GenerationConfigSource configSource,
-                                     OutputTarget outputTarget,
-                                     FileUtils fileUtils) {
+    public GenerationConfigValidator(FileUtils fileUtils,
+                                     GenerationConfigSource configSource,
+                                     OutputTarget outputTarget) {
         this.configSource = configSource;
         this.outputTarget = outputTarget;
         this.fileUtils = fileUtils;
@@ -57,10 +57,10 @@ public class GenerationConfigValidator {
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
                                            OutputTarget outputTarget) {
         if (outputTarget instanceof FileOutputTarget) {
-            if (fileUtils.isDirectory((FileOutputTarget)outputTarget)) {
+            if (fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
                     "Invalid Output - target is a directory, please use a different output filename");
-            } else if (!configSource.overwriteOutputFiles() && fileUtils.exists((FileOutputTarget)outputTarget)) {
+            } else if (!configSource.overwriteOutputFiles() && fileUtils.exists((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
                     "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
             }
@@ -70,16 +70,16 @@ public class GenerationConfigValidator {
     private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages,
                                                     OutputTarget outputTarget, int ruleCount) {
         if (outputTarget instanceof FileOutputTarget) {
-            if (!fileUtils.exists((FileOutputTarget)outputTarget)) {
+            if (!fileUtils.exists((FileOutputTarget) outputTarget)) {
                 errorMessages.add(
                     "Invalid Output - output directory must exist, please enter a valid directory name");
-            } else if (!fileUtils.isDirectory((FileOutputTarget)outputTarget)) {
+            } else if (!fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
                 errorMessages
                     .add("Invalid Output - not a directory, please enter a valid directory name");
             } else if (!configSource.overwriteOutputFiles() && !fileUtils
-                .isDirectoryEmpty((FileOutputTarget)outputTarget, ruleCount)) {
+                .isDirectoryEmpty((FileOutputTarget) outputTarget, ruleCount)) {
                 errorMessages.add(
-                    "Invalid Output - directory not empty, please remove any 'manfiest.json' and '[0-9].csv' files or use the --overwrite option");
+                    "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --overwrite option");
             }
         }
     }

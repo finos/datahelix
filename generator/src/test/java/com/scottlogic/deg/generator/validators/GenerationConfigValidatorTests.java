@@ -20,10 +20,8 @@ import static org.mockito.Mockito.when;
 
 public class GenerationConfigValidatorTests {
 
-    private Profile profile;
-    private FileUtils mockFileUtils = mock(FileUtils.class);
     private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
-    private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
+    private FileUtils mockFileUtils = mock(FileUtils.class);
     private GenerationConfig config = new GenerationConfig(
         new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
@@ -32,11 +30,13 @@ public class GenerationConfigValidatorTests {
         )
     );
     private GenerationConfigValidator validator;
+    private Profile profile;
+    private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
     @BeforeEach
     void setup() {
         //Arrange
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
@@ -63,7 +63,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -82,7 +82,7 @@ public class GenerationConfigValidatorTests {
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -103,7 +103,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -123,7 +123,7 @@ public class GenerationConfigValidatorTests {
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE
             )
         );
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
@@ -143,7 +143,7 @@ public class GenerationConfigValidatorTests {
         );
         testConfigSource.setMaxRows(1234567L);
         GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
         ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
