@@ -8,16 +8,29 @@ Background:
 #Alone
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 @ignore
-Scenario: Running a 'before' request that specifies a valid date should be successful
-     Given foo is before 2019-02-10T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-09T23:59:59.999 |
-       | 2019-02-09T23:59:59.998 |
-       | 2019-02-09T23:59:59.997 |
-       | 2019-02-09T23:59:59.996 |
+Scenario: Running a 'before' request over a year threshold should be successful
+  Given foo is before 2019-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | 2018-12-31T23:59:59.999 |
+    | 2018-12-31T23:59:59.998 |
+    | 2018-12-31T23:59:59.997 |
+    | 2018-12-31T23:59:59.996 |
+    | 2018-12-31T23:59:59.995 |
+
+# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
+@ignore
+Scenario: Running a 'before' request over a leap year date should be successful
+  Given foo is before 2016-03-01T00:00:00.000
+  And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | null                    |
+    | 2016-02-29T23:59:59.999 |
+    | 2016-02-29T23:59:59.998 |
+    | 2016-02-29T23:59:59.997 |
+    | 2016-02-29T23:59:59.996 |
 
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 @ignore
