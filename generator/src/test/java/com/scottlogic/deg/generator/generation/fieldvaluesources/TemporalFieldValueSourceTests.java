@@ -258,7 +258,7 @@ public class TemporalFieldValueSourceTests {
         //Act
         LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
         //Assert
-        Assert.assertThat(firstValue, equalTo(LocalDateTime.MIN));
+        Assert.assertThat(firstValue, equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
     }
 
     private DateTimeRestrictions restrictions(String min, String max){
