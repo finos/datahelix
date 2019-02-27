@@ -25,7 +25,7 @@ public class GenerateExecuteTests {
     private FileOutputTarget outputTarget = mock(FileOutputTarget.class);
     private GenerationConfigValidator validator = mock(GenerationConfigValidator.class);
     private ErrorReporter errorReporter = mock(ErrorReporter.class);
-    private ValidationResult mockValidationResult = mock(ValidationResult.class);
+    private ValidationResult validationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
 
     private GenerateExecute excecutor = new GenerateExecute(config, profileReader, generationEngine, configSource,
@@ -35,13 +35,13 @@ public class GenerateExecuteTests {
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
         //Arrange
         when(validator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(mockValidationResult.isValid()).thenReturn(false);
+        when(validationResult.isValid()).thenReturn(false);
 
         //Act
         excecutor.run();
 
         //Assert
-        verify(errorReporter, times(1)).display(mockValidationResult);
+        verify(errorReporter, times(1)).display(validationResult);
         verify(profileReader, never()).read((Path) any());
     }
 
@@ -52,13 +52,9 @@ public class GenerateExecuteTests {
         when(validator.preProfileChecks(config, configSource)).thenReturn(validationResult);
         when(validator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
-
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
 
-        when(validator.validateCommandLinePreProfile(eq(config))).thenReturn(mockValidationResult);
-        when(validator.validateCommandLinePostProfile(eq(mockProfile))).thenReturn(mockValidationResult);
-
-        when(mockValidationResult.isValid()).thenReturn(true);
+        when(validationResult.isValid()).thenReturn(true);
 
         //Act
         excecutor.run();

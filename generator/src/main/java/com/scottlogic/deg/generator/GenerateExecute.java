@@ -19,7 +19,7 @@ public class GenerateExecute implements Runnable {
     private final GenerationConfigSource configSource;
     private final ConfigValidator validator;
     private final GenerationEngine generationEngine;
-    private final OutputTarget fileOutputTarget;
+    private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
 
     @Inject

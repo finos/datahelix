@@ -313,7 +313,7 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
         when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(false);
-        expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manfiest.json' " +
+        expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manifest.json' " +
             "and '[0-9].csv' files or use the --overwrite option");
 
         //Act
