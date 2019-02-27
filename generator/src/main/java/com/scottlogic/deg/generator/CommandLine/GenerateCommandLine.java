@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.CommandLine;
 
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import picocli.CommandLine;
 
@@ -10,6 +11,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class holds the generate specific command line options.
+ */
 @picocli.CommandLine.Command(
     name = "generate",
     description = "Produces data using any options provided.",
@@ -17,10 +21,7 @@ import java.util.Optional;
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class GenerateCommandLine extends CommandLineBase {
-
-    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
-    private File profileFile;
+public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
 
     @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
     private Path outputPath;
@@ -41,12 +42,6 @@ public class GenerateCommandLine extends CommandLineBase {
         defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
     @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType;
-
-    @CommandLine.Option(
-        names = {"--no-optimise"},
-        description = "Prevents tree optimisation",
-        hidden = true)
-    private boolean dontOptimise;
 
     @CommandLine.Option(
         names = {"--no-partition"},
@@ -83,11 +78,6 @@ public class GenerateCommandLine extends CommandLineBase {
     private boolean violateProfile;
 
     @CommandLine.Option(
-        names = {"--overwrite"},
-        description = "Defines whether to overwrite existing output files")
-    private boolean overwriteOutputFiles = false;
-
-    @CommandLine.Option(
         names = {"--dont-violate"},
         arity = "0..",
         description = "Choose types of constraint should not be violated")
@@ -108,13 +98,7 @@ public class GenerateCommandLine extends CommandLineBase {
         description = "Visualise each tree reduction")
     private Boolean visualiseReductions = false;
 
-    @CommandLine.Option(
-        names = "--help",
-        usageHelp = true,
-        description = "Display these available command line options")
-    boolean help;
 
-    @Override
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
