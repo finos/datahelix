@@ -149,16 +149,6 @@ Scenario: Running a 'before' request that specifies the maximum valid system dat
        | 9999-12-31T23:59:59.996 |
        | 9999-12-31T23:59:59.995 |
 
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-# Defect 607 "Setting Before 0001-01-01T00:00:00.000 loops round to december of that year" related to this scenario
-# Defect 608 "Setting a date of 0000-01-01T00:00:00.000 results in an error" related to this scenario
-@ignore
-Scenario: Running a 'before' request that specifies the lowest valid system date should only generate null data
-     Given foo is before 0000-01-01T00:00:00.000
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-
 Scenario: Running a 'before' request that specifies an invalid date should be unsuccessful
      Given foo is before 2019-30-30T00:00:00.000
      Then the profile is invalid
