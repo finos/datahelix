@@ -2,12 +2,14 @@ package com.scottlogic.deg.generator.cucumber.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
 /**
@@ -25,9 +27,11 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
+        bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
+        bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
 
         if (testState.shouldViolate) {
             bind(GenerationEngine.class).to(ViolationGenerationEngine.class);

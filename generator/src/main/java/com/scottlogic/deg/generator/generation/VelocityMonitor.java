@@ -19,7 +19,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
     private Timer timer = new Timer(true);
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
     private long previousVelocity = 0;
 
     @Override
