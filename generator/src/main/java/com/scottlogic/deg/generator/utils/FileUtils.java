@@ -94,7 +94,7 @@ public class FileUtils {
      *
      * @param dir the directory we want to create
      * @return true is the directory was created successfully, false if the parent directory already exists
-     * @throws IOException if there
+     * @throws IOException if we are unable to create the directory due to an I/O error
      */
     public boolean createDirectories(Path dir) throws IOException {
         try {
