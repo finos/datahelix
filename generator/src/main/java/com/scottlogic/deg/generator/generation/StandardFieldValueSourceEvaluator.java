@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.restrictions.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
@@ -22,31 +21,27 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return Collections.singletonList(nullOnlySource);
         }
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            return getWhitelistSources(fieldSpec);
-        }
-
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        if (fieldSpec.getMustContainRestriction() != null) {
-            validSources.addAll(
-                getMustContainRestrictionSources(fieldSpec));
+        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
+            validSources.add(getWhitelistSources(fieldSpec));
         }
+        else {
+            TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
+                ? fieldSpec.getTypeRestrictions()
+                : DataTypeRestrictions.ALL_TYPES_PERMITTED;
 
-        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
-            ? fieldSpec.getTypeRestrictions()
-            : DataTypeRestrictions.ALL_TYPES_PERMITTED;
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+                validSources.add(getNumericSource(fieldSpec));
+            }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-            validSources.add(getNumericSource(fieldSpec));
-        }
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
+                validSources.add(getStringSource(fieldSpec));
+            }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-            validSources.add(getStringSource(fieldSpec));
-        }
-
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
-            validSources.add(getTemporalSource(fieldSpec));
+            if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
+                validSources.add(getTemporalSource(fieldSpec));
+            }
         }
 
         if (mayBeNull(fieldSpec)){
@@ -56,36 +51,23 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return validSources;
     }
 
+    public MustContainsFieldValueSource getRequiredValueSources(FieldSpec fieldSpec){
+        List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
+
+        return mustContainRestrictionSources.isEmpty()
+            ? null
+            : MustContainsFieldValueSource.of(mustContainRestrictionSources);
+    }
+
     private boolean mustBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() != null
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
-    private List<FieldValueSource> getWhitelistSources(FieldSpec fieldSpec) {
-        MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
-        Stream<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream();
+    private FieldValueSource getWhitelistSources(FieldSpec fieldSpec) {
+        Set<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist();
 
-        // If we have values that must be included we need to check that those values are included in the whitelist
-        if (mustContainRestriction != null) {
-            whitelist = Stream.concat(whitelist,
-                FlatMappingSpliterator.flatMap(getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction),
-                    o -> o.getSetRestrictions().getWhitelist().stream()));
-        }
-
-        if (mayBeNull(fieldSpec)) {
-            return Arrays.asList(
-                new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())),
-                nullOnlySource);
-        }
-
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
-    }
-
-    private Stream<FieldSpec> getNotNullSetRestrictionFilterOnMustContainRestriction(MustContainRestriction restriction) {
-        return restriction.getRequiredObjects()
-            .stream()
-            .filter(o -> o.getSetRestrictions() != null
-                && o.getSetRestrictions().getWhitelist() != null);
+        return new CannedValuesFieldValueSource(new ArrayList<>(whitelist));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
@@ -93,15 +75,20 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
+        if  (fieldSpec.getMustContainRestriction() == null){
+            return Collections.emptyList();
+        }
+
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
         if (mustContainRestrictionFieldSpecs.size() > 1) {
             mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
         }
 
         return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
+            .filter(fs -> fs.getSetRestrictions() != null && fs.getSetRestrictions().getWhitelist() != null)
             .map(this::getFieldValueSources),
             List::stream)
-            .filter(x->!x.equals(nullOnlySource))
+            .filter(x -> !x.equals(nullOnlySource))
             .collect(Collectors.toList());
     }
 
