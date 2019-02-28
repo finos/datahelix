@@ -4,6 +4,8 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +36,8 @@ public class FileUtils {
     public boolean isFileEmpty(File file) {
         return file.length() == 0;
     }
-     /**
+
+    /**
      * @param target the FileOutputTarget to check the existence of.
      * @return true if the supplied FileOutputTarget exists on disk, false otherwise.
      */
@@ -54,7 +57,7 @@ public class FileUtils {
      * check for the existence of files named "<code>manifest.json</code>"
      * and "<code>/^[0-9]{filecount}.csv$/</code>" in the given directory.
      *
-     * @param target the FileOutputTarget that contains the directory to test.
+     * @param target    the FileOutputTarget that contains the directory to test.
      * @param fileCount the number of files we will check for.
      * @return true if any of the files exist, false only if none of the files exist in the directory.
      */
@@ -84,5 +87,21 @@ public class FileUtils {
     public File getTraceFile(GenerationConfigSource configSource) {
         String filenameWithoutExtension = configSource.getOutputPath().toString().replaceAll("\\.[^.]+$", "");
         return Paths.get(filenameWithoutExtension + "-trace.json").toFile();
+    }
+
+    /**
+     * we wrap Files.createDirectories() so that we can mock it out in unit tests.
+     *
+     * @param dir the directory we want to create
+     * @return true is the directory was created successfully, false if the parent directory already exists
+     * @throws IOException if there
+     */
+    public boolean createDirectories(Path dir) throws IOException {
+        try {
+            Files.createDirectories(dir);
+        } catch (FileAlreadyExistsException e) {
+            return false;
+        }
+        return true;
     }
 }
