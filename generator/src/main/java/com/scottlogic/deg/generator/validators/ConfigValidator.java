@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
+import java.io.IOException;
+
 public interface ConfigValidator {
 
     ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource configSource);
@@ -13,6 +15,6 @@ public interface ConfigValidator {
         Profile profile,
         GenerationConfigSource configSource,
         OutputTarget outputTarget
-    );
+    ) throws IOException;
 
 }
