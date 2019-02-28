@@ -29,6 +29,30 @@ Scenario: Running an 'if' constraint for then condition only should be successfu
        | "b" | 10  |
        | "b" | 20  |
 
+  Scenario: Running an 'if' constraint for then condition only should be successful when interesting
+    Given foo is of type "numeric"
+    And foo is greater than 5
+    And foo is less than 10
+    And foo is anything but null
+    And the generation strategy is interesting
+    And the walker type is reductive
+    And bar is in set:
+      | 10 |
+      | 20 |
+    And bar is anything but null
+    And there is a constraint:
+       """
+         {
+         "if": { "field": "foo", "is": "equalTo", "value": 6 },
+         "then": { "field": "bar", "is": "equalTo", "value": 10 }
+         }
+       """
+    Then the following data should be generated:
+      | foo | bar |
+      | 6   | 10  |
+      | 9   | 10  |
+      | 9   | 20  |
+
 Scenario: Running an 'if' constraint for then and else conditions should be successful
        Given foo is in set:
          | "a" |
