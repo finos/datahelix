@@ -274,3 +274,16 @@ Scenario Outline: Running an invalid 'formattedAs' request should fail with an e
       | 1                        | "%tZ"       |
       | "1"                      | "%tz"       |
       | 1                        | "%tz"       |
+
+  Scenario Outline: Running an 'null' value 'formattedAs' request should fail with an invalid profile exception
+    Given foo is in set:
+      | <input> |
+      And foo is formatted as <format>
+      And foo is anything but null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
+    Examples:
+      | input                    | format      |
+      | "1"                      | null        |
+      | 1                        | null        |
+      | 2018-02-01T16:17:18.199  | null        |

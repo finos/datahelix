@@ -464,7 +464,7 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
        And foo is in set:
        | null |
        | 1    |
-     Then I am presented with an error message
+     Then the profile is invalid because "Couldn't recognise 'values' property, it must not contain 'null'"
        And no data is created
 
 Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.

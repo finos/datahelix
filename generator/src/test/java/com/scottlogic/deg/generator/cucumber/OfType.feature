@@ -222,3 +222,8 @@ Scenario: Running an 'ofType' = temporal request that includes a null entry (nul
      Then the following data should be generated:
        | foo  |
        | null |
+
+Scenario: Running a 'ofType' request that specifies null should be unsuccessful
+    Given foo is of type null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
