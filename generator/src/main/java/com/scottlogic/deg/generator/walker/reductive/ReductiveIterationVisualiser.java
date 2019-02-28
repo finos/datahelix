@@ -6,16 +6,15 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
+import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReductiveIterationVisualiser implements IterationVisualiser {
@@ -73,7 +72,6 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
                 " directory needs to exist.\n" + this.visualiseDirectoryPath.toString());
         }
 
-        FileSystemProvider provider = FileSystems.getDefault().provider();
-        provider.createDirectory(this.visualiseDirectoryPath);
+        new FileUtils().createDirectories(this.visualiseDirectoryPath);
     }
 }
