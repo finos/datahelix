@@ -309,6 +309,7 @@ Scenario: not greaterThan run against a contradicting not lessThanOrEqualTo shou
        | foo |
        | 2   |
 
+
 #granularTo
 Scenario: greaterThan run against a non contradicting granularTo should be successful (greaterThan 2 AND granularTo 1)
      Given foo is greater than 2

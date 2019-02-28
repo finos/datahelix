@@ -769,357 +769,885 @@ Scenario: 'InSet' alongside a contradicting not 'containingRegex' emits null
       | foo  |
       | null |
 
- ### ofLength ###
+### ofLength ###
 
-Scenario: Running a 'inSet' request alongside a non-contradicting ofLength constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7"  |
-     And foo is of length 4
-       Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
+Scenario: 'InSet' with a non contradicting 'ofLength' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is of length 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofLength (too short) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is of length 3
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: 'InSet' with a non contradicting not 'ofLength' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but of length 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofLength (too long) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is of length 10
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: Not 'inSet' with a non contradicting 'ofLength' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is of length 1
+    And foo is in set:
+      | "a"  |
+      | "b"  |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "b"  |
+
+Scenario Outline: 'InSet' of a non-string type value with a non contradicting 'ofLength' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is of length 0
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'ofLength' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is of length 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'ofLength' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but of length 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### longerThan ###
 
-Scenario: Running a 'inSet' request alongside a non-contradicting longerThan constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is longer than 4
-     Then the following data should be generated:
-       |   foo   |
-       | "Testt" |
-       | "Test7" |
-       |   null  |
+Scenario: 'InSet' with a non contradicting 'longerThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "aa" |
+    And foo is longer than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "aa" |
 
-Scenario: Running a 'inSet' request alongside a contradicting longerThan (equal) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test1" |
-       | "Test2" |
-       | "Test3" |
-       | "Test4" |
-       And foo is longer than 5
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: 'InSet' with a non contradicting not 'longerThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but longer than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
-Scenario: Running a 'inSet' request alongside a contradicting longerThan (too long) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test1" |
-       | "Test2" |
-       | "Test3" |
-       | "Test4" |
-       And foo is longer than 10
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: Not 'inSet' with a non contradicting 'longerThan' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "aa" |
+    And foo is longer than 1
+    And foo is in set:
+      | "aa" |
+      | "ba" |
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "ba" |
+
+Scenario Outline: 'InSet' of a non-string type value with a non contradicting 'longerThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is longer than 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'longerThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is longer than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'longerThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "aa" |
+    And foo is anything but longer than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### shorterThan ###
 
-Scenario: Running a 'inSet' request alongside a non-contradicting shorterThan constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is shorter than 5
-     Then the following data should be generated:
-       |  foo   |
-       | "Test" |
-       | "test" |
-       |  null  |
+Scenario: 'InSet' with a non contradicting 'shorterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is shorter than 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
-Scenario: Running a 'inSet' request alongside a contradicting shorterThan (too short) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is shorter than 3
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: 'InSet' with a non contradicting not 'shorterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but shorter than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
 
-Scenario: Running a 'inSet' request alongside a contradicting shorterThan (equal) constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is shorter than 4
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: Not 'inSet' with a non contradicting 'shorterThan' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is shorter than 2
+    And foo is in set:
+      | "a" |
+      | "b" |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "b" |
+
+Scenario Outline: 'InSet' of a non-string type value with a non contradicting 'shorterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is shorter than 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'shorterThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is shorter than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'shorterThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but shorter than 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+### aValid ###
+
+@ignore
+Scenario: 'InSet' with a non contradicting 'aValid' ISIN is successful
+  Given there is a field foo
+    And foo is in set:
+      | "GB0002634947" |
+    And foo is a valid "ISIN"
+  Then the following data should be generated:
+    | foo            |
+    | null           |
+    | "GB0002634947" |
+
+Scenario: 'InSet' with a non contradicting not 'aValid' ISIN is successful
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but a valid "ISIN"
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+@ignore
+Scenario: Not 'inSet' with a non contradicting 'aValid' ISIN is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is a valid "ISIN"
+    And foo is in set:
+      | "a"            |
+      | "GB0002634947" |
+  Then the following data should be generated:
+      | foo            |
+      | null           |
+      | "GB0002634947" |
+
+Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is a valid "ISIN"
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | 1                       |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' run against a contradicting 'aValid' ISIN emits null
+  Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is a valid "ISIN"
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+@ignore
+Scenario: 'InSet' run against a contradicting not 'aValid' ISIN emits null
+  Given there is a field foo
+    And foo is in set:
+      | "GB0002634947" |
+    And foo is anything but a valid "ISIN"
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### greaterThan ###
 
-Scenario: Running a 'inSet' request alongside a greaterThan constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is greater than 1
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'greaterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2 |
+    And foo is greater than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario: 'InSet' with a non contradicting not 'greaterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but greater than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: Not 'inSet' with a non contradicting 'greaterThan' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1 |
+    And foo is greater than 0
+    And foo is in set:
+      | 1 |
+      | 2 |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'greaterThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is greater than 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | "a"                     |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'greaterThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is greater than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'greaterThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1.1 |
+    And foo is anything but greater than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### greaterThanOrEqualTo ###
 
-Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is greater than or equal to 1
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'greaterThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is greater than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: 'InSet' with a non contradicting not 'greaterThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but greater than or equal to 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: Not 'inSet' with a non contradicting 'greaterThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1 |
+    And foo is greater than or equal to 1
+    And foo is in set:
+      | 1 |
+      | 2 |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'greaterThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is greater than or equal to 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | "a"                     |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'greaterThanOrEqualTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is greater than or equal to 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'greaterThanOrEqualTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but greater than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### lessThan ###
 
-Scenario: Running a 'inSet' request alongside a lessThan constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is less than 1
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'lessThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is less than 2
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: 'InSet' with a non contradicting not 'lessThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but less than 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: Not 'inSet' with a non contradicting 'lessThan' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1 |
+    And foo is less than 3
+    And foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'lessThan' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is less than 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | "a"                     |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'lessThan' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+  And foo is less than 1
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+  Scenario: 'InSet' with a contradicting not 'lessThan' emits null
+    Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but less than 2
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### lessThanOrEqualTo ###
 
-Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is less than or equal to 1
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'lessThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is less than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+
+Scenario: 'InSet' with a non contradicting not 'lessThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2 |
+    And foo is anything but less than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario: Not 'inSet' with a non contradicting 'lessThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1 |
+    And foo is less than or equal to 2
+    And foo is in set:
+      | 1 |
+      | 2 |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 2    |
+
+Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'lessThanOrEqualTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is less than or equal to 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | "a"                     |
+      | 2018-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a contradicting 'lessThanOrEqualTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2 |
+    And foo is less than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'lessThanOrEqualTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but less than or equal to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### granularTo ###
 
-Scenario: Running a 'inSet' request alongside a granularTo constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is granular to 0.1
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'granularTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 10 |
+    And foo is granular to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 10   |
+
+Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 1.1 |
+    And foo is anything but granular to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1.1  |
+
+Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1.1 |
+    And foo is granular to 1
+    And foo is in set:
+      | 1.1 |
+      | 1   |
+      | 2.0 |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
+      | 2.0  |
+
+Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'granularTo' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is granular to 1
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue               |
+      | "a"                     |
+      | 2018-01-01T00:00:00.000 |
+
+@ignore
+Scenario: 'InSet' with a contradicting 'granularTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1.1 |
+    And foo is granular to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+@ignore
+Scenario: 'InSet' with a contradicting not 'granularTo' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is anything but granular to 1
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### after ###
 
-Scenario: Running a 'inSet' request alongside a after constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is after 2010-01-01T00:00:00.000
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'after' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is after 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.001 |
+
+Scenario: 'InSet' with a non contradicting not 'after' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but after 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario: Not 'inSet' with a non contradicting 'after' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is after 2019-01-01T00:00:00.000
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.001 |
+      | 2019-01-01T00:00:00.002 |
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.002 |
+
+Scenario Outline: 'InSet' of a non-temporal type value with a non contradicting 'after' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is after 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue |
+      | "a"       |
+      | 1         |
+
+Scenario: 'InSet' with a contradicting 'after' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is after 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'after' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is anything but after 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### afterOrAt ###
 
-Scenario: Running a 'inSet' request alongside a afterOrAt constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is after or at 2010-01-01T00:00:00.000
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'afterOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is after or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a non contradicting not 'afterOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but after or at 2019-01-01T00:00:00.001
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario: Not 'inSet' with a non contradicting 'afterOrAt' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.001 |
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.001 |
+
+Scenario Outline: 'InSet' of a non-temporal type value with a non contradicting 'afterOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is after or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue |
+      | "a"       |
+      | 1         |
+
+Scenario: 'InSet' with a contradicting 'afterOrAt' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is after or at 2019-01-01T00:00:00.001
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'afterOrAt' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but after or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### before ###
 
-Scenario: Running a 'inSet' request alongside a before constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is before 2010-01-01T00:00:00.000
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'before' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is before 2019-01-01T00:00:00.001
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario: 'InSet' with a non contradicting not 'before' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but before 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario: Not 'inSet' with a non contradicting 'before' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is before 2019-01-01T00:00:00.002
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.001 |
+      | 2019-01-01T00:00:00.002 |
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+
+Scenario Outline: 'InSet' of a non-temporal type value with a non contradicting 'before' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is before 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue |
+      | "a"       |
+      | 1         |
+
+Scenario: 'InSet' with a contradicting 'before' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is before 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: 'InSet' with a contradicting not 'before' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but before 2019-01-01T00:00:00.001
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
 ### beforeOrAt ###
 
-Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should be successful
-     Given there is a field foo
-       And foo is in set:
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
-       And foo is before or at 2010-01-01T00:00:00.000
-     Then the following data should be generated:
-       | foo     |
-       | null    |
-       | "Test"  |
-       | "test"  |
-       | "Testt" |
-       | "Test7" |
+Scenario: 'InSet' with a non contradicting 'beforeOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is before or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
 
-Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
-     Given there is a field foo
-       And there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "inSet", "values": [ "Test 1", "Test 2" ] },
-         { "field": "foo", "is": "inSet", "values": [ "Test 3", "Test 4" ] }
-       ]}
-       """
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | null     |
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       | "Test 4" |
+Scenario: 'InSet' with a non contradicting not 'beforeOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is anything but before or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.001 |
 
-Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
-     Given there is a field foo
-       And there is a constraint:
-       """
-       { "allOf": [
-         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] }
-       ]}
-       """
-     Then the following data should be generated:
-       | foo      |
-       | null     |
-       | "Test1" |
-       | "Test2" |
+Scenario: Not 'inSet' with a non contradicting 'beforeOrAt' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is before or at 2019-01-01T00:00:00.002
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.001 |
+      | 2019-01-01T00:00:00.002 |
+  Then the following data should be generated:
+      | foo                     |
+      | null                    |
+      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.002 |
 
-Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should produce null
-     Given there is a field foo
-       And there is a constraint:
-       """
-       { "allOf": [
-         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-         { "field": "foo", "is": "inSet", "values": [ "Test3", "Test4" ] }
-       ]}
-       """
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario Outline: 'InSet' of a non-temporal type value with a non contradicting 'beforeOrAt' is successful
+  Given there is a field foo
+    And foo is in set:
+      | <typeValue> |
+    And foo is before or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo         |
+      | null        |
+      | <typeValue> |
+  Examples:
+      | typeValue |
+      | "a"       |
+      | 1         |
 
+Scenario: 'InSet' with a contradicting 'beforeOrAt' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.001 |
+    And foo is before or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
 
-  Scenario: Running a 'inSet' request as part of an if constraint should be successful
-     Given the following fields exist:
-       | foo   |
-       | price |
-       And foo is in set:
-       | "Test1" |
-       | "Test2" |
-       | "Test3" |
-       | "Test4" |
-       And there is a constraint:
-       """
-       {
-         "if": { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-         "then": { "field": "price", "is": "equalTo", "value": 1 },
-         "else": { "field": "price", "is": "equalTo", "value": 2 }
-         }
-       """
-       And foo is anything but null
-       And price is anything but null
-     Then the following data should be generated:
-       | foo     | price |
-       | "Test1" | 1     |
-       | "Test2" | 1     |
-       | "Test3" | 2     |
-       | "Test4" | 2     |
+Scenario: 'InSet' with a contradicting not 'beforeOrAt' emits null
+  Given there is a field foo
+    And foo is in set:
+      | 2019-01-01T00:00:00.000 |
+    And foo is anything but before or at 2019-01-01T00:00:00.000
+  Then the following data should be generated:
+      | foo  |
+      | null |
