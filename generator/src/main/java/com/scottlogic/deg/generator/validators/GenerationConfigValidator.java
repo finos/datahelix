@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class used to determine whether the command line options are valid for generation.
@@ -44,25 +43,25 @@ public class GenerationConfigValidator implements ConfigValidator {
                                               OutputTarget outputTarget) throws IOException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
-        if (outputTarget instanceof FileOutputTarget) {
+        if (outputTarget instanceof FileOutputTarget ) {
             if (configSource.shouldViolate()) {
-                errorMessages.add(
-                    checkViolationGenerateOutputTarget(configSource,
-                        (FileOutputTarget) outputTarget,
-                        profile.rules.size()
-                    ));
+                checkViolationGenerateOutputTarget(
+                    errorMessages,
+                    configSource,
+                    (FileOutputTarget)outputTarget,
+                    profile.rules.size()
+                );
             } else {
-                errorMessages.add(
-                    checkGenerateOutputTarget(configSource, (FileOutputTarget) outputTarget));
+                checkGenerateOutputTarget(errorMessages, configSource, (FileOutputTarget)outputTarget);
             }
         }
-        errorMessages.removeAll(Arrays.asList("", null));
+
         return new ValidationResult(errorMessages);
     }
 
-    private void checkSwitches(GenerationConfig config,
-                               GenerationConfigSource configSource,
-                               ArrayList<String> errorMessages) {
+    private void checkSwitches (GenerationConfig config,
+                                GenerationConfigSource configSource,
+                                ArrayList<String> errorMessages) {
 
         if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
             && !config.getMaxRows().isPresent()) {
@@ -94,37 +93,37 @@ public class GenerationConfigValidator implements ConfigValidator {
      * @param configSource
      * @param outputTarget
      */
-    private String checkGenerateOutputTarget(GenerationConfigSource configSource,
-                                             FileOutputTarget outputTarget) throws IOException {
+    private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
+                                           GenerationConfigSource configSource,
+                                           FileOutputTarget outputTarget) throws IOException {
         if (fileUtils.isDirectory(outputTarget)) {
-            return
-                "Invalid Output - target is a directory, please use a different output filename";
+            errorMessages.add(
+                "Invalid Output - target is a directory, please use a different output filename");
         } else if (!configSource.overwriteOutputFiles() && fileUtils.exists(outputTarget)) {
-            return
-                "Invalid Output - file already exists, please use a different output filename or use the --overwrite option";
+            errorMessages.add(
+                "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
         }
 
         if (!fileUtils.createDirectories(outputTarget.getFilePath().getParent())){
-            return
-                "Invalid Output - parent directory of output file already exists but is not a directory, please use a different output filename";
+            errorMessages.add(
+                "Invalid Output - parent directory of output file already exists but is not a directory, please use a different output filename");
         }
-        return "";
     }
 
-    private String checkViolationGenerateOutputTarget(GenerationConfigSource configSource,
-                                                      FileOutputTarget outputTarget,
-                                                      int ruleCount) {
+    private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages,
+                                                    GenerationConfigSource configSource,
+                                                    FileOutputTarget outputTarget,
+                                                    int ruleCount) {
         if (!fileUtils.exists(outputTarget)) {
-            return
-                "Invalid Output - output directory must exist, please enter a valid directory name";
+            errorMessages.add(
+                "Invalid Output - output directory must exist, please enter a valid directory name");
         } else if (!fileUtils.isDirectory(outputTarget)) {
-            return
-                "Invalid Output - not a directory, please enter a valid directory name";
+            errorMessages
+                .add("Invalid Output - not a directory, please enter a valid directory name");
         } else if (!configSource.overwriteOutputFiles() && !fileUtils
             .isDirectoryEmpty(outputTarget, ruleCount)) {
-            return
-                "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --overwrite option";
+            errorMessages.add(
+                    "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --overwrite option");
         }
-        return "";
     }
 }
