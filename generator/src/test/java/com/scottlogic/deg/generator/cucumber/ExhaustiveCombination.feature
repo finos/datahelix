@@ -236,7 +236,7 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
        And bar is in set:
          | 2    |
          | null |
-     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null."
+     Then the profile is invalid because "Couldn't recognise 'values' property, it must not contain 'null'"
 
 Scenario: Running an exhaustive combination strategy with null values (null) should be successful
      Given the following fields exist:

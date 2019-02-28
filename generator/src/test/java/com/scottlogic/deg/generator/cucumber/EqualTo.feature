@@ -347,7 +347,7 @@ Scenario: Running an 'equalTo' request that includes an empty string("") charact
 Scenario: Running an 'equalTo' request that includes a null entry (null) characters should fail with an error message
   Given there is a field foo
     And foo is equal to null
-  Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
 
 Scenario: Running an 'equalTo' request that includes an invalid date value should fail with an error message
   Given there is a field foo
