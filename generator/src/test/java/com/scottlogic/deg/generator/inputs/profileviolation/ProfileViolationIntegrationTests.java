@@ -5,8 +5,8 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Guice.BaseModule;
-import com.scottlogic.deg.generator.Guice.TestModule;
+import com.scottlogic.deg.generator.guice.BaseModule;
+import com.scottlogic.deg.generator.guice.TestModule;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
@@ -26,13 +26,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
 
 /**
  * Defines integration tests for all classes involved in Profile Violation including Guice creation.
@@ -69,7 +66,7 @@ public class ProfileViolationIntegrationTests {
      * Note that this test includes writing a manifest to the temporary directory.
      */
     @Test
-    public void violate_fullIntegrationTest() {
+    public void violate_fullIntegrationTest() throws IOException {
         //Arrange
         Field fooField = new Field("foo");
         Rule rule1 = new RuleBuilder("Rule 1")
@@ -108,12 +105,7 @@ public class ProfileViolationIntegrationTests {
 
         List<Profile> expectedViolatedProfiles = Collections.singletonList(violatedProfile1);
 
-        assertThat(
-            "The violate method should have returned the correct list of correct shaped profiles",
-            violatedProfiles,
-            sameBeanAs(expectedViolatedProfiles)
-        );
-        assertListProfileTypeEquality(violatedProfiles, expectedViolatedProfiles);
+        assertProfileListsAreEquivalent(expectedViolatedProfiles, violatedProfiles);
         Assert.assertTrue("Unable to find manifest.json file.", tempOutputPath.resolve("manifest.json").toFile().isFile());
     }
 

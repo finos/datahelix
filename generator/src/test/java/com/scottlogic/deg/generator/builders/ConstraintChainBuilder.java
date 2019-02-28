@@ -26,16 +26,6 @@ public abstract class ConstraintChainBuilder<T> {
 
     abstract T buildInner();
 
-    public ConstraintChainBuilder<T> withConstraint(Constraint constraint) {
-        return saveAndAddConstraint(constraint);
-    }
-
-    public ConstraintChainBuilder<T> withConstraints(Collection<Constraint> constraints) {
-        saveConstraint();
-        this.constraints.addAll(constraints);
-        return this;
-    }
-
     public ConstraintChainBuilder<T> withLessThanConstraint(Field fooField, int referenceValue) {
         return saveAndAddConstraint(new IsLessThanConstantConstraint(fooField, referenceValue, null));
     }

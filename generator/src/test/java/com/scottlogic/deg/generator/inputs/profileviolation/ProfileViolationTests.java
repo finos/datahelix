@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.*;
 
@@ -116,12 +114,8 @@ public class ProfileViolationTests {
         );
         List<Profile> expectedViolatedProfiles = Arrays.asList(violatedProfile1, violatedProfile2);
 
-        assertThat(
-            "The violate method should have returned the correct list of correct shaped profiles",
-            violatedProfiles,
-            sameBeanAs(expectedViolatedProfiles)
-        );
-        assertListProfileTypeEquality(violatedProfiles, expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1)).writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+        assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 }
