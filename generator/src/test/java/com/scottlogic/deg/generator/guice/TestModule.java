@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
  */
 public class TestModule extends AbstractModule {
 
-    private TestGenerationConfigSource configSource;
+    private final TestGenerationConfigSource configSource;
 
     public TestModule(TestGenerationConfigSource configSource) {
         this.configSource = configSource;
