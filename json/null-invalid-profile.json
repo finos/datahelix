@@ -1,0 +1,22 @@
+{
+  "$schema": "datahelix.schema.json",
+  "schemaVersion": "v3",
+  "description": "",
+  "fields": [
+    {
+      "name": "age"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "less than null rule",
+      "constraints": [
+        {
+          "field": "age",
+          "is": "null",
+          "value": null
+        }
+      ]
+    }
+  ]
+}

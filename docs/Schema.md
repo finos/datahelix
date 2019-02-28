@@ -84,7 +84,11 @@ A named collection of constraints. Test case generation revolves around rules, i
 
 ### `Constraint`
 
-Either of:
+One of:
 
 - a [data constraint](EpistemicConstraints.md)
 - a [grammatical constraint](GrammaticalConstraints.md)
+- a [presentational constraint](PresentationalConstraints.md)
+
+
+The Profile schema format is formally documented in [ProfileGrammar](ProfileGrammar.md)
