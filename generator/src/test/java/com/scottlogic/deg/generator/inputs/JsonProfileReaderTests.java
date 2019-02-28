@@ -596,6 +596,24 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectLessThanWithNullValue() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"lessThan\", \"value\": null }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
     public void shouldRejectInSetWithANullValue() {
         givenJson(
             "{" +
