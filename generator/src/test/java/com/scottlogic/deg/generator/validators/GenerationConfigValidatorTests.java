@@ -230,6 +230,9 @@ public class GenerationConfigValidatorTests {
     @Test
     public void postProfileChecks_generateOutputFileAlreadyExists_isNotValid() throws IOException {
         //Arrange
+        Path mockPath = Paths.get("/a/b/c/tmp.out");
+        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
+        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
         expectedErrorMessages.add("Invalid Output - file already exists, please use a different output filename " +
             "or use the --overwrite option");
@@ -248,7 +251,7 @@ public class GenerationConfigValidatorTests {
         //Arrange
         Path mockPath = Paths.get("/a/b/c/tmp.out");
         when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(anyObject())).thenReturn(true);
+        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
@@ -280,6 +283,9 @@ public class GenerationConfigValidatorTests {
     @Test
     public void postProfileChecks_generateOutputDirNotFile_isNotValid() throws IOException {
         //Arrange
+        Path mockPath = Paths.get("/a/b/c/tmp.out");
+        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
+        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
         expectedErrorMessages.add("Invalid Output - target is a directory, please use a different output filename");
 
