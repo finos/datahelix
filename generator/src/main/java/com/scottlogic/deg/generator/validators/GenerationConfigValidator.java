@@ -90,8 +90,9 @@ public class GenerationConfigValidator implements ConfigValidator {
     /**
      * Check the output target for a non-violating data generation.
      *
-     * @param configSource
-     * @param outputTarget
+     * @param errorMessages the list of error messages that we will add to
+     * @param configSource used to determine whether the user has opted to automatically overwrite output files
+     * @param outputTarget the output file that the user selected
      */
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
                                            GenerationConfigSource configSource,
