@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ class ReductiveDecisionTreeWalkerTests {
     private DecisionTree tree;
     private FixedFieldBuilder fixedFieldBuilder;
     private ReductiveDecisionTreeWalker walker;
+    private FixFieldStrategy fixFieldStrategy;
 
     @BeforeEach
     public void beforeEach(){
@@ -37,6 +39,7 @@ class ReductiveDecisionTreeWalkerTests {
         when(treeReducer.reduce(eq(rootNode), any(ReductiveState.class))).thenReturn(rootNode);
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
+        fixFieldStrategy = mock(FixFieldStrategy.class);
 
         walker = new ReductiveDecisionTreeWalker(
             new NoOpIterationVisualiser(),
@@ -52,11 +55,11 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
-        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(null);
+        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(null);
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, fixFieldStrategy).collect(Collectors.toList());
 
-        verify(fixedFieldBuilder).findNextFixedField(any(ReductiveState.class), eq(rootNode));
+        verify(fixedFieldBuilder).findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy));
         Assert.assertThat(result, empty());
     }
 
@@ -67,11 +70,11 @@ class ReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
         FixedField firstFixedField = fixedField("field1", 123);
-        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode))).thenReturn(firstFixedField, null);
+        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(firstFixedField, null);
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<RowSpec> result = walker.walk(tree, fixFieldStrategy).collect(Collectors.toList());
 
-        verify(fixedFieldBuilder, times(2)).findNextFixedField(any(ReductiveState.class), eq(rootNode));
+        verify(fixedFieldBuilder, times(2)).findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy));
         Assert.assertThat(result, empty());
     }
 

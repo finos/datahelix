@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
 import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.guice.CurrentProfileCache;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TestHierarchicalDependencyFixFieldStrategy {
 
@@ -212,10 +212,14 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
         Profile profile = new Profile(fields, rules);
-        CurrentProfileCache currentProfileCache = new CurrentProfileCache();
-        currentProfileCache.profile = profile;
+        ConstraintNode mockConstraintNode = mock(ConstraintNode.class);
+        DecisionTree tree = new DecisionTree(
+            mockConstraintNode,
+            profile.fields,
+            "Decision tree");
 
-        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(currentProfileCache, new FieldDependencyAnalyser());
+        HierarchicalDependencyFixFieldStrategy strategy =
+            new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser(), tree);
         return strategy.getFieldFixingPriorityList(profile.fields);
     }
 
