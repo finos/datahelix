@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "field": "",
+          "afield": "field1",
+          "ais": "null"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {"name": "field1"}
+  ]
+}
