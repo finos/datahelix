@@ -8,274 +8,319 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Optional;
 
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class GenerationConfigValidatorTests {
 
-    private Profile profile;
-    private FileUtils mockFileUtils = mock(FileUtils.class);
     private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
-    private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
-    private GenerationConfig config = new GenerationConfig(
-        new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.INTERESTING,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-        )
-    );
+    private FileUtils mockFileUtils = mock(FileUtils.class);
+    private File mockFile = mock(File.class);
+    private GenerationConfig config = mock(GenerationConfig.class);
     private GenerationConfigValidator validator;
+    private Profile profile;
+    private ArrayList<String> expectedErrorMessages;
+    private ValidationResult expectedResult;
+    private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
     @BeforeEach
     void setup() {
         //Arrange
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
-        when(mockConfigSource.shouldViolate()).thenReturn(false);
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
+        expectedErrorMessages = new ArrayList<>();
+        expectedResult = new ValidationResult(expectedErrorMessages);
+
+        //Generic Setup
+        when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.INTERESTING);
+        when(mockConfigSource.getProfileFile()).thenReturn(mockFile);
+        //Pre Profile Checks
+        when(config.getMaxRows()).thenReturn(Optional.empty());
+        when(mockConfigSource.isEnableTracing()).thenReturn(false);
+        when(mockFile.exists()).thenReturn(true);
+        when(mockFile.isDirectory()).thenReturn(false);
+        when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(false);
+        when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(false);
+        //Post Profile Checks
+        when(mockFileUtils.exists(mockOutputTarget)).thenReturn(true);
+        when(mockFileUtils.isDirectory(mockOutputTarget)).thenReturn(false);
+        when(mockConfigSource.shouldViolate()).thenReturn(false);
     }
 
     @Test
-    public void interestingWithNoMaxRowsReturnsValid() {
+    public void preProfileChecks_withValid_returnsNoErrorMessages() {
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
-    public void interestingWithMaxRowsReturnsValid() {
+    public void preProfileChecks_randomWithMaxRows_returnsNoErrorMessages() {
         //Arrange
-        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.INTERESTING,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-        );
-        testConfigSource.setMaxRows(1234567L);
-        GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        Mockito.reset(config);
+        when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.RANDOM);
+        when(config.getMaxRows()).thenReturn(Optional.of(1234L));
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
-    public void randomWithNoMaxRowsReturnsNotValid() {
+    public void validateCommandLineOptions_randomWithNoMaxRows_correctErrorMessage() {
         //Arrange
-        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.RANDOM,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-        );
-        GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        Mockito.reset(config);
+        when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.RANDOM);
+        when(config.getMaxRows()).thenReturn(Optional.empty());
+        expectedErrorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
+        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages,
-            hasItem("RANDOM mode requires max row limit: use -n=<row limit> option"));
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
 
     @Test
-    public void randomWithMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_traceConstraintsOutputFileDoesNotExist_returnsNoErrorMessages() {
         //Arrange
-        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.RANDOM,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-        );
-        testConfigSource.setMaxRows(1234567L);
-        GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
-    public void fullSequentialWithNoMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_traceConstraintsOutputFileAlreadyExistsNoOverwrite_returnsCorrectErrorMessage() {
         //Arrange
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-            )
-        );
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
+        when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
+        expectedErrorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --overwrite option");
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
 
     @Test
-    public void fullSequentialWithMaxRowsReturnsValid() {
+    public void validateCommandLineOptions_traceConstraintsOutputFileAlreadyExistsOverwrite_returnsNoErrorMessages() {
         //Arrange
-        TestGenerationConfigSource testConfigSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
-        );
-        testConfigSource.setMaxRows(1234567L);
-        GenerationConfig config = new GenerationConfig(testConfigSource);
-        validator = new GenerationConfigValidator(mockConfigSource, mockOutputTarget, mockFileUtils);
-
-        //Act
-        ValidationResult validationResult = validator.validateCommandLinePreProfile(config);
-
-        //Assert
-        Assert.assertTrue(validationResult.isValid());
-        Assert.assertThat(validationResult.errorMessages, is(empty()));
-    }
-
-    @Test
-    public void generateOutputFileAlreadyExists() {
-        //Arrange
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
-
-        //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
-
-        //Assert
-        Assert.assertFalse(validationResult.isValid());
-    }
-
-    @Test
-    public void generateOutputFileAlreadyExistsCommandLineOverwrite() {
-        //Arrange
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
+        when(mockConfigSource.isEnableTracing()).thenReturn(true);
+        when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
+        when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
-    public void generateOutputFileDoesNotExist() {
+    public void preProfileChecks_profileFilePathContainsInvalidChars_returnsCorrectErrorMessage() {
+        //Arrange
+        when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(true);
+        expectedErrorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters " +
+            "? : %% \" | > < ", mockFile.toString()));
 
         //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        Assert.assertTrue(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
 
     @Test
-    public void generateOutputDirNotFile() {
+    public void preProfileChecks_profileFileDoesNotExist_returnsCorrectErrorMessage() {
+        //Arrange
+        when(mockFile.exists()).thenReturn(false);
+        expectedErrorMessages.add("Invalid Input - Profile file does not exist");
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void preProfileChecks_profileFileIsDir_returnsCorrectErrorMessage() {
+        //Arrange
+        when(mockFile.isDirectory()).thenReturn(true);
+        expectedErrorMessages.add("Invalid Input - Profile file path provided is to a directory");
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void preProfileChecks_profileFileIsEmpty_returnsCorrectErrorMessage() {
+        //Arrange
+        when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(true);
+        expectedErrorMessages.add("Invalid Input - Profile file has no content");
+
+        //Act
+        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void postProfileChecks_generateOutputFileAlreadyExists_isNotValid() {
+        //Arrange
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
+        expectedErrorMessages.add("Invalid Output - file already exists, please use a different output filename " +
+            "or use the --overwrite option");
+
+        //Act
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void postProfileChecks_generateOutputFileAlreadyExistsCommandLineOverwrite_isValid() {
+        //Arrange
+        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
+
+        //Act
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
+    }
+
+    @Test
+    public void postProfileChecks_generateOutputFileDoesNotExist_isValid() {
+        //Arrange
+        when(mockFileUtils.exists(mockOutputTarget)).thenReturn(false);
+
+        //Act
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
+    }
+
+    @Test
+    public void postProfileChecks_generateOutputDirNotFile_isNotValid() {
         //Arrange
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
+        expectedErrorMessages.add("Invalid Output - target is a directory, please use a different output filename");
 
         //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
 
     @Test
-    public void generateViolationOutputFileAlreadyExists() {
+    public void postProfileChecks_generateViolationOutputFileNotDir_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
+        expectedErrorMessages.add("Invalid Output - not a directory, please enter a valid directory name");
 
         //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
 
     @Test
-    public void generateViolationOutputFileDoesNotExist() {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(false);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
-
-        //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
-
-        //Assert
-        Assert.assertFalse(validationResult.isValid());
-    }
-
-    @Test
-    public void generateViolationOutputDirNotExists() {
+    public void postProfileChecks_generateViolationOutputDirDoesNotExist_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
+        expectedErrorMessages.add("Invalid Output - output directory must exist, please enter a valid directory name");
+
+        //Act
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
+
+        //Assert
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
+    }
+
+    @Test
+    public void postProfileChecks_generateViolationValid_isValid() {
+        //Arrange
+        when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
         when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator
-            .validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator
+            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertTrue(actualResult.isValid());
     }
 
     @Test
-    public void generateViolationOutputDirNotFile() {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
-        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(true);
-
-        //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
-
-        //Assert
-        Assert.assertTrue(validationResult.isValid());
-    }
-
-    @Test
-    public void generateViolationOutputDirNotEmpty() {
+    public void postProfileChecks_generateViolationOutputDirNotEmpty_isNotValid() {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
         when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(false);
+        expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manifest.json' " +
+            "and '[0-9].csv' files or use the --overwrite option");
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLinePostProfile(profile);
+        ValidationResult actualResult = validator.postProfileChecks(profile, mockConfigSource, mockOutputTarget);
 
         //Assert
-        Assert.assertFalse(validationResult.isValid());
+        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
+        Assert.assertFalse(actualResult.isValid());
     }
-
 }

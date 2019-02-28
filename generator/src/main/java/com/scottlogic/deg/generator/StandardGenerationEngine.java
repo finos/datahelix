@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Guice.CurrentProfileCache;
+import com.scottlogic.deg.generator.guice.CurrentProfileCache;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.*;
@@ -9,8 +9,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.stream.Stream;
 
 public class StandardGenerationEngine implements GenerationEngine {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
-import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;

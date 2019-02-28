@@ -472,6 +472,7 @@ public class RegexStringGenerator implements StringGenerator {
          * issue #537 has been created to track when the dk.brics.automaton library
          * is updated.
          * </p>
+         * @return true if another value is available, false if all valid values have been read.
          */
         @Override
         public boolean hasNext() {
@@ -509,6 +510,8 @@ public class RegexStringGenerator implements StringGenerator {
      * <code>Because surrogate code points are not Unicode scalar values, any UTF-8 byte
      * sequence that would otherwise map to code points U+D800..U+DFFF is illformed.
      * </code>
+     * @return true if the string parameter contains valid plane 0 unicode characters.
+     *         false if it contains any surrogate characters.
      */
     public boolean isStringValidUtf8(String str) {
         for (char c : str.toCharArray()) {

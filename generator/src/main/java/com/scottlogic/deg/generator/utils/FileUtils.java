@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.utils;
 
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,15 +27,37 @@ public class FileUtils {
         return new DecimalFormat(new String(zeroes));
     }
 
+    public boolean containsInvalidChars(File file) {
+        return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
+    }
 
+    public boolean isFileEmpty(File file) {
+        return file.length() == 0;
+    }
+     /**
+     * @param target the FileOutputTarget to check the existence of.
+     * @return true if the supplied FileOutputTarget exists on disk, false otherwise.
+     */
     public boolean exists(FileOutputTarget target) {
         return Files.exists(target.getFilePath());
     }
 
+    /**
+     * @param target the FileOutputTarget to test.
+     * @return true is the supplied FileOutputTarget is a directory, false otherwise.
+     */
     public boolean isDirectory(FileOutputTarget target) {
         return Files.isDirectory(target.getFilePath());
     }
 
+    /**
+     * check for the existence of files named "<code>manifest.json</code>"
+     * and "<code>/^[0-9]{filecount}.csv$/</code>" in the given directory.
+     *
+     * @param target the FileOutputTarget that contains the directory to test.
+     * @param fileCount the number of files we will check for.
+     * @return true if any of the files exist, false only if none of the files exist in the directory.
+     */
     public boolean isDirectoryEmpty(FileOutputTarget target, int fileCount) {
         Path filepath = target.getFilePath();
         if (directoryContainsManifestJsonFile(filepath) ||
@@ -55,5 +79,10 @@ public class FileUtils {
             }
         }
         return false;
+    }
+
+    public File getTraceFile(GenerationConfigSource configSource) {
+        String filenameWithoutExtension = configSource.getOutputPath().toString().replaceAll("\\.[^.]+$", "");
+        return Paths.get(filenameWithoutExtension + "-trace.json").toFile();
     }
 }

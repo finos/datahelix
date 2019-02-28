@@ -6,8 +6,8 @@ import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFieldValueSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.List;
