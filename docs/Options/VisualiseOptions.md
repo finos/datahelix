@@ -9,3 +9,5 @@ Option switches are case-sensitive, arguments are case-insensitive
    * Prevents tree optimisation during visualisation.
 * `--no-simplify`
    * Prevents tree simplification during visualisation. Simplification is where decisions with only one option are folded into the parent.
+ * `--overwrite`
+    * Overwrite existing output files.

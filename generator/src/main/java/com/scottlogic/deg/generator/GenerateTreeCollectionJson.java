@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.NoopTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.RelatedFieldTreePartitioner;
-import com.scottlogic.deg.generator.decisiontree.tree_partitioning.TreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.NoopTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;

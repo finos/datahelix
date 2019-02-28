@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.hamcrest.core.Is;
