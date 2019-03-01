@@ -7,24 +7,23 @@ import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantCons
 import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Defines a builder for a class that can contain constraints.
  */
-public abstract class ConstraintChainBuilder<T> {
-    protected Collection<Constraint> constraints = new ArrayList<>();
+public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T> {
+    protected List<Constraint> constraints = new ArrayList<>();
     private Constraint constraintToAdd;
 
     public T build() {
         saveConstraint();
         return buildInner();
     }
-
-    abstract T buildInner();
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field fooField, int referenceValue) {
         return saveAndAddConstraint(new IsLessThanConstantConstraint(fooField, referenceValue, null));
@@ -40,6 +39,10 @@ public abstract class ConstraintChainBuilder<T> {
 
     public ConstraintChainBuilder<T> withAndConstraint(ConstraintChainBuilder<AndConstraint> andBuilder) {
         return saveAndAddConstraint(andBuilder.build());
+    }
+
+    public ConstraintChainBuilder<T> withIfConstraint(BaseConstraintBuilder<ConditionalConstraint> builder) {
+        return saveAndAddConstraint(builder.buildInner());
     }
 
     public ConstraintChainBuilder<T> negate() {
