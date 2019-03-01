@@ -21,6 +21,8 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 * `[options]` optionally a combination of options to configure how the command operates
 * `<arguments>` required inputs for the command to operate
 
+**Note:** when using quoted `<arguments>` a trailing backslash will result in an error
+
 ## Examples
 * `java -jar generator.jar generate profile.json profile.csv`
 * `java -jar generator.jar generate --violate=true profile.json violated-data-files/`
