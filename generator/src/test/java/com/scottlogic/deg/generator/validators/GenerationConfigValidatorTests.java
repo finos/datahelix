@@ -212,6 +212,7 @@ public class GenerationConfigValidatorTests {
         when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
         when(mockFileUtils.createDirectories(eq(mockPath))).thenReturn(false);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
         expectedErrorMessages.add("Invalid Output - parent directory of output file "
             + "already exists but is not a directory, please use a different output filename");
 
