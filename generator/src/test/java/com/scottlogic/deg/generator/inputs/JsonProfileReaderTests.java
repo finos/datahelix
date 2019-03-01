@@ -180,6 +180,46 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldNotThrowIsNullWithValueNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"value\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> new InvalidProfileException("Couldn't recognise 'value' property, it must be set to a value"));
+    }
+
+    @Test
+    public void shouldNotThrowIsNullWithValuesNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"values\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> new InvalidProfileException("Cannot create an IsInSetConstraint for field 'foo' with a set containing null."));
+    }
+
+    @Test
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
