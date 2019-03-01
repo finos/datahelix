@@ -198,3 +198,8 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2018-10-07" |
        | "2018-10-08" |
        | "2018-10-09" |
+
+Scenario: Running a 'beforeOrEqualTo' request that specifies null should be unsuccessful
+    Given foo is before or at null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
