@@ -83,7 +83,7 @@ public class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new IsLessThanConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueNull((dto.value)),
+                        (Number) throwIfValueNull(dto.value),
                         rules));
 
         add(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT.toString(),
@@ -199,7 +199,7 @@ public class AtomicConstraintReaderLookup {
     }
 
     private static <T> Collection<T> throwIfValuesNull(Collection<T> values) throws InvalidProfileException {
-        if (values.contains(null)) {
+        if (values == null) {
             throw new InvalidProfileException("Couldn't recognise 'values' property, it must not contain 'null'");
         }
         return values;

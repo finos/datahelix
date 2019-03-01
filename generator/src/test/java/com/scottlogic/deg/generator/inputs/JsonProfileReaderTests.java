@@ -632,6 +632,24 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectInSetSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": null }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
     public void shouldRejectAllOfWithEmptySet() {
         givenJson("{" +
             "    \"schemaVersion\": \"v3\"," +
