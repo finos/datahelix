@@ -196,7 +196,7 @@ public class JsonProfileReaderTests {
                 "}");
 
         Assertions.assertDoesNotThrow(
-            () -> new InvalidProfileException("Couldn't recognise 'value' property, it must be set to a value"));
+            () -> getResultingProfile());
     }
 
     @Test
@@ -216,7 +216,7 @@ public class JsonProfileReaderTests {
                 "}");
 
         Assertions.assertDoesNotThrow(
-            () -> new InvalidProfileException("Cannot create an IsInSetConstraint for field 'foo' with a set containing null."));
+            () -> getResultingProfile());
     }
 
     @Test
