@@ -14,6 +14,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.TreeWalkerType walkerType;
     public Long maxRows;
     public boolean validateProfile = false;
+    public Path outputPath;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -77,7 +78,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public Path getOutputPath() {
-        throw new UnsupportedOperationException();
+        return outputPath;
     }
 
     @Override
