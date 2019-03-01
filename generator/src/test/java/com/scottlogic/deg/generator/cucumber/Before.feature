@@ -6,137 +6,33 @@ Background:
        And foo is of type "temporal"
 
 #Alone
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request that specifies a valid date should be successful
-     Given foo is before 2019-02-10T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-09T23:59:59.999 |
-       | 2019-02-09T23:59:59.998 |
-       | 2019-02-09T23:59:59.997 |
-       | 2019-02-09T23:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request that specifies a valid time should be successful
-     Given foo is before 2019-01-01T12:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-01-01T11:59:59.999 |
-       | 2019-01-01T11:59:59.998 |
-       | 2019-01-01T11:59:59.997 |
-       | 2019-01-01T11:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
+# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 @ignore
 Scenario: Running a 'before' request over a year threshold should be successful
-     Given foo is before 2019-01-01T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2018-12-31T23:59:59.999 |
-       | 2018-12-31T23:59:59.998 |
-       | 2018-12-31T23:59:59.997 |
-       | 2018-12-31T23:59:59.996 |
+  Given foo is before 2019-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | 2018-12-31T23:59:59.999 |
+    | 2018-12-31T23:59:59.998 |
+    | 2018-12-31T23:59:59.997 |
+    | 2018-12-31T23:59:59.996 |
+    | 2018-12-31T23:59:59.995 |
 
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over a month threshold should be successful
-     Given foo is before 2019-02-01T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-01-31T23:59:59.999 |
-       | 2019-01-31T23:59:59.998 |
-       | 2019-01-31T23:59:59.997 |
-       | 2019-01-31T23:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over a day threshold should be successful
-     Given foo is before 2019-02-02T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-01T23:59:59.999 |
-       | 2019-02-01T23:59:59.998 |
-       | 2019-02-01T23:59:59.997 |
-       | 2019-02-01T23:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over an hour threshold should be successful
-     Given foo is before 2019-02-02T13:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-02T12:59:59.999 |
-       | 2019-02-02T12:59:59.998 |
-       | 2019-02-02T12:59:59.997 |
-       | 2019-02-02T12:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over a minute threshold should be successful
-     Given foo is before 2019-02-02T13:20:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-02T13:19:59.999 |
-       | 2019-02-02T13:19:59.998 |
-       | 2019-02-02T13:19:59.997 |
-       | 2019-02-02T13:19:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over a second threshold should be successful
-     Given foo is before 2019-02-02T13:20:19.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2019-02-02T13:20:18.999 |
-       | 2019-02-02T13:20:18.998 |
-       | 2019-02-02T13:20:18.997 |
-       | 2019-02-02T13:20:18.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
+# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 @ignore
 Scenario: Running a 'before' request over a leap year date should be successful
-     Given foo is before 2016-03-01T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2016-02-29T23:59:59.999 |
-       | 2016-02-29T23:59:59.998 |
-       | 2016-02-29T23:59:59.997 |
-       | 2016-02-29T23:59:59.996 |
+  Given foo is before 2016-03-01T00:00:00.000
+  And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | null                    |
+    | 2016-02-29T23:59:59.999 |
+    | 2016-02-29T23:59:59.998 |
+    | 2016-02-29T23:59:59.997 |
+    | 2016-02-29T23:59:59.996 |
 
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
-@ignore
-Scenario: Running a 'before' request over a non-leap year date should be successful
-     Given foo is before 2017-03-01T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2017-02-28T23:59:59.999 |
-       | 2017-02-28T23:59:59.998 |
-       | 2017-02-28T23:59:59.997 |
-       | 2017-02-28T23:59:59.996 |
-
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
+# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 @ignore
 Scenario: Running a 'before' request that specifies the maximum valid system date should be successful
      Given foo is before 9999-12-31T23:59:59.999
@@ -149,7 +45,6 @@ Scenario: Running a 'before' request that specifies the maximum valid system dat
        | 9999-12-31T23:59:59.996 |
        | 9999-12-31T23:59:59.995 |
 
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
 # Defect 607 "Setting Before 0001-01-01T00:00:00.000 loops round to december of that year" related to this scenario
 # Defect 608 "Setting a date of 0000-01-01T00:00:00.000 results in an error" related to this scenario
 @ignore
@@ -295,7 +190,7 @@ Scenario: 'before' run against a contradicting 'beforeOrAt' should only only gen
        | foo                     |
        | null                    |
 
-# Defect 600 "Running a before constraint in full generation mode generates interesting data" related to this scenario
+# Defect 635 "DateTimeRestrictionsMergeOperation if contradictory, removes all dateTime restrictions" related to this scenario
 @ignore
 Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000

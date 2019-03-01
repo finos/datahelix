@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.restrictions.DataTypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
@@ -23,7 +24,7 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void whenGeneratingUnboundSet() {
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1),
                 createDate(2100, 1, 1));
     }
@@ -31,14 +32,14 @@ public class TemporalFieldValueSourceTests {
     @Test
     public void whenGeneratingUnboundSetWithBlacklist() {
         givenBlacklist(createDate(2100, 1, 1));
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1));
     }
 
     @Test
     public void whenGivenUpperBound() {
         givenUpperBound(createDate(2018, 01, 01), true);
-        expectAllValues(
+        expectInterestingValues(
                 createDate(1900, 1, 1),
                 createDate(2018, 1, 1));
     }
@@ -46,7 +47,7 @@ public class TemporalFieldValueSourceTests {
     @Test
     public void whenGivenLowerBound() {
         givenLowerBound(createDate(2018, 01, 01), true);
-        expectAllValues(
+        expectInterestingValues(
                 createDate(2018, 1, 1),
                 createDate(2100, 1, 1));
     }
@@ -248,6 +249,18 @@ public class TemporalFieldValueSourceTests {
         Assert.assertThat(a, not(equalTo(b)));
     }
 
+    @Test
+    public void temporalGenerateAllValues_withNoMin_startsAtLocalDateTimeMin(){
+        //Arrange
+        DateTimeRestrictions max = new DateTimeRestrictions();
+        max.max = new DateTimeRestrictions.DateTimeLimit(LocalDateTime.MAX, false);
+        TemporalFieldValueSource noMin = new TemporalFieldValueSource(max, Collections.emptySet());
+        //Act
+        LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
+        //Assert
+        Assert.assertThat(firstValue, equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
+    }
+
     private DateTimeRestrictions restrictions(String min, String max){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = min == null ? null : getTimeLimit(min);
@@ -286,6 +299,21 @@ public class TemporalFieldValueSourceTests {
         fieldSource = new TemporalFieldValueSource(restrictions, blackList);
 
         fieldSource.generateAllValues().forEach(actualValues::add);
+
+        Assert.assertThat(actualValues, equalTo(expectedValues));
+    }
+
+    private void expectInterestingValues(Object... expectedValuesArray) {
+        List<Object> expectedValues = Arrays.asList(expectedValuesArray);
+        List<Object> actualValues = new ArrayList<>();
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        fieldSource.generateInterestingValues().forEach(actualValues::add);
 
         Assert.assertThat(actualValues, equalTo(expectedValues));
     }
