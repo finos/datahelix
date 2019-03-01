@@ -17,7 +17,7 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 
 `java -jar <path to JAR file> <command> [options] <arguments>`
 
-* `<command>` one of the commands described below, `generate`, `visualise`, and so on
+* `<command>` one of the commands described below, `generate`, `visualise` etc which are **case sensitive**
 * `[options]` optionally a combination of options to configure how the command operates
 * `<arguments>` required inputs for the command to operate
 
