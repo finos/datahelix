@@ -19,10 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReductiveIterationVisualiser implements IterationVisualiser {
     private final AtomicInteger currentIteration = new AtomicInteger();
+    private final FileUtils fileUtils;
     private final Path visualiseDirectoryPath;
 
     @Inject
-    public ReductiveIterationVisualiser(@Named("outputPath") Path outputPath) {
+    public ReductiveIterationVisualiser(
+        @Named("outputPath") Path outputPath,
+        FileUtils fileUtils) {
+        this.fileUtils = fileUtils;
         boolean outputPathIsADirectory = outputPath != null && outputPath.toFile().isDirectory();
 
         Path directoryPath;
@@ -72,6 +76,6 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
                 " directory needs to exist.\n" + this.visualiseDirectoryPath.toString());
         }
 
-        new FileUtils().createDirectories(this.visualiseDirectoryPath);
+        fileUtils.createDirectories(this.visualiseDirectoryPath);
     }
 }
