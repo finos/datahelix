@@ -451,3 +451,8 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     Then the following data should be generated:
       | foo            |
       | null           |
+
+  Scenario: Running an 'aValid' request with the value property set to a null entry (null) should throw an error
+    Given foo is a valid null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created

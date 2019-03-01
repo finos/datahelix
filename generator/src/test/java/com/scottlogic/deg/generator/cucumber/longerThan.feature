@@ -52,7 +52,7 @@ Scenario: 'longerThan' whitespace should fail with an error message
 
 Scenario: 'longerThan' null should fail with an error message
   Given foo is longer than null
-  Then I am presented with an error message
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
 Scenario: 'longerThan' a decimal number with a zero mantissa should be successful

@@ -131,3 +131,8 @@ Scenario: User attempts to create a numeric field with data value that are less 
      Given foo is less than or equal to "Zero"
      Then the profile is invalid
         And no data is created
+
+Scenario: Running a 'lessThanOrEqualTo' request that specifies null should be unsuccessful
+    Given foo is less than or equal to null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
