@@ -68,7 +68,7 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
                                                             Iterable<AtomicConstraint> decisionConstraints) {
-        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
+        if (rootConstraints == null) {
             return Optional.of(FieldSpec.Empty); //TODO PAUL don't do this
         }
 
@@ -86,13 +86,10 @@ public class ConstraintReducer {
                     acc1 -> optAcc2.flatMap(
                         acc2 -> fieldSpecMerger.merge(acc1, acc2))));
 
-        if (!rootFieldSpec.isPresent()) { return Optional.empty(); } //TODO PAUL i don't know what this is
-
         if (!decisionConstraints.iterator().hasNext()) { return rootFieldSpec; }
-
-
+        
         return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
-            rootFieldSpec.get(),
+            rootFieldSpec.orElse(FieldSpec.Empty),
             StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
         ));
     }
