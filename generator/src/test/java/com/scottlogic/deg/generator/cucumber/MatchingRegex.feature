@@ -593,3 +593,9 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | null | "AA" | null |
       | null | null | 1    |
       | null | null | null |
+
+  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
+    Given there is a field foo
+      And foo is matching regex null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created

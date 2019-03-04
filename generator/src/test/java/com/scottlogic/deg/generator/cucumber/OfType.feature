@@ -198,3 +198,8 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (sys
        | null                    |
        | 0001-01-01T00:00:00.001 |
        | 1970-01-01T00:00:00.000 |
+
+Scenario: Running a 'ofType' request that specifies null should be unsuccessful
+    Given foo is of type null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
