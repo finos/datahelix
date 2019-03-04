@@ -180,6 +180,46 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldNotThrowIsNullWithValueNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"value\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> getResultingProfile());
+    }
+
+    @Test
+    public void shouldNotThrowIsNullWithValuesNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"values\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> getResultingProfile());
+    }
+
+    @Test
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
@@ -596,6 +636,24 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectLessThanWithNullValue() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"lessThan\", \"value\": null }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
     public void shouldRejectInSetWithANullValue() {
         givenJson(
             "{" +
@@ -605,6 +663,24 @@ public class JsonProfileReaderTests {
                 "      {" +
                 "        \"constraints\": [" +
                 "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ null ] }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
+    public void shouldRejectInSetSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"v3\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": null }" +
                 "        ]" +
                 "      }" +
                 "    ]" +

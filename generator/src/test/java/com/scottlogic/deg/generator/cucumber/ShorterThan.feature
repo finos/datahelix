@@ -64,7 +64,7 @@ Scenario: Running a 'shorterThan' request using an empty string "" to specify a 
 
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than null
-     Then I am presented with an error message
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
        And no data is created
 
 Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet constraint should be successful
