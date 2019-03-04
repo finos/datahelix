@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -19,22 +20,21 @@ class FieldSpecFactoryTests {
             new IsNullConstraint(new Field("Test"), Collections.emptySet()).negate()
         );
 
-        FieldSpec fieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(constraints);
+        FieldSpec fieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(FieldSpec.Empty, constraints);
 
         FieldSpec expectedFieldSpec = FieldSpec.Empty.withMustContainRestriction(
             new MustContainRestriction(
                 new HashSet<FieldSpec>() {{
                     add(
                         FieldSpec.Empty.withNullRestrictions(
-                            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
-                            null
-                        )
+                            new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty)
+                        .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, null)
                     );
                 }}
             )
         );
 
-        Assert.assertEquals(fieldSpec, expectedFieldSpec);
+        Assert.assertEquals(expectedFieldSpec, fieldSpec);
     }
 
     @Test

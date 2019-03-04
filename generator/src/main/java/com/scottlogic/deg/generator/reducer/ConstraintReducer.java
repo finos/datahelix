@@ -69,21 +69,15 @@ public class ConstraintReducer {
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
                                                             Iterable<AtomicConstraint> decisionConstraints) {
         if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
-            return Optional.of(FieldSpec.Empty);
+            return Optional.of(FieldSpec.Empty); //TODO PAUL don't do this
         }
 
-        final FieldSpec decisionConstaintsFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(
-            StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
-        );
-
-        final Stream<FieldSpec> rootAndDecisionsConstraintsStream = Stream.concat(
-            Stream.of(decisionConstaintsFieldSpec),
+        final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct)
-        );
+                .map(fieldSpecFactory::construct);
 
-        return rootAndDecisionsConstraintsStream
+        Optional<FieldSpec> rootFieldSpec = rootConstraintsStream
             .reduce(
                 Optional.of(FieldSpec.Empty),
                 (optAcc, next) ->
@@ -91,5 +85,15 @@ public class ConstraintReducer {
                 (optAcc1, optAcc2) -> optAcc1.flatMap(
                     acc1 -> optAcc2.flatMap(
                         acc2 -> fieldSpecMerger.merge(acc1, acc2))));
+
+        if (!rootFieldSpec.isPresent()) { return Optional.empty(); } //TODO PAUL i don't know what this is
+
+        if (!decisionConstraints.iterator().hasNext()) { return rootFieldSpec; }
+
+
+        return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
+            rootFieldSpec.get(),
+            StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
+        ));
     }
 }

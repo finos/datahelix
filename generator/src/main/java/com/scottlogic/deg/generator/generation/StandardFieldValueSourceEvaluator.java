@@ -28,9 +28,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        if (fieldSpec.getMustContainRestriction() != null) {
-            validSources.addAll(
-                getMustContainRestrictionSources(fieldSpec));
+        if (fieldSpec.getMustContainRestriction() != null && !fieldSpec.getMustContainRestriction().getRequiredObjects().isEmpty()) {
+            List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
+            if (!mustContainRestrictionSources.isEmpty()){
+                return mustContainRestrictionSources;
+            }
         }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
@@ -95,7 +97,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
         if (mustContainRestrictionFieldSpecs.size() > 1) {
-            mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
+            //mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
+            //TODO paul WHAT AND WHY
         }
 
         return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
