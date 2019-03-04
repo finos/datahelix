@@ -33,7 +33,7 @@ Scenario Outline: 'After' invalid datetime fails with error
   ### after ###
 
 @ignore
-Scenario: 'After' with a non contradicting 'After' is successful
+Scenario: 'After' with a non-contradicting 'After' is successful
   Given foo is after 2019-01-01T00:00:00.000
     And foo is after 2019-02-01T00:00:00.000
     And the generator can generate at most 5 rows
@@ -46,7 +46,7 @@ Scenario: 'After' with a non contradicting 'After' is successful
     | 2019-02-01T00:00:00.004 |
 
 @ignore
-Scenario: 'After' with a non contradicting 'Not After' is successful
+Scenario: 'After' with a non-contradicting 'Not After' is successful
   Given foo is after 2019-01-01T00:00:00.000
     And foo is anything but after 2020-01-01T00:00:00.000
     And the generator can generate at most 5 rows
@@ -59,7 +59,7 @@ Scenario: 'After' with a non contradicting 'Not After' is successful
     | 2019-01-01T00:00:00.004 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Not After' is successful
+Scenario: 'Not After' with a non-contradicting 'Not After' is successful
   Given foo is anything but after 2019-01-01T00:00:00.000
     And foo is anything but after 2020-01-01T00:00:00.000
     And the generator can generate at most 5 rows
@@ -87,7 +87,7 @@ Scenario: 'After' with a contradicting 'Not After' generates null
 ### afterOrAt ###
 
 @ignore
-Scenario: 'After' with a non contradicting 'After Or At' is successful
+Scenario: 'After' with a non-contradicting 'After Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is after or at 2019-02-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -100,7 +100,7 @@ Then the following data should be generated:
   | 2019-02-01T00:00:00.003 |
 
 @ignore
-Scenario: 'After' with a non contradicting 'Not After Or At' is successful
+Scenario: 'After' with a non-contradicting 'Not After Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but after or at 2020-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -113,7 +113,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'After Or At' is successful
+Scenario: 'Not After' with a non-contradicting 'After Or At' is successful
 Given foo is anything but after 2020-01-01T00:00:00.000
   And foo is after or at 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -126,7 +126,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.003 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Not After Or At' is successful
+Scenario: 'Not After' with a non-contradicting 'Not After Or At' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And  foo is anything but after or at 2020-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -153,7 +153,7 @@ Then the following data should be generated:
 ### before ###
 
 @ignore
-Scenario: 'After' with a non contradicting 'Before' is successful
+Scenario: 'After' with a non-contradicting 'Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is before 2020-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -166,7 +166,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
 
 @ignore
-Scenario: 'After' with a non contradicting 'Not Before' is successful
+Scenario: 'After' with a non-contradicting 'Not Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but before 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -179,7 +179,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Before' is successful
+Scenario: 'Not After' with a non-contradicting 'Before' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is before 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -192,7 +192,7 @@ Then the following data should be generated:
   | 2018-12-31T23:59:59.996 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Not Before' is successful
+Scenario: 'Not After' with a non-contradicting 'Not Before' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before 2018-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -225,7 +225,7 @@ Then the following data should be generated:
 ### beforeOrAt ###
 
 @ignore
-Scenario: 'After' with a non contradicting 'Before' is successful
+Scenario: 'After' with a non-contradicting 'Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is before or at 2020-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -238,7 +238,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
 
 @ignore
-Scenario: 'After' with a non contradicting 'Not Before Or At' is successful
+Scenario: 'After' with a non-contradicting 'Not Before Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but before or at 2019-01-02T00:00:00.000
   And the generator can generate at most 5 rows
@@ -251,7 +251,7 @@ Then the following data should be generated:
   | 2019-01-02T00:00:00.004 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Before Or At' is successful
+Scenario: 'Not After' with a non-contradicting 'Before Or At' is successful
 Given foo is anything but after 2019-01-02T00:00:00.000
   And  foo is before or at 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
@@ -264,7 +264,7 @@ Then the following data should be generated:
   | 2018-12-31T23:59:59.997 |
 
 @ignore
-Scenario: 'Not After' with a non contradicting 'Not Before Or At' is successful
+Scenario: 'Not After' with a non-contradicting 'Not Before Or At' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before or at 2018-01-01T00:00:00.000
   And the generator can generate at most 5 rows
