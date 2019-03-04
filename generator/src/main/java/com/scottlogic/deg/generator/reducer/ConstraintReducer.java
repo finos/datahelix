@@ -72,19 +72,7 @@ public class ConstraintReducer {
             return Optional.of(FieldSpec.Empty); //TODO PAUL don't do this
         }
 
-        final Stream<FieldSpec> rootConstraintsStream =
-            StreamSupport
-                .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct);
-
-        Optional<FieldSpec> rootFieldSpec = rootConstraintsStream
-            .reduce(
-                Optional.of(FieldSpec.Empty),
-                (optAcc, next) ->
-                    optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
-                (optAcc1, optAcc2) -> optAcc1.flatMap(
-                    acc1 -> optAcc2.flatMap(
-                        acc2 -> fieldSpecMerger.merge(acc1, acc2))));
+        Optional<FieldSpec> rootFieldSpec = getRootFieldSpec(rootConstraints);
 
         if (!decisionConstraints.iterator().hasNext()) { return rootFieldSpec; }
         
@@ -92,5 +80,21 @@ public class ConstraintReducer {
             rootFieldSpec.orElse(FieldSpec.Empty),
             StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
         ));
+    }
+
+    private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
+        final Stream<FieldSpec> rootConstraintsStream =
+            StreamSupport
+                .stream(rootConstraints.spliterator(), false)
+                .map(fieldSpecFactory::construct);
+
+        return rootConstraintsStream
+            .reduce(
+                Optional.of(FieldSpec.Empty),
+                (optAcc, next) ->
+                    optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
+                (optAcc1, optAcc2) -> optAcc1.flatMap(
+                    acc1 -> optAcc2.flatMap(
+                        acc2 -> fieldSpecMerger.merge(acc1, acc2))));
     }
 }

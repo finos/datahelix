@@ -87,7 +87,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
             .map(this::getFieldValueSources),
             List::stream)
-            .filter(x->!x.equals(nullOnlySource))
             .collect(Collectors.toList());
     }
 
