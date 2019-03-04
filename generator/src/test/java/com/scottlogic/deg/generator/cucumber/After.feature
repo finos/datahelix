@@ -106,10 +106,10 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | null                    |
-  | 2019-01-01T00:00:00.000 |
   | 2019-01-01T00:00:00.001 |
   | 2019-01-01T00:00:00.002 |
   | 2019-01-01T00:00:00.003 |
+  | 2019-01-01T00:00:00.004 |
 
 @ignore
 Scenario: 'Not After' with a non contradicting 'After Or At' is successful
@@ -147,3 +147,77 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | null                    |
+
+
+### before ###
+
+@ignore
+Scenario: 'After' with a non contradicting 'Before' is successful
+Given foo is after 2019-01-01T00:00:00.000
+  And foo is before 2020-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2019-01-01T00:00:00.001 |
+  | 2019-01-01T00:00:00.002 |
+  | 2019-01-01T00:00:00.003 |
+  | 2019-01-01T00:00:00.004 |
+
+@ignore
+Scenario: 'After' with a non contradicting 'Not Before' is successful
+Given foo is after 2019-01-01T00:00:00.000
+  And foo is anything but before 2019-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2019-01-01T00:00:00.001 |
+  | 2019-01-01T00:00:00.002 |
+  | 2019-01-01T00:00:00.003 |
+  | 2019-01-01T00:00:00.004 |
+
+@ignore
+Scenario: 'Not After' with a non contradicting 'Before' is successful
+Given foo is anything but after 2019-01-01T00:00:00.000
+  And foo is before 2019-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2018-12-31T00:00:00.999 |
+  | 2018-12-31T00:00:00.998 |
+  | 2018-12-31T00:00:00.997 |
+  | 2018-12-31T00:00:00.996 |
+
+@ignore
+Scenario: 'Not After' with a non contradicting 'Not Before' is successful
+Given foo is anything but after 2019-01-01T00:00:00.000
+  And foo is anything but before 2018-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2018-01-01T00:00:00.000 |
+  | 2018-01-01T00:00:00.001 |
+  | 2018-01-01T00:00:00.002 |
+  | 2018-01-01T00:00:00.003 |
+
+### Contradictions ###
+
+@ignore
+Scenario: 'After' with a contradicting 'Before' only generates null
+Given foo is after 2019-01-02T00:00:00.000
+  And foo is before 2019-01-01T00:00:00.000
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+
+@ignore
+Scenario: 'Not After' with a contradicting 'Not Before' only generates null
+Given foo is anything but after 2019-01-01T00:00:00.000
+  And foo is anything but before 2019-01-02T00:00:00.000
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+
