@@ -198,27 +198,3 @@ Scenario: Running an 'ofType' = temporal request that includes a date value (sys
        | null                    |
        | 0001-01-01T00:00:00.001 |
        | 1970-01-01T00:00:00.000 |
-
-Scenario: Running an 'ofType' = string request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "string"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running an 'ofType' = numeric request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running an 'ofType' = temporal request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo  |
-       | null |

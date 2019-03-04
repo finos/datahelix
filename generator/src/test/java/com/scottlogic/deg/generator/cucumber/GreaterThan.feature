@@ -258,12 +258,12 @@ Scenario: greaterThan run against a non contradicting lessThanOrEqualTo should b
        | 4   |
        | 5   |
 
-Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful (greaterThan 1 AND not lessThanOrEqualTo 2)
-     Given foo is greater than 1
-       And foo is anything but less than or equal to 2
-	   And foo is anything but null
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
+Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful
+   Given foo is greater than 1
+     And foo is anything but less than or equal to 2
+   And foo is anything but null
+     And the generator can generate at most 5 rows
+   Then the following data should be generated:
        | foo |
        | 3   |
        | 4   |
