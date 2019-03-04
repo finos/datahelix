@@ -2,12 +2,9 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
@@ -76,7 +73,7 @@ public class FixedFieldBuilder {
     }
 
     private Set<FieldSpec> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {
-        DecisionAtomicConstraintExtractionVisitor visitor = new DecisionAtomicConstraintExtractionVisitor(field);
+        FieldSpecNodeVisitor visitor = new FieldSpecNodeVisitor(field, constraintReducer);
 
         //ignore the root node, pass the visitor into any option of a decision below the root node.
         rootNode.getDecisions()
@@ -84,29 +81,5 @@ public class FixedFieldBuilder {
                 .forEach(o -> o.accept(visitor)));
 
         return visitor.fieldSpecs;
-    }
-
-    class DecisionAtomicConstraintExtractionVisitor extends BaseVisitor {
-        public final HashSet<FieldSpec> fieldSpecs = new HashSet<>();
-        private final Field field;
-
-        DecisionAtomicConstraintExtractionVisitor(Field field) {
-            this.field = field;
-        }
-
-        @Override
-        public ConstraintNode visit (ConstraintNode constraintNode){
-            List<AtomicConstraint> atomicConstraintsForField = constraintNode.getAtomicConstraints().stream()
-                .filter(atomicConstraint -> atomicConstraint.getField().equals(field))
-                .collect(Collectors.toList());
-
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
-
-            if (fieldSpec.isPresent()){
-                fieldSpecs.add(fieldSpec.get());
-            }
-
-            return constraintNode;
-        }
     }
 }
