@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -13,10 +14,7 @@ import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,7 +56,7 @@ public class FixedFieldBuilder {
             .filter(c -> c.getField().equals(field))
             .collect(Collectors.toSet());
 
-        Set<AtomicConstraint> constraintsForDecisions = getAtomicConstraintsInDecisions(field, rootNode);
+        Set<FieldSpec> constraintsForDecisions = getAtomicConstraintsInDecisions(field, rootNode);
 
         //produce a fieldspec for all the atomic constraints
         Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
@@ -77,7 +75,7 @@ public class FixedFieldBuilder {
         return new FixedField(field, values, rootConstraintsFieldSpec.orElse(FieldSpec.Empty), this.monitor);
     }
 
-    private Set<AtomicConstraint> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {
+    private Set<FieldSpec> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {
         DecisionAtomicConstraintExtractionVisitor visitor = new DecisionAtomicConstraintExtractionVisitor(field);
 
         //ignore the root node, pass the visitor into any option of a decision below the root node.
@@ -85,11 +83,11 @@ public class FixedFieldBuilder {
             .forEach(d -> d.getOptions()
                 .forEach(o -> o.accept(visitor)));
 
-        return visitor.atomicConstraints;
+        return visitor.fieldSpecs;
     }
 
     class DecisionAtomicConstraintExtractionVisitor extends BaseVisitor {
-        public final HashSet<AtomicConstraint> atomicConstraints = new HashSet<>();
+        public final HashSet<FieldSpec> fieldSpecs = new HashSet<>();
         private final Field field;
 
         DecisionAtomicConstraintExtractionVisitor(Field field) {
@@ -97,12 +95,18 @@ public class FixedFieldBuilder {
         }
 
         @Override
-        public AtomicConstraint visit(AtomicConstraint atomicConstraint) {
-            if (!(atomicConstraint instanceof NotConstraint) && atomicConstraint.getField().equals(this.field)){
-                this.atomicConstraints.add(atomicConstraint);
+        public ConstraintNode visit (ConstraintNode constraintNode){
+            List<AtomicConstraint> atomicConstraintsForField = constraintNode.getAtomicConstraints().stream()
+                .filter(atomicConstraint -> atomicConstraint.getField().equals(field))
+                .collect(Collectors.toList());
+
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
+
+            if (fieldSpec.isPresent()){
+                fieldSpecs.add(fieldSpec.get());
             }
 
-            return atomicConstraint;
+            return constraintNode;
         }
     }
 }

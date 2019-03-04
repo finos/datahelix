@@ -42,14 +42,11 @@ public class FieldSpecFactory {
         return construct(constraint, false, false);
     }
 
-    public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<AtomicConstraint> decisionConstraints) {
+    public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<FieldSpec> decisionConstraints) {
         //TODO paul clean up
-
-
         return rootFieldSpec.withMustContainRestriction(
             new MustContainRestriction(
                 decisionConstraints.stream()
-                    .map(this::construct)
                     .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
                     .filter(Optional::isPresent)
                     .map(Optional::get)

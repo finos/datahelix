@@ -16,11 +16,9 @@ class FieldSpecFactoryTests {
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {
         FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-        Collection<AtomicConstraint> constraints = Collections.singletonList(
-            new IsNullConstraint(new Field("Test"), Collections.emptySet()).negate()
-        );
+        FieldSpec nullFieldSpec = FieldSpec.Empty.withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
 
-        FieldSpec fieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(FieldSpec.Empty, constraints);
+        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(FieldSpec.Empty, Collections.singleton(nullFieldSpec));
 
         FieldSpec expectedFieldSpec = FieldSpec.Empty.withMustContainRestriction(
             new MustContainRestriction(
@@ -34,7 +32,7 @@ class FieldSpecFactoryTests {
             )
         );
 
-        Assert.assertEquals(expectedFieldSpec, fieldSpec);
+        Assert.assertEquals(expectedFieldSpec, actualFieldSpec);
     }
 
     @Test

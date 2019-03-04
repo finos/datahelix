@@ -9,10 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,7 +64,7 @@ public class ConstraintReducer {
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
-                                                            Iterable<AtomicConstraint> decisionConstraints) {
+                                                            Set<FieldSpec> decisionConstraints) {
         if (rootConstraints == null) {
             return Optional.of(FieldSpec.Empty); //TODO PAUL don't do this
         }
