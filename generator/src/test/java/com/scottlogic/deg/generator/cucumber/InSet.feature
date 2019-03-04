@@ -521,17 +521,6 @@ Scenario: Running a 'inSet' request alongside a contradicting inSet constraint s
        | foo  |
        | null |
 
-Scenario: Running a 'inSet' request alongside a null constraint should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "Test 1" |
-       | "Test 2" |
-       | "Test 3" |
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'inSet' request alongside an ofType = string should be successful
      Given there is a field foo
        And foo is in set:

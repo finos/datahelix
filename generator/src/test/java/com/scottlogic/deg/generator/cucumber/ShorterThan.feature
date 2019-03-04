@@ -87,13 +87,6 @@ Scenario: Running a 'shorterThan' request alongside a non-contradicting inSet co
        | foo    |
        | null   |
 
-Scenario: Running a 'shorterThan' request alongside a null constraint should generate null
-     Given foo is shorter than 5
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'shorterThan' request alongside a non-contradicting matchingRegex constraint should be successful
      Given foo is shorter than 3
        And foo is matching regex /[☠]{2}/

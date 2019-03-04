@@ -307,13 +307,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | null                      |
       | "23232323232323232323232" |
 
-  Scenario: Running an 'ofLength' request alongside a null constraint should produce null
-    Given foo is of length 3
-    And foo is null
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: Running an 'ofLength' request alongside a non-contradicting matchingRegex constraint should be successful
     Given foo is of length 1
     And foo is matching regex /[a12]{1}/
