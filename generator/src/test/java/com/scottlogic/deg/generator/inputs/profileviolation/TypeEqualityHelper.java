@@ -19,11 +19,11 @@ public class TypeEqualityHelper {
 
     /**
      * Asserts that the two given profile lists are equivalent in both shape (sameBeanAs) and type.
-     * @param expectedProfileList Expected list of profiles.
      * @param actualProfileList Actual list of profiles.
+     * @param expectedProfileList Expected list of profiles.
      */
-    public static void assertProfileListsAreEquivalent(List<Profile> expectedProfileList,
-                                                       List<Profile> actualProfileList) {
+    public static void assertProfileListsAreEquivalent(List<Profile> actualProfileList,
+                                                       List<Profile> expectedProfileList) {
         assertThat(
             "The lists of profiles do not serialize to the same values. Use the \"<Click to see difference> option\"",
             actualProfileList,

@@ -13,8 +13,18 @@ public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
         thenCondition = builder.build();
     }
 
+    public ElseBuilder(Constraint ifCondition, BaseConstraintBuilder<ConditionalConstraint> builder) {
+        this.ifCondition = ifCondition;
+        thenCondition = builder.buildInner();
+    }
+
     public BaseConstraintBuilder<ConditionalConstraint> withElse(ConstraintChainBuilder<? extends Constraint> builder) {
         elseCondition = builder.build();
+        return this;
+    }
+
+    public BaseConstraintBuilder<ConditionalConstraint> withElse(BaseConstraintBuilder<ConditionalConstraint> builder) {
+        elseCondition = builder.buildInner();
         return this;
     }
 
