@@ -1,3 +1,4 @@
+#Generator expected to generate in ascending order where there are bracketing constraints
 Feature: User can specify that a temporal date is lower than, but not equal to, a specified threshold
 
   Background:
@@ -66,9 +67,9 @@ Scenario: 'Not After' with a non contradicting 'Not After' is successful
     | foo                     |
     | null                    |
     | 2019-01-01T00:00:00.000 |
-    | 2018-12-31T00:00:00.999 |
-    | 2018-12-31T00:00:00.998 |
-    | 2018-12-31T00:00:00.997 |
+    | 2018-12-31T23:59:59.999 |
+    | 2018-12-31T23:59:59.998 |
+    | 2018-12-31T23:59:59.997 |
 
 
 ### Contradictions ###
@@ -133,9 +134,9 @@ Then the following data should be generated:
   | foo                     |
   | null                    |
   | 2019-01-01T00:00:00.000 |
-  | 2018-12-31T00:00:00.999 |
-  | 2018-12-31T00:00:00.998 |
-  | 2018-12-31T00:00:00.997 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
 
 ### Contradictions ###
 
@@ -185,10 +186,10 @@ Given foo is anything but after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | null                    |
-  | 2018-12-31T00:00:00.999 |
-  | 2018-12-31T00:00:00.998 |
-  | 2018-12-31T00:00:00.997 |
-  | 2018-12-31T00:00:00.996 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
+  | 2018-12-31T23:59:59.996 |
 
 @ignore
 Scenario: 'Not After' with a non contradicting 'Not Before' is successful
@@ -221,3 +222,75 @@ Then the following data should be generated:
   | foo                     |
   | null                    |
 
+### beforeOrAt ###
+
+@ignore
+Scenario: 'After' with a non contradicting 'Before' is successful
+Given foo is after 2019-01-01T00:00:00.000
+  And foo is before or at 2020-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2019-01-01T00:00:00.001 |
+  | 2019-01-01T00:00:00.002 |
+  | 2019-01-01T00:00:00.003 |
+  | 2019-01-01T00:00:00.004 |
+
+@ignore
+Scenario: 'After' with a non contradicting 'Not Before Or At' is successful
+Given foo is after 2019-01-01T00:00:00.000
+  And foo is anything but before or at 2019-01-02T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2019-01-02T00:00:00.001 |
+  | 2019-01-02T00:00:00.002 |
+  | 2019-01-02T00:00:00.003 |
+  | 2019-01-02T00:00:00.004 |
+
+@ignore
+Scenario: 'Not After' with a non contradicting 'Before Or At' is successful
+Given foo is anything but after 2019-01-02T00:00:00.000
+  And  foo is before or at 2019-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2019-01-01T00:00:00.000 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
+
+@ignore
+Scenario: 'Not After' with a non contradicting 'Not Before Or At' is successful
+Given foo is anything but after 2019-01-01T00:00:00.000
+  And foo is anything but before or at 2018-01-01T00:00:00.000
+  And the generator can generate at most 5 rows
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+  | 2018-01-01T00:00:00.001 |
+  | 2018-01-01T00:00:00.002 |
+  | 2018-01-01T00:00:00.003 |
+  | 2018-01-01T00:00:00.004 |
+
+
+### Contradictions ###
+
+@ignore
+Scenario: 'After' with a contradicting 'Before Or At' only generates null
+Given foo is after 2019-01-02T00:00:00.000
+  And foo is before or at 2019-01-01T00:00:00.000
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
+
+@ignore
+Scenario: 'Not After' with a contradicting not 'Before Or At' only generates null
+Given foo is anything but after 2019-01-01T00:00:00.000
+  And foo is anything but before or at 2019-01-02T00:00:00.000
+Then the following data should be generated:
+  | foo                     |
+  | null                    |
