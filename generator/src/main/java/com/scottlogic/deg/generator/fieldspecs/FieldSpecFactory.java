@@ -44,6 +44,7 @@ public class FieldSpecFactory {
 
     public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<FieldSpec> decisionConstraints) {
         //TODO paul clean up
+        //TODO PAUL test this method
         return rootFieldSpec.withMustContainRestriction(
             new MustContainRestriction(
                 decisionConstraints.stream()

@@ -16,7 +16,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 class FieldSpecValueGeneratorTests {
@@ -30,7 +31,7 @@ class FieldSpecValueGeneratorTests {
             .withSetRestrictions(
                 new SetRestrictions(
                     new HashSet<>(
-                        Arrays.asList(1, 10)
+                        Arrays.asList(1, 5, 10)
                     ),
                     null
                 ),
@@ -83,7 +84,7 @@ class FieldSpecValueGeneratorTests {
             )
         );
 
-        assertEquals(expectedDataBags, result);
+        assertThat(result, sameBeanAs(expectedDataBags));
     }
 
     @Test
@@ -153,7 +154,7 @@ class FieldSpecValueGeneratorTests {
             )
         );
 
-        assertEquals(expectedDataBags, result);
+        assertThat(result, sameBeanAs(expectedDataBags));
     }
 
     @Test
@@ -265,10 +266,6 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue("/aa/", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
                     new DataBagValue("ba", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
@@ -278,7 +275,7 @@ class FieldSpecValueGeneratorTests {
             )
         );
 
-        assertEquals(expectedDataBags, result);
+        assertThat(result, sameBeanAs(expectedDataBags));
     }
 
     @Test
@@ -325,7 +322,7 @@ class FieldSpecValueGeneratorTests {
             )
         );
 
-        assertEquals(expectedDataBags, result);
+        assertThat(result, sameBeanAs(expectedDataBags));
     }
 
     @Test
@@ -372,6 +369,6 @@ class FieldSpecValueGeneratorTests {
             )
         );
 
-        assertEquals(expectedDataBags, result);
+        assertThat(result, sameBeanAs(expectedDataBags));
     }
 }
