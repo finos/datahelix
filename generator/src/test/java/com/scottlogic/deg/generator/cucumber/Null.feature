@@ -140,9 +140,9 @@ Scenario: 'Null' with a contradicting not 'containingRegex' emits null
 
 ### ofLength ###
 
-@ignore #out of memory
 Scenario: Not 'null' with a non contradicting 'ofLength' should be successful
   Given foo is anything but null
+    And foo is of type "string"
     And foo is of length 0
   Then the following data should be generated:
     | foo |
@@ -190,9 +190,9 @@ Scenario: 'Null' with a contradicting not 'longerThan' should only generate null
 
 ### shorterThan ###
 
-@ignore #Out of memory
 Scenario: Not 'null' with a non contradicting 'shorterThan' should be successful
   Given foo is anything but null
+    And foo is of type "string"
     And foo is shorter than 1
   Then the following data should be generated:
       | foo |
@@ -289,7 +289,7 @@ Scenario: 'Null' with a contradicting not 'greaterThanOrEqualTo' should only gen
 
 ### lessThan ###
 
-@ignore #producing negative interesting decimal values
+@ignore #Relates to issue #594 - Reverse order of value generation when only upper-bound operators are provided. Counts up from minimum possible double
 Scenario: Not 'null' with a non contradicting 'lessThan' should be successful
   Given foo is anything but null
     And foo is less than 1
@@ -315,7 +315,7 @@ Scenario: 'Null' with a contradicting not 'lessThan' should only generate null
 
 ### lessThanOrEqualTo ###
 
-@ignore #producing negative interesting decimal values
+@ignore #Relates to issue #594 - Reverse order of value generation when only upper-bound operators are provided. Counts up from minimum possible double
 Scenario: Not 'null' with a non contradicting 'lessThanOrEqualTo' should be successful
   Given foo is anything but null
     And foo is less than or equal to 1
@@ -341,7 +341,7 @@ Scenario: 'Null' with a contradicting not 'lessThanOrEqualTo' should only genera
 
 ### granularTo ###
 
-@ignore #producing values not at specifed granularity
+@ignore #Relates to issue #677 - Granularity ignored when generating from set
 Scenario: Not 'null' with a non contradicting 'granularTo' should be successful
   Given foo is anything but null
     And foo is granular to 1
@@ -368,7 +368,7 @@ Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
 
 ### after ###
 
-@ignore #producing values not at expected granularity
+@ignore #Relates to #667 - Remove default temporal granularity
 Scenario: Not 'null' with a non contradicting 'after' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
@@ -395,7 +395,7 @@ Scenario: 'Null' with a contradicting not 'after' should only generate null
 
 ### afterOrAt ###
 
-@ignore #producing values not at expected granularity
+@ignore #Relates to #667 - Remove default temporal granularity
 Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
   Given foo is anything but null
   And foo is of type "temporal"
@@ -422,7 +422,7 @@ Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
 
 ### before ###
 
-@ignore #producing values not at expected granularity and generating values from the first date increasing instead of the specified date decreasing
+@ignore #Relates to #667 - Remove default temporal granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'before' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
@@ -449,7 +449,7 @@ Scenario: 'Null' with a contradicting not 'before' should only generate null
 
 ### beforeOrAt ###
 
-@ignore #producing values not at expected granularity and generating values from the first date increasing instead of the specified date decreasing
+@ignore #Relates to #667 - Remove default temporal granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'beforeOrAt' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
