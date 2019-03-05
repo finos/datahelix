@@ -16,6 +16,15 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     protected List<Constraint> constraints = new ArrayList<>();
     private Constraint constraintToAdd;
 
+    ConstraintChainBuilder(ConstraintChainBuilder<T> builder) {
+        constraints.addAll(builder.constraints);
+        constraintToAdd = builder.constraintToAdd;
+    }
+
+    ConstraintChainBuilder() {}
+
+    abstract ConstraintChainBuilder<T> copy();
+
     public T build() {
         saveConstraint();
         return buildInner();
@@ -58,13 +67,12 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndAddConstraint(new IsOfTypeConstraint(fooField, requiredType, null));
     }
 
-
     public ConstraintChainBuilder<T> negate() {
         if (constraintToAdd == null) {
             throw new RuntimeException("Unable to call negate method on builder as no constraint found to negate.");
         }
         constraintToAdd = constraintToAdd.negate();
-        return this;
+        return this.copy();
     }
 
     public ConstraintChainBuilder<T> violate() {
@@ -75,10 +83,10 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         }
 
         constraintToAdd = new ViolatedAtomicConstraint(((AtomicConstraint) constraintToAdd).negate());
-        return this;
+        return this.copy();
     }
 
-    void saveConstraint() {
+    private void saveConstraint() {
         if (constraintToAdd != null) {
             constraints.add(constraintToAdd);
             constraintToAdd = null;
@@ -88,13 +96,13 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     private ConstraintChainBuilder<T> saveAndAddConstraint(Constraint constraint) {
         saveConstraint();
         constraintToAdd = constraint;
-        return this;
+        return this.copy();
     }
 
     public ConstraintChainBuilder<T> appendBuilder(ConstraintChainBuilder<? extends Constraint> builder) {
         saveConstraint();
         constraints.addAll(builder.constraints);
         constraintToAdd = builder.constraintToAdd;
-        return this;
+        return this.copy();
     }
 }

@@ -3,6 +3,12 @@ package com.scottlogic.deg.generator.builders;
 import com.scottlogic.deg.generator.constraints.Constraint;
 
 public class SingleConstraintBuilder extends ConstraintChainBuilder<Constraint> {
+    public SingleConstraintBuilder() { }
+
+    public SingleConstraintBuilder(ConstraintChainBuilder<Constraint> builder) {
+        super(builder);
+    }
+
     @Override
     Constraint buildInner() {
         if (constraints.size() == 0) {
@@ -14,5 +20,10 @@ public class SingleConstraintBuilder extends ConstraintChainBuilder<Constraint> 
         }
 
         return constraints.get(0);
+    }
+
+    @Override
+    public ConstraintChainBuilder<Constraint> copy() {
+        return new SingleConstraintBuilder(this);
     }
 }

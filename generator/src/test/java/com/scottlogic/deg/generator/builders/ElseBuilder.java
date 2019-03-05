@@ -10,26 +10,36 @@ public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
 
     public ElseBuilder(Constraint ifCondition, ConstraintChainBuilder<? extends Constraint> builder) {
         this.ifCondition = ifCondition;
-        thenCondition = builder.build();
+        thenCondition = builder.copy().build();
     }
 
-    public ElseBuilder(Constraint ifCondition, BaseConstraintBuilder<ConditionalConstraint> builder) {
+    public ElseBuilder(Constraint ifCondition, ElseBuilder builder) {
         this.ifCondition = ifCondition;
-        thenCondition = builder.buildInner();
+        thenCondition = builder.copy().buildInner();
     }
 
-    public BaseConstraintBuilder<ConditionalConstraint> withElse(ConstraintChainBuilder<? extends Constraint> builder) {
-        elseCondition = builder.build();
-        return this;
+    private ElseBuilder(Constraint ifCondition, Constraint thenCondition, Constraint elseCondition) {
+        this.ifCondition = ifCondition;
+        this.thenCondition = thenCondition;
+        this.elseCondition = elseCondition;
     }
 
-    public BaseConstraintBuilder<ConditionalConstraint> withElse(BaseConstraintBuilder<ConditionalConstraint> builder) {
-        elseCondition = builder.buildInner();
-        return this;
+    public ElseBuilder withElse(ConstraintChainBuilder<? extends Constraint> builder) {
+        elseCondition = builder.copy().build();
+        return this.copy();
+    }
+
+    public ElseBuilder withElse(ElseBuilder builder) {
+        elseCondition = builder.copy().buildInner();
+        return this.copy();
     }
 
     @Override
-    ConditionalConstraint buildInner() {
+    public ConditionalConstraint buildInner() {
         return new ConditionalConstraint(ifCondition, thenCondition, elseCondition);
+    }
+
+    public ElseBuilder copy() {
+        return new ElseBuilder(ifCondition, thenCondition, elseCondition);
     }
 }
