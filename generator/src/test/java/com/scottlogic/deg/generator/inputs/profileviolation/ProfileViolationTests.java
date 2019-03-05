@@ -132,20 +132,20 @@ public class ProfileViolationTests {
         Field barField = new Field("bar");
         String ruleName = "Nested if rule";
 
-        final ConstraintChainBuilder<Constraint> builderA =
+        final ConstraintChainBuilder<Constraint> A =
             new SingleConstraintBuilder().withInSetConstraint(fooField, new Object[]{1, 2, "hello"});
-        final ConstraintChainBuilder<Constraint> builderB =
+        final ConstraintChainBuilder<Constraint> B =
             new SingleConstraintBuilder().withInSetConstraint(barField, new Object[]{"A", "B"});
-        final ConstraintChainBuilder<Constraint> builderC
+        final ConstraintChainBuilder<Constraint> C
             = new SingleConstraintBuilder().withEqualToConstraint(barField, "A");
 
         Rule nestedIfRule = new RuleBuilder(ruleName)
             .withIfConstraint(new IfBuilder()
                 .withIf(new IfBuilder()
-                    .withIf(builderA)
-                    .withThen(builderB)
+                    .withIf(A)
+                    .withThen(B)
                 )
-                .withThen(builderC)
+                .withThen(C)
             )
             .build();
 
@@ -162,10 +162,10 @@ public class ProfileViolationTests {
         Rule violatedIfRule = new RuleBuilder(ruleName)
             .withAndConstraint(new AndBuilder()
                 .withIfConstraint(new IfBuilder()
-                    .withIf(builderA)
-                    .withThen(builderB)
+                    .withIf(A)
+                    .withThen(B)
                 )
-                .appendBuilder(builderC.violate())
+                .appendBuilder(C.violate())
             )
             .build();
 
@@ -199,21 +199,21 @@ public class ProfileViolationTests {
         Field barField = new Field("bar");
         String ruleName = "Nested if rule";
 
-        ConstraintChainBuilder<Constraint> builderA = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
-        ConstraintChainBuilder<Constraint> builderB = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
-        ConstraintChainBuilder<Constraint> builderC = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
-        ConstraintChainBuilder<Constraint> builderD = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
-        ConstraintChainBuilder<Constraint> builderE = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
 
         Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
             .withIfConstraint(new IfBuilder()
                 .withIf(new IfBuilder()
-                    .withIf(builderA)
-                    .withThen(builderB)
-                    .withElse(builderC)
+                    .withIf(A)
+                    .withThen(B)
+                    .withElse(C)
                 )
-                .withThen(builderD)
-                .withElse(builderE)
+                .withThen(D)
+                .withElse(E)
             )
             .build();
 
@@ -232,24 +232,24 @@ public class ProfileViolationTests {
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withIfConstraint(new IfBuilder()
-                        .withIf(builderA)
-                        .withThen(builderB)
-                        .withElse(builderC)
+                        .withIf(A)
+                        .withThen(B)
+                        .withElse(C)
                     )
-                    .appendBuilder(builderD.violate())
+                    .appendBuilder(D.violate())
                 )
                 .withAndConstraint(new AndBuilder()
                     .withOrConstraint(new OrBuilder()
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderA)
-                            .appendBuilder(builderB.violate())
+                            .appendBuilder(A)
+                            .appendBuilder(B.violate())
                         )
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderA.violate())
-                            .appendBuilder(builderC.violate())
+                            .appendBuilder(A.violate())
+                            .appendBuilder(C.violate())
                         )
                     )
-                    .appendBuilder(builderE.violate())
+                    .appendBuilder(E.violate())
                 )
             )
             .build();
@@ -284,21 +284,21 @@ public class ProfileViolationTests {
         Field barField = new Field("bar");
         String ruleName = "Nested if rule";
 
-        ConstraintChainBuilder<Constraint> builderA = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
-        ConstraintChainBuilder<Constraint> builderB = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
-        ConstraintChainBuilder<Constraint> builderC = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
-        ConstraintChainBuilder<Constraint> builderD = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
-        ConstraintChainBuilder<Constraint> builderE = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
 
         Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
             .withIfConstraint(new IfBuilder()
-                .withIf(builderA)
+                .withIf(A)
                 .withThen(new IfBuilder()
-                    .withIf(builderB)
-                    .withThen(builderC)
-                    .withElse(builderD)
+                    .withIf(B)
+                    .withThen(C)
+                    .withElse(D)
                 )
-                .withElse(builderE)
+                .withElse(E)
             )
             .build();
 
@@ -316,21 +316,21 @@ public class ProfileViolationTests {
         Rule violatedIfRule = new RuleBuilder(ruleName)
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
-                    .appendBuilder(builderA)
+                    .appendBuilder(A)
                     .withOrConstraint(new OrBuilder()
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderB)
-                            .appendBuilder(builderC.violate())
+                            .appendBuilder(B)
+                            .appendBuilder(C.violate())
                         )
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderB.violate())
-                            .appendBuilder(builderD.violate())
+                            .appendBuilder(B.violate())
+                            .appendBuilder(D.violate())
                         )
                     )
                 )
                 .withAndConstraint(new AndBuilder()
-                    .appendBuilder(builderA.violate())
-                    .appendBuilder(builderE.violate())
+                    .appendBuilder(A.violate())
+                    .appendBuilder(E.violate())
                 )
             )
             .build();
@@ -365,20 +365,20 @@ public class ProfileViolationTests {
         Field barField = new Field("bar");
         String ruleName = "Nested if rule";
 
-        ConstraintChainBuilder<Constraint> builderA = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
-        ConstraintChainBuilder<Constraint> builderB = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
-        ConstraintChainBuilder<Constraint> builderC = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
-        ConstraintChainBuilder<Constraint> builderD = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
-        ConstraintChainBuilder<Constraint> builderE = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
 
         Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
             .withIfConstraint(new IfBuilder()
-                .withIf(builderA)
-                .withThen(builderB)
+                .withIf(A)
+                .withThen(B)
                 .withElse(new IfBuilder()
-                    .withIf(builderC)
-                    .withThen(builderD)
-                    .withElse(builderE)
+                    .withIf(C)
+                    .withThen(D)
+                    .withElse(E)
                 )
             )
             .build();
@@ -397,19 +397,19 @@ public class ProfileViolationTests {
         Rule violatedIfRule = new RuleBuilder(ruleName)
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
-                    .appendBuilder(builderA)
-                    .appendBuilder(builderB.violate())
+                    .appendBuilder(A)
+                    .appendBuilder(B.violate())
                 )
                 .withAndConstraint(new AndBuilder()
-                    .appendBuilder(builderA.violate())
+                    .appendBuilder(A.violate())
                     .withOrConstraint(new OrBuilder()
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderC)
-                            .appendBuilder(builderD.violate())
+                            .appendBuilder(C)
+                            .appendBuilder(D.violate())
                         )
                         .withAndConstraint(new AndBuilder()
-                            .appendBuilder(builderC.violate())
-                            .appendBuilder(builderE.violate())
+                            .appendBuilder(C.violate())
+                            .appendBuilder(E.violate())
                         )
                     )
                 )
