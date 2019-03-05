@@ -2,12 +2,14 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
 import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v3.RuleDTO;
 import org.junit.Assert;
@@ -212,9 +214,16 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
         Profile profile = new Profile(fields, rules);
-        ConstraintNode mockConstraintNode = mock(ConstraintNode.class);
+
+        List<AtomicConstraint> atomicConstraints =
+            constraints
+                .stream()
+                .filter(c -> c instanceof AtomicConstraint)
+                .map(c -> (AtomicConstraint)c)
+                .collect(Collectors.toList());
+
         DecisionTree tree = new DecisionTree(
-            mockConstraintNode,
+            new TreeConstraintNode(atomicConstraints, Collections.emptyList()),
             profile.fields,
             "Decision tree");
 

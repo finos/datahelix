@@ -5,7 +5,8 @@ Background:
        And there is a field foo
        And foo is of type "numeric"
 
-#alone - is this an intermittently failing test?
+#alone
+#Intermittently failing test - issue #680
 Scenario: Running a 'greaterThan' request that specifies an integer should be successful
      Given foo is greater than 1
 	   And foo is anything but null
