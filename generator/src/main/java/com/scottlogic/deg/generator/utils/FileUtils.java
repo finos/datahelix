@@ -93,15 +93,27 @@ public class FileUtils {
      * we wrap Files.createDirectories() so that we can mock it out in unit tests.
      *
      * @param dir the directory we want to create
-     * @return true is the directory was created successfully, false if the parent directory already exists
+     * @return true is the directory was created successfully,
+     * false if the parent already exists and is a file
      * @throws IOException if we are unable to create the directory due to an I/O error
      */
     public boolean createDirectories(Path dir) throws IOException {
         try {
+            checkValidDirectoryPath(dir);
             Files.createDirectories(dir);
         } catch (FileAlreadyExistsException e) {
             return false;
         }
         return true;
+    }
+
+    private void checkValidDirectoryPath(Path dir) throws FileAlreadyExistsException {
+        if (Files.exists(dir) && !Files.isDirectory(dir)) {
+            throw new FileAlreadyExistsException("Directory name exists as file");
+        }
+        Path prntDir = dir.getParent();
+        if (prntDir != null) {
+            checkValidDirectoryPath(prntDir);
+        }
     }
 }

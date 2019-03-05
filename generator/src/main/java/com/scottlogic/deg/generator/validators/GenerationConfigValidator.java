@@ -105,8 +105,7 @@ public class GenerationConfigValidator implements ConfigValidator {
             errorMessages.add(
                 "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
         } else if (!fileUtils.exists(outputTarget)) {
-            Path parent = outputTarget.getFilePath().normalize().toAbsolutePath().getParent();
-            parent = outputTarget.getFilePath().toAbsolutePath().getParent();
+            Path parent = outputTarget.getFilePath().toAbsolutePath().getParent();
             if (!fileUtils.createDirectories(parent)) {
                 errorMessages.add(
                     "Invalid Output - parent directory of output file already exists but is not a directory, please use a different output filename");
@@ -117,10 +116,9 @@ public class GenerationConfigValidator implements ConfigValidator {
     private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages,
                                                     GenerationConfigSource configSource,
                                                     FileOutputTarget outputTarget,
-                                                    int ruleCount) {
+                                                    int ruleCount) throws IOException {
         if (!fileUtils.exists(outputTarget)) {
-            errorMessages.add(
-                "Invalid Output - output directory must exist, please enter a valid directory name");
+            fileUtils.createDirectories(outputTarget.getFilePath());
         } else if (!fileUtils.isDirectory(outputTarget)) {
             errorMessages
                 .add("Invalid Output - not a directory, please enter a valid directory name");

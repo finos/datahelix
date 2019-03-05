@@ -315,22 +315,6 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void postProfileChecks_generateViolationOutputDirDoesNotExist_isNotValid() throws IOException {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
-        expectedErrorMessages.add("Invalid Output - output directory must exist, please enter a valid directory name");
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
     public void postProfileChecks_generateViolationValid_isValid() throws IOException {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
