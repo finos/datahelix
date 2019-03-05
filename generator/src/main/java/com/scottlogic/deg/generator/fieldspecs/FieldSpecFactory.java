@@ -43,8 +43,10 @@ public class FieldSpecFactory {
     }
 
     public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<FieldSpec> decisionConstraints) {
-        //TODO paul clean up
-        //TODO PAUL test this method
+        if (decisionConstraints == null || decisionConstraints.isEmpty()){
+            return rootFieldSpec;
+        }
+
         return rootFieldSpec.withMustContainRestriction(
             new MustContainRestriction(
                 decisionConstraints.stream()
