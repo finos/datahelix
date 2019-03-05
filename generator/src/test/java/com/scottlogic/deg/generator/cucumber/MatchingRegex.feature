@@ -240,15 +240,6 @@ Scenario: Running a 'matchingRegex' for a minimum length that is less zero shoul
      Then I am presented with an error message
        And no data is created
 
-Scenario: User using matchingRegex operator to provide an exact set of values
-     Given foo is matching regex /[a]{1,3}/
-       And foo is anything but null
-     Then the following data should be generated:
-       | foo   |
-       | "a"   |
-       | "aa"  |
-       | "aaa" |
-
 Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given foo is matching regex /[a]{1,3}/
        And foo is in set:
@@ -268,13 +259,6 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting inSet cons
       Then the following data should be generated:
         | foo   |
         | null  |
-
-Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
 
 Scenario: Running a 'matchingRegex' request alongside an ofType = string should be successful
      Given foo is matching regex /[a]{1}/

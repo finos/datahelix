@@ -763,3 +763,4 @@ Scenario: Running an exhaustive combination strategy that includes an "if" state
        | "alpha" | 10   | "test10"  |
        | "alpha" | 100  | "test100" |
        | "alpha" | 1000 | "other"   |
+
