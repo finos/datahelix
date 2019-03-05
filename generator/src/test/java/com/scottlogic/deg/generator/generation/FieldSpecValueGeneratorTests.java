@@ -89,7 +89,7 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecContainsMultipleMustContainRestrictionsWithNumericRestrictions_returnsInterestingValuesWithMustContainRestrictionsApplied() {
-        FieldSpec fieldSpec = FieldSpec.Empty
+        FieldSpec rootFieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withNumericRestrictions(
                 new NumericRestrictions() {{
@@ -101,24 +101,29 @@ class FieldSpecValueGeneratorTests {
                 new DataTypeRestrictions(Collections.singletonList(
                     IsOfTypeConstraint.Types.NUMERIC
                 )),
-                fieldSpecSource)
-            .withMustContainRestriction(
-                new MustContainRestriction(
-                    new HashSet<>(
-                        Collections.singletonList(
-                            FieldSpec.Empty.withSetRestrictions(
-                                new SetRestrictions(
-                                    new HashSet<>(
-                                        Arrays.asList(15, 25)
-                                    ),
-                                    null
-                                ),
-                                fieldSpecSource
-                            ).withNullRestrictions(notNull, fieldSpecSource)
+                fieldSpecSource);
+
+        FieldSpec fieldSpec = rootFieldSpec.withMustContainRestriction(
+            new MustContainRestriction(
+                new HashSet<>(
+                    Arrays.asList(
+                        rootFieldSpec.withSetRestrictions(
+                            new SetRestrictions(
+                                new HashSet<>(
+                                    Arrays.asList(15, 25)),
+                                null),
+                            fieldSpecSource),
+                        rootFieldSpec.withSetRestrictions(
+                            new SetRestrictions(
+                                null,
+                                new HashSet<>(
+                                    Arrays.asList(15, 25))),
+                            fieldSpecSource
                         )
                     )
                 )
-            );
+            )
+        );
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
@@ -206,12 +211,12 @@ class FieldSpecValueGeneratorTests {
                     new DataBagValue("Test One", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
             ) &&
-            result.contains(
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue("Test Two", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
-            )
+                result.contains(
+                    DataBag.startBuilding().set(
+                        new Field("First Field"),
+                        new DataBagValue("Test Two", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    ).build()
+                )
         );
     }
 
@@ -244,7 +249,7 @@ class FieldSpecValueGeneratorTests {
                                 ),
                                 fieldSpecSource
                             )
-                            .withNullRestrictions(notNull, fieldSpecSource)
+                                .withNullRestrictions(notNull, fieldSpecSource)
                         )
                     )
                 )
