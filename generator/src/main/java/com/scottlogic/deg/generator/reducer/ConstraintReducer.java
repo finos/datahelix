@@ -71,7 +71,7 @@ public class ConstraintReducer {
                 ? Optional.of(FieldSpec.Empty)
                 : getRootFieldSpec(rootConstraints);
 
-        if (!decisionConstraints.iterator().hasNext()) { return rootFieldSpec; }
+        if (decisionConstraints.isEmpty()) { return rootFieldSpec; }
 
         return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
             rootFieldSpec.orElse(FieldSpec.Empty),

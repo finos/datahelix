@@ -73,7 +73,7 @@ public class FixedFieldBuilder {
     }
 
     private Set<FieldSpec> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {
-        FieldSpecNodeVisitor visitor = new FieldSpecNodeVisitor(field, constraintReducer);
+        FieldSpecExtractionVisitor visitor = new FieldSpecExtractionVisitor(field, constraintReducer);
 
         //ignore the root node, pass the visitor into any option of a decision below the root node.
         rootNode.getDecisions()
