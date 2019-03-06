@@ -85,7 +85,6 @@ Scenario: 'Not After' with a non-contradicting 'Not After' is successful
     | 2018-12-31T23:59:59.997 |
     | 2018-12-31T23:59:59.996 |
 
-
 ### Contradictions ###
 
 #Defect #672 - Request for contradictory After and Not After should only generate null
@@ -96,8 +95,6 @@ Scenario: 'After' with a contradicting 'Not After' generates null
   Then the following data should be generated:
     | foo                     |
     | null                    |
-
-
 
 ### afterOrAt ###
 
@@ -168,7 +165,6 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | null                    |
-
 
 ### before ###
 
@@ -248,7 +244,6 @@ Then the following data should be generated:
   | foo                     |
   | null                    |
 
-
 ### beforeOrAt ###
 
 #Related to #667 - Expected time increment is one millisecond
@@ -306,7 +301,6 @@ Then the following data should be generated:
   | 2018-01-01T00:00:00.003 |
   | 2018-01-01T00:00:00.004 |
   | 2018-01-01T00:00:00.005 |
-
 
 ### Contradictions ###
 
