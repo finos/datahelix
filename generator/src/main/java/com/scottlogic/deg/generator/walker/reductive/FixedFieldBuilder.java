@@ -53,12 +53,12 @@ public class FixedFieldBuilder {
             .filter(c -> c.getField().equals(field))
             .collect(Collectors.toSet());
 
-        Set<FieldSpec> constraintsForDecisions = getAtomicConstraintsInDecisions(field, rootNode);
+        Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
 
         //produce a fieldspec for all the atomic constraints
         Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
             constraintsForRootNode,
-            constraintsForDecisions);
+            fieldSpecsForDecisions);
 
         if (!rootConstraintsFieldSpec.isPresent() && !constraintsForRootNode.isEmpty()) {
             //contradiction in the root node
@@ -72,7 +72,7 @@ public class FixedFieldBuilder {
         return new FixedField(field, values, rootConstraintsFieldSpec.orElse(FieldSpec.Empty), this.monitor);
     }
 
-    private Set<FieldSpec> getAtomicConstraintsInDecisions(Field field, ConstraintNode rootNode) {
+    private Set<FieldSpec> getFieldSpecsForDecisions(Field field, ConstraintNode rootNode) {
         FieldSpecExtractionVisitor visitor = new FieldSpecExtractionVisitor(field, constraintReducer);
 
         //ignore the root node, pass the visitor into any option of a decision below the root node.
