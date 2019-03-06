@@ -67,7 +67,8 @@ public class ConstraintReducer {
                                                             Set<FieldSpec> decisionConstraints) {
 
         Optional<FieldSpec> rootFieldSpec =
-            rootConstraints == null ? Optional.of(FieldSpec.Empty)
+            rootConstraints == null 
+                ? Optional.of(FieldSpec.Empty)
                 : getRootFieldSpec(rootConstraints);
 
         if (!decisionConstraints.iterator().hasNext()) { return rootFieldSpec; }
