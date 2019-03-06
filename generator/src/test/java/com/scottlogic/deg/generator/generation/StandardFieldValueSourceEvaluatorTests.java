@@ -465,31 +465,6 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
-    @Test
-    void getFieldValueSources_fieldSpecContainsSetAndMustContainRestrictionsWithSameValue_shouldEmitValueOnce(){
-        FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(
-                SetRestrictions.fromWhitelist(new HashSet<>(Arrays.asList("foo", "bar"))),
-                FieldSpecSource.Empty)
-            .withMustContainRestriction(
-                new MustContainRestriction(
-                    Collections.singleton(FieldSpec.Empty
-                        .withSetRestrictions(
-                            SetRestrictions.fromWhitelist(Collections.singleton("foo")),
-                            FieldSpecSource.Empty))
-                )
-            );
-
-        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-
-        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
-
-        List<String> values = new ArrayList<>();
-        result.forEach(valueSource -> valueSource.generateAllValues().forEach(value -> values.add((String)value)));
-
-        Assert.assertThat(values, hasItems("foo", "bar"));
-    }
-
     private void AssertLastSourceIsNullOnlySource(List<FieldValueSource> sources) {
         int lastSourceIndex = sources.size() - 1;
         Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
