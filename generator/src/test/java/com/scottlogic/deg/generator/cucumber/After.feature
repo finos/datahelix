@@ -1,5 +1,4 @@
-#Generator expected to generate in ascending order where there are bracketing constraints
-Feature: User can specify that a temporal date is lower than, but not equal to, a specified threshold
+Feature: User can specify that a temporal date is after, but not equal to, a specified datetime
 
   Background:
     Given the generation strategy is full
