@@ -68,10 +68,9 @@ Scenario: Running a 'lessThan' request that specifies an empty string should be 
     Then the profile is invalid
       And no data is created
 
-@ignore #595: Null pointer exception if null is provided to a greater than constraint
 Scenario: Running a 'lessThan' request that specifies null should be unsuccessful
     Given foo is less than null
-    Then the profile is invalid
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
       And no data is created
 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why

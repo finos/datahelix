@@ -233,6 +233,23 @@ Scenario: Running a 'containingRegex' for a minimum length that is less zero sho
      Then I am presented with an error message
        And no data is created
 
+Scenario: Running a 'containingRegex' request alongside a non-contradicting equalTo constraint should be successful
+     Given there is a field foo
+       And foo is containing regex /[a]{3}/
+       And foo is equal to "aaa"
+     Then the following data should be generated:
+       | foo   |
+       | null  |
+       | "aaa" |
+
+Scenario: Running a 'containingRegex' request alongside a contradicting equalTo constraint should produce null
+     Given there is a field foo
+       And foo is containing regex /[a]{3}/
+       And foo is equal to "bbb"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       
 Scenario: Running a 'containingRegex' request alongside a non-contradicting inSet constraint should be successful
      Given there is a field foo
        And foo is containing regex /[a]{1,3}/
@@ -521,3 +538,9 @@ Scenario: Running a 'containingRegex' request as part of an if constraint should
        | "b" |  1    |
        | "c" |  2    |
        | "d" |  2    |
+
+  Scenario: Running a 'containingRegex' request with the value property set to a null entry (null) should throw an error
+    Given there is a field foo
+      And foo is containing regex null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created

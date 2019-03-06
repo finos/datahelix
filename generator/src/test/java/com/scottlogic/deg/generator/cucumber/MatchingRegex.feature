@@ -249,32 +249,20 @@ Scenario: User using matchingRegex operator to provide an exact set of values
        | "aa"  |
        | "aaa" |
 
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         |  "a"  |
-         | "aaa" |
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
+     Given foo is matching regex /[a]{3}/
+       And foo is equal to "aaa"
      Then the following data should be generated:
-         | foo   |
-         | null  |
-         | "a"   |
-         | "aaa" |
+       | foo   |
+       | null  |
+       | "aaa" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         | "b"   |
-         | "bbb" |
+Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
+     Given foo is matching regex /[a]{3}/
+       And foo is equal to "bbb"
       Then the following data should be generated:
         | foo   |
         | null  |
-
-Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
 
 Scenario: Running a 'matchingRegex' request alongside an ofType = string should be successful
      Given foo is matching regex /[a]{1}/
@@ -609,3 +597,9 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | null | "AA" | null |
       | null | null | 1    |
       | null | null | null |
+
+  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
+    Given there is a field foo
+      And foo is matching regex null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created

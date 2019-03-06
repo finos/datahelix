@@ -11,13 +11,13 @@ import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTr
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.inputs.IndividualConstraintRuleViolator;
-import com.scottlogic.deg.generator.inputs.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
+import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
+import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
