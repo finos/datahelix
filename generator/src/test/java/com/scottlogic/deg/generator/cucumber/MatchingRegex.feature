@@ -264,13 +264,6 @@ Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo co
         | foo   |
         | null  |
 
-Scenario: Running a 'matchingRegex' request alongside a null constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is null
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
 Scenario: Running a 'matchingRegex' request alongside an ofType = string should be successful
      Given foo is matching regex /[a]{1}/
      Then the following data should be generated:
@@ -583,3 +576,30 @@ Scenario: Running a 'matchingRegex' request as part of a contradicting allOf con
       | "a"  | null  |
       | "c"  | null  |
 
+  Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
+    Given there is a field bar
+    And the combination strategy is exhaustive
+    And foo is matching regex /[a]{1}/
+    And bar is in set:
+      | "AA" |
+    And there is a field lee
+    And lee is of type "numeric"
+    And lee is granular to 1
+    And lee is less than 2
+    And lee is greater than 0
+    Then the following data should be generated:
+      | foo  | bar  | lee  |
+      | "a"  | "AA" | 1    |
+      | "a"  | "AA" | null |
+      | "a"  | null | 1    |
+      | "a"  | null | null |
+      | null | "AA" | 1    |
+      | null | "AA" | null |
+      | null | null | 1    |
+      | null | null | null |
+
+  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
+    Given there is a field foo
+      And foo is matching regex null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created

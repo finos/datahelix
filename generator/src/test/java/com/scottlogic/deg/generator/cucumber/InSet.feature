@@ -363,11 +363,23 @@ Scenario: Running an 'inSet' request that includes a null entry ("") characters 
 Scenario: Running an 'inSet' request that includes a null entry (null) characters should throw an error
   Given there is a field foo
     And foo is in set:
-      | null |
-      | 1    |
-  Then I am presented with an error message
+    | null |
+    | 1    |
+  Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
     And no data is created
 
+Scenario: Running an 'inSet' request that includes strings, numeric and temporal fields should be successful.
+  Given there is a field foo
+    And foo is in set:
+    | 1                       |
+    | 2010-01-01T00:00:00.000 |
+    | "String!"               |
+  Then the following data should be generated:
+    | foo                     |
+    | 1                       |
+    | 2010-01-01T00:00:00.000 |
+    | "String!"               |
+    | null                    |
 
 Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.
   Given there is a field foo
@@ -1651,3 +1663,459 @@ Scenario: 'InSet' with a contradicting not 'beforeOrAt' emits null
   Then the following data should be generated:
       | foo  |
       | null |
+Scenario: Running a 'inSet' request alongside an ofType = string should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test 1" |
+       | "Test 2" |
+       | "Test 3" |
+       And foo is of type "string"
+     Then the following data should be generated:
+       | foo      |
+       | null     |
+       | "Test 1" |
+       | "Test 2" |
+       | "Test 3" |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
+     Given there is a field foo
+       And foo is in set:
+       | 1 |
+       | 2 |
+       | 3 |
+       And foo is of type "string"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside an ofType = numeric should be successful
+     Given there is a field foo
+       And foo is in set:
+       | 1 |
+       | 2 |
+       | 3 |
+       And foo is of type "numeric"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 1    |
+       | 2    |
+       | 3    |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofType = numeric should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "1" |
+       | "2" |
+       | "3" |
+       And foo is of type "numeric"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside an ofType = temporal should be successful
+     Given there is a field foo
+       And foo is in set:
+       | 2010-01-01T00:00:00.000 |
+       | 2010-01-01T00:00:00.001 |
+       | 2011-01-01T00:00:00.000 |
+       And foo is of type "temporal"
+     Then the following data should be generated:
+       | foo                     |
+       | null                    |
+       | 2010-01-01T00:00:00.000 |
+       | 2010-01-01T00:00:00.001 |
+       | 2011-01-01T00:00:00.000 |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofType = temporal should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "2010-01-01T00:00:00.000" |
+       | "2010-01-01T00:00:00.001" |
+       | "2011-01-01T00:00:00.000" |
+       And foo is of type "temporal"
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Tes7"  |
+     And foo is matching regex /[a-z]{4}/
+       Then the following data should be generated:
+       | foo    |
+       | null   |
+       | "test" |
+
+Scenario: Running a 'inSet' request alongside a contradicting matchingRegex constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "Testt" |
+       | "Tes7"  |
+       And foo is matching regex /[a-z]{4}/
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+
+Scenario: Running a 'inSet' request alongside a non-contradicting containingRegex constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Tes7"  |
+       And foo is containing regex /[a-z]{4}/
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "test"  |
+       | "Testt" |
+
+Scenario: Running a 'inSet' request alongside a contradicting containingRegex constraint should generate null
+  Given there is a field foo
+  And foo is in set:
+    | "Test"  |
+    | "test"  |
+    | "Testt" |
+    | "Tes7"  |
+  And foo is containing regex /[A-Z]{4}/
+  Then the following data should be generated:
+    | foo     |
+    | null    |
+
+Scenario: Running a 'inSet' request alongside a non-contradicting ofLength constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7"  |
+     And foo is of length 4
+       Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofLength (too short) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is of length 3
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofLength (too long) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is of length 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a non-contradicting longerThan constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is longer than 4
+     Then the following data should be generated:
+       |   foo   |
+       | "Testt" |
+       | "Test7" |
+       |   null  |
+
+Scenario: Running a 'inSet' request alongside a contradicting longerThan (equal) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
+       And foo is longer than 5
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a contradicting longerThan (too long) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
+       And foo is longer than 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a non-contradicting shorterThan constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is shorter than 5
+     Then the following data should be generated:
+       |  foo   |
+       | "Test" |
+       | "test" |
+       |  null  |
+
+Scenario: Running a 'inSet' request alongside a contradicting shorterThan (too short) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is shorter than 3
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a contradicting shorterThan (equal) constraint should produce null
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is shorter than 4
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: Running a 'inSet' request alongside a greaterThan constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is greater than 1
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a greaterThanOrEqualTo constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is greater than or equal to 1
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a lessThan constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is less than 1
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a lessThanOrEqualTo constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is less than or equal to 1
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a granularTo constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is granular to 0.1
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a after constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is after 2010-01-01T00:00:00.000
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a afterOrAt constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is after or at 2010-01-01T00:00:00.000
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a before constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is before 2010-01-01T00:00:00.000
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should be successful
+     Given there is a field foo
+       And foo is in set:
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+       And foo is before or at 2010-01-01T00:00:00.000
+     Then the following data should be generated:
+       | foo     |
+       | null    |
+       | "Test"  |
+       | "test"  |
+       | "Testt" |
+       | "Test7" |
+
+Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
+     Given there is a field foo
+       And there is a constraint:
+       """
+       { "anyOf": [
+         { "field": "foo", "is": "inSet", "values": [ "Test 1", "Test 2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test 3", "Test 4" ] }
+       ]}
+       """
+     Then the following data should be generated:
+       | foo      |
+       | null     |
+       | null     |
+       | "Test 1" |
+       | "Test 2" |
+       | "Test 3" |
+       | "Test 4" |
+
+Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
+     Given there is a field foo
+       And there is a constraint:
+       """
+       { "allOf": [
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] }
+       ]}
+       """
+     Then the following data should be generated:
+       | foo      |
+       | null     |
+       | "Test1" |
+       | "Test2" |
+
+Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should produce null
+     Given there is a field foo
+       And there is a constraint:
+       """
+       { "allOf": [
+         { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
+         { "field": "foo", "is": "inSet", "values": [ "Test3", "Test4" ] }
+       ]}
+       """
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+
+  Scenario: Running a 'inSet' request as part of an if constraint should be successful
+     Given the following fields exist:
+       | foo   |
+       | price |
+       And foo is in set:
+       | "Test1" |
+       | "Test2" |
+       | "Test3" |
+       | "Test4" |
+       And there is a constraint:
+       """
+       {
+         "if": { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
+         "then": { "field": "price", "is": "equalTo", "value": 1 },
+         "else": { "field": "price", "is": "equalTo", "value": 2 }
+         }
+       """
+       And foo is anything but null
+       And price is anything but null
+     Then the following data should be generated:
+       | foo     | price |
+       | "Test1" | 1     |
+       | "Test2" | 1     |
+       | "Test3" | 2     |
+       | "Test4" | 2     |

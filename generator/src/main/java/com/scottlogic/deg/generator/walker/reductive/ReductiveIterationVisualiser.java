@@ -6,24 +6,27 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
+import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReductiveIterationVisualiser implements IterationVisualiser {
     private final AtomicInteger currentIteration = new AtomicInteger();
+    private final FileUtils fileUtils;
     private final Path visualiseDirectoryPath;
 
     @Inject
-    public ReductiveIterationVisualiser(@Named("outputPath") Path outputPath) {
+    public ReductiveIterationVisualiser(
+        @Named("outputPath") Path outputPath,
+        FileUtils fileUtils) {
+        this.fileUtils = fileUtils;
         boolean outputPathIsADirectory = outputPath != null && outputPath.toFile().isDirectory();
 
         Path directoryPath;
@@ -73,7 +76,6 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
                 " directory needs to exist.\n" + this.visualiseDirectoryPath.toString());
         }
 
-        FileSystemProvider provider = FileSystems.getDefault().provider();
-        provider.createDirectory(this.visualiseDirectoryPath);
+        fileUtils.createDirectories(this.visualiseDirectoryPath);
     }
 }

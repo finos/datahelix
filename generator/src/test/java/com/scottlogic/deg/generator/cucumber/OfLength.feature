@@ -250,12 +250,62 @@ Feature: User can specify the length of generated string data using 'ofLength'
 
   # COMBINATION OF CONSTRAINTS #
 
-  Scenario: Running an 'ofLength' request alongside a null constraint should produce null
-    Given foo is of length 3
-    And foo is null
+  Scenario: Running an 'ofLength' request alongside a non-contradicting inSet constraint should be successful
+    Given foo is of length 1
+    And foo is in set:
+      | "1"  |
+      | "a"  |
+      | "22" |
     Then the following data should be generated:
       | foo  |
       | null |
+      | "1"  |
+      | "a"  |
+
+  Scenario: Running an 'ofLength' request alongside a contradicting inSet constraint should produce null
+    Given foo is of length 3
+    And foo is in set:
+      | "1"  |
+      | "a"  |
+      | "22" |
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario Outline: Running an 'ofLength' request alongside a contradicting numeric type inSet constraint should generate null
+    Given foo is of length <length>
+    And foo is in set:
+      | 1  |
+      | 22 |
+    Then the following data should be generated:
+      | foo  |
+      | null |
+  Examples:
+      | length |
+      | 1      |
+      | 2      |
+
+  Scenario: Running an 'ofLength' request alongside a contradicting temporal type inSet constraint should generate null
+    Given foo is of length 23
+    And foo is in set:
+      | 2010-01-01T00:00:00.000 |
+      | 2018-04-29T03:05:02.168 |
+    Then the following data should be generated:
+      | foo                     |
+      | null                    |
+
+
+  Scenario: Running an 'ofLength' request alongside a partially-contradicting inSet constraint should be successful
+    Given foo is of length 23
+    And foo is in set:
+      | "1"                       |
+      | "23232323232323232323232" |
+      | 23232323232323232323232   |
+      | 2010-01-01T00:00:00.000   |
+    Then the following data should be generated:
+      | foo                       |
+      | null                      |
+      | "23232323232323232323232" |
 
   Scenario: Running an 'ofLength' request alongside a non-contradicting matchingRegex constraint should be successful
     Given foo is of length 1

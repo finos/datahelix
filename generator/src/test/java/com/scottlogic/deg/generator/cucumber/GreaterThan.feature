@@ -64,10 +64,9 @@ Scenario: Running a 'greaterThan' request that specifies an empty string should 
     Then the profile is invalid
       And no data is created
 
-@ignore #595: Null pointer exception if null is provided to a greater than constraint
 Scenario: Running a 'greaterThan' request that specifies null should be unsuccessful
     Given foo is greater than null
-    Then the profile is invalid
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
       And no data is created
 
   Scenario: User requires negative numbers data
@@ -258,12 +257,12 @@ Scenario: greaterThan run against a non contradicting lessThanOrEqualTo should b
        | 4   |
        | 5   |
 
-Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful (greaterThan 1 AND not lessThanOrEqualTo 2)
-     Given foo is greater than 1
-       And foo is anything but less than or equal to 2
-	   And foo is anything but null
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
+Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful
+   Given foo is greater than 1
+     And foo is anything but less than or equal to 2
+   And foo is anything but null
+     And the generator can generate at most 5 rows
+   Then the following data should be generated:
        | foo |
        | 3   |
        | 4   |

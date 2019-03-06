@@ -92,26 +92,7 @@ Scenario: Running an 'ofType' = string request that includes a null entry ("") c
        | null |
        | ""   |
 
-Scenario: Running an 'ofType' = string request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "string"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running an 'ofType' = numeric request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-
-Scenario: Running an 'ofType' = temporal request that includes a null entry (null) characters should be successful
-     Given there is a field foo
-       And foo is null
-       And foo is of type "temporal"
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: Running a 'ofType' request that specifies null should be unsuccessful
+    Given foo is of type null
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      And no data is created
