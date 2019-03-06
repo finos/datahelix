@@ -5,7 +5,10 @@ Background:
      And the combination strategy is exhaustive
 
 Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
-     Given the following fields exist:
+      Given the generation strategy is full
+      And the combination strategy is exhaustive
+      And the walker type is reductive
+      And the following fields exist:
        | foo |
        | bar |
        And foo is of type "string"
@@ -718,7 +721,10 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
        | 0    | "test" | 14      |
 
 Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
-     Given the following fields exist:
+      Given the generation strategy is full
+      And the combination strategy is exhaustive
+      And the walker type is reductive
+      And the following fields exist:
        | foo1 |
        | foo2 |
        | foo3 |
