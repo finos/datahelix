@@ -25,7 +25,7 @@ class FieldSpecValueGeneratorTests {
     private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
     @Test
-    void generate_fieldSpecContainsSingleMustContainRestriction_returnsValuesWithValueInMustContainRestriction() {
+    void generate_rootFieldSpecContainsDuplicateMustContainRestriction_returnsValuesWithNoDuplicates() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withSetRestrictions(
