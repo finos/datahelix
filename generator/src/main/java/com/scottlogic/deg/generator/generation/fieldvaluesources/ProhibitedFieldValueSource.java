@@ -2,10 +2,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 /**
@@ -49,8 +46,22 @@ public class ProhibitedFieldValueSource implements FieldValueSource {
     }
 
     public void prohibitValue(Object value) {
-        //TODO: Only record the value as prohibited if the underlyingSource contains it.
-        prohibitedValues.add(value);
+        Optional<Boolean> underlyingSourceContainsValue = containsValue(value);
+        if (!underlyingSourceContainsValue.isPresent() || underlyingSourceContainsValue.get())
+            prohibitedValues.add(value);
+    }
+
+    private Optional<Boolean> containsValue(Object value) {
+        if (underlyingSource instanceof CannedValuesFieldValueSource){
+            Iterator<Object> allValues = underlyingSource.generateAllValues().iterator();
+            boolean valueFound = StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(allValues, Spliterator.ORDERED), false
+            ).anyMatch(v -> v == value || (v != null && v.equals(value)));
+
+            return Optional.of(valueFound);
+        }
+
+        return Optional.empty();
     }
 
     private Iterable<Object> removeProhibitedValues(Iterable<Object> values) {
