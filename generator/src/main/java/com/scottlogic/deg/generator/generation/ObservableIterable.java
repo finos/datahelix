@@ -6,6 +6,11 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
+/**
+ * An iterable that will notify any observers as each item is emitted
+ *
+ * @param <T> The item being iterated over
+ */
 public class ObservableIterable<T> extends Observable implements Iterable<T> {
     private final Iterable<T> values;
 
