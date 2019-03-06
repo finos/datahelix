@@ -5,37 +5,6 @@ Background:
        And there is a field foo
        And foo is of type "string"
 
-Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should be successful
-    Given foo is a valid "ISIN"
-      And foo is in set:
-        | "GB0002634946"  |
-        | "US0378331005"  |
-        | "GB0002634947"  |
-        | "US0378331006"  |
-        | "US378331005"   |
-        | "US37833100598" |
-        | "G00002634946"  |
-        | "400002634946"  |
-        | "GBP002634946"  |
-        | "GB000263494Z"  |
-        | "0002634946GB"  |
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "GB0002634946" |
-      | "US0378331005" |
-      And the following data should not be included in what is generated:
-        | foo             |
-        | "GB0002634947"  |
-        | "US0378331006"  |
-        | "US378331005"   |
-        | "US37833100598" |
-        | "G00002634946"  |
-        | "400002634946"  |
-        | "GBP002634946"  |
-        | "GB000263494z"  |
-
-
   Scenario: Running an 'aValid' request that includes a value of a string "ISIN" should fail with an error message
     Given foo is a valid "isin"
     And foo is in set:
@@ -101,30 +70,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
     And no data is created
 
   # COMBINATION OF CONSTRAINTS #
-
-  Scenario: Running an 'aValid' request alongside a non-contradicting inSet constraint should be successful
-    Given foo is a valid "ISIN"
-      And foo is in set:
-        | "GB0002634946" |
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "GB0002634946" |
-
-  Scenario: Running an 'aValid' request alongside a contradicting inSet constraint should only emit null
-    Given foo is a valid "ISIN"
-      And foo is in set:
-        | "GB0002634947"  |
-        | "US0378331006"  |
-        | "US378331005"   |
-        | "US37833100598" |
-        | "G00002634946"  |
-        | "400002634946"  |
-        | "GBP002634946"  |
-        | "GB000263494z"  |
-    Then the following data should be generated:
-      | foo  |
-      | null |
 
   Scenario: Running an 'aValid' request alongside a null constraint should only emit null
     Given foo is a valid "ISIN"
@@ -422,10 +367,6 @@ Scenario: Running an 'aValid' request that includes a value of a string "ISIN" s
       | null           |
       | "GB0002634946" |
       | "1"            |
-    And the following data should not be included in what is generated:
-      | foo            |
-      | "GB0002634947" |
-      | "333"          |
 
   Scenario: Running an 'aValid' request as part of a non-contradicting allOf constraint should be successful
     Given there is a constraint:

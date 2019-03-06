@@ -223,14 +223,3 @@ Scenario: Running a 'shorterThan' request as part of a non-contradicting allOf c
        | foo  |
        | null |
        | "%"  |
-
-Scenario: Running a 'shorterThan' request using a number round (decimal number) to specify a the length of a generated string should be successful
-    Given foo is shorter than 2.0
-    And foo is in set:
-      | "xxx" |
-      | "xx"  |
-      | "x"   |
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |

@@ -5,7 +5,8 @@ Background:
        And there is a field foo
        And foo is of type "numeric"
 
-#alone
+#Intermittently failing test - Issue #680
+@ignore
 Scenario: Running a 'greaterThan' request that specifies an integer should be successful
      Given foo is greater than 1
 	   And foo is anything but null
@@ -195,6 +196,8 @@ Scenario: greaterThan run against a non contradicting lessThan should be success
        | 3   |
        | 4   |
 
+#Intermittently failing test - Issue #680
+@ignore
 Scenario: greaterThan run against a non contradicting not lessThan should be successful (greaterThan 1 AND not lessThan 2)
      Given foo is greater than 1
        And foo is anything but less than 2
@@ -257,6 +260,8 @@ Scenario: greaterThan run against a non contradicting lessThanOrEqualTo should b
        | 4   |
        | 5   |
 
+#Intermittently failing test - Issue #680
+@ignore
 Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful
    Given foo is greater than 1
      And foo is anything but less than or equal to 2
@@ -307,6 +312,7 @@ Scenario: not greaterThan run against a contradicting not lessThanOrEqualTo shou
      Then the following data should be generated:
        | foo |
        | 2   |
+
 
 #granularTo
 Scenario: greaterThan run against a non contradicting granularTo should be successful (greaterThan 2 AND granularTo 1)

@@ -240,22 +240,26 @@ Scenario: Running a 'matchingRegex' for a minimum length that is less zero shoul
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running a 'matchingRegex' request alongside a non-contradicting inSet constraint should be successful
+Scenario: User using matchingRegex operator to provide an exact set of values
      Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         |  "a"  |
-         | "aaa" |
+       And foo is anything but null
      Then the following data should be generated:
-         | foo   |
-         | null  |
-         | "a"   |
-         | "aaa" |
+       | foo   |
+       | "a"   |
+       | "aa"  |
+       | "aaa" |
 
-Scenario: Running a 'matchingRegex' request alongside a contradicting inSet constraint should be successful
-     Given foo is matching regex /[a]{1,3}/
-       And foo is in set:
-         | "b"   |
-         | "bbb" |
+Scenario: Running a 'matchingRegex' request alongside a non-contradicting equalTo constraint should be successful
+     Given foo is matching regex /[a]{3}/
+       And foo is equal to "aaa"
+     Then the following data should be generated:
+       | foo   |
+       | null  |
+       | "aaa" |
+
+Scenario: Running a 'matchingRegex' request alongside a contradicting equalTo constraint should be successful
+     Given foo is matching regex /[a]{3}/
+       And foo is equal to "bbb"
       Then the following data should be generated:
         | foo   |
         | null  |

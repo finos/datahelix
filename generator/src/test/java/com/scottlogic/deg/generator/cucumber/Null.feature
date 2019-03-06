@@ -42,7 +42,7 @@ Scenario: Not 'null' with  not 'null' is successful
     | foo |
     | "a" |
 
-Scenario: 'Null' and not 'null' fails with error
+Scenario: 'Null' and not 'null' produces no data
   Given foo is null
     And foo is anything but null
   Then no data is created
