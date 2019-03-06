@@ -5,6 +5,13 @@ Feature: User can specify that a temporal date is after, but not equal to, a spe
     And there is a field foo
     And foo is of type "temporal"
 
+Scenario: 'After' valid date is successful for a single row
+  Given foo is after 2018-09-01T00:00:00.000
+    And the generator can generate at most 1 rows
+  Then the following data should be generated:
+    | foo                     |
+    | 2018-09-01T00:00:00.001 |
+
 #Related to #667 - Expected time increment is one millisecond
 @ignore
 Scenario: 'After' valid date is successful
