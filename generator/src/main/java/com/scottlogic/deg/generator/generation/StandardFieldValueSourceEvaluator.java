@@ -51,12 +51,12 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return validSources;
     }
 
-    public MustContainsFieldValueSource getRequiredValueSources(FieldSpec fieldSpec){
+    public MustContainsValues getMustContainsValues(FieldSpec fieldSpec){
         List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
 
         return mustContainRestrictionSources.isEmpty()
             ? null
-            : MustContainsFieldValueSource.of(mustContainRestrictionSources);
+            : MustContainsValues.of(mustContainRestrictionSources);
     }
 
     private boolean mustBeNull(FieldSpec fieldSpec) {

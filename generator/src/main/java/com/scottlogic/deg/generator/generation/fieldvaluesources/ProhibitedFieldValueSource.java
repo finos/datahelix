@@ -8,6 +8,13 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
+/**
+ * A FieldValueSource capable of emitting values from its underlying source that have
+ * not been previously prohibited.
+ *
+ * Calling prohibitValue will record the value as being prohibited to ensure it is not re-emitted
+ * when this source is asked for its values.
+ */
 public class ProhibitedFieldValueSource implements FieldValueSource {
     private final FieldValueSource underlyingSource;
     private final ArrayList<Object> prohibitedValues = new ArrayList<>();
@@ -42,6 +49,7 @@ public class ProhibitedFieldValueSource implements FieldValueSource {
     }
 
     public void prohibitValue(Object value) {
+        //TODO: Only record the value as prohibited if the underlyingSource contains it.
         prohibitedValues.add(value);
     }
 

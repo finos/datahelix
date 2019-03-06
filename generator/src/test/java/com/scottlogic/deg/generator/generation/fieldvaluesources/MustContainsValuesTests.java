@@ -15,12 +15,12 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
-class MustContainsFieldValueSourceTests {
+class MustContainsValuesTests {
     @Test
     public void isFinite_whenAllFinite_shouldReturnTrue(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         when(mustContain1.isFinite()).thenReturn(true);
         when(mustContain2.isFinite()).thenReturn(true);
@@ -34,7 +34,7 @@ class MustContainsFieldValueSourceTests {
     public void isFinite_whenSomeFinite_shouldReturnFalse(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         when(mustContain1.isFinite()).thenReturn(true);
         when(mustContain2.isFinite()).thenReturn(false);
@@ -48,7 +48,7 @@ class MustContainsFieldValueSourceTests {
     public void isFinite_whenNoneFinite_shouldReturnFalse(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         when(mustContain1.isFinite()).thenReturn(false);
         when(mustContain2.isFinite()).thenReturn(false);
@@ -60,7 +60,7 @@ class MustContainsFieldValueSourceTests {
 
     @Test
     public void isFinite_whenEmpty_shouldReturnTrue(){
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Collections.emptyList());
 
         boolean isFinite = mustContainSource.isFinite();
@@ -70,7 +70,7 @@ class MustContainsFieldValueSourceTests {
 
     @Test
     public void getValueCount_whenEmpty_shouldReturn0(){
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Collections.emptyList());
 
         long count = mustContainSource.getValueCount();
@@ -82,7 +82,7 @@ class MustContainsFieldValueSourceTests {
     public void getValueCount_whenPresent_shouldReturnSum(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         when(mustContain1.getValueCount()).thenReturn(1L);
         when(mustContain2.getValueCount()).thenReturn(2L);
@@ -93,24 +93,10 @@ class MustContainsFieldValueSourceTests {
     }
 
     @Test
-    public void generateInterestingValues_shouldReturnValuesFromAllSources(){
-        ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
-        ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
-            Arrays.asList(mustContain1, mustContain2));
-        when(mustContain1.generateAllValues()).thenReturn(Collections.singletonList("foo"));
-        when(mustContain2.generateAllValues()).thenReturn(Collections.singletonList("bar"));
-
-        Iterable<Object> result = mustContainSource.generateInterestingValues();
-
-        Assert.assertThat(result, hasItems("foo", "bar"));
-    }
-
-    @Test
     public void generateAllValues_shouldReturnValuesFromAllSources(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         when(mustContain1.generateAllValues()).thenReturn(Collections.singletonList("foo"));
         when(mustContain2.generateAllValues()).thenReturn(Collections.singletonList("bar"));
@@ -124,7 +110,7 @@ class MustContainsFieldValueSourceTests {
     public void generateRandomValues_shouldReturnValuesFromAllSources(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         AtomicInteger nextRandomIndex = new AtomicInteger();
@@ -140,7 +126,7 @@ class MustContainsFieldValueSourceTests {
 
     @Test
     public void removeValue_whenEmpty_shouldSucceed(){
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Collections.emptyList());
         Object value = "foo";
 
@@ -150,7 +136,7 @@ class MustContainsFieldValueSourceTests {
     @Test
     public void removeValue_whenContainsOneSource_shouldRemoveMustContainValue(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Collections.singletonList(mustContain1));
         Object value = "foo";
 
@@ -163,7 +149,7 @@ class MustContainsFieldValueSourceTests {
     public void removeValue_whenContainsMultipleSources_shouldRemoveMustContainValueFromAllSources(){
         ProhibitedFieldValueSource mustContain1 = mock(ProhibitedFieldValueSource.class);
         ProhibitedFieldValueSource mustContain2 = mock(ProhibitedFieldValueSource.class);
-        MustContainsFieldValueSource mustContainSource = new MustContainsFieldValueSource(
+        MustContainsValues mustContainSource = new MustContainsValues(
             Arrays.asList(mustContain1, mustContain2));
         Object value = "foo";
 

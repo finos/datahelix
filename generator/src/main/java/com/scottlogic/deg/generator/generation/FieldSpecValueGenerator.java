@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.DeDuplicatingFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.MustContainsFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.MustContainsValues;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.List;
@@ -33,9 +33,9 @@ public class FieldSpecValueGenerator {
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        MustContainsFieldValueSource requiredValueSource = this.sourceFactory.getRequiredValueSources(spec);
-        if (requiredValueSource != null){
-            combinedFieldValueSource = new DeDuplicatingFieldValueSource(combinedFieldValueSource, requiredValueSource);
+        MustContainsValues mustContainsValues = this.sourceFactory.getMustContainsValues(spec);
+        if (mustContainsValues != null){
+            combinedFieldValueSource = new DeDuplicatingFieldValueSource(combinedFieldValueSource, mustContainsValues);
         }
 
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());

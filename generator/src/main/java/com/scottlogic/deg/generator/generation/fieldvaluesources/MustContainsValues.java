@@ -7,42 +7,39 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MustContainsFieldValueSource implements FieldValueSource {
+/**
+ * A type capable of emitting all values from each must-contain field-value-source
+ *
+ * Will represent each must-contain FieldValueSource as a ProhibitedFieldValueSource which can prohibit
+ * values from being emitted, i.e. if they are emitted by another FieldValueSource.
+ */
+public class MustContainsValues {
     private final Collection<ProhibitedFieldValueSource> mustContainRestrictionSources;
 
-    public MustContainsFieldValueSource(List<ProhibitedFieldValueSource> mustContainRestrictionSources) {
+    MustContainsValues(List<ProhibitedFieldValueSource> mustContainRestrictionSources) {
         this.mustContainRestrictionSources = mustContainRestrictionSources;
     }
 
-    public static MustContainsFieldValueSource of(FieldValueSource... mustContainRestrictionSources) {
+    public static MustContainsValues of(FieldValueSource... mustContainRestrictionSources) {
         return of(Arrays.asList(mustContainRestrictionSources));
     }
 
-    public static MustContainsFieldValueSource of(List<FieldValueSource> mustContainRestrictionSources) {
-        return new MustContainsFieldValueSource(mustContainRestrictionSources
+    public static MustContainsValues of(List<FieldValueSource> mustContainRestrictionSources) {
+        return new MustContainsValues(mustContainRestrictionSources
             .stream()
             .map(ProhibitedFieldValueSource::new)
             .collect(Collectors.toList()));
     }
 
-    @Override
     public boolean isFinite() {
         return mustContainRestrictionSources.stream().allMatch(FieldValueSource::isFinite);
     }
 
-    @Override
     public long getValueCount() {
         //might return a count greater than the number of values emitted, if duplicates are encountered
         return mustContainRestrictionSources.stream().mapToLong(FieldValueSource::getValueCount).sum();
     }
 
-    @Override
-    public Iterable<Object> generateInterestingValues() {
-        //all values in this source are interesting
-        return generateAllValues();
-    }
-
-    @Override
     public Iterable<Object> generateAllValues() {
         return new ConcatenatingIterable<>(
             mustContainRestrictionSources
@@ -52,7 +49,6 @@ public class MustContainsFieldValueSource implements FieldValueSource {
         );
     }
 
-    @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         //this method will only be called if all preceding value sources emit no values
         //therefore this is the last-chance-saloon for some random values

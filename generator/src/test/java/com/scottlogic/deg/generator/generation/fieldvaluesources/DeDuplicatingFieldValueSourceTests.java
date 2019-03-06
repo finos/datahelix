@@ -20,7 +20,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void isFinite_whenOriginalSourceIsFinite_shouldReturnTrue(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -34,7 +34,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void isFinite_whenOriginalSourceIsNotFinite_shouldReturnFalse(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -48,7 +48,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void getValueCount_shouldReturnSumValueCounts(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -63,7 +63,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateInterestingValues_shouldRequestInterestingValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -76,7 +76,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateInterestingValues_shouldRequestAllMustContainValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -92,7 +92,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateInterestingValues_whenOriginalSourceEmitsAValue_shouldEnsureValueIsNotRepeated(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo", "bar");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("foo"));
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
@@ -106,7 +106,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateInterestingValues_whenOriginalSourceDoesNotEmitARequiredValue_shouldEnsureValueIsEmitted(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("bar"));
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
@@ -120,7 +120,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateAllValues_shouldRequestAllValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -133,7 +133,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateAllValues_shouldRequestAllMustContainValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
@@ -149,7 +149,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateAllValues_whenOriginalSourceEmitsAValue_shouldEnsureValueIsNotRepeated(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo", "bar");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("foo"));
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
@@ -163,7 +163,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateAllValues_whenOriginalSourceDoesNotEmitARequiredValue_shouldEnsureValueIsEmitted(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("bar"));
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
@@ -177,7 +177,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateRandomValues_shouldRequestRandomValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
@@ -191,24 +191,24 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateRandomValues_shouldRequestAllMustContainValues(){
         FieldValueSource originalSource = mock(FieldValueSource.class);
-        MustContainsFieldValueSource mustContainsSource = mock(MustContainsFieldValueSource.class);
+        MustContainsValues mustContainsSource = mock(MustContainsValues.class);
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
             originalSource,
             mustContainsSource);
         when(originalSource.generateRandomValues(any())).thenReturn(Collections.emptyList());
-        when(mustContainsSource.generateAllValues()).thenReturn(Collections.emptyList());
+        when(mustContainsSource.generateRandomValues(any())).thenReturn(Collections.emptyList());
 
         deduplicatingSource.generateRandomValues(randomNumberGenerator)
             .forEach(v -> { /* to exhaust the random values */ });
 
-        verify(mustContainsSource).generateAllValues();
+        verify(mustContainsSource).generateRandomValues(randomNumberGenerator);
     }
 
     @Test
     public void generateRandomValues_whenOriginalSourceEmitsAValue_shouldEnsureValueIsNotRepeated(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo", "bar");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("foo"));
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
@@ -226,7 +226,7 @@ class DeDuplicatingFieldValueSourceTests {
     @Test
     public void generateRandomValues_whenOriginalSourceDoesNotEmitARequiredValue_shouldEnsureValueIsEmitted(){
         FieldValueSource originalSource = CannedValuesFieldValueSource.of("foo");
-        MustContainsFieldValueSource mustContainsSource = MustContainsFieldValueSource.of(
+        MustContainsValues mustContainsSource = MustContainsValues.of(
             CannedValuesFieldValueSource.of("bar"));
         RandomNumberGenerator randomNumberGenerator = mock(RandomNumberGenerator.class);
         DeDuplicatingFieldValueSource deduplicatingSource = new DeDuplicatingFieldValueSource(
