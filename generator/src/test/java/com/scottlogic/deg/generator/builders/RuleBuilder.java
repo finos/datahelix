@@ -21,7 +21,17 @@ public class RuleBuilder extends ConstraintChainBuilder<Rule> {
         this.ruleInformation = new RuleInformation(new RuleDTO(ruleName, null));
     }
 
+    private RuleBuilder(RuleBuilder ruleBuilder) {
+        super(ruleBuilder);
+        ruleInformation = new RuleInformation(new RuleDTO(ruleBuilder.ruleInformation.getDescription(), null));
+    }
+
     public Rule buildInner() {
         return new Rule(ruleInformation, constraints);
+    }
+
+    @Override
+    ConstraintChainBuilder<Rule> copy() {
+        return new RuleBuilder(this);
     }
 }
