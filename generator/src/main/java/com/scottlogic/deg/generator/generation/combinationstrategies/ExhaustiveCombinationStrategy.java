@@ -15,7 +15,7 @@ public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
         List<List<DataBag>> bagsAsLists = dataBagSequences
             .map(sequence ->
-                StreamSupport.stream(sequence.spliterator(), true)
+                StreamSupport.stream(sequence.spliterator(), false)
                     .collect(Collectors.toList()))
             .collect(Collectors.toList());
 
