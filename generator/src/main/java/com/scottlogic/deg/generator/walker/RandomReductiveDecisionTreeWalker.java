@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -16,8 +17,8 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public Stream<RowSpec> walk(DecisionTree tree) {
-        Optional<RowSpec> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree);
+    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
+        Optional<RowSpec> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree, fixFieldStrategy);
         //noinspection OptionalIsPresent
         if (!firstRowSpecOpt.isPresent()) {
             return Stream.empty();
@@ -26,13 +27,13 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return Stream.concat(
             Stream.of(firstRowSpecOpt.get()),
             Stream.generate(() ->
-                getFirstRowSpecFromRandomisingIteration(tree))
+                getFirstRowSpecFromRandomisingIteration(tree, fixFieldStrategy))
                     .filter(Optional::isPresent)
                     .map(Optional::get));
     }
 
-    private Optional<RowSpec> getFirstRowSpecFromRandomisingIteration(DecisionTree tree){
-        return underlyingWalker.walk(tree)
+    private Optional<RowSpec> getFirstRowSpecFromRandomisingIteration(DecisionTree tree, FixFieldStrategy fixFieldStrategy){
+        return underlyingWalker.walk(tree, fixFieldStrategy)
             .findFirst();
     }
 }

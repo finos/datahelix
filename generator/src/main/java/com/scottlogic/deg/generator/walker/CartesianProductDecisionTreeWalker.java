@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
         this.rowSpecMerger = rowSpecMerger;
     }
 
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
         return helper.walk(tree.getRootNode());
     }

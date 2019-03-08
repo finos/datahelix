@@ -7,4 +7,3 @@ import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 public interface FixFieldStrategy {
     Field getNextFieldToFix(ReductiveState reductiveState, ReductiveConstraintNode rootNode);
 }
-
