@@ -69,6 +69,25 @@ class NumericRestrictionsMergerTests {
     }
 
     @Test
+    public void merge_withLessThanOrEqualAndGreaterThanOrEqualSameNumber_shouldReturnMergedRestrictions(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions greaterThanOrEqual = new NumericRestrictions();
+        NumericRestrictions lessThanOrEqual = new NumericRestrictions();
+        greaterThanOrEqual.min = new NumericLimit<>(BigDecimal.TEN, true);
+        lessThanOrEqual.max = new NumericLimit<>(BigDecimal.TEN, true);
+
+        MergeResult<NumericRestrictions> result = merger.merge(greaterThanOrEqual, lessThanOrEqual);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions, not(nullValue()));
+        Assert.assertThat(result.restrictions.min.getLimit(), is(equalTo(BigDecimal.TEN)));
+        Assert.assertThat(result.restrictions.min.isInclusive(), is(true));
+        Assert.assertThat(result.restrictions.max.getLimit(), is(equalTo(BigDecimal.TEN)));
+        Assert.assertThat(result.restrictions.max.isInclusive(), is(true));
+    }
+
+    @Test
     public void merge_withContradictoryNumericRestrictions_shouldReturnUnsuccessful(){
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
         NumericRestrictions left = new NumericRestrictions();

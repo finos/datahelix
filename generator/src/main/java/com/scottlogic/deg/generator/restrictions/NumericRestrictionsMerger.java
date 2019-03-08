@@ -32,11 +32,18 @@ public class NumericRestrictionsMerger {
     }
 
     private boolean canEmitSomeNumericValues(NumericRestrictions merged) {
-        if (merged.min == null || merged.max == null){
+        NumericLimit<BigDecimal> min = merged.min;
+        NumericLimit<BigDecimal> max = merged.max;
+
+        if (min == null || max == null){
             return true; //no constraints
         }
 
-        return merged.min.getLimit().compareTo(merged.max.getLimit()) < 0; //i.e. min is less than max
+        if (min.isInclusive() && max.isInclusive()){
+            return min.getLimit().compareTo(max.getLimit()) <= 0; //i.e. min is less than max
+        }
+
+        return min.getLimit().compareTo(max.getLimit()) < 0; //i.e. min is less than max
     }
 
     private NumericLimit<BigDecimal> getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit<BigDecimal> left, NumericLimit<BigDecimal> right) {
