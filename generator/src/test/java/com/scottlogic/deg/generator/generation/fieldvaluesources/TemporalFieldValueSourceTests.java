@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 public class TemporalFieldValueSourceTests {
@@ -259,6 +260,32 @@ public class TemporalFieldValueSourceTests {
         LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
         //Assert
         Assert.assertThat(firstValue, equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
+    }
+
+    @Test
+    public void temporalGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
+        //Arrange
+        DateTimeRestrictions min = new DateTimeRestrictions();
+        min.min = new DateTimeRestrictions.DateTimeLimit(TemporalFieldValueSource.ISO_MAX_DATE, false);
+        TemporalFieldValueSource datesAfterLastPermittedDate = new TemporalFieldValueSource(min, Collections.emptySet());
+
+        //Act
+        Iterator iterator = datesAfterLastPermittedDate.generateAllValues().iterator();
+        //Assert
+        Assert.assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    public void temporalGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
+        //Arrange
+        DateTimeRestrictions max = new DateTimeRestrictions();
+        max.max = new DateTimeRestrictions.DateTimeLimit(TemporalFieldValueSource.ISO_MIN_DATE, false);
+        TemporalFieldValueSource datesBeforeFirstPermittedDate = new TemporalFieldValueSource(max, Collections.emptySet());
+
+        //Act
+        Iterator iterator = datesBeforeFirstPermittedDate.generateAllValues().iterator();
+        //Assert
+        Assert.assertThat(iterator.hasNext(), is(false));
     }
 
     private DateTimeRestrictions restrictions(String min, String max){
