@@ -265,182 +265,45 @@ Scenario: ofLength run against a contradicting not shorterThan should only gener
        | foo  |
        | null |
 
-Scenario: ofLength run against a non contradicting greaterThan should be successful
+Scenario Outline: ofLength run against a non contradicting numeric constraint should be successful
      Given foo is of length 2
-       And foo is greater than 1
+       And foo is <numeric_constraint>
        And foo is in set:
          | "22" |
      Then the following data should be generated:
        | foo  |
        | null |
        | "22" |
+     Examples:
+       | numeric_constraint                      |
+       | greater than 1                          |
+       | anything but greater than 1             |
+       | greater than or equal to 1              |
+       | anything but greater than or equal to 1 |
+       | less than 2                             |
+       | anything but less than 2                |
+       | less than or equal to 2                 |
+       | anything but less than or equal to 2    |
+       | granular to 1                           |
+       | anything but granular to 1              |
 
-Scenario: ofLength run against a non contradicting not greaterThan should be successful
-     Given foo is of length 2
-       And foo is anything but greater than 1
-       And foo is in set:
-         | "22" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "22" |
 
-Scenario: ofLength run against a non contradicting greaterThanOrEqualTo should be successful
-     Given foo is of length 2
-       And foo is greater than or equal to 1
-       And foo is in set:
-         | "22" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "22" |
-
-Scenario: ofLength run against a non contradicting not greaterThanOrEqualTo should be successful
-     Given foo is of length 2
-       And foo is anything but greater than or equal to 1
-       And foo is in set:
-         | "22" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "22" |
-
-Scenario: ofLength run against a non contradicting lessThan should be successful
-     Given foo is of length 1
-       And foo is less than 2
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not lessThan should be successful
-     Given foo is of length 1
-       And foo is anything but less than 2
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting lessThanOrEqualTo should be successful
-     Given foo is of length 1
-       And foo is less than or equal to 2
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not lessThanOrEqualTo should be successful
-     Given foo is of length 1
-       And foo is anything but less than or equal to 2
-       And foo is in set:
-       | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting granularTo should be successful
-     Given foo is of length 1
-       And foo is granular to 1
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not granularTo should be successful
-     Given foo is of length 1
-       And foo is anything but granular to 1
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting after should be successful
-     Given foo is of length 1
-       And foo is after 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not after should be successful
-     Given foo is of length 1
-       And foo is anything but after 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting afterOtAt should be successful
-     Given foo is of length 1
-       And foo is after or at 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not afterOrAt should be successful
-     Given foo is of length 1
-       And foo is anything but after or at 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting before should be successful
-     Given foo is of length 1
-       And foo is before 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not before should be successful
-     Given foo is of length 1
-       And foo is anything but before 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting beforeOtAt should be successful
-     Given foo is of length 1
-       And foo is before or at 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
-
-Scenario: ofLength run against a non contradicting not beforeOrAt should be successful
-     Given foo is of length 1
-       And foo is anything but before or at 2018-09-01T00:00:00.000
-       And foo is in set:
-         | "1" |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | "1"  |
+Scenario Outline: ofLength run against a non contradicting temporal constraint should be successful
+    Given foo is of length 2
+    And foo is <temporal_constraint>
+    And foo is in set:
+      | "22" |
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "22" |
+    Examples:
+      | temporal_constraint                               |
+      | after 2018-09-01T00:00:00.000                     |
+      | anything but after 2018-09-01T00:00:00.000        |
+      | after or at 2018-09-01T00:00:00.000               |
+      | anything but after or at 2018-09-01T00:00:00.000  |
+      | before 2018-09-01T00:00:00.000                    |
+      | anything but before 2018-09-01T00:00:00.000       |
+      | before or at 2018-09-01T00:00:00.000              |
+      | anything but before or at 2018-09-01T00:00:00.000 |
