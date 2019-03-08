@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class FieldSpecFactoryTests {
-    FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
+    FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
     TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
     StringRestrictions longerThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringLongerThanConstraint(null, 2 , null))));
     StringRestrictions shorterThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringShorterThanConstraint(null, 5 , null))));
@@ -154,7 +155,6 @@ class FieldSpecFactoryTests {
             10,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -171,7 +171,6 @@ class FieldSpecFactoryTests {
                 null
             )
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -191,7 +190,6 @@ class FieldSpecFactoryTests {
             20,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
@@ -212,8 +210,6 @@ class FieldSpecFactoryTests {
             null
         );
 
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
@@ -227,7 +223,6 @@ class FieldSpecFactoryTests {
             15,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -244,7 +239,6 @@ class FieldSpecFactoryTests {
                 null
             )
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -264,7 +258,6 @@ class FieldSpecFactoryTests {
             20,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
@@ -285,8 +278,6 @@ class FieldSpecFactoryTests {
             null
         );
 
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
-
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
@@ -300,7 +291,6 @@ class FieldSpecFactoryTests {
             25,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -317,7 +307,6 @@ class FieldSpecFactoryTests {
                 null
             )
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
@@ -337,7 +326,6 @@ class FieldSpecFactoryTests {
             20,
             null
         );
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
@@ -357,8 +345,6 @@ class FieldSpecFactoryTests {
             20,
             null
         );
-
-        FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);

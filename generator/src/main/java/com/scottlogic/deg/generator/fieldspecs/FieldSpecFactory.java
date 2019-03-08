@@ -26,10 +26,6 @@ public class FieldSpecFactory {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public FieldSpecFactory() {
-        this.fieldSpecMerger = new FieldSpecMerger();
-    }
-
     private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
 
     private static final Map<StandardConstraintTypes, StringGenerator>
