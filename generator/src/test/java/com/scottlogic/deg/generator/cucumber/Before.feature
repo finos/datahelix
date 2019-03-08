@@ -190,8 +190,6 @@ Scenario: 'before' run against a contradicting 'beforeOrAt' should only only gen
        | foo                     |
        | null                    |
 
-# Defect 635 "DateTimeRestrictionsMergeOperation if contradictory, removes all dateTime restrictions" related to this scenario
-@ignore
 Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is anything but before or at 2019-01-02T00:00:00.000
