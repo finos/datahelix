@@ -199,6 +199,12 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | "2018-10-08" |
        | "2018-10-09" |
 
+Scenario: 'beforeOrEqualTo' run with minimum possible date should only generate null
+    Given foo is before or at 0001-01-01T00:00:00.000
+    Then the following data should be generated:
+      | foo                     |
+      | 0001-01-01T00:00:00.000 |
+
 Scenario: Running a 'beforeOrEqualTo' request that specifies null should be unsuccessful
     Given foo is before or at null
     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
