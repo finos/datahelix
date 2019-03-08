@@ -1,14 +1,10 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.StringGenerator;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v3.ConstraintDTO;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class AtomicConstraintReaderLookup {
+class AtomicConstraintReaderLookup {
     private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
@@ -43,6 +39,7 @@ public class AtomicConstraintReaderLookup {
                         mapValues(throwIfValuesNull(dto.values)),
                         rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.CONTAINSREGEX.toString(),
             (dto, fields, rules) ->
                 new ContainsRegexConstraint(
@@ -50,6 +47,7 @@ public class AtomicConstraintReaderLookup {
                     Pattern.compile((String) throwIfValueNull(dto.value)),
                     rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.MATCHESREGEX.toString(),
                 (dto, fields, rules) ->
                     new MatchesRegexConstraint(
@@ -57,6 +55,7 @@ public class AtomicConstraintReaderLookup {
                         Pattern.compile((String) throwIfValueNull(dto.value)),
                         rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.AVALID.toString(),
                 (dto, fields, rules) ->
                     new MatchesStandardConstraint(
@@ -253,7 +252,7 @@ public class AtomicConstraintReaderLookup {
     }
 
     private static Object potentialUnwrapDate(Object value) throws InvalidProfileException {
-        if (value == null || !(value instanceof Map))
+        if (!(value instanceof Map))
             return value;
 
         Map objectMap = (Map) value;
@@ -284,7 +283,7 @@ public class AtomicConstraintReaderLookup {
         }
     }
 
-    public ConstraintReader getByTypeCode(String typeCode) {
+    ConstraintReader getByTypeCode(String typeCode) {
         return typeCodeToSpecificReader.get(typeCode);
     }
 }
