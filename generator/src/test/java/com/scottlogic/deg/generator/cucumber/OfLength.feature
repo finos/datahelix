@@ -77,7 +77,7 @@ Scenario Outline: Running an 'ofLength' request that includes a decimal number c
        | 1.000000001 |
        | 1.9         |
 
-Scenario Outline: Running an 'ofLength' request that includes a value that is not within the numeric integer set [0 - 8000] should fail with an error
+Scenario Outline: Running an 'ofLength' request that includes a value that is not a valid number should fail with an error
      Given foo is of length <length>
        And foo is in set:
          | "a" |
