@@ -33,7 +33,12 @@ Temporal values represent specific moments in time, and are specified in profile
 { "date": "2000-01-01T09:00:00.000" }
 ```
 
-The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, with precisely 3 digits of sub-second precision, plus an optional offset specifier of either "Z" or a "+HH" format. Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, 
+with precisely 3 digits of sub-second precision, plus an optional offset specifier of either "Z" or a "+HH" format. 
+Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+
+Temporal values can be in the range `0001-01-01T00:00:00.000` to `9999-12-31T23:59:59.999`
+that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnight on the 31 December 9999`_**
 
 Temporal values are by default output per the user's locale, adjusted to their time zone.
 
