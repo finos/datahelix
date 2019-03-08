@@ -21,11 +21,22 @@ public class NumericRestrictionsMerger {
 
         final NumericRestrictions merged = new NumericRestrictions();
 
-
         merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
+        if (!canEmitSomeNumericValues(merged)){
+            return new MergeResult<>(); //successful = false
+        }
+
         return new MergeResult<>(merged);
+    }
+
+    private boolean canEmitSomeNumericValues(NumericRestrictions merged) {
+        if (merged.min == null || merged.max == null){
+            return true; //no constraints
+        }
+
+        return merged.min.getLimit().compareTo(merged.max.getLimit()) < 0; //i.e. min is less than max
     }
 
     private NumericLimit<BigDecimal> getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit<BigDecimal> left, NumericLimit<BigDecimal> right) {
