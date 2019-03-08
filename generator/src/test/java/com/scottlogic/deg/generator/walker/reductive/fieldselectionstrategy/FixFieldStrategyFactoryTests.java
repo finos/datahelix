@@ -82,7 +82,7 @@ public class FixFieldStrategyFactoryTests {
         value = GenerationConfig.TreeWalkerType.class,
         names = {"ROUTED", "CARTESIAN_PRODUCT"}
     )
-    public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsHierarchicalStrategy(GenerationConfig.TreeWalkerType walkerType) {
+    public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsNull(GenerationConfig.TreeWalkerType walkerType) {
         // Arrange
         GenerationConfigSource configSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
