@@ -215,4 +215,37 @@ public class AtomicConstraintReaderLookupTests {
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields, ruleInformation));
     }
+
+    @Test
+    public void parseDate_withDateAtYear0000_shouldThrowInvalidProfileException() {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("0000-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateBefore0000_shouldThrowInvalidProfileException() {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("-00001-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAfter9999_shouldThrowInvalidProfileException(){
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("10000-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAtStartOf0001_shouldNotThrow(){
+        Assertions.assertDoesNotThrow(
+            () -> AtomicConstraintReaderLookup.parseDate("0001-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAtEndOf9999_shouldNotThrow(){
+        Assertions.assertDoesNotThrow(
+            () -> AtomicConstraintReaderLookup.parseDate("9999-12-31T23:59:59.999"));
+    }
 }
