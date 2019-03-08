@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
 class FieldSpecValueGeneratorTests {
@@ -375,5 +377,101 @@ class FieldSpecValueGeneratorTests {
         );
 
         assertThat(result, sameBeanAs(expectedDataBags));
+    }
+
+    @Test
+    void generate_fieldSpecMustContainRestrictionWithValuesEmittedByOtherSource_returnsUniqueValues() {
+        //Arrange
+        FieldSpec rootFieldSpec = FieldSpec.Empty
+            .withNumericRestrictions(
+                new NumericRestrictions() {{
+                    min = new NumericLimit<>(new BigDecimal(10), false);
+                    max = new NumericLimit<>(new BigDecimal(20), false);
+                }},
+                fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(
+                    Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+                ),
+                fieldSpecSource)
+            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource);
+
+        MustContainRestriction mustContainRestriction = new MustContainRestriction(
+            Collections.singleton(rootFieldSpec
+                .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton(15)), fieldSpecSource)
+                .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource)
+            )
+        );
+        rootFieldSpec.withMustContainRestriction(mustContainRestriction);
+
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
+
+        //Act
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
+
+        //Assert
+        ArrayList<Object> valuesForFirstField = new ArrayList<>();
+        result.forEach(dataBag -> {
+            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+        });
+        
+        Assert.assertThat(valuesForFirstField, containsInAnyOrder(11, 12, 13, 14, 15, 16, 17, 18, 19));
+    }
+
+    @Test
+    void generate_fieldSpecMustContainRestrictionWithValuesNotEmittedByOtherSource_returnsBothSets() {
+        //Arrange
+        FieldSpec rootFieldSpec = FieldSpec.Empty
+            .withNumericRestrictions(
+                new NumericRestrictions() {{
+                    min = new NumericLimit<>(new BigDecimal(10), false);
+                    max = new NumericLimit<>(new BigDecimal(20), false);
+                }},
+                fieldSpecSource)
+            .withTypeRestrictions(
+                new DataTypeRestrictions(
+                    Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+                ),
+                fieldSpecSource)
+            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource);
+
+        MustContainRestriction mustContainRestriction = new MustContainRestriction(
+            Collections.singleton(rootFieldSpec
+                .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton(25)), fieldSpecSource)
+                .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldSpecSource)
+            )
+        );
+        rootFieldSpec.withMustContainRestriction(mustContainRestriction);
+
+        GenerationConfig generationConfig = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
+                GenerationConfig.TreeWalkerType.REDUCTIVE,
+                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+        );
+        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+            generationConfig,
+            new StandardFieldValueSourceEvaluator(),
+            new JavaUtilRandomNumberGenerator());
+
+        //Act
+        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
+
+        //Assert
+        ArrayList<Object> valuesForFirstField = new ArrayList<>();
+        result.forEach(dataBag -> {
+            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+        });
+
+        Assert.assertThat(valuesForFirstField, containsInAnyOrder(11, 12, 13, 14, 15, 16, 17, 18, 19));
     }
 }
