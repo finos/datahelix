@@ -4,7 +4,9 @@
 		{ "name": "first_name" }
     ],
     "rules": [
-		{ "not": { "field": "first_name", "is": "null" } },
-		{ "field": "first_name", "is": "shorterThan", "value": 200 }
+		{ "constraints": [
+			{ "not": { "field": "first_name", "is": "null" } },
+			{ "field": "first_name", "is": "shorterThan", "value": 200 }
+		] }
 	]
 }

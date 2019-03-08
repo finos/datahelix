@@ -5,16 +5,20 @@
 		{ "name": "surname" }
 	],
 	"rules": [
-		{
-			"anyOf": [
-				{ "field": "forename", "is": "equalTo", "value": "Matt" },
-				{ "field": "forename", "is": "equalTo", "value": "Ryan" }
+		{ 
+			"constraints": [
+				{
+					"anyOf": [
+						{ "field": "forename", "is": "equalTo", "value": "Matt" },
+						{ "field": "forename", "is": "equalTo", "value": "Ryan" }
+					]
+				},
+				{
+					"if": { "field": "forename", "is": "equalTo", "value": "Matt" },
+					"then": { "field": "surname", "is": "equalTo", "value": "Damon" },
+					"else": { "field": "surname", "is": "inSet", "values": [ "Reynolds", "Gosling" ] }
+				}
 			]
-		},
-		{
-			"if": { "field": "forename", "is": "equalTo", "value": "Matt" },
-			"then": { "field": "surname", "is": "equalTo", "value": "Damon" },
-			"else": { "field": "surname", "is": "inSet", "values": [ "Reynolds", "Gosling" ] }
 		}
 	]
 }

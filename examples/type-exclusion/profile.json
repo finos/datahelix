@@ -4,6 +4,8 @@
 		{ "name": "not_number" }
 	],
 	"rules": [
-		{ "not": { "field": "not_number", "is": "ofType", "value": "numeric" } }
+		{ "constraints": [
+			{ "not": { "field": "not_number", "is": "ofType", "value": "numeric" } }
+		] }
 	]
 }

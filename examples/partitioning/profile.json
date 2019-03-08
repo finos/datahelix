@@ -12,25 +12,28 @@
 		{ "name": "p3f3" }
     ],
     "rules": [
-		{ "field": "p1f1", "is": "inSet", "values": [ "p1-null", "p1-string" ] },
+		{ "constraints": [ 
+			{ "field": "p1f1", "is": "inSet", "values": [ "p1-null", "p1-string" ] },
 
-		{
-			"if": { "field": "p1f1", "is": "equalTo", "value": "p1-null" },
-			"then": { "field": "p1f2", "is": "null" },
-			"else": { "field": "p1f2", "is": "inSet", "values": [ "hello", "goodbye" ] }
-		},
+			{
+				"if": { "field": "p1f1", "is": "equalTo", "value": "p1-null" },
+				"then": { "field": "p1f2", "is": "null" },
+				"else": { "field": "p1f2", "is": "inSet", "values": [ "hello", "goodbye" ] }
+			},
 
-		{
-			"if": { "field": "p1f1", "is": "equalTo", "value": "p1-null" },
-			"then": { "field": "p1f3", "is": "null" },
-			"else":
-			{ 
-				"anyOf": [
-					{ "field": "p1f3", "is": "equalTo", "value": "string-1" },
-					{ "field": "p1f3", "is": "equalTo", "value": "string-2" }
-				]
+			{
+				"if": { "field": "p1f1", "is": "equalTo", "value": "p1-null" },
+				"then": { "field": "p1f3", "is": "null" },
+				"else":
+				{ 
+					"anyOf": [
+						{ "field": "p1f3", "is": "equalTo", "value": "string-1" },
+						{ "field": "p1f3", "is": "equalTo", "value": "string-2" }
+					]
+				}
 			}
-		},
+		] },
+			
 
 		{
 			"rule": "partition 2 stuff",

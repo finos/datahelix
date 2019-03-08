@@ -11,13 +11,13 @@ import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTr
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
@@ -37,11 +37,29 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsNot.not;
 
 class ExampleProfilesViolationTests {
+
+    @TestFactory
+    Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING));
+
+        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+            final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
+
+            Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
+            Assert.assertThat(constraintsPerRule, not(hasItem(0))); //there should be no rules with 0 constraints
+        }));
+    }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
@@ -51,9 +69,9 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
                 
-        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
+        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
+            standard.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
@@ -65,9 +83,9 @@ class ExampleProfilesViolationTests {
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
-        return forEachProfileFile(config, ((generationEngine, profileFile) -> {
+        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
-            generationEngine.generateDataSet(profile, config, new NullOutputTarget());
+            violating.generateDataSet(profile, config, new NullOutputTarget());
         }));
     }
 
@@ -112,6 +130,7 @@ class ExampleProfilesViolationTests {
                         engine);
 
                 consumer.generate(
+                    engine,
                     violationGenerationEngine,
                     profileFile);
             });
@@ -123,12 +142,12 @@ class ExampleProfilesViolationTests {
     }
 
     private class NullOutputTarget extends FileOutputTarget {
-        public NullOutputTarget() {
+        NullOutputTarget() {
             super(null, new NullDataSetWriter());
         }
 
         @Override
-        public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException {
+        public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
 
             generatedObjects.forEach(
@@ -159,6 +178,7 @@ class ExampleProfilesViolationTests {
 
     @FunctionalInterface
     private interface GenerateConsumer {
-        void generate(ViolationGenerationEngine engine, File profileFile) throws IOException, InvalidProfileException;
+        void generate(StandardGenerationEngine standardEngine, ViolationGenerationEngine violatingEngine, File profileFile) throws IOException, InvalidProfileException;
     }
+
 }

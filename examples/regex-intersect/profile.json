@@ -4,8 +4,10 @@
 		{ "name": "first_name" }
     ],
     "rules": [
-		{ "not": { "field": "first_name", "is": "null" } },
-		{ "field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])" },
-		{ "field": "first_name", "is": "matchingRegex", "value": "M.*" }
+		{ "constraints": [
+			{ "not": { "field": "first_name", "is": "null" } },
+			{ "field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])" },
+			{ "field": "first_name", "is": "matchingRegex", "value": "M.*" }
+		] }
 	]
 }

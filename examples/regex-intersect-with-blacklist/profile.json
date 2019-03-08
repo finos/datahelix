@@ -6,9 +6,11 @@
 		}
 	],
 	"rules": [
-		{ "not": { "field": "first_name", "is": "null" } },
-		{ "field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])" },
-		{ "field": "first_name", "is": "matchingRegex", "value": "M.*" },
-		{ "not": { "field": "first_name", "is": "equalTo", "value": "Mary" } }
+		{ "constraints": [
+			{ "not": { "field": "first_name", "is": "null" } },
+			{ "field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])" },
+			{ "field": "first_name", "is": "matchingRegex", "value": "M.*" },
+			{ "not": { "field": "first_name", "is": "equalTo", "value": "Mary" } }
+		] }
 	]
 }
