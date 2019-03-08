@@ -35,11 +35,29 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsNot.not;
 
 class ExampleProfilesViolationTests {
+
+    @TestFactory
+    Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
+        GenerationConfig config = new GenerationConfig(
+            new TestGenerationConfigSource(
+                GenerationConfig.DataGenerationType.INTERESTING,
+                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
+                GenerationConfig.CombinationStrategyType.PINNING));
+
+        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+            final Profile profile = new JsonProfileReader(new NoopProfileValidator()).read(profileFile.toPath());
+
+            Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
+            Assert.assertThat(constraintsPerRule, not(hasItem(0))); //there should be no rules with 0 constraints
+        }));
+    }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
