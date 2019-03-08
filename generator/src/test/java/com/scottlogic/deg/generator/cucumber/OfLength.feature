@@ -14,14 +14,11 @@ Scenario Outline: Running an 'ofLength' request on a roman alphabet character st
        | foo        |
        | null       |
        | <expected> |
-       And the following data should not be included in what is generated:
-         | foo           |
-         | <notExpected> |
      Examples:
-       | length | expected | notExpected |
-       | 1      | "a"      | "aa"        |
-       | 2      | "aa"     | "a"         |
-       | 1.0    | "a"      | "aa"        |
+       | length | expected |
+       | 1      | "a"      |
+       | 2      | "aa"     |
+       | 1.0    | "a"      |
 
 Scenario Outline: Running an 'ofLength' request that includes a negation of a valid numeric length should be successful
      Given foo is anything but of length <length>
@@ -32,26 +29,20 @@ Scenario Outline: Running an 'ofLength' request that includes a negation of a va
        | foo        |
        | null       |
        | <expected> |
-       And the following data should not be included in what is generated:
-         | foo           |
-         | <notExpected> |
      Examples:
-       | length | expected    | notExpected |
-       | 1      | "aa"        | "a"         |
-       | 2      | "a"         | "aa"        |
+       | length | expected |
+       | 1      | "aa"     |
+       | 2      | "a"      |
 
-Scenario Outline: Running an 'ofLength' request on a roman alphabet character string value and white space should be successful
-     Given foo is of length <length>
+Scenario: Running an 'ofLength' request on a roman alphabet character string value and white space should be successful
+     Given foo is of length 10
        And foo is in set:
          | "a"          |
          | "  10  10  " |
      Then the following data should be generated:
-       | foo        |
-       | null       |
-       | <expected> |
-     Examples:
-       | length | expected     |
-       | 10     | "  10  10  " |
+       | foo          |
+       | null         |
+       | "  10  10  " |
 
 Scenario: Running an 'ofLength' for a length of zero should be successful
      Given foo is of length 0
