@@ -17,7 +17,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
         Iterable<DataBag> iterable = new PinningCombinationStrategy
                 .InternalIterable(dataBagSequences);
 
-        return StreamSupport.stream(iterable.spliterator(), true);
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 
     class InternalIterable implements Iterable<DataBag> {
