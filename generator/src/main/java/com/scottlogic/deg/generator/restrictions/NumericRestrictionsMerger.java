@@ -40,10 +40,10 @@ public class NumericRestrictionsMerger {
         }
 
         if (min.isInclusive() && max.isInclusive()){
-            return min.getLimit().compareTo(max.getLimit()) <= 0; //i.e. min is less than max
+            return min.getLimit().compareTo(max.getLimit()) <= 0; //i.e. min <= max
         }
 
-        return min.getLimit().compareTo(max.getLimit()) < 0; //i.e. min is less than max
+        return min.getLimit().compareTo(max.getLimit()) < 0; //i.e. min < max
     }
 
     private NumericLimit<BigDecimal> getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit<BigDecimal> left, NumericLimit<BigDecimal> right) {
