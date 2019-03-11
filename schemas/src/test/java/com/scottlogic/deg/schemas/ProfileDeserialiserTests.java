@@ -11,10 +11,10 @@ import java.io.IOException;
 
 public class ProfileDeserialiserTests {
     @Test
-    public void shouldDeserialiseV3ProfileWithoutException() throws IOException {
+    public void shouldDeserialisev0_1ProfileWithoutException() throws IOException {
         // Arrange
         final String json = "{" +
-            "  \"schemaVersion\" : \"v3\"," +
+            "  \"schemaVersion\" : \"0.1\"," +
             "  \"fields\": [" +
             "    { \"name\": \"id\" }," +
             "    { \"name\": \"type\" }," +
@@ -56,6 +56,6 @@ public class ProfileDeserialiserTests {
         final BaseProfile profile = new ProfileDeserialiser().deserialise(json, ProfileDTO.SchemaVersion);
 
         // Assert
-        assertEquals("v3", profile.schemaVersion);
+        assertEquals("0.1", profile.schemaVersion);
     }
 }

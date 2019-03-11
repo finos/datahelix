@@ -62,7 +62,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +
@@ -122,7 +122,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +
@@ -167,7 +167,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +
