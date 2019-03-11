@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.scottlogic.deg.schemas.common.BaseProfile;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
-import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
+import com.scottlogic.deg.schemas.v3.ProfileDTO;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class ProfileDeserialiserTests {
             "}";
 
         // Act
-        final BaseProfile profile = new ProfileDeserialiser().deserialise(json, V3ProfileDTO.SchemaVersion);
+        final BaseProfile profile = new ProfileDeserialiser().deserialise(json, ProfileDTO.SchemaVersion);
 
         // Assert
         assertEquals("v3", profile.schemaVersion);
