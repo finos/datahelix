@@ -1,5 +1,5 @@
 {
-	"schemaVersion": "v3",
+	"schemaVersion": "0.1",
 	"fields": [
 		{ "name": "a_number" }
 	],
