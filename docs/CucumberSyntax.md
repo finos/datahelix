@@ -102,6 +102,8 @@ And there is a constraint:
 * _the following data should be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is present in the generated data (regardless of order)
 * _the following data should not be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is **not** present in the generated data (regardless of order)
 * _some data should be generated_, executes the generator and asserts that at least one row of data was emitted
+* _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
+
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.
