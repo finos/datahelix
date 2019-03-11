@@ -6,9 +6,13 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.generator.guice.BaseModule;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Assert;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Responsible for generating data in cucumber tests.
@@ -62,4 +66,30 @@ public class CucumberTestHelper {
     public Collection<Exception> getThrownExceptions(){
         return testState.testExceptions;
     }
+
+    public void assertFieldContainsNullOrMatching(String fieldName, Function<Object, Boolean> predicate){
+        Optional<Integer> fieldIndex = getIndexOfField(fieldName);
+        if (!fieldIndex.isPresent()){
+            throw new IllegalArgumentException(String.format("Field [%s] has not been defined", fieldName));
+        }
+
+        List<List<Object>> allData = this.generateAndGetData();
+        List<Object> dataForField = allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
+
+        Assert.assertThat(
+            dataForField,
+            new ListPredicateMatcher(value -> value == null || predicate.apply(value)));
+    }
+
+    private Optional<Integer> getIndexOfField(String fieldName){
+        for (int index = 0; index < testState.profileFields.size(); index++){
+            Field field = testState.profileFields.get(index);
+            if (field.name.equals(fieldName)){
+                return Optional.of(index);
+            }
+        }
+
+        return Optional.empty();
+    }
 }
+

@@ -104,6 +104,10 @@ And there is a constraint:
 * _some data should be generated_, executes the generator and asserts that at least one row of data was emitted
 * _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
 
+### Validating the data in the output
+* _{field} contains temporal data_, executes the generator and asserts that _field_ contains either `null` or temporal values
+* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
+* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.
