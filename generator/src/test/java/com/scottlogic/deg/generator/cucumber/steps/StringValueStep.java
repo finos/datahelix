@@ -29,6 +29,22 @@ public class StringValueStep {
 
     @Then("{fieldVar} contains string data")
     public void producedDataShouldContainStringValuesForField(String fieldName){
-        this.helper.assertFieldContainsNullOrMatching(fieldName, value -> value instanceof String);
+        this.helper.assertFieldContainsNullOrMatching(fieldName, String.class);
+    }
+
+    @Then("{fieldVar} contains strings of length between {int} and {int} inclusively")
+    public void producedDataShouldContainStringValuesInRangeForField(String fieldName, int minInclusive, int maxInclusive){
+        this.helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            String.class,
+            value -> isLongerThanOrEqual(value, minInclusive) && isShorterThanOrEqual(value, maxInclusive));
+    }
+
+    private boolean isShorterThanOrEqual(String value, int maxLengthInclusive) {
+        return value.length() <= maxLengthInclusive;
+    }
+
+    private boolean isLongerThanOrEqual(String value, int minLengthInclusive) {
+        return value.length() >= minLengthInclusive;
     }
 }

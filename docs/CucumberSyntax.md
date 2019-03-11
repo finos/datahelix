@@ -109,6 +109,9 @@ And there is a constraint:
 * _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
 * _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
 * _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
+* _{field} contains temporal values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or temporal values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains strings of length between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or strings with lengths between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.

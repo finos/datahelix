@@ -4,13 +4,14 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import com.scottlogic.deg.generator.*;
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.guice.BaseModule;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Assert;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -67,8 +68,23 @@ public class CucumberTestHelper {
         return testState.testExceptions;
     }
 
-    public void assertFieldContainsNullOrMatching(String fieldName, Function<Object, Boolean> predicate) {
-        assertFieldContains(fieldName, value -> value == null || predicate.apply(value));
+    public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz){
+        assertFieldContainsNullOrMatching(fieldName, clazz, value -> true);
+    }
+
+    public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz, Function<T, Boolean> predicate){
+        assertFieldContains(fieldName, objectValue -> {
+            if (objectValue == null){
+                return true;
+            }
+
+            if (!clazz.isInstance(objectValue)){
+                return false; //not the correct type
+            }
+
+            //noinspection unchecked
+            return predicate.apply((T)objectValue);
+        });
     }
 
     public void assertFieldContains(String fieldName, Function<Object, Boolean> predicate){
@@ -82,7 +98,7 @@ public class CucumberTestHelper {
 
         Assert.assertThat(
             dataForField,
-            new ListPredicateMatcher(predicate::apply));
+            new ListPredicateMatcher(predicate));
     }
 
     private Optional<Integer> getIndexOfField(String fieldName){

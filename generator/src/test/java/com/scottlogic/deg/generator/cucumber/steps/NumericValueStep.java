@@ -5,8 +5,6 @@ import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import java.math.BigInteger;
-
 public class NumericValueStep {
 
     private final CucumberTestState state;
@@ -29,6 +27,24 @@ public class NumericValueStep {
 
     @Then("{fieldVar} contains numeric data")
     public void producedDataShouldContainNumericValuesForField(String fieldName){
-        this.helper.assertFieldContainsNullOrMatching(fieldName, value -> value instanceof Number);
+        this.helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
+    }
+
+    @Then("{fieldVar} contains numeric values between {number} and {number} inclusively")
+    public void producedDataShouldContainNumericValuesInRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
+        this.helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive));
+    }
+
+    private boolean isGreaterThanOrEqual(Number value, Number minInclusive){
+        //TODO: use equals() & compareTo()
+        return value.doubleValue() >= minInclusive.doubleValue();
+    }
+
+    private boolean isLessThanOrEqual(Number value, Number maxInclusive){
+        //TODO: use equals() & compareTo()
+        return value.doubleValue() <= maxInclusive.doubleValue();
     }
 }
