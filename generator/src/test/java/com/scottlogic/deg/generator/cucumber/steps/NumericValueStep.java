@@ -5,6 +5,9 @@ import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public class NumericValueStep {
 
     private final CucumberTestState state;
@@ -39,12 +42,36 @@ public class NumericValueStep {
     }
 
     private boolean isGreaterThanOrEqual(Number value, Number minInclusive){
-        //TODO: use equals() & compareTo()
-        return value.doubleValue() >= minInclusive.doubleValue();
+        BigDecimal valueAsBigDecimal = coerceToBigDecimal(value);
+        BigDecimal minInclusiveAsBigDecimal = coerceToBigDecimal(minInclusive);
+
+        return valueAsBigDecimal.compareTo(minInclusiveAsBigDecimal) >= 0;
     }
 
     private boolean isLessThanOrEqual(Number value, Number maxInclusive){
-        //TODO: use equals() & compareTo()
-        return value.doubleValue() <= maxInclusive.doubleValue();
+        BigDecimal valueAsBigDecimal = coerceToBigDecimal(value);
+        BigDecimal maxInclusiveAsBigDecimal = coerceToBigDecimal(maxInclusive);
+
+        return valueAsBigDecimal.compareTo(maxInclusiveAsBigDecimal) <= 0;
+    }
+
+    private BigDecimal coerceToBigDecimal(Number number){
+        if (number instanceof BigDecimal){
+            return (BigDecimal)number;
+        }
+
+        if (number instanceof Integer){
+            return BigDecimal.valueOf((long)(int)number);
+        }
+
+        if (number instanceof BigInteger){
+            return new BigDecimal((BigInteger) number);
+        }
+
+        if (number instanceof Long){
+            return BigDecimal.valueOf((long)number);
+        }
+
+        throw new IllegalArgumentException(String.format("Unable to coerce %s of type %s to a BigDecimal", number, number.getClass().getName()));
     }
 }
