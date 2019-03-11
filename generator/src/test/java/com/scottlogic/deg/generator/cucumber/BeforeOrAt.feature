@@ -6,195 +6,100 @@ Background:
        And foo is of type "temporal"
        And foo is anything but null
 
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date
-     Given foo is before or at 2018-10-10T00:00:00.000
-       And foo is after 2018-10-01T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2018-10-01" |
-       | "2018-10-02" |
-       | "2018-10-03" |
-       | "2018-10-04" |
-       | "2018-10-05" |
-       | "2018-10-06" |
-       | "2018-10-07" |
-       | "2018-10-08" |
-       | "2018-10-09" |
-       | "2018-10-10" |
+  @ignore #issue 191
+Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or at a specified date
+  Given foo is before or at 2018-10-10T00:00:00.000
+    And the generator can generate at most 30 rows
+  Then the following data should be generated:
+     | foo  |
+     | 2018-10-01T00:00:00.000 |
+     | 2018-10-02T00:00:00.000 |
+     | 2018-10-03T00:00:00.000 |
+     | 2018-10-04T00:00:00.000 |
+     | 2018-10-05T00:00:00.000 |
+     | 2018-10-06T00:00:00.000 |
+     | 2018-10-07T00:00:00.000 |
+     | 2018-10-08T00:00:00.000 |
+     | 2018-10-09T00:00:00.000 |
+     | 2018-10-10T00:00:00.000 |
 
 @ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a month boundary that are less than of the same as a specified date
-     Given foo is before or at 2018-10-10T00:00:00.000
-       And foo is after 2018-09-28T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2018-09-28" |
-       | "2018-09-29" |
-       | "2018-09-30" |
-       | "2018-10-01" |
-       | "2018-10-02" |
-       | "2018-10-03" |
-       | "2018-10-04" |
-       | "2018-10-05" |
-       | "2018-10-06" |
-       | "2018-10-07" |
-       | "2018-10-08" |
-       | "2018-10-09" |
-       | "2018-10-10" |
+Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or at specified date and time
+    Given foo is before or at 2018-10-01T12:01:05.000
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo  |
+      | 2018-10-01T12:01:05.000 |
+      | 2018-09-01T12:01:02.000 |
+      | 2018-07-01T12:01:03.000 |
+      | 2018-06-01T12:01:04.000 |
+
+
+Scenario: Running beforeOrAt request that includes temporal field with date (YYYY-MM-DD) values that has invalid date should fail
+    Given foo is before or at 2019-15-32T00:00:00.000
+      And the generator can generate at most 5 rows
+    Then I am presented with an error message
+      And no data is created
+
+Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid time should fail
+    Given foo is before or at 2018-10-01T25:25:05.000
+      And the generator can generate at most 5 rows
+    Then I am presented with an error message
+      And no data is created
+
+Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
+  Given foo is before or at 0000-01-10T00:00:00.000
+  Then I am presented with an error message
+  And no data is created
+
+Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
+  Given foo is before or at 2018-Feb-01T00:00:00.000
+  And the generator can generate at most 5 rows
+  Then I am presented with an error message
+  And no data is created
 
 @ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a year boundary that are less than or the same as a specified date
-     Given foo is before or at 2018-01-03T00:00:00.000
-       And foo is after 2017-12-25T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2017-12-25" |
-       | "2017-12-26" |
-       | "2017-12-27" |
-       | "2017-12-28" |
-       | "2017-12-29" |
-       | "2017-12-30" |
-       | "2017-12-31" |
-       | "2018-01-01" |
-       | "2018-01-02" |
-       | "2018-01-03" |
+Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
+    Given foo is before or at 2024-01-01T00:00:00.000
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+    | foo  |
+    | 2016-10-01T12:01:05.000 |
+    | 2012-09-01T12:01:02.000 |
+    | 2024-07-01T12:01:03.000 |
 
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a leap year February boundary that are less than or the same as a specified date
-     Given foo is before or at 2016-03-03T00:00:00.000
-       And foo is after 2016-02-25T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2016-02-25" |
-       | "2016-02-26" |
-       | "2016-02-27" |
-       | "2016-02-28" |
-       | "2016-02-29" |
-       | "2016-03-01" |
-       | "2016-03-02" |
-       | "2016-03-03" |
+@ignore #issue related to 611
+Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
+  Given foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2018-01-01T00:00:00.000
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | 2017-10-01T00:00:00.000 |
+    | 2016-10-02T00:00:00.000 |
+    | 2018-01-01T00:00:00.000 |
+    | 2019-01-01T00:00:00.000 |
 
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values across a non-leap year February boundary that are less than or equal to a specified date
-     Given foo is before or at 2017-03-03T00:00:00.000
-       And foo is after 2017-02-25T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2017-02-25" |
-       | "2017-02-26" |
-       | "2017-02-27" |
-       | "2017-02-28" |
-       | "2017-03-01" |
-       | "2017-03-02" |
-       | "2017-03-03" |
+@ignore #issue related to 611
+Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
+  Given foo is before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2018-01-01T00:00:00.000
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo                     |
+    | 2018-03-01T00:00:00.000 |
+    | 2018-12-01T00:00:00.000 |
+    | 2019-01-01T00:00:00.000 |
 
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values within a given minute that are less than or the same as a specified date and time
-     Given foo is before or at 2018-10-01T12:00:10.000
-       And foo is after 2018-10-01T12:00:00.000
-       And foo is formatted as "%tT"
-     Then the following data should be generated:
-       | foo        |
-       | "12:00:00" |
-       | "12:00:01" |
-       | "12:00:02" |
-       | "12:00:03" |
-       | "12:00:04" |
-       | "12:00:05" |
-       | "12:00:06" |
-       | "12:00:07" |
-       | "12:00:08" |
-       | "12:00:09" |
-       | "12:00:10" |
+@ignore #issue related to 611
+Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
+    Given foo is anything but before or at 2019-01-01T00:00:00.000
+      And foo is anything but before or at 2018-01-01T00:00:00.000
+      And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo                     |
+      | 2019-10-01T00:00:00.000 |
+      | 2019-11-02T00:00:00.000 |
+      | 2020-01-01T00:00:00.000 |
+      | 2021-01-01T00:00:00.000 |
 
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or the same as a specified date and time
-     Given foo is before or at 2018-10-01T12:01:05.000
-       And foo is after 2018-10-01T12:00:57.000
-       And foo is formatted as "%tT"
-     Then the following data should be generated:
-       | foo        |
-       | "12:00:57" |
-       | "12:00:58" |
-       | "12:00:59" |
-       | "12:01:00" |
-       | "12:01:01" |
-       | "12:01:02" |
-       | "12:01:03" |
-       | "12:01:04" |
-       | "12:01:05" |
-
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across an hour boundary that are less than or the same as a specified date and time
-     Given foo is before or at 2018-10-01T13:00:05.000
-       And foo is after 2018-10-01T12:59:57.000
-       And foo is formatted as "%tT"
-     Then the following data should be generated:
-       | foo        |
-       | "12:59:57" |
-       | "12:59:58" |
-       | "12:59:59" |
-       | "13:00:00" |
-       | "13:00:01" |
-       | "13:00:02" |
-       | "13:00:03" |
-       | "13:00:04" |
-       | "13:00:05" |
-
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than a specified date and a less than or equal to a second specified date
-     Given foo is before 2018-10-10T00:00:00.000
-       And foo is before or at 2018-10-09T00:00:00.000
-       And foo is after 2018-10-01T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2018-10-01" |
-       | "2018-10-02" |
-       | "2018-10-03" |
-       | "2018-10-04" |
-       | "2018-10-05" |
-       | "2018-10-06" |
-       | "2018-10-07" |
-       | "2018-10-08" |
-       | "2018-10-09" |
-
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date and a less than a second specified date
-     Given foo is before or at 2018-10-10T00:00:00.000
-       And foo is before 2018-10-09T00:00:00.000
-       And foo is after 2018-10-01T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2018-10-01" |
-       | "2018-10-02" |
-       | "2018-10-03" |
-       | "2018-10-04" |
-       | "2018-10-05" |
-       | "2018-10-06" |
-       | "2018-10-07" |
-       | "2018-10-08" |
-
-@ignore #issue 191
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or the same as a specified date and a less than or the same as a second specified date
-     Given foo is before or at 2018-10-10T00:00:00.000
-       And foo is before or at 2018-10-09T00:00:00.000
-       And foo is after 2018-10-01T00:00:00.000
-       And foo is formatted as "%tF"
-     Then the following data should be generated:
-       | foo          |
-       | "2018-10-01" |
-       | "2018-10-02" |
-       | "2018-10-03" |
-       | "2018-10-04" |
-       | "2018-10-05" |
-       | "2018-10-06" |
-       | "2018-10-07" |
-       | "2018-10-08" |
-       | "2018-10-09" |
