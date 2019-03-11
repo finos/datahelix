@@ -1,10 +1,10 @@
 package com.scottlogic.deg.schemas;
 
 import com.scottlogic.deg.schemas.common.ProfileSerialiser;
-import com.scottlogic.deg.schemas.v3.ConstraintDTO;
-import com.scottlogic.deg.schemas.v3.FieldDTO;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
-import com.scottlogic.deg.schemas.v3.ProfileDTO;
+import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
+import com.scottlogic.deg.schemas.v0_1.FieldDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

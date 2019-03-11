@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.scottlogic.deg.schemas.common.BaseProfile;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
-import com.scottlogic.deg.schemas.v3.ProfileDTO;
+import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

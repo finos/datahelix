@@ -5,7 +5,7 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.scottlogic.deg.schemas.v3.ProfileDTO;
+import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
