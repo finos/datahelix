@@ -108,6 +108,7 @@ And there is a constraint:
 * _{field} contains temporal data_, executes the generator and asserts that _field_ contains either `null` or temporal values
 * _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
 * _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
+* _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.

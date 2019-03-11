@@ -67,7 +67,11 @@ public class CucumberTestHelper {
         return testState.testExceptions;
     }
 
-    public void assertFieldContainsNullOrMatching(String fieldName, Function<Object, Boolean> predicate){
+    public void assertFieldContainsNullOrMatching(String fieldName, Function<Object, Boolean> predicate) {
+        assertFieldContains(fieldName, value -> value == null || predicate.apply(value));
+    }
+
+    public void assertFieldContains(String fieldName, Function<Object, Boolean> predicate){
         Optional<Integer> fieldIndex = getIndexOfField(fieldName);
         if (!fieldIndex.isPresent()){
             throw new IllegalArgumentException(String.format("Field [%s] has not been defined", fieldName));
@@ -78,7 +82,7 @@ public class CucumberTestHelper {
 
         Assert.assertThat(
             dataForField,
-            new ListPredicateMatcher(value -> value == null || predicate.apply(value)));
+            new ListPredicateMatcher(predicate::apply));
     }
 
     private Optional<Integer> getIndexOfField(String fieldName){
