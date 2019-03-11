@@ -45,7 +45,7 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     }
 
     @Override
-    public double nextDouble(double lower, double upper) {
-        return random.nextDouble() * (upper - lower) + lower;
+    public double nextDouble(double lowerInclusive, double upperExclusive) {
+        return random.nextDouble() * (upperExclusive - lowerInclusive) + lowerInclusive;
     }
 }
