@@ -169,8 +169,7 @@ Scenario: Running a 'containingRegex' request that includes anchors ^ and $ shou
        | "c"  |
 
 Scenario: containingRegex that does not include the closing anchor '$' should be successful
-     Given there is a field foo
-       And foo is containing regex /^[a-c]{1}/
+     Given foo is containing regex /^[a-c]{1}/
        And foo is of length 1
      Then the following data should be generated:
        | foo  |
@@ -180,8 +179,7 @@ Scenario: containingRegex that does not include the closing anchor '$' should be
        | "c"  |
 
 Scenario: containingRegex that does not include the opening anchor '^' should be successful
-     Given there is a field foo
-       And foo is containing regex /[a-c]{1}$/
+     Given foo is containing regex /[a-c]{1}$/
        And foo is of length 1
      Then the following data should be generated:
        | foo  |
