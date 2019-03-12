@@ -61,7 +61,7 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.rule.getDescription(), equalTo(expectedDescription));
+        return rule -> Assert.assertThat(rule.ruleInformation.getDescription(), equalTo(expectedDescription));
     }
 
     private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
@@ -102,7 +102,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"f1\" } ]," +
                         "    \"rules\": []" +
                         "}");
@@ -115,7 +115,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseMultipleFields() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"f1\" }, { \"name\": \"f2\" } ]," +
                         "    \"rules\": []" +
                         "}");
@@ -129,7 +129,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException, InvalidProfileException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "       { \"field\": \"foo\", \"is\": \"null\" } " +
@@ -144,7 +144,7 @@ public class JsonProfileReaderTests {
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -163,7 +163,7 @@ public class JsonProfileReaderTests {
     public void shouldReadNameOfNamedRules() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "        {" +
@@ -180,10 +180,50 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldNotThrowIsNullWithValueNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"value\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> getResultingProfile());
+    }
+
+    @Test
+    public void shouldNotThrowIsNullWithValuesNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "        {" +
+                "           \"rule\": \"Too rule for school\"," +
+                "           \"constraints\": [" +
+                "               { \"field\": \"foo\", \"is\": \"null\", \"values\": null }" +
+                "           ]" +
+                "        }" +
+                "    ]" +
+                "}");
+
+        Assertions.assertDoesNotThrow(
+            () -> getResultingProfile());
+    }
+
+    @Test
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -207,7 +247,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseFormatConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -231,7 +271,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIsOfLengthConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"id\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -254,7 +294,7 @@ public class JsonProfileReaderTests {
         // Arrange
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -280,7 +320,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseOrConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -309,7 +349,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseAndConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -338,7 +378,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIfConstraint() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -376,7 +416,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIfConstraintWithoutElse() throws IOException, InvalidProfileException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"v3\"," +
+                        "    \"schemaVersion\": \"0.1\"," +
                         "    \"fields\": [ { \"name\": \"foo\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
@@ -413,7 +453,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
         givenJson(
             "{" +
-            "    \"schemaVersion\": \"v3\"," +
+            "    \"schemaVersion\": \"0.1\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
             "      {" +
@@ -439,7 +479,7 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -465,7 +505,7 @@ public class JsonProfileReaderTests {
     public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException, InvalidProfileException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -491,7 +531,7 @@ public class JsonProfileReaderTests {
     public void shouldAllowValidISO8601DateTime() throws IOException, InvalidProfileException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -527,7 +567,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectGreaterThanOneNumericGranularityConstraint() {
         givenJson(
             "{" +
-            "    \"schemaVersion\": \"v3\"," +
+            "    \"schemaVersion\": \"0.1\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
             "      {" +
@@ -545,7 +585,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectNonPowerOfTenNumericGranularityConstraint() {
         givenJson(
             "{" +
-            "    \"schemaVersion\": \"v3\"," +
+            "    \"schemaVersion\": \"0.1\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
             "      {" +
@@ -563,7 +603,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectNonISO8601DateTime() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -581,7 +621,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectEqualToWithNullValue() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -596,10 +636,28 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectLessThanWithNullValue() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"lessThan\", \"value\": null }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
     public void shouldRejectInSetWithANullValue() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -614,9 +672,27 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectInSetSetToNull() {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"inSet\", \"values\": null }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+        expectInvalidProfileException();
+    }
+
+    @Test
     public void shouldRejectAllOfWithEmptySet() {
         givenJson("{" +
-            "    \"schemaVersion\": \"v3\"," +
+            "    \"schemaVersion\": \"0.1\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [" +
             "      {" +
@@ -633,7 +709,7 @@ public class JsonProfileReaderTests {
     @Test
     public void shouldRejectAllOfWithEmptySetWithExplicitConstraint() {
         givenJson("{" +
-            "    \"schemaVersion\": \"v3\"," +
+            "    \"schemaVersion\": \"0.1\"," +
             "    \"fields\": [ { \"name\": \"foo\" } ]," +
             "    \"rules\": [{" +
             "        \"rule\": \"foo rule\"," +
@@ -650,7 +726,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNull() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -668,7 +744,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNullWithRuleAndConstraintFormat() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "       {" +
@@ -685,7 +761,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNullForNot() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "      {" +
@@ -703,7 +779,7 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNullForNotWithRuleAndConstraintFormat() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": \"v3\"," +
+                "    \"schemaVersion\": \"0.1\"," +
                 "    \"fields\": [ { \"name\": \"foo\" } ]," +
                 "    \"rules\": [" +
                 "       {" +

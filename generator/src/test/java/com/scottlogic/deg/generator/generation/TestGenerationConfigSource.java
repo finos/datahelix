@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -14,6 +14,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.TreeWalkerType walkerType;
     public Long maxRows;
     public boolean validateProfile = false;
+    public Path outputPath;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -77,7 +78,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public Path getOutputPath() {
-        throw new UnsupportedOperationException();
+        return outputPath;
     }
 
     @Override
@@ -92,6 +93,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public boolean shouldViolate() {
+        return false;
+    }
+
+    @Override
+    public boolean overwriteOutputFiles() {
         return false;
     }
 

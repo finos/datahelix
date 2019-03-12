@@ -5,8 +5,8 @@ import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.CannedValuesFieldValueSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -116,7 +116,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    public void shouldReturnNullSourceLastWithMustContainNullRestrictionsAndNullNotDisallowed() {
+    public void shouldReturnNullSourceLast_WithMustContainNullRestrictionsAndNullAllowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 

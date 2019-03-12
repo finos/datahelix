@@ -4,9 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 
@@ -31,7 +32,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public Stream<RowSpec> walk(DecisionTree tree){
+    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy){
         ConstraintNode rootNode = tree.getRootNode();
         ProfileFields fields = tree.getFields();
         Stream<RowSpecRoute> routes = this.producer.produceRoutes(tree);

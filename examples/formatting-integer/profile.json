@@ -1,16 +1,18 @@
 {
-	"schemaVersion": "v3",
+	"schemaVersion": "0.1",
 	"fields": [
 		{ "name": "an_integer" }
 	],
 	"rules": [
-		{ "not": { "field": "an_integer", "is": "null" } },
+		{ "constraints": [
+			{ "not": { "field": "an_integer", "is": "null" } },
 
-		{ "field": "an_integer", "is": "ofType", "value": "numeric" },
-		{ "field": "an_integer", "is": "granularTo", "value": 1 },
+			{ "field": "an_integer", "is": "ofType", "value": "numeric" },
+			{ "field": "an_integer", "is": "granularTo", "value": 1 },
 
-		{ "field": "an_integer", "is": "equalTo", "value": 1000 },
+			{ "field": "an_integer", "is": "equalTo", "value": 1000 },
 
-		{ "field": "an_integer", "is": "formattedAs", "value": "%,d" }
+			{ "field": "an_integer", "is": "formattedAs", "value": "%,d" }
+		] }
 	]
 }

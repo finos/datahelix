@@ -1,9 +1,8 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

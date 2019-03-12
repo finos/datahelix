@@ -3,11 +3,10 @@ package com.scottlogic.deg.generator.cucumber.utils;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +82,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
+    }
+
+    @Override
+    public boolean overwriteOutputFiles() {
+        return false;
     }
 
     @Override

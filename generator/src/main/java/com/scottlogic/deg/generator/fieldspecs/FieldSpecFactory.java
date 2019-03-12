@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
@@ -11,15 +12,20 @@ import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.*;
 import java.util.HashMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
+    private final FieldSpecMerger fieldSpecMerger;
+
+    @Inject
+    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger) {
+        this.fieldSpecMerger = fieldSpecMerger;
+    }
+
     private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
 
     private static final Map<StandardConstraintTypes, StringGenerator>
@@ -32,13 +38,18 @@ public class FieldSpecFactory {
         return construct(constraint, false, false);
     }
 
-    public FieldSpec toMustContainRestrictionFieldSpec(Collection<AtomicConstraint> constraints) {
-        if (constraints.isEmpty()) { 
-          return FieldSpec.Empty; 
+    public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<FieldSpec> decisionConstraints) {
+        if (decisionConstraints == null || decisionConstraints.isEmpty()){
+            return rootFieldSpec;
         }
-        return FieldSpec.Empty.withMustContainRestriction(
+
+        return rootFieldSpec.withMustContainRestriction(
             new MustContainRestriction(
-                constraints.stream().map(this::construct).collect(Collectors.toSet())
+                decisionConstraints.stream()
+                    .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet())
             )
         );
     }

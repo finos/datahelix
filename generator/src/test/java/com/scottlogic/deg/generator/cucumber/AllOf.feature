@@ -91,8 +91,9 @@ Scenario: Running a 'allOf' request that includes multiple values within the sam
            { "field": "foo", "is": "equalTo", "value": "Test01" }
          ]}
        """
-     Then the following data should be included in what is generated:
+     Then the following data should be generated:
        | foo      |
+       | null     |
        | "Test01" |
 
 Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should generate null

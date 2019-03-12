@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.field_value_sources.*;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.math.BigDecimal;
@@ -14,8 +14,6 @@ import java.util.stream.Stream;
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
 
-    private final MustContainRestrictionReducer mustContainRestrictionReducer = new MustContainRestrictionReducer();
-
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
         if (mustBeNull(fieldSpec)){
@@ -23,14 +21,16 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            return getWhitelistSources(fieldSpec);
+            return getSetRestrictionSources(fieldSpec);
         }
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        if (fieldSpec.getMustContainRestriction() != null) {
-            validSources.addAll(
-                getMustContainRestrictionSources(fieldSpec));
+        if (fieldSpec.getMustContainRestriction() != null && !fieldSpec.getMustContainRestriction().getRequiredObjects().isEmpty()) {
+            List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
+            if (!mustContainRestrictionSources.isEmpty()){
+                return mustContainRestrictionSources;
+            }
         }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
@@ -61,16 +61,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
-    private List<FieldValueSource> getWhitelistSources(FieldSpec fieldSpec) {
-        MustContainRestriction mustContainRestriction = fieldSpec.getMustContainRestriction();
+    private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
         Stream<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream();
-
-        // If we have values that must be included we need to check that those values are included in the whitelist
-        if (mustContainRestriction != null) {
-            whitelist = Stream.concat(whitelist,
-                FlatMappingSpliterator.flatMap(getNotNullSetRestrictionFilterOnMustContainRestriction(mustContainRestriction),
-                    o -> o.getSetRestrictions().getWhitelist().stream()));
-        }
 
         if (mayBeNull(fieldSpec)) {
             return Arrays.asList(
@@ -81,27 +73,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return Collections.singletonList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
     }
 
-    private Stream<FieldSpec> getNotNullSetRestrictionFilterOnMustContainRestriction(MustContainRestriction restriction) {
-        return restriction.getRequiredObjects()
-            .stream()
-            .filter(o -> o.getSetRestrictions() != null
-                && o.getSetRestrictions().getWhitelist() != null);
-    }
-
     private boolean mayBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() == null;
     }
 
     private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
-        if (mustContainRestrictionFieldSpecs.size() > 1) {
-            mustContainRestrictionFieldSpecs = mustContainRestrictionReducer.getReducedMustContainRestriction(fieldSpec);
-        }
 
         return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
             .map(this::getFieldValueSources),
             List::stream)
-            .filter(x->!x.equals(nullOnlySource))
+            .distinct()
             .collect(Collectors.toList());
     }
 

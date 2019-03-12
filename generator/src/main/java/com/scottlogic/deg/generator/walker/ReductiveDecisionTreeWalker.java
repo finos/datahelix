@@ -5,9 +5,10 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
         ConstraintNode rootNode = tree.getRootNode();
         ReductiveState initialState = new ReductiveState(tree.fields);
 
@@ -55,7 +56,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, reduced, fixFieldStrategy);
 
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
@@ -63,10 +64,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        return process(rootNode, initialState.with(nextFixedField));
+        return process(rootNode, initialState.with(nextFixedField), fixFieldStrategy);
     }
 
-    private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState) {
+    private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
         if (reductiveState.allFieldsAreFixed()){
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, constraintNode);
@@ -83,12 +84,13 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(valueIterator, Spliterator.ORDERED),
                 false),
-            fieldValue -> getRowSpecsForFixedField(constraintNode, reductiveState));
+            fieldValue -> getRowSpecsForFixedField(constraintNode, reductiveState, fixFieldStrategy));
     }
 
     private Stream<RowSpec> getRowSpecsForFixedField(
         ConstraintNode constraintNode,
-        ReductiveState reductiveState){
+        ReductiveState reductiveState,
+        FixFieldStrategy fixFieldStrategy){
 
         //reduce the tree based on the fields that are now fixed
         ReductiveConstraintNode reducedNode = this.treeReducer.reduce(constraintNode, reductiveState);
@@ -104,14 +106,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedNode, reductiveState);
 
         //find the next fixed field and continue
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode, fixFieldStrategy);
+
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
 
             return Stream.empty();
         }
 
-        return process(reducedNode, reductiveState.with(nextFixedField));
+        return process(reducedNode, reductiveState.with(nextFixedField), fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){

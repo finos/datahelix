@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.walker.reductive.field_selection_strategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,6 @@ class FixedFieldBuilderTests {
         FixFieldStrategy fixFieldStrategy = mock(FixFieldStrategy.class);
         FixedFieldBuilder builder = new FixedFieldBuilder(
             reducer,
-            fixFieldStrategy,
             new NoopDataGeneratorMonitor(),
             mock(FieldSpecValueGenerator.class));
         Field field1 = new Field("field1");
@@ -45,7 +44,7 @@ class FixedFieldBuilderTests {
         when(fixFieldStrategy.getNextFieldToFix(state, rootNode)).thenReturn(field1);
         when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.empty());
 
-        FixedField field = builder.findNextFixedField(state, rootNode);
+        FixedField field = builder.findNextFixedField(state, rootNode, fixFieldStrategy);
 
         verify(reducer).reduceConstraintsToFieldSpec(any(), any());
         Assert.assertThat(field, is(nullValue()));
@@ -58,7 +57,6 @@ class FixedFieldBuilderTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         FixedFieldBuilder builder = new FixedFieldBuilder(
             reducer,
-            fixFieldStrategy,
             new NoopDataGeneratorMonitor(),
             valueGenerator);
         Field field1 = new Field("field1");
@@ -71,7 +69,7 @@ class FixedFieldBuilderTests {
         when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.of(FieldSpec.Empty));
         when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
 
-        FixedField field = builder.findNextFixedField(state, rootNode);
+        FixedField field = builder.findNextFixedField(state, rootNode, fixFieldStrategy);
 
         verify(reducer).reduceConstraintsToFieldSpec(any(), any());
         verify(valueGenerator).generate(field1, FieldSpec.Empty);

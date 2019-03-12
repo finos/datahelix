@@ -9,10 +9,12 @@ import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNo
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,10 +61,11 @@ class ReductiveRowSpecGeneratorTests {
             GenerationConfig.TreeWalkerType.REDUCTIVE,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         ));
-        RowSpecDataBagSourceFactory dataBagSourceFactory = new RowSpecDataBagSourceFactory(
+        RowSpecDataBagSourceFactory dataBagSourceFactory = new StandardRowSpecDataBagSourceFactory(
             new FieldSpecValueGenerator(
                 config,
-                new StandardFieldValueSourceEvaluator()));
+                new StandardFieldValueSourceEvaluator(),
+                new JavaUtilRandomNumberGenerator()));
 
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(state, rootNode);
         final Stream<List<Object>> fixed = result
@@ -138,7 +141,7 @@ class ReductiveRowSpecGeneratorTests {
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         if (reducer == null){
-            reducer = new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger);
+            reducer = new ConstraintReducer(new FieldSpecFactory(new FieldSpecMerger()), fieldSpecMerger);
         }
         return new ReductiveRowSpecGenerator(
             reducer,

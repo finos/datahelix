@@ -7,9 +7,9 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.decisiontree.test_utils.*;
+import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -557,108 +557,6 @@ class ProfileDecisionTreeFactoryTests {
     private final AtomicConstraint bEquals10 = new IsInSetConstraint(new Field("B"), Collections.singleton(10), rules());
     private final AtomicConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC, rules());
     private final AtomicConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING, rules());
-
-    @Test
-    void whenViolatingPositiveAtomic() {
-        givenRule(
-            new ViolateConstraint(
-                aIsNull));
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                aIsNull.negate()));
-    }
-
-    @Test
-    void whenViolatingNegativeAtomic() {
-        givenRule(
-            new ViolateConstraint(
-                aIsNull.negate()));
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                aIsNull));
-    }
-
-    @Test
-    void whenViolatingOrConstraint() {
-        givenRule(
-            new ViolateConstraint(
-                new OrConstraint(aIsNull, cIsNumeric)));
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                aIsNull.negate(),
-                cIsNumeric.negate()));
-    }
-
-    @Test
-    void whenViolatingAndConstraint() {
-        givenRule(
-            new ViolateConstraint(
-                new AndConstraint(aIsNull, cIsNumeric, eIsString)));
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                new TreeDecisionNode(
-                    new TreeConstraintNode(
-                        aIsNull.negate(),
-                        cIsNumeric,
-                        eIsString),
-                    new TreeConstraintNode(
-                        aIsNull,
-                        cIsNumeric.negate(),
-                        eIsString),
-                    new TreeConstraintNode(
-                        aIsNull,
-                        cIsNumeric,
-                        eIsString.negate()))));
-    }
-
-    @Test
-    void whenViolatingIfConstraint() {
-        givenRule(
-            new ViolateConstraint(
-                new ConditionalConstraint(
-                    aIsNull,
-                    bEquals10,
-                    eIsString)));
-
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                new TreeDecisionNode(
-                    new TreeConstraintNode(
-                        aIsNull,
-                        bEquals10.negate()),
-                    new TreeConstraintNode(
-                        aIsNull.negate(),
-                        eIsString.negate())))
-        );
-    }
-
-    @Test
-    void analyse_violatingProfileWithSingleFieldThatHasNotAllOf_returnsExpectedTreeCollection() {
-        givenRule(
-            new ViolateConstraint(
-                new AndConstraint(
-                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test"); }}, null),
-                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{ add("Test2"); }}, null)
-                ).negate()
-            )
-        );
-
-        treeRootShouldMatch(
-            new TreeConstraintNode(
-                Arrays.asList(
-                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>(){{ add("Test"); }}, null),
-                    new IsInSetConstraint(new Field("foo"), new HashSet<Object>() {{
-                        add("Test2");
-                    }}, null)),
-                Collections.emptyList()
-            )
-        );
-    }
 
     private void assertOptionContainsSingleConstraint(ConstraintNode option, Constraint constraint) {
         Assert.assertThat("Option contains no decisions", option.getDecisions().size(), Is.is(0));

@@ -47,4 +47,5 @@ public class InMemoryOutputTarget implements OutputTarget {
                     .collect(Collectors.toList());
             }).collect(Collectors.toList());
     }
+
 }

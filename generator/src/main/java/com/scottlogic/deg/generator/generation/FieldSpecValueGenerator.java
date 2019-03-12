@@ -6,8 +6,8 @@ import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.field_value_sources.CombiningFieldValueSource;
-import com.scottlogic.deg.generator.generation.field_value_sources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
 import java.util.List;
@@ -17,11 +17,13 @@ import java.util.stream.StreamSupport;
 public class FieldSpecValueGenerator {
     private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
+    private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator) {
+    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.generationConfig = generationConfig;
         this.sourceFactory = sourceEvaluator;
+        this.randomNumberGenerator = randomNumberGenerator;
     }
 
     public Stream<DataBag> generate(Field field, FieldSpec spec) {
@@ -56,7 +58,7 @@ public class FieldSpecValueGenerator {
             case INTERESTING:
                 return source.generateInterestingValues();
             case RANDOM:
-                return source.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+                return source.generateRandomValues(randomNumberGenerator);
         }
     }
 }

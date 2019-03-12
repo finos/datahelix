@@ -4,8 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.TestCaseGenerationResult;
-import com.scottlogic.deg.generator.outputs.dataset_writers.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -52,5 +51,9 @@ public class FileOutputTarget implements OutputTarget{
         return new FileOutputTarget(
             filePath.resolve(dataSetWriter.getFileName(filename)),
             dataSetWriter);
+    }
+
+    public Path getFilePath() {
+        return filePath;
     }
 }
