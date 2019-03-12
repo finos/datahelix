@@ -53,7 +53,7 @@ Scenario: Running beforeOrAt request that includes temporal field with date and 
        And no data is created
 
 Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
-     Given foo is before or at 2018-Feb-01T00:00:00.000
+     Given foo is before or at "2018-Feb-01T00:00:00.000"
        And the generator can generate at most 5 rows
      Then I am presented with an error message
        And no data is created
