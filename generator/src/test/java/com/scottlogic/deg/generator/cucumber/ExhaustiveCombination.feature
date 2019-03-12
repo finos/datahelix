@@ -8,7 +8,6 @@ Background:
 Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
       Given the generation strategy is full
       And the combination strategy is exhaustive
-      And the walker type is reductive
       And the following fields exist:
        | foo |
        | bar |
@@ -724,7 +723,6 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
 Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
       Given the generation strategy is full
       And the combination strategy is exhaustive
-      And the walker type is reductive
       And the following fields exist:
        | foo1 |
        | foo2 |
