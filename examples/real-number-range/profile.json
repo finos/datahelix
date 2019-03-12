@@ -1,14 +1,16 @@
 {
-	"schemaVersion": "v3",
+	"schemaVersion": "0.1",
 	"fields": [
 		{ "name": "a_number" }
 	],
 	"rules": [
-		{ "not": { "field": "a_number", "is": "null" } },
-		{ "field": "a_number", "is": "ofType", "value": "numeric" },
-		{ "field": "a_number", "is": "granularTo", "value": 0.01 },
+		{ "constraints": [
+			{ "not": { "field": "a_number", "is": "null" } },
+			{ "field": "a_number", "is": "ofType", "value": "numeric" },
+			{ "field": "a_number", "is": "granularTo", "value": 0.01 },
 
-		{ "field": "a_number", "is": "greaterThanOrEqualTo", "value": 1 },
-		{ "field": "a_number", "is": "lessThanOrEqualTo", "value": 4 }
+			{ "field": "a_number", "is": "greaterThanOrEqualTo", "value": 1 },
+			{ "field": "a_number", "is": "lessThanOrEqualTo", "value": 4 }
+		] }
 	]
 }

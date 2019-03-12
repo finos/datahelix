@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.guice.ProfileProvider;
+import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalysisResult;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.Comparator;
 
@@ -12,16 +12,16 @@ public final class HierarchicalDependencyFixFieldStrategy extends ProfileBasedFi
 
     private final SetBasedFixFieldStrategy setBasedFixFieldStrategy;
     private final FieldDependencyAnalyser analyser;
+    private final Profile profile;
 
-    @Inject
-    public HierarchicalDependencyFixFieldStrategy(ProfileProvider profileProvider, FieldDependencyAnalyser analyser) {
-        super(profileProvider);
-        this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(profileProvider);
+    public HierarchicalDependencyFixFieldStrategy(Profile profile, FieldDependencyAnalyser analyser, DecisionTree tree) {
         this.analyser = analyser;
+        this.profile = profile;
+        this.setBasedFixFieldStrategy = new SetBasedFixFieldStrategy(tree);
     }
 
     Comparator<Field> getFieldOrderingStrategy() {
-        FieldDependencyAnalysisResult result = this.analyser.analyse(profileProvider.get());
+        FieldDependencyAnalysisResult result = this.analyser.analyse(profile);
         Comparator<Field> firstComparison = Comparator.comparingInt(field -> result.getDependenciesOf(field).size());
         Comparator<Field> secondComparison = Comparator.comparingInt((Field field) -> result.getDependentsOf(field).size()).reversed();
         return firstComparison.thenComparing(secondComparison)

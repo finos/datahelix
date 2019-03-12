@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.scottlogic.deg.schemas.common.BaseProfile;
 import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
-import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
+import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class ProfileDeserialiserTests {
     @Test
-    public void shouldDeserialiseV3ProfileWithoutException() throws IOException {
+    public void shouldDeserialisev0_1ProfileWithoutException() throws IOException {
         // Arrange
         final String json = "{" +
-            "  \"schemaVersion\" : \"v3\"," +
+            "  \"schemaVersion\" : \"0.1\"," +
             "  \"fields\": [" +
             "    { \"name\": \"id\" }," +
             "    { \"name\": \"type\" }," +
@@ -53,9 +53,9 @@ public class ProfileDeserialiserTests {
             "}";
 
         // Act
-        final BaseProfile profile = new ProfileDeserialiser().deserialise(json, V3ProfileDTO.SchemaVersion);
+        final BaseProfile profile = new ProfileDeserialiser().deserialise(json, ProfileDTO.SchemaVersion);
 
         // Assert
-        assertEquals("v3", profile.schemaVersion);
+        assertEquals("0.1", profile.schemaVersion);
     }
 }

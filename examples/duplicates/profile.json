@@ -1,13 +1,15 @@
 {
-    "schemaVersion": "v3",
+    "schemaVersion": "0.1",
     "fields": [
         { "name": "a" }
     ],
     "rules": [
-		{ "not": { "field": "a", "is": "null" } },
-		{ "anyOf": [
-			{ "field": "a", "is": "equalTo", "value": "foo" },
-			{ "field": "a", "is": "equalTo", "value": "foo" }
-		]}
+		{ "constraints": [
+			{ "not": { "field": "a", "is": "null" } },
+			{ "anyOf": [
+				{ "field": "a", "is": "equalTo", "value": "foo" },
+				{ "field": "a", "is": "equalTo", "value": "foo" }
+			]}
+		] }
 	]
 }

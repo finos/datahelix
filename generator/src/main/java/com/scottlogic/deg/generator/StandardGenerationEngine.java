@@ -8,8 +8,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.stream.Stream;
 
 public class StandardGenerationEngine implements GenerationEngine {
@@ -28,7 +26,6 @@ public class StandardGenerationEngine implements GenerationEngine {
     }
 
     public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
-
         final DecisionTreeCollection analysedProfile = this.decisionTreeGenerator.analyse(profile);
 
         final Stream<GeneratedObject> generatedDataItems =

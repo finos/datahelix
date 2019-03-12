@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;

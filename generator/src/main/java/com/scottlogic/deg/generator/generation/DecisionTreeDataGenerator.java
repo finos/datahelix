@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final RowSpecDataBagSourceFactory dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
+    private final FixFieldStrategyFactory walkerStrategyFactory;
 
     @Inject
     public DecisionTreeDataGenerator(
@@ -27,12 +29,14 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
-        RowSpecDataBagSourceFactory dataBagSourceFactory) {
+        RowSpecDataBagSourceFactory dataBagSourceFactory,
+        FixFieldStrategyFactory walkerStrategyFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.dataBagSourceFactory = dataBagSourceFactory;
+        this.walkerStrategyFactory = walkerStrategyFactory;
     }
 
     @Override
@@ -49,7 +53,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
-            .map(treeWalker::walk);
+            .map(tree -> treeWalker.walk(tree,
+                walkerStrategyFactory.getWalkerStrategy(profile, tree, generationConfig)));
 
         final Stream<DataBagSource> allDataBagSources =
             rowSpecsByPartition

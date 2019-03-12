@@ -2,13 +2,15 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
 import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.guice.ProfileProvider;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TestHierarchicalDependencyFixFieldStrategy {
 
@@ -212,11 +213,22 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
         Profile profile = new Profile(fields, rules);
-        ProfileProvider provider = mock(ProfileProvider.class);
-        when(provider.get()).thenReturn(profile);
 
-        HierarchicalDependencyFixFieldStrategy strategy = new HierarchicalDependencyFixFieldStrategy(provider, new FieldDependencyAnalyser());
-        return strategy.getFieldFixingPriorityList();
+        List<AtomicConstraint> atomicConstraints =
+            constraints
+                .stream()
+                .filter(c -> c instanceof AtomicConstraint)
+                .map(c -> (AtomicConstraint)c)
+                .collect(Collectors.toList());
+
+        DecisionTree tree = new DecisionTree(
+            new TreeConstraintNode(atomicConstraints, Collections.emptyList()),
+            profile.fields,
+            "Decision tree");
+
+        HierarchicalDependencyFixFieldStrategy strategy =
+            new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser(), tree);
+        return strategy.getFieldFixingPriorityList(profile.fields);
     }
 
     private static RuleInformation rule(String description){

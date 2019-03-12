@@ -23,24 +23,21 @@ import java.util.stream.Stream;
 public class FixedFieldBuilder {
 
     private final ConstraintReducer constraintReducer;
-    private final FixFieldStrategy fixFieldStrategy;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator generator;
 
     @Inject
     public FixedFieldBuilder(
         ConstraintReducer constraintReducer,
-        FixFieldStrategy fixFieldStrategy,
         ReductiveDataGeneratorMonitor monitor,
         FieldSpecValueGenerator generator) {
-        this.fixFieldStrategy = fixFieldStrategy;
         this.constraintReducer = constraintReducer;
         this.monitor = monitor;
         this.generator = generator;
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
-    public FixedField findNextFixedField(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
+    public FixedField findNextFixedField(ReductiveState reductiveState, ReductiveConstraintNode rootNode, FixFieldStrategy fixFieldStrategy) {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
 
         if (fieldToFix == null){

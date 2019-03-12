@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.ConfigSource;
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 
 import java.util.List;
 import java.util.Optional;

@@ -114,7 +114,7 @@ public class TemporalFieldValueSourceTests {
 
 
     @Test
-    public void whenGeneratingRandomValues() {
+    public void getRandomValues_withExclusiveUpperBound_shouldGenerateCorrectValues() {
         LocalDate date = LocalDate.of(2018, 1, 10);
         givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), true);
         givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), false);
@@ -131,7 +131,7 @@ public class TemporalFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-                equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0))));
+            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0))));
 
         rng.setNextDouble(1);
 
@@ -140,15 +140,140 @@ public class TemporalFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-                equalTo(LocalDateTime.of(date, LocalTime.of(17, 59, 59, 999_000_000))));
+            equalTo(LocalDateTime.of(date, LocalTime.of(17, 59, 59, 999_000_000))));
 
         rng.setNextDouble(0.5);
 
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-                equalTo(LocalDateTime.of(date, LocalTime.of(14, 59, 59, 999_000_000))));
+            equalTo(LocalDateTime.of(date, LocalTime.of(14, 59, 59, 999_000_000))));
 
+    }
+
+    @Test
+    public void getRandomValues_withInclusiveUpperBound_shouldGenerateCorrectValues() {
+        LocalDate date = LocalDate.of(2018, 1, 10);
+        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), true);
+        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), true);
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
+        rng.setNextDouble(0);
+
+        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0))));
+
+        rng.setNextDouble(1);
+
+        // Because internally the filteringIterator pre-generates the first value before we can set
+        // the new "random" value we have re-create the iterator
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(18, 0, 0))));
+
+        rng.setNextDouble(0.5);
+
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(15, 0, 0))));
+    }
+
+    @Test
+    public void getRandomValues_withExclusiveLowerBound_shouldGenerateCorrectValues() {
+        LocalDate date = LocalDate.of(2018, 1, 10);
+        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), false);
+        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), true);
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
+        rng.setNextDouble(0);
+
+        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 1_000_000))));
+
+        rng.setNextDouble(1);
+
+        // Because internally the filteringIterator pre-generates the first value before we can set
+        // the new "random" value we have re-create the iterator
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(18, 0, 0))));
+
+        rng.setNextDouble(0.5);
+
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(15, 0, 0))));
+    }
+
+    @Test
+    public void getRandomValues_withSmallPermittedRangeAtEndOfLegalRange_shouldGenerateCorrectValues() {
+        LocalDate date = LocalDate.of(9999, 12, 31);
+        givenLowerBound(LocalDateTime.of(date, LocalTime.of(23, 0, 0)), false);
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
+        rng.setNextDouble(0.99);
+
+        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(23, 59, 23, 999_000_000))));
+    }
+
+    @Test
+    public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
+        rng.setNextDouble(0);
+
+        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
+
+        rng.setNextDouble(1);
+
+        // Because internally the filteringIterator pre-generates the first value before we can set
+        // the new "random" value we have re-create the iterator
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(TemporalFieldValueSource.ISO_MAX_DATE));
+
+        rng.setNextDouble(0.5);
+
+        iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(5000, 07, 02, 11, 59, 59, 999_000_000)));
     }
 
     @Test

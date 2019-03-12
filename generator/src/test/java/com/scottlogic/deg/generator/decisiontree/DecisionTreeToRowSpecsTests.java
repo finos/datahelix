@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
