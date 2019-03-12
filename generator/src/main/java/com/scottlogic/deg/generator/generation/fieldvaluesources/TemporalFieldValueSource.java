@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class TemporalFieldValueSource implements FieldValueSource {
 
-    public static final LocalDateTime ISO_MAX_DATE = LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999);
+    public static final LocalDateTime ISO_MAX_DATE = LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999);
     public static final LocalDateTime ISO_MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
 
     private final DateTimeRestrictions restrictions;
@@ -124,12 +124,12 @@ public class TemporalFieldValueSource implements FieldValueSource {
 
         LocalDateTime lower = inclusiveLower != null
                 ? inclusiveLower
-                : LocalDateTime.of(1900, 01, 01, 0, 0);
+                : ISO_MIN_DATE;
 
 
         LocalDateTime upper = exclusiveUpper != null
                 ? exclusiveUpper
-                : LocalDateTime.of(2100, 01, 01, 0, 0);
+                : ISO_MAX_DATE.plusNanos(1_000_000);
 
 
         return () -> new UpCastingIterator<>(
