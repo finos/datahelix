@@ -1,4 +1,4 @@
-package com.scottlogic.deg.schemas.v3;
+package com.scottlogic.deg.schemas.v0_1;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

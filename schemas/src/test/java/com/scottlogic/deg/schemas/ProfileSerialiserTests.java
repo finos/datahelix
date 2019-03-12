@@ -1,10 +1,10 @@
 package com.scottlogic.deg.schemas;
 
 import com.scottlogic.deg.schemas.common.ProfileSerialiser;
-import com.scottlogic.deg.schemas.v3.ConstraintDTO;
-import com.scottlogic.deg.schemas.v3.FieldDTO;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
-import com.scottlogic.deg.schemas.v3.V3ProfileDTO;
+import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
+import com.scottlogic.deg.schemas.v0_1.FieldDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class ProfileSerialiserTests {
     @Test
     public void shouldSerialiseExampleProfile() throws IOException {
         // Arrange
-        final V3ProfileDTO profile = new V3ProfileDTO();
+        final ProfileDTO profile = new ProfileDTO();
         profile.fields = Arrays.asList(
             createField(f -> f.name = "typecode"),
             createField(f -> f.name = "price"));
@@ -62,7 +62,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +
@@ -106,7 +106,7 @@ public class ProfileSerialiserTests {
     @Test
     public void shouldSerialiseExampleProfileWithIsConstraintMissing() throws IOException {
         // Arrange
-        final V3ProfileDTO profile = new V3ProfileDTO();
+        final ProfileDTO profile = new ProfileDTO();
         profile.fields = Arrays.asList(
             createField(f -> f.name = "typecode"),
             createField(f -> f.name = "price"));
@@ -122,7 +122,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +
@@ -151,7 +151,7 @@ public class ProfileSerialiserTests {
     @Test
     public void shouldSerialiseExampleProfileWithRuleName() throws IOException {
         // Arrange
-        final V3ProfileDTO profile = new V3ProfileDTO();
+        final ProfileDTO profile = new ProfileDTO();
         profile.fields = Arrays.asList(
             createField(f -> f.name = "typecode"),
             createField(f -> f.name = "price"));
@@ -167,7 +167,7 @@ public class ProfileSerialiserTests {
         final String expectedJson =
             normalise.apply(
                 "{" +
-                    "\"schemaVersion\" : \"v3\"," +
+                    "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
                     "   { \"name\" : \"typecode\" }," +
                     "   { \"name\" : \"price\" }" +

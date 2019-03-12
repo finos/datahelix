@@ -6,9 +6,9 @@ This page will walk you through creating basic profiles with which you can gener
 of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
-interpret the profile fields and rules. The latest version is v3.
+interpret the profile fields and rules. The latest version is 0.1.
 ```
-    "schemaVersion": "v3",
+    "schemaVersion": "0.1",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
