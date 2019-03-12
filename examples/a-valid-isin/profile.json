@@ -1,9 +1,13 @@
 {
-    "schemaVersion": "v3",
+    "schemaVersion": "0.1",
     "fields": [
         { "name": "isin" }
     ],
     "rules": [
-		{ "field": "isin", "is": "aValid", "value": "ISIN" }
+		{ "constraints": 
+			[
+				{ "field": "isin", "is": "aValid", "value": "ISIN" }
+			] 
+		}
 	]
 }

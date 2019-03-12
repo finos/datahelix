@@ -1,4 +1,4 @@
-package com.scottlogic.deg.schemas.v3;
+package com.scottlogic.deg.schemas.v0_1;
 
 import java.util.Arrays;
 

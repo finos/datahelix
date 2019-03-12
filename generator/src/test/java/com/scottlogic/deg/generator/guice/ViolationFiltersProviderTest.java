@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

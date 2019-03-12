@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.builders.AndBuilder;
-import com.scottlogic.deg.generator.builders.OrBuilder;
-import com.scottlogic.deg.generator.builders.RuleBuilder;
+import com.scottlogic.deg.generator.builders.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
@@ -113,6 +113,317 @@ public class ProfileViolationTests {
             "Profile 1 -- Violating: Rule 2"
         );
         List<Profile> expectedViolatedProfiles = Arrays.asList(violatedProfile1, violatedProfile2);
+
+        assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
+
+    /**
+     * Tests that an if-then constraint nested inside the conditional of another if-then constraint violates as
+     * expected.
+     * In shorthand where A,B,C are atomic constraints: VIOLATE(IF(IF A THEN B) THEN C) -> (IF A THEN B) AND VIOLATE(C)
+     * @throws IOException if the manifest writer fails to write.
+     */
+    @Test
+    public void violate_nestedIfThen_producesViolatedProfiles() throws IOException {
+        //Arrange
+        Field fooField = new Field("foo");
+        Field barField = new Field("bar");
+        String ruleName = "Nested if rule";
+
+        final ConstraintChainBuilder<Constraint> A =
+            new SingleConstraintBuilder().withInSetConstraint(fooField, new Object[]{1, 2, "hello"});
+        final ConstraintChainBuilder<Constraint> B =
+            new SingleConstraintBuilder().withInSetConstraint(barField, new Object[]{"A", "B"});
+        final ConstraintChainBuilder<Constraint> C
+            = new SingleConstraintBuilder().withEqualToConstraint(barField, "A");
+
+        Rule nestedIfRule = new RuleBuilder(ruleName)
+            .withIfConstraint(new IfBuilder()
+                .withIf(new IfBuilder()
+                    .withIf(A)
+                    .withThen(B)
+                )
+                .withThen(C)
+            )
+            .build();
+
+        Profile inputProfile = new Profile(
+            Arrays.asList(fooField, barField),
+            Collections.singletonList(nestedIfRule),
+            "Nested if profile"
+        );
+
+        //Act
+        List<Profile> violatedProfiles = target.violate(inputProfile);
+
+        //Assert
+        Rule violatedIfRule = new RuleBuilder(ruleName)
+            .withAndConstraint(new AndBuilder()
+                .withIfConstraint(new IfBuilder()
+                    .withIf(A)
+                    .withThen(B)
+                )
+                .appendBuilder(C.violate())
+            )
+            .build();
+
+        List<Profile> expectedViolatedProfiles = Collections.singletonList(
+            new ViolatedProfile(
+                nestedIfRule,
+                new ProfileFields(Arrays.asList(fooField, barField)),
+                Collections.singletonList(violatedIfRule),
+                "Nested if profile -- Violating: " + ruleName
+            )
+        );
+
+        assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
+
+    /**
+     * Tests that an if-then-else constraint nested inside the conditional of another if-then-else constraint violates
+     * as expected.
+     * In shorthand where A,B,C,D,E are atomic constraints:
+     * VIOLATE(IF(IF A THEN B ELSE C) THEN D ELSE E)
+     *   ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (VIOLATE(IF A THEN B ELSE C) AND VIOLATE(E))
+     *   ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
+     * @throws IOException if the manifest writer fails to write.
+     */
+    @Test
+    public void violate_nestedIfThenElseInsideIf_producesViolatedProfiles() throws IOException {
+        //Arrange
+        Field fooField = new Field("foo");
+        Field barField = new Field("bar");
+        String ruleName = "Nested if rule";
+
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+
+        Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
+            .withIfConstraint(new IfBuilder()
+                .withIf(new IfBuilder()
+                    .withIf(A)
+                    .withThen(B)
+                    .withElse(C)
+                )
+                .withThen(D)
+                .withElse(E)
+            )
+            .build();
+
+        Profile inputProfile = new Profile(
+            Arrays.asList(fooField, barField),
+            Collections.singletonList(nestedIfThenElseRule),
+            "Nested if then else profile"
+        );
+
+        //Act
+        List<Profile> violatedProfiles = target.violate(inputProfile);
+
+        //Assert
+        //((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
+        Rule violatedIfRule = new RuleBuilder(ruleName)
+            .withOrConstraint(new OrBuilder()
+                .withAndConstraint(new AndBuilder()
+                    .withIfConstraint(new IfBuilder()
+                        .withIf(A)
+                        .withThen(B)
+                        .withElse(C)
+                    )
+                    .appendBuilder(D.violate())
+                )
+                .withAndConstraint(new AndBuilder()
+                    .withOrConstraint(new OrBuilder()
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(A)
+                            .appendBuilder(B.violate())
+                        )
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(A.violate())
+                            .appendBuilder(C.violate())
+                        )
+                    )
+                    .appendBuilder(E.violate())
+                )
+            )
+            .build();
+
+        List<Profile> expectedViolatedProfiles = Collections.singletonList(
+            new ViolatedProfile(
+                nestedIfThenElseRule,
+                new ProfileFields(Arrays.asList(fooField, barField)),
+                Collections.singletonList(violatedIfRule),
+                "Nested if then else profile -- Violating: " + ruleName
+            )
+        );
+
+        assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
+
+    /**
+     * Tests that an if-then-else constraint nested inside the then clause of another if-then-else constraint violates
+     * as expected.
+     * In shorthand where A,B,C,D,E are atomic constraints:
+     * VIOLATE(IF A THEN (IF B THEN C ELSE D) ELSE E)
+     *   ->   (A AND VIOLATE(IF B THEN C ELSE D)) OR (VIOLATE(A) AND VIOLATE(E))
+     *   ->   (A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+     * @throws IOException if the manifest writer fails to write.
+     */
+    @Test
+    public void violate_nestedIfThenElseInsideThen_producesViolatedProfiles() throws IOException {
+        //Arrange
+        Field fooField = new Field("foo");
+        Field barField = new Field("bar");
+        String ruleName = "Nested if rule";
+
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+
+        Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(new IfBuilder()
+                    .withIf(B)
+                    .withThen(C)
+                    .withElse(D)
+                )
+                .withElse(E)
+            )
+            .build();
+
+        Profile inputProfile = new Profile(
+            Arrays.asList(fooField, barField),
+            Collections.singletonList(nestedIfThenElseRule),
+            "Nested if then else profile"
+        );
+
+        //Act
+        List<Profile> violatedProfiles = target.violate(inputProfile);
+
+        //Assert
+        //(A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+        Rule violatedIfRule = new RuleBuilder(ruleName)
+            .withOrConstraint(new OrBuilder()
+                .withAndConstraint(new AndBuilder()
+                    .appendBuilder(A)
+                    .withOrConstraint(new OrBuilder()
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(B)
+                            .appendBuilder(C.violate())
+                        )
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(B.violate())
+                            .appendBuilder(D.violate())
+                        )
+                    )
+                )
+                .withAndConstraint(new AndBuilder()
+                    .appendBuilder(A.violate())
+                    .appendBuilder(E.violate())
+                )
+            )
+            .build();
+
+        List<Profile> expectedViolatedProfiles = Collections.singletonList(
+            new ViolatedProfile(
+                nestedIfThenElseRule,
+                new ProfileFields(Arrays.asList(fooField, barField)),
+                Collections.singletonList(violatedIfRule),
+                "Nested if then else profile -- Violating: " + ruleName
+            )
+        );
+
+        assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
+
+    /**
+     * Tests that an if-then-else constraint nested inside the else clause of another if-then-else constraint violates
+     * as expected.
+     * In shorthand where A,B,C,D,E are atomic constraints:
+     * VIOLATE(IF A THEN B ELSE (IF C THEN D ELSE E))
+     *   ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(IF C THEN D ELSE E))
+     *   ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+     * @throws IOException if the manifest writer fails to write.
+     */
+    @Test
+    public void violate_nestedIfThenElseInsideElse_producesViolatedProfiles() throws IOException {
+        //Arrange
+        Field fooField = new Field("foo");
+        Field barField = new Field("bar");
+        String ruleName = "Nested if rule";
+
+        ConstraintChainBuilder<Constraint> A = new SingleConstraintBuilder().withEqualToConstraint(fooField, "A");
+        ConstraintChainBuilder<Constraint> B = new SingleConstraintBuilder().withEqualToConstraint(barField, "B");
+        ConstraintChainBuilder<Constraint> C = new SingleConstraintBuilder().withOfLengthConstraint(fooField, 1);
+        ConstraintChainBuilder<Constraint> D = new SingleConstraintBuilder().withOfLengthConstraint(barField, 1);
+        ConstraintChainBuilder<Constraint> E = new SingleConstraintBuilder().withOfTypeConstraint(fooField, IsOfTypeConstraint.Types.STRING);
+
+        Rule nestedIfThenElseRule = new RuleBuilder(ruleName)
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(B)
+                .withElse(new IfBuilder()
+                    .withIf(C)
+                    .withThen(D)
+                    .withElse(E)
+                )
+            )
+            .build();
+
+        Profile inputProfile = new Profile(
+            Arrays.asList(fooField, barField),
+            Collections.singletonList(nestedIfThenElseRule),
+            "Nested if then else profile"
+        );
+
+        //Act
+        List<Profile> violatedProfiles = target.violate(inputProfile);
+
+        //Assert
+        //(A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+        Rule violatedIfRule = new RuleBuilder(ruleName)
+            .withOrConstraint(new OrBuilder()
+                .withAndConstraint(new AndBuilder()
+                    .appendBuilder(A)
+                    .appendBuilder(B.violate())
+                )
+                .withAndConstraint(new AndBuilder()
+                    .appendBuilder(A.violate())
+                    .withOrConstraint(new OrBuilder()
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(C)
+                            .appendBuilder(D.violate())
+                        )
+                        .withAndConstraint(new AndBuilder()
+                            .appendBuilder(C.violate())
+                            .appendBuilder(E.violate())
+                        )
+                    )
+                )
+            )
+            .build();
+
+        List<Profile> expectedViolatedProfiles = Collections.singletonList(
+            new ViolatedProfile(
+                nestedIfThenElseRule,
+                new ProfileFields(Arrays.asList(fooField, barField)),
+                Collections.singletonList(violatedIfRule),
+                "Nested if then else profile -- Violating: " + ruleName
+            )
+        );
 
         assertProfileListsAreEquivalent(violatedProfiles, expectedViolatedProfiles);
         verify(mockManifestWriter, times(1))

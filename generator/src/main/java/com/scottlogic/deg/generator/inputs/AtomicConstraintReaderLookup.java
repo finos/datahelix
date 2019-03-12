@@ -1,14 +1,10 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.StringGenerator;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
-import com.scottlogic.deg.schemas.v3.ConstraintDTO;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

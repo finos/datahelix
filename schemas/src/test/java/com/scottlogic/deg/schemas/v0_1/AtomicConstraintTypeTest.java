@@ -1,10 +1,9 @@
-package com.scottlogic.deg.schemas.v3;
+package com.scottlogic.deg.schemas.v0_1;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AtomicConstraintTypeTest {
 

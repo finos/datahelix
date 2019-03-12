@@ -9,10 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,23 +64,28 @@ public class ConstraintReducer {
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
-                                                            Iterable<AtomicConstraint> decisionConstraints) {
-        if (rootConstraints == null || !rootConstraints.iterator().hasNext()) {
-            return Optional.of(FieldSpec.Empty);
-        }
+                                                            Set<FieldSpec> decisionFieldSpecs) {
 
-        final FieldSpec decisionConstaintsFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(
-            StreamSupport.stream(decisionConstraints.spliterator(), false).collect(Collectors.toSet())
-        );
+        Optional<FieldSpec> rootFieldSpec =
+            rootConstraints == null 
+                ? Optional.of(FieldSpec.Empty)
+                : getRootFieldSpec(rootConstraints);
 
-        final Stream<FieldSpec> rootAndDecisionsConstraintsStream = Stream.concat(
-            Stream.of(decisionConstaintsFieldSpec),
+        if (decisionFieldSpecs.isEmpty()) { return rootFieldSpec; }
+
+        return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
+            rootFieldSpec.orElse(FieldSpec.Empty),
+            StreamSupport.stream(decisionFieldSpecs.spliterator(), false).collect(Collectors.toSet())
+        ));
+    }
+
+    private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
+        final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct)
-        );
+                .map(fieldSpecFactory::construct);
 
-        return rootAndDecisionsConstraintsStream
+        return rootConstraintsStream
             .reduce(
                 Optional.of(FieldSpec.Empty),
                 (optAcc, next) ->

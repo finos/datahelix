@@ -1,4 +1,4 @@
-package com.scottlogic.deg.schemas.v3;
+package com.scottlogic.deg.schemas.v0_1;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

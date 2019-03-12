@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Defines a profile violator which violates by violating each ruleInformation independently.
+ * Defines a profile violator which violates by violating each rule independently.
  * Within each violated ruleInformation we violate each constraint independently. This is consistent with the current
  * implementation of violation.
  */
@@ -34,6 +34,17 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
         this.ruleViolator = ruleViolator;
     }
 
+    /**
+     * Takes an input profile and returns a list of violated profiles with each rule violated individually in its own
+     * profile. Additionally writes the manifest of the produced violated profiles.
+     *
+     * Note that manifest writing happens here since the writer requires a list ViolatedProfile objects and the return
+     * of this method loses this context to make the generation code cleaner afterwards.
+     *
+     * @param profile Input profile.
+     * @return List of profiles each with a different rule violated.
+     * @throws IOException if the manifest writer fails to write
+     */
     @Override
     public List<Profile> violate(Profile profile) throws IOException {
         // For each rule in the profile generate a profile with this one rule violated
@@ -53,7 +64,7 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
      *
      * @param profile      Input un-violated profile
      * @param violatedRule Rule to violate
-     * @return New profile with the specified rule violated.
+     * @return New profile with the specified rule violated and all other rules untouched.
      */
     private ViolatedProfile violateRuleOnProfile(Profile profile, Rule violatedRule) {
         Collection<Rule> newRules = profile.rules.stream()

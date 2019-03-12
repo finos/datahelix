@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRoute;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -247,7 +247,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         private final ConstraintNodeToRowSpecMap[] maps;
 
         TestConstraintReducer(ConstraintNodeToRowSpecMap... maps) {
-            super(new FieldSpecFactory(), new FieldSpecMerger());
+            super(new FieldSpecFactory(new FieldSpecMerger()), new FieldSpecMerger());
             this.maps = maps;
         }
 

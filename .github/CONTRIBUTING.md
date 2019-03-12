@@ -42,6 +42,9 @@ We adopt a modified subset of the [Google Java Coding Style](https://google.gith
 * [4.5.1](https://google.github.io/styleguide/javaguide.html#s4.5.1-line-wrapping-where-to-break) Where to break (but _**not**_ [4.5.2](https://google.github.io/styleguide/javaguide.html#s4.5.2-line-wrapping-indent))
 * The `this.` qualifier should not be included, except where required.
 
+__Exception:__
+* Package names referring to a version number only take the form `v` + `majorVerion` + `_` + `minorVersion` e.g. package `v0_1` refers to version `0.1`
+
 
 ### Scala Coding Style
 

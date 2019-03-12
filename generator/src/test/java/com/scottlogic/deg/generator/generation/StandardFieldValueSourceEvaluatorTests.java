@@ -116,7 +116,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    public void shouldReturnNullSourceLastWithMustContainNullRestrictionsAndNullNotDisallowed() {
+    public void shouldReturnNullSourceLast_WithMustContainNullRestrictionsAndNullAllowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
