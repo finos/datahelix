@@ -102,3 +102,8 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2019-11-02T00:00:00.000 |
        | 2020-01-01T00:00:00.000 |
        | 2021-01-01T00:00:00.000 |
+Scenario: 'beforeOrEqualTo' run with minimum possible date should only generate null
+    Given foo is before or at 0001-01-01T00:00:00.000
+    Then the following data should be generated:
+      | foo                     |
+      | 0001-01-01T00:00:00.000 |
