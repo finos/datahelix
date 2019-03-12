@@ -151,7 +151,7 @@ public class GenerationConfig {
             public static final String INTERESTING = "INTERESTING";
             public static final String RANDOM = "RANDOM";
 
-            public static final String DEFAULT = INTERESTING;
+            public static final String DEFAULT = RANDOM;
         }
 
         public static class MonitorTypes {
