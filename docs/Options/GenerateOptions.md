@@ -12,8 +12,6 @@ Option switches are case-sensitive, arguments are case-insensitive
 * `-n <rows>` or `--max-rows <rows>`
    * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.
-* `-c <combinationType>` or `--combination-strategy <combinationType>`
-   * When producing data combine each data point using the `<combinationType>` strategy. Options are: `PINNING` (default), `EXHAUSTIVE`, `MINIMAL`, see [Combination strategies](../../generator/docs/CombinationStrategies.md) for more details.
 * `-w <walker>` or `--walker-type <walker>`
    * Use `<walker>` strategy for producing data. Options are: `CARTESIAN_PRODUCT`, `ROUTED`, `REDUCTIVE` (default), see [Tree walker types](../../generator/docs/TreeWalkerTypes.md) for more details.
 * `--no-partition`

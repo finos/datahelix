@@ -39,7 +39,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
             GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
             GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
             GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
-        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
+        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT,
+        hidden = true)
     @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType;
 
