@@ -266,7 +266,7 @@ public class TemporalFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(TemporalFieldValueSource.ISO_MAX_DATE));
+            equalTo(LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000)));
 
         rng.setNextDouble(0.5);
 
