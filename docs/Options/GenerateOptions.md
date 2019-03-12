@@ -7,8 +7,6 @@ Option switches are case-sensitive, arguments are case-insensitive
    * Generate data which violates profile constraints.
 * `--dont-violate` <epistemic constraints...>
    * Choose specific [epicstemic constraints](../EpistemicConstraints.md) to [not violate](../generator/docs/SelectiveViolation.md), e.g. "--dont-violate=typeOf lessThan" will not violate ANY data type constraints and will also not violate ANY less than constraints.
-* `-t <generationType>` or `--generation-type <generationType>`
-   * Emit `<generationType>` data. Options are: `INTERESTING` (default) or `RANDOM`, `FULL_SEQUENTIAL`, see [Generation types](../../generator/docs/GenerationTypes.md) for more details.
 * `-n <rows>` or `--max-rows <rows>`
    * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.

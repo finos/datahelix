@@ -31,7 +31,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
             GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
             ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
             ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
-        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
+        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT,
+        hidden = true)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
