@@ -80,12 +80,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
         Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
 
-        FilterAfterFirst<FieldValueSource> nullFilter = new FilterAfterFirst(nullOnlySource);
-
         return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
             .map(this::getFieldValueSources),
             List::stream)
-            .filter(nullFilter::getPredicate)
+            .distinct()
             .collect(Collectors.toList());
     }
 
