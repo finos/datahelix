@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.*;
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-        new FieldSpecFactory(),
+        new FieldSpecFactory(new FieldSpecMerger()),
         new FieldSpecMerger()
     );
 
@@ -763,8 +763,6 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Hello '$1'", rules())
         );
 
-        ConstraintReducer testObject = new ConstraintReducer(new FieldSpecFactory(), new FieldSpecMerger());
-
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
@@ -799,8 +797,6 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Lorem '$1'", rules()),
             new FormatConstraint(field, "Ipsum '$1'", rules())
         );
-
-        ConstraintReducer testObject = new ConstraintReducer(new FieldSpecFactory(), new FieldSpecMerger());
 
         Assertions.assertThrows(
             UnsupportedOperationException.class,

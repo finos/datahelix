@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class DateValueStep {
 
-    public static final String DATE_REGEX = "((\\d{4})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))";
+    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))$";
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 

@@ -220,8 +220,6 @@ Then the following data should be generated:
   | 2018-01-01T00:00:00.003 |
   | 2018-01-01T00:00:00.004 |
 
-#Defect #673 - After: Request for contradictory After and Before should only generate null
-@ignore
 Scenario: 'Not After' with contradicting 'Not Before' only generates null
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before 2019-01-02T00:00:00.000
@@ -229,8 +227,6 @@ Then the following data should be generated:
     | foo                     |
     | null                    |
 
-#Defect #673 - After: Request for contradictory After and Before should only generate null
-@ignore
 Scenario: 'After' with a contradicting 'Before' only generates null
 Given foo is after 2019-01-02T00:00:00.000
   And foo is before 2019-01-01T00:00:00.000
@@ -296,8 +292,6 @@ Then the following data should be generated:
   | 2018-01-01T00:00:00.004 |
   | 2018-01-01T00:00:00.005 |
 
-#Defect #673 - After: Request for contradictory After and Before should only generate null
-@ignore
 Scenario: 'After' with a contradicting 'Before Or At' only generates null
 Given foo is after 2019-01-02T00:00:00.000
   And foo is before or at 2019-01-01T00:00:00.000
@@ -305,11 +299,19 @@ Then the following data should be generated:
   | foo                     |
   | null                    |
 
-#Defect #673 - After: Request for contradictory After and Before should only generate null
-@ignore
 Scenario: 'Not After' with a contradicting not 'Before Or At' only generates null
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before or at 2019-01-02T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | null                    |
+
+Scenario: 'after' run with maximum possible date should only generate null
+    Given foo is after 9999-12-31T23:59:59.999
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: Running a 'after' request that specifies the highest valid system date should be unsuccessful
+    Given foo is after 10000-01-01T00:00:00.000
+    Then the profile is invalid because "Date string '10000-01-01T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"

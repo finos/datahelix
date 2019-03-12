@@ -27,6 +27,10 @@ public class DataTypeRestrictions implements TypeRestrictions {
         ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);
         allowedTypes.removeAll(Arrays.asList(types));
 
+        if (allowedTypes.isEmpty()){
+            return NO_TYPES_PERMITTED;
+        }
+
         return new DataTypeRestrictions(allowedTypes);
     }
 

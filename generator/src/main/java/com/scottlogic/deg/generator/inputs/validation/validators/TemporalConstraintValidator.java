@@ -29,10 +29,10 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
-        DateTimeRestrictions result = merger.merge(currentRestrictions, candidateRestrictions);
+        MergeResult<DateTimeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if (result != null) {
-            currentRestrictions = result;
+        if (result.successful) {
+            currentRestrictions = result.restrictions;
 
             if (isRangeInvalid() ) {
                 logInformation(field, referenceValue);
@@ -51,10 +51,10 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
 
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
-        DateTimeRestrictions result = merger.merge(currentRestrictions, candidateRestrictions);
+        MergeResult<DateTimeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
 
-        if (result != null) {
-            currentRestrictions = result;
+        if (result.successful) {
+            currentRestrictions = result.restrictions;
 
             if (isRangeInvalid() ) {
                 logInformation(field, referenceValue);

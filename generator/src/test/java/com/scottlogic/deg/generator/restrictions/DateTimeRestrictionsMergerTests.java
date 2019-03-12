@@ -5,14 +5,22 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.core.IsSame.sameInstance;
+
 class DateTimeRestrictionsMergerTests {
     @Test
     void merge_dateTimeRestrictionsAreBothNull_returnsNull() {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
-        DateTimeRestrictions result = merger.merge(null, null);
+        MergeResult<DateTimeRestrictions> result = merger.merge(null, null);
 
-        Assert.assertNull(result);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions, is(nullValue()));
     }
 
     @Test
@@ -20,9 +28,11 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
         DateTimeRestrictions right = new DateTimeRestrictions();
 
-        DateTimeRestrictions result = merger.merge(null, right);
+        MergeResult<DateTimeRestrictions> result = merger.merge(null, right);
 
-        Assert.assertSame(right, result);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions, sameInstance(right));
     }
 
     @Test
@@ -30,9 +40,11 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
         DateTimeRestrictions left = new DateTimeRestrictions();
 
-        DateTimeRestrictions result = merger.merge(left, null);
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, null);
 
-        Assert.assertSame(left, result);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions, sameInstance(left));
     }
 
     @Test
@@ -48,10 +60,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
 
-        DateTimeRestrictions result = merger.merge(left, right);
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
 
-        Assert.assertEquals(minDateTimeLimit, result.min);
-        Assert.assertEquals(maxDateTimeLimit, result.max);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions.min, equalTo(minDateTimeLimit));
+        Assert.assertThat(result.restrictions.max, equalTo(maxDateTimeLimit));
     }
 
     @Test
@@ -67,10 +81,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
 
-        DateTimeRestrictions result = merger.merge(left, right);
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
 
-        Assert.assertEquals(minDateTimeLimit, result.min);
-        Assert.assertEquals(maxDateTimeLimit, result.max);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions.min, equalTo(minDateTimeLimit));
+        Assert.assertThat(result.restrictions.max, equalTo(maxDateTimeLimit));
     }
 
     @Test
@@ -86,9 +102,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
 
-        DateTimeRestrictions result = merger.merge(left, right);
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
 
-        Assert.assertNull(result);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
     }
 
     @Test
@@ -104,8 +121,9 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
 
-        DateTimeRestrictions result = merger.merge(left, right);
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
 
-        Assert.assertNull(result);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
     }
 }

@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.schemas.v3.AtomicConstraintType;
-import com.scottlogic.deg.schemas.v3.ConstraintDTO;
-import com.scottlogic.deg.schemas.v3.RuleDTO;
+import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
+import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -214,5 +214,38 @@ public class AtomicConstraintReaderLookupTests {
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields, ruleInformation));
+    }
+
+    @Test
+    public void parseDate_withDateAtYear0000_shouldThrowInvalidProfileException() {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("0000-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateBefore0000_shouldThrowInvalidProfileException() {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("-00001-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAfter9999_shouldThrowInvalidProfileException(){
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("10000-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAtStartOf0001_shouldNotThrow(){
+        Assertions.assertDoesNotThrow(
+            () -> AtomicConstraintReaderLookup.parseDate("0001-01-01T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withDateAtEndOf9999_shouldNotThrow(){
+        Assertions.assertDoesNotThrow(
+            () -> AtomicConstraintReaderLookup.parseDate("9999-12-31T23:59:59.999"));
     }
 }

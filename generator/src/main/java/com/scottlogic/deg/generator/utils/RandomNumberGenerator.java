@@ -4,5 +4,5 @@ public interface RandomNumberGenerator {
     int nextInt();
     int nextInt(int bound);
     int nextInt(int lowerInclusive, int upperExclusive);
-    double nextDouble(double lower, double upper);
+    double nextDouble(double lowerInclusive, double upperExclusive);
 }
