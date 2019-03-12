@@ -6,7 +6,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
+import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class NumericValueStep {
 
@@ -53,25 +54,5 @@ public class NumericValueStep {
         BigDecimal maxInclusiveAsBigDecimal = coerceToBigDecimal(maxInclusive);
 
         return valueAsBigDecimal.compareTo(maxInclusiveAsBigDecimal) <= 0;
-    }
-
-    private BigDecimal coerceToBigDecimal(Number number){
-        if (number instanceof BigDecimal){
-            return (BigDecimal)number;
-        }
-
-        if (number instanceof Integer){
-            return BigDecimal.valueOf((long)(int)number);
-        }
-
-        if (number instanceof BigInteger){
-            return new BigDecimal((BigInteger) number);
-        }
-
-        if (number instanceof Long){
-            return BigDecimal.valueOf((long)number);
-        }
-
-        throw new IllegalArgumentException(String.format("Unable to coerce %s of type %s to a BigDecimal", number, number.getClass().getName()));
     }
 }
