@@ -225,6 +225,26 @@ public class TemporalFieldValueSourceTests {
     }
 
     @Test
+    public void getRandomValues_withSmallPermittedRangeAtEndOfLegalRange_shouldGenerateCorrectValues() {
+        LocalDate date = LocalDate.of(9999, 12, 31);
+        givenLowerBound(LocalDateTime.of(date, LocalTime.of(23, 0, 0)), false);
+
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = lowerLimit;
+        restrictions.max = upperLimit;
+
+        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+
+        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
+        rng.setNextDouble(0.99);
+
+        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+
+        Assert.assertThat(iterator.next(),
+            equalTo(LocalDateTime.of(date, LocalTime.of(23, 59, 23, 999_000_000))));
+    }
+
+    @Test
     public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
 
