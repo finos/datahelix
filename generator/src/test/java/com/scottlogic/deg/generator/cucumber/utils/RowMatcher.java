@@ -4,13 +4,14 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class RowMatcher extends BaseMatcher<List<Object>> {
     private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -70,29 +71,9 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
      * @return True if numbers are mathematically equal, i.e. have the same value
      */
     private boolean numbersEqual(Number actual, Number expected) {
-        BigDecimal decimalActual = convertToBigDecimal(actual);
-        BigDecimal decimalExpected = convertToBigDecimal(expected);
+        BigDecimal decimalActual = coerceToBigDecimal(actual);
+        BigDecimal decimalExpected = coerceToBigDecimal(expected);
         return decimalActual.compareTo(decimalExpected) == 0;
-    }
-
-    private BigDecimal convertToBigDecimal(Number number) {
-        if (number instanceof BigDecimal) {
-            return (BigDecimal) number;
-        }
-
-        if (number instanceof Integer) {
-            return BigDecimal.valueOf((int)number);
-        }
-
-        if (number instanceof BigInteger) {
-            return new BigDecimal((BigInteger) number);
-        }
-
-        if (number instanceof Long) {
-            return new BigDecimal((long) number);
-        }
-
-        throw new UnsupportedOperationException("Number type unsupported for conversion to BigDecimal");
     }
 
     @Override
