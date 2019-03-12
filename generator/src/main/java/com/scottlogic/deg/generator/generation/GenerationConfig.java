@@ -160,6 +160,6 @@ public class GenerationConfig {
             public static final String STANDARD = "STANDARD";
         }
 
-        public static final long DEFAULT_MAX_ROWS = 10_000_000;
+        public static final long DEFAULT_MAX_ROWS = 1000;
     }
 }
