@@ -31,7 +31,7 @@ public class GenerationConfigValidator implements ConfigValidator {
     public ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource generationConfigSource) {
         ArrayList<String> errorMessages = new ArrayList<>();
 
-        checkSwitches(config, generationConfigSource, errorMessages);
+        checkSwitches(generationConfigSource, errorMessages);
 
         checkProfileInputFile(errorMessages, generationConfigSource.getProfileFile());
 
@@ -60,15 +60,9 @@ public class GenerationConfigValidator implements ConfigValidator {
         return new ValidationResult(errorMessages);
     }
 
-    private void checkSwitches(GenerationConfig config,
-                               GenerationConfigSource configSource,
+    private void checkSwitches(GenerationConfigSource configSource,
                                ArrayList<String> errorMessages) {
 
-        if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM
-            && !config.getMaxRows().isPresent()) {
-
-            errorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
-        }
         if (configSource.isEnableTracing()) {
             if (fileUtils.getTraceFile(configSource).exists() && !configSource.overwriteOutputFiles()) {
                 errorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --overwrite option");

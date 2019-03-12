@@ -86,23 +86,6 @@ public class GenerationConfigValidatorTests {
     }
 
     @Test
-    public void validateCommandLineOptions_randomWithNoMaxRows_correctErrorMessage() {
-        //Arrange
-        Mockito.reset(config);
-        when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.RANDOM);
-        when(config.getMaxRows()).thenReturn(Optional.empty());
-        expectedErrorMessages.add("RANDOM mode requires max row limit: use -n=<row limit> option");
-        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
-
-        //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
     public void validateCommandLineOptions_traceConstraintsOutputFileDoesNotExist_returnsNoErrorMessages() {
         //Arrange
         when(mockConfigSource.isEnableTracing()).thenReturn(true);
