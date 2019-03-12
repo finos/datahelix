@@ -27,7 +27,7 @@ Examples:
 | `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ | `null` |
 
 Notes:
-- Random generation of data is infinite in its operation, therefore the `--max-rows` switch must be provided
+- Random generation of data is infinite is limited to 1000 by default, use `--max-rows` to enable generation of more data.
 
 ## Interesting
 See [this document](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) for more details on the _interesting generation mode_.
