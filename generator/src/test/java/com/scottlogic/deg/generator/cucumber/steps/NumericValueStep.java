@@ -20,22 +20,22 @@ public class NumericValueStep {
 
     @When("{fieldVar} is {operator} {number}")
     public void whenFieldIsConstrainedByNumericValue(String fieldName, String constraintName, Number value) {
-        this.state.addConstraint(fieldName, constraintName, value);
+        state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {number}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Number value) {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+        state.addNotConstraint(fieldName, constraintName, value);
     }
 
     @Then("{fieldVar} contains numeric data")
     public void producedDataShouldContainNumericValuesForField(String fieldName){
-        this.helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
+        helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
     }
 
     @Then("{fieldVar} contains numeric values between {number} and {number} inclusively")
     public void producedDataShouldContainNumericValuesInRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
-        this.helper.assertFieldContainsNullOrMatching(
+        helper.assertFieldContainsNullOrMatching(
             fieldName,
             Number.class,
             value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive));

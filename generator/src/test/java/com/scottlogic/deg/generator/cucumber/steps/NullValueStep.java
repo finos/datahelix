@@ -19,16 +19,16 @@ public class NullValueStep {
 
     @When("{fieldVar} is {operator} null")
     public void whenFieldIsConstrainedByTextValue(String fieldName, String constraintName) {
-        this.state.addConstraint(fieldName, constraintName, null);
+        state.addConstraint(fieldName, constraintName, null);
     }
 
     @When("{fieldVar} is anything but {operator} null")
     public void whenFieldIsNotConstrainedByTextValue(String fieldName, String constraintName) {
-        this.state.addNotConstraint(fieldName, constraintName, null);
+        state.addNotConstraint(fieldName, constraintName, null);
     }
 
     @Then("{fieldVar} contains anything but null")
     public void producedDataShouldNotContainNull(String fieldName) {
-        this.helper.assertFieldContains(fieldName, Objects::nonNull);
+        helper.assertFieldContains(fieldName, Objects::nonNull);
     }
 }

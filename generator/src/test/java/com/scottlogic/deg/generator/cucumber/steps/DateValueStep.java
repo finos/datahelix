@@ -21,22 +21,22 @@ public class DateValueStep {
 
     @When("{fieldVar} is {operator} {date}")
     public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
-        this.state.addConstraint(fieldName, constraintName, value);
+        state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {date}")
     public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+        state.addNotConstraint(fieldName, constraintName, value);
     }
 
     @Then("{fieldVar} contains temporal data")
     public void producedDataShouldContainTemporalValuesForField(String fieldName){
-        this.helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
+        helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
     }
 
     @Then("{fieldVar} contains temporal values between {date} and {date} inclusively")
     public void producedDataShouldContainTemporalValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
-        this.helper.assertFieldContainsNullOrMatching(
+        helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
             value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive));

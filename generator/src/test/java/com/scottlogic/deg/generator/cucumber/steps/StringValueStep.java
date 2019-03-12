@@ -19,22 +19,22 @@ public class StringValueStep {
 
     @When("{fieldVar} is {operator} {string}")
     public void whenFieldIsConstrainedByTextValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addConstraint(fieldName, constraintName, value);
+        state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {string}")
     public void whenFieldIsNotConstrainedByTextValue(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+        state.addNotConstraint(fieldName, constraintName, value);
     }
 
     @Then("{fieldVar} contains string data")
     public void producedDataShouldContainStringValuesForField(String fieldName){
-        this.helper.assertFieldContainsNullOrMatching(fieldName, String.class);
+        helper.assertFieldContainsNullOrMatching(fieldName, String.class);
     }
 
     @Then("{fieldVar} contains strings of length between {int} and {int} inclusively")
     public void producedDataShouldContainStringValuesInRangeForField(String fieldName, int minInclusive, int maxInclusive){
-        this.helper.assertFieldContainsNullOrMatching(
+        helper.assertFieldContainsNullOrMatching(
             fieldName,
             String.class,
             value -> isLongerThanOrEqual(value, minInclusive) && isShorterThanOrEqual(value, maxInclusive));
