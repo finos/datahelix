@@ -10,8 +10,6 @@ Option switches are case-sensitive, arguments are case-insensitive
 * `-n <rows>` or `--max-rows <rows>`
    * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.
-* `--no-optimise`
-   * Prevent profiles from being optimised during generation. Optimisation enables the generator to process profiles more efficiently, but adds more compute in other areas. See [Decision tree optimiser](../../generator/docs/OptimisationProcess.md) for more details.
 * `--validate-profile`
    * Validate the profile, check to see if known [contradictions](../../generator/docs/Contradictions.md) exist, see [Profile validation](../../generator/docs/ProfileValidation.md) for more details.
 
