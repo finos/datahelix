@@ -28,7 +28,6 @@ Examples:
 
 Notes:
 - Random generation of data is infinite in its operation, therefore the `--max-rows` switch must be provided
-- Random generation can only be seen as random if partitioning is disabled, choosing random generation effectively implies `--no-partition`.
 
 ## Interesting
 See [this document](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) for more details on the _interesting generation mode_.
