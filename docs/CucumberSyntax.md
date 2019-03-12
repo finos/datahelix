@@ -21,7 +21,7 @@ Background:
 
 More examples can be seen in the [generator cucumber features](https://github.com/ScottLogic/datahelix/tree/master/generator/src/test/java/com/scottlogic/deg/generator/cucumber)
 
-We wont go into details on [gherkin specs](https://docs.cucumber.io/gherkin/) in this document, please use the gherkin documentation understand the syntax.
+We wont go into details on [gherkin specs](https://docs.cucumber.io/gherkin/) in this document, please use the gherkin documentation to understand the syntax.
 
 The framework supports setting configuration settings for the generator, defining the profile and describing the expected outcome. All of these are described below, all variable elements (e.g. `{generationStrategy}` are case insensitive), all fields and values **are case sensitive**.
 
@@ -48,11 +48,9 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _`{field}` is anything but null_, adds a not(is null) constraint to the profile for field `field`
 * _`{field}` is `{operator}` `{operand}`_, adds an `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
 * _`{field}` is anything but `{operator}` `{operand}`_, adds a negated `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
-* _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself 
+* _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 
 #### Operators
-All operators are supported in cucumber but are converted to _english language_ variants; e.g. `equalTo` is expressed as `equal to`.
-
 See [Epistemic Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/EpistemicConstraints.md), [Grammatical Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/GrammaticalConstraints.md) and [Presentational Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/PresentationalConstraints.md) documents for details of the constraints.
 
 #### Operands
@@ -73,10 +71,10 @@ temporal values must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
 * `inSet` &rarr; 
 ```
 Given foo is in set: 
-| foo | 
-| 1 | 
-| 2 | 
-| 3 |
+  | foo | 
+  | 1 | 
+  | 2 | 
+  | 3 |
 ```
 * `not(after 01/02/2003)` &rarr; `Given foo is anything but after 2003-02-01T00:00:00.00`
 
@@ -95,7 +93,7 @@ And there is a constraint:
 ### Describing the outcome
 * _the profile is invalid_, executes the generator and asserts that any of the following exceptions were thrown: `InvalidProfileException`, `JsonParseException`, `IllegalArgumentException`, `ClassCastException`. I.e. something went wrong when trying to read or parse the profile
 * _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` was thrown with the message `{reason}`.
-* _i am presented with an error message_, executes the generator and asserts that a exception was thrown, doesn't discriminate over the type of exception
+* _I am presented with an error message_, executes the generator and asserts that a exception was thrown, doesn't discriminate over the type of exception
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.
@@ -121,4 +119,4 @@ And there is a constraint:
 >   * **Feature / Background / Scenario / Scenario outline** - 0 spaces
 >   * **Given / When / Then** - 5 spaces
 >   * **And** - 7 spaces
->   * **Tables / JSON snippets** - 2 spaces indented from the And
+>   * **Tables / JSON snippets** - 2 spaces indented from the above statement
