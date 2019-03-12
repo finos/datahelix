@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
-import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -42,18 +41,18 @@ public class DateValueStep {
             value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive));
     }
 
-    private LocalDateTime getDate(DateObject dateObject){
+    private LocalDateTime getDateTime(DateObject dateObject){
         String dateString = (String)dateObject.get("date");
         return LocalDateTime.parse(dateString);
     }
 
     private boolean isAfterOrAt(LocalDateTime date, DateObject minInclusiveObject){
-        LocalDateTime minInclusive = getDate(minInclusiveObject);
+        LocalDateTime minInclusive = getDateTime(minInclusiveObject);
         return date.equals(minInclusive) || date.isAfter(minInclusive);
     }
 
     private boolean isBeforeOrAt(LocalDateTime date, DateObject maxInclusiveObject){
-        LocalDateTime maxInclusive = getDate(maxInclusiveObject);
+        LocalDateTime maxInclusive = getDateTime(maxInclusiveObject);
         return date.equals(maxInclusive) || date.isBefore(maxInclusive);
     }
 }
