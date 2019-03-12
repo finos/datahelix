@@ -2,163 +2,403 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
 
 Background:
      Given the generation strategy is full
-      And there is a field foo
-      And foo is of type "numeric"
-      And foo is anything but null
+       And there is a field foo
+       And foo is of type "numeric"
 
 
-  Scenario: User requires to create a numeric field with data values that are greater or the same as zero
-       Given foo is greater than or equal to 0
-       And foo is less than 10
-       And foo is granular to 1
+Scenario: Running a 'greaterThanOrEqualTo' request that includes a positive integer should be successful
+     Given foo is greater than or equal to 0
+       And the generator can generate at most 5 rows
+       And foo is anything but null
      Then the following data should be generated:
-       | foo |
-       | 0   |
-       | 1   |
-       | 2   |
-       | 3   |
-       | 4   |
-       | 5   |
-       | 6   |
-       | 7   |
-       | 8   |
-       | 9   |
+       | foo  |
+       | 0    |
+       | 1    |
+       | 2    |
+       | 3    |
+       | 4    |
 
-Scenario: User requires to create a numeric field with data values that are greater than or the same as zero but constrained to not be greater than one
-       Given foo is greater than or equal to 0
-       And foo is less than 1
-       And foo is granular to 1
+Scenario: Running a 'greaterThanOrEqualTo' request that includes positive decimal should be successful
+     Given foo is greater than or equal to 0.0
+       And the generator can generate at most 5 rows
+       And foo is anything but null
      Then the following data should be generated:
-       | foo |
-       | 0   |
+       | foo  |
+       | 0.0  |
+       | 0.1  |
+       | 0.2  |
+       | 0.3  |
+       | 0.4  |
 
-Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specified as an integer
-       Given foo is greater than or equal to 0
-       And foo is less than 2
-       And foo is granular to 0.1
+Scenario: Running a 'greaterThanOrEqualTo' request that includes a negative integer should be successful
+     Given foo is greater than or equal to -10
+       And the generator can generate at most 5 rows
+       And foo is anything but null
      Then the following data should be generated:
-       | foo |
-       | 0.0 |
-       | 0.1 |
-       | 0.2 |
-       | 0.3 |
-       | 0.4 |
-       | 0.5 |
-       | 0.6 |
-       | 0.7 |
-       | 0.8 |
-       | 0.9 |
-       | 1.0 |
-       | 1.1 |
-       | 1.2 |
-       | 1.3 |
-       | 1.4 |
-       | 1.5 |
-       | 1.6 |
-       | 1.7 |
-       | 1.8 |
-       | 1.9 |
+       | foo  |
+       | -10  |
+       | -9   |
+       | -8   |
+       | -7   |
+       | -6   |
 
-Scenario: User requires to create a field with decimal values that are greater than or the same as zero, specified as a decimal
-       Given foo is greater than or equal to 0.0
-       And foo is less than 2.0
-       And foo is granular to 0.1
+Scenario: Running a 'greaterThanOrEqualTo' request that includes 0 should be successful
+     Given foo is greater than or equal to 0
+       And the generator can generate at most 5 rows
+       And foo is anything but null
      Then the following data should be generated:
-       | foo |
-       | 0.0 |
-       | 0.1 |
-       | 0.2 |
-       | 0.3 |
-       | 0.4 |
-       | 0.5 |
-       | 0.6 |
-       | 0.7 |
-       | 0.8 |
-       | 0.9 |
-       | 1.0 |
-       | 1.1 |
-       | 1.2 |
-       | 1.3 |
-       | 1.4 |
-       | 1.5 |
-       | 1.6 |
-       | 1.7 |
-       | 1.8 |
-       | 1.9 |
+       | foo  |
+       | 0    |
+       | 1    |
+       | 2    |
+       | 3    |
+       | 4    |
 
-Scenario: User requires to create a numeric field with data values that are greater than or the same as a negative number
-       Given foo is greater than or equal to -10
-       And foo is less than 0
-       And foo is granular to 1
-     Then the following data should be generated:
-       | foo |
-       | -10 |
-       | -9  |
-       | -8  |
-       | -7  |
-       | -6  |
-       | -5  |
-       | -4  |
-       | -3  |
-       | -2  |
-       | -1  |
-
-Scenario: User requires to create a numeric field with data values that are greater than zero and greater than or the same as one
-       Given foo is greater than 0
-       And foo is greater than or equal to 1
-       And foo is less than 10
-       And foo is granular to 1
-     Then the following data should be generated:
-       | foo |
-       | 1   |
-       | 2   |
-       | 3   |
-       | 4   |
-       | 5   |
-       | 6   |
-       | 7   |
-       | 8   |
-       | 9   |
-
-Scenario: User requires to create a numeric field with data values that are greater than or the same as zero and greater than one
-       Given foo is greater than or equal to 0
-       And foo is greater than 1
-       And foo is less than 10
-       And foo is granular to 1
-     Then the following data should be generated:
-       | foo |
-       | 2   |
-       | 3   |
-       | 4   |
-       | 5   |
-       | 6   |
-       | 7   |
-       | 8   |
-       | 9   |
-
-Scenario: User requires to create a numeric field with data values that are greater than or the same as zero and greater than or the same as one
-       Given foo is greater than or equal to 0
-       And foo is greater than or equal to 1
-       And foo is less than 10
-       And foo is granular to 1
-     Then the following data should be generated:
-       | foo |
-       | 1   |
-       | 2   |
-       | 3   |
-       | 4   |
-       | 5   |
-       | 6   |
-       | 7   |
-       | 8   |
-       | 9   |
-
-Scenario: User attempts to create a numeric field with data value that are greater than or the same as zero using an incorrect field value type of string
+Scenario: Running a 'greaterThanOrEqualTo' request that includes a string should fail
      Given foo is greater than or equal to "Zero"
      Then the profile is invalid
         And no data is created
+
+Scenario: Running a 'greaterThanOrEqualTo' request that includes an empty string should fail
+     Given foo is greater than or equal to ""
+     Then the profile is invalid
+       And no data is created
 
 Scenario: Running a 'greaterThanOrEqualTo' request that specifies null should be unsuccessful
   Given foo is greater than or equal to null
   Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
+
+Scenario: greaterThanOrEqualTo run against a non contradicting greaterThanOrEqualTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is greater than or equal to 5
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 5    |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not greaterThanOrEqualTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but greater than or equal to 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 5    |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+
+@ignore #594
+Scenario: not greaterThanOrEqualTo run against a non contradicting not greaterThanOrEqualTo should be successful
+    Given foo is anything but greater than or equal to 5
+    And foo is anything but greater than or equal to 5
+    And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo  |
+      | 4    |
+      | 3    |
+      | 2    |
+      | 1    |
+      | 0    |
+
+Scenario: greaterThanOrEqualTo run against a contradicting not greaterThanOrEqualTo should only only generate null
+     Given foo is greater than or equal to 5
+       And foo is anything but greater than or equal to 5
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting lessThan should be successful
+     Given foo is greater than or equal to 5
+       And foo is less than 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 5    |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not lessThan should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but less than 10
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 10   |
+       | 11   |
+       | 12   |
+       | 13   |
+       | 14   |
+
+@ignore #594
+Scenario: not greaterThanOrEqualTo run against a non contradicting lessThan should be successful
+     Given foo is anything but greater than or equal to 10
+       And foo is less than 10
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+
+Scenario: not greaterThanOrEqualTo run against a non contradicting not lessThan should be successful
+     Given foo is anything but greater than or equal to 10
+       And foo is anything but less than 5
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 5    |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+
+Scenario: greaterThanOrEqualTo run against a contradicting lessThan should only only generate null
+     Given foo is greater than or equal to 10
+       And foo is less than 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: greaterThanOrEqualTo run against a contradicting lessThan should only only generate null
+     Given foo is anything but greater than or equal to 10
+       And foo is anything but less than 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting lessThanOrEqualTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is less than or equal to 10
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 5    |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+       | 10   |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not lessThanOrEqualTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but less than or equal to 5
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 6    |
+       | 7    |
+       | 8    |
+       | 9    |
+       | 10   |
+
+@ignore #594
+Scenario: not greaterThanOrEqualTo run against a non contradicting lessThanOrEqualTo should be successful
+     Given foo is anything but greater than or equal to 5
+       And foo is less than or equal to 5
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 4    |
+       | 3    |
+       | 2    |
+       | 1    |
+       | 0    |
+
+Scenario: not greaterThanOrEqualTo run against a non contradicting not lessThanOrEqualTo should be successful
+     Given foo is anything but greater than or equal to 10
+       And foo is anything but less than or equal to 5
+       And the generator can generate at most 5 rows
+     Then the following data should be generated:
+       | foo  |
+       | null |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+
+Scenario: greaterThanOrEqualTo run against a contradicting lessThanOrEqualTo should only only generate null
+     Given foo is greater than or equal to 6
+       And foo is less than or equal to 5
+     Then the following data should be generated:
+       | foo  |
+       | null |
+
+Scenario: not greaterThanOrEqualTo run against a contradicting not lessThanOrEqualTo should only only generate null
+     Given foo is anything but greater than or equal to 5
+       And foo is anything but less than or equal to 6
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting granularTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is granular to 1
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not granularTo should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but granular to 0.1
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+@ignore #594
+Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo should be successful
+     Given foo is anything but greater than or equal to 5
+       And foo is granular to 1
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 4    |
+       | 3    |
+       | 2    |
+       | 1    |
+       | 0    |
+
+@ignore #594
+Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo should be successful
+     Given foo is anything but greater than or equal to 5
+       And foo is anything but granular to 0.1
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 4    |
+       | 3    |
+       | 2    |
+       | 1    |
+       | 0    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting after should be successful
+     Given foo is greater than or equal to 5
+       And foo is after 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not after should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but after 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting afterOrAt should be successful
+     Given foo is greater than or equal to 5
+       And foo is after or at 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not afterOrAt should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but after or at 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting before should be successful
+     Given foo is greater than or equal to 5
+       And foo is before 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not before should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but before 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting beforeOrAt should be successful
+     Given foo is greater than or equal to 5
+       And foo is before or at 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
+
+Scenario: greaterThanOrEqualTo run against a non contradicting not beforeOrAt should be successful
+     Given foo is greater than or equal to 5
+       And foo is anything but before or at 2019-01-01T00:00:00.000
+       And the generator can generate at most 5 rows
+       And foo is anything but null
+     Then the following data should be generated:
+       | foo  |
+       | 9    |
+       | 8    |
+       | 7    |
+       | 6    |
+       | 5    |
