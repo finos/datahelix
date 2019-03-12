@@ -71,7 +71,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"--trace-constraints"},
-        description = "Defines whether constraint tracing is enabled for the output")
+        description = "Defines whether constraint tracing is enabled for the output",
+        hidden = true)
     private boolean enableTracing;
 
     @CommandLine.Option(
@@ -97,7 +98,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"--visualise-reductions"},
-        description = "Visualise each tree reduction")
+        description = "Visualise each tree reduction",
+        hidden = true)
     private Boolean visualiseReductions = false;
 
 
