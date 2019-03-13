@@ -1,8 +1,8 @@
 # Generate Options
 Option switches are case-sensitive, arguments are case-insensitive
 
-* `--overwrite`
-    * Overwrite existing output files.
+* `--replace`
+    * Overwrite/replace existing output files.
 * `--violate`
    * Generate data which violates profile constraints.
 * `--dont-violate` <epistemic constraints...>

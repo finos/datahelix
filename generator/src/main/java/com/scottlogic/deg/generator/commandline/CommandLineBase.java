@@ -29,8 +29,8 @@ public abstract class CommandLineBase implements Runnable, ConfigSource {
     boolean help;
 
     @CommandLine.Option(
-        names = {"--overwrite"},
-        description = "Defines whether to overwrite existing output files")
+        names = {"--replace"},
+        description = "Defines whether to overwrite/replace existing output files")
     boolean overwriteOutputFiles = false;
 
     @Override
