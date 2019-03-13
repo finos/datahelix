@@ -34,6 +34,11 @@ public class NumericValueStep {
         helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
     }
 
+    @Then("{fieldVar} contains anything but numeric data")
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrNotMatching(fieldName, Number.class);
+    }
+
     @Then("{fieldVar} contains numeric values between {number} and {number} inclusively")
     public void producedDataShouldContainNumericValuesInRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
         helper.assertFieldContainsNullOrMatching(

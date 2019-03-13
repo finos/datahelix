@@ -30,6 +30,11 @@ public class StringValueStep {
         helper.assertFieldContainsNullOrMatching(fieldName, String.class);
     }
 
+    @Then("{fieldVar} contains anything but string data")
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrNotMatching(fieldName, String.class);
+    }
+
     @Then("{fieldVar} contains strings of length between {int} and {int} inclusively")
     public void producedDataShouldContainStringValuesInRangeForField(String fieldName, int minInclusive, int maxInclusive){
         helper.assertFieldContainsNullOrMatching(

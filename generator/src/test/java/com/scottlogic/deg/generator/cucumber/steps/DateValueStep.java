@@ -33,6 +33,11 @@ public class DateValueStep {
         helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
     }
 
+    @Then("{fieldVar} contains anything but temporal data")
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrNotMatching(fieldName, LocalDateTime.class);
+    }
+
     @Then("{fieldVar} contains temporal values between {date} and {date} inclusively")
     public void producedDataShouldContainTemporalValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
         helper.assertFieldContainsNullOrMatching(

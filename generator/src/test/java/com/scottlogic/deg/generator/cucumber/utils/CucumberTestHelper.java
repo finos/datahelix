@@ -87,6 +87,20 @@ public class CucumberTestHelper {
         });
     }
 
+    public <T> void assertFieldContainsNullOrNotMatching(String fieldName, Class<T> clazz){
+        assertFieldContains(fieldName, objectValue -> {
+            if (objectValue == null){
+                return true;
+            }
+
+            if (clazz.isInstance(objectValue)){
+                return false; //matches, but shouldn't match the type
+            }
+
+            return true;
+        });
+    }
+
     public void assertFieldContains(String fieldName, Function<Object, Boolean> predicate){
         Optional<Integer> fieldIndex = getIndexOfField(fieldName);
         if (!fieldIndex.isPresent()){
