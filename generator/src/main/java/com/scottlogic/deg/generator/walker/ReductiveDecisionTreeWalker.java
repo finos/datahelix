@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixF
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -43,17 +44,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveState initialState = new ReductiveState(tree.fields);
 
         visualise(rootNode, initialState);
-
-        //calculate a field to fix and start processing
-//        ConstraintNode reduced = treeReducer.pruneConstraintNode(rootNode, initialState);
-//
-//        if (reduced == null){
-//            //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
-//            //yielding an empty stream will cause back-tracking
-//
-//            this.monitor.unableToStepFurther(initialState);
-//            return Stream.empty();
-//        }
 
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, tree.rootNode, fixFieldStrategy);
 
@@ -92,9 +82,9 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixFieldStrategy fixFieldStrategy){
 
         //reduce the tree based on the fields that are now fixed
-        ConstraintNode reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField()).get();
+        Optional<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
 
-        if (reducedNode == null){
+        if (!reducedNode.isPresent()){
             //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
             //yielding an empty stream will cause back-tracking
 
@@ -103,10 +93,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         //visualise the tree now
-        visualise(reducedNode, reductiveState);
+        visualise(reducedNode.get(), reductiveState);
 
         //find the next fixed field and continue
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode, fixFieldStrategy);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode.get(), fixFieldStrategy);
 
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
@@ -114,7 +104,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        return process(reducedNode, reductiveState.with(nextFixedField), fixFieldStrategy);
+        return process(reducedNode.get(), reductiveState.with(nextFixedField), fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
