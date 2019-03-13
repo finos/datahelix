@@ -1,6 +1,6 @@
 # DataHelix Profile Grammar
 
-the following syntax diagrams were produced using this [online diagram creator](https://www.bottlecaps.de/rr) from the [DataHelix grammar BNF](../json/datahelix.profile.bnf):
+the following syntax diagrams were produced using this [online diagram creator](https://www.bottlecaps.de/rr) from the [DataHelix grammar BNF](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf):
 
 
 ## <a id="profile">profile:</a>

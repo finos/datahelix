@@ -2,7 +2,7 @@
 
 The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file `datahelix.schema.json` in the `json` directory.
 
-The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [datahelix.profile.bnf](../json/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
+The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [datahelix.profile.bnf](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
 
 To use this JSON schema in an editor we currently set up the editor to validate all json files under the json directory against the `datahelix.schema.json` schema file.
 
