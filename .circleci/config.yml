@@ -5,7 +5,7 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-      - run: mvn package
+      - run: mvn clean test
       - run:
           command: |
             mkdir -p ~/cucumber
