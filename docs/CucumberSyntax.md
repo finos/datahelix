@@ -103,13 +103,35 @@ And there is a constraint:
 * _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
 
 ### Validating the data in the output
+
+#### Temporal
 * _{field} contains temporal data_, executes the generator and asserts that _field_ contains either `null` or temporal values
-* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
-* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
-* _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
+* _{field} contains anything but temporal data_, executes the generator and asserts that _field_ contains either `null` or data that is not temporal.
 * _{field} contains temporal values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or temporal values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains temporal values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or temporal values outside _{min}_ and _{max}_.
+* _{field} contains temporal values before or at {before}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or before _{before}_
+* _{field} contains temporal values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or after _{after}_
+
+#### Numeric
+* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
+* _{field} contains anything but numeric data_, executes the generator and asserts that _field_ contains either `null` or data that is not numeric.
 * _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains numeric values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or numeric values outside _{min}_ and _{max}_.
+* _{field} contains numeric values less than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values less than or equal to _{value}_
+* _{field} contains numeric values greater than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values greater than or equal to _{value}_
+
+#### String
+* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
+* _{field} contains anything but string data_, executes the generator and asserts that _field_ contains either `null` or data that is not a string.
 * _{field} contains strings of length between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or strings with lengths between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains strings of length outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or strings with lengths outside _{min}_ and _{max}_.
+* _{field} contains strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that match the given regular expression.
+* _{field} contains anything but strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that do not match the given regular expression.
+* _{field} contains strings shorter than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values shorter than or equal to _{length}_
+* _{field} contains strings longer than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values longer than or equal to _{length}_
+
+#### Null (absence/presence)
+* _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.

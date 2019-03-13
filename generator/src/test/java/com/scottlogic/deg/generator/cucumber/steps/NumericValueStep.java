@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
@@ -34,12 +35,45 @@ public class NumericValueStep {
         helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
     }
 
+    @Then("{fieldVar} contains anything but numeric data")
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrNotMatching(fieldName, Number.class);
+    }
+
     @Then("{fieldVar} contains numeric values between {number} and {number} inclusively")
     public void producedDataShouldContainNumericValuesInRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             Number.class,
-            value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive));
+            isBetweenInclusively(minInclusive, maxInclusive));
+    }
+
+    @Then("{fieldVar} contains numeric values less than or equal to {number}")
+    public void producedDataShouldContainNumericValuesLessThanForField(String fieldName, Number lessThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isLessThanOrEqual(value, lessThanInclusive));
+    }
+
+    @Then("{fieldVar} contains numeric values greater than or equal to {number}")
+    public void producedDataShouldContainNumericValuesGreaterThanForField(String fieldName, Number greaterThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isGreaterThanOrEqual(value, greaterThanInclusive));
+    }
+
+    @Then("{fieldVar} contains numeric values outside {number} and {number}")
+    public void producedDataShouldContainNumericValuesOutOfRangeForField(String fieldName, Number min, Number max){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> !isBetweenInclusively(min, max).apply(value));
+    }
+
+    private Function<Number, Boolean> isBetweenInclusively(Number minInclusive, Number maxInclusive){
+        return value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive);
     }
 
     private boolean isGreaterThanOrEqual(Number value, Number minInclusive){
