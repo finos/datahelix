@@ -55,6 +55,22 @@ public class DateValueStep {
             value -> !isBetweenInclusively(minInclusive, maxInclusive).apply(value));
     }
 
+    @Then("{fieldVar} contains temporal values before or at {date}")
+    public void producedDataShouldContainTemporalValuesBeforeForField(String fieldName, DateObject beforeInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> isBeforeOrAt(value, beforeInclusive));
+    }
+
+    @Then("{fieldVar} contains temporal values after or at {date}")
+    public void producedDataShouldContainTemporalValuesAfterForField(String fieldName, DateObject afterInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> isAfterOrAt(value, afterInclusive));
+    }
+
     private Function<LocalDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
         return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
