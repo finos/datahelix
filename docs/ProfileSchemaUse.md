@@ -31,9 +31,7 @@ to enable visual studio code to validate json files against the datahelix profil
 
 to do this:
 
-1. click on the gear icon 
- <img src="../wikiimages/settingsicon.png" width="36" height="36">
- at the bottom left of the screen and select `Settings`
+1. click on the gear icon <img src="../wikiimages/settingsicon.png" width="36" height="36"> at the bottom left of the screen and select `Settings`
 1. in the settings windows, click `Extensions` -> `JSON`
 1. you should see a section like this:
     ```
