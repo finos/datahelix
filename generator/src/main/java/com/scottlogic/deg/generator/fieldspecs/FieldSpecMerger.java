@@ -56,6 +56,28 @@ public class FieldSpecMerger {
         }
 
         //operation/s that must happen last
-        return finalMergeOperation.applyMergeOperation(left, right, merging.get());
+        Optional<FieldSpec> fieldSpec = finalMergeOperation.applyMergeOperation(left, right, merging.get());
+
+        if (!fieldSpec.isPresent() || isContradictory(fieldSpec.get())){
+            return Optional.empty();
+        }
+
+        return fieldSpec;
+    }
+
+    private Boolean isContradictory(FieldSpec fieldSpec){
+        if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)){
+            return false;
+        }
+
+        if (fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty()){
+            return true;
+        }
+
+        if (!(fieldSpec.getSetRestrictions() == null) && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()){
+            return true;
+        }
+
+        return false;
     }
 }
