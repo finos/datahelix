@@ -8,6 +8,8 @@ jobs:
       - run: mvn clean test
       - store_test_results:
           path: schemas/target/surefire-reports
+      - store_test_results:
+          path: generator/target/surefire-reports
 workflows:
   version: 2
   build_and_test: 
