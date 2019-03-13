@@ -65,11 +65,11 @@ public class NumericValueStep {
     }
 
     @Then("{fieldVar} contains numeric values outside {number} and {number}")
-    public void producedDataShouldContainNumericValuesOutOfRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
+    public void producedDataShouldContainNumericValuesOutOfRangeForField(String fieldName, Number min, Number max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             Number.class,
-            value -> !isBetweenInclusively(minInclusive, maxInclusive).apply(value));
+            value -> !isBetweenInclusively(min, max).apply(value));
     }
 
     private Function<Number, Boolean> isBetweenInclusively(Number minInclusive, Number maxInclusive){

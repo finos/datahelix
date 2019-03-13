@@ -48,11 +48,11 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains temporal values outside {date} and {date}")
-    public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
+    public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
-            value -> !isBetweenInclusively(minInclusive, maxInclusive).apply(value));
+            value -> !isBetweenInclusively(min, max).apply(value));
     }
 
     @Then("{fieldVar} contains temporal values before or at {date}")
