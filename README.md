@@ -9,6 +9,8 @@ You can use the generator to commission and maintain your test systems with data
 
 The generator has been written in Java to allow cross platform compatibility, allowing it to work on Microsoft Windows, Apple Mac and Linux equally.
 
+[![CircleCI](https://circleci.com/gh/ScottLogic/datahelix.svg?style=svg)](https://circleci.com/gh/ScottLogic/datahelix)
+
 ## Getting started
 You will need Java v1.8 installed to run the generator, it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
