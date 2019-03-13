@@ -6,7 +6,7 @@ The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/
 
 ## JetBrains IntelliJ
 
-To use this JSON schema in an editor we currently set up the intellij editor to validate all json files under the json directory against the `datahelix.schema.json` schema file.
+To use the DataHelix profile JSON schema in IntelliJ we need to  set up the intellij editor to validate all json files under the `json` and/or `examples` directories against the `datahelix.schema.json` schema file.
 
 to setup IntelliJ to validate json files against the schema follow these steps:
 
@@ -27,11 +27,11 @@ now when you open a json file from the `json` directory in IntelliJ, it will be 
 
 ## Microsoft Visual Studio Code
 
-to enable visual studio code to validate json files against the datahelix profile schema a `json.schems` section needs to be added to the `settings.json` file.
+to enable visual studio code to validate json files against the DataHelix profile schema a `json.schems` section needs to be added to the `settings.json` file.
 
 to do this:
 
-1. click on the gear icon <img src="../wikiimages/settingsicon.png" width="36" height="36"> at the bottom left of the screen and select `Settings`
+1. click on the gear icon (<img src="../wikiimages/settingsicon.png" width="16" height="16">) at the bottom left of the screen and select `Settings`
 1. in the settings windows, click `Extensions` -> `JSON`
 1. you should see a section like this:
     ```
@@ -40,12 +40,12 @@ to do this:
     Edit in settings.json
     ```
 1. click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. add the following snippet to the end of the file:
+1. add the following snippet to the end of the file (replacing `<projectroot>` with the root directory path for the DataHelix project:
     ```
       "json.schemas": [
         {
           "fileMatch": [
-            "/Users/aaspellc/src/datahelix/*"
+            "<projectroot>/datahelix/*"
           ],
           "url": "file://<projectroot>/datahelix/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
         }
