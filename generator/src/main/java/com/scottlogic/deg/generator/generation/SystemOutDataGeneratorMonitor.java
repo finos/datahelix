@@ -27,12 +27,8 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
     }
 
     @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
-        System.out.println(
-            String.format(
-                "%s %s",
-                lastFixedField.getField().name,
-                fieldSpecForValuesInLastFixedField.toString()));
+    public void rowSpecEmitted(RowSpec rowSpecWithAllValuesForLastFixedField) {
+        System.out.println("RowSpec emitted");
     }
 
     @Override
