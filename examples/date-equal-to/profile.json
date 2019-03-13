@@ -1,17 +1,19 @@
 {
-    "schemaVersion": "0.1",
-    "fields": [
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "date"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
         {
-            "name": "date"
+          "field": "date",
+          "is": "equalTo",
+          "value": {"date": "2001-02-03T04:05:06.007"}
         }
-    ],
-    "rules": [
-		{ "constraints": [
-			{
-				"field": "date",
-				"is": "equalTo",
-				"value": { "date": "2001-02-03T04:05:06.007" }
-			}
-		] }
-    ]
+      ]
+    }
+  ]
 }
