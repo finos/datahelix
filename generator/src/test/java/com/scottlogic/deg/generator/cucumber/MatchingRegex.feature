@@ -4,6 +4,7 @@ Background:
      Given the generation strategy is full
       And there is a field foo
       And foo is of type "string"
+      And  the walker type is REDUCTIVE
 
 Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
      Given foo is matching regex /[a-z]{1}/

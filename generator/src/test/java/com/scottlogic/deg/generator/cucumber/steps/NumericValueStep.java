@@ -1,22 +1,58 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+
+import java.math.BigDecimal;
+
+import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class NumericValueStep {
 
     private final CucumberTestState state;
-    public NumericValueStep(CucumberTestState state){
+    private final CucumberTestHelper helper;
+
+    public NumericValueStep(CucumberTestState state, CucumberTestHelper helper){
         this.state = state;
+        this.helper = helper;
     }
 
     @When("{fieldVar} is {operator} {number}")
     public void whenFieldIsConstrainedByNumericValue(String fieldName, String constraintName, Number value) {
-        this.state.addConstraint(fieldName, constraintName, value);
+        state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {number}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Number value) {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+        state.addNotConstraint(fieldName, constraintName, value);
+    }
+
+    @Then("{fieldVar} contains numeric data")
+    public void producedDataShouldContainNumericValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
+    }
+
+    @Then("{fieldVar} contains numeric values between {number} and {number} inclusively")
+    public void producedDataShouldContainNumericValuesInRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive));
+    }
+
+    private boolean isGreaterThanOrEqual(Number value, Number minInclusive){
+        BigDecimal valueAsBigDecimal = coerceToBigDecimal(value);
+        BigDecimal minInclusiveAsBigDecimal = coerceToBigDecimal(minInclusive);
+
+        return valueAsBigDecimal.compareTo(minInclusiveAsBigDecimal) >= 0;
+    }
+
+    private boolean isLessThanOrEqual(Number value, Number maxInclusive){
+        BigDecimal valueAsBigDecimal = coerceToBigDecimal(value);
+        BigDecimal maxInclusiveAsBigDecimal = coerceToBigDecimal(maxInclusive);
+
+        return valueAsBigDecimal.compareTo(maxInclusiveAsBigDecimal) <= 0;
     }
 }

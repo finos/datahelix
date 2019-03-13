@@ -37,7 +37,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
 
         tr.defineParameterType(new ParameterType<>(
             "number",
-            "([+-]?\\d+(\\.\\d+)?)$",
+            "([+-]?\\d+(\\.\\d+)?)",
             Number.class,
             (Transformer<Number>) value -> (Number) GeneratorTestUtilities.parseNumber(value)));
 

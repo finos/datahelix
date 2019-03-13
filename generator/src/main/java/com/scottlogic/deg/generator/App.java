@@ -6,7 +6,7 @@ import picocli.CommandLine;
 
 import java.util.stream.Collectors;
 
-@CommandLine.Command(name = "dg")
+@CommandLine.Command(name = "datahelix")
 public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
         .addSubcommand("generate", new GenerateCommandLine())

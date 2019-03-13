@@ -31,7 +31,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
             GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
             ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
             ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
-        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT)
+        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT,
+        hidden = true)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
@@ -39,7 +40,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
             GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
             GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
             GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
-        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT)
+        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT,
+        hidden = true)
     @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType;
 
@@ -69,7 +71,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"--trace-constraints"},
-        description = "Defines whether constraint tracing is enabled for the output")
+        description = "Defines whether constraint tracing is enabled for the output",
+        hidden = true)
     private boolean enableTracing;
 
     @CommandLine.Option(
@@ -95,7 +98,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"--visualise-reductions"},
-        description = "Visualise each tree reduction")
+        description = "Visualise each tree reduction",
+        hidden = true)
     private Boolean visualiseReductions = false;
 
 

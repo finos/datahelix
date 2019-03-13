@@ -185,14 +185,14 @@ public class TemporalFieldValueSource implements FieldValueSource {
         private LocalDateTime current;
         private boolean hasNext;
 
-        public SequentialDateIterator(LocalDateTime minDate, LocalDateTime maxDate) {
-            this.minDate = minDate;
-            this.maxDate = maxDate;
+        public SequentialDateIterator(LocalDateTime inclusiveMinDate, LocalDateTime exclusiveMaxDate) {
+            this.minDate = inclusiveMinDate;
+            this.maxDate = exclusiveMaxDate;
 
-            current = minDate;
+            current = inclusiveMinDate;
 
-            unit = TemporalFieldValueSource.getIncrementForDuration(minDate, maxDate);
-            hasNext = true;
+            unit = TemporalFieldValueSource.getIncrementForDuration(inclusiveMinDate, exclusiveMaxDate);
+            hasNext = current.compareTo(exclusiveMaxDate) < 0;
         }
 
         @Override

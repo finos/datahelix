@@ -5,13 +5,13 @@ public class DateTimeRestrictionsMerger {
         MIN, MAX
     }
 
-    public DateTimeRestrictions merge(DateTimeRestrictions left, DateTimeRestrictions right) {
+    public MergeResult<DateTimeRestrictions> merge(DateTimeRestrictions left, DateTimeRestrictions right) {
         if (left == null && right == null)
-            return null;
+            return new MergeResult<>(null);
         if (left == null)
-            return right;
+            return new MergeResult<>(right);
         if (right == null)
-            return left;
+            return new MergeResult<>(left);
 
         final DateTimeRestrictions merged = new DateTimeRestrictions();
 
@@ -19,10 +19,10 @@ public class DateTimeRestrictionsMerger {
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
         if (merged.min.getLimit().isAfter(merged.max.getLimit())) {
-            return null;
+            return new MergeResult<>();
         }
 
-        return merged;
+        return new MergeResult<>(merged);
     }
 
     private DateTimeRestrictions.DateTimeLimit getMergedLimitStructure(

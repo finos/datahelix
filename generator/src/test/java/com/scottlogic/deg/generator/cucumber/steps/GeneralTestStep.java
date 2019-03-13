@@ -219,6 +219,12 @@ public class GeneralTestStep {
         Assert.assertFalse("No data was generated but some was expected", data.isEmpty());
     }
 
+    @Then("{long} rows of data are generated")
+    public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
+        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+        Assert.assertThat("Unexpected number of rows returned", data.size(), equalTo(expectedNumberOfRows));
+    }
+
     @Given("the generator can generate at most {long} rows")
     public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
         state.maxRows = Optional.of(maxNumberOfRows);

@@ -141,7 +141,7 @@ class ReductiveRowSpecGeneratorTests {
         FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
         if (reducer == null){
-            reducer = new ConstraintReducer(new FieldSpecFactory(), fieldSpecMerger);
+            reducer = new ConstraintReducer(new FieldSpecFactory(new FieldSpecMerger()), fieldSpecMerger);
         }
         return new ReductiveRowSpecGenerator(
             reducer,
