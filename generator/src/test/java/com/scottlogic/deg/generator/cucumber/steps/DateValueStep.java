@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 public class DateValueStep {
 
@@ -43,7 +44,19 @@ public class DateValueStep {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
-            value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive));
+            isBetweenInclusively(minInclusive, maxInclusive));
+    }
+
+    @Then("{fieldVar} contains temporal values outside {date} and {date}")
+    public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> !isBetweenInclusively(minInclusive, maxInclusive).apply(value));
+    }
+
+    private Function<LocalDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+        return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
     private LocalDateTime getDateTime(DateObject dateObject){

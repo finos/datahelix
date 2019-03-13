@@ -113,6 +113,9 @@ And there is a constraint:
 * _{field} contains temporal values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or temporal values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains strings of length between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or strings with lengths between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains temporal values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or temporal values outside _{min}_ and _{max}_.
+* _{field} contains numeric values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or numeric values outside _{min}_ and _{max}_.
+* _{field} contains strings of length outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or strings with lengths outside _{min}_ and _{max}_.
 * _{field} contains strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that match the given regular expression.
 
 ### Cucumber test style guide

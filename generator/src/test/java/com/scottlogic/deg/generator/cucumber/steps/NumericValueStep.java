@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
@@ -44,7 +45,19 @@ public class NumericValueStep {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             Number.class,
-            value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive));
+            isBetweenInclusively(minInclusive, maxInclusive));
+    }
+
+    @Then("{fieldVar} contains numeric values outside {number} and {number}")
+    public void producedDataShouldContainNumericValuesOutOfRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> !isBetweenInclusively(minInclusive, maxInclusive).apply(value));
+    }
+
+    private Function<Number, Boolean> isBetweenInclusively(Number minInclusive, Number maxInclusive){
+        return value -> isGreaterThanOrEqual(value, minInclusive) && isLessThanOrEqual(value, maxInclusive);
     }
 
     private boolean isGreaterThanOrEqual(Number value, Number minInclusive){
