@@ -25,10 +25,10 @@ public class IterationVisualiserProvider implements Provider<IterationVisualiser
 
     @Override
     public IterationVisualiser get() {
-        if (source.visualiseReductions()){
+        //if (source.visualiseReductions()){
             return reductiveIterationVisualiser;
-        }
+        //}
 
-        return noOpIterationVisualiser;
+        //return noOpIterationVisualiser;
     }
 }

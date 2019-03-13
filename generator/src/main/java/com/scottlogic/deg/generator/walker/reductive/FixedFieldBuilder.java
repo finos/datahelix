@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
@@ -32,7 +31,7 @@ public class FixedFieldBuilder {
     }
 
     //work out the next field to fix and return a new ReductiveState with this field fixed
-    public FixedField findNextFixedField(ReductiveState reductiveState, ReductiveConstraintNode rootNode, FixFieldStrategy fixFieldStrategy) {
+    public FixedField findNextFixedField(ReductiveState reductiveState, ConstraintNode rootNode, FixFieldStrategy fixFieldStrategy) {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
 
         if (fieldToFix == null){
