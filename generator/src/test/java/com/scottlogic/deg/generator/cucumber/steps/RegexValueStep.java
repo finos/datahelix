@@ -1,14 +1,20 @@
 package com.scottlogic.deg.generator.cucumber.steps;
 
+import com.scottlogic.deg.generator.cucumber.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+
+import java.util.regex.Pattern;
 
 public class RegexValueStep {
 
     private final CucumberTestState state;
+    private final CucumberTestHelper helper;
 
-    public RegexValueStep(CucumberTestState state){
+    public RegexValueStep(CucumberTestState state, CucumberTestHelper helper){
         this.state = state;
+        this.helper = helper;
     }
 
     @When("{fieldVar} is {operator} {regex}")
@@ -19,5 +25,15 @@ public class RegexValueStep {
     @When("{fieldVar} is anything but {operator} {regex}")
     public void whenFieldIsNotConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
         this.state.addNotConstraint(fieldName, constraintName, value);
+    }
+
+    @Then("{fieldVar} contains strings matching {regex}")
+    public void producedDataShouldContainStringValuesMatchingRegex(String fieldName, String regex){
+        Pattern pattern = Pattern.compile(regex);
+
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            String.class,
+            value -> pattern.matcher(value).matches());
     }
 }

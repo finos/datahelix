@@ -5,8 +5,6 @@ import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import java.math.BigInteger;
-
 public class StringValueStep {
 
     private final CucumberTestState state;
