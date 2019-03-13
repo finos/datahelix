@@ -66,7 +66,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void rowSpecEmitted( RowSpec rowSpecWithAllValuesForLastFixedField) {
+    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
 
     }
 

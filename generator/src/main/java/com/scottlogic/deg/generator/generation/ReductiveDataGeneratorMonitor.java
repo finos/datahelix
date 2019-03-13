@@ -9,7 +9,11 @@ import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import java.util.Map;
 
 public interface ReductiveDataGeneratorMonitor extends DataGeneratorMonitor{
-    void rowSpecEmitted(RowSpec rowSpecWithAllValuesForLastFixedField);
+    void rowSpecEmitted(
+        FixedField lastFixedField,
+        FieldSpec fieldSpecForValuesInLastFixedField,
+        RowSpec rowSpecWithAllValuesForLastFixedField);
+
     void fieldFixedToValue(Field field, Object current);
     void unableToStepFurther(ReductiveState reductiveState);
     void noValuesForField(ReductiveState reductiveState);

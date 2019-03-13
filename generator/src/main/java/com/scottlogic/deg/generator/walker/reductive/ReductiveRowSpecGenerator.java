@@ -54,7 +54,10 @@ public class ReductiveRowSpecGenerator {
             reductiveState.getLastFixedField().getField()
         );
 
-        this.monitor.rowSpecEmitted(rowSpecWithAllValuesForLastFixedField);
+        this.monitor.rowSpecEmitted(
+            reductiveState.getLastFixedField(),
+            fieldSpecForValuesInLastFixedField,
+            rowSpecWithAllValuesForLastFixedField);
         return Stream.of(rowSpecWithAllValuesForLastFixedField);
     }
 
