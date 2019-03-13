@@ -3,14 +3,10 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +25,18 @@ public class ReductiveTreePruner {
     }
 
     public Optional<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, FixedField lastFixedField) {
-        throw new NotImplementedException();
+        Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
+
+        for (ConstraintNode constraintNode : decisionNode.getOptions()) {
+            pruneConstraintNode(constraintNode, lastFixedField).ifPresent(newConstraintNodes::add);
+        }
+
+        if (newConstraintNodes.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new TreeDecisionNode(newConstraintNodes));
+
     }
 
     public Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
