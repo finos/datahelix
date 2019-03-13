@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 public class DateValueStep {
 
@@ -33,12 +34,45 @@ public class DateValueStep {
         helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
     }
 
+    @Then("{fieldVar} contains anything but temporal data")
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrNotMatching(fieldName, LocalDateTime.class);
+    }
+
     @Then("{fieldVar} contains temporal values between {date} and {date} inclusively")
     public void producedDataShouldContainTemporalValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
-            value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive));
+            isBetweenInclusively(minInclusive, maxInclusive));
+    }
+
+    @Then("{fieldVar} contains temporal values outside {date} and {date}")
+    public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> !isBetweenInclusively(min, max).apply(value));
+    }
+
+    @Then("{fieldVar} contains temporal values before or at {date}")
+    public void producedDataShouldContainTemporalValuesBeforeForField(String fieldName, DateObject beforeInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> isBeforeOrAt(value, beforeInclusive));
+    }
+
+    @Then("{fieldVar} contains temporal values after or at {date}")
+    public void producedDataShouldContainTemporalValuesAfterForField(String fieldName, DateObject afterInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            LocalDateTime.class,
+            value -> isAfterOrAt(value, afterInclusive));
+    }
+
+    private Function<LocalDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+        return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
     private LocalDateTime getDateTime(DateObject dateObject){
