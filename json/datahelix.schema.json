@@ -49,7 +49,7 @@
         "field": {"type": "string"},
         "is": {
           "enum": [
-            "ofType", "equalTo", "aValid",
+            "ofType", "equalTo", "aValid", "inSet",
             "formattedAs", "matchingRegex", "containingRegex", "ofLength", "longerThan", "shorterThan",
             "null",
             "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo", "granularTo"
@@ -63,6 +63,14 @@
           },
           "then": {
             "properties": {"value": {"enum": ["numeric", "string", "temporal"]}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"is": {"const": "inSet"}}
+          },
+          "then": {
+            "properties": {"values": {"type": "array"}}
           }
         },
         {
@@ -83,7 +91,7 @@
         },
         {
           "if": {
-            "properties": {"is": {"const": "matchingRegex"}}
+            "properties": {"is": {"enum": ["matchingRegex", "containingRegex"]}}
           },
           "then": {
             "properties": {"value": {"type": "string"}}
@@ -184,6 +192,9 @@
           "type": "object"
         },
         "then": {
+          "type": "object"
+        },
+        "else": {
           "type": "object"
         }
       }

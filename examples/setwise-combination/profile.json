@@ -1,16 +1,17 @@
 {
-    "schemaVersion": "0.1",
-    "fields": [
-        { "name": "a" },
-		{ "name": "b" }
-    ],
-    "rules": [
-		{ "constraints": [
-			{ "not": { "field": "a", "is": "null" } },
-			{ "field": "a", "is": "inSet", "values": [ "X", "Y", "Z" ] },
-			
-			{ "not": { "field": "b", "is": "null" } },
-			{ "field": "b", "is": "inSet", "values": [ "1", "2" ] }
-		] }
-	]
+  "schemaVersion": "0.1",
+  "fields": [
+    {"name": "a"},
+    {"name": "b"}
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {"not": {"field": "a", "is": "null"}},
+        {"field": "a", "is": "inSet", "values": ["X", "Y", "Z"]},
+        {"not": {"field": "b", "is": "null"}},
+        {"field": "b", "is": "inSet", "values": ["1", "2"]}
+      ]
+    }
+  ]
 }

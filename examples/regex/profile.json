@@ -1,12 +1,14 @@
 {
-    "schemaVersion": "0.1",
-    "fields": [
-		{ "name": "first_name" }
-    ],
-    "rules": [
-		{ "constraints": [
-			{ "not": { "field": "first_name", "is": "null" } },
-			{ "field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])" }
-		] }
-	]
+  "schemaVersion": "0.1",
+  "fields": [
+    {"name": "first_name"}
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {"not": {"field": "first_name", "is": "null"}},
+        {"field": "first_name", "is": "matchingRegex", "value": "(Joh?n|Mar[yk])"}
+      ]
+    }
+  ]
 }
