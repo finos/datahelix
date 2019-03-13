@@ -1,8 +1,10 @@
 {
-  "$schema": "datahelix.schema.json",
   "schemaVersion": "v3",
   "description": "",
   "fields": [
+    {
+      "name": "age"
+    },
     {
       "name": "age"
     }

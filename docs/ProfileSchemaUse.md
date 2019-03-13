@@ -20,4 +20,4 @@ to setup IntelliJ to validate json files against the schema follow these steps:
 1. select the `json` directory
 1. press okay
 
-now when you open a json file from the `json` directory, it will be automatically validated against the DataHelix profile schema.
+now when you open a json file from the `json` directory in IntelliJ, it will be automatically validated against the DataHelix profile schema.
