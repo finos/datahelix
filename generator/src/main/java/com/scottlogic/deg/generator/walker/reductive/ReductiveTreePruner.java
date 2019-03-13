@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.*;
@@ -24,11 +25,11 @@ public class ReductiveTreePruner {
         this.constraintReducer = constraintReducer;
     }
 
-    public Optional<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, FixedField lastFixedField) {
+    private Optional<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
-            pruneConstraintNode(constraintNode, lastFixedField).ifPresent(newConstraintNodes::add);
+            pruneConstraintNode(constraintNode, field, mergingFieldSpec).ifPresent(newConstraintNodes::add);
         }
 
         if (newConstraintNodes.isEmpty()) {
@@ -40,14 +41,18 @@ public class ReductiveTreePruner {
     }
 
     public Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
+        return pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
+    }
+
+    Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
         // Get field spec from current constraintNode
         List<AtomicConstraint> atomicConstraintsForField =
-            AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), lastFixedField.getField());
+            AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
 
-        Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
+        Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);//UNSAFE, What if node is contradictory with itself
 
         // Merge with spec from parent
-        Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), lastFixedField.getFieldSpecForValues());
+        Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), mergingFieldSpec);
 
         // If contradictory -> return Optional.empty?
         if (!newFieldSpec.isPresent()) {
@@ -60,7 +65,7 @@ public class ReductiveTreePruner {
 
         // Foreach decision below the constraint node, run pruneDecisionNode()
         for (DecisionNode decision : constraintNode.getDecisions()) {
-            Optional<DecisionNode> decisionNode = pruneDecisionNode(decision, lastFixedField);
+            Optional<DecisionNode> decisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
 
             if (!decisionNode.isPresent()) {
                 return Optional.empty();
