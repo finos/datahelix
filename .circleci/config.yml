@@ -6,12 +6,8 @@ jobs:
     steps:
       - checkout
       - run: mvn clean test
-      - run:
-          command: |
-            mkdir -p ~/cucumber
-            bundle exec cucumber --format junit --out ~/cucumber/junit.xml
       - store_test_results:
-          path: ~/cucumber
+          path: schemas/target/surefire-reports
 workflows:
   version: 2
   build_and_test: 
