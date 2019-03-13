@@ -6,6 +6,12 @@ jobs:
     steps:
       - checkout
       - run: mvn package
+      - run:
+          command: |
+            mkdir -p ~/cucumber
+            bundle exec cucumber --format junit --out ~/cucumber/junit.xml
+      - store_test_results:
+          path: ~/cucumber
 workflows:
   version: 2
   build_and_test: 
