@@ -30,7 +30,7 @@ class ReductiveDecisionTreeReducerTests {
     private static final AtomicConstraint isGreaterThanOrEqualTo2 = new IsGreaterThanOrEqualToConstantConstraint(field2, 2, Collections.emptySet());
     private static final AtomicConstraint isLessThan2 = new IsLessThanConstantConstraint(field3, 2, Collections.emptySet());
 
-    private static final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory();
+    private static final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
     private static final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private static final DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
     private static final ReductiveDataGeneratorMonitor nullMonitor = new NoopDataGeneratorMonitor();

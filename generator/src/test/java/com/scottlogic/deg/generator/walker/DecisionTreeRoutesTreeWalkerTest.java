@@ -247,7 +247,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         private final ConstraintNodeToRowSpecMap[] maps;
 
         TestConstraintReducer(ConstraintNodeToRowSpecMap... maps) {
-            super(new FieldSpecFactory(), new FieldSpecMerger());
+            super(new FieldSpecFactory(new FieldSpecMerger()), new FieldSpecMerger());
             this.maps = maps;
         }
 

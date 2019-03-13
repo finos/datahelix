@@ -1,5 +1,8 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
+
 import java.util.Optional;
 
 /**
@@ -10,8 +13,8 @@ public class FieldSpecMerger {
 
     private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
         new StringRestrictionsMergeOperation(),
-        new NumericRestrictionsMergeOperation(),
-        new DateTimeRestrictionsMergeOperation(),
+        new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
+        new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
         new NullRestrictionsMergeOperation(),
         new FormatRestrictionsMergeOperation(),
         new GranularityRestrictionsMergeOperation(),

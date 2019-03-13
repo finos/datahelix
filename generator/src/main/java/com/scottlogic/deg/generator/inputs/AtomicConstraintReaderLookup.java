@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class AtomicConstraintReaderLookup {
+class AtomicConstraintReaderLookup {
     private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
     static {
@@ -39,6 +39,7 @@ public class AtomicConstraintReaderLookup {
                         mapValues(throwIfValuesNull(dto.values)),
                         rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.CONTAINSREGEX.toString(),
             (dto, fields, rules) ->
                 new ContainsRegexConstraint(
@@ -46,6 +47,7 @@ public class AtomicConstraintReaderLookup {
                     Pattern.compile((String) throwIfValueNull(dto.value)),
                     rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.MATCHESREGEX.toString(),
                 (dto, fields, rules) ->
                     new MatchesRegexConstraint(
@@ -53,6 +55,7 @@ public class AtomicConstraintReaderLookup {
                         Pattern.compile((String) throwIfValueNull(dto.value)),
                         rules));
 
+        //noinspection RedundantCast
         add(AtomicConstraintType.AVALID.toString(),
                 (dto, fields, rules) ->
                     new MatchesStandardConstraint(
@@ -249,7 +252,7 @@ public class AtomicConstraintReaderLookup {
     }
 
     private static Object potentialUnwrapDate(Object value) throws InvalidProfileException {
-        if (value == null || !(value instanceof Map))
+        if (!(value instanceof Map))
             return value;
 
         Map objectMap = (Map) value;
@@ -271,16 +274,25 @@ public class AtomicConstraintReaderLookup {
         throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
     }
 
-    private static LocalDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+    static LocalDateTime parseDate(String value) throws InvalidProfileException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS");
         try {
-            return LocalDateTime.parse(value, formatter);
+            LocalDateTime parsedDateTime = LocalDateTime.parse(value, formatter);
+            if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
+                throwDateTimeError(value);
+
+            return parsedDateTime;
         } catch (DateTimeParseException dtpe){
-            throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS", value));
+            throwDateTimeError(value);
+            return null;
         }
     }
 
-    public ConstraintReader getByTypeCode(String typeCode) {
+    private static void throwDateTimeError(String profileDate) throws InvalidProfileException {
+        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999", profileDate));
+    }
+
+    ConstraintReader getByTypeCode(String typeCode) {
         return typeCodeToSpecificReader.get(typeCode);
     }
 }

@@ -24,7 +24,6 @@ For a guide on how the generator may be used see the [step by step instructions]
 Optional additional switches:
 * `--violate` generate data which violates the profile constraints
 * `-n 1000` limit the output to 1000 rows
-* `-t <data-generation-type>` - produce different data in different ways, see [generation types](./generator/docs/GenerationTypes.md)
 
 See [additional details here](./docs/Options/GenerateOptions.md) on the full list of switches that can be provided.
 

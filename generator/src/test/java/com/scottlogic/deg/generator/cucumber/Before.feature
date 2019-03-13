@@ -45,11 +45,8 @@ Scenario: Running a 'before' request that specifies the maximum valid system dat
        | 9999-12-31T23:59:59.996 |
        | 9999-12-31T23:59:59.995 |
 
-# Defect 607 "Setting Before 0001-01-01T00:00:00.000 loops round to december of that year" related to this scenario
-# Defect 608 "Setting a date of 0000-01-01T00:00:00.000 results in an error" related to this scenario
-@ignore
 Scenario: Running a 'before' request that specifies the lowest valid system date should only generate null data
-     Given foo is before 0000-01-01T00:00:00.000
+     Given foo is before 0001-01-01T00:00:00.000
      Then the following data should be generated:
        | foo                     |
        | null                    |
@@ -190,8 +187,6 @@ Scenario: 'before' run against a contradicting 'beforeOrAt' should only only gen
        | foo                     |
        | null                    |
 
-# Defect 635 "DateTimeRestrictionsMergeOperation if contradictory, removes all dateTime restrictions" related to this scenario
-@ignore
 Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is anything but before or at 2019-01-02T00:00:00.000
@@ -204,3 +199,7 @@ Scenario: Running a 'before' request that specifies null should be unsuccessful
     Given foo is before null
     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
       And no data is created
+
+Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful
+    Given foo is before 0000-01-01T00:00:00.000
+    Then the profile is invalid because "Date string '0000-01-01T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
