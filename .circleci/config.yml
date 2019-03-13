@@ -5,13 +5,6 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-      - restore_cache:
-          key: datahelix-{{ checksum "pom.xml" }}
-      - run: mvn dependency:go-offline
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: datahelix-{{ checksum "pom.xml" }}
       - run: mvn package
 workflows:
   version: 2
