@@ -36,4 +36,14 @@ public class RegexValueStep {
             String.class,
             value -> pattern.matcher(value).matches());
     }
+
+    @Then("{fieldVar} contains anything but strings matching {regex}")
+    public void producedDataShouldContainStringValuesNotMatchingRegex(String fieldName, String regex){
+        Pattern pattern = Pattern.compile(regex);
+
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            String.class,
+            value -> !pattern.matcher(value).matches());
+    }
 }
