@@ -120,6 +120,8 @@ And there is a constraint:
 * _{field} contains anything but strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that do not match the given regular expression.
 * _{field} contains temporal values before or at {before}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or before _{before}_
 * _{field} contains temporal values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or after _{after}_
+* _{field} contains numeric values less than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values less than or equal to _{value}_
+* _{field} contains numeric values greater than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values greater than or equal to _{value}_
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.

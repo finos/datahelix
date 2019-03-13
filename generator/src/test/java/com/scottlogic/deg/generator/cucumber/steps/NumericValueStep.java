@@ -48,6 +48,22 @@ public class NumericValueStep {
             isBetweenInclusively(minInclusive, maxInclusive));
     }
 
+    @Then("{fieldVar} contains numeric values less than or equal to {number}")
+    public void producedDataShouldContainNumericValuesLessThanForField(String fieldName, Number lessThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isLessThanOrEqual(value, lessThanInclusive));
+    }
+
+    @Then("{fieldVar} contains numeric values greater than or equal to {number}")
+    public void producedDataShouldContainNumericValuesGreaterThanForField(String fieldName, Number greaterThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            Number.class,
+            value -> isGreaterThanOrEqual(value, greaterThanInclusive));
+    }
+
     @Then("{fieldVar} contains numeric values outside {number} and {number}")
     public void producedDataShouldContainNumericValuesOutOfRangeForField(String fieldName, Number minInclusive, Number maxInclusive){
         helper.assertFieldContainsNullOrMatching(
