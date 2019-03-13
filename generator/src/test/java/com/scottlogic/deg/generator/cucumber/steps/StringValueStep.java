@@ -45,6 +45,22 @@ public class StringValueStep {
             isLengthBetweenInclusively(minInclusive, maxInclusive));
     }
 
+    @Then("{fieldVar} contains strings shorter than or equal to {int}")
+    public void producedDataShouldContainStringValuesShorterThanForField(String fieldName, int shorterThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            String.class,
+            value -> isShorterThanOrEqual(value, shorterThanInclusive));
+    }
+
+    @Then("{fieldVar} contains strings longer than or equal to {int}")
+    public void producedDataShouldContainStringValuesLongerThanForField(String fieldName, int longerThanInclusive){
+        helper.assertFieldContainsNullOrMatching(
+            fieldName,
+            String.class,
+            value -> isLongerThanOrEqual(value, longerThanInclusive));
+    }
+
     @Then("{fieldVar} contains strings of length outside {int} and {int}")
     public void producedDataShouldContainStringValuesOutOfRangeForField(String fieldName, int minInclusive, int maxInclusive){
         helper.assertFieldContainsNullOrMatching(

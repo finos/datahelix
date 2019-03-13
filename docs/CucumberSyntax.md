@@ -122,6 +122,8 @@ And there is a constraint:
 * _{field} contains temporal values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or after _{after}_
 * _{field} contains numeric values less than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values less than or equal to _{value}_
 * _{field} contains numeric values greater than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values greater than or equal to _{value}_
+* _{field} contains strings shorter than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values shorter than or equal to _{length}_
+* _{field} contains strings longer than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values longer than or equal to _{length}_
 
 ### Cucumber test style guide
 * Tests should be written to validate one piece of logic only per test.
