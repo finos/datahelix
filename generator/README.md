@@ -4,6 +4,8 @@ A command-line tool for generating data according to [profiles](../docs/Profiles
 
 For a guide on how the generator may be used see the [step by step instructions](../docs/GettingStarted/StepByStepInstructions.md).
 
+ To create a profile, see [here](../docs/GettingStarted/CreatingAProfile.md).
+
 ## Installation & Setup of IDE
 
 See installation instructions [here](./docs/GeneratorSetup.md).
