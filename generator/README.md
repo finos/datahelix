@@ -24,8 +24,8 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 **Note:** Do not include a trailing \ in directory paths
 
 ## Examples
-* `java -jar generator.jar generate profile.json profile.csv`
-* `java -jar generator.jar generate --violate=true profile.json violated-data-files/`
+* `java -jar generator.jar generate docs/GettingStarted/ExampleProfile1.json profile.csv`
+* `java -jar generator.jar generate --violate=true docs/GettingStarted/ExampleProfile1.json violated-data-files/`
 
 ## Commands
 ### Generate
