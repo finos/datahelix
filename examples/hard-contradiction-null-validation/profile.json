@@ -16,7 +16,7 @@
       ]
     },
     {
-      "rule": "Column 2 is not null",
+      "rule": "Column 1 is not null",
       "constraints": [
         {
           "not": {
