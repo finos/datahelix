@@ -74,7 +74,7 @@ public class FixedField {
         }
 
         return FieldSpec.Empty.withSetRestrictions(
-            new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), null),
+            new SetRestrictions(new HashSet<>(Collections.singletonList(currentValue)), Collections.emptySet()),
             this.valuesFieldSpec.getFieldSpecSource()
         ).withNullRestrictions(
             new NullRestrictions(Nullness.MUST_NOT_BE_NULL),

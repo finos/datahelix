@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,10 +58,10 @@ class SetRestrictionsTests {
 
     @BeforeEach
     private void beforeEach() {
-        this.firstInputWhitelist = null;
-        this.firstInputBlacklist = null;
-        this.secondInputWhitelist = null;
-        this.secondInputBlacklist = null;
+        this.firstInputWhitelist = Collections.emptySet();
+        this.firstInputBlacklist = Collections.emptySet();
+        this.secondInputWhitelist = Collections.emptySet();
+        this.secondInputBlacklist = Collections.emptySet();
         this.actualOutput = null;
     }
 

@@ -21,7 +21,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public void isInSet(Field field, Set<Object> values) {
 
-        SetRestrictions candidateRestrictions = new SetRestrictions(values, null);
+        SetRestrictions candidateRestrictions = new SetRestrictions(values, Collections.emptySet());
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
@@ -36,7 +36,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public void mustNotBeInSet(Field field, Set<Object> values) {
 
-        SetRestrictions candidateRestrictions = new SetRestrictions(null, values);
+        SetRestrictions candidateRestrictions = new SetRestrictions(Collections.emptySet(), values);
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);

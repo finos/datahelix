@@ -23,7 +23,7 @@ public class SetRestrictions {
     }
 
     private SetRestrictions(){
-        this.whitelist = null;
+        this.whitelist = new HashSet<>();
         this.blacklist = new HashSet<>();
     }
 
@@ -38,11 +38,19 @@ public class SetRestrictions {
     }
 
     public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
-        return new SetRestrictions(whitelist, null);
+        if (whitelist == null) {
+            throw new IllegalArgumentException("The whitelist cannot be null");
+        }
+
+        return new SetRestrictions(whitelist, Collections.emptySet());
     }
 
     public static SetRestrictions fromBlacklist(Set<Object> blacklist) {
-        return new SetRestrictions(null, blacklist);
+        if (blacklist == null) {
+            throw new IllegalArgumentException("The blacklist cannot be null");
+        }
+
+        return new SetRestrictions(Collections.emptySet(), blacklist);
     }
 
     public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
@@ -53,20 +61,18 @@ public class SetRestrictions {
         b = coalesce(b, neutral);
 
         Set<Object> newWhitelist;
-        if (a.whitelist == null && b.whitelist == null)
-            newWhitelist = null;
-        else if (a.whitelist == null)
+        if (a.whitelist.isEmpty() && b.whitelist.isEmpty())
+            newWhitelist = Collections.emptySet();
+        else if (a.whitelist.isEmpty())
             newWhitelist = b.whitelist;
-        else if (b.whitelist == null)
+        else if (b.whitelist.isEmpty())
             newWhitelist = a.whitelist;
         else
             newWhitelist = SetUtils.intersect(a.whitelist, b.whitelist);
 
-        Set<Object> newBlacklist = SetUtils.union(
-            coalesce(a.blacklist, Collections.emptySet()),
-            coalesce(b.blacklist, Collections.emptySet()));
+        Set<Object> newBlacklist = SetUtils.union(a.blacklist, b.blacklist);
 
-        if (newWhitelist != null && newBlacklist != null) {
+        if (!newWhitelist.isEmpty() && !newBlacklist.isEmpty()) {
             Set<Object> whiteAndBlacklistIntersection = SetUtils.intersect(
                 newBlacklist,
                 newWhitelist);
@@ -80,7 +86,7 @@ public class SetRestrictions {
             newBlacklist = Collections.emptySet();
         }
 
-        if (newWhitelist != null && newWhitelist.size() == 0) {
+        if (newWhitelist.isEmpty() && newBlacklist.isEmpty()) {
             return new MergeResult<>();
         }
 
@@ -96,12 +102,12 @@ public class SetRestrictions {
         if (isEmpty())
             return "<empty>";
 
-        if (whitelist == null || whitelist.isEmpty())
+        if (whitelist.isEmpty())
             return String.format(
                     "NOT IN %s",
                     Objects.toString(blacklist));
 
-        if (blacklist == null || blacklist.isEmpty())
+        if (blacklist.isEmpty())
             return String.format(
                     "IN %s",
                     Objects.toString(whitelist));
