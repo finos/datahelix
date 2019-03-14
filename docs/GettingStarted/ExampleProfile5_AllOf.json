@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Column 1 is a string",
+      "constraints": [
+        {
+          "allOf": [
+            {
+              "field": "Column 1",
+              "is": "ofType",
+              "value": "string"
+            },
+            {
+              "field": "Column 1",
+              "is": "ofType",
+              "value": "numeric"
+            },
+            {
+              "not": {
+                "field": "Column 1",
+                "is": "null"
+              }
+            }
+          ]
+        }
+
+      ]
+    }
+  ]
+}
