@@ -47,8 +47,9 @@ to do this:
           "fileMatch": [
             "<datahelix_projectroot>/*"
           ],
-          "url": "file://<datahelix_projectroot>/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
+          "url": "file:///<datahelix_projectroot>/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
         }
+      ]
     ```
 1. if the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
 
