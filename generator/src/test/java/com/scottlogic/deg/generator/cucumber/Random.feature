@@ -5,7 +5,6 @@ Feature: User can generate valid data for all types (string, numeric or temporal
     Given the generation strategy is random
       And there is a field foo
 
-#last step can't be found/runner says it's undefined despite the step existing
 Scenario: The generator produces valid 'Temporal' data in random mode
   Given foo is of type "temporal"
     And foo is anything but null
@@ -46,3 +45,39 @@ Scenario: The generator produces valid 'Null' data in random mode
     | null |
     | null |
     | null |
+
+  ### Violating ###
+
+Scenario: The generator produces violating 'Temporal' data in random mode
+  Given foo is of type "temporal"
+    And foo is anything but null
+    And the generator can generate at most 5 rows
+    And foo is before or at 2019-01-01T00:00:00.000
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but temporal data
+
+Scenario: The generator produces violating 'String' data in random mode
+  Given foo is of type "string"
+    And foo is anything but null
+    And the generator can generate at most 5 rows
+    And foo is shorter than 10
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but string data
+
+Scenario: The generator produces violating 'Numeric' data in random mode
+  Given foo is of type "numeric"
+    And foo is anything but null
+    And the generator can generate at most 5 rows
+    And foo is less than or equal to 10
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but numeric data
+
+Scenario: The generator produces violating 'Null' data in random mode
+  Given foo is null
+    And the generator can generate at most 5 rows
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but null
