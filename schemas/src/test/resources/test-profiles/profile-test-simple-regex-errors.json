@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "field1",
+          "is": "matchingRegex",
+          "value": 43
+        },
+        {
+          "field": "field1",
+          "is": "containingRegex",
+          "value": 43
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "matchingRegex",
+            "value": {"date": "0001-01-01T09:00:00.000"}
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "containingRegex",
+            "value": {"date": "0001-01-01T09:00:00.000"}
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -55,3 +55,33 @@ to do this:
 1. if the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
 
 
+## Schema Validation using library
+
+to validate a DataHelix Profile json file against the schema the `schema.jar` file needs to be included in the project:
+
+to include the schema.jar file in a maven project add the following dependency: 
+```
+<dependencies>
+    <dependency>
+        <groupId>com.scottlogic.deg</groupId>
+        <artifactId>schemas</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+    .
+    .
+    .
+</dependencies>
+```
+
+then create an instance of the [`ProfileValidator`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/v0_1/ProfileValidator.java) object and call the validateProfile() method passing in an `java.io.InputStream` that contains the profile data to be validated.
+
+an example of calling the validator:
+
+```java
+File profileFile = new File("path/to/profile.json");
+InputStream profileStream = new FileInputStream(profileFile);
+ValidationResult result = profileValidator.validateProfile(profileStream);
+```
+This will return a [`ValidationResult`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/common/ValidationResult.java) object which contains a list of error messages found during validation.
+
+if the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check is validation was successful.
