@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Column 1 is null",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "null"
+        }
+      ]
+    },
+    {
+      "rule": "Column 1 is not null",
+      "constraints": [
+        {
+          "not": {
+            "field": "Column 1",
+            "is": "null"
+          }
+        }
+      ]
+    }
+  ]
+}

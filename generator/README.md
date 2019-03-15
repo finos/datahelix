@@ -4,6 +4,8 @@ A command-line tool for generating data according to [profiles](../docs/Profiles
 
 For a guide on how the generator may be used see the [step by step instructions](../docs/GettingStarted/StepByStepInstructions.md).
 
+ To create a profile, see [here](../docs/GettingStarted/CreatingAProfile.md).
+
 ## Installation & Setup of IDE
 
 See installation instructions [here](./docs/GeneratorSetup.md).
@@ -26,6 +28,8 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 ## Examples
 * `java -jar generator.jar generate profile.json profile.csv`
 * `java -jar generator.jar generate --violate=true profile.json violated-data-files/`
+
+Example profiles can be found at `../docs/GettingStarted/ExampleProfile1.json` or `../examples/`.
 
 ## Commands
 ### Generate
