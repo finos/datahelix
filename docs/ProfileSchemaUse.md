@@ -27,7 +27,7 @@ now when you open a json file from the `json` directory in IntelliJ, it will be 
 
 ## Microsoft Visual Studio Code
 
-to enable visual studio code to validate json files against the DataHelix profile schema a `json.schems` section needs to be added to the `settings.json` file.
+to enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
 
 to do this:
 
