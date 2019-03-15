@@ -2,13 +2,11 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
 import java.util.ArrayList;
@@ -48,6 +46,10 @@ public class ReductiveTreePruner {
             AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
 
         Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
+
+        if (!nodeFieldSpec.isPresent()) {
+            return Optional.empty();
+        }
 
         // Merge with spec from parent
         Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), mergingFieldSpec);
