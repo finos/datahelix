@@ -1,7 +1,7 @@
 
 profile ::= '{' schemaVersion ',' ( schemaDescription ',' )? fields ',' rules '}'
 
-schemaVersion ::= '"' 'schemaVersion' '"' ':' '"' digit+ '.' digit+ ( '.' digit+ )? '"'
+schemaVersion ::= '"' 'schemaVersion' '"' ':' '"' digit+ '.' digit+ '"'
 schemaDescription ::= '"' 'description' '"' ':' string
 
 fields ::= '"' 'fields' '"' ':' '[' ( '{' fieldName '}' ( ',' '{' fieldName  '}' )*) ']'

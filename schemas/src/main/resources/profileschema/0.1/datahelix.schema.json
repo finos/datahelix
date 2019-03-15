@@ -26,6 +26,18 @@
         "name": {"type": "string"}
       }
     },
+
+    "constraint": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/grammaticalConstraint"
+        },
+        {
+          "$ref": "#/definitions/dataConstraint"
+        }
+      ]
+    },
+
     "grammaticalConstraint": {
       "oneOf": [
         {
@@ -42,9 +54,10 @@
         }
       ]
     },
+
     "dataConstraint": {
       "type": "object",
-      "additionalProperties": false,
+      "required": ["field", "is"],
       "properties": {
         "field": {"type": "string"},
         "is": {
@@ -57,6 +70,14 @@
         }
       },
       "anyOf": [
+        {
+          "if": {
+            "properties": {"is": {"const": "equalTo"}}
+          },
+          "then": {
+            "properties": {"value": {}}
+          }
+        },
         {
           "if": {
             "properties": {"is": {"const": "ofType"}}
@@ -101,7 +122,7 @@
           "if": {
             "properties": {
               "is": {
-                "enum": ["shorterThan", "longerThan", "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo", "granularTo"]
+                "enum": ["shorterThan", "longerThan", "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo", "granularTo", "ofLength"]
               }
             }
           },
@@ -119,22 +140,7 @@
         }
       ]
     },
-    "constraint": {
-      "type": "array",
-      "minItems": 1,
-      "additionalItems": false,
-      "title": "The constraints defining the enclosing rule.",
-      "items": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/grammaticalConstraint"
-          },
-          {
-            "$ref": "#/definitions/dataConstraint"
-          }
-        ]
-      }
-    },
+
     "ofTypeConstraint": {
       "type": "object",
       "properties": {
@@ -189,13 +195,13 @@
       "required": ["if", "then"],
       "properties": {
         "if": {
-          "type": "object"
+          "$ref": "#/definitions/constraint"
         },
         "then": {
-          "type": "object"
+          "$ref": "#/definitions/constraint"
         },
         "else": {
-          "type": "object"
+          "$ref": "#/definitions/constraint"
         }
       }
     }
@@ -212,20 +218,20 @@
       "type": "string",
       "title": "A description of what data the profile is modelling"
     },
+
     "fields": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "additionalItems": false,
       "title": "Defines the fields that data will be produced for. field names must begin with an alphabetic character.",
       "items": {
         "$ref": "#/definitions/fieldName"
       }
     },
+
     "rules": {
       "type": "array",
       "minItems": 1,
-      "additionalItems": false,
       "title": "The Rules defining the data to be output",
       "items": {
         "type": "object",
@@ -235,10 +241,14 @@
           "additionalProperties": false,
           "rule": {
             "type": "string",
-            "title": "A named collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way."
+            "title": "A collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way."
           },
           "constraints": {
-            "$ref": "#/definitions/constraint"
+            "type": "array",
+            "minItems": 1,
+            "items":
+              {"$ref": "#/definitions/constraint"}
+
           }
         }
       }

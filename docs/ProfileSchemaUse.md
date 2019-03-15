@@ -40,16 +40,16 @@ to do this:
     Edit in settings.json
     ```
 1. click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. add the following snippet to the end of the file (replacing `<projectroot>` with the root directory path for the DataHelix project:
+1. add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project:
     ```
       "json.schemas": [
         {
           "fileMatch": [
-            "<projectroot>/datahelix/*"
+            "<datahelix_projectroot>/*"
           ],
-          "url": "file://<projectroot>/datahelix/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
+          "url": "file://<datahelix_projectroot>/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
         }
     ```
-1. if the above snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
+1. if the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
 
 
