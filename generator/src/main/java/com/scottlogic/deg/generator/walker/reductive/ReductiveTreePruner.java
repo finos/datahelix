@@ -42,33 +42,17 @@ public class ReductiveTreePruner {
         return newConstraintNode;
     }
 
-    private boolean isContradictory(ConstraintNode constraintNode) {
-        List<Field> constraintFields = constraintNode.getAtomicConstraints().stream()
-            .map(AtomicConstraint::getField)
-            .distinct()
-            .collect(Collectors.toList());
-
-        for (Field field : constraintFields) {
-            List<AtomicConstraint> constraintsForField = AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
-            if (!fieldSpec.isPresent()){
-                return true;
-            }
-        }
-        return false;
-    }
-
     private Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
         // Get field spec from current constraintNode
         List<AtomicConstraint> atomicConstraintsForField =
             AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
 
-        Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);//UNSAFE, What if node is contradictory with itself
+        Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
 
         // Merge with spec from parent
         Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), mergingFieldSpec);
 
-        // If contradictory -> return Optional.empty?
+        // If contradictory -> return Optional.empty
         if (!newFieldSpec.isPresent()) {
             return Optional.empty();
         }
@@ -110,6 +94,21 @@ public class ReductiveTreePruner {
         }
 
         return Optional.of(new TreeDecisionNode(newConstraintNodes));
+    }
 
+    private boolean isContradictory(ConstraintNode constraintNode) {
+        List<Field> constraintFields = constraintNode.getAtomicConstraints().stream()
+            .map(AtomicConstraint::getField)
+            .distinct()
+            .collect(Collectors.toList());
+
+        for (Field field : constraintFields) {
+            List<AtomicConstraint> constraintsForField = AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
+            if (!fieldSpec.isPresent()){
+                return true;
+            }
+        }
+        return false;
     }
 }

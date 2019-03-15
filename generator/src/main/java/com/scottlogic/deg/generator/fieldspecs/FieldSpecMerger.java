@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
 
 import java.util.Optional;
