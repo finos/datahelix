@@ -13,9 +13,9 @@ jobs:
       - store_test_results:
           path: generator/target/surefire-reports
       - codecov/upload:
-          file: schemas/target/jacoco-reports
+          file: schemas/target/jacoco-reports/jacoco.xml
       - codecov/upload:
-          file: generator/target/jacoco-reports
+          file: generator/target/jacoco-reports/jacoco.xml
 workflows:
   version: 2.1
   build_and_test: 
