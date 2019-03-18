@@ -80,8 +80,19 @@ public class DateTimeRestrictions {
             return Objects.hash(limit, inclusive);
         }
 
-        public boolean isAfter(DateTimeLimit other) {
-            return limit.isAfter(other.limit);
+        public boolean isAfter(DateTimeLimit max) {
+            LocalDateTime minLimit = getReferenceTime(1);
+            LocalDateTime maxLimit = max.getReferenceTime(-1);
+
+            return minLimit.isAfter(maxLimit);
+        }
+
+        private LocalDateTime getReferenceTime(int nanoOffset){
+            if (inclusive){
+                return limit;
+            }
+
+            return limit.plusNanos(nanoOffset);
         }
     }
 }

@@ -2,13 +2,10 @@ package com.scottlogic.deg.generator.restrictions;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
@@ -216,6 +213,124 @@ class DateTimeRestrictionsTests {
         boolean result = restrictions.match(min);
 
         Assert.assertFalse(result);
+    }
+
+    @Test
+    public void isAfter_whenSameDateAndBothInclusive_shouldBeFalse(){
+        LocalDateTime value = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(value, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(value, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(false));
+    }
+
+    @Test
+    public void isAfter_whenSameDateAndOtherIsExclusive_shouldBeTrue(){
+        LocalDateTime value = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(value, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(value, false);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(true));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsBeforeByOneNanoSecondInclusive_shouldBeFalse(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = selfValue.plusNanos(-1);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(false));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsBeforeByOneNanoSecondExclusive_shouldBeFalse(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = selfValue.plusNanos(-1);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(false));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsBeforeInclusive_shouldBeFalse(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = LocalDateTime.of(2000, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(false));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsBeforeExclusive_shouldBeFalse(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = LocalDateTime.of(2000, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(false));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsAfterInclusive_shouldBeTrue(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = LocalDateTime.of(2002, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(true));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsAfterExclusive_shouldBeTrue(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = LocalDateTime.of(2002, 02, 03, 04, 05, 06);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(true));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsAfterByOneNanoSecondInclusive_shouldBeTrue(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = selfValue.plusNanos(1);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(true));
+    }
+
+    @Test
+    public void isAfter_whenOtherIsAfterByOneNanoSecondExclusive_shouldBeTrue(){
+        LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        LocalDateTime otherValue = selfValue.plusNanos(1);
+        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, false);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+
+        boolean result = other.isAfter(self);
+
+        Assert.assertThat(result, is(true));
     }
 
     private DateTimeRestrictions restrictions(MockDateTimeLimit min, MockDateTimeLimit max){
