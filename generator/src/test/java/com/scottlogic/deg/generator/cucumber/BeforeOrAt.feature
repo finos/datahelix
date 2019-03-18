@@ -74,10 +74,11 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 2017-10-01T00:00:00.000 |
-       | 2016-10-02T00:00:00.000 |
-       | 2018-01-01T00:00:00.000 |
-       | 2019-01-01T00:00:00.000 |
+       | 0001-01-01T00:00:00.000 |
+       | 0002-01-01T00:00:00.000 |
+       | 0003-01-01T00:00:00.000 |
+       | 0004-01-01T00:00:00.000 |
+       | 0005-01-01T00:00:00.000 |
 
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
@@ -85,9 +86,11 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 2018-03-01T00:00:00.000 |
-       | 2018-12-01T00:00:00.000 |
-       | 2019-01-01T00:00:00.000 |
+       | 2018-01-01T00:00:00.001 |
+       | 2018-02-01T00:00:00.001 |
+       | 2018-03-01T00:00:00.001 |
+       | 2018-04-01T00:00:00.001 |
+       | 2018-05-01T00:00:00.001 |
 
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is anything but before or at 2019-01-01T00:00:00.000
@@ -95,10 +98,12 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 2019-10-01T00:00:00.000 |
-       | 2019-11-02T00:00:00.000 |
-       | 2020-01-01T00:00:00.000 |
-       | 2021-01-01T00:00:00.000 |
+       | 2019-01-01T00:00:00.001 |
+       | 2020-01-01T00:00:00.001 |
+       | 2021-01-01T00:00:00.001 |
+       | 2022-01-01T00:00:00.001 |
+       | 2023-01-01T00:00:00.001 |
+
 Scenario: 'beforeOrEqualTo' run with minimum possible date should only generate null
     Given foo is before or at 0001-01-01T00:00:00.000
     Then the following data should be generated:
