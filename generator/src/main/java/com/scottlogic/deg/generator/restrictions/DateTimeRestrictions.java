@@ -79,5 +79,9 @@ public class DateTimeRestrictions {
         public int hashCode() {
             return Objects.hash(limit, inclusive);
         }
+
+        public boolean isAfter(DateTimeLimit other) {
+            return limit.isAfter(other.limit);
+        }
     }
 }

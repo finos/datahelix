@@ -22,7 +22,7 @@ public class DateTimeRestrictionsMerger {
             return new MergeResult<>(merged);
         }
 
-        if (merged.min.getLimit().isAfter(merged.max.getLimit())) {
+        if (merged.min.isAfter(merged.max)) {
             return new MergeResult<>();
         }
 
