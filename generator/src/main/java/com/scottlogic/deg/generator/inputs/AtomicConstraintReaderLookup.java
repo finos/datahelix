@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -275,7 +276,7 @@ class AtomicConstraintReaderLookup {
     }
 
     static LocalDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS").withResolverStyle(ResolverStyle.STRICT);
         try {
             LocalDateTime parsedDateTime = LocalDateTime.parse(value, formatter);
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
