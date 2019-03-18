@@ -171,14 +171,6 @@ Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should b
        | 2022-01-01T00:00:00.000 |
        | 2023-01-01T00:00:00.000 |
 
-Scenario: 'before' run against a contradicting 'beforeOrAt' should only only generate string, numeric and null
-     Given foo is before 2019-01-01T00:00:00.000
-       And foo is before or at 2019-01-02T00:00:00.000
-       And the generator can generate at most 5 rows
-     Then the following data should be generated:
-       | foo                     |
-       | null                    |
-
 Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is anything but before or at 2019-01-02T00:00:00.000
