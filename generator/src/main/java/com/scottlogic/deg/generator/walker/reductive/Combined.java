@@ -10,11 +10,11 @@ public class Combined<T> {
 
 
     /**
-     * Returns an {@code Unptional} with the specified present non-null value.
+     * Returns an {@code Combined} with the specified present non-null value.
      *
      * @param <T> the class of the value
      * @param value the value to be present, which must be non-null
-     * @return an {@code Unptional} with the value present
+     * @return an {@code Combined} with the value present
      * @throws NullPointerException if value is null
      */
     public static <T> Combined<T> of(T value) {
@@ -32,7 +32,7 @@ public class Combined<T> {
     }
 
     /**
-     * If a value not Contradictory in this {@code Unptional}, returns the value,
+     * If a value not Contradictory in this {@code Combined}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
      *
      * @return the non-null value held by this {@code Optional}
@@ -48,11 +48,11 @@ public class Combined<T> {
     }
 
     /**
-     * Returns a Contradictory {@code Unptional} instance.  No value is present for this
-     * Unptional.
+     * Returns a Contradictory {@code Combined} instance.  No value is present for this
+     * Combined.
      *
      * @param <T> Type of the non-existent value
-     * @return a Contradictory {@code Unptional}
+     * @return a Contradictory {@code Combined}
      */
     public static<T> Combined<T> contradictory() {
         @SuppressWarnings("unchecked")

@@ -25,8 +25,14 @@ public class ReductiveTreePruner {
         this.constraintReducer = constraintReducer;
     }
 
-    public Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
-        return pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
+    /**
+     * Prunes a tree of any branches that are contradictory to the value of the nextFixedField
+     * @param constraintNode The Tree to be pruned
+     * @param nextFixedField The field, and the value to fix it for.
+     * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
+     */
+    public Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField nextFixedField) {
+        return pruneConstraintNode(constraintNode, nextFixedField.getField(), nextFixedField.getFieldSpecForCurrentValue());
     }
 
     private Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
