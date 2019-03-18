@@ -93,4 +93,9 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     public boolean visualiseReductions() {
         return false;
     }
+
+    @Override
+    public GenerationConfig.OutputFormat getOutputFormat() {
+        return null;
+    }
 }
