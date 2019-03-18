@@ -43,7 +43,7 @@ class ReductiveTreePrunerTest {
 
     // Leaf constraint -> contradicts with last fixed field
     @Test
-    public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsEmptyNode() {
+    public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field1, 5, Collections.emptySet()));
@@ -52,10 +52,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Optional<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Optional expected = Optional.empty();
+        Combined<Object> expected = Combined.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -79,7 +79,7 @@ class ReductiveTreePrunerTest {
 
     // With a decision -> Decision contradicts
     @Test
-    public void pruneConstraintNode_withContradictoryDecision_returnsEmptyOptional() {
+    public void pruneConstraintNode_withContradictoryDecision_returnsContradictory() {
         //Arrange
         ConstraintNode tree =
             constraintNode()
@@ -93,10 +93,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Optional<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Optional<ConstraintNode> expected = Optional.empty();
+        Combined<Object> expected = Combined.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -206,7 +206,7 @@ class ReductiveTreePrunerTest {
 
     // Two decisions, one decision is contradictory
     @Test
-    public void pruneConstraintNode_twoDecisionsOneContradictory_returnEmptyOptional() {
+    public void pruneConstraintNode_twoDecisionsOneContradictory_returnContradictory() {
         //Arrange
         ConstraintNode tree =
             constraintNode()
@@ -223,10 +223,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Optional<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Optional<Object> expected = Optional.empty();
+        Combined<Object> expected = Combined.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -329,7 +329,7 @@ class ReductiveTreePrunerTest {
 
     // Both layers contradict -> returns invalid tree
     @Test
-    public void pruneConstraintNode_MultiLayerMultiContradicts_returnsEmptyOptional() {
+    public void pruneConstraintNode_MultiLayerMultiContradicts_returnsContradictory() {
         //Arrange
         ConstraintNode tree =
             constraintNode()
@@ -347,10 +347,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Optional<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Optional<Object> expected = Optional.empty();
+        Combined<Object> expected = Combined.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 

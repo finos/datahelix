@@ -35,7 +35,7 @@ class ReductiveDecisionTreeWalkerTests {
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
         ReductiveTreePruner treeReducer = mock(ReductiveTreePruner.class);
-        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(java.util.Optional.ofNullable(rootNode));
+        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Combined.of(rootNode));
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
         fixFieldStrategy = mock(FixFieldStrategy.class);

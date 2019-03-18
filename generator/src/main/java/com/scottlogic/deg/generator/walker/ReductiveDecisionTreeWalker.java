@@ -82,12 +82,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixFieldStrategy fixFieldStrategy){
 
         //reduce the tree based on the fields that are now fixed
-        Optional<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
+        Combined<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
 
-        if (!reducedNode.isPresent()){
-            //a field has been fixed, but is contradictory, i.e. it has invalidated the tree
+        if (reducedNode.isContradictory()){
             //yielding an empty stream will cause back-tracking
-
             this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
         }

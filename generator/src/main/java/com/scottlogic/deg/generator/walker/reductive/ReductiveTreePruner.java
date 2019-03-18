@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ReductiveTreePruner {
 
@@ -26,15 +25,8 @@ public class ReductiveTreePruner {
         this.constraintReducer = constraintReducer;
     }
 
-    public Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
-        Combined<ConstraintNode> newConstraintNode = pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
-
-        if (newConstraintNode.isContradictory()){
-            return Optional.empty();
-        }
-
-
-        return Optional.of(newConstraintNode.get());
+    public Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
+        return pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
     }
 
     private Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
