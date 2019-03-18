@@ -92,7 +92,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? new NumericRestrictions()
             : fieldSpec.getNumericRestrictions();
 
-        int numericScale = getNumericScale(restrictions, fieldSpec.getGranularityRestrictions());
+        int numericScale = getNumericScale(fieldSpec.getGranularityRestrictions());
 
         if ((restrictions.min == null && restrictions.max == null) || isFieldValueAnInteger(restrictions, numericScale)) {
             return new IntegerFieldValueSource(
@@ -106,20 +106,13 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             numericScale);
     }
 
-    private int getNumericScale(NumericRestrictions numericRestrictions, GranularityRestrictions granularityRestrictions) {
+    private int getNumericScale(GranularityRestrictions granularityRestrictions) {
         if (granularityRestrictions != null) {
             return granularityRestrictions.getNumericScale();
         }
 
-        if (numericRestrictions.min != null && numericRestrictions.max != null) {
-            return Math.max(numericRestrictions.min.getLimit().scale(), numericRestrictions.max.getLimit().scale());
-        }
-
-        NumericLimit<BigDecimal> numericLimit = numericRestrictions.min != null
-            ? numericRestrictions.min
-            : numericRestrictions.max;
-
-        return numericLimit != null ? numericLimit.getLimit().scale() : 0;
+        //Note that the default granularity if not specified is 10e-20
+        return 20;
     }
 
     private boolean isFieldValueAnInteger(NumericRestrictions numericRestrictions, int numericScale) {

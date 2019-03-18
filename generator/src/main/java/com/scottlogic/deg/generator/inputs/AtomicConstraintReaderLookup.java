@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
@@ -135,9 +136,24 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISOFTYPE.toString(),
                 (dto, fields, rules) ->
                 {
+                    String typeString = (String) throwIfValueNull(dto.value);
+                    if (typeString.equals("integer")) {
+                        return new AndConstraint(
+                            new IsOfTypeConstraint(
+                                fields.getByName(dto.field),
+                                IsOfTypeConstraint.Types.NUMERIC,
+                                rules
+                            ),
+                            new IsGranularToConstraint(
+                                fields.getByName(dto.field),
+                                new ParsedGranularity(BigDecimal.ONE),
+                                rules
+                            )
+                        );
+                    }
                     final IsOfTypeConstraint.Types type;
-                    switch ((String) throwIfValueNull(dto.value)) {
-                        case "numeric":
+                    switch (typeString) {
+                        case "decimal":
                             type = IsOfTypeConstraint.Types.NUMERIC;
                             break;
 
@@ -148,6 +164,10 @@ class AtomicConstraintReaderLookup {
                         case "temporal":
                             type = IsOfTypeConstraint.Types.TEMPORAL;
                             break;
+
+                        case "numeric":
+                            throw new InvalidProfileException("Numeric type is no longer supported. " +
+                                "Please use one of \"decimal\" or \"numeric\"");
 
                         default:
                             throw new InvalidProfileException("Unrecognised type in type constraint: " + dto.value);
