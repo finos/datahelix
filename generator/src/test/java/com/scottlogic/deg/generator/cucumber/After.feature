@@ -12,8 +12,7 @@ Scenario: 'After' valid date is successful for a single row
     | foo                     |
     | 2018-09-01T00:00:00.001 |
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' valid date is successful
   Given foo is after 2018-09-01T00:00:00.000
     And the generator can generate at most 4 rows
@@ -41,6 +40,7 @@ Scenario: 'After' non-existent leap year date fails with error
 
   ### after ###
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'After' is successful
   Given foo is after 2019-01-01T00:00:00.000
     And foo is after 2019-02-01T00:00:00.000
@@ -48,13 +48,12 @@ Scenario: 'After' with a non-contradicting 'After' is successful
   Then the following data should be generated:
     | foo                     |
     | 2019-02-01T00:00:00.001 |
-    | 2020-02-01T00:00:00.001 |
-    | 2021-02-01T00:00:00.001 |
-    | 2022-02-01T00:00:00.001 |
-    | 2023-02-01T00:00:00.001 |
+    | 2019-02-01T00:00:00.002 |
+    | 2019-02-01T00:00:00.003 |
+    | 2019-02-01T00:00:00.004 |
+    | 2019-02-01T00:00:00.005 |
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Not After' is successful
   Given foo is after 2019-01-01T00:00:00.000
     And foo is anything but after 2020-01-01T00:00:00.000
@@ -62,22 +61,23 @@ Scenario: 'After' with a non-contradicting 'Not After' is successful
   Then the following data should be generated:
     | foo                     |
     | 2019-01-01T00:00:00.001 |
-    | 2019-02-01T00:00:00.001 |
-    | 2019-03-01T00:00:00.001 |
-    | 2019-04-01T00:00:00.001 |
-    | 2019-05-01T00:00:00.001 |
+    | 2019-01-01T00:00:00.002 |
+    | 2019-01-01T00:00:00.003 |
+    | 2019-01-01T00:00:00.004 |
+    | 2019-01-01T00:00:00.005 |
 
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'Not After' with a non-contradicting 'Not After' is successful
   Given foo is anything but after 2019-01-01T00:00:00.000
     And foo is anything but after 2020-01-01T00:00:00.000
     And the generator can generate at most 5 rows
   Then the following data should be generated:
     | foo                     |
-    | 0001-01-01T00:00:00.000 |
-    | 0002-01-01T00:00:00.000 |
-    | 0003-01-01T00:00:00.000 |
-    | 0004-01-01T00:00:00.000 |
-    | 0005-01-01T00:00:00.000 |
+    | 2019-01-01T00:00:00.000 |
+    | 2018-12-31T23:59:59.999 |
+    | 2018-12-31T23:59:59.998 |
+    | 2018-12-31T23:59:59.997 |
+    | 2018-12-31T23:59:59.996 |
 
 #Defect #672 - Request for contradictory After and Not After should only generate null
 @ignore
@@ -90,6 +90,7 @@ Scenario: 'After' with a contradicting 'Not After' generates null
 
 ### afterOrAt ###
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'After Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is after or at 2019-02-01T00:00:00.000
@@ -97,13 +98,12 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-02-01T00:00:00.000 |
-  | 2020-02-01T00:00:00.000 |
-  | 2021-02-01T00:00:00.000 |
-  | 2022-02-01T00:00:00.000 |
-  | 2023-02-01T00:00:00.000 |
+  | 2019-02-01T00:00:00.001 |
+  | 2019-02-01T00:00:00.002 |
+  | 2019-02-01T00:00:00.003 |
+  | 2019-02-01T00:00:00.004 |
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Not After Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but after or at 2020-01-01T00:00:00.000
@@ -116,8 +116,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
   | 2019-01-01T00:00:00.005 |
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'Not After' with a non-contradicting 'After Or At' is successful
 Given foo is anything but after 2020-01-01T00:00:00.000
   And foo is after or at 2019-01-01T00:00:00.000
@@ -130,17 +129,18 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.003 |
   | 2019-01-01T00:00:00.004 |
 
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'Not After' with a non-contradicting 'Not After Or At' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And  foo is anything but after or at 2020-01-01T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 0001-01-01T00:00:00.000 |
-  | 0002-01-01T00:00:00.000 |
-  | 0003-01-01T00:00:00.000 |
-  | 0004-01-01T00:00:00.000 |
-  | 0005-01-01T00:00:00.000 |
+  | 2019-01-01T00:00:00.000 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
+  | 2018-12-31T23:59:59.996 |
 
 #Defect #672 - Request for contradictory After and Not After should only generate null
 @ignore
@@ -154,8 +154,7 @@ Then the following data should be generated:
 
 ### before ###
 
-  #Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is before 2020-01-01T00:00:00.000
@@ -168,6 +167,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
   | 2019-01-01T00:00:00.005 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Not Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but before 2019-01-01T00:00:00.000
@@ -175,25 +175,25 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-01-01T00:00:00.001 |
-  | 2020-01-01T00:00:00.001 |
-  | 2021-01-01T00:00:00.001 |
-  | 2022-01-01T00:00:00.001 |
-  | 2023-01-01T00:00:00.001 |
+  | 2019-01-01T00:00:00.002 |
+  | 2019-01-01T00:00:00.003 |
+  | 2019-01-01T00:00:00.004 |
+  | 2019-01-01T00:00:00.005 |
 
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'Not After' with a non-contradicting 'Before' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is before 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 0001-01-01T00:00:00.000 |
-  | 0002-01-01T00:00:00.000 |
-  | 0003-01-01T00:00:00.000 |
-  | 0004-01-01T00:00:00.000 |
-  | 0005-01-01T00:00:00.000 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
+  | 2018-12-31T23:59:59.996 |
+  | 2018-12-31T23:59:59.995 |
 
- #Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'Not After' with a non-contradicting 'Not Before' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before 2018-01-01T00:00:00.000
@@ -222,8 +222,7 @@ Then the following data should be generated:
 
 ### beforeOrAt ###
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is before or at 2020-01-01T00:00:00.000
@@ -236,6 +235,7 @@ Then the following data should be generated:
   | 2019-01-01T00:00:00.004 |
   | 2019-01-01T00:00:00.005 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Not Before Or At' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but before or at 2019-01-02T00:00:00.000
@@ -243,25 +243,25 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-01-02T00:00:00.001 |
-  | 2020-01-02T00:00:00.001 |
-  | 2021-01-02T00:00:00.001 |
-  | 2022-01-02T00:00:00.001 |
-  | 2023-01-02T00:00:00.001 |
+  | 2019-01-02T00:00:00.002 |
+  | 2019-01-02T00:00:00.003 |
+  | 2019-01-02T00:00:00.004 |
+  | 2019-01-02T00:00:00.005 |
 
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'Not After' with a non-contradicting 'Before Or At' is successful
 Given foo is anything but after 2019-01-02T00:00:00.000
   And  foo is before or at 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 0001-01-01T00:00:00.000 |
-  | 0002-01-01T00:00:00.000 |
-  | 0003-01-01T00:00:00.000 |
-  | 0004-01-01T00:00:00.000 |
-  | 0005-01-01T00:00:00.000 |
+  | 2019-01-01T00:00:00.000 |
+  | 2018-12-31T23:59:59.999 |
+  | 2018-12-31T23:59:59.998 |
+  | 2018-12-31T23:59:59.997 |
+  | 2018-12-31T23:59:59.996 |
 
-#Related to #667 - Expected time increment is one millisecond
-@ignore
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: 'Not After' with a non-contradicting 'Not Before Or At' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
   And foo is anything but before or at 2018-01-01T00:00:00.000
