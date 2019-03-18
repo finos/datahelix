@@ -102,6 +102,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         hidden = true)
     private Boolean visualiseReductions = false;
 
+    @CommandLine.Option(
+        names = {"-o"},
+        description = "Output format",
+        defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
+    private GenerationConfig.OutputFormat outputFormat;
 
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
@@ -183,6 +188,10 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public boolean visualiseReductions() {
         return visualiseReductions;
+    }
+
+    public GenerationConfig.OutputFormat getOutputFormat() {
+        return outputFormat;
     }
 
     @Override

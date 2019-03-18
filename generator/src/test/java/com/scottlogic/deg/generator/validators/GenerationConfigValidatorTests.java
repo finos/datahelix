@@ -105,7 +105,7 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.isEnableTracing()).thenReturn(true);
         when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
         when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
-        expectedErrorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --overwrite option");
+        expectedErrorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --replace option");
 
         //Act
         ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
@@ -219,7 +219,7 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
         when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
         expectedErrorMessages.add("Invalid Output - file already exists, please use a different output filename " +
-            "or use the --overwrite option");
+            "or use the --replace option");
 
         //Act
         ValidationResult actualResult = validator
@@ -320,7 +320,7 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
         when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(false);
         expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manifest.json' " +
-            "and '[0-9].csv' files or use the --overwrite option");
+            "and '[0-9].csv' files or use the --replace option");
 
         //Act
         ValidationResult actualResult = validator.postProfileChecks(profile, mockConfigSource, mockOutputTarget);
