@@ -54,7 +54,7 @@ public class ReductiveTreePruner {
         // Merge with spec from parent
         Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), mergingFieldSpec);
 
-        // If contradictory -> return Optional.empty
+        // If contradictory -> return Combined.contradictory
         if (!newFieldSpec.isPresent()) {
             return Combined.contradictory();
         }
