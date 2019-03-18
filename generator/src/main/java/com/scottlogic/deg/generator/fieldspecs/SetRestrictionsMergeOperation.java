@@ -27,7 +27,6 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
 
         // Filter the set to match any new restrictions
         if (setRestrictions != null &&
-            !setRestrictions.getWhitelist().isEmpty() &&
             !setRestrictions.getWhitelist().isEmpty()) {
 
             Stream<?> filterStream = setRestrictions.getWhitelist().stream();

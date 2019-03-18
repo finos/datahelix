@@ -28,13 +28,13 @@ public class SetRestrictions {
     }
 
     public SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
-        this.whitelist = whitelist;
-        this.blacklist = blacklist;
+        this.whitelist = whitelist == null ? new HashSet<>() : whitelist;
+        this.blacklist = blacklist == null ? new HashSet<>() : blacklist;
     }
 
     public boolean isEmpty(){
-        return ((this.whitelist == null || this.whitelist.isEmpty())
-            && (this.blacklist == null || this.blacklist.isEmpty()));
+        return this.whitelist.isEmpty()
+            && this.blacklist.isEmpty();
     }
 
     public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
