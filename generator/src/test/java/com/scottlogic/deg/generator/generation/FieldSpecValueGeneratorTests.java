@@ -113,7 +113,7 @@ class FieldSpecValueGeneratorTests {
                             new SetRestrictions(
                                 new HashSet<>(
                                     Arrays.asList(15, 25)),
-                                Collections.emptySet()),
+                                null),
                             fieldSpecSource),
                         rootFieldSpec.withSetRestrictions(
                             new SetRestrictions(
