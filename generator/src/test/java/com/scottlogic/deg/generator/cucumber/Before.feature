@@ -67,17 +67,18 @@ Scenario: Running a 'before' request that specifies an invalid leap year should 
      And no data is created
 
 #before
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'before' run against a non contradicting 'before' should be successful
      Given foo is before 2019-01-01T00:00:00.000
        And foo is before 2018-01-01T00:00:00.000
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 0001-01-01T00:00:00.000 |
-       | 0002-01-01T00:00:00.000 |
-       | 0003-01-01T00:00:00.000 |
-       | 0004-01-01T00:00:00.000 |
-       | 0005-01-01T00:00:00.000 |
+       | 2017-12-31T23:59:59.999 |
+       | 2017-12-31T23:59:59.998 |
+       | 2017-12-31T23:59:59.997 |
+       | 2017-12-31T23:59:59.996 |
+       | 2017-12-31T23:59:59.995 |
 
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 # Defect 141 "Implement granularity for temporal values" related to this issue
@@ -94,6 +95,7 @@ Scenario: 'before' run against a non contradicting not 'before' should be succes
        | 2019-01-01T23:59:59.997 |
        | 2019-01-01T23:59:59.996 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: not 'before' run against a non contradicting not 'before' should be successful
      Given foo is anything but before 2019-01-01T00:00:00.000
        And foo is anything but before 2018-01-01T00:00:00.000
@@ -101,10 +103,10 @@ Scenario: not 'before' run against a non contradicting not 'before' should be su
      Then the following data should be generated:
        | foo                     |
        | 2019-01-01T00:00:00.000 |
-       | 2020-01-01T00:00:00.000 |
-       | 2021-01-01T00:00:00.000 |
-       | 2022-01-01T00:00:00.000 |
-       | 2023-01-01T00:00:00.000 |
+       | 2019-01-01T00:00:00.001 |
+       | 2019-01-01T00:00:00.002 |
+       | 2019-01-01T00:00:00.003 |
+       | 2019-01-01T00:00:00.004 |
 
 Scenario: 'before' run against a contradicting not 'before' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
@@ -115,17 +117,18 @@ Scenario: 'before' run against a contradicting not 'before' should only only gen
        | null                    |
 
 #beforeOrAt
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: 'before' run against a non contradicting 'beforeOrAt' should be successful
      Given foo is before 2019-01-01T00:00:00.000
        And foo is before or at 2018-01-01T00:00:00.000
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 0001-01-01T00:00:00.000 |
-       | 0002-01-01T00:00:00.000 |
-       | 0003-01-01T00:00:00.000 |
-       | 0004-01-01T00:00:00.000 |
-       | 0005-01-01T00:00:00.000 |
+       | 2018-01-01T00:00:00.000 |
+       | 2017-12-31T23:59:59.999 |
+       | 2017-12-31T23:59:59.998 |
+       | 2017-12-31T23:59:59.997 |
+       | 2017-12-31T23:59:59.996 |
 
 # Defect 614 "Before and not BeforeOrAt run in full generation mode doesn't create all expected values" related to this scenario
 @ignore
@@ -153,17 +156,18 @@ Scenario: not 'before' run against a non contradicting 'beforeOrAt' should be su
        | 2018-12-31T23:59:59.999 |
        | 2018-12-31T23:59:59.998 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should be successful
      Given foo is anything but before 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 2019-01-01T00:00:00.000 |
-       | 2020-01-01T00:00:00.000 |
-       | 2021-01-01T00:00:00.000 |
-       | 2022-01-01T00:00:00.000 |
-       | 2023-01-01T00:00:00.000 |
+       | 2019-01-01T00:00:00.001 |
+       | 2019-01-01T00:00:00.002 |
+       | 2019-01-01T00:00:00.003 |
+       | 2019-01-01T00:00:00.004 |
+       | 2019-01-01T00:00:00.005 |
 
 Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
