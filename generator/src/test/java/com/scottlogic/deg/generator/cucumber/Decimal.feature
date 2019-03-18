@@ -67,7 +67,7 @@ Scenario: In Set constraint with decimal type only produces valid decimals
     | 1.00000000000000000000  |
     | 1.10000000000000000000  |
 
-Scenario: Granular to 2 d.p. with type numeric produces valid decimals with 2 d.p.
+Scenario: Granular to 2 d.p. with type decimal produces valid decimals with 2 d.p.
   Given foo is granular to 0.01
     And foo is greater than or equal to 0
     And the generator can generate at most 5 rows
@@ -79,7 +79,7 @@ Scenario: Granular to 2 d.p. with type numeric produces valid decimals with 2 d.
     | 0.03  |
     | 0.04  |
 
-Scenario: Granular to 2 d.p. with type numeric produces valid decimals with 2 d.p.
+Scenario: Granular to 2 d.p. with type decimal produces valid decimals with 2 d.p.
   Given foo is granular to 10e-30
     And foo is greater than or equal to 0
     And the generator can generate at most 5 rows
