@@ -34,8 +34,6 @@ Scenario Outline: 'After' invalid datetime fails with error
     | 2018-09-01T25:00:00.000 |
     | 2018-13-01T00:00:00.000 |
 
-#Issue #610 - Leap year date invalid
-@ignore
 Scenario: 'After' non-existent leap year date fails with error
   Given foo is after 2019-02-29T00:00:00.000
   Then I am presented with an error message
