@@ -53,6 +53,7 @@
         <junit.vintage.version>5.3.1</junit.vintage.version>
         <junit.platform.version>1.3.1</junit.platform.version>
         <jackson.version>2.9.6</jackson.version>
+        <jacoco.version>0.8.3</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -175,6 +176,47 @@
     </reporting>
 
     <build>
+    	<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.basedir}/target/jacoco.exec</dataFile>
+							<outputDirectory>${project.basedir}/target/jacoco-reports</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<systemPropertyVariables>
+						<jacoco-agent.destfile>${project.basedir}/target/jacoco.exec</jacoco-agent.destfile>
+					</systemPropertyVariables>
+                    <excludes>
+                        <exclude>picocli/**/*</exclude>
+                    </excludes>
+				</configuration>
+			</plugin>
+		</plugins>
         <pluginManagement>
             <plugins>
 
