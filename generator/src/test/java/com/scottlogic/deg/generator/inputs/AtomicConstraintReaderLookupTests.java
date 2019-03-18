@@ -248,4 +248,18 @@ public class AtomicConstraintReaderLookupTests {
         Assertions.assertDoesNotThrow(
             () -> AtomicConstraintReaderLookup.parseDate("9999-12-31T23:59:59.999"));
     }
+
+    @Test
+    public void parseDate_withAnInvalidDateShouldThrow(){
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("2019-02-29T00:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withAnInvalidTimeShouldThrow(){
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> AtomicConstraintReaderLookup.parseDate("2019-01-01T24:00:00.000"));
+    }
 }
