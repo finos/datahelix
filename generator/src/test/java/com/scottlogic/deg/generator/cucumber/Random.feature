@@ -74,7 +74,6 @@ Scenario Outline: The generator produces violating (incorrect type) data in rand
     And the data requested is violating
   Then 5 rows of data are generated
     And foo contains anything but <type> data
-
   Examples:
     | type    |
     | string  |
