@@ -326,7 +326,7 @@ class DateTimeRestrictionsTests {
         LocalDateTime selfValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
         LocalDateTime otherValue = selfValue.plusNanos(1);
         DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, false);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
 
         boolean result = other.isAfter(self);
 
