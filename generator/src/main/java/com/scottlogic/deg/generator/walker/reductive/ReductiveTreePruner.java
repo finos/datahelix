@@ -33,9 +33,6 @@ public class ReductiveTreePruner {
             return Optional.empty();
         }
 
-        if (isContradictory(newConstraintNode.get())){
-            return Optional.empty();
-        }
 
         return Optional.of(newConstraintNode.get());
     }
@@ -109,21 +106,5 @@ public class ReductiveTreePruner {
 
     private ConstraintNode getOnlyRemainingOption(Combined<DecisionNode> prunedDecisionNode) {
         return prunedDecisionNode.get().getOptions().iterator().next();
-    }
-
-    private boolean isContradictory(ConstraintNode constraintNode) {
-        List<Field> constraintFields = constraintNode.getAtomicConstraints().stream()
-            .map(AtomicConstraint::getField)
-            .distinct()
-            .collect(Collectors.toList());
-
-        for (Field field : constraintFields) {
-            List<AtomicConstraint> constraintsForField = AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
-            if (!fieldSpec.isPresent()){
-                return true;
-            }
-        }
-        return false;
     }
 }
