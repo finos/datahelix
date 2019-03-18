@@ -185,6 +185,7 @@ class ReductiveTreePrunerTest {
                     constraintNode().where(field1).isInSet("b"),
                     constraintNode().where(field1).isInSet("c"))
                 .build();
+
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
         FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
 
@@ -199,6 +200,7 @@ class ReductiveTreePrunerTest {
                 constraintNode().where(field1).isInSet("a"),
                 constraintNode().where(field1).isInSet("b"))
             .build();
+
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -286,8 +288,8 @@ class ReductiveTreePrunerTest {
         ConstraintNode expected = constraintNode()
             .where(unrelatedField).isInSet("unrelated1")
             .withDecisions(
-                constraintNode().where(unrelatedField).isInSet("unrelated2"),
-                constraintNode().where(field1).isInSet("valid"))
+                constraintNode().where(field1).isInSet("valid"),
+                constraintNode().where(unrelatedField).isInSet("unrelated2"))
             .build();
         assertThat(actual, sameBeanAs(expected));
     }
@@ -317,10 +319,10 @@ class ReductiveTreePrunerTest {
         //Assert
         ConstraintNode expected = constraintNode()
             .withDecisions(
+                constraintNode().where(field1).isInSet("valid"),
                 constraintNode()
                     .where(unrelatedField).isInSet("unrelated1")
-                    .where(unrelatedField).isInSet("unrelated2"),
-                constraintNode().where(field1).isInSet("valid"))
+                    .where(unrelatedField).isInSet("unrelated2"))
             .build();
         assertThat(actual, sameBeanAs(expected));
     }

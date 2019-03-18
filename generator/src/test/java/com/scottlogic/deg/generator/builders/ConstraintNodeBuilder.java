@@ -7,12 +7,12 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConstraintNodeBuilder {
-    protected Set<AtomicConstraint> constraints = new HashSet<>();
-    private Set<DecisionNode> decisionNodes = new HashSet<>();
+    protected List<AtomicConstraint> constraints = new ArrayList<>();
+    private List<DecisionNode> decisionNodes = new ArrayList<>();
 
     protected ConstraintNodeBuilder() {
     }
@@ -30,7 +30,7 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder withDecisions(ConstraintNodeBuilder... constraintNodes) {
-        Set<ConstraintNode> nodes = new HashSet<>();
+        List<ConstraintNode> nodes = new ArrayList<>();
         for (ConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }

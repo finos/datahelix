@@ -52,7 +52,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode singleDecisionOption = constraint("decision");
         ConstraintNode rootNode = constraint(
             "root",
-            new OrderedDecisionNode(singleDecisionOption));
+            new TreeDecisionNode(singleDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
         RowSpecRoute route1 = route(null, route(singleDecisionOption));
@@ -88,8 +88,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new OrderedDecisionNode(leftDecisionOption),
-            new OrderedDecisionNode(rightDecisionOption)
+            new TreeDecisionNode(leftDecisionOption),
+            new TreeDecisionNode(rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
@@ -125,8 +125,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode conflictingOption = constraint("conflicting");
         ConstraintNode rootNode = constraint(
             "root",
-            new OrderedDecisionNode(leftDecisionOption),
-            new OrderedDecisionNode(conflictingOption)
+            new TreeDecisionNode(leftDecisionOption),
+            new TreeDecisionNode(conflictingOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
@@ -162,7 +162,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
+            new TreeDecisionNode(leftDecisionOption, rightDecisionOption)
         );
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
 
@@ -201,7 +201,7 @@ class DecisionTreeRoutesTreeWalkerTest {
         ConstraintNode rightDecisionOption = constraint("right");
         ConstraintNode rootNode = constraint(
             "root",
-            new OrderedDecisionNode(leftDecisionOption, rightDecisionOption)
+            new TreeDecisionNode(leftDecisionOption, rightDecisionOption)
         );
         RowSpecRoute route1 = route(null, route(leftDecisionOption));
         DecisionTree tree = new DecisionTree(rootNode, getFields(), "Test tree");
@@ -237,8 +237,8 @@ class DecisionTreeRoutesTreeWalkerTest {
         return new RowSpecRoute(decisionOption, Arrays.asList(subRoutes));
     }
 
-    private static ConstraintNode constraint(String name, OrderedDecisionNode... decisions){
-        return new OrderedConstraintNode(
+    private static ConstraintNode constraint(String name, DecisionNode... decisions){
+        return new TreeConstraintNode(
             Collections.singletonList(new IsInSetConstraint(new Field(name), Collections.singleton(name), rules())),
             Arrays.asList(decisions));
     }
@@ -321,120 +321,6 @@ class DecisionTreeRoutesTreeWalkerTest {
         @Override
         public String toString() {
             return name;
-        }
-    }
-
-    private static class OrderedConstraintNode implements ConstraintNode {
-        private final List<AtomicConstraint> atomicConstraints;
-        private final List<DecisionNode> decisions;
-
-        public OrderedConstraintNode(List<AtomicConstraint> atomicConstraints, List<DecisionNode> decisions) {
-            this.atomicConstraints = atomicConstraints;
-            this.decisions = decisions;
-        }
-
-        @Override
-        public Collection<AtomicConstraint> getAtomicConstraints() {
-            return atomicConstraints;
-        }
-
-        @Override
-        public Collection<DecisionNode> getDecisions() {
-            return decisions;
-        }
-
-        @Override
-        public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public boolean atomicConstraintExists(AtomicConstraint constraint) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode markNode(NodeMarking marking) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public boolean hasMarking(NodeMarking detail) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public ConstraintNode accept(NodeVisitor visitor){
-            Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
-            Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
-
-            return visitor.visit(
-                new OrderedConstraintNode(
-                    atomicConstraintStream.collect(Collectors.toList()),
-                    decisionNodeStream.collect(Collectors.toList())));
-        }
-    }
-
-    private static class OrderedDecisionNode implements DecisionNode {
-        private final List<ConstraintNode> options;
-
-        public OrderedDecisionNode(ConstraintNode... options) {
-            this.options = Arrays.asList(options);
-        }
-
-        @Override
-        public Collection<ConstraintNode> getOptions() {
-            return options;
-        }
-
-        @Override
-        public DecisionNode setOptions(Collection<ConstraintNode> options) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public DecisionNode markNode(NodeMarking marking) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public boolean hasMarking(NodeMarking detail) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public DecisionNode accept(NodeVisitor visitor){
-            Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
-            return visitor.visit(
-                new TreeDecisionNode(
-                    options.collect(Collectors.toList())
-                )
-            );
         }
     }
 
