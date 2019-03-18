@@ -15,6 +15,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public Long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
+    public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -104,5 +105,10 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public boolean visualiseReductions() {
         return false;
+    }
+
+    @Override
+    public GenerationConfig.OutputFormat getOutputFormat() {
+        return outputFormat;
     }
 }

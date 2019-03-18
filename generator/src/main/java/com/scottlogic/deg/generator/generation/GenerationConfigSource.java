@@ -33,4 +33,5 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean visualiseReductions();
     boolean shouldViolate();
 
+    GenerationConfig.OutputFormat getOutputFormat();
 }
