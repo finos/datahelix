@@ -65,7 +65,7 @@ public class GenerationConfigValidator implements ConfigValidator {
 
         if (configSource.isEnableTracing()) {
             if (fileUtils.getTraceFile(configSource).exists() && !configSource.overwriteOutputFiles()) {
-                errorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --overwrite option");
+                errorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --replace option");
             }
         }
     }
@@ -97,7 +97,7 @@ public class GenerationConfigValidator implements ConfigValidator {
                 "Invalid Output - target is a directory, please use a different output filename");
         } else if (!configSource.overwriteOutputFiles() && fileUtils.exists(outputTarget)) {
             errorMessages.add(
-                "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
+                "Invalid Output - file already exists, please use a different output filename or use the --replace option");
         } else if (!fileUtils.exists(outputTarget)) {
             Path parent = outputTarget.getFilePath().toAbsolutePath().getParent();
             if (!fileUtils.createDirectories(parent)) {
@@ -119,7 +119,7 @@ public class GenerationConfigValidator implements ConfigValidator {
         } else if (!configSource.overwriteOutputFiles() && !fileUtils
             .isDirectoryEmpty(outputTarget, ruleCount)) {
             errorMessages.add(
-                "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --overwrite option");
+                "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --replace option");
         }
     }
 }

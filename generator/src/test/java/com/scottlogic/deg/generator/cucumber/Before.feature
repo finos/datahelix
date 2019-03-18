@@ -56,15 +56,11 @@ Scenario: Running a 'before' request that specifies an invalid date should be un
      Then the profile is invalid
        And no data is created
 
-# Defect 617 "Invalid time (24:00) does not result in an invalid profile error" related to this scenario
-@ignore
 Scenario: Running a 'before' request that specifies an invalid time should be unsuccessful
      Given foo is before 2019-01-01T24:00:00.000
        Then the profile is invalid
      And no data is created
 
-# Defect 610 "Setting before using an invalid leap year date does not fail as expected" related to this scenario
-@ignore
 Scenario: Running a 'before' request that specifies an invalid leap year should be unsuccessful
      Given foo is before 2019-02-29T00:00:00.000
        Then the profile is invalid
@@ -113,8 +109,7 @@ Scenario: not 'before' run against a non contradicting not 'before' should be su
        | 2019-01-01T00:00:00.002 |
        | 2019-01-01T00:00:00.003 |
        | 2019-01-01T00:00:00.004 |
-# Defect 613 "Request for simultaneously Before and not Before a date brings back that date" related to this scenario
-@ignore
+
 Scenario: 'before' run against a contradicting not 'before' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is anything but before 2019-01-01T00:00:00.000
