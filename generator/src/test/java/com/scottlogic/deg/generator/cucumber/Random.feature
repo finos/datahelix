@@ -92,24 +92,23 @@ Scenario: The generator produces violating (not type) 'Temporal' data in random 
   Given foo is of type "temporal"
     And foo is anything but null
     And the generator can generate at most 5 rows
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000
     And the data requested is violating
     And we do not violate any of type constraints
   Then 5 rows of data are generated
     And foo contains temporal data
-    And foo contains temporal values after or at 2019-01-01T00:00:00.001
+    And foo contains temporal values after or at 2019-01-01T00:00:00.000
 
 Scenario: The generator produces violating (not type) 'Numeric' data in random mode
   Given foo is of type "numeric"
     And foo is anything but null
     And the generator can generate at most 5 rows
-    And foo is less than or equal to 10
+    And foo is less than 10
     And the data requested is violating
     And we do not violate any of type constraints
   Then 5 rows of data are generated
     And foo contains numeric data
     And foo contains numeric values greater than or equal to 10
-    And foo is anything but equal to 10
 
 Scenario: The generator produces violating (not type) 'String' data in random mode
   Given foo is of type "string"
