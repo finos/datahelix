@@ -77,11 +77,11 @@ Scenario: 'before' run against a non contradicting 'before' should be successful
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | null                    |
-       | 2017-12-31T23:59:59.999 |
-       | 2017-12-31T23:59:59.998 |
-       | 2017-12-31T23:59:59.997 |
-       | 2017-12-31T23:59:59.996 |
+       | 0001-01-01T00:00:00.000 |
+       | 0002-01-01T00:00:00.000 |
+       | 0003-01-01T00:00:00.000 |
+       | 0004-01-01T00:00:00.000 |
+       | 0005-01-01T00:00:00.000 |
 
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
 # Defect 141 "Implement granularity for temporal values" related to this issue
@@ -104,11 +104,12 @@ Scenario: not 'before' run against a non contradicting not 'before' should be su
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | null                    |
-       | 2019-01-01T00:00:00.001 |
-       | 2019-01-01T00:00:00.002 |
-       | 2019-01-01T00:00:00.003 |
-       | 2019-01-01T00:00:00.004 |
+       | 2019-01-01T00:00:00.000 |
+       | 2020-01-01T00:00:00.000 |
+       | 2021-01-01T00:00:00.000 |
+       | 2022-01-01T00:00:00.000 |
+       | 2023-01-01T00:00:00.000 |
+
 # Defect 613 "Request for simultaneously Before and not Before a date brings back that date" related to this scenario
 @ignore
 Scenario: 'before' run against a contradicting not 'before' should only only generate string, numeric and null
@@ -126,11 +127,11 @@ Scenario: 'before' run against a non contradicting 'beforeOrAt' should be succes
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | null                    |
-       | 2018-01-01T00:00:00.000 |
-       | 2017-12-31T23:59:59.999 |
-       | 2017-12-31T23:59:59.998 |
-       | 2017-12-31T23:59:59.997 |
+       | 0001-01-01T00:00:00.000 |
+       | 0002-01-01T00:00:00.000 |
+       | 0003-01-01T00:00:00.000 |
+       | 0004-01-01T00:00:00.000 |
+       | 0005-01-01T00:00:00.000 |
 
 # Defect 614 "Before and not BeforeOrAt run in full generation mode doesn't create all expected values" related to this scenario
 @ignore
@@ -164,10 +165,11 @@ Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should b
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | null                    |
-       | 2018-01-01T00:00:00.000 |
-       | 2017-12-31T23:59:59.999 |
-       | 2017-12-31T23:59:59.998 |
+       | 2019-01-01T00:00:00.000 |
+       | 2020-01-01T00:00:00.000 |
+       | 2021-01-01T00:00:00.000 |
+       | 2022-01-01T00:00:00.000 |
+       | 2023-01-01T00:00:00.000 |
 
 Scenario: 'before' run against a contradicting 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
