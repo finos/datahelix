@@ -66,9 +66,9 @@
 ## Constituent objects
 
 ### `Profile`
-* `"description"`: A description of what data the profile is modelling
-* `"fields"`: A set of `Field` objects
-* `"rules"`: A set of `Rule` objects which can contain any number of `Constraint` objects.
+* `"description"`: An optional description of what data the profile is modelling.
+* `"fields"`: A set of one or more `Field` objects. Each field must have a unique name.
+* `"rules"`: A set of one or more `Rule` objects which must contain one or more `Constraint` objects.
 
 ### `Field`
 
