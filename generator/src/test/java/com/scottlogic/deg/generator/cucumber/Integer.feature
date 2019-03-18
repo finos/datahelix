@@ -1,0 +1,80 @@
+Feature: User can specify that a number is of type integer and does not have any decimal places
+
+  Background:
+    Given the generation strategy is full
+    And there is a field foo
+    And foo is of type "integer"
+    And foo is anything but null
+
+### Numeric Constraints
+
+Scenario: Greater than constraint with integer type produces valid integers
+  Given foo is greater than 10
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo |
+    | 11  |
+    | 12  |
+    | 13  |
+    | 14  |
+    | 15  |
+
+Scenario: Greater than or equal to constraint with integer type produces valid integers
+  Given foo is greater than or equal to 10
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo |
+    | 10  |
+    | 11  |
+    | 12  |
+    | 13  |
+    | 14  |
+
+Scenario: Less than or equal to constraint with integer type produces valid integers
+  Given foo is less than or equal to 10
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo |
+    | 10  |
+    | 9   |
+    | 8   |
+    | 7   |
+    | 6   |
+
+Scenario: Less than constraint with integer type produces valid integers
+  Given foo is less than 10
+    And the generator can generate at most 5 rows
+  Then the following data should be generated:
+    | foo |
+    | 9   |
+    | 8   |
+    | 7   |
+    | 6   |
+    | 5   |
+
+Scenario: Equal to constraint with integer type produces valid integer
+  Given foo is equal to 10
+  Then the following data should be generated:
+    | foo |
+    | 10  |
+
+Scenario: Equal to constraint with integer type rejects invalid integer
+  Given foo is equal to 10.1
+  Then no data is created
+
+Scenario: In Set constraint with integer type only produces valid integers
+  Given foo is in set:
+    | 1   |
+    | 1.1 |
+  Then the following data should be generated:
+    | foo |
+    | 1   |
+
+Scenario: Contradictory granular to constraint with integer type only produces valid integers
+  Given foo is in set:
+    | 1   |
+    | 1.1 |
+    And foo is granular to 0.1
+  Then the following data should be generated:
+    | foo |
+    | 1   |
