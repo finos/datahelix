@@ -50,10 +50,10 @@ Scenario: 'After' with a non-contradicting 'After' is successful
   Then the following data should be generated:
     | foo                     |
     | 2019-02-01T00:00:00.001 |
-    | 2019-02-01T00:00:00.002 |
-    | 2019-02-01T00:00:00.003 |
-    | 2019-02-01T00:00:00.004 |
-    | 2019-02-01T00:00:00.005 |
+    | 2020-02-01T00:00:00.001 |
+    | 2021-02-01T00:00:00.001 |
+    | 2022-02-01T00:00:00.001 |
+    | 2023-02-01T00:00:00.001 |
 
 #Related to #667 - Expected time increment is one millisecond
 @ignore
@@ -64,10 +64,10 @@ Scenario: 'After' with a non-contradicting 'Not After' is successful
   Then the following data should be generated:
     | foo                     |
     | 2019-01-01T00:00:00.001 |
-    | 2019-01-01T00:00:00.002 |
-    | 2019-01-01T00:00:00.003 |
-    | 2019-01-01T00:00:00.004 |
-    | 2019-02-01T00:00:00.005 |
+    | 2019-02-01T00:00:00.001 |
+    | 2019-03-01T00:00:00.001 |
+    | 2019-04-01T00:00:00.001 |
+    | 2019-05-01T00:00:00.001 |
 
 Scenario: 'Not After' with a non-contradicting 'Not After' is successful
   Given foo is anything but after 2019-01-01T00:00:00.000
@@ -75,11 +75,11 @@ Scenario: 'Not After' with a non-contradicting 'Not After' is successful
     And the generator can generate at most 5 rows
   Then the following data should be generated:
     | foo                     |
-    | 2019-01-01T00:00:00.000 |
-    | 2018-12-31T23:59:59.999 |
-    | 2018-12-31T23:59:59.998 |
-    | 2018-12-31T23:59:59.997 |
-    | 2018-12-31T23:59:59.996 |
+    | 0001-01-01T00:00:00.000 |
+    | 0002-01-01T00:00:00.000 |
+    | 0003-01-01T00:00:00.000 |
+    | 0004-01-01T00:00:00.000 |
+    | 0005-01-01T00:00:00.000 |
 
 #Defect #672 - Request for contradictory After and Not After should only generate null
 @ignore
@@ -99,10 +99,10 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-02-01T00:00:00.000 |
-  | 2019-02-01T00:00:00.001 |
-  | 2019-02-01T00:00:00.002 |
-  | 2019-02-01T00:00:00.003 |
-  | 2019-02-01T00:00:00.004 |
+  | 2020-02-01T00:00:00.000 |
+  | 2021-02-01T00:00:00.000 |
+  | 2022-02-01T00:00:00.000 |
+  | 2023-02-01T00:00:00.000 |
 
 #Related to #667 - Expected time increment is one millisecond
 @ignore
@@ -138,11 +138,11 @@ Given foo is anything but after 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 2019-01-01T00:00:00.000 |
-  | 2018-12-31T23:59:59.999 |
-  | 2018-12-31T23:59:59.998 |
-  | 2018-12-31T23:59:59.997 |
-  | 2018-12-31T23:59:59.996 |
+  | 0001-01-01T00:00:00.000 |
+  | 0002-01-01T00:00:00.000 |
+  | 0003-01-01T00:00:00.000 |
+  | 0004-01-01T00:00:00.000 |
+  | 0005-01-01T00:00:00.000 |
 
 #Defect #672 - Request for contradictory After and Not After should only generate null
 @ignore
@@ -177,10 +177,10 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-01-01T00:00:00.001 |
-  | 2019-01-01T00:00:00.002 |
-  | 2019-01-01T00:00:00.003 |
-  | 2019-01-01T00:00:00.004 |
-  | 2019-01-01T00:00:00.005 |
+  | 2020-01-01T00:00:00.001 |
+  | 2021-01-01T00:00:00.001 |
+  | 2022-01-01T00:00:00.001 |
+  | 2023-01-01T00:00:00.001 |
 
 Scenario: 'Not After' with a non-contradicting 'Before' is successful
 Given foo is anything but after 2019-01-01T00:00:00.000
@@ -188,11 +188,11 @@ Given foo is anything but after 2019-01-01T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 2018-12-31T23:59:59.999 |
-  | 2018-12-31T23:59:59.998 |
-  | 2018-12-31T23:59:59.997 |
-  | 2018-12-31T23:59:59.996 |
-  | 2018-12-31T23:59:59.995 |
+  | 0001-01-01T00:00:00.000 |
+  | 0002-01-01T00:00:00.000 |
+  | 0003-01-01T00:00:00.000 |
+  | 0004-01-01T00:00:00.000 |
+  | 0005-01-01T00:00:00.000 |
 
  #Related to #667 - Expected time increment is one millisecond
 @ignore
@@ -245,10 +245,10 @@ Given foo is after 2019-01-01T00:00:00.000
 Then the following data should be generated:
   | foo                     |
   | 2019-01-02T00:00:00.001 |
-  | 2019-01-02T00:00:00.002 |
-  | 2019-01-02T00:00:00.003 |
-  | 2019-01-02T00:00:00.004 |
-  | 2019-01-02T00:00:00.005 |
+  | 2020-01-02T00:00:00.001 |
+  | 2021-01-02T00:00:00.001 |
+  | 2022-01-02T00:00:00.001 |
+  | 2023-01-02T00:00:00.001 |
 
 Scenario: 'Not After' with a non-contradicting 'Before Or At' is successful
 Given foo is anything but after 2019-01-02T00:00:00.000
@@ -256,11 +256,11 @@ Given foo is anything but after 2019-01-02T00:00:00.000
   And the generator can generate at most 5 rows
 Then the following data should be generated:
   | foo                     |
-  | 2019-01-01T00:00:00.000 |
-  | 2018-12-31T23:59:59.999 |
-  | 2018-12-31T23:59:59.998 |
-  | 2018-12-31T23:59:59.997 |
-  | 2018-12-31T23:59:59.996 |
+  | 0001-01-01T00:00:00.000 |
+  | 0002-01-01T00:00:00.000 |
+  | 0003-01-01T00:00:00.000 |
+  | 0004-01-01T00:00:00.000 |
+  | 0005-01-01T00:00:00.000 |
 
 #Related to #667 - Expected time increment is one millisecond
 @ignore
