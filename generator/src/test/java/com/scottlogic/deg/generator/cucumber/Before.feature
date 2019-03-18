@@ -113,8 +113,7 @@ Scenario: not 'before' run against a non contradicting not 'before' should be su
        | 2019-01-01T00:00:00.002 |
        | 2019-01-01T00:00:00.003 |
        | 2019-01-01T00:00:00.004 |
-# Defect 613 "Request for simultaneously Before and not Before a date brings back that date" related to this scenario
-@ignore
+
 Scenario: 'before' run against a contradicting not 'before' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is anything but before 2019-01-01T00:00:00.000
