@@ -129,6 +129,21 @@ public class GenerationConfig {
         }
     }
 
+    public enum OutputFormat {
+        CSV(Constants.OutputFormats.CSV),
+        JSON(Constants.OutputFormats.JSON);
+        private final String text;
+
+        OutputFormat(String text){
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
@@ -158,6 +173,13 @@ public class GenerationConfig {
             public static final String QUIET = "QUIET";
             public static final String VERBOSE = "VERBOSE";
             public static final String STANDARD = "STANDARD";
+        }
+
+        public static class OutputFormats {
+            public static final String CSV = "CSV";
+            public static final String JSON = "JSON";
+
+            public static final String DEFAULT = CSV;
         }
 
         public static final long DEFAULT_MAX_ROWS = 1000;
