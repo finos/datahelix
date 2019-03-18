@@ -71,8 +71,6 @@ Scenario: Running a 'before' request that specifies an invalid leap year should 
      And no data is created
 
 #before
-# Defect 611 "before run against a non contradicting before results in an error" related to this scenario
-@ignore
 Scenario: 'before' run against a non contradicting 'before' should be successful
      Given foo is before 2019-01-01T00:00:00.000
        And foo is before 2018-01-01T00:00:00.000
@@ -100,8 +98,6 @@ Scenario: 'before' run against a non contradicting not 'before' should be succes
        | 2019-01-01T23:59:59.997 |
        | 2019-01-01T23:59:59.996 |
 
-# Defect 611 "before run against a non contradicting before results in an error" related to this scenario
-@ignore
 Scenario: not 'before' run against a non contradicting not 'before' should be successful
      Given foo is anything but before 2019-01-01T00:00:00.000
        And foo is anything but before 2018-01-01T00:00:00.000
@@ -124,8 +120,6 @@ Scenario: 'before' run against a contradicting not 'before' should only only gen
        | null                    |
 
 #beforeOrAt
-# Defect 611 "before run against a non contradicting before results in an error" related to this scenario
-@ignore
 Scenario: 'before' run against a non contradicting 'beforeOrAt' should be successful
      Given foo is before 2019-01-01T00:00:00.000
        And foo is before or at 2018-01-01T00:00:00.000
@@ -164,8 +158,6 @@ Scenario: not 'before' run against a non contradicting 'beforeOrAt' should be su
        | 2018-12-31T23:59:59.999 |
        | 2018-12-31T23:59:59.998 |
 
-# Defect 611 "before run against a non contradicting before results in an error" related to this scenario
-@ignore
 Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should be successful
      Given foo is anything but before 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
@@ -177,8 +169,6 @@ Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should b
        | 2017-12-31T23:59:59.999 |
        | 2017-12-31T23:59:59.998 |
 
-# Defect 611 "before run against a non contradicting before results in an error" related to this scenario
-@ignore
 Scenario: 'before' run against a contradicting 'beforeOrAt' should only only generate string, numeric and null
      Given foo is before 2019-01-01T00:00:00.000
        And foo is before or at 2019-01-02T00:00:00.000

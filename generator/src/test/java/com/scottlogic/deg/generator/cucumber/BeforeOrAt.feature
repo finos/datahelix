@@ -68,7 +68,6 @@ Scenario: Running beforeOrAt request that includes temporal field with date and 
        | 2012-09-01T12:01:02.000 |
        | 2024-07-01T12:01:03.000 |
 
-@ignore #issue related to 611
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is before or at 2018-01-01T00:00:00.000
@@ -80,7 +79,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2018-01-01T00:00:00.000 |
        | 2019-01-01T00:00:00.000 |
 
-@ignore #issue related to 611
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
@@ -91,7 +89,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2018-12-01T00:00:00.000 |
        | 2019-01-01T00:00:00.000 |
 
-@ignore #issue related to 611
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is anything but before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
