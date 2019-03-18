@@ -27,9 +27,9 @@ public class ReductiveTreePruner {
     }
 
     public Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField lastFixedField) {
-        Optional<ConstraintNode> newConstraintNode = pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
+        Combined<ConstraintNode> newConstraintNode = pruneConstraintNode(constraintNode, lastFixedField.getField(), lastFixedField.getFieldSpecForCurrentValue());
 
-        if (!newConstraintNode.isPresent()){
+        if (newConstraintNode.isContradictory()){
             return Optional.empty();
         }
 
@@ -37,10 +37,10 @@ public class ReductiveTreePruner {
             return Optional.empty();
         }
 
-        return newConstraintNode;
+        return Optional.of(newConstraintNode.get());
     }
 
-    private Optional<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
+    private Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
         // Get field spec from current constraintNode
         List<AtomicConstraint> atomicConstraintsForField =
             AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
@@ -48,7 +48,7 @@ public class ReductiveTreePruner {
         Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
 
         if (!nodeFieldSpec.isPresent()) {
-            return Optional.empty();
+            return Combined.contradictory();
         }
 
         // Merge with spec from parent
@@ -56,7 +56,7 @@ public class ReductiveTreePruner {
 
         // If contradictory -> return Optional.empty
         if (!newFieldSpec.isPresent()) {
-            return Optional.empty();
+            return Combined.contradictory();
         }
 
         Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
@@ -65,26 +65,27 @@ public class ReductiveTreePruner {
 
         // Foreach decision below the constraint node, run pruneDecisionNode()
         for (DecisionNode decision : constraintNode.getDecisions()) {
-            Optional<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
+            Combined<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
 
-            if (!prunedDecisionNode.isPresent()) {
-                return Optional.empty();
+            if (prunedDecisionNode.isContradictory()) {
+                return Combined.contradictory();
             }
 
             if (prunedDecisionNode.get().getOptions().size() == 1) {
                 ConstraintNode remainingConstraintNode = prunedDecisionNode.get().getOptions().iterator().next();
                 newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
                 newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
-            } else {
+            }
+            else {
                 newDecisionNodes.add(prunedDecisionNode.get());
             }
         }
 
         // Return new Constraint node
-        return Optional.of(new TreeConstraintNode(newAtomicConstraints, newDecisionNodes));
+        return Combined.of(new TreeConstraintNode(newAtomicConstraints, newDecisionNodes));
     }
 
-    private Optional<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
+    private Combined<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
@@ -92,10 +93,10 @@ public class ReductiveTreePruner {
         }
 
         if (newConstraintNodes.isEmpty()) {
-            return Optional.empty();
+            return Combined.contradictory();
         }
 
-        return Optional.of(new TreeDecisionNode(newConstraintNodes));
+        return Combined.of(new TreeDecisionNode(newConstraintNodes));
     }
 
     private boolean isContradictory(ConstraintNode constraintNode) {
