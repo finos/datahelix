@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,7 +34,7 @@ class ReductiveDecisionTreeWalkerTests {
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
         ReductiveTreePruner treeReducer = mock(ReductiveTreePruner.class);
-        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Combined.of(rootNode));
+        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Merged.of(rootNode));
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
         fixFieldStrategy = mock(FixFieldStrategy.class);

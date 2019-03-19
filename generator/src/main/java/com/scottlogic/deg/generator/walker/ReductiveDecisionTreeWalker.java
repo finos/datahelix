@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixF
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -45,7 +44,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         visualise(rootNode, initialState);
 
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, tree.rootNode, fixFieldStrategy);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, rootNode, fixFieldStrategy);
 
         if (nextFixedField == null){
             //couldn't fix a field, maybe there are contradictions in the root node?
@@ -82,7 +81,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixFieldStrategy fixFieldStrategy){
 
         //reduce the tree based on the fields that are now fixed
-        Combined<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
+        Merged<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
 
         if (reducedNode.isContradictory()){
             //yielding an empty stream will cause back-tracking

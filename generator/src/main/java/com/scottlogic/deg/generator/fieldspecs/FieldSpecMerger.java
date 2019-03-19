@@ -59,14 +59,14 @@ public class FieldSpecMerger {
         //operation/s that must happen last
         Optional<FieldSpec> fieldSpec = finalMergeOperation.applyMergeOperation(left, right, merging.get());
 
-        if (!fieldSpec.isPresent() || isContradictory(fieldSpec.get())){
+        if (!fieldSpec.isPresent() || cannotEmitAnyData(fieldSpec.get())){
             return Optional.empty();
         }
 
         return fieldSpec;
     }
 
-    private Boolean isContradictory(FieldSpec fieldSpec){
+    private boolean cannotEmitAnyData(FieldSpec fieldSpec){
         if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)){
             return false;
         }

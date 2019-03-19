@@ -4,21 +4,21 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class Combined<T> {
+public class Merged<T> {
 
     private final T value;
 
 
     /**
-     * Returns an {@code Combined} with the specified present non-null value.
+     * Returns an {@code Merged} with the specified present non-null value.
      *
      * @param <T> the class of the value
      * @param value the value to be present, which must be non-null
-     * @return an {@code Combined} with the value present
+     * @return an {@code Merged} with the value present
      * @throws NullPointerException if value is null
      */
-    public static <T> Combined<T> of(T value) {
-        return new Combined<>(value);
+    public static <T> Merged<T> of(T value) {
+        return new Merged<>(value);
     }
 
 
@@ -32,13 +32,13 @@ public class Combined<T> {
     }
 
     /**
-     * If a value not Contradictory in this {@code Combined}, returns the value,
+     * If a value not Contradictory in this {@code Merged}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
      *
      * @return the non-null value held by this {@code Optional}
      * @throws NoSuchElementException if is Contradictory
      *
-     * @see Combined#isContradictory() ()
+     * @see Merged#isContradictory() ()
      */
     public T get() {
         if (value == null) {
@@ -48,16 +48,14 @@ public class Combined<T> {
     }
 
     /**
-     * Returns a Contradictory {@code Combined} instance.  No value is present for this
-     * Combined.
+     * Returns a Contradictory {@code Merged} instance.  No value is present for this
+     * Merged.
      *
      * @param <T> Type of the non-existent value
-     * @return a Contradictory {@code Combined}
+     * @return a Contradictory {@code Merged}
      */
-    public static<T> Combined<T> contradictory() {
-        @SuppressWarnings("unchecked")
-        Combined<T> t = (Combined<T>) CONTRADICTORY;
-        return t;
+    public static<T> Merged<T> contradictory() {
+        return new Merged<>();
     }
 
     /**
@@ -73,12 +71,10 @@ public class Combined<T> {
             consumer.accept(value);
     }
 
-    private Combined(T value) {
+    private Merged(T value) {
         this.value = Objects.requireNonNull(value);
     }
-
-    private static final Combined<?> CONTRADICTORY = new Combined<>();
-    private Combined() {
+    private Merged() {
         this.value = null;
     }
 }
