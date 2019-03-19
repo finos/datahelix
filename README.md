@@ -376,21 +376,21 @@ $ java -jar generator.jar generate --violate --dont-violate=ofType null \
 
 Or, alternatively, you can re-arrange your constraints so that the ones that define types / null, are grouped as a single rule. After By re-grouping constraints, the following output, with random strings that violate the regex constraint, is generated:
 
+```
 firstName,age,nationalInsurance
-"",43,"PT530853D"
-"&#48583;",56,"GE797875M"
-"&#37030;&#29187;",84,"JA172890M"
-"J&#14339;&#25031;&#22289;&#12961;&#20459;&#26440;",32,"AE613401F"
-"&#20469;&#53921;",38,"TS256211F"
+"�",43,"PT530853D"
+"뷇",56,"GE797875M"
+"邦爃",84,"JA172890M"
+"J㠃懇圑㊡俫杈",32,"AE613401F"
+"俵튡",38,"TS256211F"
 "M",60,"GE987171M"
 "M",7,
-"M&#42894;&#4741;&#59414;&#21101;&#42596;&#21708;&#53662;&#44242;",97,"EN082475C"
+"Mꞎኅ剭Ꙥ哌톞곒",97,"EN082475C"
 ")",80,"BX025130C"
-",&#9281;&#51869;",60,"RW177969"
-"5&#6275;&#54430;&#65199;&#17599;&#22267;",57,"RY904705"
+",⑁쪝",60,"RW177969"
+"5ᢃ풞ﺯ䒿囻",57,"RY904705" 
 [...]
-
-**NOTE** - the above is not formatted as a code block because GitHub flavor markdown doesn't support the unicode character set which th generator outputs. On a related note, we are considering adding a feature that allows you to [specify / restrict the character set](https://github.com/ScottLogic/datahelix/issues/294) in a future release.
+```
 
 ## Next steps
 
