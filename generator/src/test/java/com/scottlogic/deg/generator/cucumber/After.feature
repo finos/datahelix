@@ -79,8 +79,6 @@ Scenario: 'Not After' with a non-contradicting 'Not After' is successful
     | 2018-12-31T23:59:59.997 |
     | 2018-12-31T23:59:59.996 |
 
-#Defect #672 - Request for contradictory After and Not After should only generate null
-@ignore
 Scenario: 'After' with a contradicting 'Not After' generates null
   Given foo is after 2019-01-01T00:00:00.000
     And foo is anything but after 2019-01-01T00:00:00.000
@@ -142,8 +140,6 @@ Then the following data should be generated:
   | 2018-12-31T23:59:59.997 |
   | 2018-12-31T23:59:59.996 |
 
-#Defect #672 - Request for contradictory After and Not After should only generate null
-@ignore
 Scenario: 'After' with a contradicting 'Not After Or At' only generates null
 Given foo is after 2019-01-01T00:00:00.000
   And foo is anything but after or at 2019-01-01T00:00:00.000
