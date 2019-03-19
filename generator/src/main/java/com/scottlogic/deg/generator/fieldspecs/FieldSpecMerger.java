@@ -75,7 +75,7 @@ public class FieldSpecMerger {
             return true;
         }
 
-        if (!(fieldSpec.getSetRestrictions() == null) && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()){
+        if (!(fieldSpec.getSetRestrictions() == null) &&  fieldSpec.getSetRestrictions().getWhitelist() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()){
             return true;
         }
 
