@@ -22,7 +22,7 @@ Scenario: The generator produces valid 'Numeric' data in random mode
     And foo is less than or equal to 10
   Then 5 rows of data are generated
     And foo contains numeric data
-    And foo contains numeric values between -179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 and 10 inclusively
+    And foo contains numeric values less than or equal to 10
     And foo contains anything but null
 
 Scenario: The generator produces valid 'String' data in random mode
