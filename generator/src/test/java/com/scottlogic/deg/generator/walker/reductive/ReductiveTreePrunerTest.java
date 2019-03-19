@@ -52,10 +52,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Combined<Object> expected = Combined.contradictory();
+        Merged<Object> expected = Merged.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -93,10 +93,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Combined<Object> expected = Combined.contradictory();
+        Merged<Object> expected = Merged.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -223,10 +223,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Combined<Object> expected = Combined.contradictory();
+        Merged<Object> expected = Merged.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 
@@ -347,10 +347,10 @@ class ReductiveTreePrunerTest {
         when(fixedField.getFieldSpecForCurrentValue()).thenReturn(inputFieldSpec);
 
         //Act
-        Combined<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fixedField);
 
         //Assert
-        Combined<Object> expected = Combined.contradictory();
+        Merged<Object> expected = Merged.contradictory();
         assertThat(actual, sameBeanAs(expected));
     }
 

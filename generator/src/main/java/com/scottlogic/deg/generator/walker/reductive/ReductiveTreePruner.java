@@ -31,25 +31,24 @@ public class ReductiveTreePruner {
      * @param nextFixedField The field, and the value to fix it for.
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
-    public Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField nextFixedField) {
+    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField nextFixedField) {
         return pruneConstraintNode(constraintNode, nextFixedField.getField(), nextFixedField.getFieldSpecForCurrentValue());
     }
 
-    private Combined<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
-
-        Combined<FieldSpec> newFieldSpec = combineConstraintsWithParent(field, constraintNode, mergingFieldSpec);
+    private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
+        Merged<FieldSpec> newFieldSpec = combineConstraintsWithParent(field, constraintNode, mergingFieldSpec);
         if (newFieldSpec.isContradictory()){
-            return Combined.contradictory();
+            return Merged.contradictory();
         }
 
         Collection<AtomicConstraint> newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
         Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
 
         for (DecisionNode decision : constraintNode.getDecisions()) {
-            Combined<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
+            Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
 
             if (prunedDecisionNode.isContradictory()) {
-                return Combined.contradictory();
+                return Merged.contradictory();
             }
 
             if (onlyOneOption(prunedDecisionNode)) {
@@ -63,10 +62,10 @@ public class ReductiveTreePruner {
             }
         }
 
-        return Combined.of(new TreeConstraintNode(newAtomicConstraints, newDecisionNodes));
+        return Merged.of(new TreeConstraintNode(newAtomicConstraints, newDecisionNodes));
     }
 
-    private Combined<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
+    private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
@@ -74,36 +73,36 @@ public class ReductiveTreePruner {
         }
 
         if (newConstraintNodes.isEmpty()) {
-            return Combined.contradictory();
+            return Merged.contradictory();
         }
 
-        return Combined.of(new TreeDecisionNode(newConstraintNodes));
+        return Merged.of(new TreeDecisionNode(newConstraintNodes));
     }
 
-    private Combined<FieldSpec> combineConstraintsWithParent(Field field, ConstraintNode constraintNode, FieldSpec parentFieldSpec){
+    private Merged<FieldSpec> combineConstraintsWithParent(Field field, ConstraintNode constraintNode, FieldSpec parentFieldSpec){
         List<AtomicConstraint> atomicConstraintsForField =
             AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
 
         Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
 
         if (!nodeFieldSpec.isPresent()) {
-            return Combined.contradictory();
+            return Merged.contradictory();
         }
 
         Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), parentFieldSpec);
 
         if (!newFieldSpec.isPresent()) {
-            return Combined.contradictory();
+            return Merged.contradictory();
         }
 
-        return Combined.of(newFieldSpec.get());
+        return Merged.of(newFieldSpec.get());
     }
 
-    private boolean onlyOneOption(Combined<DecisionNode> prunedDecisionNode) {
+    private boolean onlyOneOption(Merged<DecisionNode> prunedDecisionNode) {
         return prunedDecisionNode.get().getOptions().size() == 1;
     }
 
-    private ConstraintNode getOnlyRemainingOption(Combined<DecisionNode> prunedDecisionNode) {
+    private ConstraintNode getOnlyRemainingOption(Merged<DecisionNode> prunedDecisionNode) {
         return prunedDecisionNode.get().getOptions().iterator().next();
     }
 }
