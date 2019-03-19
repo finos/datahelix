@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
@@ -33,10 +32,6 @@ public class ReductiveRowSpecGenerator {
 
     //produce a stream of RowSpecs for each value in the permitted set of values for the field fixed on the last iteration
     public Stream<RowSpec> createRowSpecsFromFixedValues(ReductiveState reductiveState, ConstraintNode constraintNode) {
-        //create a row spec where every field is set to this.fixedFields & field=value
-        if (reductiveState.getLastFixedField() == null) {
-            throw new IllegalStateException("Field has not been fixed yet");
-        }
 
         Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(reductiveState, constraintNode);
 
@@ -45,20 +40,10 @@ public class ReductiveRowSpecGenerator {
             return Stream.empty();
         }
 
-        FieldSpec fieldSpecForValuesInLastFixedField = reductiveState.getLastFixedField().getFieldSpecForValues();
-        fieldSpecsPerField.put(reductiveState.getLastFixedField().getField(), fieldSpecForValuesInLastFixedField);
+        RowSpec rowSpec = new RowSpec(reductiveState.getFields(), fieldSpecsPerField);
 
-        RowSpec rowSpecWithAllValuesForLastFixedField = new ReductiveRowSpec(
-            reductiveState.getFields(),
-            fieldSpecsPerField,
-            reductiveState.getLastFixedField().getField()
-        );
-
-        this.monitor.rowSpecEmitted(
-            reductiveState.getLastFixedField(),
-            fieldSpecForValuesInLastFixedField,
-            rowSpecWithAllValuesForLastFixedField);
-        return Stream.of(rowSpecWithAllValuesForLastFixedField);
+        this.monitor.rowSpecEmitted(rowSpec);
+        return Stream.of(rowSpec);
     }
 
 
@@ -72,6 +57,7 @@ public class ReductiveRowSpecGenerator {
             .stream()
             .collect(Collectors.toMap(
                 ff -> ff.getField(),
+
                 ff -> {
                     FieldSpec fieldSpec = createFieldSpec(ff, fieldToConstraints.get(ff.getField()));
                     return fieldSpec == null

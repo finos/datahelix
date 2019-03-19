@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
-import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +26,8 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
     }
 
     @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
-        System.out.println(
-            String.format(
-                "%s %s",
-                lastFixedField.getField().name,
-                fieldSpecForValuesInLastFixedField.toString()));
+    public void rowSpecEmitted(RowSpec rowSpec) {
+        System.out.println("owSec emitted");
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 public class FixedFieldBuilder {
 
+    public static final FixedField FIXED_ALL_FIELDS = new FixedField(null, null, null, null);
     private final ConstraintReducer constraintReducer;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator generator;
@@ -35,10 +36,7 @@ public class FixedFieldBuilder {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
 
         if (fieldToFix == null){
-            throw new UnsupportedOperationException(
-                String.format(
-                    "Unable to find a field to fix, no finite constraints\nUnfixed fields: %s",
-                    Objects.toString(reductiveState.getUnfixedFields())));
+            return FIXED_ALL_FIELDS;
         }
 
         return createFixedFieldWithValues(fieldToFix, rootNode);

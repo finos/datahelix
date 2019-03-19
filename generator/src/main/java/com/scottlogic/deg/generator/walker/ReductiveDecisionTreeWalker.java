@@ -60,7 +60,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         /* if all fields are fixed, return a stream of the values for the last fixed field with all other field values repeated */
         if (reductiveState.allFieldsAreFixed()){
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, constraintNode);
-        }
+        }//TODO paul this check should be moved
 
         Iterator<Object> valueIterator = reductiveState.getValuesFromLastFixedField().iterator();
         if (!valueIterator.hasNext()){
@@ -97,8 +97,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode.get(), fixFieldStrategy);
 
         if (nextFixedField == null){
-            //couldn't fix a field, maybe there are contradictions in the root node?
-
             return Stream.empty();
         }
 

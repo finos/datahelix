@@ -28,11 +28,7 @@ public class ReductiveState {
     }
 
     public boolean allFieldsAreFixed() {
-        int noOfFixedFields = this.lastFixedField == null
-            ? this.fixedFields.size()
-            : this.fixedFields.size() + 1;
-
-        return noOfFixedFields == this.fields.size();
+        return fixedFields.size() == fields.size();
     }
 
     public boolean isFieldFixed(Field field) {
