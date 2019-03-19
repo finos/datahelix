@@ -18,7 +18,11 @@ public class DateTimeRestrictionsMerger {
         merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
-        if (merged.min.getLimit().isAfter(merged.max.getLimit())) {
+        if (merged.min == null || merged.max == null){
+            return new MergeResult<>(merged);
+        }
+
+        if (merged.min.isAfter(merged.max)) {
             return new MergeResult<>();
         }
 
