@@ -1696,7 +1696,7 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        | "ccc"  | "333" |
        | "dddd" | "333" |
 
-@ignore #756  Reductive Walker Does not Reduce for the final field
+
 Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
        Given foo is in set:
          | "aa"   |
