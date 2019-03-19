@@ -218,7 +218,7 @@ Then the following data should be generated:
 
 ### beforeOrAt ###
 
-@ignore #667 - granularity for temporals should be millisecond by default
+@ignore #191 - or at date not created  #667 - granularity for temporals should be millisecond by default
 Scenario: 'After' with a non-contradicting 'Before' is successful
 Given foo is after 2019-01-01T00:00:00.000
   And foo is before or at 2020-01-01T00:00:00.000
