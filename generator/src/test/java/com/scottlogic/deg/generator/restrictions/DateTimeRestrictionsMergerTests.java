@@ -126,4 +126,100 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(false));
     }
+
+    @Test
+    void merge_rightAndLeftHaveNoMax_shouldNotReturnNull() {
+        DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
+
+        DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            LocalDateTime.now(), false
+        );
+        DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
+        DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions.min, equalTo(minDateTimeLimit));
+        Assert.assertThat(result.restrictions.max, is(nullValue()));
+    }
+
+    @Test
+    void merge_rightAndLeftHaveNoMin_shouldNotReturnNull() {
+        DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
+
+        DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            LocalDateTime.now(), false
+        );
+        DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
+        DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+        Assert.assertThat(result.restrictions.min, is(nullValue()));
+        Assert.assertThat(result.restrictions.max, equalTo(maxDateTimeLimit));
+    }
+
+    @Test
+    void merge_minExclusiveSameAsMaxInclusive_shouldReturnAsUnsuccessful() {
+        DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
+        LocalDateTime referenceTime = LocalDateTime.now();
+
+        DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, false
+        );
+        DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, true
+        );
+        DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
+        DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
+    }
+
+    @Test
+    void merge_minExclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
+        DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
+        LocalDateTime referenceTime = LocalDateTime.now();
+
+        DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, false
+        );
+        DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, false
+        );
+        DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
+        DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
+    }
+
+    @Test
+    void merge_minInclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
+        DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
+        LocalDateTime referenceTime = LocalDateTime.now();
+
+        DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, true
+        );
+        DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
+            referenceTime, false
+        );
+        DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
+        DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
+    }
 }
