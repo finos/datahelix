@@ -68,18 +68,20 @@ Scenario: Running beforeOrAt request that includes temporal field with date and 
        | 2012-09-01T12:01:02.000 |
        | 2024-07-01T12:01:03.000 |
 
+@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is before or at 2018-01-01T00:00:00.000
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo                     |
-       | 0001-01-01T00:00:00.000 |
-       | 0002-01-01T00:00:00.000 |
-       | 0003-01-01T00:00:00.000 |
-       | 0004-01-01T00:00:00.000 |
-       | 0005-01-01T00:00:00.000 |
+       | 2018-01-01T00:00:00.000 |
+       | 2017-12-31T23:59:59.999 |
+       | 2017-12-31T23:59:59.998 |
+       | 2017-12-31T23:59:59.997 |
+       | 2017-12-31T23:59:59.996 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
@@ -87,11 +89,12 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
      Then the following data should be generated:
        | foo                     |
        | 2018-01-01T00:00:00.001 |
-       | 2018-02-01T00:00:00.001 |
-       | 2018-03-01T00:00:00.001 |
-       | 2018-04-01T00:00:00.001 |
-       | 2018-05-01T00:00:00.001 |
+       | 2018-01-01T00:00:00.002 |
+       | 2018-01-01T00:00:00.003 |
+       | 2018-01-01T00:00:00.004 |
+       | 2018-01-01T00:00:00.005 |
 
+@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is anything but before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
@@ -99,10 +102,10 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
      Then the following data should be generated:
        | foo                     |
        | 2019-01-01T00:00:00.001 |
-       | 2020-01-01T00:00:00.001 |
-       | 2021-01-01T00:00:00.001 |
-       | 2022-01-01T00:00:00.001 |
-       | 2023-01-01T00:00:00.001 |
+       | 2019-01-01T00:00:00.002 |
+       | 2019-01-01T00:00:00.003 |
+       | 2019-01-01T00:00:00.004 |
+       | 2019-01-01T00:00:00.005 |
 
 Scenario: 'beforeOrEqualTo' run with minimum possible date should only generate null
     Given foo is before or at 0001-01-01T00:00:00.000
