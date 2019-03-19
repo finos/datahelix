@@ -29,7 +29,7 @@ public class ConstraintNodeBuilder {
         return new AtomicConstraintBuilder(this, field);
     }
 
-    public ConstraintNodeBuilder withDecisions(ConstraintNodeBuilder... constraintNodes) {
+    public ConstraintNodeBuilder withDecision(ConstraintNodeBuilder... constraintNodes) {
         List<ConstraintNode> nodes = new ArrayList<>();
         for (ConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());

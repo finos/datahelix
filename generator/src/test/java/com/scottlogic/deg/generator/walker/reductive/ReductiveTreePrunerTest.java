@@ -83,7 +83,7 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("a"),
                     constraintNode().where(field1).isInSet("b"))
                 .build();
@@ -106,7 +106,7 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("a"),
                     constraintNode().where(field1).isInSet("b"))
                 .build();
@@ -129,7 +129,7 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("a"),
                     constraintNode().where(field1).isInSet("b"))
                 .build();
@@ -154,7 +154,7 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("a"),
                     constraintNode().where(field1).isInSet("b"),
                     constraintNode().where(field1).isInSet("c"))
@@ -180,7 +180,7 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("a"),
                     constraintNode().where(field1).isInSet("b"),
                     constraintNode().where(field1).isInSet("c"))
@@ -196,7 +196,7 @@ class ReductiveTreePrunerTest {
 
         //Assert
         ConstraintNode expected = constraintNode()
-            .withDecisions(
+                .withDecision(
                 constraintNode().where(field1).isInSet("a"),
                 constraintNode().where(field1).isInSet("b"))
             .build();
@@ -210,10 +210,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("valid"),
                     constraintNode().where(unrelatedField).isInSet("unrelated"))
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("contradictory"),
                     constraintNode().where(field1).isInSet("contradictory"))
                 .build();
@@ -238,10 +238,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("contradiction"),
                     constraintNode().where(unrelatedField).isInSet("unrelated1")
-                        .withDecisions(
+                        .withDecision(
                             constraintNode().where(field1).isInSet("contradiction"),
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
@@ -268,10 +268,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("contradiction"),
                     constraintNode().where(unrelatedField).isInSet("unrelated1")
-                        .withDecisions(
+                        .withDecision(
                             constraintNode().where(field1).isInSet("valid"),
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
@@ -287,7 +287,7 @@ class ReductiveTreePrunerTest {
         //Assert
         ConstraintNode expected = constraintNode()
             .where(unrelatedField).isInSet("unrelated1")
-            .withDecisions(
+            .withDecision(
                 constraintNode().where(field1).isInSet("valid"),
                 constraintNode().where(unrelatedField).isInSet("unrelated2"))
             .build();
@@ -300,10 +300,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("valid"),
                     constraintNode().where(unrelatedField).isInSet("unrelated1")
-                        .withDecisions(
+                        .withDecision(
                             constraintNode().where(field1).isInSet("contradiction"),
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
@@ -318,7 +318,7 @@ class ReductiveTreePrunerTest {
 
         //Assert
         ConstraintNode expected = constraintNode()
-            .withDecisions(
+            .withDecision(
                 constraintNode().where(field1).isInSet("valid"),
                 constraintNode()
                     .where(unrelatedField).isInSet("unrelated1")
@@ -333,10 +333,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("contradiction"),
                     constraintNode().where(unrelatedField).isInSet("unrelated1")
-                        .withDecisions(
+                        .withDecision(
                             constraintNode().where(field1).isInSet("contradiction"),
                             constraintNode().where(field1).isInSet("contradiction")
                         ))
@@ -360,10 +360,10 @@ class ReductiveTreePrunerTest {
         //Arrange
         ConstraintNode tree =
             constraintNode()
-                .withDecisions(
+                .withDecision(
                     constraintNode().where(field1).isInSet("valid"),
                     constraintNode().where(unrelatedField).isInSet("unrelated1")
-                        .withDecisions(
+                        .withDecision(
                             constraintNode().where(field1).isInSet("valid"),
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
