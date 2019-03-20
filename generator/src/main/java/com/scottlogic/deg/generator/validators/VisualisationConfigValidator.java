@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.validators;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.VisualiseOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.util.ArrayList;
@@ -36,11 +37,11 @@ public class VisualisationConfigValidator {
      */
     private ArrayList<String> checkOutputTarget(boolean overwrite, OutputTarget outputTarget) {
         ArrayList<String> errorMessages = new ArrayList<>();
-        if (outputTarget instanceof FileOutputTarget) {
-            if (fileUtils.isDirectory((FileOutputTarget) outputTarget)) {
+        if (outputTarget instanceof VisualiseOutputTarget) {
+            if (fileUtils.isDirectory(((VisualiseOutputTarget) outputTarget).getFilePath())) {
                 errorMessages.add(
                     "Invalid Output - target is a directory, please use a different output filename");
-            } else if (!overwrite && fileUtils.exists((FileOutputTarget) outputTarget)) {
+            } else if (!overwrite && fileUtils.exists(((VisualiseOutputTarget) outputTarget).getFilePath())) {
                 errorMessages.add(
                     "Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
             }
