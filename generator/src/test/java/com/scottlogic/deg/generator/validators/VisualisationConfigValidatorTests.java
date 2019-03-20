@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.outputs.targets.VisualiseOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
 import org.junit.Assert;
@@ -18,7 +17,6 @@ import static org.mockito.Mockito.when;
 
 public class VisualisationConfigValidatorTests {
 
-    private VisualiseOutputTarget mockOutputTarget = mock(VisualiseOutputTarget.class);
     private FileUtils mockFileUtils = mock(FileUtils.class);
     private Path mockFilePath = mock(Path.class);
     private Profile profile;
@@ -28,7 +26,6 @@ public class VisualisationConfigValidatorTests {
     @BeforeEach
     void setup() throws IOException {
         //Arrange
-        when(mockOutputTarget.getFilePath()).thenReturn(mockFilePath);
         validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
@@ -41,7 +38,7 @@ public class VisualisationConfigValidatorTests {
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
+        ValidationResult validationResult = validator.validateCommandLine(false, mockFilePath);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
@@ -53,7 +50,7 @@ public class VisualisationConfigValidatorTests {
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(true, mockOutputTarget);
+        ValidationResult validationResult = validator.validateCommandLine(true, mockFilePath);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -63,7 +60,7 @@ public class VisualisationConfigValidatorTests {
     public void generateOutputFileDoesNotExist() {
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
+        ValidationResult validationResult = validator.validateCommandLine(false, mockFilePath);
 
         //Assert
         Assert.assertTrue(validationResult.isValid());
@@ -75,7 +72,7 @@ public class VisualisationConfigValidatorTests {
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
 
         //Act
-        ValidationResult validationResult = validator.validateCommandLine(false, mockOutputTarget);
+        ValidationResult validationResult = validator.validateCommandLine(false, mockFilePath);
 
         //Assert
         Assert.assertFalse(validationResult.isValid());
