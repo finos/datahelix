@@ -1,16 +1,21 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -19,56 +24,49 @@ import java.util.stream.StreamSupport;
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveTreePruner treePruner;
     private final IterationVisualiser iterationVisualiser;
-    private final FixedFieldBuilder fixedFieldBuilder;
+    private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
+    private final FieldSpecValueGenerator fieldSpecValueGenerator;
 
     @Inject
     public ReductiveDecisionTreeWalker(
         IterationVisualiser iterationVisualiser,
-        FixedFieldBuilder fixedFieldBuilder,
+        ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
-        ReductiveRowSpecGenerator reductiveRowSpecGenerator) {
+        ReductiveRowSpecGenerator reductiveRowSpecGenerator,
+        FieldSpecValueGenerator fieldSpecValueGenerator) {
         this.iterationVisualiser = iterationVisualiser;
-        this.fixedFieldBuilder = fixedFieldBuilder;
+        this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
+        this.fieldSpecValueGenerator = fieldSpecValueGenerator;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
     public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
-        ConstraintNode rootNode = tree.getRootNode();
         ReductiveState initialState = new ReductiveState(tree.fields);
-
-        visualise(rootNode, initialState);
-
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(initialState, rootNode, fixFieldStrategy);
-
-        if (nextFixedField == null){
-            //couldn't fix a field, maybe there are contradictions in the root node?
-
-            return Stream.empty();
-        }
-
-        return walkForNextField(rootNode, initialState.withNextFieldToFixChosen(nextFixedField), fixFieldStrategy);
+        visualise(tree.getRootNode(), initialState);
+        return walkForNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
     private Stream<RowSpec> walkForNextField(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
-        Iterator<Object> valueIterator = reductiveState.getValuesFromNextFieldToFix().iterator();
+        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, constraintNode);
+        Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(constraintNode, fieldToFix);
 
-        if (!valueIterator.hasNext()){
-            this.monitor.noValuesForField(reductiveState);
+        if (!nextFieldSpec.isPresent()){
+            //couldn't fix a field, maybe there are contradictions in the root node?
             return Stream.empty();
         }
 
-        // for each value for the last fixed field, fix the value and process the tree based on this field being fixed
+        Stream<FieldValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
+            .map(dataBag -> new FieldValue(fieldToFix, dataBag.getValue(fieldToFix)));
+
         return FlatMappingSpliterator.flatMap(
-            StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(valueIterator, Spliterator.ORDERED),
-                false),
+            values,
             fieldValue -> walkForNextValue(constraintNode, reductiveState, fixFieldStrategy, fieldValue));
     }
 
@@ -76,10 +74,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ConstraintNode constraintNode,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
-        Object value){
+        FieldValue value){
 
         //reduce the tree based on the fields that are now fixed
-        Merged<ConstraintNode> reducedNode = this.treePruner.pruneConstraintNode(constraintNode, reductiveState.getNextFieldToFix().getField(), value);
+        Merged<ConstraintNode> reducedNode = this.treePruner.pruneConstraintNode(constraintNode, value);
 
         if (reducedNode.isContradictory()){
             //yielding an empty stream will cause back-tracking
@@ -96,14 +94,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState);
         }
 
-        //find the next fixed field and continue
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(newReductiveState, reducedNode.get(), fixFieldStrategy);
-
-        if (nextFixedField == null){
-            return Stream.empty();
-        }
-
-        return walkForNextField(reducedNode.get(), newReductiveState.withNextFieldToFixChosen(nextFixedField), fixFieldStrategy);
+        return walkForNextField(reducedNode.get(), newReductiveState, fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
