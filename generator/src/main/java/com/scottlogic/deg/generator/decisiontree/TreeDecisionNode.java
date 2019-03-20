@@ -27,7 +27,7 @@ public final class TreeDecisionNode implements DecisionNode {
 
     @Override
     public Collection<ConstraintNode> getOptions() {
-        return new HashSet<>(options);
+        return options;
     }
 
     @Override

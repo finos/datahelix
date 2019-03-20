@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
@@ -30,7 +29,7 @@ class RandomReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         tree = new DecisionTree(
-            new ReductiveConstraintNode(new TreeConstraintNode(), Collections.emptySet()),
+            new TreeConstraintNode(),
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2"))),
             "test-tree");
 
