@@ -96,12 +96,4 @@ public class ReductiveState {
 
         return new ReductiveState(fields, newFixedFieldsMap, null);
     }
-
-    public ReductiveState with(FixedField fixedField) {
-
-        if (nextFieldToFix == null)
-            return withNextFieldToFixChosen(fixedField);
-
-        return withCurrentFieldFixedToValue(nextFieldToFix.getCurrentValue()).withNextFieldToFixChosen(fixedField);
-    }
 }

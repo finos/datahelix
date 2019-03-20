@@ -19,9 +19,9 @@ public class ReductiveStateTests {
         FixedField lastFixedField = new FixedField(new Field("First Field"),  null, null);
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),
-            fixedFields
-        ).with(lastFixedField)
-            .with(new FixedField(null, null, null));
+            fixedFields);
+        reductiveState = with(reductiveState, lastFixedField);
+        reductiveState = with(reductiveState, new FixedField(null, null, null));
 
         boolean result = reductiveState.allFieldsAreFixed();
 
@@ -81,9 +81,19 @@ public class ReductiveStateTests {
                 .map(Field::new)
                 .collect(Collectors.toList())));
 
-        return fixedFields.values().stream().reduce(
-            initialState,
-            ReductiveState::with,
-            (a, b) -> null);
+        for (FixedField fixedField : fixedFields.values()) {
+            initialState = with(initialState, fixedField);
+        }
+
+        return initialState;
+    }
+
+
+    private ReductiveState with(ReductiveState reductiveState, FixedField fixedField) {
+
+        if (reductiveState.getNextFieldToFix() == null)
+            return reductiveState.withNextFieldToFixChosen(fixedField);
+
+        return reductiveState.withCurrentFieldFixedToValue(fixedField.getCurrentValue()).withNextFieldToFixChosen(fixedField);
     }
 }

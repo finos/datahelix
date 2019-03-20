@@ -131,7 +131,6 @@ class ReductiveRowSpecGeneratorTests {
         Assert.assertEquals(result.collect(Collectors.toList()), Collections.emptyList());
     }
 
-    */
 
     private ReductiveRowSpecGenerator getRowSpecGenerator(
         ConstraintReducer reducer) {
@@ -180,4 +179,6 @@ class ReductiveRowSpecGeneratorTests {
 
         return finalState.with(lastFixedField);
     }
+
+    */
 }
