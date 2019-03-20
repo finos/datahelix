@@ -1,0 +1,57 @@
+﻿{
+  "schemaVersion": "0.1",
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+        },
+        {
+          "ThisIsNotValid": ""
+        },
+        {
+          "field": "field1",
+          "ThisIsNotValid": ""
+        },
+        {
+          "field": "field1",
+          "ais": "formattedAs",
+          "value": "%ggg"
+        },
+        {
+          "afield": "field1",
+          "is": "shorterThan",
+          "value": 19
+        },
+        {
+          "field": "field1",
+          "is": "shorterThan",
+          "value": 19,
+          "extrafield": 34
+        },
+        {
+          "field": "field1",
+          "is": "null",
+          "value": 43
+        },
+        {
+          "field": "field1",
+          "is": "null",
+          "value": "error"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

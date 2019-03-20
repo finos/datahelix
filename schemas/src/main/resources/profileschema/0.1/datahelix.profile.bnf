@@ -1,27 +1,24 @@
-
 profile ::= '{' schemaVersion ',' ( schemaDescription ',' )? fields ',' rules '}'
 
 schemaVersion ::= '"' 'schemaVersion' '"' ':' '"' digit+ '.' digit+ '"'
 schemaDescription ::= '"' 'description' '"' ':' string
 
-fields ::= '"' 'fields' '"' ':' '[' ( '{' fieldName '}' ( ',' '{' fieldName  '}' )*) ']'
-fieldName ::=  '"' 'name' '"' ':' string
+fields ::= '"' 'fields' '"' ':' '[' ( '{' fieldName '}' ( ',' '{' fieldName '}' )*) ']'
+fieldName ::= '"' 'name' '"' ':' string
 
-rules ::='"' 'rules' '"' ':' '[' ( '{' rule '}' ( ',' '{' rule  '}' )*) ']'
+rules ::='"' 'rules' '"' ':' '[' ( '{' rule '}' ( ',' '{' rule '}' )*)? ']'
 
-rule ::= ( '"' 'rule' '"' ':' string ',' )?
-  '"' 'constraints' '"'':' '[' (constraint ( ',' constraint )*) ']'
+rule ::= ( '"' 'rule' '"' ':' string ',' )? '"' 'constraints' '"'':' '[' (constraint ( ',' constraint )*)? ']'
 
-constraint ::= ( epistemicConstraint | grammaticalConstraint | presentationalConstraint )
+constraint ::= epistemicConstraint | grammaticalConstraint | presentationalConstraint
 
-grammaticalConstraint ::= ( not | anyOf | allOf | if )
+grammaticalConstraint ::= not | anyOf | allOf | if
 
-presentationalConstraint ::=  '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( formattedAs ) '}'
+presentationalConstraint ::= '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( formattedAs ) '}'
 
 epistemicConstraint ::= '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( ofType | equalTo | stringConstraint | numberConstraint | temporalConstraint | inSet | '"' 'null' '"' ) '}'
 
-
-not   ::= '{' '"' 'not' '"' ':'  constraint '}'
+not   ::= '{' '"' 'not' '"' ':' constraint '}'
 anyOf ::= '{' '"' 'anyOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 allOf ::= '{' '"' 'allOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 if    ::= '{' '"' 'if' '"' ':' constraint ',' '"' 'then' '"' ':' constraint ( ',' '"' 'else' '"' ':' constraint )? '}'
@@ -42,11 +39,11 @@ equalTo ::= '"' 'equalTo' '"' ',' '"' 'value' '"' ':' ( number | string | tempor
 
 temporal         ::= '{' '"' 'date' '"' ':' '"' temporalValue '"' '}'
 temporalValue    ::=temporalYear'-'temporalMonth '-'temporalDay 'T' temporalHour ':' temporalMinute ':' temporalSecond '.' temporalMillisec
-temporalYear     ::= digit digit digit digit
-temporalMonth    ::= ( '0' [1-9] ) | ( '1' ( [0-2] ) )
-temporalDay      ::= ( '0' [1-9] ) | ( [1-2] digit ) | ( '3' ( [0-1] ) )
-temporalHour     ::= ( '0' [1-9] ) | ( '1' digit ) | ( '2' ( [0-3] ) )
-temporalMinute   ::= [0-5]  digit
+temporalYear     ::= '0' '0' '0' [1-9] | '0' '0' [1-9] digit | '0' [1-9] digit digit | [1-9] digit digit digit
+temporalMonth    ::= '0' [1-9] | '1' [0-2]
+temporalDay      ::= '0' [1-9] | [1-2] digit | '3' [0-1]
+temporalHour     ::= '0' [1-9] | '1' digit | '2' [0-3]
+temporalMinute   ::= [0-5] digit
 temporalSecond   ::= [0-5] digit
 temporalMillisec ::= digit digit digit
 
@@ -54,18 +51,9 @@ string              ::= '"' character* '"'
 stringFormatPattern ::= '"' '%' character+ '"'
 
 character     ::= unescapedChar | escapedChar
-unescapedChar ::= ( [#x20-#x21] | [#x23-#x5B] | [#x5D-#x10FFFF] )
-escapedChar   ::= [\] ( #x22 | #x5C | #x2F | #x08 | #x0C | #x0A | #x0D | #x09| 'u' hexDigit hexDigit hexDigit hexDigit)
+unescapedChar ::= [#x0020-#x0021#x0023-#x005B#x005D-#x10FFFF]
+escapedChar   ::= '\' ( [#x0022#x005C#x002F#x0008#x000C#x000A#x000D#x0009] | 'u' hexDigit hexDigit hexDigit hexDigit )
 
 hexDigit   ::= digit | [A-Fa-f]
-
-number  ::= '-'?
-            ( '0' | [1-9] digit* )
-            ( '.' digit+ )?
-            (
-                ( 'e' | 'E' )
-                ( '+' | '-' )?
-                 digit+
-            )?
-
+number     ::= '-'? ( '0' | [1-9] digit* ) ( '.' digit+ )? ( ( 'e' | 'E' ) ( '+' | '-' )? digit+ )?
 digit      ::= [0-9]
