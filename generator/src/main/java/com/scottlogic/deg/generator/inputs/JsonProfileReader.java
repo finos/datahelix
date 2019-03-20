@@ -23,23 +23,11 @@ import java.util.stream.Collectors;
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
-
-    private ProfileValidator validator;
-
-    @Inject
-    public JsonProfileReader(ProfileValidator validator) {
-        this.validator = validator;
-    }
-
     public Profile read(Path filePath) throws IOException, InvalidProfileException {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
 
-        Profile profile =  this.read(profileJson);
-
-        validator.validate(profile);
-
-        return profile;
+        return this.read(profileJson);
     }
 
     public Profile read(String profileJson) throws IOException, InvalidProfileException {
