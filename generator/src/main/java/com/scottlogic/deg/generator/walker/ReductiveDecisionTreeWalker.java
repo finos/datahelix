@@ -69,16 +69,17 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(valueIterator, Spliterator.ORDERED),
                 false),
-            fieldValue -> walkForNextValue(constraintNode, reductiveState, fixFieldStrategy));
+            fieldValue -> walkForNextValue(constraintNode, reductiveState, fixFieldStrategy, fieldValue));
     }
 
     private Stream<RowSpec> walkForNextValue(
         ConstraintNode constraintNode,
         ReductiveState reductiveState,
-        FixFieldStrategy fixFieldStrategy){
+        FixFieldStrategy fixFieldStrategy,
+        Object value){
 
         //reduce the tree based on the fields that are now fixed
-        Merged<ConstraintNode> reducedNode = this.treePruner.pruneConstraintNode(constraintNode, reductiveState.getNextFieldToFix());
+        Merged<ConstraintNode> reducedNode = this.treePruner.pruneConstraintNode(constraintNode, reductiveState.getNextFieldToFix().getField(), value);
 
         if (reducedNode.isContradictory()){
             //yielding an empty stream will cause back-tracking

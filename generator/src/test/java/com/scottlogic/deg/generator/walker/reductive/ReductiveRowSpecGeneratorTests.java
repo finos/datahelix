@@ -145,6 +145,7 @@ class ReductiveRowSpecGeneratorTests {
         return new ReductiveRowSpecGenerator(
             reducer,
             fieldSpecMerger,
+            new FieldSpecHelper(),
             mock(ReductiveDataGeneratorMonitor.class)
         );
     }

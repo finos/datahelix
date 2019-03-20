@@ -34,7 +34,7 @@ class ReductiveDecisionTreeWalkerTests {
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
         ReductiveTreePruner treeReducer = mock(ReductiveTreePruner.class);
-        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Merged.of(rootNode));
+        when(treeReducer.pruneConstraintNode(eq(rootNode), any(Field.class), any())).thenReturn(Merged.of(rootNode)); //TODO paul why is this being mocked
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
         fixFieldStrategy = mock(FixFieldStrategy.class);

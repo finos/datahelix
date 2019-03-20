@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -18,15 +19,18 @@ public class ReductiveRowSpecGenerator {
 
     private final ConstraintReducer constraintReducer;
     private final FieldSpecMerger fieldSpecMerger;
+    private final FieldSpecHelper fieldSpecHelper;
     private final ReductiveDataGeneratorMonitor monitor;
 
     @Inject
     public ReductiveRowSpecGenerator(
         ConstraintReducer constraintReducer,
         FieldSpecMerger fieldSpecMerger,
+        FieldSpecHelper fieldSpecHelper,
         ReductiveDataGeneratorMonitor monitor) {
         this.fieldSpecMerger = fieldSpecMerger;
         this.constraintReducer = constraintReducer;
+        this.fieldSpecHelper = fieldSpecHelper;
         this.monitor = monitor;
     }
 
@@ -69,7 +73,7 @@ public class ReductiveRowSpecGenerator {
 
     //create a FieldSpec for a given FixedField and the atomic constraints we know about this field
     private FieldSpec createFieldSpec(FixedField fixedField, Collection<AtomicConstraint> constraintsForField) {
-        FieldSpec fixedFieldSpec = fixedField.getFieldSpecForCurrentValue();
+        FieldSpec fixedFieldSpec = fieldSpecHelper.getFieldSpecForValue(fixedField.getCurrentValue());
         Optional<FieldSpec> constrainedFieldSpecOpt = this.constraintReducer.reduceConstraintsToFieldSpec(constraintsForField);
 
         if (!constrainedFieldSpecOpt.isPresent()){

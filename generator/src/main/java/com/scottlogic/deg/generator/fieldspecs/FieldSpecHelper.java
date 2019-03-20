@@ -8,7 +8,8 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class FieldSpecHelper {
-    public static FieldSpec getFieldSpecForCurrentValue(Object value){
+    //TODO paul TEST
+    public FieldSpec getFieldSpecForValue(Object value){
         if (value == null) {
             return getNullRequiredFieldSpec();
         }
@@ -17,7 +18,7 @@ public class FieldSpecHelper {
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
     }
 
-    public static FieldSpec getNullRequiredFieldSpec() {
+    private FieldSpec getNullRequiredFieldSpec() {
         return FieldSpec.Empty
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_BE_NULL), FieldSpecSource.Empty);
     }

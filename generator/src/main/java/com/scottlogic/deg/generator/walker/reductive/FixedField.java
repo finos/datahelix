@@ -50,10 +50,6 @@ public class FixedField {
             : String.format("[%s] = %s", this.field.name, this.current);
     }
 
-    FieldSpec getFieldSpecForCurrentValue(){
-        return FieldSpecHelper.getFieldSpecForCurrentValue(current);
-    }
-
     public Object getCurrentValue() {
         if (this.current == NOT_ITERATED){
             throw new UnsupportedOperationException("FixedField has not iterated yet");

@@ -32,7 +32,7 @@ class FixedFieldBuilderTests {
             reducer,
             new NoopDataGeneratorMonitor(),
             mock(FieldSpecValueGenerator.class));
-        Field field1 = new Field("field1");
+        Field field1 = new Field("field");
         ProfileFields fields = new ProfileFields(Collections.singletonList(field1));
         ReductiveState state = new ReductiveState(fields);
         TreeConstraintNode rootNode =
@@ -57,7 +57,7 @@ class FixedFieldBuilderTests {
             reducer,
             new NoopDataGeneratorMonitor(),
             valueGenerator);
-        Field field1 = new Field("field1");
+        Field field1 = new Field("field");
         ProfileFields fields = new ProfileFields(Collections.singletonList(field1));
         ReductiveState state = new ReductiveState(fields);
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));

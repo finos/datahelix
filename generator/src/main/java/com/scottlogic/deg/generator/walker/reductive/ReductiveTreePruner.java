@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
@@ -18,21 +19,24 @@ public class ReductiveTreePruner {
 
     private final FieldSpecMerger merger;
     private final ConstraintReducer constraintReducer;
+    private final FieldSpecHelper fieldSpecHelper;
 
     @Inject
-    public ReductiveTreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer) {
+    public ReductiveTreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer, FieldSpecHelper fieldSpecHelper) {
         this.merger = merger;
         this.constraintReducer = constraintReducer;
+        this.fieldSpecHelper = fieldSpecHelper;
     }
 
     /**
      * Prunes a tree of any branches that are contradictory to the value of the nextFixedField
      * @param constraintNode The Tree to be pruned
-     * @param nextFieldToFix The field, and the value to fix it for.
+     * @param nextFieldToFix The field to prune for
+     * @param nextValue the value to prune the field the field for for.
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
-    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField nextFieldToFix) {
-        return pruneConstraintNode(constraintNode, nextFieldToFix.getField(), nextFieldToFix.getFieldSpecForCurrentValue());
+    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field nextFieldToFix, Object nextValue) {
+        return pruneConstraintNode(constraintNode, nextFieldToFix, fieldSpecHelper.getFieldSpecForValue(nextValue));
     }
 
     private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
