@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
-class ProfileValidatorTest {
+class ProfileValidatorTests {
 
     private ProfileValidator profileValidator = new ProfileValidatorMedia();
 
