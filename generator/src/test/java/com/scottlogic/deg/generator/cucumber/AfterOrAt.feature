@@ -172,22 +172,6 @@ Scenario: Running afterOrAt request against a non contradicting beforeOrAt shoul
        | 2021-01-01T00:00:00.000 |
 
 
-@ignore
-Scenario: Running afterOrAt against a contradicting beforeOrAt should generate only string,numeric and null
-     Given foo is after or at 2019-01-01T00:00:00.000
-       And foo is before or at 2019-01-01T00:00:00.000
-       And foo is in set:
-       | 1                         |
-       | 2018-01-01T00:00:00.000   |
-       | 2011-01-01T00:00:00.000   |
-       | "2011-01-01T00:00:00.000" |
-       | "2018-01-01T00:00:00.000" |
-       | 2018-01-01T00:00:00.000   |
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | 1    |
-       | "2011-01-01T00:00:00.000" |
-       | "2018-01-01T00:00:00.000" |
+
 
 
