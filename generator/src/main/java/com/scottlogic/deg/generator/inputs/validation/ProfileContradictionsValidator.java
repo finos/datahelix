@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidatio
 
 import java.util.Collection;
 
-public class ReportingProfileValidator implements ProfileValidator {
+public class ProfileContradictionsValidator implements ProfileValidator {
     @Override
     public Collection<ValidationAlert> validate(Profile profile) {
         ProfileValidationVisitor visitor = new ProfileValidationVisitor();
