@@ -30,5 +30,5 @@ public interface ProfileValidator {
      * @param profileStream an InputStream of the profile to validate
      * @return the result of validating the provided profile against the provided schema
      */
-    ValidationResult validateMedeia(InputStream schemaStream, InputStream profileStream);
+    ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream);
 }

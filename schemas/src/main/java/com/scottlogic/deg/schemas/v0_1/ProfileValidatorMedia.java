@@ -21,13 +21,13 @@ public class ProfileValidatorMedia implements ProfileValidator {
 
     @Override
     public ValidationResult validateProfile(InputStream profileStream) {
-        return validateMedeia(
+        return validateProfile(
             this.getClass().getResourceAsStream(datahelixProfileSchema),
             profileStream);
     }
 
     @Override
-    public ValidationResult validateMedeia(InputStream schemaStream, InputStream profileStream) {
+    public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");
