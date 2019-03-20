@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileValidatorMedia implements ProfileValidator {
+public class ProfileValidatorMedeia implements ProfileValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();
     private static ObjectMapper objectMapper = new ObjectMapper();
