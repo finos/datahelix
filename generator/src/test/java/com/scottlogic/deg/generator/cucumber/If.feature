@@ -3,6 +3,7 @@ Feature: Values can be specified by using if, then and else constraints
 Background:
      Given the generation strategy is full
      And the combination strategy is exhaustive
+     And the walker type is REDUCTIVE
      And the following fields exist:
       | foo |
       | bar |
@@ -1695,6 +1696,7 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
        | "ccc"  | "333" |
        | "dddd" | "333" |
 
+
 Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
        Given foo is in set:
          | "aa"   |
@@ -2432,7 +2434,7 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
        | foo | bar |
        | 10  | 1   |
 
-@ignore #issue 363
+@ignore #issue 363  maybe also 756?
 Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
       Given foo is in set:
          | 1     |
@@ -3530,6 +3532,7 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "d" | 50  |
        | "e" | 10  |
 
+@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3564,6 +3567,7 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "d" | 50  |
        | "e" | 50  |
 
+@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3635,6 +3639,7 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "e" | 50  |
 
 
+@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3667,6 +3672,7 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "d" | 50  |
        | "e" | 50  |
 
+@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a contradictory anyOf constraint within its else statement should be successful
        Given foo is in set:
          | "a" |

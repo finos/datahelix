@@ -53,7 +53,7 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     public Collection<DecisionNode> getDecisions() {
-        return new HashSet<>(decisions);
+        return decisions;
     }
 
     public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {

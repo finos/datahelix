@@ -1,0 +1,27 @@
+{
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "field": "field1",
+          "is": "formattedAs",
+          "value": "%ggg"
+        },
+        {
+          "field": "field1",
+          "is": "shorterThan",
+          "value": 19
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

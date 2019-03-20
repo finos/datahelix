@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
 
 import java.util.Optional;
@@ -56,6 +57,28 @@ public class FieldSpecMerger {
         }
 
         //operation/s that must happen last
-        return finalMergeOperation.applyMergeOperation(left, right, merging.get());
+        Optional<FieldSpec> fieldSpec = finalMergeOperation.applyMergeOperation(left, right, merging.get());
+
+        if (!fieldSpec.isPresent() || cannotEmitAnyData(fieldSpec.get())){
+            return Optional.empty();
+        }
+
+        return fieldSpec;
+    }
+
+    private boolean cannotEmitAnyData(FieldSpec fieldSpec){
+        if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)){
+            return false;
+        }
+
+        if (fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty()){
+            return true;
+        }
+
+        if (!(fieldSpec.getSetRestrictions() == null) &&  fieldSpec.getSetRestrictions().getWhitelist() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()){
+            return true;
+        }
+
+        return false;
     }
 }
