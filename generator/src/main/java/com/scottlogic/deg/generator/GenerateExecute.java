@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
+import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -12,6 +14,7 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.ValidationResult;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
@@ -22,6 +25,7 @@ public class GenerateExecute implements Runnable {
     private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
     private final ProfileValidator profileValidator;
+    private final ProfileValidationReporter validationReporter;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
@@ -31,7 +35,8 @@ public class GenerateExecute implements Runnable {
                            OutputTarget outputTarget,
                            ConfigValidator configValidator,
                            ErrorReporter errorReporter,
-                           ProfileValidator profileValidator) {
+                           ProfileValidator profileValidator,
+                           ProfileValidationReporter validationReporter) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
@@ -40,6 +45,7 @@ public class GenerateExecute implements Runnable {
         this.configValidator = configValidator;
         this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
+        this.validationReporter = validationReporter;
     }
 
     @Override
@@ -55,7 +61,8 @@ public class GenerateExecute implements Runnable {
         try {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            profileValidator.validate(profile);
+            Collection<ValidationAlert> alerts = profileValidator.validate(profile);
+            validationReporter.output(alerts);
 
             validationResult = configValidator.postProfileChecks(profile, configSource, outputTarget);
             if (!validationResult.isValid()) {

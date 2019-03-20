@@ -10,18 +10,18 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidatio
 
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
-    private final ProfileValidationReporter validationReporter;
+    private final ReportingProfileValidator contradictionCheckingValidator;
 
     @Inject
-    public ProfileValidatorProvider(GenerationConfigSource configSource, ProfileValidationReporter validationReporter) {
+    public ProfileValidatorProvider(GenerationConfigSource configSource, ReportingProfileValidator contradictionCheckingValidator) {
         this.configSource = configSource;
-        this.validationReporter = validationReporter;
+        this.contradictionCheckingValidator = contradictionCheckingValidator;
     }
 
     @Override
     public ProfileValidator get() {
         if(configSource.getValidateProfile()) {
-            return new ReportingProfileValidator(validationReporter);
+            return contradictionCheckingValidator;
         }
         return new NoopProfileValidator();
     }

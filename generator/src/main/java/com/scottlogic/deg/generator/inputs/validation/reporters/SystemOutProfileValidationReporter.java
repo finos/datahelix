@@ -3,12 +3,12 @@ package com.scottlogic.deg.generator.inputs.validation.reporters;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 
-import java.util.List;
+import java.util.Collection;
 
 public class SystemOutProfileValidationReporter implements  ProfileValidationReporter {
 
     @Override
-    public void output(List<ValidationAlert> alerts) {
+    public void output(Collection<ValidationAlert> alerts) {
         if (alerts.size() == 0) return;
 
         boolean hasErrors = false;

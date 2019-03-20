@@ -2,11 +2,6 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.combinationstrategies.*;
-import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 
 import java.util.Optional;
 
@@ -16,7 +11,6 @@ public class GenerationConfig {
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
     private final Optional<Long> maxRows;
-    private final boolean validateProfile;
 
     @Inject
     public GenerationConfig(GenerationConfigSource source) {
@@ -24,7 +18,6 @@ public class GenerationConfig {
         this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
-        this.validateProfile = source.getValidateProfile();
     }
 
     public DataGenerationType getDataGenerationType() {
@@ -51,15 +44,6 @@ public class GenerationConfig {
     }
 
     public Optional<Long> getMaxRows() { return maxRows; }
-
-    public ProfileValidator getProfileValidator() {
-
-        if(validateProfile) {
-            return new ReportingProfileValidator(new SystemOutProfileValidationReporter());
-        }
-
-        return new NoopProfileValidator();
-    }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),

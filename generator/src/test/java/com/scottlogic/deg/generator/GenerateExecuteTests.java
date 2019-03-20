@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
@@ -29,6 +30,7 @@ public class GenerateExecuteTests {
     private ErrorReporter errorReporter = mock(ErrorReporter.class);
     private ValidationResult validationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
+    private ProfileValidationReporter validationReporter = mock(ProfileValidationReporter.class);
 
     private GenerateExecute excecutor = new GenerateExecute(
         config,
@@ -38,7 +40,8 @@ public class GenerateExecuteTests {
         outputTarget,
         configValidator,
         errorReporter,
-        profileValidator);
+        profileValidator,
+        validationReporter);
 
     @Test
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
