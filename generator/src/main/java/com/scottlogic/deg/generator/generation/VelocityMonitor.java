@@ -61,15 +61,17 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         OffsetDateTime finished = OffsetDateTime.now(ZoneOffset.UTC);
         Duration totalDuration = Duration.between(startedGenerating, finished);
 
+        //Get the total duration of the generator in milliseconds
         BigDecimal nanoSecondsAsMilliseconds = BigDecimal
             .valueOf(totalDuration.getNano())
-            .divide(nanoSecondsInMillisecond, RoundingMode.DOWN);
-
+            .divide(nanoSecondsInMillisecond, RoundingMode.DOWN); //get the number of nanoSeconds in the duration and divide to convert them into milliseconds
         BigDecimal secondsAsMilliseconds = BigDecimal
-            .valueOf(totalDuration.getSeconds())
+            .valueOf(totalDuration.getSeconds()) //get the total number of seconds and multiply them by 1000 to convert them to milliseconds
             .multiply(millisecondsInSecond);
-
         BigDecimal totalMilliseconds = nanoSecondsAsMilliseconds.add(secondsAsMilliseconds);
+
+        //Work out the average velocity for the generator as a whole by using the formula
+        // (<rowsEmitted>/<totalMilliseconds>)*1000 = <rowsEmitted>/second
         BigInteger averageRowsPerSecond = new BigDecimal(rowsEmitted)
             .setScale(2, RoundingMode.UNNECESSARY)
             .divide(totalMilliseconds, RoundingMode.HALF_UP)
