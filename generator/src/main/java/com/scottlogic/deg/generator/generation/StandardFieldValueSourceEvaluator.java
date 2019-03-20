@@ -107,12 +107,15 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private int getNumericScale(GranularityRestrictions granularityRestrictions) {
+        //Note that the default granularity if not specified is 1e-20
+        final int maximumGranularity = 20;
+
         if (granularityRestrictions != null) {
-            return granularityRestrictions.getNumericScale();
+            int granularityScale = granularityRestrictions.getNumericScale();
+            return Math.min(granularityScale, maximumGranularity);
         }
 
-        //Note that the default granularity if not specified is 10e-20
-        return 20;
+        return maximumGranularity;
     }
 
     private boolean isFieldValueAnInteger(NumericRestrictions numericRestrictions, int numericScale) {
