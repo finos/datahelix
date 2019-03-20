@@ -93,8 +93,6 @@ class ReductiveRowSpecGeneratorTests {
             () -> rowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, rootNode));
     }
 
-    */
-
     @Test
     void createRowSpecFromFixedValues_reducerReturnsEmptyOptionalFieldSpec_returnsEmptyStream() {
         ConstraintReducer reducer = mock(ConstraintReducer.class);
@@ -128,12 +126,12 @@ class ReductiveRowSpecGeneratorTests {
 
         //noinspection ResultOfMethodCallIgnored
         fixedField.getStream().collect(Collectors.toList());
-        Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(reductiveState,
-            new TreeConstraintNode()
-        );
+        Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(reductiveState);
 
         Assert.assertEquals(result.collect(Collectors.toList()), Collections.emptyList());
     }
+
+    */
 
     private ReductiveRowSpecGenerator getRowSpecGenerator(
         ConstraintReducer reducer) {

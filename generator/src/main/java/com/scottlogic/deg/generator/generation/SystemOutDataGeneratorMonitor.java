@@ -40,7 +40,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: Unable to step further %s ",
-                reductiveState.getFixedFields().size(),
+                reductiveState.getFieldValues().size(),
                 reductiveState.toString(true)));
     }
 
@@ -49,7 +49,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: No values for field %s: %s ",
-                reductiveState.getFixedFields().size(),
+                reductiveState.getFieldValues().size(),
                 reductiveState.getNextFieldToFix().getField().name,
                 reductiveState.toString(true)));
     }
@@ -64,7 +64,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: Unable to emit row, some FieldSpec's are Empty: %s",
-                reductiveState.getFixedFields().size(),
+                reductiveState.getFieldValues().size(),
                 Objects.toString(emptyFieldSpecs)));
     }
 }
