@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.reporters.GeneratorContinuation;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 
@@ -74,5 +77,40 @@ public class GenerateExecuteTests {
         //Assert
         verify(profileReader, times(1)).read(testFile.toPath());
         verify(errorReporter, never()).display(any());
+    }
+
+    @Test
+    public void run_whenReporterReturnsAbort_shouldNotGenerate() throws IOException, InvalidProfileException {
+        //Arrange
+        File testFile = new File("TestFile");
+        when(configSource.getProfileFile()).thenReturn(testFile);
+        when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
+        when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(validationReporter.output(any())).thenReturn(GeneratorContinuation.ABORT);
+
+        //Act
+        excecutor.run();
+
+        //Assert
+        verify(validationReporter, times(1)).output(any());
+        verify(generationEngine, never()).generateDataSet(any(), any(), any());
+    }
+
+    @Test
+    public void run_whenReporterReturnsContinue_shouldGenerate() throws IOException, InvalidProfileException {
+        //Arrange
+        File testFile = new File("TestFile");
+        when(configSource.getProfileFile()).thenReturn(testFile);
+        when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
+        when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(configValidator.postProfileChecks(any(), any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(validationReporter.output(any())).thenReturn(GeneratorContinuation.CONTINUE);
+
+        //Act
+        excecutor.run();
+
+        //Assert
+        verify(validationReporter, times(1)).output(any());
+        verify(generationEngine, times(1)).generateDataSet(any(), any(), any());
     }
 }

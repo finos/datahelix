@@ -8,8 +8,9 @@ import java.util.Collection;
 public class SystemOutProfileValidationReporter implements  ProfileValidationReporter {
 
     @Override
-    public void output(Collection<ValidationAlert> alerts) {
-        if (alerts.size() == 0) return;
+    public GeneratorContinuation output(Collection<ValidationAlert> alerts) {
+        if (alerts.size() == 0)
+            return GeneratorContinuation.CONTINUE;
 
         boolean hasErrors = false;
         for (ValidationAlert alert : alerts) {
@@ -27,7 +28,9 @@ public class SystemOutProfileValidationReporter implements  ProfileValidationRep
 
         if (hasErrors) {
             System.out.println("Encountered unrecoverable profile validation errors.");
-            System.exit(1);
+            return GeneratorContinuation.ABORT;
         }
+
+        return GeneratorContinuation.CONTINUE;
     }
 }

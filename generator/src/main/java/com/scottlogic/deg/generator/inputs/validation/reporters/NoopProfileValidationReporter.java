@@ -7,7 +7,7 @@ import java.util.Collection;
 public class NoopProfileValidationReporter implements ProfileValidationReporter {
 
     @Override
-    public void output(Collection<ValidationAlert> alerts) {
-
+    public GeneratorContinuation output(Collection<ValidationAlert> alerts) {
+        return GeneratorContinuation.CONTINUE;
     }
 }

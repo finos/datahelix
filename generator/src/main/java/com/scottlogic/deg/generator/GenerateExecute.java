@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
+import com.scottlogic.deg.generator.inputs.validation.reporters.GeneratorContinuation;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
@@ -62,7 +63,10 @@ public class GenerateExecute implements Runnable {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
             Collection<ValidationAlert> alerts = profileValidator.validate(profile);
-            validationReporter.output(alerts);
+            GeneratorContinuation continuationBehaviour = validationReporter.output(alerts);
+            if (continuationBehaviour == GeneratorContinuation.ABORT){
+                return;
+            }
 
             validationResult = configValidator.postProfileChecks(profile, configSource, outputTarget);
             if (!validationResult.isValid()) {
