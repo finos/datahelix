@@ -8,18 +8,12 @@ import com.worldturner.medeia.api.UrlSchemaSource;
 import com.worldturner.medeia.api.ValidationFailedException;
 import com.worldturner.medeia.api.jackson.MedeiaJacksonApi;
 import com.worldturner.medeia.schema.validation.SchemaValidator;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Used to validate a DataHelix Profile JSON file.
- * <p>
- * Checks that the profile JSON file is valid against the DataHelix Profile Schema (datahelix.schema.json)
- */
 public class ProfileValidatorMedia implements ProfileValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();
@@ -53,7 +47,6 @@ public class ProfileValidatorMedia implements ProfileValidator {
         return new ValidationResult(errorMessages);
     }
 
-    @NotNull
     private SchemaValidator loadSchema() {
         SchemaSource source = new UrlSchemaSource(getClass().getResource(datahelixProfileSchema));
         return api.loadSchema(source);
