@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.util.Collections;
@@ -14,7 +14,7 @@ public abstract class ProfileBasedFixFieldStrategy implements FixFieldStrategy {
     private List<Field> fieldsInFixingOrder;
 
     @Override
-    public Field getNextFieldToFix(ReductiveState reductiveState, ReductiveConstraintNode rootNode) {
+    public Field getNextFieldToFix(ReductiveState reductiveState, ConstraintNode rootNode) {
         return getFieldFixingPriorityList(reductiveState.getFields()).stream()
             .filter(field -> !reductiveState.isFieldFixed(field) && reductiveState.getFields().stream().anyMatch(pf -> pf.equals(field)))
             .findFirst()

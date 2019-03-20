@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 class ReductiveDecisionTreeWalkerTests {
-    private ReductiveConstraintNode rootNode;
+    private TreeConstraintNode rootNode;
     private DecisionTree tree;
     private FixedFieldBuilder fixedFieldBuilder;
     private ReductiveDecisionTreeWalker walker;
@@ -33,10 +31,10 @@ class ReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         ProfileFields fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
-        rootNode = new ReductiveConstraintNode(new TreeConstraintNode(), Collections.emptySet());
+        rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
-        ReductiveDecisionTreeReducer treeReducer = mock(ReductiveDecisionTreeReducer.class);
-        when(treeReducer.reduce(eq(rootNode), any(ReductiveState.class))).thenReturn(rootNode);
+        ReductiveTreePruner treeReducer = mock(ReductiveTreePruner.class);
+        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Merged.of(rootNode));
 
         fixedFieldBuilder = mock(FixedFieldBuilder.class);
         fixFieldStrategy = mock(FixFieldStrategy.class);
