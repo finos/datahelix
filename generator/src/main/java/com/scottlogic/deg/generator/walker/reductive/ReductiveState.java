@@ -86,13 +86,13 @@ public class ReductiveState {
         return new ReductiveState(fields, fieldValues, nextFieldToFix);
     }
 
-    public ReductiveState whereCurrentFieldIsFixed() {
+    public ReductiveState withCurrentFieldFixedToValue(Object value) {
         if (nextFieldToFix == null) {
             throw new UnsupportedOperationException();
         }
 
         Map<Field, FieldValue> newFixedFieldsMap = new HashMap<>(fieldValues);
-        newFixedFieldsMap.put(nextFieldToFix.getField(), new FieldValue(nextFieldToFix.getField(), nextFieldToFix.getCurrentValue()));
+        newFixedFieldsMap.put(nextFieldToFix.getField(), new FieldValue(nextFieldToFix.getField(), value));
 
         return new ReductiveState(fields, newFixedFieldsMap, null);
     }
@@ -102,6 +102,6 @@ public class ReductiveState {
         if (nextFieldToFix == null)
             return withNextFieldToFixChosen(fixedField);
 
-        return whereCurrentFieldIsFixed().withNextFieldToFixChosen(fixedField);
+        return withCurrentFieldFixedToValue(nextFieldToFix.getCurrentValue()).withNextFieldToFixChosen(fixedField);
     }
 }

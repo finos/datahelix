@@ -90,7 +90,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedNode.get(), reductiveState);
 
         ReductiveState newReductiveState =
-            reductiveState.whereCurrentFieldIsFixed();
+            reductiveState.withCurrentFieldFixedToValue(value);
 
         if (newReductiveState.allFieldsAreFixed()){
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState);
