@@ -391,6 +391,7 @@ firstName,age,nationalInsurance
 "5ᢃ풞ﺯ䒿囻",57,"RY904705" 
 [...]
 ```
+**NOTE** we are considering adding a feature that allows you to [specify / restrict the character set](https://github.com/ScottLogic/datahelix/issues/294) in a future release.
 
 ## Next steps
 
