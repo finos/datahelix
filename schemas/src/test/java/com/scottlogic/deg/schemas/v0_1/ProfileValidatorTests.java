@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 class ProfileValidatorTests {
 
-    private ProfileValidator profileValidator = new ProfileValidatorMedia();
+    private ProfileValidator profileValidator = new ProfileValidatorMedeia();
 
     private ValidationResult validate(String profile) {
         InputStream testProfile = this.getClass().getResourceAsStream(profile);
