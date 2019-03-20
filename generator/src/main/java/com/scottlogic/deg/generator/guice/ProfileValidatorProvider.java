@@ -3,25 +3,32 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileContradictionsValidator;
+import com.scottlogic.deg.generator.inputs.validation.*;
 
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
     private final ProfileContradictionsValidator contradictionCheckingValidator;
+    private final ProfileFieldUntypedValidator untypedValidator;
 
     @Inject
-    public ProfileValidatorProvider(GenerationConfigSource configSource, ProfileContradictionsValidator contradictionCheckingValidator) {
+    public ProfileValidatorProvider(
+        GenerationConfigSource configSource,
+        ProfileContradictionsValidator contradictionCheckingValidator,
+        ProfileFieldUntypedValidator untypedValidator) {
+
         this.configSource = configSource;
         this.contradictionCheckingValidator = contradictionCheckingValidator;
+        this.untypedValidator = untypedValidator;
     }
 
     @Override
     public ProfileValidator get() {
         if(configSource.getValidateProfile()) {
-            return contradictionCheckingValidator;
+            return new MultipleProfileValidator(
+                contradictionCheckingValidator,
+                untypedValidator);
         }
-        return new NoopProfileValidator();
+
+        return untypedValidator;
     }
 }
