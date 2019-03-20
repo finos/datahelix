@@ -15,13 +15,13 @@ public class ReductiveStateTests {
     void allFieldsAreFixed_lastFixedFieldNotNullAndFixedFieldsSizePlusOneEqualsFieldsSize_returnsTrue() {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null));
-        FixedField lastFixedField = new FixedField(new Field("First Field"), null, null, null);
+            new FixedField(new Field("Second Field"), null,  null));
+        FixedField lastFixedField = new FixedField(new Field("First Field"),  null, null);
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),
             fixedFields
         ).with(lastFixedField)
-            .with(new FixedField(null, null,null, null));
+            .with(new FixedField(null, null, null));
 
         boolean result = reductiveState.allFieldsAreFixed();
 
@@ -32,9 +32,9 @@ public class ReductiveStateTests {
     void allFieldsAreFixed_lastFixedFieldNullAndFixedFieldsSizeEqualToFieldSize_returnsFalse() {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(new Field("First Field"),
-            new FixedField(new Field("First Field"), null, null, null));
+            new FixedField(new Field("First Field"), null, null));
         fixedFields.put(new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null));
+            new FixedField(new Field("Second Field"), null, null));
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),
             fixedFields
@@ -49,7 +49,7 @@ public class ReductiveStateTests {
     void allFieldsAreFixed_lastFixedFieldNotNullAndFixedFieldsSizePlusOneDoesNotEqualFieldsSize_returnsFalse() {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null));
+            new FixedField(new Field("Second Field"), null,  null));
 
         ReductiveState reductiveState = getReductiveState(Arrays.asList("First Field", "Second Field", "Third Field"), fixedFields);
 
@@ -63,7 +63,7 @@ public class ReductiveStateTests {
         HashMap<Field, FixedField> fixedFields = new HashMap<>();
         fixedFields.put(
             new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
+            new FixedField(new Field("Second Field"), null,  null)
         );
         ReductiveState reductiveState = getReductiveState(
             Arrays.asList("First Field", "Second Field"),

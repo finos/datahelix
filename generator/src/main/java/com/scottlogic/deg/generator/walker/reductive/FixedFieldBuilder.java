@@ -61,7 +61,7 @@ public class FixedFieldBuilder {
         Stream<Object> values = generator.generate(field, rootConstraintsFieldSpec.orElse(FieldSpec.Empty))
             .map(dataBag -> dataBag.getValue(field));
 
-        return new FixedField(field, values, rootConstraintsFieldSpec.orElse(FieldSpec.Empty), this.monitor);
+        return new FixedField(field, values, this.monitor);
     }
 
     private Set<FieldSpec> getFieldSpecsForDecisions(Field field, ConstraintNode rootNode) {

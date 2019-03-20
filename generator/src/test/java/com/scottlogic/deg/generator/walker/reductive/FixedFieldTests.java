@@ -20,7 +20,6 @@ class FixedFieldTests {
         FixedField fixedField = new FixedField(
             new Field("Test"),
             Stream.of(new ArrayList<Object>() {{ add(null); }}),
-            FieldSpec.Empty,
             mock(ReductiveDataGeneratorMonitor.class)
         );
 

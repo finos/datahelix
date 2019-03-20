@@ -109,7 +109,6 @@ class ReductiveRowSpecGeneratorTests {
         FixedField fixedField = new FixedField(
             new Field("First Field"),
             fixedFieldValues,
-            FieldSpec.Empty,
             mock(ReductiveDataGeneratorMonitor.class)
         );
         fixedFields.put(
@@ -123,7 +122,6 @@ class ReductiveRowSpecGeneratorTests {
             new FixedField(
                 new Field("Test"),
                 Stream.of(Collections.emptyList()),
-                null,
                 mock(ReductiveDataGeneratorMonitor.class)
             )
         );
