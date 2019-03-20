@@ -84,4 +84,4 @@ ValidationResult result = profileValidator.validateProfile(profileStream);
 ```
 This will return a [`ValidationResult`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/common/ValidationResult.java) object which contains a list of error messages found during validation.
 
-if the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check is validation was successful.
+if the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check whether validation was successful.
