@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 public class FixedFieldBuilder {
 
-    public static final FixedField FIXED_ALL_FIELDS = new FixedField(null, null, null, null);
     private final ConstraintReducer constraintReducer;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator generator;
@@ -34,10 +33,6 @@ public class FixedFieldBuilder {
     //work out the next field to fix and return a new ReductiveState with this field fixed
     public FixedField findNextFixedField(ReductiveState reductiveState, ConstraintNode rootNode, FixFieldStrategy fixFieldStrategy) {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, rootNode);
-
-        if (fieldToFix == null){
-            return FIXED_ALL_FIELDS;
-        }
 
         return createFixedFieldWithValues(fieldToFix, rootNode);
     }
