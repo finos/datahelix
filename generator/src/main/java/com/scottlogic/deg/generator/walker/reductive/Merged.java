@@ -4,6 +4,10 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Generic merged object that may be contradictory.
+ * This would be nicer if it extended optional, but optional is final
+ */
 public class Merged<T> {
 
     private final T value;
