@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,19 +11,19 @@ public class ReductiveState {
 
     private final ProfileFields fields;
     private final Map<Field, FixedField> fixedFields;
-    private final FixedField lastFixedField;
+    private final FixedField nextFieldToFix;
 
-    public ReductiveState(ProfileFields fields){
+    public ReductiveState(ProfileFields fields) {
         this(fields, new HashMap<>(), null);
     }
 
     private ReductiveState(
         ProfileFields fields,
         Map<Field, FixedField> fixedFields,
-        FixedField lastFixedField) {
+        FixedField nextFieldToFix) {
         this.fields = fields;
         this.fixedFields = fixedFields;
-        this.lastFixedField = lastFixedField;
+        this.nextFieldToFix = nextFieldToFix;
     }
 
     public boolean allFieldsAreFixed() {
@@ -36,17 +35,17 @@ public class ReductiveState {
     }
 
     //get a stream of all possible values for the field that was fixed on the last iteration
-    public Stream<Object> getValuesFromLastFixedField(){
-        if (this.lastFixedField == null)
+    public Stream<Object> getValuesFromNextFieldToFix() {
+        if (this.nextFieldToFix == null)
             throw new NullPointerException("Field has not been fixed yet");
 
-        return this.lastFixedField.getStream();
+        return this.nextFieldToFix.getStream();
     }
 
     //get a copy of the current fixed field for the given field, will return null if the field isn't fixed
     public FixedField getFixedField(Field field) {
-        if (lastFixedField != null && lastFixedField.getField().equals(field)){
-            return lastFixedField;
+        if (nextFieldToFix != null && nextFieldToFix.getField().equals(field)) {
+            return nextFieldToFix;
         }
 
         return this.fixedFields.getOrDefault(field, null);
@@ -57,51 +56,60 @@ public class ReductiveState {
         return toString(false);
     }
 
-    public Map<Field, FixedField> getFixedFieldsExceptLast(){
+    public Map<Field, FixedField> getFixedFields() {
         return this.fixedFields;
     }
 
-    public FixedField getLastFixedField(){
-        return this.lastFixedField;
-    }
-
-    public Set<Field> getUnfixedFields(){
-        return this.fields.stream()
-            .filter(f -> !this.fixedFields.containsKey(f) && !f.equals(this.lastFixedField.getField()))
-            .collect(Collectors.toSet());
+    public FixedField getNextFieldToFix() {
+        return this.nextFieldToFix;
     }
 
     public String toString(boolean detailAllFields) {
         String fixedFieldsString = this.fixedFields.size() > 10 && !detailAllFields
             ? String.format("Fixed fields: %d of %d", this.fixedFields.size(), this.fields.size())
             : String.join(", ", this.fixedFields.values()
-                .stream()
-                .sorted(Comparator.comparing(ff -> ff.getField().name))
-                .map(FixedField::toString)
-                .collect(Collectors.toList()));
+            .stream()
+            .sorted(Comparator.comparing(ff -> ff.getField().name))
+            .map(FixedField::toString)
+            .collect(Collectors.toList()));
 
-        if (this.lastFixedField == null) {
+        if (this.nextFieldToFix == null) {
             return fixedFieldsString;
         }
 
         return this.fixedFields.isEmpty()
-            ? this.lastFixedField.toString()
-            : this.lastFixedField.toString() + " & " + fixedFieldsString;
+            ? this.nextFieldToFix.toString()
+            : this.nextFieldToFix.toString() + " & " + fixedFieldsString;
     }
 
     public ProfileFields getFields() {
         return this.fields;
     }
 
-    public ReductiveState with(FixedField fixedField){
+    public ReductiveState withNextFieldToFixChosen(FixedField nextFieldToFix) {
+        if (this.nextFieldToFix != null) {
+            throw new UnsupportedOperationException();
+        }
 
-        if (lastFixedField == null)
-            return new ReductiveState(fields, new HashMap<>(), fixedField);
+        return new ReductiveState(fields, fixedFields, nextFieldToFix);
+    }
 
-        Map<Field, FixedField> newFixedFieldsMap = Stream.concat
-            (fixedFields.values().stream(), Stream.of(lastFixedField))
-            .collect(Collectors.toMap(x->x.getField(), Function.identity()));
+    public ReductiveState whereCurrentFieldIsFixed() {
+        if (nextFieldToFix == null) {
+            throw new UnsupportedOperationException();
+        }
 
-        return new ReductiveState(fields, newFixedFieldsMap, fixedField);
+        Map<Field, FixedField> newFixedFieldsMap = new HashMap<>(fixedFields);
+        newFixedFieldsMap.put(nextFieldToFix.getField(), nextFieldToFix);
+
+        return new ReductiveState(fields, newFixedFieldsMap, null);
+    }
+
+    public ReductiveState with(FixedField fixedField) {
+
+        if (nextFieldToFix == null)
+            return withNextFieldToFixChosen(fixedField);
+
+        return whereCurrentFieldIsFixed().withNextFieldToFixChosen(fixedField);
     }
 }

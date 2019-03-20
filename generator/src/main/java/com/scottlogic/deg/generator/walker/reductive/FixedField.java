@@ -47,10 +47,6 @@ public class FixedField {
             });
     }
 
-    public FieldSpec getFieldSpecForValues(){
-        return this.valuesFieldSpec;
-    }
-
     @Override
     public String toString() {
         return this.current == NOT_ITERATED

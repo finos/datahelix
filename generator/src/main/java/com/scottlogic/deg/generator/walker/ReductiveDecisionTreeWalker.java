@@ -52,7 +52,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        return process(rootNode, initialState.with(nextFixedField), fixFieldStrategy);
+        return process(rootNode, initialState.withNextFieldToFixChosen(nextFixedField), fixFieldStrategy);
     }
 
     private Stream<RowSpec> process(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
@@ -61,7 +61,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return reductiveRowSpecGenerator.createRowSpecsFromFixedValues(reductiveState, constraintNode);
         }//TODO paul this check should be moved
 
-        Iterator<Object> valueIterator = reductiveState.getValuesFromLastFixedField().iterator();
+        Iterator<Object> valueIterator = reductiveState.getValuesFromNextFieldToFix().iterator();
         if (!valueIterator.hasNext()){
             this.monitor.noValuesForField(reductiveState);
             return Stream.empty();
@@ -81,7 +81,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         FixFieldStrategy fixFieldStrategy){
 
         //reduce the tree based on the fields that are now fixed
-        Merged<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getLastFixedField());
+        Merged<ConstraintNode> reducedNode = this.treeReducer.pruneConstraintNode(constraintNode, reductiveState.getNextFieldToFix());
 
         if (reducedNode.isContradictory()){
             //yielding an empty stream will cause back-tracking
@@ -99,7 +99,12 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        return process(reducedNode.get(), reductiveState.with(nextFixedField), fixFieldStrategy);
+        ReductiveState newReductiveState =
+            reductiveState
+                .whereCurrentFieldIsFixed()
+                .withNextFieldToFixChosen(nextFixedField);
+
+        return process(reducedNode.get(), newReductiveState, fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){

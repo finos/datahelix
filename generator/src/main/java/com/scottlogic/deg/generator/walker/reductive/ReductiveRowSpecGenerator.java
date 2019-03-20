@@ -33,7 +33,7 @@ public class ReductiveRowSpecGenerator {
     //produce a stream of RowSpecs for each value in the permitted set of values for the field fixed on the last iteration
     public Stream<RowSpec> createRowSpecsFromFixedValues(ReductiveState reductiveState, ConstraintNode constraintNode) {
 
-        Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFieldsExceptLast(reductiveState, constraintNode);
+        Map<Field, FieldSpec> fieldSpecsPerField = getFieldSpecsForAllFixedFields(reductiveState, constraintNode);
 
         if (fieldSpecsPerField.values().stream().anyMatch(fieldSpec -> fieldSpec == FieldSpec.Empty)){
             this.monitor.unableToEmitRowAsSomeFieldSpecsAreEmpty(reductiveState, fieldSpecsPerField);
@@ -48,12 +48,12 @@ public class ReductiveRowSpecGenerator {
 
 
     //create a mapping of field->fieldspec for each fixed field - efficiency
-    private Map<Field, FieldSpec> getFieldSpecsForAllFixedFieldsExceptLast(ReductiveState reductiveState, ConstraintNode constraintNode){
+    private Map<Field, FieldSpec> getFieldSpecsForAllFixedFields(ReductiveState reductiveState, ConstraintNode constraintNode){
         Map<Field, List<AtomicConstraint>> fieldToConstraints = constraintNode.getAtomicConstraints()
             .stream()
             .collect(Collectors.groupingBy(AtomicConstraint::getField));
 
-        return reductiveState.getFixedFieldsExceptLast().values()
+        return reductiveState.getFixedFields().values()
             .stream()
             .collect(Collectors.toMap(
                 ff -> ff.getField(),
