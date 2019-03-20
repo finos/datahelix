@@ -31,7 +31,7 @@ public class ReductiveState {
     }
 
     public boolean isFieldFixed(Field field) {
-        return getFixedField(field) != null;
+        return fixedFields.containsKey(field);
     }
 
     //get a stream of all possible values for the field that was fixed on the last iteration
@@ -40,15 +40,6 @@ public class ReductiveState {
             throw new NullPointerException("Field has not been fixed yet");
 
         return this.nextFieldToFix.getStream();
-    }
-
-    //get a copy of the current fixed field for the given field, will return null if the field isn't fixed
-    public FixedField getFixedField(Field field) {
-        if (nextFieldToFix != null && nextFieldToFix.getField().equals(field)) {
-            return nextFieldToFix;
-        }
-
-        return this.fixedFields.getOrDefault(field, null);
     }
 
     @Override

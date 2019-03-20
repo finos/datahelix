@@ -92,19 +92,17 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         //visualise the tree now
         visualise(reducedNode.get(), reductiveState);
 
+        ReductiveState newReductiveState =
+            reductiveState.whereCurrentFieldIsFixed();
+
         //find the next fixed field and continue
-        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(reductiveState, reducedNode.get(), fixFieldStrategy);
+        FixedField nextFixedField = fixedFieldBuilder.findNextFixedField(newReductiveState, reducedNode.get(), fixFieldStrategy);
 
         if (nextFixedField == null){
             return Stream.empty();
         }
 
-        ReductiveState newReductiveState =
-            reductiveState
-                .whereCurrentFieldIsFixed()
-                .withNextFieldToFixChosen(nextFixedField);
-
-        return process(reducedNode.get(), newReductiveState, fixFieldStrategy);
+        return process(reducedNode.get(), newReductiveState.withNextFieldToFixChosen(nextFixedField), fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
