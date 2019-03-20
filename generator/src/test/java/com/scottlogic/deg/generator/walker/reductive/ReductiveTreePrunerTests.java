@@ -23,7 +23,7 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ReductiveTreePrunerTest {
+class ReductiveTreePrunerTests {
 
     public static final FieldSpec notNull = FieldSpec.Empty
         .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
