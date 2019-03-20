@@ -118,7 +118,7 @@
           ]
         }
       },
-      "anyOf": [
+      "allOf": [
         {
           "if": {
             "properties": {"is": {"enum": ["after", "afterOrAt", "before", "beforeOrAt"]}}

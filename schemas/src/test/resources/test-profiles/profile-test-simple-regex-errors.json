@@ -11,12 +11,12 @@
         {
           "field": "field1",
           "is": "matchingRegex",
-          "value": 43
+          "value": 4
         },
         {
           "field": "field1",
           "is": "containingRegex",
-          "value": 43
+          "value": 3
         },
         {
           "not": {
