@@ -7,28 +7,34 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
-    private String startedGenerating;
+    private static final BigDecimal millisecondsInSecond = BigDecimal.valueOf(1_000);
+    private static final BigDecimal nanoSecondsInMillisecond = BigDecimal.valueOf(1_000_000);
+
+    private LocalDateTime startedGenerating;
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
     private Timer timer = new Timer(true);
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
 
     @Override
     public void generationStarting(GenerationConfig generationConfig) {
-        startedGenerating = simpleDateFormat.format( new Date());
+        startedGenerating = LocalDateTime.now();
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
 
-        System.out.println("Generation started at: " + startedGenerating + "\n");
+        System.out.println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
         System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
         System.out.println("---------------+---------------------+---------------");
 
@@ -40,7 +46,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
             }
         }, 1000L, 1000L);
     }
-
+    
     @Override
     public void rowEmitted(GeneratedObject row) {
         rowsSinceLastSample++;
@@ -49,15 +55,42 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
     public void endGeneration() {
-        reportVelocity(0);
-        System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
+        timer.cancel();
+
+        LocalDateTime finished = LocalDateTime.now();
+        Duration totalDuration = Duration.between(startedGenerating, finished);
+
+        BigDecimal nanoSecondsAsMilliseconds = BigDecimal
+            .valueOf(totalDuration.getNano())
+            .divide(nanoSecondsInMillisecond, RoundingMode.DOWN);
+
+        BigDecimal secondsAsMilliseconds = BigDecimal
+            .valueOf(totalDuration.getSeconds())
+            .multiply(millisecondsInSecond);
+
+        BigDecimal totalMilliseconds = nanoSecondsAsMilliseconds.add(secondsAsMilliseconds);
+        BigInteger averageRowsPerSecond = new BigDecimal(rowsEmitted)
+            .setScale(2, RoundingMode.UNNECESSARY)
+            .divide(totalMilliseconds, RoundingMode.HALF_UP)
+            .multiply(millisecondsInSecond).toBigInteger();
+
+        System.out.println(String.format(
+            "%-14s | %-19d | Finished",
+            rowsEmitted.toString(),
+            averageRowsPerSecond
+        ));
+
+        System.out.println(
+            String.format(
+                "\nGeneration finished at: %s",
+                timeFormatter.format(finished)));
     }
 
-    public void reportVelocity(long rowsSinceLastSample) {
+    private void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
-        System.out.print(
+        System.out.println(
         String.format(
-            "%-14s | %-19d | %s \n",
+            "%-14s | %-19d | %s",
             rowsEmitted.toString(),
             rowsSinceLastSample,
             trend)
