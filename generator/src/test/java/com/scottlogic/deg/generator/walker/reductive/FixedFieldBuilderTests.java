@@ -40,11 +40,11 @@ class FixedFieldBuilderTests {
                 new IsNullConstraint(field1, Collections.emptySet()),
                 new IsNullConstraint(field1, Collections.emptySet()).negate());
         when(fixFieldStrategy.getNextFieldToFix(state, rootNode)).thenReturn(field1);
-        when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.empty());
+        when(reducer.reduceConstraintsToFieldSpecWithMustContains(any(), any())).thenReturn(Optional.empty());
 
         FixedField field = builder.findNextFixedField(state, rootNode, fixFieldStrategy);
 
-        verify(reducer).reduceConstraintsToFieldSpec(any(), any());
+        verify(reducer).reduceConstraintsToFieldSpecWithMustContains(any(), any());
         Assert.assertThat(field, is(nullValue()));
     }
 
@@ -62,12 +62,12 @@ class FixedFieldBuilderTests {
         ReductiveState state = new ReductiveState(fields);
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
         when(fixFieldStrategy.getNextFieldToFix(state, rootNode)).thenReturn(field1);
-        when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.of(FieldSpec.Empty));
+        when(reducer.reduceConstraintsToFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(FieldSpec.Empty));
         when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
 
         FixedField field = builder.findNextFixedField(state, rootNode, fixFieldStrategy);
 
-        verify(reducer).reduceConstraintsToFieldSpec(any(), any());
+        verify(reducer).reduceConstraintsToFieldSpecWithMustContains(any(), any());
         verify(valueGenerator).generate(field1, FieldSpec.Empty);
         Assert.assertThat(field, not(nullValue()));
     }

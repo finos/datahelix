@@ -3,12 +3,14 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
+import com.sun.corba.se.spi.orbutil.fsm.FSM;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,22 +39,22 @@ public class FixedFieldBuilder {
         return createFixedFieldWithValues(fieldToFix, rootNode);
     }
 
-    //for the given field get a stream of possible values
-    private FixedField createFixedFieldWithValues(Field field, ConstraintNode rootNode) {
-        //from the original tree, get all atomic constraints that match the given field
-        Set<AtomicConstraint> constraintsForRootNode = rootNode.getAtomicConstraints()
-            .stream()
-            .filter(c -> c.getField().equals(field))
-            .collect(Collectors.toSet());
+    private Optional<FieldSpec> getFieldSpecWithMustContains(ConstraintNode rootNode, Field field){
+        List<AtomicConstraint> constraintsForRootNode =
+            AtomicConstraintsHelper.getConstraintsForField(rootNode.getAtomicConstraints(), field);
 
         Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
 
-        //produce a fieldspec for all the atomic constraints
-        Optional<FieldSpec> rootConstraintsFieldSpec = this.constraintReducer.reduceConstraintsToFieldSpec(
+        return this.constraintReducer.reduceConstraintsToFieldSpecWithMustContains(
             constraintsForRootNode,
             fieldSpecsForDecisions);
+    }
 
-        if (!rootConstraintsFieldSpec.isPresent() && !constraintsForRootNode.isEmpty()) {
+    //for the given field get a stream of possible values
+    private FixedField createFixedFieldWithValues(Field field, ConstraintNode rootNode) {
+        Optional<FieldSpec> rootConstraintsFieldSpec = getFieldSpecWithMustContains(rootNode, field);
+
+        if (!rootConstraintsFieldSpec.isPresent()) {
             //contradiction in the root node
             return null;
         }
