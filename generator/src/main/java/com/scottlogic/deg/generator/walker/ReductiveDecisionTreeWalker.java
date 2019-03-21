@@ -14,12 +14,8 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.Fiel
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveTreePruner treePruner;

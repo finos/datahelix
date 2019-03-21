@@ -58,7 +58,6 @@ class ReductiveFieldSpecBuilderTests {
         Optional<FieldSpec> field = builder.getFieldSpecWithMustContains(rootNode, field1);
 
         verify(reducer).reduceConstraintsToFieldSpecWithMustContains(any(), any());
-        verify(valueGenerator).generate(field1, FieldSpec.Empty);
         Assert.assertTrue(field.isPresent());
     }
 }

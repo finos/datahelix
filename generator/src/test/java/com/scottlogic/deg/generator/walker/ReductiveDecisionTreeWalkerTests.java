@@ -87,13 +87,4 @@ class ReductiveDecisionTreeWalkerTests {
         verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
     }
-
-    private static FixedField fixedField(String fieldName, Object... values) {
-        FixedField mockFixedField = mock(FixedField.class, fieldName);
-
-        when(mockFixedField.getField()).thenReturn(new Field(fieldName));
-        when(mockFixedField.getStream()).thenReturn(Stream.of(values));
-
-        return mockFixedField;
-    }
 }
