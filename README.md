@@ -29,7 +29,7 @@ Profiles are JSON files that describe the data you want to generate. They are co
 
  - **fields** -  an array of uniquely named fields (or columns).
  - **rules** - an array of constraints, with an optional description.
- - **constraints** - reduce the data for a given column
+ - **constraints** - restrict the types and ranges of data permitted for the given column.
 
 We'll start by generating data for a trivial schema. Using your favourite text editor, create the following JSON profile and save it as `profile.json`:
 
@@ -239,21 +239,30 @@ Finally, before exploring some more interesting features of the generator, we'll
       "rule": "national insurance",
       "constraints": [
         { "field": "nationalInsurance", "is": "ofType", "value": "string" },
-        
         {
           "if": {
             "field": "age",
-            "is": "greaterThanOrEqual",
+            "is": "greaterThanOrEqualTo",
             "value": 16
           },
           "then": {
-            "field": "nationalInsurance",
-            "is": "matchingRegex",
-            "value": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
+            "allOf": [
+              {
+                "field": "nationalInsurance",
+                "is": "matchingRegex",
+                "value": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
+              },
+              {
+                "not": {
+                  "field": "nationalInsurance",
+                  "is": "null"
+                }
+              }
+            ]
           },
           "else": {
-              "field": "nationalInsurance",
-              "is": "null"
+            "field": "nationalInsurance",
+            "is": "null"
           }
         }
       ]
@@ -395,7 +404,7 @@ firstName,age,nationalInsurance
 
 ## Next steps
 
-That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](???) is a good next step.
+That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](???) is a good next step. You might also be interested in the [examples folder](https://github.com/ScottLogic/datahelix/tree/master/examples), which illustrates various features of the generator.
 
 ## License
 
