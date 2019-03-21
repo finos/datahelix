@@ -38,31 +38,30 @@ public class FileUtils {
     }
 
     /**
-     * @param target the FileOutputTarget to check the existence of.
+     * @param path the Path to check the existence of.
      * @return true if the supplied FileOutputTarget exists on disk, false otherwise.
      */
-    public boolean exists(FileOutputTarget target) {
-        return Files.exists(target.getFilePath());
+    public boolean exists(Path path) {
+        return Files.exists(path);
     }
 
     /**
-     * @param target the FileOutputTarget to test.
+     * @param path the Path to test.
      * @return true is the supplied FileOutputTarget is a directory, false otherwise.
      */
-    public boolean isDirectory(FileOutputTarget target) {
-        return Files.isDirectory(target.getFilePath());
+    public boolean isDirectory(Path path) {
+        return Files.isDirectory(path);
     }
 
     /**
      * check for the existence of files named "<code>manifest.json</code>"
      * and "<code>/^[0-9]{filecount}.csv$/</code>" in the given directory.
      *
-     * @param target    the FileOutputTarget that contains the directory to test.
+     * @param filepath    the Path that contains the directory to test.
      * @param fileCount the number of files we will check for.
      * @return true if any of the files exist, false only if none of the files exist in the directory.
      */
-    public boolean isDirectoryEmpty(FileOutputTarget target, int fileCount) {
-        Path filepath = target.getFilePath();
+    public boolean isDirectoryEmpty(Path filepath, int fileCount) {
         if (directoryContainsManifestJsonFile(filepath) ||
             directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
             return false;

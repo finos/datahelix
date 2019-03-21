@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
@@ -36,11 +35,10 @@ class FixedFieldBuilderTests {
         Field field1 = new Field("field1");
         ProfileFields fields = new ProfileFields(Collections.singletonList(field1));
         ReductiveState state = new ReductiveState(fields);
-        ReductiveConstraintNode rootNode = new ReductiveConstraintNode(
+        TreeConstraintNode rootNode =
             new TreeConstraintNode(
                 new IsNullConstraint(field1, Collections.emptySet()),
-                new IsNullConstraint(field1, Collections.emptySet()).negate()),
-            Collections.emptySet());
+                new IsNullConstraint(field1, Collections.emptySet()).negate());
         when(fixFieldStrategy.getNextFieldToFix(state, rootNode)).thenReturn(field1);
         when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.empty());
 
@@ -62,9 +60,7 @@ class FixedFieldBuilderTests {
         Field field1 = new Field("field1");
         ProfileFields fields = new ProfileFields(Collections.singletonList(field1));
         ReductiveState state = new ReductiveState(fields);
-        ReductiveConstraintNode rootNode = new ReductiveConstraintNode(
-            new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet())),
-            Collections.emptySet());
+        TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
         when(fixFieldStrategy.getNextFieldToFix(state, rootNode)).thenReturn(field1);
         when(reducer.reduceConstraintsToFieldSpec(any(), any())).thenReturn(Optional.of(FieldSpec.Empty));
         when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
