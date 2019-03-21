@@ -12,7 +12,7 @@ import java.util.Map;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
-class ReductiveStateTest {
+class ReductiveStateTests {
     Field field1 = new Field("field1");
     Field field2 = new Field("field2");
     ReductiveState reductiveState = new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
