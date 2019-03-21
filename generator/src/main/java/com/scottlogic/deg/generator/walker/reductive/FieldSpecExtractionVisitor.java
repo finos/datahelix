@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -25,9 +26,8 @@ public class FieldSpecExtractionVisitor extends BaseVisitor {
 
     @Override
     public ConstraintNode visit(ConstraintNode constraintNode) {
-        List<AtomicConstraint> atomicConstraintsForField = constraintNode.getAtomicConstraints().stream()
-            .filter(atomicConstraint -> atomicConstraint.getField().equals(field))
-            .collect(Collectors.toList());
+        List<AtomicConstraint> atomicConstraintsForField =
+            AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
 
         Optional<FieldSpec> fieldSpec =
             atomicConstraintsForField.isEmpty()
