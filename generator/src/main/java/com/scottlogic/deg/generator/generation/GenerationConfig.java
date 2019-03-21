@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ReportingProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class GenerationConfig {
@@ -183,5 +184,8 @@ public class GenerationConfig {
         }
 
         public static final long DEFAULT_MAX_ROWS = 1000;
+
+        public static final BigDecimal NUMERIC_MAX = new BigDecimal("1e20");
+        public static final BigDecimal NUMERIC_MIN = new BigDecimal("-1e20");
     }
 }

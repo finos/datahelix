@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -229,8 +230,8 @@ class RealNumberFieldValueSourceTests {
 
         expectInterestingValues(
             4, 5,
-            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
-            BigDecimal.valueOf(Double.MAX_VALUE));
+            GenerationConfig.Constants.NUMERIC_MAX.subtract(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MAX);
     }
 
     @Test
@@ -238,19 +239,19 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(4, true);
 
         expectInterestingValues(
-            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
-            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MIN,
+            GenerationConfig.Constants.NUMERIC_MIN.add(BigDecimal.ONE),
             0, 3, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
         expectInterestingValues(
-            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
-            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MIN,
+            GenerationConfig.Constants.NUMERIC_MIN.add(BigDecimal.ONE),
             0,
-            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
-            BigDecimal.valueOf(Double.MAX_VALUE)
+            GenerationConfig.Constants.NUMERIC_MAX.subtract(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MAX
         );
     }
 
