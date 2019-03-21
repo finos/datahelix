@@ -3,14 +3,18 @@ package com.scottlogic.deg.generator.validators;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,6 +24,7 @@ public class VisualisationConfigValidatorTests {
     private FileUtils mockFileUtils = mock(FileUtils.class);
     private Path mockFilePath = mock(Path.class);
     private Profile profile;
+    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private TestVisualisationConfigSource mockConfigSource = mock(TestVisualisationConfigSource.class);
     private VisualisationConfigValidator validator;
 
@@ -29,6 +34,7 @@ public class VisualisationConfigValidatorTests {
         validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
+        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
     }
 
