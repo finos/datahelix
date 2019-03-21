@@ -17,27 +17,26 @@ import java.util.stream.Stream;
 public class ReductiveFieldSpecBuilder {
 
     private final ConstraintReducer constraintReducer;
-    private final ReductiveDataGeneratorMonitor monitor;
-    private final FieldSpecValueGenerator generator;
 
     @Inject
-    public ReductiveFieldSpecBuilder(
-        ConstraintReducer constraintReducer,
-        ReductiveDataGeneratorMonitor monitor,
-        FieldSpecValueGenerator generator) {
+    public ReductiveFieldSpecBuilder(ConstraintReducer constraintReducer) {
         this.constraintReducer = constraintReducer;
-        this.monitor = monitor;
-        this.generator = generator;
     }
 
-
+    /**
+     * creates a FieldSpec for a field for the current state of the tree
+     * FieldSpec to be used for generating values
+     * @param rootNode of the tree to create the fieldSpec for
+     * @param field to create the fieldSpec for
+     * @return fieldSpec with mustContains restriction if not contradictory, otherwise Optional.empty()
+     */
     public Optional<FieldSpec> getFieldSpecWithMustContains(ConstraintNode rootNode, Field field){
         List<AtomicConstraint> constraintsForRootNode =
             AtomicConstraintsHelper.getConstraintsForField(rootNode.getAtomicConstraints(), field);
 
         Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
 
-        return this.constraintReducer.reduceConstraintsToFieldSpecWithMustContains(
+        return constraintReducer.reduceConstraintsToFieldSpecWithMustContains(
             constraintsForRootNode,
             fieldSpecsForDecisions);
     }

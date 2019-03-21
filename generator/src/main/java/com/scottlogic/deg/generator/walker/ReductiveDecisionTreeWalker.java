@@ -48,10 +48,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<RowSpec> fixNextField(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    private Stream<RowSpec> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
-        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, constraintNode);
-        Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(constraintNode, fieldToFix);
+        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, tree);
+        Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(tree, fieldToFix);
 
         if (!nextFieldSpec.isPresent()){
             //couldn't fix a field, maybe there are contradictions in the root node?
@@ -64,35 +64,34 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         return FlatMappingSpliterator.flatMap(
             values,
-            fieldValue -> pruneTreeForNextValue(constraintNode, reductiveState, fixFieldStrategy, fieldValue));
+            fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldValue));
     }
 
     private Stream<RowSpec> pruneTreeForNextValue(
-        ConstraintNode constraintNode,
+        ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
-        FieldValue value){
+        FieldValue fieldValue){
 
-        //reduce the tree based on the fields that are now fixed
-        Merged<ConstraintNode> reducedNode = this.treePruner.pruneConstraintNode(constraintNode, value);
+        Merged<ConstraintNode> reducedTree = this.treePruner.pruneConstraintNode(tree, fieldValue);
 
-        if (reducedNode.isContradictory()){
+        if (reducedTree.isContradictory()){
             //yielding an empty stream will cause back-tracking
             this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
         }
 
-        monitor.fieldFixedToValue(value.getField(), value.getValue());
-        visualise(reducedNode.get(), reductiveState);
+        monitor.fieldFixedToValue(fieldValue.getField(), fieldValue.getValue());
+        visualise(reducedTree.get(), reductiveState);
 
         ReductiveState newReductiveState =
-            reductiveState.withFixedFieldValue(value);
+            reductiveState.withFixedFieldValue(fieldValue);
 
         if (newReductiveState.allFieldsAreFixed()){
             return Stream.of(reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState));
         }
 
-        return fixNextField(reducedNode.get(), newReductiveState, fixFieldStrategy);
+        return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
