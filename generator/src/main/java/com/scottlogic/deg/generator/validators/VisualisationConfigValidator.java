@@ -1,8 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.schemas.common.ValidationResult;
 
