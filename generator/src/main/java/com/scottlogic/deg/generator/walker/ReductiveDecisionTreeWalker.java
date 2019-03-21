@@ -55,6 +55,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         if (!nextFieldSpec.isPresent()){
             //couldn't fix a field, maybe there are contradictions in the root node?
+            monitor.noValuesForField(reductiveState, fieldToFix);
             return Stream.empty();
         }
 
@@ -81,6 +82,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
+        monitor.fieldFixedToValue(value.getField(), value.getValue());
         visualise(reducedNode.get(), reductiveState);
 
         ReductiveState newReductiveState =

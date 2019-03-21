@@ -80,7 +80,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void noValuesForField(ReductiveState reductiveState) {
+    public void noValuesForField(ReductiveState reductiveState, Field field) {
 
     }
 

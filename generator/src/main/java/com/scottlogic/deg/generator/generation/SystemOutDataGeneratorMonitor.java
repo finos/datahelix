@@ -27,7 +27,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
 
     @Override
     public void rowSpecEmitted(RowSpec rowSpec) {
-        System.out.println("owSec emitted");
+        System.out.println("RowSec emitted");
     }
 
     @Override
@@ -45,11 +45,12 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
     }
 
     @Override
-    public void noValuesForField(ReductiveState reductiveState) {
+    public void noValuesForField(ReductiveState reductiveState, Field field) {
         System.out.println(
             String.format(
                 "%d: No values for field %s: %s ",
                 reductiveState.getFieldValues().size(),
+                field,
                 reductiveState.toString(true)));
     }
 
