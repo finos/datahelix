@@ -27,7 +27,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
 
     @Override
     public void rowSpecEmitted(RowSpec rowSpec) {
-        System.out.println("RowSec emitted");
+        System.out.println("RowSpec emitted");
     }
 
     @Override
