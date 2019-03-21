@@ -38,7 +38,7 @@ Any value/s mentioned within an `if` or `anyOf` will be considered interesting w
 ```
 field1 greaterThanOrEqual 0
 field1 lessThan 10
-field1 ofType numeric
+field1 ofType integer
 
 if field1 equalTo 5 then
   field2 equalTo "a"

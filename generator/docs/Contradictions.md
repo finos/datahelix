@@ -6,8 +6,8 @@ This document describes [how data is generated](SetRestrictionAndGeneration.md) 
 
 | Type | Explanation | Example |
 | ---- | ---- | ---- |
-| 'Hard' | _cannot_ create any rows of data (for the field, and therefore the output file) | `foo ofType string` and `foo ofType numeric` and `foo not(is null)` - no rows would be emitted |
-| 'Soft' | _could_ create some data, but some scenarios would produce none | `foo not null` and `if bar equalTo 1 then foo is null`, also `foo ofType string` and `foo ofType numeric`, 1 row would be emitted, containing `null` |
+| 'Hard' | _cannot_ create any rows of data (for the field, and therefore the output file) | `foo ofType string` and `foo ofType decimal` and `foo not(is null)` - no rows would be emitted |
+| 'Soft' | _could_ create some data, but some scenarios would produce none | `foo not null` and `if bar equalTo 1 then foo is null`, also `foo ofType string` and `foo ofType decimal`, 1 row would be emitted, containing `null` |
 
 There is an optional component of the generator - the profile validator - which can detect some of the above contradictions. See the explanation of each type for more detail.
 
@@ -19,7 +19,7 @@ See [how data is generated](SetRestrictionAndGeneration.md) for more detail on h
 
 Examples are:
 * `is null` and `not(is null)`
-* `ofType string` and `ofType numeric` and `not(is null)`
+* `ofType string` and `ofType decimal` and `not(is null)`
 * `ofType string` and `shorterThan 1` and `not(is null)`
 
 The contradictions that the validator will detect are [documented here](ProfileValidation.md).
@@ -36,7 +36,7 @@ The following are examples of where constraints can be combined and (whilst pote
 * `foo inSet ["a", "b", 1, 2]` and `foo greaterThan 1`
   * this can emit `"a", "b", 2` or nothing (`null`) as there is nothing to say it must have a value, or must be of a particular type
 * `foo greaterThan 1` and `foo ofType string`
-  * this can emit all strings, or emit no value (`null`) (the `greaterThan` constraint is ignored as it only applies to `numeric` values, of which none will be generated)
+  * this can emit all strings, or emit no value (`null`) (the `greaterThan` constraint is ignored as it only applies to `decimal` or `integer` values, of which none will be generated)
 
 ## What happens
 1. 'hard' contradictions only abort processing when the validator is enabled

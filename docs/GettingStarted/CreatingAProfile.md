@@ -50,7 +50,7 @@ Here is a list of two rules comprised of one constraint each:
             {
               "field": "Column 2",
               "is": "ofType",
-              "value": "numeric"
+              "value": "integer"
             }
           ]
         }

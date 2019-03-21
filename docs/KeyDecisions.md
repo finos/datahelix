@@ -20,7 +20,7 @@ In some cases this is intuitive:
 
 - If `C` says that a field is null, `¬C` should permit that field to be anything _other_ than null.
 - If `C` says that a field is in a set, `¬C` should permit anything _not_ in that set.
-- If `C` says that a field is numeric, `¬C` should permit strings, temporal values, etc.
+- If `C` says that a field is a decimal, `¬C` should permit strings, temporal values, etc.
 
 But:
 
