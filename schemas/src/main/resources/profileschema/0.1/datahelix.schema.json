@@ -180,13 +180,27 @@
             "properties": {
               "is": {
                 "enum": [
-                  "shorterThan", "longerThan", "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo", "granularTo"
+                  "shorterThan", "longerThan", "granularTo"
                 ]
               }
             }
           },
           "then": {
-            "properties": {"value": {"type": "number"}}
+            "properties": {"value": {"type": "number" }}
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "enum": [
+                  "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {"value": {"type": "number", "maximum": 1E20, "minimum": -1E20}}
           }
         },
         {
