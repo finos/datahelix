@@ -652,7 +652,7 @@ Scenario: Running an if request that contains a non contradictory ofType constra
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
          "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-         "else": { "field": "bar", "is": "ofType", "value": "numeric" }
+         "else": { "field": "bar", "is": "ofType", "value": "integer" }
          }
        """
      Then the following data should be generated:
@@ -710,7 +710,7 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
-         "then": { "field": "bar", "is": "ofType", "value": "numeric" },
+         "then": { "field": "bar", "is": "ofType", "value": "integer" },
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
@@ -738,7 +738,7 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
          "then": { "field": "bar", "is": "equalTo", "value": "a" },
-         "else": { "field": "bar", "is": "ofType", "value": "numeric" }
+         "else": { "field": "bar", "is": "ofType", "value": "integer" }
          }
        """
      Then the following data should be generated:

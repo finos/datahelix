@@ -492,15 +492,25 @@ Scenario: 'InSet' with non-contradicting 'ofType' string should be successful
       | "Test 2" |
       | "Test 3" |
 
-Scenario: 'InSet' with non-contradicting 'ofType' numeric should be successful
+Scenario: 'InSet' with non-contradicting 'ofType' integer should be successful
   Given there is a field foo
     And foo is in set:
       | 1 |
-    And foo is of type "numeric"
+    And foo is of type "integer"
   Then the following data should be generated:
       | foo  |
       | null |
       | 1    |
+
+Scenario: 'InSet' with non-contradicting 'ofType' decimal should be successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+    And foo is of type "decimal"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1    |
 
 Scenario: 'InSet' with non-contradicting 'ofType' temporal should be successful
   Given there is a field foo
@@ -525,8 +535,8 @@ Scenario Outline: 'InSet' type values with non-contradicting not 'ofType' are su
       | setValue                | type       |
       | 1                       | "string"   |
       | 2019-01-01T00:00:00.000 | "string"   |
-      | "a"                     | "numeric"  |
-      | 2019-01-01T00:00:00.000 | "numeric"  |
+      | "a"                     | "decimal"  |
+      | 2019-01-01T00:00:00.000 | "decimal"  |
       | 1                       | "temporal" |
       | "a"                     | "temporal" |
 
@@ -547,8 +557,8 @@ Scenario Outline: Not 'inSet' type values with non-contradicting 'ofType' are su
       | setValue                | type       | expectedValue           |
       | 1                       | "string"   | "a"                     |
       | 2019-01-01T00:00:00.000 | "string"   | "a"                     |
-      | "a"                     | "numeric"  | 1                       |
-      | 2019-01-01T00:00:00.000 | "numeric"  | 1                       |
+      | "a"                     | "decimal"  | 1                       |
+      | 2019-01-01T00:00:00.000 | "decimal"  | 1                       |
       | 1                       | "temporal" | 2019-01-01T00:00:00.000 |
       | "a"                     | "temporal" | 2019-01-01T00:00:00.000 |
 
@@ -565,7 +575,8 @@ Scenario Outline: Running a 'inSet' of string values with a contradicting ofType
       | null |
   Examples:
       | type       |
-      | "numeric"  |
+      | "integer"  |
+      | "decimal"  |
       | "temporal" |
 
 Scenario Outline: Running a 'inSet' of numeric values with a contradicting ofType emits null
@@ -593,7 +604,8 @@ Scenario Outline: Running a 'inSet' of date values with a contradicting ofType e
       | null |
   Examples:
       | type      |
-      | "numeric" |
+      | "integer" |
+      | "decimal"  |
       | "string"  |
 
 Scenario Outline: : 'InSet' equal to a type value and with not 'ofType' for the same type should emit null
@@ -607,7 +619,7 @@ Scenario Outline: : 'InSet' equal to a type value and with not 'ofType' for the 
   Examples:
       | typeValue               | type       |
       | "a"                     | "string"   |
-      | 1                       | "numeric"  |
+      | 1                       | "decimal"  |
       | 2010-01-01T00:00:00.000 | "temporal" |
 
 ### matchingRegex ###
@@ -1688,30 +1700,55 @@ Scenario: Running a 'inSet' request alongside a contradicting ofType = string sh
        | foo  |
        | null |
 
-Scenario: Running a 'inSet' request alongside an ofType = numeric should be successful
-     Given there is a field foo
-       And foo is in set:
-       | 1 |
-       | 2 |
-       | 3 |
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       | 1    |
-       | 2    |
-       | 3    |
+Scenario: Running a 'inSet' request alongside an ofType = integer should be successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+    And foo is of type "integer"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1    |
+    | 2    |
+    | 3    |
 
-Scenario: Running a 'inSet' request alongside a contradicting ofType = numeric should produce null
-     Given there is a field foo
-       And foo is in set:
-       | "1" |
-       | "2" |
-       | "3" |
-       And foo is of type "numeric"
-     Then the following data should be generated:
-       | foo  |
-       | null |
+Scenario: Running a 'inSet' request alongside an ofType = decimal should be successful
+  Given there is a field foo
+    And foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+    And foo is of type "decimal"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1    |
+    | 2    |
+    | 3    |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofType = integer should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "1" |
+      | "2" |
+      | "3" |
+    And foo is of type "integer"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+Scenario: Running a 'inSet' request alongside a contradicting ofType = decimal should produce null
+  Given there is a field foo
+    And foo is in set:
+      | "1" |
+      | "2" |
+      | "3" |
+    And foo is of type "decimal"
+  Then the following data should be generated:
+    | foo  |
+    | null |
 
 Scenario: Running a 'inSet' request alongside an ofType = temporal should be successful
      Given there is a field foo

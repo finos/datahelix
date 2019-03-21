@@ -59,7 +59,8 @@ Scenario Outline: Not 'null' with 'ofType' is successful
   Examples:
       | type       | typeValue               |
       | "string"   | "a"                     |
-      | "numeric"  |  1                      |
+      | "decimal"  |  1.1                    |
+      | "integer"  |  1                      |
       | "temporal" | 2019-01-01T00:00:00.000 |
 
 Scenario Outline: 'Null' with 'ofType' emits null
@@ -71,7 +72,8 @@ Scenario Outline: 'Null' with 'ofType' emits null
   Examples:
     | type       |
     | "string"   |
-    | "numeric"  |
+    | "integer"  |
+    | "decimal"  |
     | "temporal" |
 
 Scenario Outline: 'Null' with not 'ofType' emits null
@@ -83,7 +85,7 @@ Scenario Outline: 'Null' with not 'ofType' emits null
   Examples:
     | type       |
     | "string"   |
-    | "numeric"  |
+    | "decimal"  |
     | "temporal" |
 
 ### matchingRegex ###
@@ -244,9 +246,9 @@ Scenario: Not 'null' with a non contradicting 'greaterThan' should be successful
     And foo is greater than 1
     And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo |
-    | 2   |
-    | 3   |
+    | foo                     |
+    | 1.00000000000000000001  |
+    | 1.00000000000000000002  |
 
 Scenario: 'Null' with a contradicting 'greaterThan' should only generate null
   Given foo is null
@@ -267,11 +269,11 @@ Scenario: 'Null' with a contradicting not 'greaterThan' should only generate nul
 Scenario: Not 'null' with a non contradicting 'greaterThanOrEqualTo' should be successful
   Given foo is anything but null
     And foo is greater than or equal to 1
-  And the generator can generate at most 2 rows
+    And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo |
-    | 1   |
-    | 2   |
+    | foo                     |
+    | 1.00000000000000000001  |
+    | 1.00000000000000000002  |
 
 Scenario: 'Null' with a contradicting 'greaterThanOrEqualTo' should only generate null
   Given foo is null
@@ -293,7 +295,7 @@ Scenario: 'Null' with a contradicting not 'greaterThanOrEqualTo' should only gen
 Scenario: Not 'null' with a non contradicting 'lessThan' should be successful
   Given foo is anything but null
     And foo is less than 1
-  And the generator can generate at most 2 rows
+    And the generator can generate at most 2 rows
   Then the following data should be generated:
     | foo |
     | 0   |
