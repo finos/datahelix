@@ -24,6 +24,13 @@ public class ReductiveState {
         this.fieldValues = fieldValues;
     }
 
+    public ReductiveState withFixedFieldValue(FieldValue value) {
+        Map<Field, FieldValue> newFixedFieldsMap = new HashMap<>(fieldValues);
+        newFixedFieldsMap.put(value.getField(), value);
+
+        return new ReductiveState(fields, newFixedFieldsMap);
+    }
+
     public boolean allFieldsAreFixed() {
         return fieldValues.size() == fields.size();
     }
@@ -53,12 +60,5 @@ public class ReductiveState {
 
     public ProfileFields getFields() {
         return this.fields;
-    }
-
-    public ReductiveState withCurrentFieldFixedToValue(FieldValue value) {
-        Map<Field, FieldValue> newFixedFieldsMap = new HashMap<>(fieldValues);
-        newFixedFieldsMap.put(value.getField(), value);
-
-        return new ReductiveState(fields, newFixedFieldsMap);
     }
 }

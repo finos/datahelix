@@ -45,10 +45,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
-        return walkForNextField(tree.getRootNode(), initialState, fixFieldStrategy);
+        return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<RowSpec> walkForNextField(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    private Stream<RowSpec> fixNextField(ConstraintNode constraintNode, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, constraintNode);
         Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(constraintNode, fieldToFix);
@@ -64,10 +64,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         return FlatMappingSpliterator.flatMap(
             values,
-            fieldValue -> walkForNextValue(constraintNode, reductiveState, fixFieldStrategy, fieldValue));
+            fieldValue -> pruneTreeForNextValue(constraintNode, reductiveState, fixFieldStrategy, fieldValue));
     }
 
-    private Stream<RowSpec> walkForNextValue(
+    private Stream<RowSpec> pruneTreeForNextValue(
         ConstraintNode constraintNode,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
@@ -86,13 +86,13 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedNode.get(), reductiveState);
 
         ReductiveState newReductiveState =
-            reductiveState.withCurrentFieldFixedToValue(value);
+            reductiveState.withFixedFieldValue(value);
 
         if (newReductiveState.allFieldsAreFixed()){
             return Stream.of(reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState));
         }
 
-        return walkForNextField(reducedNode.get(), newReductiveState, fixFieldStrategy);
+        return fixNextField(reducedNode.get(), newReductiveState, fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
