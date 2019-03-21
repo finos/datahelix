@@ -1,7 +1,11 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
 import com.scottlogic.deg.schemas.common.ValidationResult;
 import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
@@ -21,11 +25,12 @@ import static org.mockito.Mockito.when;
 
 public class VisualisationConfigValidatorTests {
 
+    private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
     private FileUtils mockFileUtils = mock(FileUtils.class);
     private Path mockFilePath = mock(Path.class);
     private Profile profile;
-    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private TestVisualisationConfigSource mockConfigSource = mock(TestVisualisationConfigSource.class);
+    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private VisualisationConfigValidator validator;
 
     @BeforeEach
@@ -34,7 +39,7 @@ public class VisualisationConfigValidatorTests {
         validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
-        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
+   when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
     }
 
