@@ -87,21 +87,6 @@ Scenario: Running afterOrAt request against a non-contradicting afterOrAt constr
        | 2021-01-01T00:00:00.000 |
        | 2022-01-01T00:00:00.000 |
 
-Scenario: Running afterOrAt request against a non contradicting not afterOrAtOrAt should be successful
-     Given foo is after or at 2019-01-01T00:00:00.000
-       And foo is after or at 2020-01-01T00:00:00.000
-       And foo is in set:
-       | 2018-01-01T00:00:00.000 |
-       | 2019-01-01T00:00:00.000 |
-       | 2020-01-01T00:00:00.000 |
-       | 2021-01-01T00:00:00.000 |
-       | 2022-01-01T00:00:00.000 |
-     Then the following data should be generated:
-       | foo                     |
-       | 2020-01-01T00:00:00.000 |
-       | 2021-01-01T00:00:00.000 |
-       | 2022-01-01T00:00:00.000 |
-
 Scenario: Running afterOrAt request against a non contradicting beforeOrAt should be successful
      Given foo is after or at 2019-01-01T00:00:00.000
        And foo is before or at 2020-01-01T00:00:00.000
