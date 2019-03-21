@@ -5,8 +5,7 @@ Background:
        And there is a field foo
        And foo is of type "temporal"
        And foo is anything but null
-
-
+  
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are after or at a specified date
      Given foo is after or at 2018-01-01T00:00:00.000
        And the generator can generate at most 6 rows
@@ -55,7 +54,6 @@ Scenario: Running beforeOrAt request that includes temporal field with date and 
      Then I am presented with an error message
        And no data is created
 
-
 Scenario: Running afterOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
      Given foo is after or at 2019-01-01T00:00:00.000
        And foo is in set:
@@ -69,7 +67,6 @@ Scenario: Running afterOrAt request that includes temporal field with date and t
        | 2019-01-01T00:00:00.000 |
        | 2020-01-01T00:00:00.000 |
        | 2021-01-01T00:00:00.000 |
-
 
 Scenario: Running afterOrAt request against a non-contradicting afterOrAt constraint should be successful
      Given foo is after or at 2019-01-01T00:00:00.000
@@ -155,8 +152,3 @@ Scenario: Running afterOrAt request against a non contradicting beforeOrAt shoul
        | foo                     |
        | 2020-01-01T00:00:00.000 |
        | 2021-01-01T00:00:00.000 |
-
-
-
-
-
