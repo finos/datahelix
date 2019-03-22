@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.generation.databags;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.ReductiveRowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import org.junit.Assert;
@@ -39,32 +38,6 @@ class StandardRowSpecDataBagSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
-
-        factory.createDataBagSource(rowSpec);
-
-        verify(generatorFactory, times(1)).generate(field, fieldSpec);
-    }
-
-    @Test
-    void shouldCreateMultiplyingDataBagSourceForReductiveRowSpec() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-        Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
-        ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
-        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
-
-        DataBagSource result = factory.createDataBagSource(rowSpec);
-
-        Assert.assertThat(result, instanceOf(StandardRowSpecDataBagSourceFactory.MultiplyingDataBagSource.class));
-    }
-
-    @Test
-    void shouldCreateValuesForEachFieldSpecInReductiveRowSpec() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-        Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
-        ReductiveRowSpec rowSpec = new ReductiveRowSpec(fields, map, field);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
 

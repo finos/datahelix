@@ -467,7 +467,6 @@ Scenario: Running an if request that contains a non contradictory null constrain
        | foo  | bar  |
        | null | "c"  |
        | null | null |
-       | null | null |
        | 2    | null |
        | 3    | "c"  |
        | 3    | null |
@@ -492,7 +491,6 @@ Scenario: Running an if request that contains a non contradictory null constrain
        """
      Then the following data should be generated:
        | foo  | bar  |
-       | null | null |
        | null | null |
        | null | "b"  |
        | 2    | "b"  |
@@ -3532,7 +3530,6 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "d" | 50  |
        | "e" | 10  |
 
-@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3567,7 +3564,6 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
        | "d" | 50  |
        | "e" | 50  |
 
-@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3639,7 +3635,6 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "e" | 50  |
 
 
-@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
        Given foo is in set:
          | "a" |
@@ -3672,7 +3667,6 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
        | "d" | 50  |
        | "e" | 50  |
 
-@ignore #756  Reductive Walker Does not Reduce for the final field
 Scenario: Running an if request that contains a contradictory anyOf constraint within its else statement should be successful
        Given foo is in set:
          | "a" |
