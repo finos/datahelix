@@ -42,7 +42,7 @@
     3. [allOf](#allOf)
     4. [if](#if)
 
-3. [Presentational constraints](#Presentational-Constraints)
+5. [Presentational constraints](#Presentational-Constraints)
 
 
 # Profiles
@@ -54,6 +54,8 @@
 * _email_address_ must be populated and contain a @ character
   * however, if _user_id_ is itself an email address, _email_address_ must be absent
 * _creation_date_ is a non-optional date, with no time component, later than 2003 and output per [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)    
+
+This data profile can be found in the [example folder](..\examples\user-account).
 
 Every profile declares some **fields** and some **constraints**.
 
@@ -77,7 +79,7 @@ The decision of how to group constraints into rules is up to the user. At the ex
 
 ## Persistence
 
-Profiles are persisted as JSON documents following a [schema](Schema.md).
+Profiles are persisted as JSON documents following a [schema](Schema.md) saved as UTF-8.
 
 ## Creation
 
