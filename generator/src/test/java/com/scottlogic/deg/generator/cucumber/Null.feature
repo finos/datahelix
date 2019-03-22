@@ -272,8 +272,8 @@ Scenario: Not 'null' with a non contradicting 'greaterThanOrEqualTo' should be s
     And the generator can generate at most 2 rows
   Then the following data should be generated:
     | foo                     |
+    | 1                     |
     | 1.00000000000000000001  |
-    | 1.00000000000000000002  |
 
 Scenario: 'Null' with a contradicting 'greaterThanOrEqualTo' should only generate null
   Given foo is null
