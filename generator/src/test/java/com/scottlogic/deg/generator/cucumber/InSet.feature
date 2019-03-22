@@ -2059,7 +2059,6 @@ Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constra
      Then the following data should be generated:
        | foo      |
        | null     |
-       | null     |
        | "Test 1" |
        | "Test 2" |
        | "Test 3" |

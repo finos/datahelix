@@ -3,7 +3,6 @@ Feature: Hard contradictions produce nothing, soft contradictions produce only n
 Background:
   Given the generation strategy is RANDOM
   And there is a field foo
-  And the walker type is REDUCTIVE
 
 ### Hard Contradictions ###
 Scenario: Contradicting types, disallowing 'null', should not produce any data.
