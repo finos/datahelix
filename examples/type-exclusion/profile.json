@@ -6,7 +6,7 @@
   "rules": [
     {
       "constraints": [
-        {"not": {"field": "not_number", "is": "ofType", "value": "numeric"}}
+        {"not": {"field": "not_number", "is": "ofType", "value": "decimal"}}
       ]
     }
   ]

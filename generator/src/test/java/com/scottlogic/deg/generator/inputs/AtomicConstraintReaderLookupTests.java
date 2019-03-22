@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
@@ -65,6 +66,14 @@ public class AtomicConstraintReaderLookupTests {
         typeValueDto.field = "test";
         typeValueDto.value = "string";
 
+        ConstraintDTO integerTypeValueDto = new ConstraintDTO();
+        integerTypeValueDto.field = "test";
+        integerTypeValueDto.value = "integer";
+
+        ConstraintDTO decimalTypeValueDto = new ConstraintDTO();
+        decimalTypeValueDto.field = "test";
+        decimalTypeValueDto.value = "decimal";
+
         ConstraintDTO notValueDto = new ConstraintDTO();
         notValueDto.field = "test";
         notValueDto.not = stringValueDto;
@@ -74,6 +83,8 @@ public class AtomicConstraintReaderLookupTests {
                 Arguments.of(AtomicConstraintType.ISINSET, multipleValuesDto, IsInSetConstraint.class),
                 Arguments.of(AtomicConstraintType.ISNULL, stringValueDto, IsNullConstraint.class),
                 Arguments.of(AtomicConstraintType.ISOFTYPE, typeValueDto, IsOfTypeConstraint.class),
+                Arguments.of(AtomicConstraintType.ISOFTYPE, integerTypeValueDto, AndConstraint.class),
+                Arguments.of(AtomicConstraintType.ISOFTYPE, decimalTypeValueDto, IsOfTypeConstraint.class),
                 Arguments.of(AtomicConstraintType.MATCHESREGEX, stringValueDto, MatchesRegexConstraint.class),
                 Arguments.of(AtomicConstraintType.FORMATTEDAS, stringValueDto, FormatConstraint.class),
                 Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto, StringHasLengthConstraint.class),
@@ -116,6 +127,21 @@ public class AtomicConstraintReaderLookupTests {
             Arguments.of(AtomicConstraintType.HASLENGTH, nullValueDto),
             Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, nullValueDto),
             Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, nullValueDto));
+    }
+
+    private static Stream<Arguments> ofTypeInvalidValueProvider() {
+        ConstraintDTO numericTypeValueDto = new ConstraintDTO();
+        numericTypeValueDto.field = "test";
+        numericTypeValueDto.value = "numeric";
+
+        ConstraintDTO invalidTypeValueDto = new ConstraintDTO();
+        invalidTypeValueDto.field = "test";
+        invalidTypeValueDto.value = "garbage";
+
+        return Stream.of(
+            Arguments.of(AtomicConstraintType.ISOFTYPE, numericTypeValueDto),
+            Arguments.of(AtomicConstraintType.ISOFTYPE, invalidTypeValueDto)
+        );
     }
 
     private static Stream<Arguments> numericOutOfBoundsOperandProvider() {
@@ -218,9 +244,9 @@ public class AtomicConstraintReaderLookupTests {
         }
     }
 
-    @DisplayName("Should fail when string lengths have an invalid operand")
+    @DisplayName("Should fail when operators have an invalid operand")
     @ParameterizedTest(name = "{0} should be invalid")
-    @MethodSource("stringLengthInvalidOperandProvider")
+    @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 

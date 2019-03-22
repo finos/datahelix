@@ -27,7 +27,7 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 ```javascript
 { "allOf": [
-    { "field": "foo", "is": "ofType", "value": "numeric" },
+    { "field": "foo", "is": "ofType", "value": "integer" },
     { "field": "foo", "is": "equalTo", "value": 0 }
 ]}
 ```
@@ -38,7 +38,7 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 
 ```javascript
 {
-    "if":   { "field": "foo", "is": "ofType", "value": "numeric" },
+    "if":   { "field": "foo", "is": "ofType", "value": "integer" },
     "then": { "field": "foo", "is": "greaterThan", "value": 0 },
     "else": { "field": "foo", "is": "equalTo", "value": "N/A" }
 }

@@ -11,7 +11,7 @@ Violation is invoked using the `--violate` option with the generate command. An 
 	1. Create a decision tree from that profile, and pass it to the generator as normal.
 	1. Write the output to a file in the output directory with a numerical file name.
 1. Output a valid version with no rules violated.
-1. Output a manifest file, listing which output file corresponts to which rule.
+1. Output a manifest file, listing which output file corresponds to which rule.
 
 ## Manifest
 

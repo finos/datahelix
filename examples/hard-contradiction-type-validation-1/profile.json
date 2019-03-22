@@ -22,7 +22,7 @@
         {
           "field": "Column 1",
           "is": "ofType",
-          "value": "numeric"
+          "value": "integer"
         }
       ]
     },

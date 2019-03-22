@@ -7,7 +7,7 @@
     {
       "constraints": [
         {"not": {"field": "a_number", "is": "null"}},
-        {"field": "a_number", "is": "ofType", "value": "numeric"},
+        {"field": "a_number", "is": "ofType", "value": "decimal"},
         {"field": "a_number", "is": "granularTo", "value": 0.01},
         {"field": "a_number", "is": "greaterThanOrEqualTo", "value": 1},
         {"field": "a_number", "is": "lessThanOrEqualTo", "value": 4}
