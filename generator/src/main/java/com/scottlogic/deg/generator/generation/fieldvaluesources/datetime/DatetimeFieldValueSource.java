@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation.fieldvaluesources.DateTime;
+package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;

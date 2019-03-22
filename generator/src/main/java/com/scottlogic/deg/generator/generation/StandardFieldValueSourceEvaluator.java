@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.DateTime.DatetimeFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DatetimeFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.math.BigDecimal;
