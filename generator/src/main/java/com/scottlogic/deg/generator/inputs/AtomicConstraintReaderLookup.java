@@ -167,7 +167,7 @@ class AtomicConstraintReaderLookup {
 
                         case "numeric":
                             throw new InvalidProfileException("Numeric type is no longer supported. " +
-                                "Please use one of \"decimal\" or \"numeric\"");
+                                "Please use one of \"decimal\" or \"integer\"");
 
                         default:
                             throw new InvalidProfileException("Unrecognised type in type constraint: " + dto.value);
