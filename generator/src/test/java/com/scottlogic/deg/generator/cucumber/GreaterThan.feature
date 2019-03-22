@@ -386,6 +386,7 @@ Scenario: not greaterThan run against a non contradicting granularTo should be s
     | 1  |
     | 0  |
 
+#594: order of generation to be reversed
 #after
 Scenario: greaterThan run against a non contradicting after should be successful (greaterThan 1 AND after 2019-01-01T00:00:00.00)
   Given foo is greater than 1
