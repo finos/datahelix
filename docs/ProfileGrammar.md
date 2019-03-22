@@ -127,8 +127,8 @@ _**[epistemicConstraint](#epistemicConstraint)**_
 _**[epistemicConstraint](#epistemicConstraint)**_
 
 
-## <a id="temporalConstraint">temporalConstraint:</a>
-![](profile-grammar/temporalConstraint.png)
+## <a id="datetimeConstraint">datetimeConstraint:</a>
+![](profile-grammar/datetimeConstraint.png)
 ##### referenced by:
 _**[epistemicConstraint](#epistemicConstraint)**_
 
@@ -151,17 +151,17 @@ _**[epistemicConstraint](#epistemicConstraint)**_
 _**[presentationalConstraint](#presentationalConstraint)**_
 
 
-## <a id="temporal">temporal:</a>
-![](profile-grammar/temporal.png)
+## <a id="datetime">datetime:</a>
+![](profile-grammar/datetime.png)
 ##### referenced by:
 _**[equalTo](#equalTo)**_\
 _**[inSet](#inSet)**_\
-_**[temporalConstraint](#temporalConstraint)**_
+_**[datetimeConstraint](#datetimeConstraint)**_
 
 
 
-## <a id="temporalValue">temporalValue:</a>
-A temporal value is a representation of an 
+## <a id="datetimeValue">datetimeValue:</a>
+A datetime value is a representation of an
 [ISO 8601-1:2019](https://www.iso.org/standard/70907.html)
 formatted date time.\
 ![](profile-grammar/temporalValue.png)

@@ -4,13 +4,13 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.LocalDateTime;
 
-public class TemporalConstraintValidationMessages implements StandardValidationMessages {
+public class DatetimeConstraintValidationMessages implements StandardValidationMessages {
 
 
     private DateTimeRestrictions restriction;
     private LocalDateTime newValue;
 
-    public TemporalConstraintValidationMessages(
+    public DatetimeConstraintValidationMessages(
         DateTimeRestrictions restriction,
         LocalDateTime newValue) {
 
@@ -22,7 +22,7 @@ public class TemporalConstraintValidationMessages implements StandardValidationM
     public String getVerboseMessage() {
 
         return String.format(
-            "Temporal constraint with value %s has been applied. The range is %s.",
+            "Datetime constraint with value %s has been applied. The range is %s.",
             newValue,
             restriction.toString());
     }

@@ -140,7 +140,7 @@ Scenario: not lessThan run against a non contradicting not lessThan should be su
        | 8   |
        | 9   |
 
-Scenario: lessThan run against a contradicting not lessThan should only only generate string, temporal and null (lessThan 2 AND not lessThan 2)
+Scenario: lessThan run against a contradicting not lessThan should only only generate string, datetime and null (lessThan 2 AND not lessThan 2)
      Given foo is less than 2
        And foo is anything but less than 2
      Then the following data should be generated:
@@ -206,7 +206,7 @@ Scenario: not lessThan run against a non contradicting not lessThanOrEqualTo sho
        | 9   |
 
 @ignore #589, #594: produces big-integer numbers rather than integer values, not sure why
-Scenario: lessThan run against a contradicting lessThanOrEqualTo should only only generate string, temporal and null (lessThan 1 AND lessThanOrEqualTo 1)
+Scenario: lessThan run against a contradicting lessThanOrEqualTo should only only generate string, datetime and null (lessThan 1 AND lessThanOrEqualTo 1)
      Given foo is less than 1
        And foo is less than or equal to 1
        And foo is anything but null
@@ -219,7 +219,7 @@ Scenario: lessThan run against a contradicting lessThanOrEqualTo should only onl
        | -2147482621 |
        | -2147482620 |
 
-Scenario: not lessThan run against a contradicting not lessThanOrEqualTo should only only generate string, temporal and null (lessThan 2 AND not lessThanOrEqualTo 3)
+Scenario: not lessThan run against a contradicting not lessThanOrEqualTo should only only generate string, datetime and null (lessThan 2 AND not lessThanOrEqualTo 3)
      Given foo is less than 2
        And foo is anything but less than or equal to 3
      Then the following data should be generated:

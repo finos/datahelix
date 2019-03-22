@@ -132,7 +132,7 @@ Scenario: not greaterThan run against a non contradicting not greaterThan should
        | -2147482621 |
        | -2147482620 |
 
-Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, temporal and null (greaterThan 2 AND not greaterThan 2)
+Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, datetime and null (greaterThan 2 AND not greaterThan 2)
      Given foo is greater than 2
        And foo is anything but greater than 2
      Then the following data should be generated:
@@ -177,7 +177,7 @@ Scenario: not greaterThan run against a non contradicting not greaterThanOrEqual
        | -2147482621 |
        | -2147482620 |
 
-Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, temporal and null (greaterThan 2 AND not greaterThanOrEqualTo 3)
+Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, datetime and null (greaterThan 2 AND not greaterThanOrEqualTo 3)
      Given foo is greater than 2
        And foo is anything but greater than or equal to 3
      Then the following data should be generated:
@@ -230,14 +230,14 @@ Scenario: not greaterThan run against a non contradicting not lessThan should be
        | 4   |
        | 5   |
 
-Scenario: greaterThan run against a contradicting lessThan should only only generate string, temporal and null (greaterThan 2 AND lessThan 2)
+Scenario: greaterThan run against a contradicting lessThan should only only generate string, datetime and null (greaterThan 2 AND lessThan 2)
      Given foo is greater than 2
        And foo is less than 2
      Then the following data should be generated:
        | foo  |
        | null |
 
-Scenario: not greaterThan run against a contradicting not lessThan should only only generate string, temporal and null (not greaterThan 2 AND not lessThan 2)
+Scenario: not greaterThan run against a contradicting not lessThan should only only generate string, datetime and null (not greaterThan 2 AND not lessThan 2)
      Given foo is anything but greater than 2
        And foo is anything but less than 2
 	   And foo is anything but null
@@ -292,14 +292,14 @@ Scenario: not greaterThan run against a non contradicting not lessThanOrEqualTo 
        | foo |
        | 5   |
 
-Scenario: greaterThan run against a contradicting lessThanOrEqualTo should only only generate string, temporal and null (greaterThan 2 AND lessThanOrEqualTo 1)
+Scenario: greaterThan run against a contradicting lessThanOrEqualTo should only only generate string, datetime and null (greaterThan 2 AND lessThanOrEqualTo 1)
      Given foo is greater than 2
        And foo is less than or equal to 1
      Then the following data should be generated:
        | foo  |
        | null |
 
-Scenario: not greaterThan run against a contradicting not lessThanOrEqualTo should only only generate string, temporal and null (not greaterThan 2 AND not lessThanOrEqualTo 1)
+Scenario: not greaterThan run against a contradicting not lessThanOrEqualTo should only only generate string, datetime and null (not greaterThan 2 AND not lessThanOrEqualTo 1)
      Given foo is anything but greater than 2
        And foo is anything but less than or equal to 1
 	   And foo is anything but null

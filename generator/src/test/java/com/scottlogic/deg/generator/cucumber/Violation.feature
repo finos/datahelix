@@ -49,7 +49,7 @@ Scenario Outline: The generator produces violating (incorrect type) data in rand
   Examples:
     | type    |
     | string  |
-    | temporal|
+    | datetime|
     | numeric |
 
 Scenario: The generator produces violating 'Null' data in random mode
@@ -59,16 +59,16 @@ Scenario: The generator produces violating 'Null' data in random mode
   Then 5 rows of data are generated
     And foo contains anything but null
 
-Scenario: The generator produces violating (not type) 'Temporal' data in random mode
-  Given foo is of type "temporal"
+Scenario: The generator produces violating (not type) 'Datetime' data in random mode
+  Given foo is of type "datetime"
     And the generation strategy is random
     And foo is anything but null
     And foo is before 2019-01-01T00:00:00.000
     And the data requested is violating
     And we do not violate any of type constraints
   Then 5 rows of data are generated
-    And foo contains temporal data
-    And foo contains temporal values after or at 2019-01-01T00:00:00.000
+    And foo contains datetime data
+    And foo contains datetime values after or at 2019-01-01T00:00:00.000
 
 Scenario: The generator produces violating (not type) 'Numeric' data in random mode
   Given foo is of type "numeric"

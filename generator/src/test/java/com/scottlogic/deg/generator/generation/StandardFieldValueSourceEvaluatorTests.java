@@ -96,21 +96,21 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    public void shouldReturnNullSourceLastWithTypedTemporalRestrictionsAndNullNotDisallowed() {
+    public void shouldReturnNullSourceLastWithTypedDatetimeRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        DateTimeRestrictions temporalRestrictions = new DateTimeRestrictions() {{
+        DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions() {{
             min = new DateTimeLimit(LocalDateTime.MIN, false);
             max = new DateTimeLimit(LocalDateTime.MAX, false);
         }};
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.TEMPORAL
+            IsOfTypeConstraint.Types.DATETIME
         ));
-        FieldSpec fieldSpecInSetWithTypedTemporalRestrictionsAndNullNotDisallowed = FieldSpec.Empty
-            .withDateTimeRestrictions(temporalRestrictions, fieldSpecSource)
+        FieldSpec fieldSpecInSetWithTypedDatetimeRestrictionsAndNullNotDisallowed = FieldSpec.Empty
+            .withDateTimeRestrictions(datetimeRestrictions, fieldSpecSource)
             .withTypeRestrictions(typeRestrictions, fieldSpecSource);
 
-        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedTemporalRestrictionsAndNullNotDisallowed);
+        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedDatetimeRestrictionsAndNullNotDisallowed);
 
         AssertLastSourceIsNullOnlySource(sources);
     }

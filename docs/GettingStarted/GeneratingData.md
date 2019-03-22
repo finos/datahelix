@@ -86,7 +86,7 @@ With no additional options this should yield the following data:
 ```
 
 The data generated violates each rule in turn and records the results in separate files.
-For example, by violating the `"ofType": "String"` constraint in the first rule the violating data produced is of types *numeric* and *temporal*. 
+For example, by violating the `"ofType": "String"` constraint in the first rule the violating data produced is of types *numeric* and *datetime*.
 The manifest shows which rules are violated in which file. 
 
 ## Hints and Tips

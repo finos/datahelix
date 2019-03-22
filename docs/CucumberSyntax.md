@@ -60,10 +60,10 @@ When specifying the operator/s for a field, ensure to format the value as in the
 | ---- | ---- |
 | string | "my value" |
 | number | `1.234` |
-| temporal | `2001-02-03T04:05:06.000` | 
+| datetime | `2001-02-03T04:05:06.000` |
 | null | `null` |
 
-temporal values must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
+datetime values must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
 
 #### Examples
 * `ofType` &rarr; `Given foo is of type "string"`
@@ -104,13 +104,13 @@ And there is a constraint:
 
 ### Validating the data in the output
 
-#### Temporal
-* _{field} contains temporal data_, executes the generator and asserts that _field_ contains either `null` or temporal values
-* _{field} contains anything but temporal data_, executes the generator and asserts that _field_ contains either `null` or data that is not temporal.
-* _{field} contains temporal values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or temporal values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
-* _{field} contains temporal values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or temporal values outside _{min}_ and _{max}_.
-* _{field} contains temporal values before or at {before}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or before _{before}_
-* _{field} contains temporal values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or after _{after}_
+#### Datetime
+* _{field} contains datetime data_, executes the generator and asserts that _field_ contains either `null` or datetime values
+* _{field} contains anything but datetime data_, executes the generator and asserts that _field_ contains either `null` or data that is not datetime.
+* _{field} contains datetime values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or datetime values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
+* _{field} contains datetime values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or datetime values outside _{min}_ and _{max}_.
+* _{field} contains datetime values before or at {before}_, executes the generator and asserts that _field_ contains either `null` or datetime values at or before _{before}_
+* _{field} contains datetime values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or datetime values at or after _{after}_
 
 #### Numeric
 * _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values

@@ -66,9 +66,9 @@ Example profiles may include:
 | C is greater than 10             | C is less than 5              | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
 
 
-## Temporal validation
+## Datetime validation
 
-Temporal validation is performed to ensure there always is a value that can be generated for a field.
+Datetime validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 

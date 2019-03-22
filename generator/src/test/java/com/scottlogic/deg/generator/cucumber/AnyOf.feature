@@ -132,7 +132,7 @@ Scenario: User requires to create a field with dates that conform to one or many
          { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
        ]}
        """
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is before 2018-10-10T00:00:00.000
      Then the following data should be generated:
        | foo                     |
@@ -164,7 +164,7 @@ Scenario: User requires to create a field with dates that conform to multiple se
          { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-04T00:00:00.000" } }
        ]}
        """
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is before 2018-10-09T00:00:00.000
      Then the following data should be generated:
        | foo                     |

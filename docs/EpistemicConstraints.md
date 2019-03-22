@@ -48,7 +48,7 @@ Is satisfied if `field` is null or absent.
 { "field": "price", "is": "ofType", "value": "string" }
 ```
 
-Is satisfied if `field` is of type represented by `value` (valid options: `numeric`, `string`, `temporal`)
+Is satisfied if `field` is of type represented by `value` (valid options: `numeric`, `string`, `datetime`)
 
 ## Textual constraints
 
@@ -145,7 +145,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 
 Is satisfied if `field` has at least the [granularity](./DataTypes.md#Granularity) specified in `value`.
 
-## Temporal constraints
+## Datetime constraints
 All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
 
 Example: `{ "date": "2001-02-03T04:05:06.007" }`
