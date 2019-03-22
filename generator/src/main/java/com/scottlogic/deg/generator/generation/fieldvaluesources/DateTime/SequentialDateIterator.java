@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.Iterator;
 
-public class SequentialDateIterator implements Iterator<LocalDateTime> {
+class SequentialDateIterator implements Iterator<LocalDateTime> {
     private final LocalDateTime maxDate;
     private final TemporalUnit unit;
 

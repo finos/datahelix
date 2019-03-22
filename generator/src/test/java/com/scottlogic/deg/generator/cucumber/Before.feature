@@ -66,6 +66,7 @@ Scenario: Running a 'before' request that specifies an invalid leap year should 
        Then the profile is invalid
      And no data is created
 
+#before
 @ignore #594 generation should be descending when upper-bound only is provided
 Scenario: 'before' run against a non contradicting 'before' should be successful
      Given foo is before 2019-01-01T00:00:00.000
@@ -149,6 +150,7 @@ Scenario: not 'before' run against a non contradicting 'beforeOrAt' should be su
        | 2019-01-01T00:00:00.000 |
        | 2018-12-31T23:59:59.999 |
        | 2018-12-31T23:59:59.998 |
+       | 2018-12-31T23:59:59.997 |
 
 Scenario: not 'before' run against a non contradicting not 'beforeOrAt' should be successful
      Given foo is anything but before 2019-01-01T00:00:00.000

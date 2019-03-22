@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Iterator;
 
-public class RandomDateIterator implements Iterator<LocalDateTime> {
+class RandomDateIterator implements Iterator<LocalDateTime> {
     private final LocalDateTime minDate;
     private final LocalDateTime maxDate;
     private final RandomNumberGenerator random;
