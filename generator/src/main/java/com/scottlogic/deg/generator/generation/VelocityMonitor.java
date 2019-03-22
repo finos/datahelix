@@ -4,7 +4,6 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.math.BigDecimal;
@@ -102,7 +101,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
+    public void rowSpecEmitted(RowSpec rowSpec) {
 
     }
 
@@ -117,7 +116,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void noValuesForField(ReductiveState reductiveState) {
+    public void noValuesForField(ReductiveState reductiveState, Field field) {
 
     }
 
