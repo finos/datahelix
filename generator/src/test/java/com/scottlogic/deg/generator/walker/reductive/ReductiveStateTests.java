@@ -2,108 +2,44 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import org.junit.Assert;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-public class ReductiveStateTests {
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+
+class ReductiveStateTests {
+    Field field1 = new Field("field1");
+    Field field2 = new Field("field2");
+    ReductiveState reductiveState = new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
+    FieldValue value1 = new FieldValue(field1, "v1");
+    FieldValue value2 = new FieldValue(field2, "v2");
+
     @Test
-    void allFieldsAreFixed_lastFixedFieldNotNullAndFixedFieldsSizePlusOneEqualsFieldsSize_returnsTrue() {
-        HashMap<Field, FixedField> fixedFields = new HashMap<>();
-        fixedFields.put(
-            new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
-        );
-        FixedField lastFixedField = new FixedField(
-            new Field("First Field"),
-            null,
-            null,
-            null
-        );
-        ReductiveState reductiveState = getReductiveState(
-            Arrays.asList("First Field", "Second Field"),
-            fixedFields
-        ).with(lastFixedField);
+    void withFixedFieldValue() {
+        ReductiveState stateWithOneFixedField = reductiveState.withFixedFieldValue(value1);
 
-        boolean result = reductiveState.allFieldsAreFixed();
+        Map<Field, FieldValue> expected = new HashMap<>();
+        expected.put(field1, value1);
 
-        Assert.assertTrue(result);
+        assertThat(stateWithOneFixedField.allFieldsAreFixed(), sameBeanAs(false));
+        assertThat(stateWithOneFixedField.getFieldValues(), sameBeanAs(expected));
     }
 
     @Test
-    void allFieldsAreFixed_lastFixedFieldNullAndFixedFieldsSizeEqualToFieldSize_returnsTrue() {
-        HashMap<Field, FixedField> fixedFields = new HashMap<>();
-        fixedFields.put(
-            new Field("First Field"),
-            new FixedField(new Field("First Field"), null, null, null)
-        );
-        fixedFields.put(
-            new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
-        );
-        ReductiveState reductiveState = getReductiveState(
-            Arrays.asList("First Field", "Second Field"),
-            fixedFields
-        );
+    void withTwoFixedFieldValue() {
+        ReductiveState stateWithBothFixedFields = reductiveState.withFixedFieldValue(value1).withFixedFieldValue(value2);
 
-        boolean result = reductiveState.allFieldsAreFixed();
+        Map<Field, FieldValue> expected = new HashMap<>();
+        expected.put(field1, value1);
+        expected.put(field2, value2);
 
-        Assert.assertTrue(result);
-    }
+        assertThat(stateWithBothFixedFields.allFieldsAreFixed(), sameBeanAs(true));
 
-    @Test
-    void allFieldsAreFixed_lastFixedFieldNotNullAndFixedFieldsSizePlusOneDoesNotEqualFieldsSize_returnsFalse() {
-        HashMap<Field, FixedField> fixedFields = new HashMap<>();
-        fixedFields.put(
-            new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
-        );
-        FixedField lastFixedField = new FixedField(
-            new Field("First Field"),
-            null,
-            null,
-            null
-        );
-        ReductiveState reductiveState = getReductiveState(
-            Arrays.asList("First Field", "Second Field", "Third Field"),
-            fixedFields
-        );
-
-        boolean result = reductiveState.allFieldsAreFixed();
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
-    void allFieldsAreFixed_lastFixedFieldNullAndFixedFieldsSizeDoesNotEqualFieldsSize_returnsFalse() {
-        HashMap<Field, FixedField> fixedFields = new HashMap<>();
-        fixedFields.put(
-            new Field("Second Field"),
-            new FixedField(new Field("Second Field"), null, null, null)
-        );
-        ReductiveState reductiveState = getReductiveState(
-            Arrays.asList("First Field", "Second Field"),
-            fixedFields);
-
-        boolean result = reductiveState.allFieldsAreFixed();
-
-        Assert.assertFalse(result);
-    }
-
-    private ReductiveState getReductiveState(List<String> profileFields, HashMap<Field, FixedField> fixedFields) {
-        ReductiveState initialState = new ReductiveState(
-            new ProfileFields(profileFields
-                .stream()
-                .map(Field::new)
-                .collect(Collectors.toList())));
-
-        return fixedFields.values().stream().reduce(
-            initialState,
-            ReductiveState::with,
-            (a, b) -> null);
+        assertThat(stateWithBothFixedFields.getFieldValues(), sameBeanAs(expected));
     }
 }
