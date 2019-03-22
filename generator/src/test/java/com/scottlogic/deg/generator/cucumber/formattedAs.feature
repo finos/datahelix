@@ -4,7 +4,6 @@ Background:
      Given the generation strategy is full
        And there is a field foo
 
-  #todo paul
 Scenario Outline: Running a valid 'formattedAs' request should be successful
      Given foo is in set:
        | <input> |

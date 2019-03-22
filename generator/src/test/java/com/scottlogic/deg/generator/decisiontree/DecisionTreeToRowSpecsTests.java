@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 public class DecisionTreeToRowSpecsTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
-            new ConstraintReducer(
-                    new FieldSpecFactory(new FieldSpecMerger()),
-                    fieldSpecMerger
-            ),
-            new RowSpecMerger(
-                    fieldSpecMerger
-            )
+        new ConstraintReducer(
+            new FieldSpecFactory(new FieldSpecMerger()),
+            fieldSpecMerger
+        ),
+        new RowSpecMerger(
+            fieldSpecMerger
+        )
     );
     private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
