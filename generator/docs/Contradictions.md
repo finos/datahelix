@@ -24,12 +24,20 @@ Examples are:
 
 The contradictions that the validator will detect are [documented here](ProfileValidation.md).
 
+Examples of profiles are:
+* [Null Validation](../../examples/hard-contradiction-null-validation/profile.json)
+* [Type Validation 1](../../examples/hard-contradiction-type-validation-1/profile.json)
+* [Type Validation 2](../../examples/hard-contradiction-type-validation-2/profile.json)
+
 ## 'Soft' contradictions
 This is where contradictions only appear in more complex constraints, e.g. `anyOf`, `if`, `allOf`, etc. It can also be related to where different types of constraints are combined, e.g. `aValid ISIN` and `matchingRegex /[a-z]{10}/`.
 
 These contradictions are more difficult to detect, and in some cases are only apparent when generating data.
 
 The contradictions that the validator will detect are [documented here](ProfileValidation.md).
+
+Examples of profiles are:
+* [Type Validation](../../examples/soft-contradictions/profile.json)
 
 ## Non-contradictory examples
 The following are examples of where constraints can be combined and (whilst potentially dubious) are not contradictory:
