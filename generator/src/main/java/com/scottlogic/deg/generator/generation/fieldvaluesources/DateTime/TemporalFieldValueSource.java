@@ -1,5 +1,6 @@
-package com.scottlogic.deg.generator.generation.fieldvaluesources;
+package com.scottlogic.deg.generator.generation.fieldvaluesources.DateTime;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
@@ -18,6 +19,7 @@ public class TemporalFieldValueSource implements FieldValueSource {
     public static final LocalDateTime ISO_MAX_DATE = LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999);
     public static final LocalDateTime ISO_MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
 
+    private ChronoUnit granularity = ChronoUnit.MILLIS;
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
     private final LocalDateTime inclusiveLower;
@@ -35,24 +37,6 @@ public class TemporalFieldValueSource implements FieldValueSource {
         this.blacklist = blacklist;
     }
 
-    public static ChronoUnit getIncrementForDuration(LocalDateTime inclusiveLower, LocalDateTime exclusiveUpper) {
-        Duration difference = Duration.between(inclusiveLower, exclusiveUpper);
-
-        if (difference.toMinutes() <= 1) {
-            return ChronoUnit.SECONDS;
-        } else if (difference.toMinutes() <= 60) {
-            return ChronoUnit.MINUTES;
-        } else if (difference.toDays() <= 1) {
-            return ChronoUnit.HOURS;
-        } else if (difference.toDays() <= 31) {
-            return ChronoUnit.DAYS;
-        } else if (difference.toDays() <= 365) {
-            return ChronoUnit.MONTHS;
-        } else {
-            return ChronoUnit.YEARS;
-        }
-    }
-
     @Override
     public boolean isFinite() {
         return restrictions.min != null &&
@@ -65,17 +49,16 @@ public class TemporalFieldValueSource implements FieldValueSource {
     public long getValueCount() {
 
         if (isFinite()) {
-            ChronoUnit unit = getIncrementForDuration(inclusiveLower, exclusiveUpper);
-
             Duration duration = Duration.between(inclusiveLower, exclusiveUpper);
             Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
 
-            if (unit == ChronoUnit.SECONDS) return duration.getSeconds();
-            if (unit == ChronoUnit.MINUTES) return duration.getSeconds() * 60;
-            if (unit == ChronoUnit.HOURS) return duration.getSeconds() * 60 * 60;
-            if (unit == ChronoUnit.DAYS) return (period.getDays() + 1);
-            if (unit == ChronoUnit.MONTHS) return (period.getMonths() + 1);
-            if (unit == ChronoUnit.YEARS) return (period.getYears() + 1);
+            if (granularity == ChronoUnit.MILLIS) return (duration.getNano() / 1000000) +1;
+            if (granularity == ChronoUnit.SECONDS) return duration.getSeconds() + 1;
+            if (granularity == ChronoUnit.MINUTES) return (duration.getSeconds() / 60) + 1;
+            if (granularity == ChronoUnit.HOURS) return (duration.getSeconds() / 360) + 1;
+            if (granularity == ChronoUnit.DAYS) return (period.getDays() + 1);
+            if (granularity == ChronoUnit.MONTHS) return (period.getMonths() + 1);
+            if (granularity == ChronoUnit.YEARS) return (period.getYears() + 1);
         }
 
         throw new IllegalStateException("Cannot get count of an infinite series");
@@ -87,7 +70,8 @@ public class TemporalFieldValueSource implements FieldValueSource {
             new FilteringIterator<>(
                 new SequentialDateIterator(
                     inclusiveLower != null ? inclusiveLower : ISO_MIN_DATE,
-                    exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE),
+                    exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE,
+                    granularity),
                 i -> !blacklist.contains(i)));
     }
 
@@ -175,69 +159,5 @@ public class TemporalFieldValueSource implements FieldValueSource {
     @Override
     public int hashCode() {
         return Objects.hash(restrictions, blacklist, inclusiveLower, exclusiveUpper);
-    }
-
-    private class SequentialDateIterator implements Iterator<LocalDateTime> {
-        private final LocalDateTime minDate;
-        private final LocalDateTime maxDate;
-        private final TemporalUnit unit;
-
-        private LocalDateTime current;
-        private boolean hasNext;
-
-        public SequentialDateIterator(LocalDateTime inclusiveMinDate, LocalDateTime exclusiveMaxDate) {
-            this.minDate = inclusiveMinDate;
-            this.maxDate = exclusiveMaxDate;
-
-            current = inclusiveMinDate;
-
-            unit = TemporalFieldValueSource.getIncrementForDuration(inclusiveMinDate, exclusiveMaxDate);
-            hasNext = current.compareTo(exclusiveMaxDate) < 0;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return hasNext;
-        }
-
-        @Override
-        public LocalDateTime next() {
-
-            LocalDateTime next = current;
-
-            current = current.plus(1, unit);
-            if (current.isAfter(maxDate) || current.isEqual(maxDate)) {
-                hasNext = false;
-            }
-
-            return next;
-        }
-    }
-
-    private class RandomDateIterator implements Iterator<LocalDateTime> {
-        private final LocalDateTime minDate;
-        private final LocalDateTime maxDate;
-        private final RandomNumberGenerator random;
-
-        public RandomDateIterator(LocalDateTime minDate, LocalDateTime maxDate, RandomNumberGenerator randomNumberGenerator) {
-            this.minDate = minDate;
-            this.maxDate = maxDate;
-            this.random = randomNumberGenerator;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return true;
-        }
-
-        @Override
-        public LocalDateTime next() {
-            long min = this.minDate.toInstant(ZoneOffset.UTC).toEpochMilli();
-            long max = this.maxDate.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
-
-            long generatedLong = (long)random.nextDouble(min, max);
-
-            return Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toLocalDateTime();
-        }
     }
 }
