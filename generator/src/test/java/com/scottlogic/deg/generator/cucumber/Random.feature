@@ -1,5 +1,5 @@
 
-Feature: User can generate valid data for all types (string, numeric or temporal) in random generation mode. Actual randomness of the data not tested.
+Feature: User can generate valid data for all types (string, integer, decimal, or temporal) in random generation mode. Actual randomness of the data not tested.
 
   Background:
     Given the generation strategy is random

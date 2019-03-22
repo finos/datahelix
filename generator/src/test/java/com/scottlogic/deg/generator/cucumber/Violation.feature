@@ -79,8 +79,8 @@ Scenario: The generator produces violating (not type) 'Temporal' data in random 
     And foo contains temporal data
     And foo contains temporal values after or at 2019-01-01T00:00:00.000
 
-Scenario: The generator produces violating (not type) 'Numeric' data in random mode
-  Given foo is of type "numeric"
+Scenario: The generator produces violating (not type) 'Decimal' data in random mode
+  Given foo is of type "decimal"
     And foo is anything but null
     And the generation strategy is random
     And foo is less than 10
