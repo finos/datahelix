@@ -26,6 +26,8 @@ But:
 
 - If `C` says that a field is a number greater than 3, it might be intuitive to say that `¬C` permits numbers less than or equal to 3.     
 
+Note that negation of type integer is not fully defined yet as we do not have a negation of granularTo implemented.
+
 ## Does an inSet constraint imply anything about nullability?
 
 ```javascript
