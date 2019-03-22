@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.inputs;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
+import com.scottlogic.deg.generator.utils.NumberUtils;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
@@ -23,14 +25,14 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new FormatConstraint(
                         fields.getByName(dto.field),
-                        (String) throwIfValueNull(dto.value),
+                        (String) throwIfValueInvalid(dto.value),
                         rules));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        mapValues(Collections.singleton(throwIfValueNull(dto.value))),
+                        mapValues(Collections.singleton(throwIfValueInvalid(dto.value))),
                         rules));
 
         add(AtomicConstraintType.ISINSET.toString(),
@@ -45,7 +47,7 @@ class AtomicConstraintReaderLookup {
             (dto, fields, rules) ->
                 new ContainsRegexConstraint(
                     fields.getByName(dto.field),
-                    Pattern.compile((String) throwIfValueNull(dto.value)),
+                    Pattern.compile((String) throwIfValueInvalid(dto.value)),
                     rules));
 
         //noinspection RedundantCast
@@ -53,7 +55,7 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new MatchesRegexConstraint(
                         fields.getByName(dto.field),
-                        Pattern.compile((String) throwIfValueNull(dto.value)),
+                        Pattern.compile((String) throwIfValueInvalid(dto.value)),
                         rules));
 
         //noinspection RedundantCast
@@ -61,7 +63,7 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new MatchesStandardConstraint(
                         fields.getByName(dto.field),
-                        StandardConstraintTypes.valueOf((String) throwIfValueNull(dto.value)),
+                        StandardConstraintTypes.valueOf((String) throwIfValueInvalid(dto.value)),
                         rules
                     ));
 
@@ -69,63 +71,64 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new IsGreaterThanConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueNull(dto.value),
-                        rules));
+                        (Number) throwIfValueInvalid(dto.value),
+                        rules)
+        );
 
         add(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsGreaterThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueNull(dto.value),
+                        (Number) throwIfValueInvalid(dto.value),
                         rules));
 
         add(AtomicConstraintType.ISLESSTHANCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsLessThanConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueNull(dto.value),
+                        (Number) throwIfValueInvalid(dto.value),
                         rules));
 
         add(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsLessThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueNull(dto.value),
+                        (Number) throwIfValueInvalid(dto.value),
                         rules));
 
         add(AtomicConstraintType.ISBEFORECONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsBeforeConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueNull(dto.value)),
+                        unwrapDate(throwIfValueInvalid(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsBeforeOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueNull(dto.value)),
+                        unwrapDate(throwIfValueInvalid(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsAfterConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueNull(dto.value)),
+                        unwrapDate(throwIfValueInvalid(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsAfterOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueNull(dto.value)),
+                        unwrapDate(throwIfValueInvalid(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields, rules) ->
                     new IsGranularToConstraint(
                         fields.getByName(dto.field),
-                        ParsedGranularity.parse(throwIfValueNull(dto.value)),
+                        ParsedGranularity.parse(throwIfValueInvalid(dto.value)),
                         rules));
 
         add(AtomicConstraintType.ISNULL.toString(),
@@ -136,7 +139,7 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                 {
                     final IsOfTypeConstraint.Types type;
-                    switch ((String) throwIfValueNull(dto.value)) {
+                    switch ((String) throwIfValueInvalid(dto.value)) {
                         case "numeric":
                             type = IsOfTypeConstraint.Types.NUMERIC;
                             break;
@@ -191,9 +194,18 @@ class AtomicConstraintReaderLookup {
                 });
     }
 
-    private static <T> T throwIfValueNull(T value) throws InvalidProfileException {
+    private static <T> T throwIfValueInvalid(T value) throws InvalidProfileException {
         if (value == null) {
             throw new InvalidProfileException("Couldn't recognise 'value' property, it must be set to a value");
+        }
+        if(value instanceof Number) {
+            BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
+            if (GenerationConfig.Constants.NUMERIC_MAX.compareTo(valueAsBigDecimal) < 0) {
+                throw new InvalidProfileException("'value' property is out of upper bound");
+            }
+            if (GenerationConfig.Constants.NUMERIC_MIN.compareTo(valueAsBigDecimal) > 0) {
+                throw new InvalidProfileException("'value' property is out of lower bound");
+            }
         }
         return value;
     }
@@ -206,7 +218,7 @@ class AtomicConstraintReaderLookup {
     }
 
     private static int getIntegerLength(ConstraintDTO dto) throws InvalidProfileException {
-        Object value = throwIfValueNull(dto.value);
+        Object value = throwIfValueInvalid(dto.value);
         BigDecimal decimal;
 
         if (value instanceof Integer){

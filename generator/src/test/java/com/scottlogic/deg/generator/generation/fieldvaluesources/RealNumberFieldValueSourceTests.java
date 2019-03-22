@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -229,8 +230,8 @@ class RealNumberFieldValueSourceTests {
 
         expectInterestingValues(
             4, 5,
-            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
-            BigDecimal.valueOf(Double.MAX_VALUE));
+            GenerationConfig.Constants.NUMERIC_MAX.subtract(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MAX);
     }
 
     @Test
@@ -238,19 +239,19 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(4, true);
 
         expectInterestingValues(
-            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
-            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MIN,
+            GenerationConfig.Constants.NUMERIC_MIN.add(BigDecimal.ONE),
             0, 3, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
         expectInterestingValues(
-            BigDecimal.valueOf(Double.MAX_VALUE).negate(),
-            BigDecimal.valueOf(Double.MAX_VALUE).negate().add(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MIN,
+            GenerationConfig.Constants.NUMERIC_MIN.add(BigDecimal.ONE),
             0,
-            BigDecimal.valueOf(Double.MAX_VALUE).subtract(BigDecimal.ONE),
-            BigDecimal.valueOf(Double.MAX_VALUE)
+            GenerationConfig.Constants.NUMERIC_MAX.subtract(BigDecimal.ONE),
+            GenerationConfig.Constants.NUMERIC_MAX
         );
     }
 
@@ -405,6 +406,82 @@ class RealNumberFieldValueSourceTests {
             2);
 
         Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void interestingValuesInclusively_UpperLimitLargerThanConfig_IncludesConfigMax() {
+        givenLowerBound(-10, true);
+        givenUpperBound(1e30, true);
+        givenScale(0);
+
+        expectInterestingValues(new BigDecimal("1e20"), "99999999999999999999", "0", "-9", "-10");
+    }
+
+    @Test
+    public void exhaustiveValuesInclusively_UpperLimitLargerThanConfig_IncludesConfigMax() {
+        givenLowerBound(new BigDecimal("99999999999999999995"), true);
+        givenUpperBound(1e30, true);
+        givenScale(0);
+
+        expectAllValues(new BigDecimal("1e20"), "99999999999999999999",
+            "99999999999999999998", "99999999999999999997", "99999999999999999996", "99999999999999999995");
+    }
+
+    @Test
+    public void interestingValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
+        givenLowerBound(-10, false);
+        givenUpperBound(1e30, false);
+        givenScale(0);
+
+        expectInterestingValues("99999999999999999999", "99999999999999999998", "0", "-8", "-9");
+    }
+
+    @Test
+    public void exhaustiveValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
+        givenLowerBound(new BigDecimal("99999999999999999995"), false);
+        givenUpperBound(1e30, false);
+        givenScale(0);
+
+        expectAllValues("99999999999999999999", "99999999999999999998", "99999999999999999997",
+            "99999999999999999996");
+    }
+
+    @Test
+    public void interestingValuesInclusively_LowerLimitSmallerThanConfig_IncludesConfigMin() {
+        givenLowerBound(-1e30, true);
+        givenUpperBound(10, true);
+        givenScale(0);
+
+        expectInterestingValues(new BigDecimal("-1e20"), "-99999999999999999999", "0", "9", "10");
+    }
+
+    @Test
+    public void exhaustiveValuesInclusively_LowerLimitSmallerThanConfig_IncludesConfigMin() {
+        givenLowerBound(-1e30, true);
+        givenUpperBound(new BigDecimal("-99999999999999999995"), true);
+        givenScale(0);
+
+        expectAllValues(new BigDecimal("-1e20"), "-99999999999999999999",
+            "-99999999999999999998", "-99999999999999999997", "-99999999999999999996", "-99999999999999999995");
+    }
+
+    @Test
+    public void interestingValuesExclusively_LowerLimitSmallerThanConfig_IncludesConfigMinPlusOne() {
+        givenLowerBound(-1e30, false);
+        givenUpperBound(10, false);
+        givenScale(0);
+
+        expectInterestingValues("-99999999999999999999", "-99999999999999999998", "0", "8", "9");
+    }
+
+    @Test
+    public void exhaustiveValuesExclusively_LowerLimitSmallerThanConfig_IncludesConfigMinPlusOne() {
+        givenLowerBound(-1e30, false);
+        givenUpperBound(new BigDecimal("-99999999999999999995"), false);
+        givenScale(0);
+
+        expectAllValues( "-99999999999999999999", "-99999999999999999998", "-99999999999999999997",
+            "-99999999999999999996");
     }
 
     private NumericRestrictions numericRestrictions(Integer min, Integer max){

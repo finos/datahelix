@@ -3,6 +3,8 @@ package com.scottlogic.deg.schemas.v0_1;
 import com.scottlogic.deg.schemas.common.ValidationResult;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.InputStream;
 
@@ -156,6 +158,30 @@ class ProfileValidatorTests {
     @Test
     void validateProfile_temporal_fails() {
         ValidationResult result = validate("/test-profiles/profile-test-simple-temporals-errors.json");
+        Assert.assertFalse("Profile should not be valid", result.isValid());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "/test-profiles/profile-test-greaterThan-max.json",
+        "/test-profiles/profile-test-greaterThanOrEqualTo-max.json",
+        "/test-profiles/profile-test-lessThan-min.json",
+        "/test-profiles/profile-test-lessThanOrEqualTo-min.json"
+    })
+    void validateProfile_numericMinMax_success(String filePath) {
+        ValidationResult result = validate(filePath);
+        Assert.assertTrue("Profile should not be valid", result.isValid());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "/test-profiles/profile-test-greaterThan-max-errors.json",
+        "/test-profiles/profile-test-greaterThanOrEqualTo-max-errors.json",
+        "/test-profiles/profile-test-lessThan-min-errors.json",
+        "/test-profiles/profile-test-lessThanOrEqualTo-min-errors.json"
+    })
+    void validateProfile_numericMinMax_fails(String filePath) {
+        ValidationResult result = validate(filePath);
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 }
