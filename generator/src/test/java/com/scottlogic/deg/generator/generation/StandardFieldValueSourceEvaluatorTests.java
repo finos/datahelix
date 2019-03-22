@@ -279,7 +279,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryIntegerValues() {
+    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(),
             FieldSpecSource.Empty
@@ -298,15 +298,17 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         Assert.assertEquals(1, result.size());
         Iterator interestingValuesIterator = result.get(0).generateInterestingValues().iterator();
-        List<Integer> valuesFromResult = new ArrayList<>();
+        List<BigDecimal> valuesFromResult = new ArrayList<>();
         while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add((Integer) interestingValuesIterator.next());
+            valuesFromResult.add(new BigDecimal(interestingValuesIterator.next().toString()));
         }
 
-        final List<Integer> expectedValues = Arrays.asList(
-            -2147483648,
-            0,
-            2147483646
+        final List<BigDecimal> expectedValues = Arrays.asList(
+            new BigDecimal("-100000000000000000000"),
+            new BigDecimal("-99999999999999999999"),
+            new BigDecimal("0"),
+            new BigDecimal("99999999999999999999"),
+            new BigDecimal("100000000000000000000")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
