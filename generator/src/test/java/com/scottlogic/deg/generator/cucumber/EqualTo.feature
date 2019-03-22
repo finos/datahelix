@@ -535,10 +535,19 @@ Scenario: 'OfType' string 'equalTo' a string value should be successful
     | "0123456789" |
 
 
-Scenario: 'EqualTo' a number with 'ofType' numeric is successful
+Scenario: 'EqualTo' an integer with 'ofType' integer is successful
   Given there is a field foo
     And foo is equal to 1
-    And foo is of type "numeric"
+    And foo is of type "integer"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1    |
+
+Scenario: 'EqualTo' an decimal with 'ofType' decimal is successful
+  Given there is a field foo
+    And foo is equal to 1
+    And foo is of type "decimal"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -570,20 +579,20 @@ Scenario: 'EqualTo' a date and not 'ofType' string is successful
     | foo                     |
     | null                    |
     | 9999-12-31T23:59:59.999 |
-
-Scenario: 'EqualTo' a string and not 'ofType' numeric is successful
+  
+Scenario: 'EqualTo' a string and not 'ofType' decimal is successful
   Given there is a field foo
     And foo is equal to "a"
-    And foo is anything but of type "numeric"
+    And foo is anything but of type "decimal"
   Then the following data should be generated:
     | foo  |
     | null |
     | "a"  |
 
-Scenario: 'EqualTo' a date and not 'ofType' numeric is successful
+Scenario: 'EqualTo' a date and not 'ofType' decimal is successful
   Given there is a field foo
     And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but of type "numeric"
+    And foo is anything but of type "decimal"
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -635,10 +644,10 @@ Scenario: Not 'equalTo' a date and 'ofType' string is successful
     | "2019-01-01T00:00:00.000" |
     | "STr!ng5"                 |
 
-Scenario: Not 'equalTo' a string value and 'ofType' numeric is successful
+Scenario: Not 'equalTo' a string value and 'ofType' integer is successful
     Given there is a field foo
       And foo is anything but equal to "a"
-      And foo is of type "numeric"
+      And foo is of type "integer"
       And foo is in set:
       | 1   |
       | "a" |
@@ -647,10 +656,22 @@ Scenario: Not 'equalTo' a string value and 'ofType' numeric is successful
       | null |
       | 1    |
 
-Scenario: Not 'equalTo' a date value and 'ofType' numeric is successful
+Scenario: Not 'equalTo' a string value and 'ofType' decimal is successful
+  Given there is a field foo
+    And foo is anything but equal to "a"
+    And foo is of type "decimal"
+    And foo is in set:
+    | 1.1 |
+    | "a" |
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1.1  |
+
+Scenario: Not 'equalTo' a date value and 'ofType' integer is successful
     Given there is a field foo
       And foo is anything but equal to 2019-01-01T00:00:00.000
-      And foo is of type "numeric"
+      And foo is of type "integer"
       And foo is in set:
       | 1                       |
       | 2019-01-01T00:00:00.000 |
@@ -659,6 +680,19 @@ Scenario: Not 'equalTo' a date value and 'ofType' numeric is successful
       | foo  |
       | null |
       | 1    |
+
+Scenario: Not 'equalTo' a date value and 'ofType' decimal is successful
+  Given there is a field foo
+    And foo is anything but equal to 2019-01-01T00:00:00.000
+    And foo is of type "decimal"
+    And foo is in set:
+    | 1.1                     |
+    | 2019-01-01T00:00:00.000 |
+    | "1"                     |
+  Then the following data should be generated:
+    | foo  |
+    | null |
+    | 1.1  |
 
 Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
     Given there is a field foo
@@ -673,7 +707,7 @@ Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
       | null                    |
       | 2019-01-01T00:00:00.000 |
 
-Scenario: Not 'equalTo' a numeric value and 'ofType' temporal is successful
+Scenario: Not 'equalTo' an integer value and 'ofType' temporal is successful
     Given there is a field foo
       And foo is anything but equal to 1
       And foo is of type "temporal"
@@ -686,15 +720,23 @@ Scenario: Not 'equalTo' a numeric value and 'ofType' temporal is successful
       | null                    |
       | 2019-01-01T00:00:00.000 |
 
-Scenario: 'EqualTo' an empty string and 'ofType' numeric emits null
+Scenario: 'EqualTo' an empty string and 'ofType' integer emits null
     Given there is a field foo
       And foo is equal to ""
-      And foo is of type "numeric"
+      And foo is of type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
 
-Scenario: 'EqualTo' an empty string and 'ofType' temporal emits null
+  Scenario: 'EqualTo' an empty string and 'ofType' decimal emits null
+    Given there is a field foo
+    And foo is equal to ""
+    And foo is of type "decimal"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'EqualTo' an empty string and 'ofType' temporal emits null
     Given there is a field foo
       And foo is equal to ""
       And foo is of type "temporal"
@@ -702,7 +744,7 @@ Scenario: 'EqualTo' an empty string and 'ofType' temporal emits null
       | foo  |
       | null |
 
-Scenario: 'EqualTo' a numeric value and 'ofType' string emits null
+Scenario: 'EqualTo' an integer value and 'ofType' string emits null
     Given there is a field foo
       And foo is equal to 2
       And foo is of type "string"
@@ -718,21 +760,37 @@ Scenario: 'EqualTo' a date value and 'ofType' string emits null
       | foo  |
       | null |
 
-Scenario: 'EqualTo' a string value and 'ofType' numeric emits null
+Scenario: 'EqualTo' a string value and 'ofType' integer emits null
     Given there is a field foo
       And foo is equal to "2"
-      And foo is of type "numeric"
+      And foo is of type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
 
-Scenario: 'EqualTo' a date value and 'ofType' numeric emits null
+Scenario: 'EqualTo' a string value and 'ofType' decimal emits null
+  Given there is a field foo
+    And foo is equal to "2"
+    And foo is of type "decimal"
+  Then the following data should be generated:
+    | foo  |
+    | null |
+
+Scenario: 'EqualTo' a date value and 'ofType' integer emits null
     Given there is a field foo
       And foo is equal to 2010-01-01T00:00:00.000
-      And foo is of type "numeric"
+      And foo is of type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
+
+Scenario: 'EqualTo' a date value and 'ofType' decimal emits null
+  Given there is a field foo
+    And foo is equal to 2010-01-01T00:00:00.000
+    And foo is of type "decimal"
+  Then the following data should be generated:
+    | foo  |
+    | null |
 
 Scenario: 'EqualTo' a string value and 'ofType' temporal emits null
     Given there is a field foo
@@ -742,7 +800,7 @@ Scenario: 'EqualTo' a string value and 'ofType' temporal emits null
       | foo  |
       | null |
 
-Scenario: 'EqualTo' a numeric value and 'ofType' temporal emits null
+Scenario: 'EqualTo' an integer value and 'ofType' temporal emits null
     Given there is a field foo
       And foo is equal to 2
       And foo is of type "temporal"
@@ -758,10 +816,10 @@ Scenario: 'EqualTo' string and not 'ofType' string emits null
     | foo  |
     | null |
 
-Scenario: 'EqualTo' number and not 'ofType' numeric emits null
+Scenario: 'EqualTo' decimal and not 'ofType' decimal emits null
   Given there is a field foo
     And foo is equal to 1.12
-    And foo is anything but of type "numeric"
+    And foo is anything but of type "decimal"
   Then the following data should be generated:
     | foo  |
     | null |

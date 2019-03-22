@@ -1,0 +1,118 @@
+﻿{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "constraints": [
+        {
+          "anyOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "hvalue": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "shorterThan",
+              "value": 19
+            },
+            {
+              "field": "field1",
+              "is": "aValid",
+              "hvalue": "ISIN"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "null"
+            },
+            {
+              "field": "field1",
+              ";is": "aValid",
+              "value": "ISIN"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "null"
+            },
+            {
+              "afield": "field1",
+              "is": "aValid",
+              "value": "ISIN"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            }
+          ]
+        },
+        {
+          "nanyOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "shorterThan",
+              "value": 19
+            }
+          ]
+        },
+        {
+          "nallOf": [
+            {
+              "field": "field1",
+              "is": "formattedAs",
+              "value": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "shorterThan",
+              "value": 19
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

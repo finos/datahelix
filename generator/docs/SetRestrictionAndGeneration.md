@@ -1,6 +1,6 @@
 # Set restriction process
 
-The profile describes to the generator how to reduce the original set of data to a permitted set of data per field. In most cases the generator starts off using the universal set as the source of data. This represents all values for all types (temporal, string, numeric) without restriction. It also allows for no value to be emitted - the empty set (&#8709;) commonly expressed as `null`).
+The profile describes to the generator how to reduce the original set of data to a permitted set of data per field. In most cases the generator starts off using the universal set as the source of data. This represents all values for all types (temporal, string, integer, decimal) without restriction. It also allows for no value to be emitted - the empty set (&#8709;) commonly expressed as `null`).
 
 The universal set can be visualised as  
 ![](set-reduction-universal-set.svg)
@@ -15,7 +15,7 @@ The generator will only (effectively) use a different original set of data - i.e
 The above constraints describe the set of permitted values to then (potentially) filter values further (if there are more constraints).
 
 You can imagine the universal set is divided into a number of quadrants, where each constraint only applies a filter to part of the universal set (or what remains of it). i.e.
-* `greaterThan` will only affect the numeric values in the universal set, other values will remain un-touched
+* `greaterThan` will only affect the integer/decimal values in the universal set, other values will remain un-touched
 * `shorterThan` will only affect the string values in the universal set, other values will remain un-touched
 * `ofType` will remove all values from the universal set other than those of the prescribed type (see [graphical representation](set-reduction-ofType-string.svg))
 * `not null` will remove the empty set (&#8709;) from the universal set (see [graphical representation](set-reduction-not-null.svg))
@@ -66,7 +66,7 @@ This set of values is then the permitted set of values for field _foo_.
 It does **not**
 * Prevent the empty set from being emitted
 
-As the original set is a restricted set, only the values provided can be emitted. These values can be of hetrogenonous types (e.g. an intermix of temporal, string and numeric types).
+As the original set is a restricted set, only the values provided can be emitted. These values can be of heterogeneous types (e.g. an intermix of temporal, string, decimal and integer types).
 
 The constraint `foo equalTo "c"` is equivalent to `foo inSet ["c"]`.
 
@@ -177,7 +177,7 @@ The `else` segment has been excluded for clarity, it would be included as `not(f
 effectively (in the ):
 1. Remove the set [&#8709;] from the universal set and use this is the set for bar going forwards
 1. Intersects the set [a, b, c] with the universal set _(yielding the set [a, b, c, &#8709;])_
-1. For the first set of data for `foo` (_[a, b, c, &#8709;]_) intersect the set [&#8709;] with the set of data for `bar` _([{all temporal values}, {all numeric values}, {all string values}])_ this produces an empty set of data (where event the &#8709; is not present, i.e. [])
+1. For the first set of data for `foo` (_[a, b, c, &#8709;]_) intersect the set [&#8709;] with the set of data for `bar` _([{all temporal values}, {all decimal values}, {all string values}])_ this produces an empty set of data (where event the &#8709; is not present, i.e. [])
 
 This results in no data being created given the scenario where foo has a value in the set _[a, b, c]_. The field `foo` is not restricted from being `null` therefore it is theoretically permitted for the generator to enter the _then_ when `foo` is `null`. This doesn't happen currently as when `foo` is `null` it is ambiguous between the _then_ and the _else_.
 

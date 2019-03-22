@@ -72,7 +72,7 @@ Scenario: Running an 'allOf' request that contains soft contradictory restraints
              {"field": "foo", "is": "matchingRegex", "value": "[a-z]{3}" },
              {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" }
            ]},
-           { "field": "foo", "is": "ofType", "value": "numeric" },
+           { "field": "foo", "is": "ofType", "value": "integer" },
            { "field": "foo", "is": "equalTo", "value": 5}
          ]}
        """
@@ -108,17 +108,3 @@ Scenario: User attempts to combine two constraints that only intersect at the em
     Then the following data should be generated:
        | foo  |
        | null |
-
-Scenario: Numeric value using the allOf operator
-     Given there is a field foo
-       And there is a constraint:
-       """
-         { "allOf": [
-            { "field": "foo", "is": "ofType", "value": "numeric" },
-            { "field": "foo", "is": "equalTo", "value": 5 }
-         ]}
-       """
-     Then the following data should be generated:
-       | foo  |
-       | null |
-       |  5   |

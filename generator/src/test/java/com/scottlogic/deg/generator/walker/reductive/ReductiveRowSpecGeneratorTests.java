@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.reductive.ReductiveConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
@@ -127,10 +126,7 @@ class ReductiveRowSpecGeneratorTests {
         //noinspection ResultOfMethodCallIgnored
         fixedField.getStream().collect(Collectors.toList());
         Stream<RowSpec> result = rowSpecGenerator.createRowSpecsFromFixedValues(reductiveState,
-            new ReductiveConstraintNode(
-                new TreeConstraintNode(Collections.emptyList(), Collections.emptyList()),
-                null
-            )
+            new TreeConstraintNode()
         );
 
         Assert.assertEquals(result.collect(Collectors.toList()), Collections.emptyList());
