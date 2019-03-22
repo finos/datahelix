@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "field1",
+          "is": "matchingRegex",
+          "value": 4
+        }
+      ]
+    }
+  ]
+}
