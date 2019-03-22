@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 public class GenerationConfigValidatorTests {
 
     private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
+    private Path mockFilePath = mock(Path.class);
     private FileUtils mockFileUtils = mock(FileUtils.class);
     private File mockFile = mock(File.class);
     private GenerationConfig config = mock(GenerationConfig.class);
@@ -38,6 +39,7 @@ public class GenerationConfigValidatorTests {
     @BeforeEach
     void setup() {
         //Arrange
+        when(mockOutputTarget.getFilePath()).thenReturn(mockFilePath);
         validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
         expectedErrorMessages = new ArrayList<>();
@@ -54,8 +56,8 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(false);
         when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(false);
         //Post Profile Checks
-        when(mockFileUtils.exists(mockOutputTarget)).thenReturn(true);
-        when(mockFileUtils.isDirectory(mockOutputTarget)).thenReturn(false);
+        when(mockFileUtils.exists(mockFilePath)).thenReturn(true);
+        when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
     }
 
@@ -195,7 +197,7 @@ public class GenerationConfigValidatorTests {
         when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
         when(mockFileUtils.createDirectories(eq(mockPath))).thenReturn(false);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(false);
+        when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
         expectedErrorMessages.add("Invalid Output - parent directory of output file "
             + "already exists but is not a directory, please use a different output filename");
 
@@ -214,10 +216,8 @@ public class GenerationConfigValidatorTests {
     @Test
     public void postProfileChecks_generateOutputFileAlreadyExists_isNotValid() throws IOException {
         //Arrange
-        Path mockPath = Paths.get("/a/b/c/tmp.out");
-        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
+        when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(true);
         expectedErrorMessages.add("Invalid Output - file already exists, please use a different output filename " +
             "or use the --replace option");
 
@@ -233,9 +233,7 @@ public class GenerationConfigValidatorTests {
     @Test
     public void postProfileChecks_generateOutputFileAlreadyExistsCommandLineOverwrite_isValid() throws IOException {
         //Arrange
-        Path mockPath = Paths.get("/a/b/c/tmp.out");
-        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
+        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
@@ -253,7 +251,7 @@ public class GenerationConfigValidatorTests {
         Path mockPath = Paths.get("/a/b/c/tmp.out");
         when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
         when(mockFileUtils.createDirectories(anyObject())).thenReturn(true);
-        when(mockFileUtils.exists(mockOutputTarget)).thenReturn(false);
+        when(mockFileUtils.exists(mockFilePath)).thenReturn(false);
 
         //Act
         ValidationResult actualResult = validator
@@ -267,10 +265,8 @@ public class GenerationConfigValidatorTests {
     @Test
     public void postProfileChecks_generateOutputDirNotFile_isNotValid() throws IOException {
         //Arrange
-        Path mockPath = Paths.get("/a/b/c/tmp.out");
-        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(mockPath.getParent())).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
+        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
+        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
         expectedErrorMessages.add("Invalid Output - target is a directory, please use a different output filename");
 
         //Act
@@ -301,8 +297,8 @@ public class GenerationConfigValidatorTests {
     public void postProfileChecks_generateViolationValid_isValid() throws IOException {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
-        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(true);
+        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
+        when(mockFileUtils.isDirectoryEmpty(eq(mockFilePath), anyInt())).thenReturn(true);
 
         //Act
         ValidationResult actualResult = validator
@@ -317,8 +313,8 @@ public class GenerationConfigValidatorTests {
     public void postProfileChecks_generateViolationOutputDirNotEmpty_isNotValid() throws IOException {
         //Arrange
         when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockOutputTarget))).thenReturn(true);
-        when(mockFileUtils.isDirectoryEmpty(eq(mockOutputTarget), anyInt())).thenReturn(false);
+        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
+        when(mockFileUtils.isDirectoryEmpty(eq(mockFilePath), anyInt())).thenReturn(false);
         expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manifest.json' " +
             "and '[0-9].csv' files or use the --replace option");
 

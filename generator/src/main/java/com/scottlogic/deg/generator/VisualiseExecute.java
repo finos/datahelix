@@ -1,13 +1,15 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.google.inject.name.Named;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
@@ -33,7 +35,7 @@ public class VisualiseExecute implements Runnable {
     private final ErrorReporter errorReporter;
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
-    private final OutputTarget outputTarget;
+    private final Path outputPath;
     private final ProfileReader profileReader;
     private final VisualisationConfigSource configSource;
     private final VisualisationConfigValidator validator;
@@ -43,7 +45,7 @@ public class VisualiseExecute implements Runnable {
                             ErrorReporter errorReporter,
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
-                            OutputTarget outputTarget,
+                            @Named("outputPath") Path outputPath,
                             ProfileReader profileReader,
                             VisualisationConfigSource configSource,
                             VisualisationConfigValidator validator) {
@@ -52,7 +54,7 @@ public class VisualiseExecute implements Runnable {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.configSource = configSource;
-        this.outputTarget = outputTarget;
+        this.outputPath = outputPath;
         this.profileReader = profileReader;
         this.validator = validator;
     }
@@ -61,7 +63,7 @@ public class VisualiseExecute implements Runnable {
     public void run() {
 
         ValidationResult validationResult = validator.validateCommandLine(
-            configSource.overwriteOutputFiles(), outputTarget);
+            configSource.overwriteOutputFiles(), outputPath);
         if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
             return;
