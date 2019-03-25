@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation.fieldvaluesources.DateTime;
+package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -53,6 +51,7 @@ public class TemporalFieldValueSource implements FieldValueSource {
             Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
 
             if (granularity == ChronoUnit.MILLIS) return (duration.getNano() / 1000000) +1;
+            // future work to add customisable datetime granularity #141
             if (granularity == ChronoUnit.SECONDS) return duration.getSeconds() + 1;
             if (granularity == ChronoUnit.MINUTES) return (duration.getSeconds() / 60) + 1;
             if (granularity == ChronoUnit.HOURS) return (duration.getSeconds() / 360) + 1;
