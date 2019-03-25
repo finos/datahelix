@@ -1,8 +1,8 @@
 # DataHelix Profile Schema Usage
 
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file `datahelix.schema.json` in the `json` directory.
+The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../schemas/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../schemas/src/main/resources/profileschema/0.1/) directory.
 
-The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [datahelix.profile.bnf](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
+The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [`datahelix.profile.bnf`](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
 
 ## JetBrains IntelliJ
 
@@ -26,6 +26,10 @@ now when you open a json file from the `json` directory in IntelliJ, it will be 
 
 
 ## Microsoft Visual Studio Code
+
+**_Although Visual Studio Code appears to validate the profile json files against the schema, it incorrectly shows some profile files as valid when there are syntactic errors in them._**
+
+**_For this reason the use of Visual Stuido Code is not recommended for DataHelix development._**
 
 to enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
 
