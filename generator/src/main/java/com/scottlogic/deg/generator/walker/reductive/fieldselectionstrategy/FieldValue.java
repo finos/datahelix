@@ -12,7 +12,7 @@ public class FieldValue {
     private final FormatRestrictions formatRestrictions;
 
     public FieldValue(Field field, Object value){
-        this(field, value,null);
+        this(field, value, FieldSpec.Empty);
     }
     public FieldValue(Field field, Object value, FieldSpec valueSource){
         this.value = value;
