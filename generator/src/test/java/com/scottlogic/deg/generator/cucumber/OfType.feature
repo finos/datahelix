@@ -115,4 +115,4 @@ Scenario: Running a 'ofType' request that specifies null should be unsuccessful
 Scenario: Running an 'ofType' = numeric request should throw an error
   Given there is a field foo
     And foo is of type "numeric"
-  Then I am presented with an error message
+  Then the profile is invalid because "Numeric type is no longer supported. Please use one of "decimal" or "integer""
