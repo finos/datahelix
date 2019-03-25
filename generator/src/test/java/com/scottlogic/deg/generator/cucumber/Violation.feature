@@ -3,7 +3,6 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Background:
     Given there is a field foo
       And the data requested is violating
-      And the walker type is REDUCTIVE
       And the generator can generate at most 5 rows
 
 Scenario: Running the generator in violate mode for not equal to is successful
