@@ -79,7 +79,7 @@ public class ProfileFieldUntypedValidator implements ProfileValidator {
     /** Returns true if the provided constraint permits fieldToCheck to pass validation */
     private static boolean confersCompliance(AtomicConstraint constraint, Field fieldToCheck) {
         return
-            constraint.getField() == fieldToCheck
+            constraint.getField().equals(fieldToCheck)
             && (
                 constraint instanceof IsOfTypeConstraint
                 || constraint instanceof IsNullConstraint
