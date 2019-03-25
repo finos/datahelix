@@ -38,9 +38,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
      */
     @Override
     public ValidationResult validateProfile(InputStream profileStream) {
-        ValidationResult result = null;
-        result = validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), profileStream);
-        return result;
+        return validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), profileStream);
     }
 
     /**

@@ -21,7 +21,7 @@ public class GenerateExecute implements Runnable {
     private final GenerationEngine generationEngine;
     private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
-    private final ProfileSchemaValidator profileValidator;
+    private final ProfileSchemaValidator profileSchemaValidator;
 
     @Inject
     public GenerateExecute(GenerationConfig config,
@@ -31,13 +31,13 @@ public class GenerateExecute implements Runnable {
                            OutputTarget outputTarget,
                            ConfigValidator validator,
                            ErrorReporter errorReporter,
-                           ProfileSchemaValidator profileValidator) {
+                           ProfileSchemaValidator profileSchemaValidator) {
         this.config = config;
         this.profileReader = profileReader;
         this.generationEngine = generationEngine;
         this.configSource = configSource;
         this.outputTarget = outputTarget;
-        this.profileValidator = profileValidator;
+        this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;
         this.errorReporter = errorReporter;
     }
@@ -46,10 +46,10 @@ public class GenerateExecute implements Runnable {
     public void run() {
 
         ValidationResult validationResult = validator.preProfileChecks(config, configSource);
-        ValidationResult validationResult2 = profileValidator.validateProfile(configSource.getProfileFile());
-        if (!validationResult.isValid() || !validationResult2.isValid()) {
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
             errorReporter.display(validationResult);
-            errorReporter.display(validationResult2);
+            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 

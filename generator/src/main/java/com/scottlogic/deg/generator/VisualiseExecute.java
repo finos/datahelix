@@ -38,7 +38,7 @@ public class VisualiseExecute implements Runnable {
     private final FieldSpecMerger fieldSpecMerger;
     private final Path outputPath;
     private final ProfileReader profileReader;
-    private final ProfileSchemaValidator profileValidator;
+    private final ProfileSchemaValidator profileSchemaValidator;
     private final VisualisationConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
@@ -49,7 +49,7 @@ public class VisualiseExecute implements Runnable {
                             FieldSpecMerger fieldSpecMerger,
                             @Named("outputPath") Path outputPath,
                             ProfileReader profileReader,
-                            ProfileSchemaValidator profileValidator,
+                            ProfileSchemaValidator profileSchemaValidator,
                             VisualisationConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
@@ -59,16 +59,17 @@ public class VisualiseExecute implements Runnable {
         this.configSource = configSource;
         this.outputPath = outputPath;
         this.profileReader = profileReader;
-        this.profileValidator = profileValidator;
+        this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;
     }
 
     @Override
     public void run() {
         ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
-        ValidationResult validationResult2 = profileValidator.validateProfile(configSource.getProfileFile());
-        if (!validationResult.isValid() || !validationResult2.isValid()) {
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
             errorReporter.display(validationResult);
+            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 

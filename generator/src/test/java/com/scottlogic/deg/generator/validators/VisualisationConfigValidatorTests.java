@@ -3,9 +3,6 @@ package com.scottlogic.deg.generator.validators;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.schemas.common.ValidationResult;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
-
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
 import com.scottlogic.deg.schemas.common.ValidationResult;
 import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
@@ -39,7 +36,7 @@ public class VisualisationConfigValidatorTests {
         validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
-   when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
     }
 
