@@ -304,11 +304,11 @@ public class StandardFieldValueSourceEvaluatorTests {
         }
 
         final List<BigDecimal> expectedValues = Arrays.asList(
-            new BigDecimal("-100000000000000000000"),
-            new BigDecimal("-99999999999999999999"),
-            new BigDecimal("0"),
-            new BigDecimal("99999999999999999999"),
-            new BigDecimal("100000000000000000000")
+            new BigDecimal("-100000000000000000000.00000000000000000000"),
+            new BigDecimal("-99999999999999999999.99999999999999999999"),
+            new BigDecimal("0E-20"),
+            new BigDecimal("99999999999999999999.99999999999999999999"),
+            new BigDecimal("100000000000000000000.00000000000000000000")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
     }

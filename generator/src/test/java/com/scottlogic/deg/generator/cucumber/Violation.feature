@@ -29,16 +29,16 @@ Scenario: Running the generator in violate mode for multiple constraints with st
     And foo is anything but equal to "hello"
     And the generator can generate at most 10 rows
   Then the following data should be included in what is generated:
-    | foo                     |
-    | "hello"                 |
-    | 0                       |
-    | -100000000000000000000  |
-    | -99999999999999999999   |
-    | 99999999999999999999    |
-    | 100000000000000000000   |
-    | 1900-01-01T00:00:00.000 |
-    | 2100-01-01T00:00:00.000 |
-    | null                    |
+    | foo                                          |
+    | "hello"                                      |
+    | 0                                            |
+    | -100000000000000000000.00000000000000000000  |
+    | -99999999999999999999.99999999999999999999   |
+    | 99999999999999999999.99999999999999999999    |
+    | 100000000000000000000.00000000000000000000   |
+    | 1900-01-01T00:00:00.000                      |
+    | 2100-01-01T00:00:00.000                      |
+    | null                                         |
 
 ### Random
 
