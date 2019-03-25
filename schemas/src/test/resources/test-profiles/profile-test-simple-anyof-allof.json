@@ -27,11 +27,6 @@
           "allOf": [
             {
               "field": "field1",
-              "is": "formattedAs",
-              "value": "%ggg"
-            },
-            {
-              "field": "field1",
               "is": "null"
             },
             {
