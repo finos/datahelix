@@ -10,25 +10,15 @@ public class FieldValue {
     private final Object value;
     private final FieldSpecSource valueSource;
     private final FormatRestrictions formatRestrictions;
-    private final FieldSpecSource formatSource;
 
     public FieldValue(Field field, Object value){
-        this(field, value, (FormatRestrictions) null);
+        this(field, value,null);
     }
-    public FieldValue(Field field, Object value, FormatRestrictions formatRestrictions){
-        this.value = value;
-        this.field = field;
-        this.formatRestrictions = formatRestrictions;
-        this.valueSource = null;
-        this.formatSource = null;
-    }
-
     public FieldValue(Field field, Object value, FieldSpec valueSource){
         this.value = value;
         this.field = field;
         this.valueSource = valueSource.getFieldSpecSource();
         this.formatRestrictions = valueSource.getFormatRestrictions();
-        this.formatSource = valueSource.getFieldSpecSource();
     }
 
     public Object getValue() {
