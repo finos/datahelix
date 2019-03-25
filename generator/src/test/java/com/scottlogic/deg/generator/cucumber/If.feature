@@ -3,7 +3,6 @@ Feature: Values can be specified by using if, then and else constraints
 Background:
      Given the generation strategy is full
      And the combination strategy is exhaustive
-     And the walker type is REDUCTIVE
      And the following fields exist:
       | foo |
       | bar |

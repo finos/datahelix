@@ -36,7 +36,7 @@ public class ReductiveTreePruner {
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
     public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FieldValue value) {
-        return pruneConstraintNode(constraintNode, value.getField(), fieldSpecHelper.getFieldSpecForValue(value.getValue()));
+        return pruneConstraintNode(constraintNode, value.getField(), fieldSpecHelper.getFieldSpecForValue(value));
     }
 
     private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {

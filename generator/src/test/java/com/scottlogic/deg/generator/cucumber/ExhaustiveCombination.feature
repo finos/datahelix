@@ -3,7 +3,6 @@ Feature: User can create data across multiple fields for all combinations availa
 Background:
      Given the generation strategy is full
      And the combination strategy is exhaustive
-     And the walker type is REDUCTIVE
 
 Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
       Given the generation strategy is full
