@@ -36,7 +36,7 @@ public abstract class CommandLineBase implements Runnable, ConfigSource {
     @CommandLine.Option(
         names = { "--disable-schema" },
         description = "Disables schema validation")
-    Boolean disableSchema = false;
+    boolean disableSchema = false;
 
     @Override
     public void run() {

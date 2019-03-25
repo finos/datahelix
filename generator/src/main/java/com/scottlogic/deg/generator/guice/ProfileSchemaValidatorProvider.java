@@ -11,20 +11,17 @@ public class ProfileSchemaValidatorProvider implements Provider<ProfileSchemaVal
 
     private final ConfigSource configSource;
     private final ProfileSchemaValidatorLeadPony leadPonyValidator;
-    private final NoopProfileSchemaValidator noopProfileSchemaValidator;
 
     @Inject
-    public ProfileSchemaValidatorProvider(ConfigSource configSource, ProfileSchemaValidatorLeadPony leadPonyValidator,
-                                          NoopProfileSchemaValidator noopProfileSchemaValidator) {
+    public ProfileSchemaValidatorProvider(ConfigSource configSource, ProfileSchemaValidatorLeadPony leadPonyValidator) {
         this.configSource = configSource;
         this.leadPonyValidator = leadPonyValidator;
-        this.noopProfileSchemaValidator = noopProfileSchemaValidator;
     }
 
     @Override
     public ProfileSchemaValidator get() {
-        if (configSource.disableSchema()) {
-            return noopProfileSchemaValidator;
+        if (configSource.disableSchemaValidation()) {
+            return new NoopProfileSchemaValidator();
         }
 
         return leadPonyValidator;

@@ -52,7 +52,7 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     }
 
     @Override
-    public boolean disableSchema() {
+    public boolean disableSchemaValidation() {
         return this.disableSchema;
     }
 

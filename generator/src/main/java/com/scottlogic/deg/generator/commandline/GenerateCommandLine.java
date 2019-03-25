@@ -128,7 +128,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public boolean disableSchema() {
+    public boolean disableSchemaValidation() {
         return this.disableSchema;
     }
 

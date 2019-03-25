@@ -80,8 +80,8 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean disableSchema() {
-        return false;
+    public boolean disableSchemaValidation() {
+        return true;
     }
 
     @Override

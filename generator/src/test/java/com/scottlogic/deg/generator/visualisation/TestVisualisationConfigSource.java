@@ -19,7 +19,7 @@ public class TestVisualisationConfigSource implements VisualisationConfigSource 
     }
 
     @Override
-    public boolean disableSchema() {
+    public boolean disableSchemaValidation() {
         return false;
     }
 

@@ -93,7 +93,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean disableSchema() {
+    public boolean disableSchemaValidation() {
         return false;
     }
 
