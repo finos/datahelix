@@ -9,10 +9,6 @@ public class ValidationResult {
         this.errorMessages = errorMessages;
     }
 
-    public void addErrorMessages(List<String> errorMessages) {
-        this.errorMessages.addAll(errorMessages);
-    }
-
     public boolean isValid() {
         return errorMessages.isEmpty();
     }

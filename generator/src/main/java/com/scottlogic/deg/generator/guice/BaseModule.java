@@ -95,7 +95,6 @@ public class BaseModule extends AbstractModule {
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
 
-        //bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorMedeia.class);
         bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorLeadPony.class);
     }
 

@@ -2,13 +2,14 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
@@ -58,15 +59,15 @@ public class VisualiseExecute implements Runnable {
         this.configSource = configSource;
         this.outputPath = outputPath;
         this.profileReader = profileReader;
-        this.profileValidator=profileValidator;
+        this.profileValidator = profileValidator;
         this.validator = validator;
     }
 
     @Override
     public void run() {
         ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
-        validationResult.addErrorMessages(profileValidator.validateProfile(configSource.getProfileFile()).errorMessages);
-        if (!validationResult.isValid()) {
+        ValidationResult validationResult2 = profileValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !validationResult2.isValid()) {
             errorReporter.display(validationResult);
             return;
         }

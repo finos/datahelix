@@ -46,9 +46,10 @@ public class GenerateExecute implements Runnable {
     public void run() {
 
         ValidationResult validationResult = validator.preProfileChecks(config, configSource);
-        validationResult.addErrorMessages(profileValidator.validateProfile(configSource.getProfileFile()).errorMessages);
-        if (!validationResult.isValid()) {
+        ValidationResult validationResult2 = profileValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !validationResult2.isValid()) {
             errorReporter.display(validationResult);
+            errorReporter.display(validationResult2);
             return;
         }
 
