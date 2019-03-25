@@ -48,7 +48,7 @@ Is satisfied if `field` is null or absent.
 { "field": "price", "is": "ofType", "value": "string" }
 ```
 
-Is satisfied if `field` is of type represented by `value` (valid options: `numeric`, `string`, `temporal`)
+Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `temporal`)
 
 ## Textual constraints
 

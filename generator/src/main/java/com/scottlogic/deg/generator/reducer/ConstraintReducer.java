@@ -60,16 +60,15 @@ public class ConstraintReducer {
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
-        return reduceConstraintsToFieldSpec(constraints, Collections.emptySet());
+        return constraints == null
+                ? Optional.of(FieldSpec.Empty)
+                : getRootFieldSpec(constraints);
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> rootConstraints,
+    public Optional<FieldSpec> reduceConstraintsToFieldSpecWithMustContains(Iterable<AtomicConstraint> rootConstraints,
                                                             Set<FieldSpec> decisionFieldSpecs) {
 
-        Optional<FieldSpec> rootFieldSpec =
-            rootConstraints == null 
-                ? Optional.of(FieldSpec.Empty)
-                : getRootFieldSpec(rootConstraints);
+        Optional<FieldSpec> rootFieldSpec = reduceConstraintsToFieldSpec(rootConstraints);
 
         if (decisionFieldSpecs.isEmpty()) { return rootFieldSpec; }
 

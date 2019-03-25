@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
@@ -33,9 +34,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         this.scale = scale;
         this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
 
-        NumericLimit<BigDecimal> lowerLimit = restrictions.min == null
-            ? new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE).negate(), true)
-            : restrictions.min;
+        NumericLimit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
 
         this.inclusiveLowerLimit =
             (lowerLimit.isInclusive()
@@ -43,9 +42,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
                 : lowerLimit.getLimit().add(exclusivityAdjuster))
             .setScale(scale, RoundingMode.CEILING);
 
-        NumericLimit<BigDecimal> upperLimit = restrictions.max == null
-            ? new NumericLimit<>(BigDecimal.valueOf(Double.MAX_VALUE), true)
-            : restrictions.max;
+        NumericLimit<BigDecimal> upperLimit = getUpperLimit(restrictions);
 
         this.inclusiveUpperLimit =
             (upperLimit.isInclusive()
@@ -59,6 +56,26 @@ public class RealNumberFieldValueSource implements FieldValueSource {
             .map(i -> i.setScale(scale, RoundingMode.HALF_UP))
             .filter(i -> this.inclusiveLowerLimit.compareTo(i) <= 0 && i.compareTo(this.inclusiveUpperLimit) <= 0)
             .collect(Collectors.toSet());
+    }
+
+    private NumericLimit<BigDecimal> getUpperLimit(NumericRestrictions restrictions) {
+        BigDecimal maxValue = GenerationConfig.Constants.NUMERIC_MAX;
+        if (restrictions.max == null) {
+            return new NumericLimit<>(maxValue, true);
+        }
+
+        // Returns the smaller of the two maximum restrictions
+        return new NumericLimit<>(maxValue.min(restrictions.max.getLimit()), restrictions.max.isInclusive());
+    }
+
+    private NumericLimit<BigDecimal> getLowerLimit(NumericRestrictions restrictions) {
+        BigDecimal minValue = GenerationConfig.Constants.NUMERIC_MIN;
+        if (restrictions.min == null) {
+            return new NumericLimit<>(minValue, true);
+        }
+
+        // Returns the larger of the two minimum restrictions
+        return new NumericLimit<>(minValue.max(restrictions.min.getLimit()), restrictions.min.isInclusive());
     }
 
     @Override

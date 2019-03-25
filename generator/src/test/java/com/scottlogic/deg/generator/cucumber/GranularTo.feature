@@ -3,7 +3,7 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
 Background:
      Given the generation strategy is full
        And there is a field foo
-       And foo is of type "numeric"
+       And foo is of type "decimal"
        And foo is anything but null
     
 Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point

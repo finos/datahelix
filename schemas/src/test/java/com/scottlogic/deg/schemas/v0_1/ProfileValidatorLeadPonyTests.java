@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
-class ProfileValidatorTests {
+class ProfileValidatorLeadPonyTests {
 
-    private ProfileValidator profileValidator = new ProfileValidatorMedeia();
+    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorLeadPony();
 
     private ValidationResult validate(String profile) {
         InputStream testProfile = this.getClass().getResourceAsStream(profile);
@@ -23,19 +23,19 @@ class ProfileValidatorTests {
 
     @Test
     void validateProfile_empty_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-empty.json");
+        ValidationResult result = validate("/test-profiles/profile-test-empty-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 
     @Test
     void validateProfile_fields_array_empty_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-fields-array-empty.json");
+        ValidationResult result = validate("/test-profiles/profile-test-fields-array-empty-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 
     @Test
     void validateProfile_missing_constraint_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-missing-constraint.json");
+        ValidationResult result = validate("/test-profiles/profile-test-missing-constraint-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 
@@ -47,19 +47,19 @@ class ProfileValidatorTests {
 
     @Test
     void validateProfile_no_fields_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-no-fields.json");
+        ValidationResult result = validate("/test-profiles/profile-test-no-fields-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 
     @Test
     void validateProfile_no_rules_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-no-rules.json");
+        ValidationResult result = validate("/test-profiles/profile-test-no-rules-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 
     @Test
     void validateProfile_no_version_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-no-version.json");
+        ValidationResult result = validate("/test-profiles/profile-test-no-version-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 

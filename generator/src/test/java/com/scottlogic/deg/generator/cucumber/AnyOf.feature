@@ -70,9 +70,8 @@ Scenario: User requires to create a field with numbers that conform to one or ma
          { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
        ]}
        """
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is less than 11
-       And foo is granular to 1
      Then the following data should be generated:
        | foo  |
        | null |
@@ -104,9 +103,8 @@ Scenario: User requires to create a field with numbers that conform to multiple 
          { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
        ]}
        """
-    And foo is of type "numeric"
+    And foo is of type "integer"
     And foo is less than 20
-    And foo is granular to 1
     Then the following data should be generated:
       | foo  |
       | null |

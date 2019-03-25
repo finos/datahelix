@@ -5,6 +5,8 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,7 @@ public class GenerationConfigValidatorTests {
     private Profile profile;
     private ArrayList<String> expectedErrorMessages;
     private ValidationResult expectedResult;
+    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
     @BeforeEach
@@ -59,6 +62,7 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.exists(mockFilePath)).thenReturn(true);
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         when(mockConfigSource.shouldViolate()).thenReturn(false);
+        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
     }
 
     @Test

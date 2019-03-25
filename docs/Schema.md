@@ -28,7 +28,7 @@
 		{
 			"rule": "low_price is a non-nullable positive integer",
 			"constraints": [
-				{ "field": "low_price", "is": "ofType", "value": "numeric" },
+				{ "field": "low_price", "is": "ofType", "value": "integer" },
 				{ "not": { "field": "low_price", "is": "null" } },
 				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
 			]

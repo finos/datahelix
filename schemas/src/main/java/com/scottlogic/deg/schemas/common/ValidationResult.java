@@ -5,7 +5,7 @@ import java.util.List;
 public class ValidationResult {
     public final List<String> errorMessages;
 
-    public ValidationResult(List<String> errorMessages){
+    public ValidationResult(List<String> errorMessages) {
         this.errorMessages = errorMessages;
     }
 
