@@ -89,9 +89,7 @@ public class GeneralTestStep {
 
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {
-        theGeneratorCanGenerateAtMostRows(1);
-
-        cucumberTestHelper.generateAndGetData();
+        cucumberTestHelper.runPreGenerationChecks();
 
         List<String> errors = this.cucumberTestHelper
             .getProfileValidationErrors()
@@ -110,7 +108,7 @@ public class GeneralTestStep {
         Assert.assertThat(
             "Expected invalid profile",
             this.cucumberTestHelper.getThrownExceptions(),
-            hasItem(
+            hasItem( //TODO: Stop catching generic errors! We should only be looking for InvalidProfileException here
                 either((Matcher)isA(InvalidProfileException.class))
                     .or(isA(JsonParseException.class))
                     .or(isA(IllegalArgumentException.class))
@@ -137,7 +135,7 @@ public class GeneralTestStep {
 
     @But("^field (.+?) should fail validation: \"(.+)\"$")
     public void fieldIsInvalidWithError(String fieldName, String expectedError) {
-        cucumberTestHelper.generateAndGetData();
+        cucumberTestHelper.runPreGenerationChecks();
 
         List<String> errors = this.cucumberTestHelper
             .getProfileValidationErrorsForField(fieldName)
@@ -151,8 +149,6 @@ public class GeneralTestStep {
                 errors,
                 hasItem(expectedError));
         }
-
-        noDataIsCreated();
     }
 
     @Then("^I am presented with an error message$")

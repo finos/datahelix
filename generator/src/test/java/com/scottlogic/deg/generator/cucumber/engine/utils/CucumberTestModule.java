@@ -13,6 +13,8 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
+import static org.mockito.Mockito.*;
+
 /**
  * Class which defines bindings for Guice injection specific for cucumber testing. The test state is persisted through
  * the various classes by binding the CucumberTestState object to the instance specified here.
@@ -35,7 +37,9 @@ public class CucumberTestModule extends AbstractModule {
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
 
-        if (testState.shouldViolate) {
+        if (testState.shouldSkipGeneration()) {
+            bind(GenerationEngine.class).toInstance(mock(GenerationEngine.class));
+        } else if (testState.shouldViolate) {
             bind(GenerationEngine.class).to(ViolationGenerationEngine.class);
         } else {
             bind(GenerationEngine.class).to(StandardGenerationEngine.class);

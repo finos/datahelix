@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class CucumberGenerationConfigSource implements GenerationConfigSource {
-
     private final CucumberTestState state;
 
     @Inject

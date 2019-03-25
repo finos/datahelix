@@ -25,8 +25,14 @@ public class CucumberTestState {
      */
     public Boolean shouldViolate = false;
 
+    /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
+    private Boolean shouldSkipGeneration = false;
+    public Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
+    public void disableGeneration() { shouldSkipGeneration = true; }
+
     public Optional<Long> maxRows = Optional.empty();
 
+    public Boolean generationHasAlreadyOccured = false;
     public List<List<Object>> generatedObjects;
 
     final List<Field> profileFields = new ArrayList<>();
@@ -87,6 +93,8 @@ public class CucumberTestState {
         this.constraints.clear();
         this.testExceptions.clear();
         this.generatedObjects = null;
+        this.generationHasAlreadyOccured = false;
+        this.shouldSkipGeneration = false;
     }
 
     public void addField(String fieldName) {

@@ -28,14 +28,8 @@ public class CucumberTestHelper {
         this.testState = testState;
     }
 
-    public List <List<Object>> generateAndGetData() {
-        if (testState.dataGenerationType == null) {
-            throw new RuntimeException("Gherkin error: Please specify the data strategy");
-        }
-
-        if (this.generatorHasRun()) {
-            return testState.generatedObjects;
-        }
+    public void runGenerationProcess() {
+        if (testState.generationHasAlreadyOccured) return;
 
         try {
             Module concatenatedModule =
@@ -46,16 +40,43 @@ public class CucumberTestHelper {
             Injector injector = Guice.createInjector(concatenatedModule);
 
             injector.getInstance(GenerateExecute.class).run();
-
-            return testState.generatedObjects;
         } catch (Exception e) {
             testState.addException(e);
-            return null;
         }
+
+        testState.generationHasAlreadyOccured = true;
+    }
+
+    public List<List<Object>> generateAndGetData() {
+        if (testState.shouldSkipGeneration()) {
+            throw new RuntimeException(
+                "Gherkin error: Don't use profile validity steps in conjunction with data checking steps");
+        }
+
+        if (testState.dataGenerationType == null) {
+            throw new RuntimeException("Gherkin error: Please specify the data strategy");
+        }
+
+        if (this.generatorHasRun()) {
+            return testState.generatedObjects == null
+                ? new ArrayList<>()
+                : testState.generatedObjects;
+        }
+
+        runGenerationProcess();
+
+        return testState.generatedObjects == null
+            ? new ArrayList<>()
+            : testState.generatedObjects;
+    }
+
+    public void runPreGenerationChecks() {
+        testState.disableGeneration();
+        runGenerationProcess();
     }
 
     public boolean generatorHasRun(){
-        return testState.generatedObjects != null || generatorHasThrownException();
+        return testState.generationHasAlreadyOccured;
     }
 
     public boolean generatorHasThrownException() {
