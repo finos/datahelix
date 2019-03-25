@@ -152,6 +152,7 @@ Scenario: greaterThan run against a non contradicting not greaterThan should be 
     | 4   |
     | 5   |
 
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThan run against a non contradicting not greaterThan should be successful (not greaterThan 5 AND not greaterThan 4)
   Given foo is anything but greater than 5
     And foo is anything but greater than 4
@@ -159,12 +160,12 @@ Scenario: not greaterThan run against a non contradicting not greaterThan should
     And foo is of type "integer"
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                    |
-    | -100000000000000000000 |
-    | -99999999999999999999  |
-    | -99999999999999999998  |
-    | -99999999999999999997  |
-    | -99999999999999999996  |
+    | foo |
+    | 3   |
+    | 2   |
+    | 1   |
+    | 0   |
+    | -1  |
 
 Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, temporal and null (greaterThan 2 AND not greaterThan 2)
   Given foo is greater than 2
@@ -200,6 +201,7 @@ Scenario: greaterThan run against a non contradicting not greaterThanOrEqualTo s
     | 3   |
     | 4   |
 
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThan run against a non contradicting not greaterThanOrEqualTo should be successful (not greaterThan 5 AND not greaterThanOrEqualTo 4)
   Given foo is anything but greater than 5
     And foo is anything but greater than or equal to 4
@@ -207,12 +209,12 @@ Scenario: not greaterThan run against a non contradicting not greaterThanOrEqual
     And foo is anything but null
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                    |
-    | -100000000000000000000 |
-    | -99999999999999999999  |
-    | -99999999999999999998  |
-    | -99999999999999999997  |
-    | -99999999999999999996  |
+    | foo |
+    | 4   |
+    | 3   |
+    | 2   |
+    | 1   |
+    | 0   |
 
 Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, temporal and null (greaterThan 2 AND not greaterThanOrEqualTo 3)
   Given foo is greater than 2
@@ -247,6 +249,7 @@ Scenario: greaterThan run against a non contradicting not lessThan should be suc
     | 5   |
     | 6   |
 
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThan run against a non contradicting lessThan should be successful (not greaterThan 4 AND lessThan 2)
   Given foo is anything but greater than 4
     And foo is less than 2
@@ -254,12 +257,12 @@ Scenario: not greaterThan run against a non contradicting lessThan should be suc
     And foo is anything but null
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                    |
-    | -100000000000000000000 |
-    | -99999999999999999999  |
-    | -99999999999999999998  |
-    | -99999999999999999997  |
-    | -99999999999999999996  |
+    | foo  |
+    | 1    |
+    | 0    |
+    | -1   |
+    | -2   |
+    | -3   |
 
 Scenario: not greaterThan run against a non contradicting not lessThan should be successful (not greaterThan 5 AND not lessThan 4)
   Given foo is anything but greater than 5
@@ -314,7 +317,7 @@ Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo shou
      | 6   |
      | 7   |
 
-  @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThan run against a non contradicting lessThanOrEqualTo should be successful (not greaterThan 4 AND lessThanOrEqualTo 2)
   Given foo is anything but greater than 4
     And foo is less than or equal to 2
@@ -358,7 +361,7 @@ Scenario: not greaterThan run against a contradicting not lessThanOrEqualTo shou
 
 
 #granularTo
-Scenario: greaterThan run against a non contradicting granularTo should be successful (greaterThan 2 AND granularTo 1)
+Scenario: greaterThan run against a non contradicting granularTo should be successful (greaterThan 2 AND granularTo 0.1)
   Given foo is greater than 2
     And foo is granular to 0.1
     And foo is anything but null
@@ -372,19 +375,20 @@ Scenario: greaterThan run against a non contradicting granularTo should be succe
     | 2.4 |
     | 2.5 |
 
-  @ignore #594
-Scenario: not greaterThan run against a non contradicting granularTo should be successful (not greaterThan 4 AND granularTo 1)
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
+Scenario: not greaterThan run against a non contradicting granularTo should be successful (not greaterThan 4 AND granularTo 0.1)
   Given foo is anything but greater than 4
-    And foo is of type "integer"
+    And foo is granular to 0.1
     And foo is anything but null
+    And foo is of type "decimal"
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                                                                                                                                                                                                                                                                                                                     |
-    | 4  |
-    | 3  |
-    | 2  |
-    | 1  |
-    | 0  |
+    | foo  |
+    | 3.9  |
+    | 3.8  |
+    | 3.7  |
+    | 3.6  |
+    | 3.5  |
 
 #after
 Scenario: greaterThan run against a non contradicting after should be successful (greaterThan 1 AND after 2019-01-01T00:00:00.00)
