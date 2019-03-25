@@ -4,8 +4,12 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.GeneratorContinuation;
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
+import com.scottlogic.deg.generator.inputs.validation.ValidationType;
+import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
+import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
@@ -17,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 
 import static org.mockito.Mockito.*;
@@ -80,13 +86,16 @@ public class GenerateExecuteTests {
     }
 
     @Test
-    public void run_whenReporterReturnsAbort_shouldNotGenerate() throws IOException, InvalidProfileException {
+    public void run_whenProfileValidationYieldsErrors_shouldNotGenerate() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
+        Collection<ValidationAlert> validationAlerts = Collections.singleton(
+            new ValidationAlert(Criticality.ERROR, new StringValidationMessage(""), ValidationType.NULL, new Field("")));
+
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
-        when(validationReporter.output(any())).thenReturn(GeneratorContinuation.ABORT);
+        when(profileValidator.validate(any())).thenReturn(validationAlerts);
 
         //Act
         excecutor.run();
@@ -97,14 +106,18 @@ public class GenerateExecuteTests {
     }
 
     @Test
-    public void run_whenReporterReturnsContinue_shouldGenerate() throws IOException, InvalidProfileException {
+    public void run_whenProfileValidationYieldsInformationOrWarnings_shouldStillGenerate() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
+        Collection<ValidationAlert> validationAlerts = Arrays.asList(
+            new ValidationAlert(Criticality.INFORMATION, new StringValidationMessage(""), ValidationType.NULL, new Field("")),
+            new ValidationAlert(Criticality.WARNING, new StringValidationMessage(""), ValidationType.NULL, new Field("")));
+
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
         when(configValidator.postProfileChecks(any(), any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
-        when(validationReporter.output(any())).thenReturn(GeneratorContinuation.CONTINUE);
+        when(profileValidator.validate(any())).thenReturn(validationAlerts);
 
         //Act
         excecutor.run();

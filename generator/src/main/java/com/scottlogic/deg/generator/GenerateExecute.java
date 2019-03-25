@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.reporters.GeneratorContinuation;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
@@ -51,7 +51,6 @@ public class GenerateExecute implements Runnable {
 
     @Override
     public void run() {
-
         ValidationResult validationResult = configValidator.preProfileChecks(config, configSource);
 
         if (!validationResult.isValid()) {
@@ -63,8 +62,8 @@ public class GenerateExecute implements Runnable {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
             Collection<ValidationAlert> alerts = profileValidator.validate(profile);
-            GeneratorContinuation continuationBehaviour = validationReporter.output(alerts);
-            if (continuationBehaviour == GeneratorContinuation.ABORT){
+            validationReporter.output(alerts);
+            if (validationResultShouldHaltExecution(alerts)) {
                 return;
             }
 
@@ -79,5 +78,11 @@ public class GenerateExecute implements Runnable {
         } catch (IOException | InvalidProfileException e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean validationResultShouldHaltExecution(Collection<ValidationAlert> alerts) {
+        return alerts.stream()
+            .anyMatch(alert ->
+                alert.getCriticality().equals(Criticality.ERROR));
     }
 }

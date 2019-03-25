@@ -7,19 +7,21 @@ import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.guice.BaseModule;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Responsible for generating data in cucumber tests.
  */
 public class CucumberTestHelper {
-
     private final CucumberTestState testState;
 
     public CucumberTestHelper(CucumberTestState testState){
@@ -38,8 +40,8 @@ public class CucumberTestHelper {
         try {
             Module concatenatedModule =
                 Modules
-                .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
-                .with(new CucumberTestModule(testState));
+                    .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
+                    .with(new CucumberTestModule(testState));
 
             Injector injector = Guice.createInjector(concatenatedModule);
 
@@ -66,6 +68,23 @@ public class CucumberTestHelper {
 
     public Collection<Exception> getThrownExceptions(){
         return testState.testExceptions;
+    }
+
+    public Stream<String> getProfileValidationErrors(){
+        return Stream.concat(
+            testState.testExceptions.stream()
+                .filter(e -> e instanceof InvalidProfileException)
+                .map(Throwable::getMessage),
+            testState.validationReporter
+                .getRecordedAlerts().stream()
+                .map(a -> a.getMessage().getVerboseMessage()));
+    }
+
+    public Stream<String> getProfileValidationErrorsForField(String fieldName){
+        return testState.validationReporter
+            .getRecordedAlerts().stream()
+            .filter(a -> a.getField().name.equals(fieldName))
+            .map(a -> a.getMessage().getVerboseMessage());
     }
 
     public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz){

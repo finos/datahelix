@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
  * Class to represent the state during cucumber test running and execution
  */
 public class CucumberTestState {
-
     public GenerationConfig.DataGenerationType dataGenerationType;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
@@ -33,6 +32,8 @@ public class CucumberTestState {
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
     final List<Exception> testExceptions = new ArrayList<>();
+
+    final RecordingProfileValidationReporter validationReporter = new RecordingProfileValidationReporter();
 
     final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 

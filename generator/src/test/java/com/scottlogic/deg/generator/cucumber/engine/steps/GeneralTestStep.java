@@ -87,6 +87,22 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
+    @Then("^the profile should be considered valid$")
+    public void theProfileIsValid() {
+        theGeneratorCanGenerateAtMostRows(1);
+
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        Assert.assertThat(
+            "There were unexpected profile validation errors",
+            errors,
+            empty());
+    }
+
     @Then("^the profile is invalid$")
     public void theProfileIsInvalid() {
         cucumberTestHelper.generateAndGetData();
@@ -102,19 +118,41 @@ public class GeneralTestStep {
     }
 
     @But("^the profile is invalid because \"(.+)\"$")
-    public void fieldIsInvalidWithError(String error) {
+    public void profileIsInvalidWithError(String expectedError) {
         cucumberTestHelper.generateAndGetData();
 
-        List<Exception> thrownExceptions = new ArrayList<>(this.cucumberTestHelper.getThrownExceptions());
-        Assert.assertThat(
-            "Expected invalid profile",
-            thrownExceptions,
-            hasItem(isA(InvalidProfileException.class)));
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
 
-        Assert.assertThat(
-            thrownExceptions.get(0).getMessage(),
-            is(equalTo(error))
-        );
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertThat(
+                "Expected profile validation error",
+                errors,
+                hasItem(expectedError));
+        }
+    }
+
+    @But("^field (.+?) should fail validation: \"(.+)\"$")
+    public void fieldIsInvalidWithError(String fieldName, String expectedError) {
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrorsForField(fieldName)
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No validation errors were raised");
+        } else {
+            Assert.assertThat(
+                "Expected profile validation error for field " + fieldName,
+                errors,
+                hasItem(expectedError));
+        }
+
+        noDataIsCreated();
     }
 
     @Then("^I am presented with an error message$")

@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.inputs.validation.messages.UntypedFieldValidationMessage;
+import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -52,7 +52,8 @@ public class ProfileFieldUntypedValidator implements ProfileValidator {
             .map(nonCompliantField ->
                 new ValidationAlert(
                     Criticality.ERROR,
-                    new UntypedFieldValidationMessage(),
+                    new StringValidationMessage(
+                        "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"),
                     ValidationType.TYPE,
                     nonCompliantField))
             .collect(Collectors.toList());
