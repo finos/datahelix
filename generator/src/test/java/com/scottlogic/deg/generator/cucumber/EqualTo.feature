@@ -544,7 +544,7 @@ Scenario: 'EqualTo' an integer with 'ofType' integer is successful
     | null |
     | 1    |
 
-Scenario: 'EqualTo' an decimal with 'ofType' decimal is successful
+Scenario: 'EqualTo' a decimal with 'ofType' decimal is successful
   Given there is a field foo
     And foo is equal to 1
     And foo is of type "decimal"

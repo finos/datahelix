@@ -6,8 +6,10 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,21 +20,23 @@ public class ReductiveTreePruner {
 
     private final FieldSpecMerger merger;
     private final ConstraintReducer constraintReducer;
+    private final FieldSpecHelper fieldSpecHelper;
 
     @Inject
-    public ReductiveTreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer) {
+    public ReductiveTreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer, FieldSpecHelper fieldSpecHelper) {
         this.merger = merger;
         this.constraintReducer = constraintReducer;
+        this.fieldSpecHelper = fieldSpecHelper;
     }
 
     /**
      * Prunes a tree of any branches that are contradictory to the value of the nextFixedField
      * @param constraintNode The Tree to be pruned
-     * @param nextFixedField The field, and the value to fix it for.
+     * @param value the field and value to prune for.
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
-    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FixedField nextFixedField) {
-        return pruneConstraintNode(constraintNode, nextFixedField.getField(), nextFixedField.getFieldSpecForCurrentValue());
+    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FieldValue value) {
+        return pruneConstraintNode(constraintNode, value.getField(), fieldSpecHelper.getFieldSpecForValue(value.getValue()));
     }
 
     private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
