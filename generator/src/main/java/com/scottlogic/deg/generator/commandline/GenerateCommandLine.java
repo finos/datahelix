@@ -128,6 +128,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
+    public boolean disableSchema() {
+        return this.disableSchema;
+    }
+
+    @Override
     public boolean overwriteOutputFiles() {
         return this.overwriteOutputFiles;
     }

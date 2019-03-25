@@ -19,6 +19,11 @@ public class TestVisualisationConfigSource implements VisualisationConfigSource 
     }
 
     @Override
+    public boolean disableSchema() {
+        return false;
+    }
+
+    @Override
     public String getTitleOverride() {
         return null;
     }

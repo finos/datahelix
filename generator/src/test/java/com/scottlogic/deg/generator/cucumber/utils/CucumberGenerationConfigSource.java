@@ -80,6 +80,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
+    public boolean disableSchema() {
+        return false;
+    }
+
+    @Override
     public boolean shouldViolate() {
         return state.shouldViolate;
     }
