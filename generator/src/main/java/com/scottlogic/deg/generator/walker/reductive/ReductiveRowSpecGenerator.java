@@ -31,8 +31,8 @@ public class ReductiveRowSpecGenerator {
             reductiveState.getFieldValues().values().stream()
                 .collect(Collectors.toMap(
                     FieldValue::getField,
-                    fieldValue -> fieldSpecHelper.getFieldSpecForValue(fieldValue.getValue())
-                                    .withFormatRestrictions(fieldValue.getFormatRestrictions(), FieldSpecSource.Empty)));
+                    fieldValue -> fieldSpecHelper.getFieldSpecForValue(fieldValue)
+                                    .withFormatRestrictions(fieldValue.getFormatRestrictions(), fieldValue.getFieldSpecSource())));
 
         RowSpec rowSpec = new RowSpec(reductiveState.getFields(), fieldSpecsPerField);
         monitor.rowSpecEmitted(rowSpec);
