@@ -30,29 +30,29 @@ Scenario: Greater than or equal to constraint with decimal type produces valid d
     | 10.00000000000000000003 |
     | 10.00000000000000000004 |
 
-@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
+#594 - Change to descending order?
 Scenario: Less than or equal to constraint with decimal type produces valid decimals
   Given foo is less than or equal to 10
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | 10                      |
-    | 9.99999999999999999999  |
-    | 9.99999999999999999998  |
-    | 9.99999999999999999997  |
-    | 9.99999999999999999996  |
+    | foo                                         |
+    | -100000000000000000000                      |
+    | -99999999999999999999.99999999999999999999  |
+    | -99999999999999999999.99999999999999999998  |
+    | -99999999999999999999.99999999999999999997  |
+    | -99999999999999999999.99999999999999999996  |
 
-@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
+#594 - Change to descending order?
 Scenario: Less than constraint with decimal type produces valid decimals
   Given foo is less than 10
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | 9.99999999999999999999  |
-    | 9.99999999999999999998  |
-    | 9.99999999999999999997  |
-    | 9.99999999999999999996  |
-    | 9.99999999999999999995  |
+    | foo                                         |
+    | -100000000000000000000                      |
+    | -99999999999999999999.99999999999999999999  |
+    | -99999999999999999999.99999999999999999998  |
+    | -99999999999999999999.99999999999999999997  |
+    | -99999999999999999999.99999999999999999996  |
 
 Scenario: Equal to constraint with decimal type produces valid decimal
   Given foo is equal to 10
