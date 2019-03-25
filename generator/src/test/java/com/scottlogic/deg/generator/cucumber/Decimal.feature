@@ -55,10 +55,10 @@ Scenario: Less than constraint with decimal type produces valid decimals
     | -99999999999999999999.99999999999999999996  |
 
 Scenario: Equal to constraint with decimal type produces valid decimal
-  Given foo is equal to 10
+  Given foo is equal to 10.1
   Then the following data should be generated:
-    | foo |
-    | 10  |
+    | foo   |
+    | 10.1  |
 
 Scenario: In Set constraint with decimal type only produces valid decimals
   Given foo is in set:
