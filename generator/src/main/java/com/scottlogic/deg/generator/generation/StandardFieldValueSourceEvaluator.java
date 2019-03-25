@@ -94,12 +94,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         int numericScale = getNumericScale(fieldSpec.getGranularityRestrictions());
 
-        if ((restrictions.min == null && restrictions.max == null) || isFieldValueAnInteger(restrictions, numericScale)) {
-            return new IntegerFieldValueSource(
-                restrictions,
-                getBlacklist(fieldSpec));
-        }
-
         return new RealNumberFieldValueSource(
             restrictions,
             getBlacklist(fieldSpec),
@@ -116,14 +110,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         return maximumGranularity;
-    }
-
-    private boolean isFieldValueAnInteger(NumericRestrictions numericRestrictions, int numericScale) {
-        if (numericScale > 0) {
-            return false;
-        }
-
-        return numericRestrictions.areLimitValuesInteger();
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
