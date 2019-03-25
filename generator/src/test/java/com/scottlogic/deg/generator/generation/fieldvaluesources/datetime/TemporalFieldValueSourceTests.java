@@ -1,6 +1,5 @@
-package com.scottlogic.deg.generator.generation.fieldvaluesources;
+package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.generator.restrictions.DataTypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
@@ -54,62 +53,14 @@ public class TemporalFieldValueSourceTests {
     }
 
     @Test
-    public void whenGivenMultiYearRangeAndBlacklist() {
-        givenLowerBound(createDate(2018, 3, 7), true);
-        givenUpperBound(createDate(2022, 3, 7), false);
-        givenBlacklist(createDate(2019, 3, 7));
-        expectAllValues(
-                createDate(2018, 3, 7),
-                createDate(2020, 3, 7),
-                createDate(2021, 3, 7));
-    }
-
-    @Test
-    public void whenGivenMultiYearRange() {
-        givenLowerBound(createDate(2018, 3, 7), true);
-        givenUpperBound(createDate(2022, 3, 7), false);
-        expectAllValues(
-                createDate(2018, 3, 7),
-                createDate(2019, 3, 7),
-                createDate(2020, 3, 7),
-                createDate(2021, 3, 7));
-    }
-
-    @Test
-    public void whenGivenMultiMonthRange() {
-        givenLowerBound(createDate(2018, 01, 01), true);
-        givenUpperBound(createDate(2018, 06, 01), true);
-        expectAllValues(
-                createDate(2018, 1, 1),
-                createDate(2018, 2, 1),
-                createDate(2018, 3, 1),
-                createDate(2018, 4, 1),
-                createDate(2018, 5, 1),
-                createDate(2018, 6, 1));
-    }
-
-    @Test
-    public void whenGivenMultiDayRange() {
-        givenLowerBound(createDate(2018, 1, 10), true);
-        givenUpperBound(createDate(2018, 1, 13), false);
-        expectAllValues(
-                createDate(2018, 1, 10),
-                createDate(2018, 1, 11),
-                createDate(2018, 1, 12));
-    }
-
-    @Test
     public void whenGivenMultiHourRange() {
         LocalDate date = LocalDate.of(2018, 1, 10);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), true);
-        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), false);
+        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 0)), true);
+        givenUpperBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 3000000)), false);
         expectAllValues(
-                LocalDateTime.of(date, LocalTime.of(12, 0, 0)),
-                LocalDateTime.of(date, LocalTime.of(13, 0, 0)),
-                LocalDateTime.of(date, LocalTime.of(14, 0, 0)),
-                LocalDateTime.of(date, LocalTime.of(15, 0, 0)),
-                LocalDateTime.of(date, LocalTime.of(16, 0, 0)),
-                LocalDateTime.of(date, LocalTime.of(17, 0, 0)));
+            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 0)),
+            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 1000000)),
+            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 2000000)));
     }
 
 
