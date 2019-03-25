@@ -1,4 +1,4 @@
-Feature: User can specify that a number is of type decimal and does not have any decimal places
+Feature: User can specify that a number is of type decimal and can have varying numbers of decimal places
 
 Background:
   Given the generation strategy is full
