@@ -111,3 +111,8 @@ Scenario: Running a 'ofType' request that specifies null should be unsuccessful
     Given foo is of type null
     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
       And no data is created
+
+Scenario: Running an 'ofType' = numeric request should throw an error
+  Given there is a field foo
+    And foo is of type "numeric"
+  Then I am presented with an error message
