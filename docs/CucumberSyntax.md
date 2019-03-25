@@ -113,6 +113,7 @@ And there is a constraint:
 * _{field} contains temporal values after or at {after}_, executes the generator and asserts that _field_ contains either `null` or temporal values at or after _{after}_
 
 #### Numeric
+Note these steps work for asserting both integer and decimal data. There are no current steps for asserting general granularity.
 * _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
 * _{field} contains anything but numeric data_, executes the generator and asserts that _field_ contains either `null` or data that is not numeric.
 * _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.

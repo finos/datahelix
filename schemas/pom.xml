@@ -24,6 +24,14 @@
             <groupId>com.worldturner.medeia</groupId>
             <artifactId>medeia-validator-jackson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.leadpony.justify</groupId>
+            <artifactId>justify</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

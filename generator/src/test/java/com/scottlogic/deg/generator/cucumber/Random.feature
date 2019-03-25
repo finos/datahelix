@@ -1,5 +1,5 @@
 
-Feature: User can generate valid data for all types (string, numeric or temporal) in random generation mode. Actual randomness of the data not tested.
+Feature: User can generate valid data for all types (string, integer, decimal, or temporal) in random generation mode. Actual randomness of the data not tested.
 
   Background:
     Given the generation strategy is random
@@ -15,8 +15,8 @@ Scenario: The generator produces valid 'Temporal' data in random mode
     And foo contains anything but null
     And foo contains temporal values between 0001-01-01T00:00:00.000 and 2019-01-01T00:00:00.000 inclusively
 
-Scenario: The generator produces valid 'Numeric' data in random mode
-  Given foo is of type "numeric"
+Scenario: The generator produces valid 'Integer' data in random mode
+  Given foo is of type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is less than or equal to 10
@@ -25,7 +25,17 @@ Scenario: The generator produces valid 'Numeric' data in random mode
     And foo contains numeric values less than or equal to 10
     And foo contains anything but null
 
-Scenario: The generator produces valid 'String' data in random mode
+Scenario: The generator produces valid 'Decimal' data in random mode
+  Given foo is of type "decimal"
+    And foo is anything but null
+    And the generator can generate at most 5 rows
+    And foo is less than or equal to 10
+  Then 5 rows of data are generated
+    And foo contains numeric data
+    And foo contains numeric values less than or equal to 10
+    And foo contains anything but null
+
+  Scenario: The generator produces valid 'String' data in random mode
   Given foo is of type "string"
     And foo is anything but null
     And the generator can generate at most 5 rows

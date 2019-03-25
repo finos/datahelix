@@ -9,15 +9,25 @@ import com.worldturner.medeia.api.ValidationFailedException;
 import com.worldturner.medeia.api.jackson.MedeiaJacksonApi;
 import com.worldturner.medeia.schema.validation.SchemaValidator;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileValidatorMedeia implements ProfileValidator {
+public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    public ValidationResult validateProfile(File profileFile) {
+        try {
+            return validateProfile(new FileInputStream(profileFile));
+        } catch (FileNotFoundException e) {
+            List<String> errMsgs = new ArrayList<>();
+            errMsgs.add(e.getLocalizedMessage());
+            return new ValidationResult(errMsgs);
+        }
+    }
 
     @Override
     public ValidationResult validateProfile(InputStream profileStream) {

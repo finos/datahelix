@@ -7,12 +7,15 @@ import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
@@ -27,9 +30,15 @@ public class GenerateExecuteTests {
     private ErrorReporter errorReporter = mock(ErrorReporter.class);
     private ValidationResult validationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
+    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
 
-    private GenerateExecute excecutor = new GenerateExecute(config, profileReader, generationEngine, configSource,
-        outputTarget, validator, errorReporter);
+    private GenerateExecute executor = new GenerateExecute(config, profileReader, generationEngine, configSource,
+        outputTarget, validator, errorReporter, mockProfileSchemaValidator);
+
+    @BeforeEach
+    public void setup(){
+        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
+    }
 
     @Test
     public void invalidConfigCallsCorrectMethods() throws IOException, InvalidProfileException {
@@ -38,7 +47,7 @@ public class GenerateExecuteTests {
         when(validationResult.isValid()).thenReturn(false);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(errorReporter, times(1)).display(validationResult);
@@ -57,7 +66,7 @@ public class GenerateExecuteTests {
         when(validationResult.isValid()).thenReturn(true);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(profileReader, times(1)).read(testFile.toPath());

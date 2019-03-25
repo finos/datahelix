@@ -8,13 +8,13 @@ Background:
 Scenario: Contradicting types, disallowing 'null', should not produce any data.
   Given foo is anything but null
   And foo is of type "string"
-  And foo is of type "numeric"
+  And foo is of type "integer"
   Then no data is created
 
 ### Soft Contradictions ###
 Scenario: Contradicting types, but allowing 'null', should produce only 'null' values.
   Given foo is of type "string"
-    And foo is of type "numeric"
+    And foo is of type "integer"
     And the generator can generate at most 2 rows
   Then the following data should be generated:
     | foo  |

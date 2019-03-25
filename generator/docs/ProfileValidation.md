@@ -10,7 +10,7 @@ The validation checks currently performed include:
 
 2. Constraint for a different data type is applied
 
-    Example: A is a string and granularity constraint is applied - granularity constraint can only operate on numeric fields at the moment.
+    Example: A is a string and granularity constraint is applied - granularity constraint can only operate on decimal fields at the moment.
 
 Profile validation is turned off by default (Uses the noop validator). To enable it please pass in parameter: --validate-profile=true or -v=true. 
 
@@ -18,7 +18,7 @@ The workflow for the profile validator is that it iterates over all the constrai
 
 Validation alerts have different levels:
 
-| Criticality |      Data generation      |                                                                                                     Explaination |
+| Criticality |      Data generation      |                                                                                                     Explanation |
 |-------------|:-------------------------:|-----------------------------------------------------------------------------------------------------------------:|
 | Error       | Data cannot be generated. |                       There are unrecoverable contradictions between constraints. These errors must be resolved. |
 | Information |   Data can be generated.  | There are constraints that look like they may sometimes contradict but there are some possible values that satisfy them. |
@@ -34,10 +34,10 @@ Example profiles may include:
 
 | Constraint 1                       | Constraint 2          | Validity - Logging   | Reason                                                                                                    |
 |------------------------------------|-----------------------|---------|-----------------------------------------------------------------------------------------------------------|
-| A is of type STRING                | A is of type NUMERIC  | Invalid - Error | A is already set to be of type STRING by Constraint 1. The type cannot be changed to a different one.     |
-| A is less than 10                  | A is of type TEMPORAL | Invalid - Error | Constraint 1 implies that A must be of NUMERIC type. The type cannot be changed to a different one.       |
-| A is of type STRING                | A is granular to 1    | Invalid - Error | A is of type String and applying granular to constraint is only allowed on NUMERIC fields.                |
-| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid - Error | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to NUMERIC types.  |
+| A is of type STRING                | A is of type INTEGER  | Invalid - Error | A is already set to be of type STRING by Constraint 1. The type cannot be changed to a different one.     |
+| A is less than 10                  | A is of type TEMPORAL | Invalid - Error | Constraint 1 implies that A must be of INTEGER or DECIMAL type. The type cannot be changed to a different one.       |
+| A is of type STRING                | A is granular to 1    | Invalid - Error | A is of type String and applying granular to constraint is only allowed on DECIMAL fields.                |
+| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid - Error | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to INTEGER or DECIMAL types.  |
 
 
 ## Set validation

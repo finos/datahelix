@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.schemas.common.ValidationResult;
 
 import java.util.ArrayList;
 

@@ -111,44 +111,81 @@ Scenario: Running an exhaustive combination strategy with special character (whi
        | " " | " "  |
        | " "  | " "  |
 
-Scenario: Running an exhaustive combination strategy with valid number values should be successful
+Scenario: Running an exhaustive combination strategy with valid integer values should be successful
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is anything but null
-       And bar is of type "numeric"
+       And bar is of type "integer"
        And bar is anything but null
        And foo is in set:
          | 999 |
          | -12 |
        And bar is in set:
-         | 12.01 |
-         | 0     |
+         | 12 |
+         | 0  |
      Then the following data should be generated:
-       | foo | bar   |
-       | 999 | 12.01 |
-       | -12 | 12.01 |
-       | 999 | 0     |
-       | -12 | 0     |
+       | foo | bar|
+       | 999 | 12 |
+       | -12 | 12 |
+       | 999 | 0  |
+       | -12 | 0  |
 
+Scenario: Running an exhaustive combination strategy with valid decimal values should be successful
+  Given the following fields exist:
+    | foo |
+    | bar |
+    And foo is of type "decimal"
+    And foo is anything but null
+    And bar is of type "decimal"
+    And bar is anything but null
+    And foo is in set:
+      | 999 |
+      | -12 |
+    And bar is in set:
+      | 12.01 |
+      | 0     |
+  Then the following data should be generated:
+    | foo | bar   |
+    | 999 | 12.01 |
+    | -12 | 12.01 |
+    | 999 | 0     |
+    | -12 | 0     |
 
-Scenario: Running an exhaustive combination strategy with invalid number values should fail with an appropriate error message
+Scenario: Running an exhaustive combination strategy with invalid integer values should fail with an appropriate error message
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is anything but null
-       And bar is of type "numeric"
+       And bar is of type "integer"
        And bar is anything but null
        And foo is in set:
          | 999 |
          | +12 |
        And bar is in set:
-         | 12.01 |
-         | 0     |
+         | 12 |
+         | 0  |
      Then I am presented with an error message
        And no data is created
+
+Scenario: Running an exhaustive combination strategy with invalid decimal values should fail with an appropriate error message
+  Given the following fields exist:
+    | foo |
+    | bar |
+    And foo is of type "decimal"
+    And foo is anything but null
+    And bar is of type "decimal"
+    And bar is anything but null
+    And foo is in set:
+      | 999 |
+      | +12 |
+    And bar is in set:
+      | 12.01 |
+      | 0     |
+  Then I am presented with an error message
+    And no data is created
 
 Scenario: Running an exhaustive combination strategy with valid date values should be successful
      Given the following fields exist:
@@ -228,9 +265,9 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is anything but null
-       And bar is of type "numeric"
+       And bar is of type "integer"
        And bar is anything but null
        And foo is in set:
          | 0 |
@@ -240,13 +277,13 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
          | null |
      Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null."
 
-Scenario: Running an exhaustive combination strategy with null values (null) should be successful
+Scenario: Running an exhaustive combination strategy should be successful
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is anything but null
-       And bar is of type "numeric"
+       And bar is of type "integer"
        And bar is anything but null
        And foo is in set:
          | 0 |
@@ -261,13 +298,13 @@ Scenario: Running an exhaustive combination strategy with null values (null) sho
        | 0   | 1   |
        | 1   | 1   |
 
-Scenario: Running an exhaustive combination strategy with a string and a numeric field should be successful
+Scenario: Running an exhaustive combination strategy with a string and an integer field should be successful
      Given the following fields exist:
        | foo |
        | bar |
        And foo is of type "string"
        And foo is anything but null
-       And bar is of type "numeric"
+       And bar is of type "integer"
        And bar is anything but null
        And foo is in set:
          | "x" |
@@ -281,6 +318,27 @@ Scenario: Running an exhaustive combination strategy with a string and a numeric
        | "y" | 0   |
        | "x" | 1   |
        | "y" | 1   |
+
+Scenario: Running an exhaustive combination strategy with a string and a decimal field should be successful
+  Given the following fields exist:
+    | foo |
+    | bar |
+    And foo is of type "string"
+    And foo is anything but null
+    And bar is of type "decimal"
+    And bar is anything but null
+    And foo is in set:
+      | "x" |
+      | "y" |
+    And bar is in set:
+      | 0 |
+      | 1 |
+  Then the following data should be generated:
+    | foo | bar |
+    | "x" | 0   |
+    | "y" | 0   |
+    | "x" | 1   |
+    | "y" | 1   |
 
 Scenario: Running an exhaustive combination strategy with a string and a temporal field should be successful
      Given the following fields exist:
@@ -303,26 +361,47 @@ Scenario: Running an exhaustive combination strategy with a string and a tempora
        | "x" | 2010-12-31T23:59:00.000 |
        | "y" | 2010-12-31T23:59:00.000 |
 
-Scenario: Running an exhaustive combination strategy with a numeric and a temporal field should be successful
+Scenario: Running an exhaustive combination strategy with an integer and a temporal field should be successful
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "numeric"
+       And foo is of type "integer"
        And foo is anything but null
        And bar is of type "temporal"
        And bar is anything but null
        And foo is in set:
-         | 500 |
-         | 1.1 |
+         | 500  |
+         | 1    |
        And bar is in set:
          | 2010-01-01T00:00:00.000 |
          | 2010-12-31T23:59:00.000 |
      Then the following data should be generated:
-       | foo | bar                     |
-       | 500 | 2010-01-01T00:00:00.000 |
-       | 1.1 | 2010-01-01T00:00:00.000 |
-       | 500 | 2010-12-31T23:59:00.000 |
-       | 1.1 | 2010-12-31T23:59:00.000 |
+       | foo  | bar                     |
+       | 500  | 2010-01-01T00:00:00.000 |
+       | 1    | 2010-01-01T00:00:00.000 |
+       | 500  | 2010-12-31T23:59:00.000 |
+       | 1    | 2010-12-31T23:59:00.000 |
+
+Scenario: Running an exhaustive combination strategy with a decimal and a temporal field should be successful
+  Given the following fields exist:
+    | foo |
+    | bar |
+    And foo is of type "decimal"
+    And foo is anything but null
+    And bar is of type "temporal"
+    And bar is anything but null
+    And foo is in set:
+      | 500 |
+      | 1.1 |
+    And bar is in set:
+      | 2010-01-01T00:00:00.000 |
+      | 2010-12-31T23:59:00.000 |
+  Then the following data should be generated:
+    | foo | bar                     |
+    | 500 | 2010-01-01T00:00:00.000 |
+    | 1.1 | 2010-01-01T00:00:00.000 |
+    | 500 | 2010-12-31T23:59:00.000 |
+    | 1.1 | 2010-12-31T23:59:00.000 |
 
   Scenario: Running an exhaustive combination strategy across five fields should be successful
     Given the following fields exist:
@@ -331,15 +410,15 @@ Scenario: Running an exhaustive combination strategy with a numeric and a tempor
       | foo3 |
       | foo4 |
       | foo5 |
-    And foo1 is of type "numeric"
+    And foo1 is of type "integer"
     And foo1 is anything but null
-    And foo2 is of type "numeric"
+    And foo2 is of type "integer"
     And foo2 is anything but null
-    And foo3 is of type "numeric"
+    And foo3 is of type "integer"
     And foo3 is anything but null
-    And foo4 is of type "numeric"
+    And foo4 is of type "integer"
     And foo4 is anything but null
-    And foo5 is of type "numeric"
+    And foo5 is of type "integer"
     And foo5 is anything but null
     And foo1 is in set:
       | 1 |
@@ -397,11 +476,11 @@ Scenario: Running an exhaustive combination strategy across three fields with fi
        | foo1 |
        | foo2 |
        | foo3 |
-       And foo1 is of type "numeric"
+       And foo1 is of type "integer"
        And foo1 is anything but null
-       And foo2 is of type "numeric"
+       And foo2 is of type "integer"
        And foo2 is anything but null
-       And foo3 is of type "numeric"
+       And foo3 is of type "integer"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -555,11 +634,11 @@ Scenario: Running an exhaustive combination strategy across fields with an uneve
        | foo1 |
        | foo2 |
        | foo3 |
-       And foo1 is of type "numeric"
+       And foo1 is of type "integer"
        And foo1 is anything but null
-       And foo2 is of type "numeric"
+       And foo2 is of type "integer"
        And foo2 is anything but null
-       And foo3 is of type "numeric"
+       And foo3 is of type "integer"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -591,16 +670,16 @@ Scenario: Running an exhaustive combination strategy across fields with an uneve
        | 1    | 22   | 13   |
        | 1    | 22   | 14   |
 
-Scenario: Running an exhaustive combination strategy across fields with a duplicate numeric data option in a field should be successful
+Scenario: Running an exhaustive combination strategy across fields with a duplicate integer data option in a field should be successful
      Given the following fields exist:
        | foo1 |
        | foo2 |
        | foo3 |
-       And foo1 is of type "numeric"
+       And foo1 is of type "integer"
        And foo1 is anything but null
-       And foo2 is of type "numeric"
+       And foo2 is of type "integer"
        And foo2 is anything but null
-       And foo3 is of type "numeric"
+       And foo3 is of type "integer"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -622,7 +701,7 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | 1    | 20   | 13   |
        | 1    | 20   | 14   |
 
-Scenario: Running an exhaustive combination strategy across fields with a duplicate data option in different formats (numeric & string) in a field should be successful
+Scenario: Running an exhaustive combination strategy across fields with a duplicate data option in different formats (integer & string) in a field should be successful
      Given the following fields exist:
        | foo1 |
        | foo2 |
@@ -667,7 +746,7 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
        | foo1 |
        | foo2 |
        | foo3 |
-       And foo1 is of type "numeric"
+       And foo1 is of type "integer"
        And foo1 is anything but null
        And foo2 is of type "string"
        And foo2 is anything but null
@@ -728,7 +807,7 @@ Scenario: Running an exhaustive combination strategy that includes an "if" state
        | foo3 |
        And foo1 is of type "string"
        And foo1 is anything but null
-       And foo2 is of type "numeric"
+       And foo2 is of type "integer"
        And foo2 is anything but null
        And foo3 is of type "string"
        And foo3 is anything but null

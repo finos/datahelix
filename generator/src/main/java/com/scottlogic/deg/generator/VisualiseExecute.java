@@ -13,9 +13,10 @@ import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class VisualiseExecute implements Runnable {
     private final FieldSpecMerger fieldSpecMerger;
     private final Path outputPath;
     private final ProfileReader profileReader;
+    private final ProfileSchemaValidator profileSchemaValidator;
     private final VisualisationConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
@@ -47,6 +49,7 @@ public class VisualiseExecute implements Runnable {
                             FieldSpecMerger fieldSpecMerger,
                             @Named("outputPath") Path outputPath,
                             ProfileReader profileReader,
+                            ProfileSchemaValidator profileSchemaValidator,
                             VisualisationConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
@@ -56,16 +59,17 @@ public class VisualiseExecute implements Runnable {
         this.configSource = configSource;
         this.outputPath = outputPath;
         this.profileReader = profileReader;
+        this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;
     }
 
     @Override
     public void run() {
-
-        ValidationResult validationResult = validator.validateCommandLine(
-            configSource.overwriteOutputFiles(), outputPath);
-        if (!validationResult.isValid()) {
+        ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
             errorReporter.display(validationResult);
+            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 

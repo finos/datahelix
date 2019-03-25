@@ -23,7 +23,7 @@ anyOf ::= '{' '"' 'anyOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 allOf ::= '{' '"' 'allOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 if    ::= '{' '"' 'if' '"' ':' constraint ',' '"' 'then' '"' ':' constraint ( ',' '"' 'else' '"' ':' constraint )? '}'
 
-ofType   ::= '"' 'ofType' '"' ',' '"' 'value' '"' ':' '"' ( 'numeric' | 'string' | 'temporal' ) '"'
+ofType   ::= '"' 'ofType' '"' ',' '"' 'value' '"' ':' '"' ( 'decimal' | 'integer' | 'string' | 'temporal' ) '"'
 
 formattedAs ::= '"' 'formattedAs' '"' ',' '"' 'value' '"' ':' stringFormatPattern
 
