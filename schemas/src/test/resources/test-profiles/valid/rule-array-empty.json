@@ -1,0 +1,13 @@
+{
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ],
+  "schemaVersion": "0.1",
+  "rules": [
+  ]
+}

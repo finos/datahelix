@@ -6,13 +6,14 @@ import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
-import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -26,6 +27,7 @@ public class GenerateExecute implements Runnable {
     private final OutputTarget outputTarget;
     private final ProfileReader profileReader;
     private final ProfileValidator profileValidator;
+    private final ProfileSchemaValidator profileSchemaValidator;
     private final ProfileValidationReporter validationReporter;
 
     @Inject
@@ -37,6 +39,7 @@ public class GenerateExecute implements Runnable {
                            ConfigValidator configValidator,
                            ErrorReporter errorReporter,
                            ProfileValidator profileValidator,
+                           ProfileSchemaValidator profileSchemaValidator,
                            ProfileValidationReporter validationReporter) {
         this.config = config;
         this.profileReader = profileReader;
@@ -44,6 +47,7 @@ public class GenerateExecute implements Runnable {
         this.configSource = configSource;
         this.outputTarget = outputTarget;
         this.configValidator = configValidator;
+        this.profileSchemaValidator = profileSchemaValidator;
         this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
         this.validationReporter = validationReporter;
@@ -52,9 +56,10 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
         ValidationResult validationResult = configValidator.preProfileChecks(config, configSource);
-
-        if (!validationResult.isValid()) {
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
             errorReporter.display(validationResult);
+            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 
@@ -85,4 +90,5 @@ public class GenerateExecute implements Runnable {
             .anyMatch(alert ->
                 alert.getCriticality().equals(Criticality.ERROR));
     }
+
 }

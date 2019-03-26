@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CucumberTestState {
     public GenerationConfig.DataGenerationType dataGenerationType;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
-    public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT;
+    public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.REDUCTIVE;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.

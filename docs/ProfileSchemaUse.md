@@ -1,8 +1,8 @@
 # DataHelix Profile Schema Usage
 
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file `datahelix.schema.json` in the `json` directory.
+The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../schemas/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../schemas/src/main/resources/profileschema/0.1/) directory.
 
-The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [datahelix.profile.bnf](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
+The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [`datahelix.profile.bnf`](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
 
 ## JetBrains IntelliJ
 
@@ -26,6 +26,10 @@ now when you open a json file from the `json` directory in IntelliJ, it will be 
 
 
 ## Microsoft Visual Studio Code
+
+**_Although Visual Studio Code appears to validate the profile json files against the schema, it incorrectly shows some profile files as valid when there are syntactic errors in them._**
+
+**_For this reason the use of Visual Stuido Code is not recommended for DataHelix development._**
 
 to enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
 
@@ -55,3 +59,33 @@ to do this:
 1. if the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
 
 
+## Schema Validation using library
+
+to validate a DataHelix Profile json file against the schema the `schema.jar` file needs to be included in the project:
+
+to include the schema.jar file in a maven project add the following dependency: 
+```
+<dependencies>
+    <dependency>
+        <groupId>com.scottlogic.deg</groupId>
+        <artifactId>schemas</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+    .
+    .
+    .
+</dependencies>
+```
+
+then create an instance of the [`ProfileValidator`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/v0_1/ProfileValidator.java) object and call the validateProfile() method passing in an `java.io.InputStream` that contains the profile data to be validated.
+
+an example of calling the validator:
+
+```java
+File profileFile = new File("path/to/profile.json");
+InputStream profileStream = new FileInputStream(profileFile);
+ValidationResult result = profileValidator.validateProfile(profileStream);
+```
+This will return a [`ValidationResult`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/common/ValidationResult.java) object which contains a list of error messages found during validation.
+
+if the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check whether validation was successful.

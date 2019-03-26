@@ -8,13 +8,13 @@ import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
 import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -40,8 +40,9 @@ public class GenerateExecuteTests {
     private ValidationResult validationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
     private ProfileValidationReporter validationReporter = mock(ProfileValidationReporter.class);
+    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
 
-    private GenerateExecute excecutor = new GenerateExecute(
+    private GenerateExecute executor = new GenerateExecute(
         config,
         profileReader,
         generationEngine,
@@ -50,6 +51,7 @@ public class GenerateExecuteTests {
         configValidator,
         errorReporter,
         profileValidator,
+        mockProfileSchemaValidator,
         validationReporter);
 
     @Test
@@ -59,7 +61,7 @@ public class GenerateExecuteTests {
         when(validationResult.isValid()).thenReturn(false);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(errorReporter, times(1)).display(validationResult);
@@ -78,7 +80,7 @@ public class GenerateExecuteTests {
         when(validationResult.isValid()).thenReturn(true);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(profileReader, times(1)).read(testFile.toPath());
@@ -98,7 +100,7 @@ public class GenerateExecuteTests {
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(validationReporter, times(1)).output(any());
@@ -120,7 +122,7 @@ public class GenerateExecuteTests {
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
 
         //Act
-        excecutor.run();
+        executor.run();
 
         //Assert
         verify(validationReporter, times(1)).output(any());

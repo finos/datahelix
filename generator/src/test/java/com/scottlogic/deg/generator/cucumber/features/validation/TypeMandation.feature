@@ -45,7 +45,7 @@ Scenario: An anyOf constraint whose branches all satisfy type mandation should a
       """
       { "anyOf": [
         { "field": "user_id", "is": "ofType", "value": "string" },
-        { "field": "user_id", "is": "ofType", "value": "numeric" }
+        { "field": "user_id", "is": "ofType", "value": "integer" }
       ]}
       """
   Then the profile should be considered valid
@@ -66,7 +66,7 @@ Scenario: An if constraint should be able to satisfy type mandation
     And there is a constraint:
       """
       { "if": { "not": { "field": "user_id", "is": "ofType", "value": "string" } },
-        "then": { "field": "user_id", "is": "ofType", "value": "numeric" } }
+        "then": { "field": "user_id", "is": "ofType", "value": "integer" } }
       """
   Then the profile should be considered valid
 

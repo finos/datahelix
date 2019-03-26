@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
-import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
+import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -20,12 +20,12 @@ import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraint
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
-import com.scottlogic.deg.generator.inputs.validation.*;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
+import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -37,6 +37,8 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidatorLeadPony;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -70,6 +72,7 @@ public class BaseModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
+        bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
@@ -92,6 +95,7 @@ public class BaseModule extends AbstractModule {
 
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
+
     }
 
     private void bindAllCommandLineTypes() {

@@ -1,19 +1,22 @@
 package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.google.inject.name.Named;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
-import com.scottlogic.deg.generator.validators.ValidationResult;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
+import com.scottlogic.deg.schemas.common.ValidationResult;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,8 +36,9 @@ public class VisualiseExecute implements Runnable {
     private final ErrorReporter errorReporter;
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
-    private final OutputTarget outputTarget;
+    private final Path outputPath;
     private final ProfileReader profileReader;
+    private final ProfileSchemaValidator profileSchemaValidator;
     private final VisualisationConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
@@ -43,8 +47,9 @@ public class VisualiseExecute implements Runnable {
                             ErrorReporter errorReporter,
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
-                            OutputTarget outputTarget,
+                            @Named("outputPath") Path outputPath,
                             ProfileReader profileReader,
+                            ProfileSchemaValidator profileSchemaValidator,
                             VisualisationConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
@@ -52,18 +57,19 @@ public class VisualiseExecute implements Runnable {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.configSource = configSource;
-        this.outputTarget = outputTarget;
+        this.outputPath = outputPath;
         this.profileReader = profileReader;
+        this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;
     }
 
     @Override
     public void run() {
-
-        ValidationResult validationResult = validator.validateCommandLine(
-            configSource.overwriteOutputFiles(), outputTarget);
-        if (!validationResult.isValid()) {
+        ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
             errorReporter.display(validationResult);
+            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 

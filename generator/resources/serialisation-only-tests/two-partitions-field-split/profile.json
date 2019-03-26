@@ -136,7 +136,7 @@
 		"constraints": [{
 			"field": "EventType",
 			"is": "ofType",
-			"value": "numeric"
+			"value": "integer"
 		},{
 			"field": "EventType",
 			"is": "lessThan",

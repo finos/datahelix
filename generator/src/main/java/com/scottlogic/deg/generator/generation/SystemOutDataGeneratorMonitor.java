@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
-import com.scottlogic.deg.generator.walker.reductive.FixedField;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +26,8 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
     }
 
     @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
-        System.out.println(
-            String.format(
-                "%s %s",
-                lastFixedField.getField().name,
-                fieldSpecForValuesInLastFixedField.toString()));
+    public void rowSpecEmitted(RowSpec rowSpec) {
+        System.out.println("RowSpec emitted");
     }
 
     @Override
@@ -45,17 +40,17 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: Unable to step further %s ",
-                reductiveState.getFixedFieldsExceptLast().size(),
+                reductiveState.getFieldValues().size(),
                 reductiveState.toString(true)));
     }
 
     @Override
-    public void noValuesForField(ReductiveState reductiveState) {
+    public void noValuesForField(ReductiveState reductiveState, Field field) {
         System.out.println(
             String.format(
                 "%d: No values for field %s: %s ",
-                reductiveState.getFixedFieldsExceptLast().size(),
-                reductiveState.getLastFixedField().getField().name,
+                reductiveState.getFieldValues().size(),
+                field,
                 reductiveState.toString(true)));
     }
 
@@ -69,7 +64,7 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
         System.out.println(
             String.format(
                 "%d: Unable to emit row, some FieldSpec's are Empty: %s",
-                reductiveState.getFixedFieldsExceptLast().size(),
+                reductiveState.getFieldValues().size(),
                 Objects.toString(emptyFieldSpecs)));
     }
 }

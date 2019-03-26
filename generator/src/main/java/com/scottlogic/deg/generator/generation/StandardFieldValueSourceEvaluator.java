@@ -4,9 +4,9 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.TemporalFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -92,13 +92,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? new NumericRestrictions()
             : fieldSpec.getNumericRestrictions();
 
-        int numericScale = getNumericScale(restrictions, fieldSpec.getGranularityRestrictions());
-
-        if ((restrictions.min == null && restrictions.max == null) || isFieldValueAnInteger(restrictions, numericScale)) {
-            return new IntegerFieldValueSource(
-                restrictions,
-                getBlacklist(fieldSpec));
-        }
+        int numericScale = getNumericScale(fieldSpec.getGranularityRestrictions());
 
         return new RealNumberFieldValueSource(
             restrictions,
@@ -106,28 +100,16 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             numericScale);
     }
 
-    private int getNumericScale(NumericRestrictions numericRestrictions, GranularityRestrictions granularityRestrictions) {
+    private int getNumericScale(GranularityRestrictions granularityRestrictions) {
+        //Note that the default granularity if not specified is 1e-20
+        final int maximumGranularity = 20;
+
         if (granularityRestrictions != null) {
-            return granularityRestrictions.getNumericScale();
+            int granularityScale = granularityRestrictions.getNumericScale();
+            return Math.min(granularityScale, maximumGranularity);
         }
 
-        if (numericRestrictions.min != null && numericRestrictions.max != null) {
-            return Math.max(numericRestrictions.min.getLimit().scale(), numericRestrictions.max.getLimit().scale());
-        }
-
-        NumericLimit<BigDecimal> numericLimit = numericRestrictions.min != null
-            ? numericRestrictions.min
-            : numericRestrictions.max;
-
-        return numericLimit != null ? numericLimit.getLimit().scale() : 0;
-    }
-
-    private boolean isFieldValueAnInteger(NumericRestrictions numericRestrictions, int numericScale) {
-        if (numericScale > 0) {
-            return false;
-        }
-
-        return numericRestrictions.areLimitValuesInteger();
+        return maximumGranularity;
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {

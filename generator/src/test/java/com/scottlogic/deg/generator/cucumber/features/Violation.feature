@@ -3,7 +3,6 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Background:
     Given there is a field foo
       And the data requested is violating
-      And the walker type is REDUCTIVE
       And the generator can generate at most 5 rows
 
 Scenario: Running the generator in violate mode for not equal to is successful
@@ -30,28 +29,39 @@ Scenario: Running the generator in violate mode for multiple constraints with st
     And foo is anything but equal to "hello"
     And the generator can generate at most 10 rows
   Then the following data should be included in what is generated:
-    | foo                     |
-    | "hello"                 |
-    | 0                       |
-    | -2147483648             |
-    | 2147483646              |
-    | 1900-01-01T00:00:00.000 |
-    | 2100-01-01T00:00:00.000 |
-    | null                    |
+    | foo                                          |
+    | "hello"                                      |
+    | 0                                            |
+    | -100000000000000000000.00000000000000000000  |
+    | -99999999999999999999.99999999999999999999   |
+    | 99999999999999999999.99999999999999999999    |
+    | 100000000000000000000.00000000000000000000   |
+    | 1900-01-01T00:00:00.000                      |
+    | 2100-01-01T00:00:00.000                      |
+    | null                                         |
 
 ### Random
 
-Scenario Outline: The generator produces violating (incorrect type) data in random mode for all types
-  Given foo is of type "<type>"
+Scenario: The generator produces violating (incorrect type) data in random mode for type 'String'
+  Given foo is of type "string"
     And the generation strategy is random
     And the data requested is violating
   Then 5 rows of data are generated
-    And foo contains anything but <type> data
-  Examples:
-    | type    |
-    | string  |
-    | temporal|
-    | numeric |
+    And foo contains anything but string data
+
+Scenario: The generator produces violating (incorrect type) data in random mode for type 'Temporal'
+  Given foo is of type "temporal"
+    And the generation strategy is random
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but temporal data
+
+Scenario: The generator produces violating (incorrect type) data in random mode for type 'Decimal'
+  Given foo is of type "decimal"
+    And the generation strategy is random
+    And the data requested is violating
+  Then 5 rows of data are generated
+    And foo contains anything but numeric data
 
 Scenario: The generator produces violating 'Null' data in random mode
   Given foo is null
@@ -71,8 +81,8 @@ Scenario: The generator produces violating (not type) 'Temporal' data in random 
     And foo contains temporal data
     And foo contains temporal values after or at 2019-01-01T00:00:00.000
 
-Scenario: The generator produces violating (not type) 'Numeric' data in random mode
-  Given foo is of type "numeric"
+Scenario: The generator produces violating (not type) 'Decimal' data in random mode
+  Given foo is of type "decimal"
     And foo is anything but null
     And the generation strategy is random
     And foo is less than 10

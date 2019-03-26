@@ -6,8 +6,7 @@
 	"rules": [
 		{ "constraints": [
 			{ "not": { "field": "an_integer", "is": "null" } },
-			{ "field": "an_integer", "is": "ofType", "value": "numeric" },
-			{ "field": "an_integer", "is": "granularTo", "value": 1 },
+			{ "field": "an_integer", "is": "ofType", "value": "integer" },
 
 			{ "field": "an_integer", "is": "greaterThanOrEqualTo", "value": 1 },
 			{ "field": "an_integer", "is": "lessThanOrEqualTo", "value": 4 },

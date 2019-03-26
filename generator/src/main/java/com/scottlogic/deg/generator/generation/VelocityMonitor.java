@@ -4,31 +4,37 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.walker.reductive.FixedField;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
-    private String startedGenerating;
+    private static final BigDecimal millisecondsInSecond = BigDecimal.valueOf(1_000);
+    private static final BigDecimal nanoSecondsInMillisecond = BigDecimal.valueOf(1_000_000);
+
+    private OffsetDateTime startedGenerating;
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
     private Timer timer = new Timer(true);
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
 
     @Override
     public void generationStarting(GenerationConfig generationConfig) {
-        startedGenerating = simpleDateFormat.format( new Date());
+        startedGenerating = OffsetDateTime.now(ZoneOffset.UTC);
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
 
-        System.out.println("Generation started at: " + startedGenerating + "\n");
+        System.out.println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
         System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
         System.out.println("---------------+---------------------+---------------");
 
@@ -40,7 +46,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
             }
         }, 1000L, 1000L);
     }
-
+    
     @Override
     public void rowEmitted(GeneratedObject row) {
         rowsSinceLastSample++;
@@ -49,15 +55,44 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
     public void endGeneration() {
-        reportVelocity(0);
-        System.out.println("\n\nGeneration finished at: " + simpleDateFormat.format(new Date()));
+        timer.cancel();
+
+        OffsetDateTime finished = OffsetDateTime.now(ZoneOffset.UTC);
+        Duration totalDuration = Duration.between(startedGenerating, finished);
+
+        //Get the total duration of the generator in milliseconds
+        BigDecimal nanoSecondsAsMilliseconds = BigDecimal
+            .valueOf(totalDuration.getNano())
+            .divide(nanoSecondsInMillisecond, RoundingMode.DOWN); //get the number of nanoSeconds in the duration and divide to convert them into milliseconds
+        BigDecimal secondsAsMilliseconds = BigDecimal
+            .valueOf(totalDuration.getSeconds()) //get the total number of seconds and multiply them by 1000 to convert them to milliseconds
+            .multiply(millisecondsInSecond);
+        BigDecimal totalMilliseconds = nanoSecondsAsMilliseconds.add(secondsAsMilliseconds);
+
+        //Work out the average velocity for the generator as a whole by using the formula
+        // (<rowsEmitted>/<totalMilliseconds>)*1000 = <rowsEmitted>/second
+        BigInteger averageRowsPerSecond = new BigDecimal(rowsEmitted)
+            .setScale(2, RoundingMode.UNNECESSARY)
+            .divide(totalMilliseconds, RoundingMode.HALF_UP)
+            .multiply(millisecondsInSecond).toBigInteger();
+
+        System.out.println(String.format(
+            "%-14s | %-19d | Finished",
+            rowsEmitted.toString(),
+            averageRowsPerSecond
+        ));
+
+        System.out.println(
+            String.format(
+                "\nGeneration finished at: %s",
+                timeFormatter.format(finished)));
     }
 
-    public void reportVelocity(long rowsSinceLastSample) {
+    private void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
-        System.out.print(
+        System.out.println(
         String.format(
-            "%-14s | %-19d | %s \n",
+            "%-14s | %-19d | %s",
             rowsEmitted.toString(),
             rowsSinceLastSample,
             trend)
@@ -66,7 +101,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void rowSpecEmitted(FixedField lastFixedField, FieldSpec fieldSpecForValuesInLastFixedField, RowSpec rowSpecWithAllValuesForLastFixedField) {
+    public void rowSpecEmitted(RowSpec rowSpec) {
 
     }
 
@@ -81,7 +116,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
 
     @Override
-    public void noValuesForField(ReductiveState reductiveState) {
+    public void noValuesForField(ReductiveState reductiveState, Field field) {
 
     }
 

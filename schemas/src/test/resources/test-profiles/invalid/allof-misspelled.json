@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "constraints": [
+        {
+          "nallOf": [
+            {
+              "field": "field1",
+              "is": "equalTo",
+              "value": "%ggg"
+            },
+            {
+              "field": "field1",
+              "is": "shorterThan",
+              "value": 19
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

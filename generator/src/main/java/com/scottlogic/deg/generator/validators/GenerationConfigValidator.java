@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.schemas.common.ValidationResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +57,6 @@ public class GenerationConfigValidator implements ConfigValidator {
                 checkGenerateOutputTarget(errorMessages, configSource, (FileOutputTarget) outputTarget);
             }
         }
-
         return new ValidationResult(errorMessages);
     }
 
@@ -92,13 +92,13 @@ public class GenerationConfigValidator implements ConfigValidator {
     private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
                                            GenerationConfigSource configSource,
                                            FileOutputTarget outputTarget) throws IOException {
-        if (fileUtils.isDirectory(outputTarget)) {
+        if (fileUtils.isDirectory(outputTarget.getFilePath())) {
             errorMessages.add(
                 "Invalid Output - target is a directory, please use a different output filename");
-        } else if (!configSource.overwriteOutputFiles() && fileUtils.exists(outputTarget)) {
+        } else if (!configSource.overwriteOutputFiles() && fileUtils.exists(outputTarget.getFilePath())) {
             errorMessages.add(
                 "Invalid Output - file already exists, please use a different output filename or use the --replace option");
-        } else if (!fileUtils.exists(outputTarget)) {
+        } else if (!fileUtils.exists(outputTarget.getFilePath())) {
             Path parent = outputTarget.getFilePath().toAbsolutePath().getParent();
             if (!fileUtils.createDirectories(parent)) {
                 errorMessages.add(
@@ -111,13 +111,13 @@ public class GenerationConfigValidator implements ConfigValidator {
                                                     GenerationConfigSource configSource,
                                                     FileOutputTarget outputTarget,
                                                     int ruleCount) throws IOException {
-        if (!fileUtils.exists(outputTarget)) {
+        if (!fileUtils.exists(outputTarget.getFilePath())) {
             fileUtils.createDirectories(outputTarget.getFilePath());
-        } else if (!fileUtils.isDirectory(outputTarget)) {
+        } else if (!fileUtils.isDirectory(outputTarget.getFilePath())) {
             errorMessages
                 .add("Invalid Output - not a directory, please enter a valid directory name");
         } else if (!configSource.overwriteOutputFiles() && !fileUtils
-            .isDirectoryEmpty(outputTarget, ruleCount)) {
+            .isDirectoryEmpty(outputTarget.getFilePath(), ruleCount)) {
             errorMessages.add(
                 "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --replace option");
         }

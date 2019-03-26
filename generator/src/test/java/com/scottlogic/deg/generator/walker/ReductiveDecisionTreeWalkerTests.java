@@ -1,11 +1,19 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.restrictions.NullRestrictions;
+import com.scottlogic.deg.generator.restrictions.Nullness;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
@@ -13,7 +21,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,27 +34,34 @@ import static org.mockito.Mockito.*;
 class ReductiveDecisionTreeWalkerTests {
     private TreeConstraintNode rootNode;
     private DecisionTree tree;
-    private FixedFieldBuilder fixedFieldBuilder;
+    private ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private ReductiveDecisionTreeWalker walker;
     private FixFieldStrategy fixFieldStrategy;
+    private FieldSpecValueGenerator fieldSpecValueGenerator;
+    private Field field1 = new Field("field1");
+    private Field field2 = new Field("field2");
 
     @BeforeEach
     public void beforeEach(){
-        ProfileFields fields = new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")));
+        ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
-        ReductiveTreePruner treeReducer = mock(ReductiveTreePruner.class);
-        when(treeReducer.pruneConstraintNode(eq(rootNode), any(FixedField.class))).thenReturn(Merged.of(rootNode));
+        ReductiveTreePruner treePruner = mock(ReductiveTreePruner.class);
+        when(treePruner.pruneConstraintNode(eq(rootNode), any())).thenReturn(Merged.of(rootNode));
 
-        fixedFieldBuilder = mock(FixedFieldBuilder.class);
+        reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
+        fieldSpecValueGenerator = mock(FieldSpecValueGenerator.class);
         fixFieldStrategy = mock(FixFieldStrategy.class);
+        when(fixFieldStrategy.getNextFieldToFix(any(), any())).thenReturn(field1, field2);
+
 
         walker = new ReductiveDecisionTreeWalker(
             new NoOpIterationVisualiser(),
-            fixedFieldBuilder,
+            reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),
-            treeReducer,
-            mock(ReductiveRowSpecGenerator.class)
+            treePruner,
+            mock(ReductiveRowSpecGenerator.class),
+            fieldSpecValueGenerator
         );
     }
 
@@ -53,11 +70,11 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
-        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(null);
+        when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(eq(rootNode), any())).thenReturn(Optional.empty());
 
         List<RowSpec> result = walker.walk(tree, fixFieldStrategy).collect(Collectors.toList());
 
-        verify(fixedFieldBuilder).findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy));
+        verify(reductiveFieldSpecBuilder).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
     }
 
@@ -67,21 +84,17 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        FixedField firstFixedField = fixedField("field1", 123);
-        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(firstFixedField, (FixedField)null);
+        DataBag dataBag = DataBag.startBuilding().set(field1, "yes", DataBagValueSource.Empty).build();
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
+                .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
+            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
+        when(fieldSpecValueGenerator.generate(any(), any())).thenReturn(Stream.of(dataBag));
+
+        when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 
         List<RowSpec> result = walker.walk(tree, fixFieldStrategy).collect(Collectors.toList());
 
-        verify(fixedFieldBuilder, times(2)).findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy));
+        verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
-    }
-
-    private static FixedField fixedField(String fieldName, Object... values) {
-        FixedField mockFixedField = mock(FixedField.class, fieldName);
-
-        when(mockFixedField.getField()).thenReturn(new Field(fieldName));
-        when(mockFixedField.getStream()).thenReturn(Stream.of(values));
-
-        return mockFixedField;
     }
 }
