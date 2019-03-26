@@ -8,13 +8,13 @@ import com.scottlogic.deg.generator.inputs.validation.*;
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
     private final ProfileContradictionsValidator contradictionCheckingValidator;
-    private final ProfileFieldUntypedValidator untypedValidator;
+    private final TypingRequiredPerFieldValidator untypedValidator;
 
     @Inject
     public ProfileValidatorProvider(
         GenerationConfigSource configSource,
         ProfileContradictionsValidator contradictionCheckingValidator,
-        ProfileFieldUntypedValidator untypedValidator) {
+        TypingRequiredPerFieldValidator untypedValidator) {
 
         this.configSource = configSource;
         this.contradictionCheckingValidator = contradictionCheckingValidator;

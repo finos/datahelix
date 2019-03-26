@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
  *
  * see {@link https://github.com/ScottLogic/datahelix/issues/767 #767} for more details
  */
-public class ProfileFieldUntypedValidator implements ProfileValidator {
+public class TypingRequiredPerFieldValidator implements ProfileValidator {
     private final DecisionTreeFactory decisionTreeFactory;
 
     @Inject
-    public ProfileFieldUntypedValidator(DecisionTreeFactory decisionTreeFactory) {
+    public TypingRequiredPerFieldValidator(DecisionTreeFactory decisionTreeFactory) {
         this.decisionTreeFactory = decisionTreeFactory;
     }
 
