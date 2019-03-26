@@ -108,7 +108,7 @@ public class GeneralTestStep {
         Assert.assertThat(
             "Expected invalid profile",
             this.cucumberTestHelper.getThrownExceptions(),
-            hasItem( //TODO: Stop catching generic errors! We should only be looking for InvalidProfileException here
+            hasItem( //TODO: #802: Stop catching generic errors! We should only be looking for InvalidProfileException here
                 either((Matcher)isA(InvalidProfileException.class))
                     .or(isA(JsonParseException.class))
                     .or(isA(IllegalArgumentException.class))
