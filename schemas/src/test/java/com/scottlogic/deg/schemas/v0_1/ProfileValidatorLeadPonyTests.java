@@ -148,14 +148,14 @@ class ProfileValidatorLeadPonyTests {
     }
 
     @Test
-    void validateProfile_temporal_success() {
-        ValidationResult result = validate("/test-profiles/profile-test-simple-temporals.json");
+    void validateProfile_datetime_success() {
+        ValidationResult result = validate("/test-profiles/profile-test-simple-datetimes.json");
         Assert.assertTrue("Profile should be valid", result.isValid());
     }
 
     @Test
-    void validateProfile_temporal_fails() {
-        ValidationResult result = validate("/test-profiles/profile-test-simple-temporals-errors.json");
+    void validateProfile_datetime_fails() {
+        ValidationResult result = validate("/test-profiles/profile-test-simple-datetimes-errors.json");
         Assert.assertFalse("Profile should not be valid", result.isValid());
     }
 }

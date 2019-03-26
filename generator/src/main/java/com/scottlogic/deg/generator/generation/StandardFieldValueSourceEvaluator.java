@@ -46,7 +46,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
-            validSources.add(getTemporalSource(fieldSpec));
+            validSources.add(getDateTimeSource(fieldSpec));
         }
 
         if (mayBeNull(fieldSpec)){
@@ -141,7 +141,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
     }
 
-    private FieldValueSource getTemporalSource(FieldSpec fieldSpec) {
+    private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
         DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(

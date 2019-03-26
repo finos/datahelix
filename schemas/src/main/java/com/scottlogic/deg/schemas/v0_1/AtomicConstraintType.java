@@ -25,7 +25,7 @@ public enum AtomicConstraintType {
     ISLESSTHANCONSTANT("lessThan"),
     ISLESSTHANOREQUALTOCONSTANT("lessThanOrEqualTo"),
 
-    // Temporal
+    // DateTime
     ISAFTERCONSTANTDATETIME("after"),
     ISAFTEROREQUALTOCONSTANTDATETIME("afterOrAt"),
     ISBEFORECONSTANTDATETIME("before"),

@@ -22,7 +22,7 @@ public class DateTimeConstraintValidationMessages implements StandardValidationM
     public String getVerboseMessage() {
 
         return String.format(
-            "Temporal constraint with value %s has been applied. The range is %s.",
+            "DateTime constraint with value %s has been applied. The range is %s.",
             newValue,
             restriction.toString());
     }

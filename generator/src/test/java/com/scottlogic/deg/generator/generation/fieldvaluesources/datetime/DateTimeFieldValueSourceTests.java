@@ -327,7 +327,7 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void temporalGenerateAllValues_withNoMin_startsAtLocalDateTimeMin(){
+    public void datetimeGenerateAllValues_withNoMin_startsAtLocalDateTimeMin(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
         max.max = new DateTimeRestrictions.DateTimeLimit(LocalDateTime.MAX, false);
@@ -339,7 +339,7 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void temporalGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
+    public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions min = new DateTimeRestrictions();
         min.min = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
@@ -352,7 +352,7 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void temporalGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
+    public void datetimeGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
         max.max = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
