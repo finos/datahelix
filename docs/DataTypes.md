@@ -46,4 +46,4 @@ DateTimes are by default output per the user's locale, adjusted to their time zo
 
 ### DateTime granularity
 
-DateTimes currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
+DateTimes currently have a granularity of 1 millisecond. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
