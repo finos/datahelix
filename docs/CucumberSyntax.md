@@ -106,7 +106,7 @@ And there is a constraint:
 
 #### DateTime
 * _{field} contains datetime data_, executes the generator and asserts that _field_ contains either `null` or datetimes
-* _{field} contains anything but datetime data_, executes the generator and asserts that _field_ contains either `null` or data that is not datetime.
+* _{field} contains anything but datetime data_, executes the generator and asserts that _field_ contains either `null` or data that is not a datetime.
 * _{field} contains datetimes between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or datetimes between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains datetimes outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or datetimes outside _{min}_ and _{max}_.
 * _{field} contains datetimes before or at {before}_, executes the generator and asserts that _field_ contains either `null` or datetimes at or before _{before}_
