@@ -29,7 +29,9 @@ public class CucumberTestHelper {
     }
 
     public void runGenerationProcess() {
-        if (testState.generationHasAlreadyOccured) return;
+        if (testState.generationHasAlreadyOccured) {
+            return;
+        }
 
         try {
             Module concatenatedModule =
@@ -57,20 +59,16 @@ public class CucumberTestHelper {
             throw new RuntimeException("Gherkin error: Please specify the data strategy");
         }
 
-        if (this.generatorHasRun()) {
-            return testState.generatedObjects == null
-                ? new ArrayList<>()
-                : testState.generatedObjects;
+        if (!generatorHasRun()) {
+            runGenerationProcess();
         }
-
-        runGenerationProcess();
 
         return testState.generatedObjects == null
             ? new ArrayList<>()
             : testState.generatedObjects;
     }
 
-    public void runPreGenerationChecks() {
+    public void runChecksWithoutGeneratingData() {
         testState.disableGeneration();
         runGenerationProcess();
     }

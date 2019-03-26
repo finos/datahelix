@@ -50,7 +50,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public boolean getValidateProfile() {
-        return true;
+        return false;
     }
 
     @Override

@@ -89,7 +89,7 @@ public class GeneralTestStep {
 
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {
-        cucumberTestHelper.runPreGenerationChecks();
+        cucumberTestHelper.runChecksWithoutGeneratingData();
 
         List<String> errors = this.cucumberTestHelper
             .getProfileValidationErrors()
@@ -135,7 +135,7 @@ public class GeneralTestStep {
 
     @But("^field (.+?) should fail validation: \"(.+)\"$")
     public void fieldIsInvalidWithError(String fieldName, String expectedError) {
-        cucumberTestHelper.runPreGenerationChecks();
+        cucumberTestHelper.runChecksWithoutGeneratingData();
 
         List<String> errors = this.cucumberTestHelper
             .getProfileValidationErrorsForField(fieldName)
