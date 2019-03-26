@@ -96,7 +96,10 @@ public class CucumberTestHelper {
                 .map(Throwable::getMessage),
             testState.validationReporter
                 .getRecordedAlerts().stream()
-                .map(a -> a.getMessage().getVerboseMessage()));
+                .map(a -> String.format(
+                    "Field [%s]: %s",
+                    a.getField().name,
+                    a.getMessage().getVerboseMessage())));
     }
 
     public Stream<String> getProfileValidationErrorsForField(String fieldName){
