@@ -8,6 +8,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
 
 Scenario: Running the generator in violate mode for not equal to is successful
   Given foo is anything but equal to 8
+    And foo is of type "integer"
     And the generation strategy is full
   Then the following data should be generated:
     | foo  |

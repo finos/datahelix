@@ -241,6 +241,7 @@ Scenario: 'Null' with a contradicting not 'aValid' should only generate null
 
 Scenario: Not 'null' with a non contradicting 'greaterThan' should be successful
   Given foo is anything but null
+    And foo is of type "integer"
     And foo is greater than 1
     And the generator can generate at most 2 rows
   Then the following data should be generated:
@@ -250,6 +251,7 @@ Scenario: Not 'null' with a non contradicting 'greaterThan' should be successful
 
 Scenario: 'Null' with a contradicting 'greaterThan' should only generate null
   Given foo is null
+    And foo is of type "integer"
     And foo is greater than 1
   Then the following data should be generated:
     | foo  |
@@ -266,6 +268,7 @@ Scenario: 'Null' with a contradicting not 'greaterThan' should only generate nul
 
 Scenario: Not 'null' with a non contradicting 'greaterThanOrEqualTo' should be successful
   Given foo is anything but null
+    And foo is of type "integer"
     And foo is greater than or equal to 1
   And the generator can generate at most 2 rows
   Then the following data should be generated:
@@ -293,6 +296,7 @@ Scenario: 'Null' with a contradicting not 'greaterThanOrEqualTo' should only gen
 Scenario: Not 'null' with a non contradicting 'lessThan' should be successful
   Given foo is anything but null
     And foo is less than 1
+    And foo is of type "integer"
   And the generator can generate at most 2 rows
   Then the following data should be generated:
     | foo |
@@ -318,6 +322,7 @@ Scenario: 'Null' with a contradicting not 'lessThan' should only generate null
 @ignore #Relates to issue #594 - Reverse order of value generation when only upper-bound operators are provided. Counts up from minimum possible double
 Scenario: Not 'null' with a non contradicting 'lessThanOrEqualTo' should be successful
   Given foo is anything but null
+    And foo is of type "integer"
     And foo is less than or equal to 1
     And the generator can generate at most 2 rows
   Then the following data should be generated:
