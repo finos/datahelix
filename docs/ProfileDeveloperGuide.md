@@ -44,6 +44,11 @@
 
 5. [Presentational constraints](#Presentational-Constraints)
 
+6. [Profile Validation](#Profile-Validation)
+    1. [JetBrains IntelliJ](#JetBrains-IntelliJ)
+    2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
+    3. [Schema Validation using library](#Schema-Validation-using-library)
+
 
 # Profiles
 
@@ -432,3 +437,95 @@ Used by output serialisers where string output is required. `value` must be:
 * not `null` (formatting will not be applied for null values)
 
 See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
+
+# Profile Validation
+
+The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../schemas/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../schemas/src/main/resources/profileschema/0.1/) directory.
+
+The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [`datahelix.profile.bnf`](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
+
+## JetBrains IntelliJ
+
+To use the DataHelix profile JSON schema in IntelliJ we need to  set up the intellij editor to validate all json files under the `json` and/or `examples` directories against the `datahelix.schema.json` schema file.
+
+To setup IntelliJ to validate json files against the schema follow these steps:
+
+1. Open IntelliJ
+1. Select `File` -> `Settings` -> `Languages & Frameworks` -> `Schemas and DTDs'
+1. Select `JSON Schema Mappings`
+1. Press the `+` button to add a new schema mapping
+1. Give the mapping a name (e.g. `DataHelix Profile Schema`)
+1. For `Schema file or URL:` select the local schema file (e.g. `<project root>/datahelix/json/datahelix.schema.json`)
+1. Make sure the `Schema version:` is set to `JSON schema version 7`
+1. Press the `+` button to add a new mapping
+1. Select `Add Directory`
+1. Select the `json` directory
+1. Press okay
+
+Now when you open a json file from the `json` directory in IntelliJ, it will be automatically validated against the DataHelix profile schema.
+
+
+## Microsoft Visual Studio Code
+
+**_Although Visual Studio Code appears to validate the profile json files against the schema, it incorrectly shows some profile files as valid when there are syntactic errors in them._**
+
+**_For this reason the use of Visual Stuido Code is not recommended for DataHelix development._**
+
+To enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
+
+To do this:
+
+1. Click on the gear icon (<img src="../wikiimages/settingsicon.png" width="16" height="16">) at the bottom left of the screen and select `Settings`
+1. In the settings windows, click `Extensions` -> `JSON`
+1. You should see a section like this:
+    ```
+    Schemas
+    Associate schemas to JSON files in the current project
+    Edit in settings.json
+    ```
+1. Click on the `Edit in settings.json` link and VSCode will open the settings.json file.
+1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileWatch"` value with an appropriate value for your configuration):
+    ```
+      "json.schemas": [
+        {
+          "fileMatch": [
+            "<datahelix_projectroot>/*"
+          ],
+          "url": "file:///<datahelix_projectroot>/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
+        }
+      ]
+    ```
+    to verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
+1. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
+
+
+## Schema Validation using library
+
+To validate a DataHelix Profile json file against the schema the `schema.jar` file needs to be included in the project:
+
+To include the schema.jar file in a maven project add the following dependency: 
+```
+<dependencies>
+    <dependency>
+        <groupId>com.scottlogic.deg</groupId>
+        <artifactId>schemas</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+    .
+    .
+    .
+</dependencies>
+```
+
+Then create an instance of the [`ProfileValidator`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/v0_1/ProfileValidator.java) object and call the validateProfile() method passing in an `java.io.InputStream` that contains the profile data to be validated.
+
+An example of calling the validator:
+
+```java
+File profileFile = new File("path/to/profile.json");
+InputStream profileStream = new FileInputStream(profileFile);
+ValidationResult result = profileValidator.validateProfile(profileStream);
+```
+This will return a [`ValidationResult`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/common/ValidationResult.java) object which contains a list of error messages found during validation.
+
+If the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check whether validation was successful.
