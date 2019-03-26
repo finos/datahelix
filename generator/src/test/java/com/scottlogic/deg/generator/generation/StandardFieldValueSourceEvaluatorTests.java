@@ -104,7 +104,7 @@ public class StandardFieldValueSourceEvaluatorTests {
             max = new DateTimeLimit(LocalDateTime.MAX, false);
         }};
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.TEMPORAL
+            IsOfTypeConstraint.Types.DATETIME
         ));
         FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.Empty
             .withDateTimeRestrictions(datetimeRestrictions, fieldSpecSource)

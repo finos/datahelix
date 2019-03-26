@@ -165,7 +165,7 @@ class AtomicConstraintReaderLookup {
                             break;
 
                         case "datetime":
-                            type = IsOfTypeConstraint.Types.TEMPORAL;
+                            type = IsOfTypeConstraint.Types.DATETIME;
                             break;
 
                         case "numeric":

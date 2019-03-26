@@ -45,7 +45,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
             validSources.add(getDateTimeSource(fieldSpec));
         }
 

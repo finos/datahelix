@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
 
-    public final ValidationType validationType = ValidationType.TEMPORAL;
+    public final ValidationType validationType = ValidationType.DATETIME;
 
     private final List<ValidationAlert> alerts;
     private DateTimeRestrictions currentRestrictions;

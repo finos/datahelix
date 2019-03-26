@@ -29,7 +29,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
             return Optional.of(merging
                 .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.TEMPORAL),
+                    typeRestrictions.except(IsOfTypeConstraint.Types.DATETIME),
                     left.getFieldSpecSource().combine(right.getFieldSpecSource())));
         }
 
