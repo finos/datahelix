@@ -68,7 +68,7 @@ class ReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
         FixedField firstFixedField = fixedField("field1", 123);
-        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(firstFixedField, null);
+        when(fixedFieldBuilder.findNextFixedField(any(ReductiveState.class), eq(rootNode), eq(fixFieldStrategy))).thenReturn(firstFixedField, (FixedField)null);
 
         List<RowSpec> result = walker.walk(tree, fixFieldStrategy).collect(Collectors.toList());
 
