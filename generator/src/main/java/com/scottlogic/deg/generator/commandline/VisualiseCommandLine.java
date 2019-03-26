@@ -52,8 +52,8 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
     }
 
     @Override
-    public boolean disableSchemaValidation() {
-        return this.disableSchema;
+    public boolean isSchemaValidationEnabled() {
+        return !this.disableSchemaValidation;
     }
 
     public String getTitleOverride() {

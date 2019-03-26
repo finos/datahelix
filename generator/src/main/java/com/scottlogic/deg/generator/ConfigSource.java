@@ -11,7 +11,7 @@ public interface ConfigSource {
     boolean dontOptimise();
     Path getOutputPath();
     File getProfileFile();
-    boolean disableSchemaValidation();
+    boolean isSchemaValidationEnabled();
     boolean getValidateProfile();
     boolean overwriteOutputFiles();
 
