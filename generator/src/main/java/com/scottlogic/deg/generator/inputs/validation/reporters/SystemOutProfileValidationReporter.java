@@ -14,11 +14,18 @@ public class SystemOutProfileValidationReporter implements ProfileValidationRepo
                 hasErrors = true;
             }
 
-            System.out.println(String.format("Field %s: %s during %s Validation: %s",
-                alert.getField().toString(),
-                alert.getCriticality().toString(),
-                alert.getValidationType().toString(),
-                alert.getMessage().getVerboseMessage()));
+            if (alert.getField() != null) {
+                System.out.println(String.format("Field %s: %s during %s Validation: %s",
+                    alert.getField().toString(),
+                    alert.getCriticality().toString(),
+                    alert.getValidationType().toString(),
+                    alert.getMessage().getVerboseMessage()));
+            } else {
+                System.out.println(String.format("%s during %s Validation: %s",
+                    alert.getCriticality().toString(),
+                    alert.getValidationType().toString(),
+                    alert.getMessage().getVerboseMessage()));
+            }
         }
 
         if (hasErrors) {
