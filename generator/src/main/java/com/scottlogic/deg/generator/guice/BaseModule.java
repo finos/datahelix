@@ -72,6 +72,7 @@ public class BaseModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
+        bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
@@ -95,7 +96,6 @@ public class BaseModule extends AbstractModule {
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
 
-        bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorLeadPony.class);
     }
 
     private void bindAllCommandLineTypes() {

@@ -1,25 +1,27 @@
-package com.scottlogic.deg.generator.cucumber.utils;
+package com.scottlogic.deg.schemas.v0_1;
 
 import com.scottlogic.deg.schemas.common.ValidationResult;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Collections;
 
-public class CucumberProfileSchemaValidator implements ProfileSchemaValidator {
+public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
+
+    ValidationResult result = new ValidationResult(Collections.emptyList());
+
     @Override
     public ValidationResult validateProfile(File profileFile) {
-        return new ValidationResult(new ArrayList<>());
+        return result;
     }
 
     @Override
     public ValidationResult validateProfile(InputStream profileStream) {
-        return new ValidationResult(new ArrayList<>());
+        return result;
     }
 
     @Override
     public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
-        return new ValidationResult(new ArrayList<>());
+        return result;
     }
 }

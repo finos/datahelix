@@ -33,6 +33,11 @@ public abstract class CommandLineBase implements Runnable, ConfigSource {
         description = "Defines whether to overwrite/replace existing output files")
     boolean overwriteOutputFiles = false;
 
+    @CommandLine.Option(
+        names = { "--disable-schema-validation" },
+        description = "Disables schema validation")
+    boolean disableSchemaValidation = false;
+
     @Override
     public void run() {
         BaseModule container = new BaseModule(this);

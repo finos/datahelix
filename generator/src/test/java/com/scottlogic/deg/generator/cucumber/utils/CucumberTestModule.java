@@ -33,7 +33,6 @@ public class CucumberTestModule extends AbstractModule {
         bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
-        bind(ProfileSchemaValidator.class).to(CucumberProfileSchemaValidator.class);
 
         if (testState.shouldViolate) {
             bind(GenerationEngine.class).to(ViolationGenerationEngine.class);
