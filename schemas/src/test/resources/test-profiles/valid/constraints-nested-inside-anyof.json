@@ -1,5 +1,6 @@
 {
   "schemaVersion": "0.1",
+  "description": "profile description",
   "rules": [
     {
       "rule": "rule 1",
@@ -15,24 +16,6 @@
               "field": "field1",
               "is": "shorterThan",
               "value": 19
-            },
-            {
-              "field": "field1",
-              "is": "inSet",
-              "values": ["1", 2]
-            }
-          ]
-        },
-        {
-          "allOf": [
-            {
-              "field": "field1",
-              "is": "null"
-            },
-            {
-              "field": "field1",
-              "is": "aValid",
-              "value": "ISIN"
             }
           ]
         }
@@ -42,9 +25,6 @@
   "fields": [
     {
       "name": "field1"
-    },
-    {
-      "name": "field2"
     }
   ]
 }
