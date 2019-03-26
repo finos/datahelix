@@ -51,6 +51,11 @@ public class VisualiseCommandLine extends CommandLineBase implements Visualisati
         return profileFile;
     }
 
+    @Override
+    public boolean isSchemaValidationEnabled() {
+        return !this.disableSchemaValidation;
+    }
+
     public String getTitleOverride() {
         return titleOverride;
     }

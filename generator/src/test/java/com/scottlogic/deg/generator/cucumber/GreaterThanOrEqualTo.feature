@@ -99,7 +99,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not greaterThanOr
     | 8    |
     | 9    |
 
-@ignore #594
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThanOrEqualTo run against a non contradicting not greaterThanOrEqualTo should be successful
   Given foo is anything but greater than or equal to 5
     And foo is anything but greater than or equal to 5
@@ -149,7 +149,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not lessThan shou
     | 13   |
     | 14   |
 
-@ignore #594
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThanOrEqualTo run against a non contradicting lessThan should be successful
   Given foo is anything but greater than or equal to 10
     And foo is less than 10
@@ -220,7 +220,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not lessThanOrEqu
     | 9    |
     | 10   |
 
-@ignore #594
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThanOrEqualTo run against a non contradicting lessThanOrEqualTo should be successful
   Given foo is anything but greater than or equal to 5
     And foo is less than or equal to 5
@@ -292,7 +292,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not granularTo sh
     | 6    |
     | 5    |
 
-@ignore #594
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo should be successful
   Given foo is anything but greater than or equal to 5
     And foo is granular to 1
@@ -307,7 +307,7 @@ Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo sh
     | 1    |
     | 0    |
 
-@ignore #594
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo should be successful
   Given foo is anything but greater than or equal to 5
     And foo is anything but granular to 0.1
