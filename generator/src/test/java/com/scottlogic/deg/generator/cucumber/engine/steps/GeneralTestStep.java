@@ -162,10 +162,6 @@ public class GeneralTestStep {
     public void noDataIsCreated() {
         List<List<Object>> data = cucumberTestHelper.generateAndGetData();
 
-        if (!cucumberTestHelper.hasDataBeenGenerated()){
-            return; //pass
-        }
-
         String serialisedData = String.join(
             "\n",
             data
@@ -179,51 +175,56 @@ public class GeneralTestStep {
                             .collect(Collectors.toList())))
                 .collect(Collectors.toList()));
 
-        Assert.fail("Some data was generated when none was expected:\n" + serialisedData);
+        Assert.assertThat(
+            "Some data was generated when none was expected:\n" + serialisedData,
+            data,
+            empty());
     }
 
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        Assert.assertThat(
-            "Exceptions thrown during generation",
-            cucumberTestHelper.getThrownExceptions(),
-            empty());
-        Assert.assertThat(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
+        assertOutputData(null, data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        Assert.assertThat(
-            "Exceptions thrown during generation",
-            cucumberTestHelper.getThrownExceptions(),
-            empty());
-        Assert.assertThat(data.generatedData, equalTo(data.expectedData));
+        assertOutputData(null, data.generatedData, equalTo(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        Assert.assertThat(
-            "Exceptions thrown during generation",
-            cucumberTestHelper.getThrownExceptions(),
-            empty());
-        Assert.assertThat(data.generatedData, new RowsPresentMatcher(data.expectedData));
+        assertOutputData(null, data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
+        assertOutputData(null, data.generatedData, new RowsAbsentMatcher(data.expectedData));
+    }
+
+    private void assertOutputData(String message, List<List<Object>> data, Matcher<List<List<Object>>> matcher){
+        assertNoGenerationErrors();
+
+        Assert.assertThat(message, data, matcher);
+    }
+
+    private void assertNoGenerationErrors() {
         Assert.assertThat(
             "Exceptions thrown during generation",
             cucumberTestHelper.getThrownExceptions(),
             empty());
-        Assert.assertThat(data.generatedData, new RowsAbsentMatcher(data.expectedData));
+
+        Assert.assertThat(
+            "Validation errors thrown during generation",
+            cucumberTestHelper.getProfileValidationErrors().collect(Collectors.toList()),
+            empty());
     }
 
     private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
@@ -250,13 +251,20 @@ public class GeneralTestStep {
     @Then("some data should be generated")
     public void someDataShouldBeGenerated() {
         List <List<Object>> data = cucumberTestHelper.generateAndGetData();
-        Assert.assertFalse("No data was generated but some was expected", data.isEmpty());
+
+        assertNoGenerationErrors();
+        Assert.assertThat("No data was generated but some was expected", data, not(empty()));
     }
 
     @Then("{long} rows of data are generated")
     public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
         List <List<Object>> data = cucumberTestHelper.generateAndGetData();
-        Assert.assertThat("Unexpected number of rows returned", (long)data.size(), equalTo(expectedNumberOfRows));
+
+        assertNoGenerationErrors();
+        Assert.assertThat(
+            "Unexpected number of rows returned",
+            (long)data.size(),
+            equalTo(expectedNumberOfRows));
     }
 
     @Given("the generator can generate at most {long} rows")
