@@ -5,14 +5,28 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
       And the data requested is violating
       And the generator can generate at most 5 rows
 
-Scenario: Running the generator in violate mode for not equal to is successful
+@ignore #584, conditional violation doesn't work with 'ofType integer'
+Scenario: Running the generator in violate mode for not equal to is successful (integer)
   Given foo is anything but equal to 8
     And foo is of type "integer"
+    And we do not violate any of type constraints
     And the generation strategy is full
   Then the following data should be generated:
     | foo  |
     | 8    |
     | null |
+
+Scenario: Running the generator in violate mode for not equal to is successful (decimal)
+    Given foo is anything but equal to 8
+    And foo is of type "decimal"
+    And foo is granular to 1
+    And we do not violate any of type constraints
+    And we do not violate any granular to constraints
+    And the generation strategy is full
+    Then the following data should be generated:
+      | foo  |
+      | 8    |
+      | null |
 
 Scenario: Running the generator in violate mode where equal to is not violated is successful
   Given foo is equal to 8
