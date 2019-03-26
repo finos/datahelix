@@ -369,8 +369,6 @@ Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
     | null |
 
 ### after ###
-
-@ignore #Relates to #667 - Remove default datetime granularity
 Scenario: Not 'null' with a non contradicting 'after' should be successful
   Given foo is anything but null
     And foo is of type "datetime"
@@ -397,7 +395,6 @@ Scenario: 'Null' with a contradicting not 'after' should only generate null
 
 ### afterOrAt ###
 
-@ignore #Relates to #667 - Remove default datetime granularity
 Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
   Given foo is anything but null
   And foo is of type "datetime"
@@ -424,7 +421,7 @@ Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
 
 ### before ###
 
-@ignore #Relates to #667 - Remove default datetime granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'before' should be successful
   Given foo is anything but null
     And foo is of type "datetime"
@@ -451,7 +448,7 @@ Scenario: 'Null' with a contradicting not 'before' should only generate null
 
 ### beforeOrAt ###
 
-@ignore #Relates to #667 - Remove default datetime granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'beforeOrAt' should be successful
   Given foo is anything but null
     And foo is of type "datetime"

@@ -68,7 +68,7 @@ Scenario: Running beforeOrAt request that includes datetime field with date and 
        | 2012-09-01T12:01:02.000 |
        | 2024-07-01T12:01:03.000 |
 
-@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
+@ignore #594 generation should be descending when upper-bound only is provided
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is before or at 2018-01-01T00:00:00.000
@@ -81,7 +81,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2017-12-31T23:59:59.997 |
        | 2017-12-31T23:59:59.996 |
 
-@ignore #667 - granularity for datetimes should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
@@ -94,7 +93,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2018-01-01T00:00:00.004 |
        | 2018-01-01T00:00:00.005 |
 
-@ignore #667 - granularity for datetimes should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is anything but before or at 2019-01-01T00:00:00.000
        And foo is anything but before or at 2018-01-01T00:00:00.000
