@@ -56,9 +56,13 @@ public class GenerateExecute implements Runnable {
     @Override
     public void run() {
         ValidationResult validationResult = configValidator.preProfileChecks(config, configSource);
-        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
-        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
+        if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
+            return;
+        }
+
+        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        if (!profileSchemaValidationResult.isValid()) {
             errorReporter.display(profileSchemaValidationResult);
             return;
         }
