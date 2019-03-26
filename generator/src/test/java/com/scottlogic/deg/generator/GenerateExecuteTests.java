@@ -76,6 +76,7 @@ public class GenerateExecuteTests {
         when(configValidator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
+        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(new ValidationResult(Collections.emptyList()));
 
         when(validationResult.isValid()).thenReturn(true);
 
@@ -98,6 +99,7 @@ public class GenerateExecuteTests {
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
+        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(new ValidationResult(Collections.emptyList()));
 
         //Act
         executor.run();
@@ -120,6 +122,7 @@ public class GenerateExecuteTests {
         when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
         when(configValidator.postProfileChecks(any(), any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
+        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(new ValidationResult(Collections.emptyList()));
 
         //Act
         executor.run();
