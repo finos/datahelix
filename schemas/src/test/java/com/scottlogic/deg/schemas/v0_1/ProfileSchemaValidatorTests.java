@@ -50,7 +50,6 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                //    System.out.println("Testing " + INVALID_PROFILE_DIR + " profile [" + profileFilename + "]");
                 InputStream testProfile = this.getClass().getResourceAsStream(TEST_PROFILE_DIR + INVALID_PROFILE_DIR + File.separator + profileFilename);
                 ValidationResult result = profileValidator.validateProfile(testProfile);
                 Supplier<String> msgSupplier = () -> "Profile ["
@@ -69,7 +68,6 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                //      System.out.println("Testing " + VALID_PROFILE_DIR + " profile [" + TEST_PROFILE_DIR + VALID_PROFILE_DIR  + File.separator+  profileFilename + "]");
                 InputStream testProfile = this.getClass().getResourceAsStream(TEST_PROFILE_DIR + VALID_PROFILE_DIR + File.separator + profileFilename);
                 ValidationResult result = profileValidator.validateProfile(testProfile);
                 Assert.assertTrue("Profile [" + profileFilename + "] should be valid [" + result.errorMessages + "]", result.isValid());
