@@ -60,7 +60,7 @@
     proves that the structure of an `if` must meet the specifications e.g. only one `else` clause, `if - else` without a `then` etc...
     
 1. `profile-test-simple-inset.json` - _valid_\
-    proves that `field - is - inset` can contain strings, numbers or temporals and any combination of the three 
+    proves that `field - is - inset` can contain strings, numbers or datetimes and any combination of the three
         
 1. `profile-test-simple-regex.json` - _valid_\
     proves that regex strings are validated
@@ -68,10 +68,10 @@
 1. `profile-test-simple-regex-errors.json` - _invalid_\
     prove that numbers and dates are not allowed as a regex value
     
-1. `profile-test-simple-temporals.json` - _valid_\
-    proves that valid temporal constraints are allowed 
+1. `profile-test-simple-datetimes.json` - _valid_\
+    proves that valid datetime constraints are allowed
     
-1. `profile-test-simple-temporals-errors.json` - _invalid_\
-    proves that invalid temporal constraints are not allowed
+1. `profile-test-simple-datetimes-errors.json` - _invalid_\
+    proves that invalid datetime constraints are not allowed
 
 
