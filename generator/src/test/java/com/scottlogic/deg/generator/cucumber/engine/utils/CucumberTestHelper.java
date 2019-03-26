@@ -59,7 +59,7 @@ public class CucumberTestHelper {
             throw new RuntimeException("Gherkin error: Please specify the data strategy");
         }
 
-        if (!generatorHasRun()) {
+        if (!generatorHasRun() && testState.testExceptions.isEmpty()) {
             runGenerationProcess();
         }
 
