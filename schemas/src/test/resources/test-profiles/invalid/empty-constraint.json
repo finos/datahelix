@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ]
+}
