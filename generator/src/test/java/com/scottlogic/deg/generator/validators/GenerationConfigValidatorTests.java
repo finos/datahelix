@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.validators;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.schemas.common.ValidationResult;
@@ -17,10 +18,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.hamcrest.Matchers.empty;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,7 +46,7 @@ public class GenerationConfigValidatorTests {
     void setup() {
         //Arrange
         when(mockOutputTarget.getFilePath()).thenReturn(mockFilePath);
-        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
+        validator = new GenerationConfigValidator(mockFileUtils);
         profile = new Profile(new ArrayList<>(), new ArrayList<>());
         expectedErrorMessages = new ArrayList<>();
         expectedResult = new ValidationResult(expectedErrorMessages);
@@ -81,7 +84,7 @@ public class GenerationConfigValidatorTests {
         Mockito.reset(config);
         when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.RANDOM);
         when(config.getMaxRows()).thenReturn(Optional.of(1234L));
-        validator = new GenerationConfigValidator(mockFileUtils, mockConfigSource, mockOutputTarget);
+        validator = new GenerationConfigValidator(mockFileUtils);
 
         //Act
         ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
@@ -188,142 +191,6 @@ public class GenerationConfigValidatorTests {
 
         //Act
         ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateOutputFileParentDirAlreadyExists_isNotValid()
-        throws IOException {
-        Path mockPath = Paths.get("/a/b/c/tmp.out");
-        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(eq(mockPath))).thenReturn(false);
-        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
-        expectedErrorMessages.add("Invalid Output - parent directory of output file "
-            + "already exists but is not a directory, please use a different output filename");
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat(
-            "Validation result did not contain expected error message",
-            actualResult,
-            sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateOutputFileAlreadyExists_isNotValid() throws IOException {
-        //Arrange
-        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
-        when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(true);
-        expectedErrorMessages.add("Invalid Output - file already exists, please use a different output filename " +
-            "or use the --replace option");
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateOutputFileAlreadyExistsCommandLineOverwrite_isValid() throws IOException {
-        //Arrange
-        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
-        when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateOutputFileDoesNotExist_isValid() throws IOException {
-        //Arrange
-        Path mockPath = Paths.get("/a/b/c/tmp.out");
-        when(mockOutputTarget.getFilePath()).thenReturn(mockPath);
-        when(mockFileUtils.createDirectories(anyObject())).thenReturn(true);
-        when(mockFileUtils.exists(mockFilePath)).thenReturn(false);
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateOutputDirNotFile_isNotValid() throws IOException {
-        //Arrange
-        when(mockFileUtils.createDirectories(mockFilePath.getParent())).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
-        expectedErrorMessages.add("Invalid Output - target is a directory, please use a different output filename");
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateViolationOutputFileNotDir_isNotValid() throws IOException {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        expectedErrorMessages.add("Invalid Output - not a directory, please enter a valid directory name");
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateViolationValid_isValid() throws IOException {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
-        when(mockFileUtils.isDirectoryEmpty(eq(mockFilePath), anyInt())).thenReturn(true);
-
-        //Act
-        ValidationResult actualResult = validator
-            .postProfileChecks(profile, mockConfigSource, mockOutputTarget);
-
-        //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
-    }
-
-    @Test
-    public void postProfileChecks_generateViolationOutputDirNotEmpty_isNotValid() throws IOException {
-        //Arrange
-        when(mockConfigSource.shouldViolate()).thenReturn(true);
-        when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(true);
-        when(mockFileUtils.isDirectoryEmpty(eq(mockFilePath), anyInt())).thenReturn(false);
-        expectedErrorMessages.add("Invalid Output - directory not empty, please remove any 'manifest.json' " +
-            "and '[0-9].csv' files or use the --replace option");
-
-        //Act
-        ValidationResult actualResult = validator.postProfileChecks(profile, mockConfigSource, mockOutputTarget);
 
         //Assert
         assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));

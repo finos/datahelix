@@ -4,6 +4,12 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.inputs.validation.Criticality;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
+import com.scottlogic.deg.generator.inputs.validation.ValidationType;
+import com.scottlogic.deg.generator.inputs.validation.messages.OutputValidationMessage;
+import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
@@ -13,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Class used to determine whether the command line options are valid for generation.
@@ -22,9 +29,7 @@ public class GenerationConfigValidator implements ConfigValidator {
     private final FileUtils fileUtils;
 
     @Inject
-    public GenerationConfigValidator(FileUtils fileUtils,
-                                     GenerationConfigSource configSource,
-                                     OutputTarget outputTarget) {
+    public GenerationConfigValidator(FileUtils fileUtils) {
         this.fileUtils = fileUtils;
     }
 
@@ -36,27 +41,6 @@ public class GenerationConfigValidator implements ConfigValidator {
 
         checkProfileInputFile(errorMessages, generationConfigSource.getProfileFile());
 
-        return new ValidationResult(errorMessages);
-    }
-
-    @Override
-    public ValidationResult postProfileChecks(Profile profile,
-                                              GenerationConfigSource configSource,
-                                              OutputTarget outputTarget) throws IOException {
-        ArrayList<String> errorMessages = new ArrayList<>();
-
-        if (outputTarget instanceof FileOutputTarget) {
-            if (configSource.shouldViolate()) {
-                checkViolationGenerateOutputTarget(
-                    errorMessages,
-                    configSource,
-                    (FileOutputTarget) outputTarget,
-                    profile.rules.size()
-                );
-            } else {
-                checkGenerateOutputTarget(errorMessages, configSource, (FileOutputTarget) outputTarget);
-            }
-        }
         return new ValidationResult(errorMessages);
     }
 
@@ -81,45 +65,5 @@ public class GenerationConfigValidator implements ConfigValidator {
             errorMessages.add("Invalid Input - Profile file has no content");
         }
     }
-
-    /**
-     * Check the output target for a non-violating data generation.
-     *
-     * @param errorMessages the list of error messages that we will add to
-     * @param configSource  used to determine whether the user has opted to automatically overwrite output files
-     * @param outputTarget  the output file that the user selected
-     */
-    private void checkGenerateOutputTarget(ArrayList<String> errorMessages,
-                                           GenerationConfigSource configSource,
-                                           FileOutputTarget outputTarget) throws IOException {
-        if (fileUtils.isDirectory(outputTarget.getFilePath())) {
-            errorMessages.add(
-                "Invalid Output - target is a directory, please use a different output filename");
-        } else if (!configSource.overwriteOutputFiles() && fileUtils.exists(outputTarget.getFilePath())) {
-            errorMessages.add(
-                "Invalid Output - file already exists, please use a different output filename or use the --replace option");
-        } else if (!fileUtils.exists(outputTarget.getFilePath())) {
-            Path parent = outputTarget.getFilePath().toAbsolutePath().getParent();
-            if (!fileUtils.createDirectories(parent)) {
-                errorMessages.add(
-                    "Invalid Output - parent directory of output file already exists but is not a directory, please use a different output filename");
-            }
-        }
-    }
-
-    private void checkViolationGenerateOutputTarget(ArrayList<String> errorMessages,
-                                                    GenerationConfigSource configSource,
-                                                    FileOutputTarget outputTarget,
-                                                    int ruleCount) throws IOException {
-        if (!fileUtils.exists(outputTarget.getFilePath())) {
-            fileUtils.createDirectories(outputTarget.getFilePath());
-        } else if (!fileUtils.isDirectory(outputTarget.getFilePath())) {
-            errorMessages
-                .add("Invalid Output - not a directory, please enter a valid directory name");
-        } else if (!configSource.overwriteOutputFiles() && !fileUtils
-            .isDirectoryEmpty(outputTarget.getFilePath(), ruleCount)) {
-            errorMessages.add(
-                "Invalid Output - directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --replace option");
-        }
-    }
 }
+

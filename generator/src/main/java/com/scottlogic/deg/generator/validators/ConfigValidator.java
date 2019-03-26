@@ -9,13 +9,5 @@ import com.scottlogic.deg.schemas.common.ValidationResult;
 import java.io.IOException;
 
 public interface ConfigValidator {
-
     ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource configSource);
-
-    ValidationResult postProfileChecks(
-        Profile profile,
-        GenerationConfigSource configSource,
-        OutputTarget outputTarget
-    ) throws IOException;
-
 }

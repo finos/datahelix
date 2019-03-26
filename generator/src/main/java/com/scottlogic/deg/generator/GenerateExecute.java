@@ -76,12 +76,6 @@ public class GenerateExecute implements Runnable {
                 return;
             }
 
-            validationResult = configValidator.postProfileChecks(profile, configSource, outputTarget);
-            if (!validationResult.isValid()) {
-                errorReporter.display(validationResult);
-                return;
-            }
-
             generationEngine.generateDataSet(profile, config, outputTarget);
 
         } catch (IOException | InvalidProfileException e) {

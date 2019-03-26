@@ -40,7 +40,6 @@ public class GenerateExecuteTests {
     private ErrorReporter errorReporter = mock(ErrorReporter.class);
     private ValidationResult validationResult = mock(ValidationResult.class);
     private ValidationResult schemaValidationResult = mock(ValidationResult.class);
-    private ValidationResult postProfileValidationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
     private ProfileValidationReporter validationReporter = mock(ProfileValidationReporter.class);
     private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
@@ -129,7 +128,6 @@ public class GenerateExecuteTests {
         //Arrange
         File testFile = new File("TestFile");
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(configValidator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
@@ -141,67 +139,6 @@ public class GenerateExecuteTests {
 
         //Assert
         verify(profileReader, times(1)).read(testFile.toPath());
-        verify(errorReporter, never()).display(any());
-    }
-
-    @Test
-    public void run_whenSchemaValidationPasses_shouldRunPostProfileChecks() throws IOException, InvalidProfileException {
-        //Arrange
-        File testFile = new File("TestFile");
-        when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(configValidator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(validationResult);
-        when(configSource.getProfileFile()).thenReturn(testFile);
-        when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
-        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(validationResult.isValid()).thenReturn(true);
-        when(schemaValidationResult.isValid()).thenReturn(true);
-
-        //Act
-        executor.run();
-
-        //Assert
-        verify(configValidator, times(1)).postProfileChecks(mockProfile, configSource, outputTarget);
-    }
-
-    @Test
-    public void run_whenPostProfileChecksFail_shouldNotRunGenerator() throws IOException, InvalidProfileException {
-        //Arrange
-        File testFile = new File("TestFile");
-        when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(configValidator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(postProfileValidationResult);
-        when(configSource.getProfileFile()).thenReturn(testFile);
-        when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
-        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(validationResult.isValid()).thenReturn(true);
-        when(schemaValidationResult.isValid()).thenReturn(true);
-        when(postProfileValidationResult.isValid()).thenReturn(false);
-
-        //Act
-        executor.run();
-
-        //Assert
-        verify(generationEngine, never()).generateDataSet(any(Profile.class), any(GenerationConfig.class), any(OutputTarget.class));
-        verify(errorReporter, times(1)).display(same(postProfileValidationResult));
-    }
-
-    @Test
-    public void run_whenPostProfileChecksPass_shouldRunGenerator() throws IOException, InvalidProfileException {
-        //Arrange
-        File testFile = new File("TestFile");
-        when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(configValidator.postProfileChecks(any(Profile.class), same(configSource), same(outputTarget))).thenReturn(postProfileValidationResult);
-        when(configSource.getProfileFile()).thenReturn(testFile);
-        when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
-        when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(validationResult.isValid()).thenReturn(true);
-        when(schemaValidationResult.isValid()).thenReturn(true);
-        when(postProfileValidationResult.isValid()).thenReturn(true);
-
-        //Act
-        executor.run();
-
-        //Assert
-        verify(generationEngine, times(1)).generateDataSet(mockProfile, config, outputTarget);
         verify(errorReporter, never()).display(any());
     }
 
@@ -238,7 +175,6 @@ public class GenerateExecuteTests {
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
-        when(configValidator.postProfileChecks(any(), any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
         when(schemaValidationResult.isValid()).thenReturn(true);

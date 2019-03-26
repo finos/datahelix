@@ -7,6 +7,9 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -37,6 +40,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
+        bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
 
         if (testState.shouldSkipGeneration()) {
             bind(GenerationEngine.class).toInstance(mock(GenerationEngine.class));
