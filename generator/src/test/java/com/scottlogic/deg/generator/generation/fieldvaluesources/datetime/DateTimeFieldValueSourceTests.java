@@ -15,12 +15,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
-public class TemporalFieldValueSourceTests {
+public class DateTimeFieldValueSourceTests {
 
     private DateTimeRestrictions.DateTimeLimit lowerLimit = null;
     private DateTimeRestrictions.DateTimeLimit upperLimit = null;
     private Set<Object> blackList = new HashSet<>();
-    private TemporalFieldValueSource fieldSource;
+    private DateTimeFieldValueSource fieldSource;
 
     @Test
     public void whenGeneratingUnboundSet() {
@@ -74,7 +74,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
@@ -112,7 +112,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
@@ -149,7 +149,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
@@ -185,7 +185,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0.99);
@@ -200,7 +200,7 @@ public class TemporalFieldValueSourceTests {
     public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
@@ -208,7 +208,7 @@ public class TemporalFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
+            equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
 
         rng.setNextDouble(1);
 
@@ -229,10 +229,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
 
@@ -242,10 +242,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistInDifferentOrder(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MAX, LocalDateTime.MIN)));
 
@@ -255,10 +255,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistEmpty(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             Collections.emptySet());
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             Collections.emptySet());
 
@@ -268,10 +268,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMin(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
 
@@ -280,10 +280,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMax(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-30"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
 
@@ -292,10 +292,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptBlacklist(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
 
@@ -304,10 +304,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenOnlyBlacklistMatches(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-30"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
 
@@ -316,10 +316,10 @@ public class TemporalFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesDontMatch(){
-        TemporalFieldValueSource a = new TemporalFieldValueSource(
+        DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-30"),
             new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
-        TemporalFieldValueSource b = new TemporalFieldValueSource(
+        DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
 
@@ -331,19 +331,19 @@ public class TemporalFieldValueSourceTests {
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
         max.max = new DateTimeRestrictions.DateTimeLimit(LocalDateTime.MAX, false);
-        TemporalFieldValueSource noMin = new TemporalFieldValueSource(max, Collections.emptySet());
+        DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
         //Act
         LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
         //Assert
-        Assert.assertThat(firstValue, equalTo(TemporalFieldValueSource.ISO_MIN_DATE));
+        Assert.assertThat(firstValue, equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
     }
 
     @Test
     public void temporalGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions min = new DateTimeRestrictions();
-        min.min = new DateTimeRestrictions.DateTimeLimit(TemporalFieldValueSource.ISO_MAX_DATE, false);
-        TemporalFieldValueSource datesAfterLastPermittedDate = new TemporalFieldValueSource(min, Collections.emptySet());
+        min.min = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
+        DateTimeFieldValueSource datesAfterLastPermittedDate = new DateTimeFieldValueSource(min, Collections.emptySet());
 
         //Act
         Iterator iterator = datesAfterLastPermittedDate.generateAllValues().iterator();
@@ -355,8 +355,8 @@ public class TemporalFieldValueSourceTests {
     public void temporalGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeRestrictions.DateTimeLimit(TemporalFieldValueSource.ISO_MIN_DATE, false);
-        TemporalFieldValueSource datesBeforeFirstPermittedDate = new TemporalFieldValueSource(max, Collections.emptySet());
+        max.max = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
+        DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 
         //Act
         Iterator iterator = datesBeforeFirstPermittedDate.generateAllValues().iterator();
@@ -399,7 +399,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         fieldSource.generateAllValues().forEach(actualValues::add);
 
@@ -414,7 +414,7 @@ public class TemporalFieldValueSourceTests {
         restrictions.min = lowerLimit;
         restrictions.max = upperLimit;
 
-        fieldSource = new TemporalFieldValueSource(restrictions, blackList);
+        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         fieldSource.generateInterestingValues().forEach(actualValues::add);
 

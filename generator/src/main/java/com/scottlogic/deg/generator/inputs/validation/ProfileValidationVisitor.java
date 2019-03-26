@@ -31,7 +31,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, false);
+        state.dateTimeConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, false);
+        state.dateTimeConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, true);
+        state.dateTimeConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, true);
+        state.dateTimeConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         } else {
             ConstraintValidator noRestrictions = new ConstraintValidator(
                 new TypeConstraintValidator(),
-                new TemporalConstraintValidator(),
+                new DateTimeConstraintValidator(),
                 new SetConstraintValidator(),
                 new StringConstraintValidator(),
                 new NullConstraintValidator(),

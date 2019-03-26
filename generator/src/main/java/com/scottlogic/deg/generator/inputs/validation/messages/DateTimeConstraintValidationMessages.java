@@ -4,13 +4,13 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.LocalDateTime;
 
-public class TemporalConstraintValidationMessages implements StandardValidationMessages {
+public class DateTimeConstraintValidationMessages implements StandardValidationMessages {
 
 
     private DateTimeRestrictions restriction;
     private LocalDateTime newValue;
 
-    public TemporalConstraintValidationMessages(
+    public DateTimeConstraintValidationMessages(
         DateTimeRestrictions restriction,
         LocalDateTime newValue) {
 
