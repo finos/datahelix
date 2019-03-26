@@ -8,5 +8,6 @@ public enum ValidationType {
     NULL,
     GRANULARITY,
     NUMERIC,
-    OUTPUT
+    OUTPUT,
+    INPUT
 }

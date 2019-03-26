@@ -55,9 +55,9 @@ public class GenerateExecute implements Runnable {
 
     @Override
     public void run() {
-        ValidationResult validationResult = configValidator.preProfileChecks(config, configSource);
-        if (!validationResult.isValid()) {
-            errorReporter.display(validationResult);
+        Collection<ValidationAlert> validationResult = configValidator.preProfileChecks(config, configSource);
+        if (!validationResult.isEmpty()) {
+            validationReporter.output(validationResult);
             return;
         }
 

@@ -8,10 +8,10 @@ import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.ValidationType;
+import com.scottlogic.deg.generator.inputs.validation.messages.InputValidationMessage;
 import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.schemas.common.ValidationResult;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,11 +37,17 @@ public class GenerateExecuteTests {
     private GenerationConfigValidator configValidator = mock(GenerationConfigValidator.class);
     private ProfileValidator profileValidator = mock(ProfileValidator.class);
     private ErrorReporter errorReporter = mock(ErrorReporter.class);
-    private ValidationResult validationResult = mock(ValidationResult.class);
+    private Collection<ValidationAlert> validationResult;
     private ValidationResult schemaValidationResult = mock(ValidationResult.class);
     private Profile mockProfile = mock(Profile.class);
     private ProfileValidationReporter validationReporter = mock(ProfileValidationReporter.class);
     private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
+    private ValidationAlert invalid = new ValidationAlert(
+        Criticality.ERROR,
+        new InputValidationMessage("Some error", mock(File.class)),
+        ValidationType.INPUT,
+        null
+    );
 
     private GenerateExecute executor = new GenerateExecute(
         config,
@@ -59,24 +64,24 @@ public class GenerateExecuteTests {
     @Test
     public void run_whenPreProfileChecksFail_shouldNotReadProfile() throws IOException, InvalidProfileException {
         //Arrange
+        validationResult = Collections.singleton(invalid);
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
-        when(validationResult.isValid()).thenReturn(false);
 
         //Act
         executor.run();
 
         //Assert
-        verify(errorReporter, times(1)).display(validationResult);
+        verify(validationReporter, times(1)).output(validationResult);
         verify(profileReader, never()).read((Path) any());
     }
 
     @Test
     public void run_whenPreProfileChecksFail_shouldNotValidateTheSchema() {
         //Arrange
+        validationResult = Collections.singleton(invalid);
         File testFile = new File("TestFile");
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
-        when(validationResult.isValid()).thenReturn(false);
 
         //Act
         executor.run();
@@ -89,12 +94,11 @@ public class GenerateExecuteTests {
     public void run_whenPreProfileChecksPass_shouldValidateTheSchema() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
+        validationResult = Collections.emptySet();
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-
-        when(validationResult.isValid()).thenReturn(true);
 
         //Act
         executor.run();
@@ -107,11 +111,11 @@ public class GenerateExecuteTests {
     public void run_whenSchemaValidationFails_shouldNotReadTheProfile() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
+        validationResult = Collections.emptySet();
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(validationResult.isValid()).thenReturn(true);
         when(schemaValidationResult.isValid()).thenReturn(false);
 
         //Act
@@ -127,11 +131,11 @@ public class GenerateExecuteTests {
     public void run_whenSchemaValidationPasses_shouldReadProfile() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
+        validationResult = Collections.emptySet();
         when(configValidator.preProfileChecks(config, configSource)).thenReturn(validationResult);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(validationResult.isValid()).thenReturn(true);
         when(schemaValidationResult.isValid()).thenReturn(true);
 
         //Act
@@ -146,12 +150,11 @@ public class GenerateExecuteTests {
     public void run_whenProfileValidationYieldsErrors_shouldNotGenerate() throws IOException, InvalidProfileException {
         //Arrange
         File testFile = new File("TestFile");
-        Collection<ValidationAlert> validationAlerts = Collections.singleton(
-            new ValidationAlert(Criticality.ERROR, new StringValidationMessage(""), ValidationType.NULL, new Field("")));
-
+        Collection<ValidationAlert> validationAlerts = Collections.singleton(invalid);
+        validationResult = Collections.emptySet();
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
-        when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(configValidator.preProfileChecks(any(), any())).thenReturn(validationResult);
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
         when(schemaValidationResult.isValid()).thenReturn(true);
@@ -171,13 +174,13 @@ public class GenerateExecuteTests {
         Collection<ValidationAlert> validationAlerts = Arrays.asList(
             new ValidationAlert(Criticality.INFORMATION, new StringValidationMessage(""), ValidationType.NULL, new Field("")),
             new ValidationAlert(Criticality.WARNING, new StringValidationMessage(""), ValidationType.NULL, new Field("")));
-
+        validationResult = Collections.emptySet();
+        when(schemaValidationResult.isValid()).thenReturn(true);
         when(configSource.getProfileFile()).thenReturn(testFile);
         when(profileReader.read(eq(testFile.toPath()))).thenReturn(mockProfile);
-        when(configValidator.preProfileChecks(any(), any())).thenReturn(new ValidationResult(new ArrayList<>()));
+        when(configValidator.preProfileChecks(any(), any())).thenReturn(validationResult);
         when(profileValidator.validate(any())).thenReturn(validationAlerts);
         when(mockProfileSchemaValidator.validateProfile(testFile)).thenReturn(schemaValidationResult);
-        when(schemaValidationResult.isValid()).thenReturn(true);
 
         //Act
         executor.run();

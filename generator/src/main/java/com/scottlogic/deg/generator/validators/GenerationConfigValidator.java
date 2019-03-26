@@ -1,23 +1,16 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.ValidationType;
+import com.scottlogic.deg.generator.inputs.validation.messages.InputValidationMessage;
 import com.scottlogic.deg.generator.inputs.validation.messages.OutputValidationMessage;
-import com.scottlogic.deg.generator.inputs.validation.messages.StandardValidationMessages;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.schemas.common.ValidationResult;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,35 +27,59 @@ public class GenerationConfigValidator implements ConfigValidator {
     }
 
     @Override
-    public ValidationResult preProfileChecks(GenerationConfig config, GenerationConfigSource generationConfigSource) {
-        ArrayList<String> errorMessages = new ArrayList<>();
+    public Collection<ValidationAlert> preProfileChecks(GenerationConfig config, GenerationConfigSource generationConfigSource) {
+        ArrayList<ValidationAlert> errorMessages = new ArrayList<>();
 
         checkSwitches(generationConfigSource, errorMessages);
 
         checkProfileInputFile(errorMessages, generationConfigSource.getProfileFile());
 
-        return new ValidationResult(errorMessages);
+        return errorMessages;
     }
 
     private void checkSwitches(GenerationConfigSource configSource,
-                               ArrayList<String> errorMessages) {
+                               ArrayList<ValidationAlert> errorMessages) {
 
         if (configSource.isEnableTracing()) {
             if (fileUtils.getTraceFile(configSource).exists() && !configSource.overwriteOutputFiles()) {
-                errorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --replace option");
+                errorMessages.add(new ValidationAlert(
+                    Criticality.ERROR,
+                    new OutputValidationMessage("trace file already exists, please use a different output filename or use the --replace option"),
+                    ValidationType.OUTPUT,
+                    null));
             }
         }
     }
 
-    private void checkProfileInputFile(ArrayList<String> errorMessages, File profileFile) {
+    private void checkProfileInputFile(ArrayList<ValidationAlert> errorMessages, File profileFile) {
         if (fileUtils.containsInvalidChars(profileFile)) {
-            errorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters ? : %% \" | > < ", profileFile.toString()));
+            errorMessages.add(
+                new ValidationAlert(
+                    Criticality.ERROR,
+                    new InputValidationMessage("Profile file path (%s) contains one or more invalid characters ? : %% \" | > < ", profileFile),
+                    ValidationType.INPUT,
+                    null));
         } else if (!profileFile.exists()) {
-            errorMessages.add("Invalid Input - Profile file does not exist");
+            errorMessages.add(
+                new ValidationAlert(
+                    Criticality.ERROR,
+                    new InputValidationMessage("Profile file (%s) does not exist", profileFile),
+                    ValidationType.INPUT,
+                    null));
         } else if (profileFile.isDirectory()) {
-            errorMessages.add("Invalid Input - Profile file path provided is to a directory");
+            errorMessages.add(
+                new ValidationAlert(
+                    Criticality.ERROR,
+                    new InputValidationMessage("Profile file path (%s) provided is to a directory", profileFile),
+                    ValidationType.INPUT,
+                    null));
         } else if (fileUtils.isFileEmpty(profileFile)) {
-            errorMessages.add("Invalid Input - Profile file has no content");
+            errorMessages.add(
+                new ValidationAlert(
+                    Criticality.ERROR,
+                    new InputValidationMessage("Profile file (%s) has no content", profileFile),
+                    ValidationType.INPUT,
+                    null));
         }
     }
 }

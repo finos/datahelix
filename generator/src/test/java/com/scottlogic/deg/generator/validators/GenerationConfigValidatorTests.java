@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
@@ -14,17 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.hamcrest.Matchers.empty;
-import static org.mockito.Matchers.*;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,9 +32,6 @@ public class GenerationConfigValidatorTests {
     private File mockFile = mock(File.class);
     private GenerationConfig config = mock(GenerationConfig.class);
     private GenerationConfigValidator validator;
-    private Profile profile;
-    private ArrayList<String> expectedErrorMessages;
-    private ValidationResult expectedResult;
     private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private TestGenerationConfigSource mockConfigSource = mock(TestGenerationConfigSource.class);
 
@@ -47,9 +40,6 @@ public class GenerationConfigValidatorTests {
         //Arrange
         when(mockOutputTarget.getFilePath()).thenReturn(mockFilePath);
         validator = new GenerationConfigValidator(mockFileUtils);
-        profile = new Profile(new ArrayList<>(), new ArrayList<>());
-        expectedErrorMessages = new ArrayList<>();
-        expectedResult = new ValidationResult(expectedErrorMessages);
 
         //Generic Setup
         when(config.getDataGenerationType()).thenReturn(GenerationConfig.DataGenerationType.INTERESTING);
@@ -71,11 +61,10 @@ public class GenerationConfigValidatorTests {
     @Test
     public void preProfileChecks_withValid_returnsNoErrorMessages() {
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
+        Assert.assertThat(actualResult, empty());
     }
 
     @Test
@@ -87,11 +76,10 @@ public class GenerationConfigValidatorTests {
         validator = new GenerationConfigValidator(mockFileUtils);
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
+        Assert.assertThat(actualResult, empty());
     }
 
     @Test
@@ -101,11 +89,10 @@ public class GenerationConfigValidatorTests {
         when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
+        Assert.assertThat(actualResult, empty());
     }
 
     @Test
@@ -114,14 +101,16 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.isEnableTracing()).thenReturn(true);
         when(mockFileUtils.getTraceFile(mockConfigSource)).thenReturn(mock(File.class));
         when(mockFileUtils.getTraceFile(mockConfigSource).exists()).thenReturn(true);
-        expectedErrorMessages.add("Invalid Output - trace file already exists, please use a different output filename or use the --replace option");
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
+        Collection<String> messages = actualResult
+            .stream()
+            .map(va -> va.getMessage().getVerboseMessage())
+            .collect(Collectors.toList());
+        Assert.assertThat(messages, hasItem("Invalid Output - trace file already exists, please use a different output filename or use the --replace option"));
     }
 
     @Test
@@ -133,67 +122,73 @@ public class GenerationConfigValidatorTests {
         when(mockConfigSource.overwriteOutputFiles()).thenReturn(true);
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertTrue(actualResult.isValid());
+        Assert.assertThat(actualResult, empty());
     }
 
     @Test
     public void preProfileChecks_profileFilePathContainsInvalidChars_returnsCorrectErrorMessage() {
         //Arrange
         when(mockFileUtils.containsInvalidChars(mockFile)).thenReturn(true);
-        expectedErrorMessages.add(String.format("Profile file path (%s) contains one or more invalid characters " +
-            "? : %% \" | > < ", mockFile.toString()));
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
+        Collection<String> messages = actualResult
+            .stream()
+            .map(va -> va.getMessage().getVerboseMessage())
+            .collect(Collectors.toList());
+        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file path \\(.+\\) contains one or more invalid characters .*")));
     }
 
     @Test
     public void preProfileChecks_profileFileDoesNotExist_returnsCorrectErrorMessage() {
         //Arrange
         when(mockFile.exists()).thenReturn(false);
-        expectedErrorMessages.add("Invalid Input - Profile file does not exist");
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
+        Collection<String> messages = actualResult
+            .stream()
+            .map(va -> va.getMessage().getVerboseMessage())
+            .collect(Collectors.toList());
+        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file \\(.+\\) does not exist$")));
     }
 
     @Test
     public void preProfileChecks_profileFileIsDir_returnsCorrectErrorMessage() {
         //Arrange
         when(mockFile.isDirectory()).thenReturn(true);
-        expectedErrorMessages.add("Invalid Input - Profile file path provided is to a directory");
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
+        Collection<String> messages = actualResult
+            .stream()
+            .map(va -> va.getMessage().getVerboseMessage())
+            .collect(Collectors.toList());
+        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file path \\(.+\\) provided is to a directory$")));
     }
 
     @Test
     public void preProfileChecks_profileFileIsEmpty_returnsCorrectErrorMessage() {
         //Arrange
         when(mockFileUtils.isFileEmpty(mockFile)).thenReturn(true);
-        expectedErrorMessages.add("Invalid Input - Profile file has no content");
 
         //Act
-        ValidationResult actualResult = validator.preProfileChecks(config, mockConfigSource);
+        Collection<ValidationAlert> actualResult = validator.preProfileChecks(config, mockConfigSource);
 
         //Assert
-        assertThat("Validation result did not contain expected error message", actualResult, sameBeanAs(expectedResult));
-        Assert.assertFalse(actualResult.isValid());
+        Collection<String> messages = actualResult
+            .stream()
+            .map(va -> va.getMessage().getVerboseMessage())
+            .collect(Collectors.toList());
+        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file \\(.+\\) has no content$")));
     }
 }
