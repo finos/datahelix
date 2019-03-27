@@ -1,4 +1,4 @@
-## Key Concepts:
+## Key Concepts
 
 1. [Design Decisions](KeyDecisions.md)
 1. [Decision Trees](DecisionTrees/DecisionTrees.md)
@@ -7,5 +7,6 @@
 
 ## Development
 
-1. [Dependency Injection](DependencyInjection.md)
-2. [Unit Testing](CucumberSyntax.md)
+1. [Contributing](../.github/contributing.md)
+2. [Dependency Injection](DependencyInjection.md)
+3. [Unit Testing](CucumberSyntax.md)
