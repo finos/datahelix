@@ -1,9 +1,9 @@
-Feature: User can specify that a temporal date is lower than, but not equal to, a specified threshold
+Feature: User can specify that a datetime date is lower than, but not equal to, a specified threshold
 
 Background:
      Given the generation strategy is full
        And there is a field foo
-       And foo is of type "temporal"
+       And foo is of type "datetime"
 
 #Alone
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
@@ -81,7 +81,7 @@ Scenario: 'before' run against a non contradicting 'before' should be successful
        | 2017-12-31T23:59:59.995 |
 
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-# Defect 141 "Implement granularity for temporal values" related to this issue
+# Defect 141 "Implement granularity for datetimes" related to this issue
 @ignore
 Scenario: 'before' run against a non contradicting not 'before' should be successful
      Given foo is before 2019-01-02T00:00:00.000

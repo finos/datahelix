@@ -312,7 +312,7 @@ Scenario: Running an 'equalTo' request that includes a date value (not a string)
 Scenario: Running an 'equalTo' request that includes a date value (leap year) should be successful
   Given there is a field foo
     And foo is equal to 2020-02-29T00:00:00.000
-    And foo is of type "temporal"
+    And foo is of type "datetime"
   Then the following data should be generated:
   | foo                     |
   | null                    |
@@ -321,7 +321,7 @@ Scenario: Running an 'equalTo' request that includes a date value (leap year) sh
 Scenario: Running an 'equalTo' request that includes a date value (earliest date) should be successful
   Given there is a field foo
     And foo is equal to 0001-01-01T00:00:01.000
-    And foo is of type "temporal"
+    And foo is of type "datetime"
   Then the following data should be generated:
   | foo                     |
   | null                    |
@@ -330,7 +330,7 @@ Scenario: Running an 'equalTo' request that includes a date value (earliest date
 Scenario: Running an 'equalTo' request that includes a date value (system max future dates) should be successful
   Given there is a field foo
     And foo is equal to 9999-12-31T23:59:59.999
-    And foo is of type "temporal"
+    And foo is of type "datetime"
   Then the following data should be generated:
    | foo                      |
    | null                     |
@@ -553,10 +553,10 @@ Scenario: 'EqualTo' a decimal with 'ofType' decimal is successful
     | null |
     | 1    |
 
-Scenario: 'EqualTo' a date value with 'ofType' temporal is successful
+Scenario: 'EqualTo' a date value with 'ofType' datetime is successful
   Given there is a field foo
     And foo is equal to 2010-01-01T00:00:00.000
-    And foo is of type "temporal"
+    And foo is of type "datetime"
   Then the following data should be generated:
     | foo                     |
     | null                    |
@@ -598,19 +598,19 @@ Scenario: 'EqualTo' a date and not 'ofType' decimal is successful
     | null                    |
     | 2019-01-01T00:00:00.000 |
 
-Scenario: 'EqualTo' a string and not 'ofType' temporal is successful
+Scenario: 'EqualTo' a string and not 'ofType' datetime is successful
   Given there is a field foo
     And foo is equal to "a"
-    And foo is anything but of type "temporal"
+    And foo is anything but of type "datetime"
   Then the following data should be generated:
     | foo  |
     | null |
     | "a"  |
 
-Scenario: 'EqualTo' a number and not 'ofType' temporal is successful
+Scenario: 'EqualTo' a number and not 'ofType' datetime is successful
   Given there is a field foo
     And foo is equal to 1
-    And foo is anything but of type "temporal"
+    And foo is anything but of type "datetime"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -694,10 +694,10 @@ Scenario: Not 'equalTo' a date value and 'ofType' decimal is successful
     | null |
     | 1.1  |
 
-Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
+Scenario: Not 'equalTo' a string value and 'ofType' datetime is successful
     Given there is a field foo
       And foo is anything but equal to "a"
-      And foo is of type "temporal"
+      And foo is of type "datetime"
       And foo is in set:
       | 2019-01-01T00:00:00.000   |
       | "2019-01-01T00:00:00.000" |
@@ -707,10 +707,10 @@ Scenario: Not 'equalTo' a string value and 'ofType' temporal is successful
       | null                    |
       | 2019-01-01T00:00:00.000 |
 
-Scenario: Not 'equalTo' an integer value and 'ofType' temporal is successful
+Scenario: Not 'equalTo' an integer value and 'ofType' datetime is successful
     Given there is a field foo
       And foo is anything but equal to 1
-      And foo is of type "temporal"
+      And foo is of type "datetime"
       And foo is in set:
       | 2019-01-01T00:00:00.000 |
       | 100                     |
@@ -736,10 +736,10 @@ Scenario: 'EqualTo' an empty string and 'ofType' integer emits null
       | foo  |
       | null |
 
-  Scenario: 'EqualTo' an empty string and 'ofType' temporal emits null
+  Scenario: 'EqualTo' an empty string and 'ofType' datetime emits null
     Given there is a field foo
       And foo is equal to ""
-      And foo is of type "temporal"
+      And foo is of type "datetime"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -792,18 +792,18 @@ Scenario: 'EqualTo' a date value and 'ofType' decimal emits null
     | foo  |
     | null |
 
-Scenario: 'EqualTo' a string value and 'ofType' temporal emits null
+Scenario: 'EqualTo' a string value and 'ofType' datetime emits null
     Given there is a field foo
       And foo is equal to "2010-01-01T00:00:00.000"
-      And foo is of type "temporal"
+      And foo is of type "datetime"
     Then the following data should be generated:
       | foo  |
       | null |
 
-Scenario: 'EqualTo' an integer value and 'ofType' temporal emits null
+Scenario: 'EqualTo' an integer value and 'ofType' datetime emits null
     Given there is a field foo
       And foo is equal to 2
-      And foo is of type "temporal"
+      And foo is of type "datetime"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -824,10 +824,10 @@ Scenario: 'EqualTo' decimal and not 'ofType' decimal emits null
     | foo  |
     | null |
 
-Scenario: 'EqualTo' date and not 'ofType' temporal emits null
+Scenario: 'EqualTo' date and not 'ofType' datetime emits null
   Given there is a field foo
     And foo is equal to 2019-02-12T09:11:53.000
-    And foo is anything but of type "temporal"
+    And foo is anything but of type "datetime"
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1639,7 +1639,7 @@ Scenario: Not 'equalTo' run against a non contradicting 'after' should be succes
     | 2019-01-01T00:00:00.004 |
     | 2019-01-01T00:00:00.005 |
 
-Scenario Outline: 'EqualTo' a non-temporal value with 'after' should be successful
+Scenario Outline: 'EqualTo' a non-datetime value with 'after' should be successful
   Given there is a field foo
     And foo is equal to <value>
     And foo is after 2018-01-01T00:00:00.000
@@ -1701,7 +1701,7 @@ Scenario: Not 'equalTo' run against a non contradicting 'afterOrAt' should only 
     | 2019-01-01T00:00:00.003 |
     | 2019-01-01T00:00:00.004 |
 
-Scenario Outline: 'EqualTo' to a non-temporal value with 'afterOrAt' should be successful
+Scenario Outline: 'EqualTo' to a non-datetime value with 'afterOrAt' should be successful
   Given there is a field foo
     And foo is equal to <value>
     And foo is after or at 2018-01-01T00:00:00.000
@@ -1764,7 +1764,7 @@ Scenario: Not 'equalTo' run against a non contradicting 'before' should be succe
     | 2018-12-31T23:59:59.996 |
     | 2018-12-31T23:59:59.995 |
 
-Scenario Outline: 'EqualTo' a non-temporal value with 'before' should be successful
+Scenario Outline: 'EqualTo' a non-datetime value with 'before' should be successful
   Given there is a field foo
     And foo is equal to <value>
     And foo is before 2018-01-01T00:00:00.000
@@ -1827,7 +1827,7 @@ Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be s
     | 2018-12-31T23:59:59.996 |
     | 2018-12-31T23:59:59.995 |
 
-Scenario Outline: 'EqualTo' a non-temporal value with 'beforeOrAt' should be successful
+Scenario Outline: 'EqualTo' a non-datetime value with 'beforeOrAt' should be successful
   Given there is a field foo
     And foo is equal to <value>
     And foo is before 2018-01-01T00:00:00.000

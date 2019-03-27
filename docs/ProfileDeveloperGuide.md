@@ -8,7 +8,7 @@
 2. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
-    3. [Temporal](#Temporal)
+    3. [DateTime](#DateTime)
 
 3. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
@@ -30,7 +30,7 @@
         3. [lessThan](#predicate-lessthan)
         4. [lessThanOrEqualTo](#predicate-lessthanorequalto)
         5. [granularTo](#predicate-granularto)
-    5. [Temporal constraints](#Temporal-constraints)
+    5. [DateTime constraints](#DateTime-constraints)
         1. [after](#predicate-after)
         2. [afterOrAt](#predicate-afterorat)
         3. [before](#predicate-before)
@@ -96,7 +96,7 @@ Profiles can be created by any of:
 
 # Data Types
 
-DataHelix currently recognises four data types: _string_, _temporal_, _integer_ and _decimal_. Keeping this set small is a deliberate goal; it would be possible to have types like _FirstName_ or _Postcode_, but instead these are considered specialisations of the _String_ type, so they can be constrained by the normal string operators (e.g. a user could generate all first names shorter than 10 characters, starting with a vowel).
+DataHelix currently recognises four data types: _string_, _datetime_, _integer_ and _decimal_. Keeping this set small is a deliberate goal; it would be possible to have types like _FirstName_ or _Postcode_, but instead these are considered specialisations of the _String_ type, so they can be constrained by the normal string operators (e.g. a user could generate all first names shorter than 10 characters, starting with a vowel).
 
 ## Integer/Decimal
 
@@ -123,9 +123,9 @@ Note that granularity concerns which values are valid, not how they're presented
 
 Strings are sequences of unicode characters. Currently, only characters from the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) (Plane 0) are supported.
 
-## Temporal
+## DateTime
 
-Temporal values represent specific moments in time, and are specified in profiles through specialised objects:
+DateTimes represent specific moments in time, and are specified in profiles through specialised objects:
 
 ```javascript
 { "date": "2000-01-01T09:00:00.000" }
@@ -135,14 +135,14 @@ The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); th
 with precisely 3 digits of sub-second precision, plus an optional offset specifier of either "Z" or a "+HH" format. 
 Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
 
-Temporal values can be in the range `0001-01-01T00:00:00.000` to `9999-12-31T23:59:59.999`
+DateTimes can be in the range `0001-01-01T00:00:00.000` to `9999-12-31T23:59:59.999`
 that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnight on the 31 December 9999`_**
 
-Temporal values are by default output per the user's locale, adjusted to their time zone.
+DateTimes are by default output per the user's locale, adjusted to their time zone.
 
-### Temporal granularity
+### DateTime granularity
 
-Temporal values currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
+DateTimes currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
 
 
 # Predicate constraints
@@ -203,7 +203,7 @@ Is satisfied if `field` is null or absent.
 { "field": "price", "is": "ofType", "value": "string" }
 ```
 
-Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `temporal`)
+Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`)
 
 ## Textual constraints
 
@@ -322,7 +322,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
 
-## Temporal constraints
+## DateTime constraints
 All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
 
 Example: `{ "date": "2001-02-03T04:05:06.007" }`

@@ -30,32 +30,32 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     public void visit(IsAfterConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.DATETIME);
+        state.dateTimeConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsBeforeConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, false);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.DATETIME);
+        state.dateTimeConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, false);
     }
 
     @Override
     public void visit(IsAfterOrEqualToConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.DATETIME);
+        state.dateTimeConstraintValidator.isAfter(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
     public void visit(IsBeforeOrEqualToConstantDateTimeConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
-        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.TEMPORAL);
-        state.temporalConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, true);
+        state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.DATETIME);
+        state.dateTimeConstraintValidator.isBefore(constraint.getField(), constraint.referenceValue, true);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         } else {
             ConstraintValidator noRestrictions = new ConstraintValidator(
                 new TypeConstraintValidator(),
-                new TemporalConstraintValidator(),
+                new DateTimeConstraintValidator(),
                 new SetConstraintValidator(),
                 new StringConstraintValidator(),
                 new NullConstraintValidator(),
