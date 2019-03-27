@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
-public class TemporalFieldValueSource implements FieldValueSource {
+public class DateTimeFieldValueSource implements FieldValueSource {
 
     public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999, ZoneOffset.UTC);
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0,0, 0, ZoneOffset.UTC);
@@ -23,7 +23,7 @@ public class TemporalFieldValueSource implements FieldValueSource {
     private final OffsetDateTime inclusiveLower;
     private final OffsetDateTime exclusiveUpper;
 
-    public TemporalFieldValueSource(
+    public DateTimeFieldValueSource(
             DateTimeRestrictions restrictions,
             Set<Object> blacklist) {
 
@@ -138,7 +138,7 @@ public class TemporalFieldValueSource implements FieldValueSource {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        TemporalFieldValueSource otherSource = (TemporalFieldValueSource) obj;
+        DateTimeFieldValueSource otherSource = (DateTimeFieldValueSource) obj;
         return restrictions.equals(otherSource.restrictions) &&
             blacklist.equals(otherSource.blacklist) &&
             equals(inclusiveLower, otherSource.inclusiveLower) &&

@@ -35,9 +35,9 @@ Example profiles may include:
 | Constraint 1                       | Constraint 2          | Validity - Logging   | Reason                                                                                                    |
 |------------------------------------|-----------------------|---------|-----------------------------------------------------------------------------------------------------------|
 | A is of type STRING                | A is of type INTEGER  | Invalid - Error | A is already set to be of type STRING by Constraint 1. The type cannot be changed to a different one.     |
-| A is less than 10                  | A is of type TEMPORAL | Invalid - Error | Constraint 1 implies that A must be of INTEGER or DECIMAL type. The type cannot be changed to a different one.       |
+| A is less than 10                  | A is of type DATETIME | Invalid - Error | Constraint 1 implies that A must be of INTEGER or DECIMAL type. The type cannot be changed to a different one.       |
 | A is of type STRING                | A is granular to 1    | Invalid - Error | A is of type String and applying granular to constraint is only allowed on DECIMAL fields.                |
-| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid - Error | Constraint 1 implies that A must be of TEMPORAL type. Constraint 2 can only be applied to INTEGER or DECIMAL types.  |
+| A is after 2008-09-15T15:53:00.000 | A is less than 10     | Invalid - Error | Constraint 1 implies that A must be of DATETIME type. Constraint 2 can only be applied to INTEGER or DECIMAL types.  |
 
 
 ## Set validation
@@ -66,9 +66,9 @@ Example profiles may include:
 | C is greater than 10             | C is less than 5              | Valid - Information | Null satisfies these conditions. Null will be provided in all cases. |
 
 
-## Temporal validation
+## DateTime validation
 
-Temporal validation is performed to ensure there always is a value that can be generated for a field.
+DateTime validation is performed to ensure there always is a value that can be generated for a field.
 
 Example profiles may include:
 

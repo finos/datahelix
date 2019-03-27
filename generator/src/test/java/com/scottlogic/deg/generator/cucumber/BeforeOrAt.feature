@@ -1,13 +1,13 @@
-Feature: User can specify that a temporal date is lower than, or the same as, a specified threshold
+Feature: User can specify that a datetime date is lower than, or the same as, a specified threshold
 
 Background:
      Given the generation strategy is full
        And there is a field foo
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is anything but null
 
 @ignore #issue 594
-Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are less than or at a specified date
+Scenario: User requires to create a datetime field with date (YYYY-MM-DD) values within a given month that are less than or at a specified date
      Given foo is before or at 2018-10-10T00:00:00.000Z
        And the generator can generate at most 30 rows
      Then the following data should be generated:
@@ -24,7 +24,7 @@ Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values
        | 2018-10-10T00:00:00.000Z |
 
 @ignore #issue 594
-Scenario: User requires to create a temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or at specified date and time
+Scenario: User requires to create a datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or at specified date and time
      Given foo is before or at 2018-10-01T12:01:05.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -35,31 +35,31 @@ Scenario: User requires to create a temporal field with date and time (YYYY-MM-D
        | 2018-06-01T12:01:04.000Z |
 
 
-Scenario: Running beforeOrAt request that includes temporal field with date (YYYY-MM-DD) values that has invalid date should fail
+Scenario: Running beforeOrAt request that includes datetime field with date (YYYY-MM-DD) values that has invalid date should fail
      Given foo is before or at 2019-15-32T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid time should fail
+Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid time should fail
      Given foo is before or at 2018-10-01T25:25:05.000Z
        And the generator can generate at most 5 rows
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
+Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
      Given foo is before or at 0000-01-10T00:00:00.000Z
      Then I am presented with an error message
        And no data is created
 
-Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
+Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
      Given foo is before or at "2018-Feb-01T00:00:00.000"
        And the generator can generate at most 5 rows
      Then I am presented with an error message
        And no data is created
 
 @ignore #issue 594
-Scenario: Running beforeOrAt request that includes temporal field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
+Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
      Given foo is before or at 2024-01-01T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
@@ -68,7 +68,7 @@ Scenario: Running beforeOrAt request that includes temporal field with date and 
        | 2012-09-01T12:01:02.000 |
        | 2024-07-01T12:01:03.000 |
 
-@ignore #667 & 594, granularity should be millisecond by default and generation should be descending when upper-bound only is provided
+@ignore #594 generation should be descending when upper-bound only is provided
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000Z
        And foo is before or at 2018-01-01T00:00:00.000Z
@@ -81,7 +81,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2017-12-31T23:59:59.997Z |
        | 2017-12-31T23:59:59.996Z |
 
-@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is before or at 2019-01-01T00:00:00.000Z
        And foo is anything but before or at 2018-01-01T00:00:00.000Z
@@ -94,7 +93,6 @@ Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt cons
        | 2018-01-01T00:00:00.004Z |
        | 2018-01-01T00:00:00.005Z |
 
-@ignore #667 - granularity for temporals should be millisecond by default
 Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
      Given foo is anything but before or at 2019-01-01T00:00:00.000Z
        And foo is anything but before or at 2018-01-01T00:00:00.000Z

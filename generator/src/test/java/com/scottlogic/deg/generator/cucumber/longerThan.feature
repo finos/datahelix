@@ -117,7 +117,7 @@ Scenario: Multiple not 'longerThan' requests should be successful
        | "aaaa"  |
        | "aaaaa" |
 
-Scenario: 'longerThan' with contradicting not 'longerThan' should emit numeric,temporal and null
+Scenario: 'longerThan' with contradicting not 'longerThan' should emit numeric,datetime and null
   Given foo is longer than 3
     And foo is anything but longer than 3
     And foo is in set:
@@ -189,7 +189,7 @@ Scenario: Not 'longerThan' with non contradicting not 'shorterThan' should be su
       | "aa"  |
       | "aaa" |
 
-Scenario: 'longerThan' with contradicting 'shorterThan' should emit numeric,temporal and null
+Scenario: 'longerThan' with contradicting 'shorterThan' should emit numeric,datetime and null
   Given foo is longer than 3
     And foo is shorter than 2
     And foo is in set:
@@ -202,7 +202,7 @@ Scenario: 'longerThan' with contradicting 'shorterThan' should emit numeric,temp
       | 1                        |
       | 2011-01-01T00:00:00.000Z |
 
-Scenario: Not 'longerThan' with contradicting not 'shorterThan' should emit numeric,temporal and null
+Scenario: Not 'longerThan' with contradicting not 'shorterThan' should emit numeric,datetime and null
   Given foo is anything but longer than 3
     And foo is anything but shorter than 4
     And foo is in set:
@@ -257,7 +257,7 @@ Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' constraint sho
       | null |
       | "2"  |
 
-Scenario: 'longerThan' against contradicting 'aValid' emits numeric,temporal and null
+Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and null
   Given foo is longer than 20
     And foo is a valid "ISIN"
     And foo is in set:

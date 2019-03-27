@@ -531,7 +531,7 @@ Scenario: matchingRegex string run against a non contradicting not granularTo sh
        | "01" |
        | "10" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting after should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -545,7 +545,7 @@ Scenario: matchingRegex string run against a non contradicting after should be s
         | "ac" |
         | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting not after should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -559,7 +559,7 @@ Scenario: matchingRegex string run against a non contradicting not after should 
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting afterOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -573,7 +573,7 @@ Scenario: matchingRegex string run against a non contradicting afterOrAt should 
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting not afterOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -587,7 +587,7 @@ Scenario: matchingRegex string run against a non contradicting not afterOrAt sho
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting before should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -601,7 +601,7 @@ Scenario: matchingRegex string run against a non contradicting before should be 
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting not before should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -615,7 +615,7 @@ Scenario: matchingRegex string run against a non contradicting not before should
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting beforeOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
@@ -629,7 +629,7 @@ Scenario: matchingRegex string run against a non contradicting beforeOrAt should
        | "ac" |
        | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a temporal value" is related to this scenario
+# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
 @ignore
 Scenario: matchingRegex string run against a non contradicting not beforeOrAt should be successful
      Given foo is matching regex /[a-e]{2}/

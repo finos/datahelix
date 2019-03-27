@@ -20,7 +20,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            //no temporal values can be created
+            //no datetimes can be created
 
             TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
             if (typeRestrictions == null){
@@ -29,7 +29,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
             return Optional.of(merging
                 .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.TEMPORAL),
+                    typeRestrictions.except(IsOfTypeConstraint.Types.DATETIME),
                     left.getFieldSpecSource().combine(right.getFieldSpecSource())));
         }
 

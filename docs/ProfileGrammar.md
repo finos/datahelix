@@ -127,8 +127,8 @@ _**[epistemicConstraint](#epistemicConstraint)**_
 _**[epistemicConstraint](#epistemicConstraint)**_
 
 
-## <a id="temporalConstraint">temporalConstraint:</a>
-![](profile-grammar/temporalConstraint.png)
+## <a id="datetimeConstraint">datetimeConstraint:</a>
+![](profile-grammar/datetimeConstraint.png)
 ##### referenced by:
 _**[epistemicConstraint](#epistemicConstraint)**_
 
@@ -151,69 +151,69 @@ _**[epistemicConstraint](#epistemicConstraint)**_
 _**[presentationalConstraint](#presentationalConstraint)**_
 
 
-## <a id="temporal">temporal:</a>
-![](profile-grammar/temporal.png)
+## <a id="datetime">datetime:</a>
+![](profile-grammar/datetime.png)
 ##### referenced by:
 _**[equalTo](#equalTo)**_\
 _**[inSet](#inSet)**_\
-_**[temporalConstraint](#temporalConstraint)**_
+_**[datetimeConstraint](#datetimeConstraint)**_
 
 
 
-## <a id="temporalValue">temporalValue:</a>
-A temporal value is a representation of an 
+## <a id="datetimeValue">datetimeValue:</a>
+A datetime value is a representation of an
 [ISO 8601-1:2019](https://www.iso.org/standard/70907.html)
 formatted date time.\
-![](profile-grammar/temporalValue.png)
+![](profile-grammar/datetimeValue.png)
 ##### referenced by:num
-_**[temporal](#temporal)**_
+_**[datetime](#datetime)**_
 
 
-## temporalYear:
-![](profile-grammar/temporalYear.png)
+## datetimeYear:
+![](profile-grammar/datetimeYear.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
-## temporalMonth:
-![](profile-grammar/temporalMonth.png)
+## datetimeMonth:
+![](profile-grammar/datetimeMonth.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
-## temporalDay:
-![](profile-grammar/temporalDay.png)
+## datetimeDay:
+![](profile-grammar/datetimeDay.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
-## temporalHour:
-![](profile-grammar/temporalHour.png)
+## datetimeHour:
+![](profile-grammar/datetimeHour.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
-## temporalMinute:
-![](profile-grammar/temporalMinute.png)
+## datetimeMinute:
+![](profile-grammar/datetimeMinute.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
-## temporalSecond:
-![](profile-grammar/temporalSecond.png)
+## datetimeSecond:
+![](profile-grammar/datetimeSecond.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
-## temporalMillisec:
-![](profile-grammar/temporalMillisec.png)
+## datetimeMillisec:
+![](profile-grammar/datetimeMillisec.png)
 ##### referenced by:
-_**[temporalValue](#temporalValue)**_
+_**[datetimeValue](#datetimeValue)**_
 
 
 
@@ -277,10 +277,10 @@ _**[stringConstraint](#stringConstraint)**_
 _**[hexDigit](#hexDigit)**_\
 _**[number](#number)**_\
 _**[schemaVersion](#schemaVersion)**_\
-_**[temporalDay](#temporalDay)**_\
-_**[temporalHour](#temporalHour)**_\
-_**[temporalMillisec](#temporalMillisec)**_\
-_**[temporalMinute](#temporalMinute)**_\
-_**[temporalMonth](#temporalMonth)**_\
-_**[temporalSecond](#temporalSecond)**_\
-_**[temporalYear](#temporalYear)**_
+_**[datetimeDay](#datetimeDay)**_\
+_**[datetimeHour](#datetimeHour)**_\
+_**[datetimeMillisec](#datetimeMillisec)**_\
+_**[datetimeMinute](#datetimeMinute)**_\
+_**[datetimeMonth](#datetimeMonth)**_\
+_**[datetimeSecond](#datetimeSecond)**_\
+_**[datetimeYear](#datetimeYear)**_
