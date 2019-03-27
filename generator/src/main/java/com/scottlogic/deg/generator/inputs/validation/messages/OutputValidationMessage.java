@@ -9,6 +9,6 @@ public class OutputValidationMessage implements StandardValidationMessages {
 
     @Override
     public String getVerboseMessage() {
-        return String.format("Invalid Output - %s", message);
+        return message;
     }
 }

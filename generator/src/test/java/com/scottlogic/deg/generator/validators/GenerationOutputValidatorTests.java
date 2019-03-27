@@ -65,7 +65,7 @@ public class GenerationOutputValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - parent directory of output file "
+        Assert.assertThat(messages, hasItem("parent directory of output file "
             + "already exists but is not a directory, please use a different output filename"));
     }
 
@@ -83,7 +83,7 @@ public class GenerationOutputValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - file already exists, please use a different output filename " +
+        Assert.assertThat(messages, hasItem("file already exists, please use a different output filename " +
             "or use the --replace option"));
     }
 
@@ -129,7 +129,7 @@ public class GenerationOutputValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - target is a directory, please use a different output filename"));
+        Assert.assertThat(messages, hasItem("target is a directory, please use a different output filename"));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class GenerationOutputValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - not a directory, please enter a valid directory name"));
+        Assert.assertThat(messages, hasItem("not a directory, please enter a valid directory name"));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class GenerationOutputValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - directory not empty, please remove any 'manifest.json' " +
+        Assert.assertThat(messages, hasItem("directory not empty, please remove any 'manifest.json' " +
             "and '[0-9].csv' files or use the --replace option"));
     }
 }

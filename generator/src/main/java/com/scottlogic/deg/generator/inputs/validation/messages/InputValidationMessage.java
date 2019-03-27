@@ -14,9 +14,7 @@ public class InputValidationMessage implements StandardValidationMessages {
     @Override
     public String getVerboseMessage() {
         return String.format(
-            "Invalid Input - %s",
-            String.format(
-                message,
-                file.toString()));
+            message,
+            file.toString());
     }
 }

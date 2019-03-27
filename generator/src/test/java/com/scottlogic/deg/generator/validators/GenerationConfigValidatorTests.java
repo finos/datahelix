@@ -110,7 +110,7 @@ public class GenerationConfigValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem("Invalid Output - trace file already exists, please use a different output filename or use the --replace option"));
+        Assert.assertThat(messages, hasItem("trace file already exists, please use a different output filename or use the --replace option"));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class GenerationConfigValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file path \\(.+\\) contains one or more invalid characters .*")));
+        Assert.assertThat(messages, hasItem(matchesPattern("^Profile file path \\(.+\\) contains one or more invalid characters .*")));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class GenerationConfigValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file \\(.+\\) does not exist$")));
+        Assert.assertThat(messages, hasItem(matchesPattern("^Profile file \\(.+\\) does not exist$")));
     }
 
     @Test
@@ -173,7 +173,7 @@ public class GenerationConfigValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file path \\(.+\\) provided is to a directory$")));
+        Assert.assertThat(messages, hasItem(matchesPattern("^Profile file path \\(.+\\) provided is to a directory$")));
     }
 
     @Test
@@ -189,6 +189,6 @@ public class GenerationConfigValidatorTests {
             .stream()
             .map(va -> va.getMessage().getVerboseMessage())
             .collect(Collectors.toList());
-        Assert.assertThat(messages, hasItem(matchesPattern("^Invalid Input - Profile file \\(.+\\) has no content$")));
+        Assert.assertThat(messages, hasItem(matchesPattern("^Profile file \\(.+\\) has no content$")));
     }
 }
