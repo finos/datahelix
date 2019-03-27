@@ -18,7 +18,7 @@ import java.util.List;
  * <p>
  * Checks that the profile JSON file is valid against the DataHelix Profile Schema
  * (datahelix.schema.json) using the <a href="https://github.com/leadpony/justify">
- *     LeadPony Justify JSON Schema Validator</a>
+ * LeadPony Justify JSON Schema Validator</a>
  * </p>
  */
 public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
@@ -34,19 +34,11 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
         }
     }
 
-    /**
-     * Validates a json file against the DataHelix Profile JSON Schema.
-     *
-     * @return the result of validating the provided profile
-     */
     @Override
     public ValidationResult validateProfile(InputStream profileStream) {
         return validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), profileStream);
     }
 
-    /**
-     * @return the result of validating the provided DataHelix Profile
-     */
     @Override
     public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();

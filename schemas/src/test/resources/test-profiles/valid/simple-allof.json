@@ -8,7 +8,8 @@
           "allOf": [
             {
               "field": "field1",
-              "is": "null"
+              "is": "shorterThan",
+              "value": 19
             },
             {
               "field": "field1",

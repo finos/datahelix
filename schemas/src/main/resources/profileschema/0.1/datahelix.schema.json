@@ -108,7 +108,6 @@
       "required": ["field", "is"],
       "minProperties": 2,
       "maxProperties": 3,
-      "additionalProperties": true,
       "properties": {
         "field": {"type": "string"},
         "is": {
@@ -153,7 +152,7 @@
                 "properties": {"is": {"const": "null"}}
               },
               "then": {
-                "properties": {"value": false}
+                "maxProperties":  2
               },
               "else": {
                 "if": {
@@ -201,8 +200,7 @@
                         },
                         "then": {
                           "properties": {"value": {"const": "ISIN", "default": "ISIN"}}
-                        },
-                        "else": {"not": true}
+                        }
                       }
                     }
                   }
