@@ -8,7 +8,7 @@ import java.util.List;
 public class ConstraintValidator {
 
     public final TypeConstraintValidator typeConstraintValidator;
-    public final TemporalConstraintValidator temporalConstraintValidator;
+    public final DateTimeConstraintValidator dateTimeConstraintValidator;
     public final SetConstraintValidator setConstraintValidator;
     public final StringConstraintValidator stringConstraintValidator;
     public final NullConstraintValidator nullConstraintValidator;
@@ -16,7 +16,7 @@ public class ConstraintValidator {
     public final NumericConstraintValidator numericConstraintValidator;
 
     public ConstraintValidator(TypeConstraintValidator typeConstraintValidator,
-                                  TemporalConstraintValidator temporalConstraintValidator,
+                                  DateTimeConstraintValidator dateTimeConstraintValidator,
                                   SetConstraintValidator setConstraintValidator,
                                   StringConstraintValidator stringConstraintValidator,
                                   NullConstraintValidator nullConstraintValidator,
@@ -24,7 +24,7 @@ public class ConstraintValidator {
                                   NumericConstraintValidator numericConstraintValidator)
     {
         this.typeConstraintValidator = typeConstraintValidator;
-        this.temporalConstraintValidator = temporalConstraintValidator;
+        this.dateTimeConstraintValidator = dateTimeConstraintValidator;
         this.setConstraintValidator = setConstraintValidator;
         this.stringConstraintValidator = stringConstraintValidator;
         this.nullConstraintValidator = nullConstraintValidator;
@@ -37,7 +37,7 @@ public class ConstraintValidator {
         List<ValidationAlert> alerts = new ArrayList<>();
 
         alerts.addAll(typeConstraintValidator.getAlerts());
-        alerts.addAll(temporalConstraintValidator.getAlerts());
+        alerts.addAll(dateTimeConstraintValidator.getAlerts());
         alerts.addAll(setConstraintValidator.getAlerts());
         alerts.addAll(stringConstraintValidator.getAlerts());
         alerts.addAll(nullConstraintValidator.getAlerts());

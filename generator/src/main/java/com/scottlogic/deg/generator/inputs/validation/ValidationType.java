@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
 public enum ValidationType {
-    TEMPORAL,
+    DATETIME,
     TYPE,
     SET,
     STRING,

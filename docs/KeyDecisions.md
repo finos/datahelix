@@ -20,7 +20,7 @@ In some cases this is intuitive:
 
 - If `C` says that a field is null, `¬C` should permit that field to be anything _other_ than null.
 - If `C` says that a field is in a set, `¬C` should permit anything _not_ in that set.
-- If `C` says that a field is a decimal, `¬C` should permit strings, temporal values, etc.
+- If `C` says that a field is a decimal, `¬C` should permit strings, datetimes, etc.
 
 But:
 
@@ -36,7 +36,7 @@ Note that negation of type integer is not fully defined yet as we do not have a 
 
 Given the above, should we expect nulls? If null is considered a _value_ then no would be a reasonable answer, but it can equally be considered the absence of a value. 
 
-## What do temporal constraints mean when datetimes are partially specified?
+## What do datetime constraints mean when datetimes are partially specified?
 
 ```javascript
 { "field": "creationDate", "is": "after", "value": "2015-01-01" }

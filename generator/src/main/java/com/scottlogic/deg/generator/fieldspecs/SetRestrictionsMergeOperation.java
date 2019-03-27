@@ -41,7 +41,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
             }
 
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
                 filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
             }
 
