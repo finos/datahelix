@@ -13,6 +13,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used to validate a DataHelix Profile JSON file.
+ * <p>
+ * Checks that the profile JSON file is valid against the DataHelix Profile Schema
+ * (datahelix.schema.json) using the <a href="https://github.com/worldturner/medeia-validator/">
+ *     Medeia JSON Schema Validator</a>
+ * </p>
+ */
 public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();

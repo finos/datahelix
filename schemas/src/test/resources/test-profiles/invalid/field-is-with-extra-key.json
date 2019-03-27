@@ -6,8 +6,9 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "null",
-          "value": "error"
+          "is": "shorterThan",
+          "value": 18,
+          "extrafield": 34
         }
       ]
     }

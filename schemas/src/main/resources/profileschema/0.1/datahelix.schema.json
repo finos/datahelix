@@ -90,6 +90,9 @@
     "grammaticalConstraint": {
       "oneOf": [
         {
+          "$ref": "#/definitions/ifConstraint"
+        },
+        {
           "$ref": "#/definitions/notConstraint"
         },
         {
@@ -97,15 +100,14 @@
         },
         {
           "$ref": "#/definitions/allOfConstraint"
-        },
-        {
-          "$ref": "#/definitions/ifConstraint"
         }
       ]
     },
     "dataConstraint": {
       "type": "object",
       "required": ["field", "is"],
+      "minProperties": 2,
+      "maxProperties": 3,
       "properties": {
         "field": {"type": "string"},
         "is": {
@@ -118,100 +120,97 @@
           ]
         }
       },
-      "allOf": [
-        {
-          "if": {
-            "properties": {"is": {"enum": ["after", "afterOrAt", "before", "beforeOrAt"]}}
-          },
-          "then": {
-            "properties": {"value": {"$ref": "#/definitions/datetime"}}
-          }
+      "if": {
+        "properties": {"is": {"enum": ["after", "afterOrAt", "before", "beforeOrAt"]}}
+      },
+      "then": {
+        "properties": {"value": {"$ref": "#/definitions/datetime"}}
+      },
+      "else": {
+        "if": {
+          "properties": {"is": {"const": "equalTo"}}
         },
-        {
-          "if": {
-            "properties": {"is": {"const": "equalTo"}}
-          },
-          "then": {
-            "properties": {"value": {}}
-          }
+        "then": {
+          "properties": {"value": {}}
         },
-        {
+        "else": {
           "if": {
             "properties": {"is": {"const": "ofType"}}
           },
           "then": {
             "properties": {"value": {"enum": ["decimal", "integer", "string", "datetime"]}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "inSet"}}
           },
-          "then": {
-            "properties": {"values": {"type": "array"}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "null"}}
-          },
-          "then": {
-            "properties": {"not": {}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "formattedAs"}}
-          },
-          "then": {
-            "properties": {"value": {"pattern": "^%.+$"}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"enum": ["matchingRegex", "containingRegex"]}}
-          },
-          "then": {
-            "properties": {"value": {"type": "string", "default": ".*"}}
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "enum": [
-                  "shorterThan", "longerThan", "granularTo"
-                ]
+          "else": {
+            "if": {
+              "properties": {"is": {"const": "inSet"}}
+            },
+            "then": {
+              "properties": {"values": {"type": "array"}}
+            },
+            "else": {
+              "if": {
+                "properties": {"is": {"const": "null"}}
+              },
+              "then": {
+                "properties": {"not": {}}
+              },
+              "else": {
+                "if": {
+                  "properties": {"is": {"const": "formattedAs"}}
+                },
+                "then": {
+                  "properties": {"value": {"pattern": "^%.+$"}}
+                },
+                "else": {
+                  "if": {
+                    "properties": {"is": {"enum": ["matchingRegex", "containingRegex"]}}
+                  },
+                  "then": {
+                    "properties": {"value": {"type": "string", "default": ".*"}}
+                  },
+                  "else": {
+                    "if": {
+                      "properties": {
+                        "is": {
+                          "enum": [
+                            "shorterThan", "longerThan", "granularTo"
+                          ]
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {"value": {"type": "number"}}
+                    },
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "is": {
+                            "enum": [
+                              "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {"value": {"type": "number", "maximum": 1E20, "minimum": -1E20}}
+                      },
+                      "else": {
+                        "if": {
+                          "properties": {"is": {"const": "aValid"}}
+                        },
+                        "then": {
+                          "properties": {"value": {"const": "ISIN", "default": "ISIN"}}
+                        },
+                        "else": {"not": true}
+                      }
+                    }
+                  }
+                }
               }
             }
-          },
-          "then": {
-            "properties": {"value": {"type": "number" }}
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "enum": [
-                  "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo"
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {"value": {"type": "number", "maximum": 1E20, "minimum": -1E20}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "aValid"}}
-          },
-          "then": {
-            "properties": {"value": {"const": "ISIN", "default": "ISIN"}}
           }
         }
-      ]
+      }
     },
     "notConstraint": {
       "type": "object",

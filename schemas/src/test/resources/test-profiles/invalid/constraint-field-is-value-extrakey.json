@@ -6,8 +6,9 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "null",
-          "value": 43
+          "is": "formattedAs",
+          "value": "%ggg",
+          "extrakey": "invalid"
         }
       ]
     }

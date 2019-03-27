@@ -16,7 +16,10 @@ import java.util.List;
 /**
  * Used to validate a DataHelix Profile JSON file.
  * <p>
- * Checks that the profile JSON file is valid against the DataHelix Profile Schema (datahelix.schema.json)
+ * Checks that the profile JSON file is valid against the DataHelix Profile Schema
+ * (datahelix.schema.json) using the <a href="https://github.com/leadpony/justify">
+ *     LeadPony Justify JSON Schema Validator</a>
+ * </p>
  */
 public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
 
