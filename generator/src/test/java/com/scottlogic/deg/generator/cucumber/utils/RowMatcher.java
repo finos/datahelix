@@ -5,6 +5,7 @@ import org.hamcrest.Description;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Iterator;
@@ -15,9 +16,7 @@ import java.util.stream.Collectors;
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class RowMatcher extends BaseMatcher<List<Object>> {
-    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter
-        .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS") //TODO: include offset
-        .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private final List<Object> expectedRow;
 

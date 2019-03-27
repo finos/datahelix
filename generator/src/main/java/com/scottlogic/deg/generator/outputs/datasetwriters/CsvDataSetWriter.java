@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
-    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
