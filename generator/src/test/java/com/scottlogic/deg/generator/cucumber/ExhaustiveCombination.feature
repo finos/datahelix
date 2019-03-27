@@ -191,9 +191,9 @@ Scenario: Running an exhaustive combination strategy with valid date values shou
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is anything but null
-       And bar is of type "temporal"
+       And bar is of type "datetime"
        And bar is anything but null
        And foo is in set:
          | 2018-12-04T14:00:00.000 |
@@ -212,9 +212,9 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is anything but null
-       And bar is of type "temporal"
+       And bar is of type "datetime"
        And bar is anything but null
        And foo is in set:
          | 2018-12-99T14:00:00.000 |
@@ -229,9 +229,9 @@ Scenario: Running an exhaustive combination strategy with invalid date formats s
      Given the following fields exist:
        | foo |
        | bar |
-       And foo is of type "temporal"
+       And foo is of type "datetime"
        And foo is anything but null
-       And bar is of type "temporal"
+       And bar is of type "datetime"
        And bar is anything but null
        And foo is in set:
          | 2018-12-01T14:00:00.000 |
@@ -340,13 +340,13 @@ Scenario: Running an exhaustive combination strategy with a string and a decimal
     | "x" | 1   |
     | "y" | 1   |
 
-Scenario: Running an exhaustive combination strategy with a string and a temporal field should be successful
+Scenario: Running an exhaustive combination strategy with a string and a datetime field should be successful
      Given the following fields exist:
        | foo |
        | bar |
        And foo is of type "string"
        And foo is anything but null
-       And bar is of type "temporal"
+       And bar is of type "datetime"
        And bar is anything but null
        And foo is in set:
          | "x" |
@@ -361,13 +361,13 @@ Scenario: Running an exhaustive combination strategy with a string and a tempora
        | "x" | 2010-12-31T23:59:00.000 |
        | "y" | 2010-12-31T23:59:00.000 |
 
-Scenario: Running an exhaustive combination strategy with an integer and a temporal field should be successful
+Scenario: Running an exhaustive combination strategy with an integer and a datetime field should be successful
      Given the following fields exist:
        | foo |
        | bar |
        And foo is of type "integer"
        And foo is anything but null
-       And bar is of type "temporal"
+       And bar is of type "datetime"
        And bar is anything but null
        And foo is in set:
          | 500  |
@@ -382,13 +382,13 @@ Scenario: Running an exhaustive combination strategy with an integer and a tempo
        | 500  | 2010-12-31T23:59:00.000 |
        | 1    | 2010-12-31T23:59:00.000 |
 
-Scenario: Running an exhaustive combination strategy with a decimal and a temporal field should be successful
+Scenario: Running an exhaustive combination strategy with a decimal and a datetime field should be successful
   Given the following fields exist:
     | foo |
     | bar |
     And foo is of type "decimal"
     And foo is anything but null
-    And bar is of type "temporal"
+    And bar is of type "datetime"
     And bar is anything but null
     And foo is in set:
       | 500 |
@@ -706,11 +706,11 @@ Scenario: Running an exhaustive combination strategy across fields with a duplic
        | foo1 |
        | foo2 |
        | foo3 |
-       And foo1 is anything but of type "temporal"
+       And foo1 is anything but of type "datetime"
        And foo1 is anything but null
-       And foo2 is anything but of type "temporal"
+       And foo2 is anything but of type "datetime"
        And foo2 is anything but null
-       And foo3 is anything but of type "temporal"
+       And foo3 is anything but of type "datetime"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |
@@ -750,7 +750,7 @@ Scenario: Running an exhaustive combination strategy across fields with non orde
        And foo1 is anything but null
        And foo2 is of type "string"
        And foo2 is anything but null
-       And foo3 is anything but of type "temporal"
+       And foo3 is anything but of type "datetime"
        And foo3 is anything but null
        And foo1 is in set:
          | 1 |

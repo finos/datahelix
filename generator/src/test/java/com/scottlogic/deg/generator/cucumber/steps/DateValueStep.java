@@ -29,42 +29,42 @@ public class DateValueStep {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
-    @Then("{fieldVar} contains temporal data")
-    public void producedDataShouldContainTemporalValuesForField(String fieldName){
+    @Then("{fieldVar} contains datetime data")
+    public void producedDataShouldContainDateTimeValuesForField(String fieldName){
         helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
     }
 
-    @Then("{fieldVar} contains anything but temporal data")
+    @Then("{fieldVar} contains anything but datetime data")
     public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
         helper.assertFieldContainsNullOrNotMatching(fieldName, LocalDateTime.class);
     }
 
-    @Then("{fieldVar} contains temporal values between {date} and {date} inclusively")
-    public void producedDataShouldContainTemporalValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
+    @Then("{fieldVar} contains datetimes between {date} and {date} inclusively")
+    public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
             isBetweenInclusively(minInclusive, maxInclusive));
     }
 
-    @Then("{fieldVar} contains temporal values outside {date} and {date}")
-    public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
+    @Then("{fieldVar} contains datetimes outside {date} and {date}")
+    public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
             value -> !isBetweenInclusively(min, max).apply(value));
     }
 
-    @Then("{fieldVar} contains temporal values before or at {date}")
-    public void producedDataShouldContainTemporalValuesBeforeForField(String fieldName, DateObject beforeInclusive){
+    @Then("{fieldVar} contains datetimes before or at {date}")
+    public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, DateObject beforeInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,
             value -> isBeforeOrAt(value, beforeInclusive));
     }
 
-    @Then("{fieldVar} contains temporal values after or at {date}")
-    public void producedDataShouldContainTemporalValuesAfterForField(String fieldName, DateObject afterInclusive){
+    @Then("{fieldVar} contains datetimes after or at {date}")
+    public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, DateObject afterInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             LocalDateTime.class,

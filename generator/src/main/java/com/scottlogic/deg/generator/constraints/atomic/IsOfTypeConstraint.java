@@ -27,7 +27,7 @@ public class IsOfTypeConstraint implements AtomicConstraint, VisitableProfileEle
     public enum Types {
         NUMERIC,
         STRING,
-        TEMPORAL
+        DATETIME
     }
 
     @Override

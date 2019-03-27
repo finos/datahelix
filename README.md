@@ -157,7 +157,7 @@ The generator supports four different data types:
  - **integer** - any integer that can be defined by the Java [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) type
  - **decimal** - any real number (again a BigDecimal), with an optional granularity / precision that can be defined via a `granularTo` constraint.
  - **string** - sequences of unicode characters
- - **temporal** - specific moments in time, with values in the range 0001-01-01T00:00 to 9999-12-31T23:59
+ - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00 to 9999-12-31T23:59
 
 <!-- TODO: rename as datetime -->
 

@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.TemporalFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
@@ -45,8 +45,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.TEMPORAL)) {
-            validSources.add(getTemporalSource(fieldSpec));
+        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
+            validSources.add(getDateTimeSource(fieldSpec));
         }
 
         if (mayBeNull(fieldSpec)){
@@ -141,10 +141,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
     }
 
-    private FieldValueSource getTemporalSource(FieldSpec fieldSpec) {
+    private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
         DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
 
-        return new TemporalFieldValueSource(
+        return new DateTimeFieldValueSource(
             restrictions != null ? restrictions : new DateTimeRestrictions(),
             getBlacklist(fieldSpec));
     }

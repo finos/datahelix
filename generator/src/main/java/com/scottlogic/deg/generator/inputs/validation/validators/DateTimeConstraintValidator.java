@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
+public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
 
-    public final ValidationType validationType = ValidationType.TEMPORAL;
+    public final ValidationType validationType = ValidationType.DATETIME;
 
     private final List<ValidationAlert> alerts;
     private DateTimeRestrictions currentRestrictions;
 
-    public TemporalConstraintValidator() {
+    public DateTimeConstraintValidator() {
         this.alerts = new ArrayList<>();
     }
 
@@ -76,7 +76,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
     private void logError(Field field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
-            new TemporalConstraintValidationMessages(
+            new DateTimeConstraintValidationMessages(
                 currentRestrictions,
                 referenceValue),
             validationType,
@@ -86,7 +86,7 @@ public class TemporalConstraintValidator implements ConstraintValidatorAlerts {
     private void logInformation(Field field, LocalDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
-            new TemporalConstraintValidationMessages(
+            new DateTimeConstraintValidationMessages(
                 currentRestrictions,
                 referenceValue),
             validationType,
