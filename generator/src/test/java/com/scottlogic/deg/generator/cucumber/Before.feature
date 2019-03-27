@@ -179,4 +179,4 @@ Scenario: Running a 'before' request that specifies null should be unsuccessful
 
 Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful
     Given foo is before 0000-01-01T00:00:00.000Z
-    Then the profile is invalid because "Date string '0000-01-01T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '0000-01-01T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
