@@ -53,7 +53,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
      * Wraps the current constraint in a ViolatedAtomicConstraint.
      * @return New builder with the violated head constraint and the same tail.
      */
-    public ConstraintChainBuilder<T> violate() {
+    public ConstraintChainBuilder<T> wrapWithViolate() {
         if (!(headConstraint instanceof AtomicConstraint)) {
             throw new RuntimeException("Can only mark atomic constraints as violated.");
         }

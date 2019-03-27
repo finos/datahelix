@@ -24,6 +24,14 @@ public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
         return new ElseBuilder(ifCondition, thenCondition, builder.build());
     }
 
+    public ElseBuilder negate() {
+        if (elseCondition == null) {
+            return new ElseBuilder(ifCondition, thenCondition.negate(), null);
+        }
+
+        return new ElseBuilder(ifCondition, thenCondition, elseCondition.negate());
+    }
+
     @Override
     public ConditionalConstraint build() {
         return new ConditionalConstraint(ifCondition, thenCondition, elseCondition);
