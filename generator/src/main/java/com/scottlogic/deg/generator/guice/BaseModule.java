@@ -38,10 +38,9 @@ import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidatorLeadPony;
 
 import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -94,7 +93,7 @@ public class BaseModule extends AbstractModule {
         bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
-        bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(LocalDateTime.now().getNano()));
+        bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
 
     }
 

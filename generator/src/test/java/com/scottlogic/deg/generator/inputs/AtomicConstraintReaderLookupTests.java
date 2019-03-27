@@ -16,11 +16,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AtomicConstraintReaderLookupTests {
@@ -328,5 +331,14 @@ public class AtomicConstraintReaderLookupTests {
         Assertions.assertThrows(
             InvalidProfileException.class,
             () -> AtomicConstraintReaderLookup.parseDate("2019-01-01T24:00:00.000"));
+    }
+
+    @Test
+    public void parseDate_withValidAte_shouldTreatDateWithUTCOffset() throws InvalidProfileException {
+        OffsetDateTime localDateTime = AtomicConstraintReaderLookup.parseDate("2018-04-01T00:00:00.000");
+
+        Assert.assertThat(
+            localDateTime,
+            equalTo(OffsetDateTime.of(2018, 04, 01, 00, 00, 00, 0, ZoneOffset.UTC)));
     }
 }

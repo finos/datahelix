@@ -6,10 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.cucumber.steps.DateObject;
 import com.scottlogic.deg.generator.cucumber.steps.DateValueStep;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 
 public class GeneratorTestUtilities {
     private static final ObjectMapper mapper = createMapper();
@@ -51,8 +56,17 @@ public class GeneratorTestUtilities {
 
     public static Object parseExpected(String input) throws JsonParseException, InvalidProfileException {
         if (input.matches(DateValueStep.DATE_REGEX)) {
-            return LocalDateTime.parse(input);
+            return getOffsetDateTime(input);
         }
         return parseInput(input);
+    }
+
+    public static OffsetDateTime getOffsetDateTime(String input) {
+        DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")
+            .withResolverStyle(ResolverStyle.STRICT)
+            .withZone(ZoneId.of("Z"));
+
+        return ZonedDateTime.parse(input, formatter).toOffsetDateTime();
     }
 }

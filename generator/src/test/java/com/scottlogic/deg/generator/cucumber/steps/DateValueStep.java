@@ -2,10 +2,11 @@ package com.scottlogic.deg.generator.cucumber.steps;
 
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.utils.CucumberTestState;
+import com.scottlogic.deg.generator.cucumber.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.function.Function;
 
 public class DateValueStep {
@@ -31,19 +32,19 @@ public class DateValueStep {
 
     @Then("{fieldVar} contains temporal data")
     public void producedDataShouldContainTemporalValuesForField(String fieldName){
-        helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
+        helper.assertFieldContainsNullOrMatching(fieldName, OffsetDateTime.class);
     }
 
     @Then("{fieldVar} contains anything but temporal data")
     public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
-        helper.assertFieldContainsNullOrNotMatching(fieldName, LocalDateTime.class);
+        helper.assertFieldContainsNullOrNotMatching(fieldName, OffsetDateTime.class);
     }
 
     @Then("{fieldVar} contains temporal values between {date} and {date} inclusively")
     public void producedDataShouldContainTemporalValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             isBetweenInclusively(minInclusive, maxInclusive));
     }
 
@@ -51,7 +52,7 @@ public class DateValueStep {
     public void producedDataShouldContainTemporalValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> !isBetweenInclusively(min, max).apply(value));
     }
 
@@ -59,7 +60,7 @@ public class DateValueStep {
     public void producedDataShouldContainTemporalValuesBeforeForField(String fieldName, DateObject beforeInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> isBeforeOrAt(value, beforeInclusive));
     }
 
@@ -67,26 +68,26 @@ public class DateValueStep {
     public void producedDataShouldContainTemporalValuesAfterForField(String fieldName, DateObject afterInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> isAfterOrAt(value, afterInclusive));
     }
 
-    private Function<LocalDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+    private Function<OffsetDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
         return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
-    private LocalDateTime getDateTime(DateObject dateObject){
+    private OffsetDateTime getDateTime(DateObject dateObject){
         String dateString = (String)dateObject.get("date");
-        return LocalDateTime.parse(dateString);
+        return GeneratorTestUtilities.getOffsetDateTime(dateString);
     }
 
-    private boolean isAfterOrAt(LocalDateTime date, DateObject minInclusiveObject){
-        LocalDateTime minInclusive = getDateTime(minInclusiveObject);
+    private boolean isAfterOrAt(OffsetDateTime date, DateObject minInclusiveObject){
+        OffsetDateTime minInclusive = getDateTime(minInclusiveObject);
         return date.equals(minInclusive) || date.isAfter(minInclusive);
     }
 
-    private boolean isBeforeOrAt(LocalDateTime date, DateObject maxInclusiveObject){
-        LocalDateTime maxInclusive = getDateTime(maxInclusiveObject);
+    private boolean isBeforeOrAt(OffsetDateTime date, DateObject maxInclusiveObject){
+        OffsetDateTime maxInclusive = getDateTime(maxInclusiveObject);
         return date.equals(maxInclusive) || date.isBefore(maxInclusive);
     }
 }

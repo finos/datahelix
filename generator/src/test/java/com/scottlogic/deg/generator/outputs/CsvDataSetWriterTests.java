@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 
 public class CsvDataSetWriterTests {
@@ -99,7 +100,7 @@ public class CsvDataSetWriterTests {
     @Test
     void dateTimeWithNoFormatShouldUseDefaultFormat() throws IOException {
         // Arrange
-        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
             Collections.singletonList(getValue(date)), // Format string to max 5 chars
@@ -116,7 +117,7 @@ public class CsvDataSetWriterTests {
     @Test
     void dateTimeWithNFormatShouldUsePrescribedFormat() throws IOException {
         // Arrange
-        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
             Collections.singletonList(getValueWithFormat(date, "%tF")), // Format string to max 5 chars

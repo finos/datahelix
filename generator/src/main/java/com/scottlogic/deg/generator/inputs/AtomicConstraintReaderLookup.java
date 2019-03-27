@@ -299,15 +299,15 @@ class AtomicConstraintReaderLookup {
         return parseDate((String)date);
     }
 
-    private static LocalDateTime unwrapDate(Object value) throws InvalidProfileException {
+    private static OffsetDateTime unwrapDate(Object value) throws InvalidProfileException {
         Object date = potentialUnwrapDate(value);
-        if (date instanceof LocalDateTime)
-            return (LocalDateTime) date;
+        if (date instanceof OffsetDateTime)
+            return (OffsetDateTime) date;
 
         throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
     }
 
-    static LocalDateTime parseDate(String value) throws InvalidProfileException {
+    static OffsetDateTime parseDate(String value) throws InvalidProfileException {
         DateTimeFormatter formatter = DateTimeFormatter
             .ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")
             .withResolverStyle(ResolverStyle.STRICT)
@@ -319,7 +319,7 @@ class AtomicConstraintReaderLookup {
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
                 throwDateTimeError(value);
 
-            return parsedDateTime.toLocalDateTime();
+            return parsedDateTime;
         } catch (DateTimeParseException dtpe){
             throwDateTimeError(value);
             return null;

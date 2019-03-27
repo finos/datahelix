@@ -4,7 +4,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Iterator;
@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class RowMatcher extends BaseMatcher<List<Object>> {
-    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter
+        .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS") //TODO: include offset
+        .withResolverStyle(ResolverStyle.STRICT);
 
     private final List<Object> expectedRow;
 
@@ -91,8 +93,8 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
     }
 
     private static Object formatDate(Object value){
-        if (value instanceof LocalDateTime){
-            return ((LocalDateTime) value).format(dateTimeFormat);
+        if (value instanceof OffsetDateTime){
+            return ((OffsetDateTime) value).format(dateTimeFormat);
         }
 
         return value;
