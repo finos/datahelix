@@ -25,7 +25,7 @@
         {
           "field": "Column 2",
           "is": "ofType",
-          "value": "numeric"
+          "value": "integer"
         }
       ]
     }

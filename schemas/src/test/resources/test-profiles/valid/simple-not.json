@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "not": {
+            "field": "field1",
+            "is": "formattedAs",
+            "value": "%ggg"
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "shorterThan",
+            "value": 19
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "longerThan",
+            "value": 6
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "aValid",
+            "value": "ISIN"
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "aValid",
+            "value": "ISIN"
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "inSet",
+            "values": ["1", 2]
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "inSet",
+            "values": ["1", 2]
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "ofType",
+            "value": "string"
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "greaterThan",
+            "value": 43
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "lessThan",
+            "value": 78
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "greaterThanOrEqualTo",
+            "value": 44
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "lessThanOrEqualTo",
+            "value": 77
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "granularTo",
+            "value": 0.3
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "equalTo",
+            "value": 0.004003
+          }
+        },
+        {
+          "not": {
+            "field": "field1",
+            "is": "equalTo",
+            "value": "0.004003"
+          }
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

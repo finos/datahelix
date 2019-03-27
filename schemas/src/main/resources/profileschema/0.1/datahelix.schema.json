@@ -140,7 +140,7 @@
             "properties": {"is": {"const": "ofType"}}
           },
           "then": {
-            "properties": {"value": {"enum": ["numeric", "string", "temporal"]}}
+            "properties": {"value": {"enum": ["decimal", "integer", "string", "temporal"]}}
           }
         },
         {

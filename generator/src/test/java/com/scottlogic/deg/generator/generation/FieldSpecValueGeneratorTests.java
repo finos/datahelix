@@ -144,19 +144,27 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(11, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(15, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(25, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("15"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(29, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("25"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                ).build(),
+                DataBag.startBuilding().set(
+                    new Field("First Field"),
+                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                ).build(),
+                DataBag.startBuilding().set(
+                    new Field("First Field"),
+                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
             )
         );
@@ -363,11 +371,19 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(11, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
-                    new DataBagValue(29, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                ).build(),
+                DataBag.startBuilding().set(
+                    new Field("First Field"),
+                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                ).build(),
+                DataBag.startBuilding().set(
+                    new Field("First Field"),
+                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
                 DataBag.startBuilding().set(
                     new Field("First Field"),
@@ -385,8 +401,8 @@ class FieldSpecValueGeneratorTests {
         FieldSpec rootFieldSpec = FieldSpec.Empty
             .withNumericRestrictions(
                 new NumericRestrictions() {{
-                    min = new NumericLimit<>(new BigDecimal(10), false);
-                    max = new NumericLimit<>(new BigDecimal(20), false);
+                    min = new NumericLimit<>(new BigDecimal("1E-19"), false);
+                    max = new NumericLimit<>(new BigDecimal("2E-19"), false);
                 }},
                 fieldSpecSource)
             .withTypeRestrictions(
@@ -424,7 +440,17 @@ class FieldSpecValueGeneratorTests {
             valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
         });
         
-        Assert.assertThat(valuesForFirstField, containsInAnyOrder(11, 12, 13, 14, 15, 16, 17, 18, 19));
+        Assert.assertThat(valuesForFirstField, containsInAnyOrder(
+            new BigDecimal("1.1E-19"),
+            new BigDecimal("1.2E-19"),
+            new BigDecimal("1.3E-19"),
+            new BigDecimal("1.4E-19"),
+            new BigDecimal("1.5E-19"),
+            new BigDecimal("1.6E-19"),
+            new BigDecimal("1.7E-19"),
+            new BigDecimal("1.8E-19"),
+            new BigDecimal("1.9E-19")
+        ));
     }
 
     @Test
@@ -433,8 +459,8 @@ class FieldSpecValueGeneratorTests {
         FieldSpec rootFieldSpec = FieldSpec.Empty
             .withNumericRestrictions(
                 new NumericRestrictions() {{
-                    min = new NumericLimit<>(new BigDecimal(10), false);
-                    max = new NumericLimit<>(new BigDecimal(20), false);
+                    min = new NumericLimit<>(new BigDecimal("1E-19"), false);
+                    max = new NumericLimit<>(new BigDecimal("2E-19"), false);
                 }},
                 fieldSpecSource)
             .withTypeRestrictions(
@@ -472,6 +498,16 @@ class FieldSpecValueGeneratorTests {
             valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
         });
 
-        Assert.assertThat(valuesForFirstField, containsInAnyOrder(11, 12, 13, 14, 15, 16, 17, 18, 19));
+        Assert.assertThat(valuesForFirstField, containsInAnyOrder(
+            new BigDecimal("1.1E-19"),
+            new BigDecimal("1.2E-19"),
+            new BigDecimal("1.3E-19"),
+            new BigDecimal("1.4E-19"),
+            new BigDecimal("1.5E-19"),
+            new BigDecimal("1.6E-19"),
+            new BigDecimal("1.7E-19"),
+            new BigDecimal("1.8E-19"),
+            new BigDecimal("1.9E-19")
+            ));
     }
 }

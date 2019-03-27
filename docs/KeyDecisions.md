@@ -20,11 +20,13 @@ In some cases this is intuitive:
 
 - If `C` says that a field is null, `¬C` should permit that field to be anything _other_ than null.
 - If `C` says that a field is in a set, `¬C` should permit anything _not_ in that set.
-- If `C` says that a field is numeric, `¬C` should permit strings, temporal values, etc.
+- If `C` says that a field is a decimal, `¬C` should permit strings, temporal values, etc.
 
 But:
 
 - If `C` says that a field is a number greater than 3, it might be intuitive to say that `¬C` permits numbers less than or equal to 3.     
+
+Note that negation of type integer is not fully defined yet as we do not have a negation of granularTo implemented.
 
 ## Does an inSet constraint imply anything about nullability?
 

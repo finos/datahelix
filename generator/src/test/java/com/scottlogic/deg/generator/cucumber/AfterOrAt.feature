@@ -5,7 +5,8 @@ Background:
        And there is a field foo
        And foo is of type "temporal"
        And foo is anything but null
-  
+
+  @ignore #141 add user configurable datetime granularity
 Scenario: User requires to create a temporal field with date (YYYY-MM-DD) values within a given month that are after or at a specified date
      Given foo is after or at 2018-01-01T00:00:00.000
        And the generator can generate at most 6 rows

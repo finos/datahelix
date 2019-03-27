@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
+import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 /**
  * Class which defines bindings for Guice injection specific for cucumber testing. The test state is persisted through

@@ -4,7 +4,6 @@ Background:
      Given the generation strategy is full
       And there is a field foo
       And foo is of type "string"
-      And  the walker type is REDUCTIVE
 
 Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
      Given foo is matching regex /[a-z]{1}/
@@ -644,14 +643,14 @@ Scenario: matchingRegex string run against a non contradicting not beforeOrAt sh
        | "ac" |
        | "ad" |
 
-Scenario: Running a 'matchingRegex' and 'inSet' and 'numeric' request nulls are generated last
+Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
      Given there is a field bar
        And the combination strategy is exhaustive
        And foo is matching regex /[a]{1}/
        And bar is in set:
          | "AA" |
        And there is a field lee
-       And lee is of type "numeric"
+       And lee is of type "integer"
        And lee is granular to 1
        And lee is less than 2
        And lee is greater than 0
