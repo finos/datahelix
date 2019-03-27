@@ -16,14 +16,14 @@ grammaticalConstraint ::= not | anyOf | allOf | if
 
 presentationalConstraint ::= '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( formattedAs ) '}'
 
-epistemicConstraint ::= '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( ofType | equalTo | stringConstraint | numberConstraint | temporalConstraint | inSet | '"' 'null' '"' ) '}'
+epistemicConstraint ::= '{' '"' 'field' '"' ':' string ',' '"' 'is' '"' ':' ( ofType | equalTo | stringConstraint | numberConstraint | datetimeConstraint | inSet | '"' 'null' '"' ) '}'
 
 not   ::= '{' '"' 'not' '"' ':' constraint '}'
 anyOf ::= '{' '"' 'anyOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 allOf ::= '{' '"' 'allOf''"' ':' '[' (constraint ( ',' constraint )*) ']' '}'
 if    ::= '{' '"' 'if' '"' ':' constraint ',' '"' 'then' '"' ':' constraint ( ',' '"' 'else' '"' ':' constraint )? '}'
 
-ofType   ::= '"' 'ofType' '"' ',' '"' 'value' '"' ':' '"' ( 'decimal' | 'integer' | 'string' | 'temporal' ) '"'
+ofType   ::= '"' 'ofType' '"' ',' '"' 'value' '"' ':' '"' ( 'decimal' | 'integer' | 'string' | 'datetime' ) '"'
 
 formattedAs ::= '"' 'formattedAs' '"' ',' '"' 'value' '"' ':' stringFormatPattern
 
@@ -31,21 +31,21 @@ stringConstraint ::= ( '"' ( 'matchingRegex' | 'containingRegex' ) '"' ',' '"' '
  | ( '"' ( 'ofLength' | 'longerThan' | 'shorterThan' ) '"' ',' '"' 'value' '"' ':' number )
  | '"' 'aValid' '"' ':' '"' 'ISIN' '"'
 numberConstraint ::= '"' ( 'lessThan' | 'greaterThan' | 'lessThanOrEqualTo' | 'greaterThanOrEqualTo' | 'granularTo' ) '"' ',' '"' 'value' '"' ':' number
-temporalConstraint ::= '"' ( 'after' | 'afterOrAt' | 'before' | 'beforeOrAt' ) '"' ',' '"' 'value' '"' ':' temporal
+datetimeConstraint ::= '"' ( 'after' | 'afterOrAt' | 'before' | 'beforeOrAt' ) '"' ',' '"' 'value' '"' ':' datetime
 
-inSet ::= '"' 'inSet' '"' ':' '[' ( ( temporal | string | number) ( ',' ( temporal | string | number) )*) ']'
+inSet ::= '"' 'inSet' '"' ':' '[' ( ( datetime | string | number) ( ',' ( datetime | string | number) )*) ']'
 
-equalTo ::= '"' 'equalTo' '"' ',' '"' 'value' '"' ':' ( number | string | temporal ) '}'
+equalTo ::= '"' 'equalTo' '"' ',' '"' 'value' '"' ':' ( number | string | datetime ) '}'
 
-temporal         ::= '{' '"' 'date' '"' ':' '"' temporalValue '"' '}'
-temporalValue    ::=temporalYear'-'temporalMonth '-'temporalDay 'T' temporalHour ':' temporalMinute ':' temporalSecond '.' temporalMillisec
-temporalYear     ::= '0' '0' '0' [1-9] | '0' '0' [1-9] digit | '0' [1-9] digit digit | [1-9] digit digit digit
-temporalMonth    ::= '0' [1-9] | '1' [0-2]
-temporalDay      ::= '0' [1-9] | [1-2] digit | '3' [0-1]
-temporalHour     ::= '0' [1-9] | '1' digit | '2' [0-3]
-temporalMinute   ::= [0-5] digit
-temporalSecond   ::= [0-5] digit
-temporalMillisec ::= digit digit digit
+datetime         ::= '{' '"' 'date' '"' ':' '"' datetimeValue '"' '}'
+datetimeValue    ::=datetimeYear'-'datetimeMonth '-'datetimeDay 'T' datetimeHour ':' datetimeMinute ':' datetimeSecond '.' datetimeMillisec
+datetimeYear     ::= '0' '0' '0' [1-9] | '0' '0' [1-9] digit | '0' [1-9] digit digit | [1-9] digit digit digit
+datetimeMonth    ::= '0' [1-9] | '1' [0-2]
+datetimeDay      ::= '0' [1-9] | [1-2] digit | '3' [0-1]
+datetimeHour     ::= '0' [1-9] | '1' digit | '2' [0-3]
+datetimeMinute   ::= [0-5] digit
+datetimeSecond   ::= [0-5] digit
+datetimeMillisec ::= digit digit digit
 
 string              ::= '"' character* '"'
 stringFormatPattern ::= '"' '%' character+ '"'

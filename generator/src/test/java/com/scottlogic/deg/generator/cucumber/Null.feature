@@ -61,7 +61,7 @@ Scenario Outline: Not 'null' with 'ofType' is successful
       | "string"   | "a"                     |
       | "decimal"  |  1.1                    |
       | "integer"  |  1                      |
-      | "temporal" | 2019-01-01T00:00:00.000 |
+      | "datetime" | 2019-01-01T00:00:00.000 |
 
 Scenario Outline: 'Null' with 'ofType' emits null
   Given foo is null
@@ -74,7 +74,7 @@ Scenario Outline: 'Null' with 'ofType' emits null
     | "string"   |
     | "integer"  |
     | "decimal"  |
-    | "temporal" |
+    | "datetime" |
 
 Scenario Outline: 'Null' with not 'ofType' emits null
   Given foo is null
@@ -86,7 +86,7 @@ Scenario Outline: 'Null' with not 'ofType' emits null
     | type       |
     | "string"   |
     | "decimal"  |
-    | "temporal" |
+    | "datetime" |
 
 ### matchingRegex ###
 
@@ -369,11 +369,9 @@ Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
     | null |
 
 ### after ###
-
-@ignore #Relates to #667 - Remove default temporal granularity
 Scenario: Not 'null' with a non contradicting 'after' should be successful
   Given foo is anything but null
-    And foo is of type "temporal"
+    And foo is of type "datetime"
     And foo is after 2019-01-01T00:00:00.000
     And the generator can generate at most 2 rows
   Then the following data should be generated:
@@ -397,10 +395,9 @@ Scenario: 'Null' with a contradicting not 'after' should only generate null
 
 ### afterOrAt ###
 
-@ignore #Relates to #667 - Remove default temporal granularity
 Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
   Given foo is anything but null
-  And foo is of type "temporal"
+  And foo is of type "datetime"
   And foo is after or at 2019-01-01T00:00:00.000
   And the generator can generate at most 2 rows
   Then the following data should be generated:
@@ -424,10 +421,10 @@ Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
 
 ### before ###
 
-@ignore #Relates to #667 - Remove default temporal granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'before' should be successful
   Given foo is anything but null
-    And foo is of type "temporal"
+    And foo is of type "datetime"
     And foo is before 2019-01-01T00:00:00.003
     And the generator can generate at most 2 rows
   Then the following data should be generated:
@@ -451,10 +448,10 @@ Scenario: 'Null' with a contradicting not 'before' should only generate null
 
 ### beforeOrAt ###
 
-@ignore #Relates to #667 - Remove default temporal granularity and #594 - Reverse order of value generation when only upper-bound operators are provided
+@ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: Not 'null' with a non contradicting 'beforeOrAt' should be successful
   Given foo is anything but null
-    And foo is of type "temporal"
+    And foo is of type "datetime"
     And foo is before or at 2019-01-01T00:00:00.002
     And the generator can generate at most 2 rows
   Then the following data should be generated:
