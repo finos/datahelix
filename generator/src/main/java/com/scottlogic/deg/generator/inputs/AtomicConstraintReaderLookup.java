@@ -9,7 +9,7 @@ import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -308,13 +308,18 @@ class AtomicConstraintReaderLookup {
     }
 
     static LocalDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS").withResolverStyle(ResolverStyle.STRICT);
+        DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")
+            .withResolverStyle(ResolverStyle.STRICT)
+            .withZone(ZoneId.of("Z"));
+
         try {
-            LocalDateTime parsedDateTime = LocalDateTime.parse(value, formatter);
+            OffsetDateTime parsedDateTime = ZonedDateTime.parse(value, formatter).toOffsetDateTime();
+
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
                 throwDateTimeError(value);
 
-            return parsedDateTime;
+            return parsedDateTime.toLocalDateTime();
         } catch (DateTimeParseException dtpe){
             throwDateTimeError(value);
             return null;
