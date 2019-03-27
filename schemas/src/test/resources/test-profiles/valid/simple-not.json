@@ -34,12 +34,6 @@
         {
           "not": {
             "field": "field1",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "field1",
             "is": "aValid",
             "value": "ISIN"
           }

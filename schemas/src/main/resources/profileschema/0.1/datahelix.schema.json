@@ -108,6 +108,7 @@
       "required": ["field", "is"],
       "minProperties": 2,
       "maxProperties": 3,
+      "additionalProperties": true,
       "properties": {
         "field": {"type": "string"},
         "is": {
@@ -152,7 +153,7 @@
                 "properties": {"is": {"const": "null"}}
               },
               "then": {
-                "properties": {"not": {}}
+                "properties": {"value": false}
               },
               "else": {
                 "if": {
