@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public class DateValueStep {
 
-    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z)";
+    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
@@ -21,12 +21,12 @@ public class DateValueStep {
     }
 
     @When("{fieldVar} is {operator} {date}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
         state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {date}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
