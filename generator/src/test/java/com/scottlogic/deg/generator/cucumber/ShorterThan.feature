@@ -177,7 +177,7 @@ Scenario: shorterThan run against a non contradicting not granularTo should be s
 
 Scenario: shorterThan run against a non contradicting after should be successful
      Given foo is shorter than 2
-       And foo is after 2019-01-01T00:00:00.000
+       And foo is after 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -186,7 +186,7 @@ Scenario: shorterThan run against a non contradicting after should be successful
 
 Scenario: shorterThan run against a non contradicting not after should be successful
      Given foo is shorter than 2
-       And foo is anything but after 2019-01-01T00:00:00.000
+       And foo is anything but after 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -195,7 +195,7 @@ Scenario: shorterThan run against a non contradicting not after should be succes
 
 Scenario: shorterThan run against a non contradicting afterOrAt should be successful
      Given foo is shorter than 2
-       And foo is after or at 2019-01-01T00:00:00.000
+       And foo is after or at 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -204,7 +204,7 @@ Scenario: shorterThan run against a non contradicting afterOrAt should be succes
 
 Scenario: shorterThan run against a non contradicting not afterOrAt should be successful
      Given foo is shorter than 2
-       And foo is anything but after or at 2019-01-01T00:00:00.000
+       And foo is anything but after or at 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -213,7 +213,7 @@ Scenario: shorterThan run against a non contradicting not afterOrAt should be su
 
 Scenario: shorterThan run against a non contradicting before should be successful
      Given foo is shorter than 2
-       And foo is before 2019-01-01T00:00:00.000
+       And foo is before 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -222,7 +222,7 @@ Scenario: shorterThan run against a non contradicting before should be successfu
 
 Scenario: shorterThan run against a non contradicting not before should be successful
      Given foo is shorter than 2
-       And foo is anything but before 2019-01-01T00:00:00.000
+       And foo is anything but before 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -231,7 +231,7 @@ Scenario: shorterThan run against a non contradicting not before should be succe
 
 Scenario: shorterThan run against a non contradicting beforeOrAt should be successful
      Given foo is shorter than 2
-       And foo is before or at 2019-01-01T00:00:00.000
+       And foo is before or at 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |
@@ -240,7 +240,7 @@ Scenario: shorterThan run against a non contradicting beforeOrAt should be succe
 
 Scenario: shorterThan run against a non contradicting not beforeOrAt should be successful
      Given foo is shorter than 2
-       And foo is anything but before or at 2019-01-01T00:00:00.000
+       And foo is anything but before or at 2019-01-01T00:00:00.000Z
        And foo is matching regex /[x]{1,5}/
      Then the following data should be generated:
        | foo  |

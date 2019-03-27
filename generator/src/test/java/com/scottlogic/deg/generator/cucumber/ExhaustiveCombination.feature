@@ -196,17 +196,17 @@ Scenario: Running an exhaustive combination strategy with valid date values shou
        And bar is of type "temporal"
        And bar is anything but null
        And foo is in set:
-         | 2018-12-04T14:00:00.000 |
-         | 2018-12-05T14:00:00.000 |
+         | 2018-12-04T14:00:00.000Z |
+         | 2018-12-05T14:00:00.000Z |
        And bar is in set:
-         | 2010-01-01T00:00:00.000 |
-         | 2010-12-31T23:59:00.000 |
+         | 2010-01-01T00:00:00.000Z |
+         | 2010-12-31T23:59:00.000Z |
      Then the following data should be generated:
-       | foo                     | bar                     |
-       | 2018-12-04T14:00:00.000 | 2010-01-01T00:00:00.000 |
-       | 2018-12-05T14:00:00.000 | 2010-01-01T00:00:00.000 |
-       | 2018-12-04T14:00:00.000 | 2010-12-31T23:59:00.000 |
-       | 2018-12-05T14:00:00.000 | 2010-12-31T23:59:00.000 |
+       | foo                      | bar                      |
+       | 2018-12-04T14:00:00.000Z | 2010-01-01T00:00:00.000Z |
+       | 2018-12-05T14:00:00.000Z | 2010-01-01T00:00:00.000Z |
+       | 2018-12-04T14:00:00.000Z | 2010-12-31T23:59:00.000Z |
+       | 2018-12-05T14:00:00.000Z | 2010-12-31T23:59:00.000Z |
 
 Scenario: Running an exhaustive combination strategy with invalid date values should fail with an appropriate error message
      Given the following fields exist:
@@ -217,11 +217,11 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
        And bar is of type "temporal"
        And bar is anything but null
        And foo is in set:
-         | 2018-12-99T14:00:00.000 |
-         | 2018-12-05T14:00:00.000 |
+         | 2018-12-99T14:00:00.000Z |
+         | 2018-12-05T14:00:00.000Z |
        And bar is in set:
-         | 2010-01-01T00:00:00.000 |
-         | 2010-12-31T23:59:00.000 |
+         | 2010-01-01T00:00:00.000Z |
+         | 2010-12-31T23:59:00.000Z |
      Then I am presented with an error message
        And no data is created
   
@@ -234,11 +234,11 @@ Scenario: Running an exhaustive combination strategy with invalid date formats s
        And bar is of type "temporal"
        And bar is anything but null
        And foo is in set:
-         | 2018-12-01T14:00:00.000 |
-         | 2018-12-05T14:00:00.000 |
+         | 2018-12-01T14:00:00.000Z |
+         | 2018-12-05T14:00:00.000Z |
        And bar is in set:
-         | 01-01-2010T00:00:00.000 |
-         | 2010-12-31T23:59:00.000 |
+         | 01-01-2010T00:00:00.000Z |
+         | 2010-12-31T23:59:00.000Z |
      Then I am presented with an error message
        And no data is created
 
@@ -352,14 +352,14 @@ Scenario: Running an exhaustive combination strategy with a string and a tempora
          | "x" |
          | "y" |
        And bar is in set:
-         | 2010-01-01T00:00:00.000 |
-         | 2010-12-31T23:59:00.000 |
+         | 2010-01-01T00:00:00.000Z |
+         | 2010-12-31T23:59:00.000Z |
      Then the following data should be generated:
-       | foo | bar                     |
-       | "x" | 2010-01-01T00:00:00.000 |
-       | "y" | 2010-01-01T00:00:00.000 |
-       | "x" | 2010-12-31T23:59:00.000 |
-       | "y" | 2010-12-31T23:59:00.000 |
+       | foo | bar                      |
+       | "x" | 2010-01-01T00:00:00.000Z |
+       | "y" | 2010-01-01T00:00:00.000Z |
+       | "x" | 2010-12-31T23:59:00.000Z |
+       | "y" | 2010-12-31T23:59:00.000Z |
 
 Scenario: Running an exhaustive combination strategy with an integer and a temporal field should be successful
      Given the following fields exist:
@@ -373,14 +373,14 @@ Scenario: Running an exhaustive combination strategy with an integer and a tempo
          | 500  |
          | 1    |
        And bar is in set:
-         | 2010-01-01T00:00:00.000 |
-         | 2010-12-31T23:59:00.000 |
+         | 2010-01-01T00:00:00.000Z |
+         | 2010-12-31T23:59:00.000Z |
      Then the following data should be generated:
-       | foo  | bar                     |
-       | 500  | 2010-01-01T00:00:00.000 |
-       | 1    | 2010-01-01T00:00:00.000 |
-       | 500  | 2010-12-31T23:59:00.000 |
-       | 1    | 2010-12-31T23:59:00.000 |
+       | foo  | bar                      |
+       | 500  | 2010-01-01T00:00:00.000Z |
+       | 1    | 2010-01-01T00:00:00.000Z |
+       | 500  | 2010-12-31T23:59:00.000Z |
+       | 1    | 2010-12-31T23:59:00.000Z |
 
 Scenario: Running an exhaustive combination strategy with a decimal and a temporal field should be successful
   Given the following fields exist:
@@ -394,14 +394,14 @@ Scenario: Running an exhaustive combination strategy with a decimal and a tempor
       | 500 |
       | 1.1 |
     And bar is in set:
-      | 2010-01-01T00:00:00.000 |
-      | 2010-12-31T23:59:00.000 |
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-12-31T23:59:00.000Z |
   Then the following data should be generated:
-    | foo | bar                     |
-    | 500 | 2010-01-01T00:00:00.000 |
-    | 1.1 | 2010-01-01T00:00:00.000 |
-    | 500 | 2010-12-31T23:59:00.000 |
-    | 1.1 | 2010-12-31T23:59:00.000 |
+    | foo | bar                      |
+    | 500 | 2010-01-01T00:00:00.000Z |
+    | 1.1 | 2010-01-01T00:00:00.000Z |
+    | 500 | 2010-12-31T23:59:00.000Z |
+    | 1.1 | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy across five fields should be successful
     Given the following fields exist:

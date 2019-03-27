@@ -324,7 +324,7 @@ Scenario: not greaterThanOrEqualTo run against a non contradicting granularTo sh
 
 Scenario: greaterThanOrEqualTo run against a non contradicting after should be successful
   Given foo is greater than or equal to 5
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -338,7 +338,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting after should be s
 
 Scenario: greaterThanOrEqualTo run against a non contradicting not after should be successful
   Given foo is greater than or equal to 5
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -352,7 +352,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not after should 
 
 Scenario: greaterThanOrEqualTo run against a non contradicting afterOrAt should be successful
   Given foo is greater than or equal to 5
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -366,7 +366,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting afterOrAt should 
 
 Scenario: greaterThanOrEqualTo run against a non contradicting not afterOrAt should be successful
   Given foo is greater than or equal to 5
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -380,7 +380,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not afterOrAt sho
 
 Scenario: greaterThanOrEqualTo run against a non contradicting before should be successful
   Given foo is greater than or equal to 5
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -394,7 +394,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting before should be 
 
 Scenario: greaterThanOrEqualTo run against a non contradicting not before should be successful
   Given foo is greater than or equal to 5
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is anything but before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -408,7 +408,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting not before should
 
 Scenario: greaterThanOrEqualTo run against a non contradicting beforeOrAt should be successful
   Given foo is greater than or equal to 5
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"
@@ -422,7 +422,7 @@ Scenario: greaterThanOrEqualTo run against a non contradicting beforeOrAt should
 
 Scenario: greaterThanOrEqualTo run against a non contradicting not beforeOrAt should be successful
   Given foo is greater than or equal to 5
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     And foo is anything but null
     And foo is of type "integer"

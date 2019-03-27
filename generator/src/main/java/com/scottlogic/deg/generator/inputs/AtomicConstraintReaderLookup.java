@@ -327,7 +327,7 @@ class AtomicConstraintReaderLookup {
     }
 
     private static void throwDateTimeError(String profileDate) throws InvalidProfileException {
-        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999", profileDate));
+        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z", profileDate));
     }
 
     ConstraintReader getByTypeCode(String typeCode) {

@@ -57,11 +57,11 @@ Scenario Outline: Not 'null' with 'ofType' is successful
       | foo              |
       | <typeValue> |
   Examples:
-      | type       | typeValue               |
-      | "string"   | "a"                     |
-      | "decimal"  |  1.1                    |
-      | "integer"  |  1                      |
-      | "temporal" | 2019-01-01T00:00:00.000 |
+      | type       | typeValue                |
+      | "string"   | "a"                      |
+      | "decimal"  |  1.1                     |
+      | "integer"  |  1                       |
+      | "temporal" | 2019-01-01T00:00:00.000Z |
 
 Scenario Outline: 'Null' with 'ofType' emits null
   Given foo is null
@@ -374,23 +374,23 @@ Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
 Scenario: Not 'null' with a non contradicting 'after' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo                     |
-    | 2019-01-01T00:00:00.001 |
-    | 2019-01-01T00:00:00.002 |
+    | foo                      |
+    | 2019-01-01T00:00:00.001Z |
+    | 2019-01-01T00:00:00.002Z |
 
 Scenario: 'Null' with a contradicting 'after' should only generate null
   Given foo is null
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'Null' with a contradicting not 'after' should only generate null
   Given foo is null
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -401,23 +401,23 @@ Scenario: 'Null' with a contradicting not 'after' should only generate null
 Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
   Given foo is anything but null
   And foo is of type "temporal"
-  And foo is after or at 2019-01-01T00:00:00.000
+  And foo is after or at 2019-01-01T00:00:00.000Z
   And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo                     |
-    | 2019-01-01T00:00:00.000 |
-    | 2019-01-01T00:00:00.001 |
+    | foo                      |
+    | 2019-01-01T00:00:00.000Z |
+    | 2019-01-01T00:00:00.001Z |
 
 Scenario: 'Null' with a contradicting 'afterOrAt' should only generate null
   Given foo is null
-  And foo is after or at 2019-01-01T00:00:00.000
+  And foo is after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
   Given foo is null
-  And foo is after or at 2019-01-01T00:00:00.000
+  And foo is after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -428,23 +428,23 @@ Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
 Scenario: Not 'null' with a non contradicting 'before' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
-    And foo is before 2019-01-01T00:00:00.003
+    And foo is before 2019-01-01T00:00:00.003Z
     And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo                     |
-    | 2019-01-01T00:00:00.002 |
-    | 2019-01-01T00:00:00.001 |
+    | foo                      |
+    | 2019-01-01T00:00:00.002Z |
+    | 2019-01-01T00:00:00.001Z |
 
 Scenario: 'Null' with a contradicting 'before' should only generate null
   Given foo is null
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'Null' with a contradicting not 'before' should only generate null
   Given foo is null
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -455,23 +455,23 @@ Scenario: 'Null' with a contradicting not 'before' should only generate null
 Scenario: Not 'null' with a non contradicting 'beforeOrAt' should be successful
   Given foo is anything but null
     And foo is of type "temporal"
-    And foo is before or at 2019-01-01T00:00:00.002
+    And foo is before or at 2019-01-01T00:00:00.002Z
     And the generator can generate at most 2 rows
   Then the following data should be generated:
-    | foo                     |
-    | 2019-01-01T00:00:00.002 |
-    | 2019-01-01T00:00:00.001 |
+    | foo                      |
+    | 2019-01-01T00:00:00.002Z |
+    | 2019-01-01T00:00:00.001Z |
 
 Scenario: 'Null' with a contradicting 'beforeOrAt' should only generate null
   Given foo is null
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'Null' with a contradicting not 'beforeOrAt' should only generate null
   Given foo is null
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |

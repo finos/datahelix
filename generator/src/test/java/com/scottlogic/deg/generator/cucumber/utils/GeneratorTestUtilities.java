@@ -62,11 +62,7 @@ public class GeneratorTestUtilities {
     }
 
     public static OffsetDateTime getOffsetDateTime(String input) {
-        DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")
-            .withResolverStyle(ResolverStyle.STRICT)
-            .withZone(ZoneId.of("Z"));
-
-        return ZonedDateTime.parse(input, formatter).toOffsetDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        return OffsetDateTime.parse(input, formatter);
     }
 }

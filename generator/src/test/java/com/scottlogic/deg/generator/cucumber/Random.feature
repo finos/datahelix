@@ -9,11 +9,11 @@ Scenario: The generator produces valid 'Temporal' data in random mode
   Given foo is of type "temporal"
     And foo is anything but null
     And the generator can generate at most 5 rows
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then 5 rows of data are generated
     And foo contains temporal data
     And foo contains anything but null
-    And foo contains temporal values between 0001-01-01T00:00:00.000 and 2019-01-01T00:00:00.000 inclusively
+    And foo contains temporal values between 0001-01-01T00:00:00.000Z and 2019-01-01T00:00:00.000Z inclusively
 
 Scenario: The generator produces valid 'Integer' data in random mode
   Given foo is of type "integer"

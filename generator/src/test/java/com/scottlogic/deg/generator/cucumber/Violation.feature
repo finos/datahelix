@@ -35,8 +35,8 @@ Scenario: Running the generator in violate mode for multiple constraints with st
     | -99999999999999999999.99999999999999999999   |
     | 99999999999999999999.99999999999999999999    |
     | 100000000000000000000.00000000000000000000   |
-    | 1900-01-01T00:00:00.000                      |
-    | 2100-01-01T00:00:00.000                      |
+    | 1900-01-01T00:00:00.000Z                     |
+    | 2100-01-01T00:00:00.000Z                     |
     | null                                         |
 
 ### Random
@@ -73,12 +73,12 @@ Scenario: The generator produces violating (not type) 'Temporal' data in random 
   Given foo is of type "temporal"
     And the generation strategy is random
     And foo is anything but null
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And the data requested is violating
     And we do not violate any of type constraints
   Then 5 rows of data are generated
     And foo contains temporal data
-    And foo contains temporal values after or at 2019-01-01T00:00:00.000
+    And foo contains temporal values after or at 2019-01-01T00:00:00.000Z
 
 Scenario: The generator produces violating (not type) 'Decimal' data in random mode
   Given foo is of type "decimal"

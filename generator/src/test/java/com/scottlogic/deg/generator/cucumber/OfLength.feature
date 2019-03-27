@@ -367,7 +367,7 @@ Scenario: ofLength run against a non contradicting not granularTo should be succ
 
 Scenario: ofLength run against a non contradicting after should be successful
      Given foo is of length 1
-       And foo is after 2018-09-01T00:00:00.000
+       And foo is after 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -377,7 +377,7 @@ Scenario: ofLength run against a non contradicting after should be successful
 
 Scenario: ofLength run against a non contradicting not after should be successful
      Given foo is of length 1
-       And foo is anything but after 2018-09-01T00:00:00.000
+       And foo is anything but after 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -387,7 +387,7 @@ Scenario: ofLength run against a non contradicting not after should be successfu
 
 Scenario: ofLength run against a non contradicting afterOtAt should be successful
      Given foo is of length 1
-       And foo is after or at 2018-09-01T00:00:00.000
+       And foo is after or at 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -397,7 +397,7 @@ Scenario: ofLength run against a non contradicting afterOtAt should be successfu
 
 Scenario: ofLength run against a non contradicting not afterOrAt should be successful
      Given foo is of length 1
-       And foo is anything but after or at 2018-09-01T00:00:00.000
+       And foo is anything but after or at 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -407,7 +407,7 @@ Scenario: ofLength run against a non contradicting not afterOrAt should be succe
 
 Scenario: ofLength run against a non contradicting before should be successful
      Given foo is of length 1
-       And foo is before 2018-09-01T00:00:00.000
+       And foo is before 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -417,7 +417,7 @@ Scenario: ofLength run against a non contradicting before should be successful
 
 Scenario: ofLength run against a non contradicting not before should be successful
      Given foo is of length 1
-       And foo is anything but before 2018-09-01T00:00:00.000
+       And foo is anything but before 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -427,7 +427,7 @@ Scenario: ofLength run against a non contradicting not before should be successf
 
 Scenario: ofLength run against a non contradicting beforeOtAt should be successful
      Given foo is of length 1
-       And foo is before or at 2018-09-01T00:00:00.000
+       And foo is before or at 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:
@@ -437,7 +437,7 @@ Scenario: ofLength run against a non contradicting beforeOtAt should be successf
 
 Scenario: ofLength run against a non contradicting not beforeOrAt should be successful
      Given foo is of length 1
-       And foo is anything but before or at 2018-09-01T00:00:00.000
+       And foo is anything but before or at 2018-09-01T00:00:00.000Z
        And foo is in set:
          | "1" |
      Then the following data should be generated:

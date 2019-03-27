@@ -535,7 +535,7 @@ Scenario: matchingRegex string run against a non contradicting not granularTo sh
 @ignore
 Scenario: matchingRegex string run against a non contradicting after should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is after 2018-10-10T00:00:00.000
+       And foo is after 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
         | foo  |
@@ -549,7 +549,7 @@ Scenario: matchingRegex string run against a non contradicting after should be s
 @ignore
 Scenario: matchingRegex string run against a non contradicting not after should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is anything but after 2018-10-10T00:00:00.000
+       And foo is anything but after 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -563,7 +563,7 @@ Scenario: matchingRegex string run against a non contradicting not after should 
 @ignore
 Scenario: matchingRegex string run against a non contradicting afterOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is after or at 2018-10-10T00:00:00.000
+       And foo is after or at 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -577,7 +577,7 @@ Scenario: matchingRegex string run against a non contradicting afterOrAt should 
 @ignore
 Scenario: matchingRegex string run against a non contradicting not afterOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is anything but after or at 2018-10-10T00:00:00.000
+       And foo is anything but after or at 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -591,7 +591,7 @@ Scenario: matchingRegex string run against a non contradicting not afterOrAt sho
 @ignore
 Scenario: matchingRegex string run against a non contradicting before should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is before 2018-10-10T00:00:00.000
+       And foo is before 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -605,7 +605,7 @@ Scenario: matchingRegex string run against a non contradicting before should be 
 @ignore
 Scenario: matchingRegex string run against a non contradicting not before should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is anything but before 2018-10-10T00:00:00.000
+       And foo is anything but before 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -619,7 +619,7 @@ Scenario: matchingRegex string run against a non contradicting not before should
 @ignore
 Scenario: matchingRegex string run against a non contradicting beforeOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is before or at 2018-10-10T00:00:00.000
+       And foo is before or at 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
@@ -633,7 +633,7 @@ Scenario: matchingRegex string run against a non contradicting beforeOrAt should
 @ignore
 Scenario: matchingRegex string run against a non contradicting not beforeOrAt should be successful
      Given foo is matching regex /[a-e]{2}/
-       And foo is before or at 2018-10-10T00:00:00.000
+       And foo is before or at 2018-10-10T00:00:00.000Z
        And the generator can generate at most 5 rows
      Then the following data should be generated:
        | foo  |
