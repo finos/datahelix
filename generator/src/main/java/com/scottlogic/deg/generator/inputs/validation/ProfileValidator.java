@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator.inputs.validation;
 
 import com.scottlogic.deg.generator.Profile;
 
-public interface ProfileValidator {
+import java.util.Collection;
 
-    void validate(Profile profile);
+public interface ProfileValidator {
+    Collection<ValidationAlert> validate(Profile profile);
 }
