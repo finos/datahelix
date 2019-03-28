@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.generator.cucumber.engine.utils.CucumberManifestWriter;
+import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberManifestWriter;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
