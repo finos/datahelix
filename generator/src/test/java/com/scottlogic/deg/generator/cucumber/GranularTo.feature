@@ -97,3 +97,6 @@ Scenario: Running a 'granularTo' request that specifies null should be unsuccess
     Given foo is granular to null
     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
       And no data is created
+
+Scenario:
+
