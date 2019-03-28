@@ -48,7 +48,7 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
         final DecisionTree decisionTree = decisionTreeFactory.analyse(profile).getMergedTree();
 
         return profile.fields.stream()
-            .filter(field -> !confersCompliance(decisionTree.getRootNode(), field))
+            .filter(field -> !sufficientlyRestrictsFieldTypes(decisionTree.getRootNode(), field))
             .map(nonCompliantField ->
                 new ValidationAlert(
                     Criticality.ERROR,
@@ -59,25 +59,24 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
             .collect(Collectors.toList());
     }
 
-    /** Returns true if the provided node permits fieldToCheck to pass validation */
-    private static boolean confersCompliance(ConstraintNode node, Field fieldToCheck) {
+    private static boolean sufficientlyRestrictsFieldTypes(ConstraintNode node, Field fieldToCheck) {
+        // a constraint node is sufficient if any of its constraints, or any of its decision nodes, are sufficient
         return
             node.getAtomicConstraints().stream()
-                .anyMatch(constraint -> confersCompliance(constraint, fieldToCheck))
+                .anyMatch(constraint -> sufficientlyRestrictsFieldTypes(constraint, fieldToCheck))
             ||
             node.getDecisions().stream()
-                .anyMatch(decisionNode -> confersCompliance(decisionNode, fieldToCheck));
+                .anyMatch(decisionNode -> sufficientlyRestrictsFieldTypes(decisionNode, fieldToCheck));
     }
 
-    /** Returns true if the provided node permits fieldToCheck to pass validation */
-    private static boolean confersCompliance(DecisionNode node, Field fieldToCheck) {
+    private static boolean sufficientlyRestrictsFieldTypes(DecisionNode node, Field fieldToCheck) {
+        // a decision node is sufficient if all of its branches are sufficient
         return
             node.getOptions().stream()
-                .allMatch(constraintNode -> confersCompliance(constraintNode, fieldToCheck));
+                .allMatch(constraintNode -> sufficientlyRestrictsFieldTypes(constraintNode, fieldToCheck));
     }
 
-    /** Returns true if the provided constraint permits fieldToCheck to pass validation */
-    private static boolean confersCompliance(AtomicConstraint constraint, Field fieldToCheck) {
+    private static boolean sufficientlyRestrictsFieldTypes(AtomicConstraint constraint, Field fieldToCheck) {
         return
             constraint.getField().equals(fieldToCheck)
             && (
