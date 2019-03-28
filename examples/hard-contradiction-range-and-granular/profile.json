@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Column 1 is greaterThan 0",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "greaterThan",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "rule": "Column 1 is lessThan 1",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "lessThan",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "rule": "Column 1 is granularTo 1",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "granularTo",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "rule": "Column 1 is not null",
+      "constraints": [
+        {
+          "not": {
+            "field": "Column 1",
+            "is": "null"
+          }
+        }
+      ]
+    }
+  ]
+}
