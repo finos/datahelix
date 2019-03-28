@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -310,23 +311,27 @@ class AtomicConstraintReaderLookup {
         throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
     }
 
-    static OffsetDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")
-            .withResolverStyle(ResolverStyle.STRICT)
-            .withZone(ZoneOffset.UTC);
+    private static OffsetDateTime parseDate(String value) throws InvalidProfileException {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
+            .optionalStart()
+            .appendOffset("+HH", "Z")
+            .toFormatter()
+            .withResolverStyle(ResolverStyle.STRICT);
 
         try {
-            OffsetDateTime parsedDateTime = ZonedDateTime.parse(
-                value.endsWith("Z")
-                    ? value.substring(0, value.length() - 1)
-                    : value,
-                formatter).toOffsetDateTime();
+            TemporalAccessor temporalAccessor = formatter.parse(value);
+
+            OffsetDateTime parsedDateTime =
+                temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)
+                    ? OffsetDateTime.from(temporalAccessor)
+                    : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
 
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
                 throwDateTimeError(value);
 
             return parsedDateTime;
-        } catch (DateTimeParseException dtpe){
+        } catch (DateTimeParseException dtpe) {
             throwDateTimeError(value);
             return null;
         }
