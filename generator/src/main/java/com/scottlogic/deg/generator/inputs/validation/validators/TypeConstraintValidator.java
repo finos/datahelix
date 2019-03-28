@@ -30,7 +30,7 @@ public class TypeConstraintValidator implements ConstraintValidatorAlerts {
         TypeRestrictionsMerger merger = new TypeRestrictionsMerger();
 
         MergeResult<TypeRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
-        if(result.successful){
+        if(result.successful && !result.restrictions.getAllowedTypes().isEmpty()){
             currentRestrictions = result.restrictions;
         } else {
             logError(field, new TypeConstraintValidationMessages(
