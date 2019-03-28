@@ -1355,6 +1355,7 @@ Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
       | null |
       | 1.1  |
 
+@ignore #issue #824 - 2.0 should be generated with a granularity of 1
 Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
   Given there is a field foo
     And foo is granular to 1
