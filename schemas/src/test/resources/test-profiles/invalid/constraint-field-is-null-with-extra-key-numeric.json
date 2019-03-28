@@ -7,7 +7,7 @@
         {
           "field": "field1",
           "is": "null",
-          "values": 43
+          "invalidkey": 43
         }
       ]
     }
