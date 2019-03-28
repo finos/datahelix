@@ -1357,8 +1357,6 @@ Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
 
 Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
   Given there is a field foo
-    And foo is anything but in set:
-      | 1.1 |
     And foo is granular to 1
     And foo is in set:
       | 1.1 |
