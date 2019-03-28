@@ -1,22 +1,25 @@
 package com.scottlogic.deg.generator.builders;
 
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+
+import java.util.List;
 
 public class OrBuilder extends ConstraintChainBuilder<OrConstraint> {
     public OrBuilder() {
         super();
     }
 
-    private OrBuilder(ConstraintChainBuilder<OrConstraint> orBuilder) {
-        super(orBuilder);
+    private OrBuilder(Constraint headConstraint, List<Constraint> tailConstraints) {
+        super(headConstraint, tailConstraints);
     }
 
     public OrConstraint buildInner() {
-        return new OrConstraint(constraints);
+        return new OrConstraint(tailConstraints);
     }
 
     @Override
-    public ConstraintChainBuilder<OrConstraint> copy() {
-        return new OrBuilder(this);
+    ConstraintChainBuilder<OrConstraint> create(Constraint headConstraint, List<Constraint> tailConstraints) {
+        return new OrBuilder(headConstraint, tailConstraints);
     }
 }
