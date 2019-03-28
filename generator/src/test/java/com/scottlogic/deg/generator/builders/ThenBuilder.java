@@ -3,22 +3,13 @@ package com.scottlogic.deg.generator.builders;
 import com.scottlogic.deg.generator.constraints.Constraint;
 
 public class ThenBuilder {
-
     private final Constraint ifCondition;
 
-    public ThenBuilder(ConstraintChainBuilder<? extends Constraint> builder) {
-        ifCondition = builder.copy().build();
+    public ThenBuilder(BaseConstraintBuilder<? extends Constraint> builder) {
+        ifCondition = builder.build();
     }
 
-    public ThenBuilder(ElseBuilder builder) {
-        ifCondition = builder.copy().buildInner();
-    }
-
-    public ElseBuilder withThen(ConstraintChainBuilder<? extends Constraint> builder) {
-        return new ElseBuilder(ifCondition, builder);
-    }
-
-    public ElseBuilder withThen(ElseBuilder builder) {
+    public ElseBuilder withThen(BaseConstraintBuilder<? extends Constraint> builder) {
         return new ElseBuilder(ifCondition, builder);
     }
 }

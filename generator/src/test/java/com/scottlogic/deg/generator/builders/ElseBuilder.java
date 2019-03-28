@@ -4,19 +4,9 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 
 public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
-    private Constraint ifCondition;
-    private Constraint thenCondition;
-    private Constraint elseCondition;
-
-    public ElseBuilder(Constraint ifCondition, ConstraintChainBuilder<? extends Constraint> builder) {
-        this.ifCondition = ifCondition;
-        thenCondition = builder.copy().build();
-    }
-
-    public ElseBuilder(Constraint ifCondition, ElseBuilder builder) {
-        this.ifCondition = ifCondition;
-        thenCondition = builder.copy().buildInner();
-    }
+    private final Constraint ifCondition;
+    private final Constraint thenCondition;
+    private final Constraint elseCondition;
 
     private ElseBuilder(Constraint ifCondition, Constraint thenCondition, Constraint elseCondition) {
         this.ifCondition = ifCondition;
@@ -24,22 +14,18 @@ public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
         this.elseCondition = elseCondition;
     }
 
-    public ElseBuilder withElse(ConstraintChainBuilder<? extends Constraint> builder) {
-        elseCondition = builder.copy().build();
-        return this.copy();
+    ElseBuilder(Constraint ifCondition, BaseConstraintBuilder<? extends Constraint> builder) {
+        this.ifCondition = ifCondition;
+        this.thenCondition = builder.build();
+        this.elseCondition = null;
     }
 
-    public ElseBuilder withElse(ElseBuilder builder) {
-        elseCondition = builder.copy().buildInner();
-        return this.copy();
+    public ElseBuilder withElse(BaseConstraintBuilder<? extends Constraint> builder) {
+        return new ElseBuilder(ifCondition, thenCondition, builder.build());
     }
 
     @Override
-    public ConditionalConstraint buildInner() {
+    public ConditionalConstraint build() {
         return new ConditionalConstraint(ifCondition, thenCondition, elseCondition);
-    }
-
-    public ElseBuilder copy() {
-        return new ElseBuilder(ifCondition, thenCondition, elseCondition);
     }
 }

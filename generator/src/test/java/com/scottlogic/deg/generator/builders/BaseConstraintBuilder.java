@@ -1,5 +1,5 @@
 package com.scottlogic.deg.generator.builders;
 
 abstract class BaseConstraintBuilder<T> {
-    abstract T buildInner();
+    abstract T build();
 }
