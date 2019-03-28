@@ -24,7 +24,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private OffsetDateTime startedGenerating;
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
-    private Timer timer = new Timer(true);
+    private Timer timer;
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
 
@@ -38,6 +38,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
         System.out.println("---------------+---------------------+---------------");
 
+        timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
