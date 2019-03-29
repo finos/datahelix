@@ -825,21 +825,21 @@ Feature: User can create data across multiple fields for all combinations availa
       | "other"     |
       | "Not in If" |
     And there is a constraint:
-       """
-         {
-         "if": { "field": "foo2", "is": "equalTo", "value": 1 },
-         "then": { "field": "foo3", "is": "equalTo", "value": "test1" },
-         "else": {
-         "if": { "field": "foo2", "is": "equalTo", "value": 10 },
-         "then": { "field": "foo3", "is": "equalTo", "value": "test10" },
-         "else": {
-         "if": { "field": "foo2", "is": "equalTo", "value": 100 },
-         "then": { "field": "foo3", "is": "equalTo", "value": "test100" },
-         "else": { "field": "foo3", "is": "equalTo", "value": "other" }
-         }
-         }
-         }
-       """
+      """
+      {
+        "if": { "field": "foo2", "is": "equalTo", "value": 1 },
+        "then": { "field": "foo3", "is": "equalTo", "value": "test1" },
+        "else": {
+          "if": { "field": "foo2", "is": "equalTo", "value": 10 },
+          "then": { "field": "foo3", "is": "equalTo", "value": "test10" },
+          "else": {
+            "if": { "field": "foo2", "is": "equalTo", "value": 100 },
+            "then": { "field": "foo3", "is": "equalTo", "value": "test100" },
+            "else": { "field": "foo3", "is": "equalTo", "value": "other" }
+          }
+        }
+      }
+      """
     Then the following data should be generated:
       | foo1    | foo2 | foo3      |
       | "alpha" | 1    | "test1"   |

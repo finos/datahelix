@@ -6,13 +6,13 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: User requires to create a field with strings that conform to one or many constraints
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "equalTo", "value": "Test0" },
-         { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
-         { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "equalTo", "value": "Test0" },
+        { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
+        { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+      ]}
+      """
     And foo is of type "string"
     And foo is anything but null
     Then the following data should be generated:
@@ -42,20 +42,20 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: When user requires creation of a field with strings that contain multiple contradictory sets of one or many constraints no data should be generated
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "equalTo", "value": "Test0" },
-         { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
-         { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "equalTo", "value": "Test0" },
+        { "field": "foo", "is": "inSet", "values": ["Test1", "Test2", "Test3", "Test4", "Test5"] },
+        { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+      ]}
+      """
     And there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "equalTo", "value": "Test6" },
-         { "field": "foo", "is": "inSet", "values": ["Test7", "Test8", "Test9"] }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "equalTo", "value": "Test6" },
+        { "field": "foo", "is": "inSet", "values": ["Test7", "Test8", "Test9"] }
+      ]}
+      """
     And foo is of type "string"
     And foo is anything but null
     Then no data is created
@@ -64,12 +64,12 @@ Feature: Values can be specified by using any of to set multiple constraints
 # failing - data is duplicated linked to issue 91
   Scenario: User requires to create a field with numbers that conform to one or many non-contradictory constraints
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "greaterThan", "value": 0 },
-         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "greaterThan", "value": 0 },
+        { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
+      ]}
+      """
     And foo is of type "integer"
     And foo is less than 11
     Then the following data should be generated:
@@ -90,19 +90,19 @@ Feature: Values can be specified by using any of to set multiple constraints
   # failing - data is duplicated linked to issue 91
   Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "greaterThan", "value": 8 },
-         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 10 }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "greaterThan", "value": 8 },
+        { "field": "foo", "is": "greaterThanOrEqualTo", "value": 10 }
+      ]}
+      """
     And there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "greaterThan", "value": 1 },
-         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "greaterThan", "value": 1 },
+        { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
+      ]}
+      """
     And foo is of type "integer"
     And foo is less than 20
     Then the following data should be generated:
@@ -124,12 +124,12 @@ Feature: Values can be specified by using any of to set multiple constraints
   # failing - data is duplicated linked to issue 91
   Scenario: User requires to create a field with dates that conform to one or many constraints
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
-         { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
+        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
+      ]}
+      """
     And foo is of type "datetime"
     And foo is before 2018-10-10T00:00:00.000
     Then the following data should be generated:
@@ -149,19 +149,19 @@ Feature: Values can be specified by using any of to set multiple constraints
     # failing - data is duplicated linked to issue 91
   Scenario: User requires to create a field with dates that conform to multiple sets of constraints
     Given there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
-         { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
+        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
+      ]}
+      """
     And there is a constraint:
-       """
-       { "anyOf": [
-         { "field": "foo", "is": "after", "value": { "date": "2018-10-03T00:00:00.000" } },
-         { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-04T00:00:00.000" } }
-       ]}
-       """
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "after", "value": { "date": "2018-10-03T00:00:00.000" } },
+        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-04T00:00:00.000" } }
+      ]}
+      """
     And foo is of type "datetime"
     And foo is before 2018-10-09T00:00:00.000
     Then the following data should be generated:
@@ -176,19 +176,15 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: Running an 'anyOf' request that contains a valid nested anyOf request should be successful
     Given there is a constraint:
-    """
+      """
       { "anyOf": [
-        {
-          "field": "foo", "is": "ofLength", "value": 1
-        },
-        {
-          "anyOf":  [
-            { "field": "foo", "is": "ofLength", "value": 3 },
-            { "field": "foo", "is": "ofLength", "value": 5 }
-          ]
-        }
+        { "field": "foo", "is": "ofLength", "value": 1 },
+        { "anyOf":  [
+          { "field": "foo", "is": "ofLength", "value": 3 },
+          { "field": "foo", "is": "ofLength", "value": 5 }
+        ]}
       ]}
-    """
+      """
     And foo is in set:
       | "1"     |
       | "22"    |
@@ -208,19 +204,15 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
     Given there is a constraint:
-    """
+      """
       { "anyOf": [
-        {
-          "field": "foo", "is": "ofLength", "value": 1
-        },
-        {
-          "allOf":  [
-            { "field": "foo", "is": "longerThan", "value": 3 },
-            { "field": "foo", "is": "shorterThan", "value": 5 }
-          ]
-        }
+        { "field": "foo", "is": "ofLength", "value": 1 },
+        { "allOf": [
+          { "field": "foo", "is": "longerThan", "value": 3 },
+          { "field": "foo", "is": "shorterThan", "value": 5 }
+        ]}
       ]}
-    """
+      """
     And foo is in set:
       | "1"     |
       | "22"    |
@@ -240,18 +232,14 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: Running an 'anyOf' request that contains an invalid nested anyOf request should fail with an error message
     Given there is a constraint:
-  """
-    { "anyOf": [
-      {
-        "field": "foo", "is": "ofLength", "value": 1
-      },
-      {
-        "anyOf":  [
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "ofLength", "value": 1 },
+        { "anyOf": [
           { "field": "foo", "is": "ofLength", "value": -1 }
-        ]
-      }
-    ]}
-  """
+        ]}
+      ]}
+      """
     And foo is of type "string"
     And foo is anything but null
     Then I am presented with an error message
@@ -259,18 +247,14 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
     Given there is a constraint:
-  """
-    { "anyOf": [
-      {
-        "field": "foo", "is": "ofLength", "value": 1
-      },
-      {
-        "allOf":  [
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "ofLength", "value": 1 },
+        { "allOf": [
           { "field": "foo", "is": "ofLength", "value": -1 }
-        ]
-      }
-    ]}
-  """
+        ]}
+      ]}
+      """
     And foo is of type "string"
     And foo is anything but null
     Then I am presented with an error message
@@ -278,19 +262,15 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
     Given there is a constraint:
-  """
-    { "anyOf": [
-      {
-        "field": "foo", "is": "ofLength", "value": 1
-      },
-      {
-        "allOf":  [
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "ofLength", "value": 1 },
+        { "allOf": [
           { "field": "foo", "is": "longerThan", "value": 3 },
           { "field": "foo", "is": "shorterThan", "value": 2 }
-        ]
-      }
-    ]}
-  """
+        ]}
+      ]}
+      """
     And foo is of type "string"
     And foo is in set:
       | "a"  |
