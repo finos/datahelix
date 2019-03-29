@@ -129,7 +129,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @Override
     public boolean isSchemaValidationEnabled() {
-        return !this.disableSchemaValidation;
+        return this.enableSchemaValidation;
     }
 
     @Override
