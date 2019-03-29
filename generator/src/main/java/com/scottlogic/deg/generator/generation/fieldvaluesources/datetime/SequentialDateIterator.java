@@ -1,17 +1,17 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.TemporalUnit;
 import java.util.Iterator;
 
-class SequentialDateIterator implements Iterator<LocalDateTime> {
-    private final LocalDateTime maxDate;
+class SequentialDateIterator implements Iterator<OffsetDateTime> {
+    private final OffsetDateTime maxDate;
     private final TemporalUnit unit;
 
-    private LocalDateTime current;
+    private OffsetDateTime current;
     private boolean hasNext;
 
-    SequentialDateIterator(LocalDateTime inclusiveMinDate, LocalDateTime exclusiveMaxDate, TemporalUnit granularity) {
+    SequentialDateIterator(OffsetDateTime inclusiveMinDate, OffsetDateTime exclusiveMaxDate, TemporalUnit granularity) {
         this.maxDate = exclusiveMaxDate;
 
         current = inclusiveMinDate;
@@ -26,9 +26,9 @@ class SequentialDateIterator implements Iterator<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime next() {
+    public OffsetDateTime next() {
 
-        LocalDateTime next = current;
+        OffsetDateTime next = current;
 
         current = current.plus(1, unit);
         if (current.isAfter(maxDate) || current.isEqual(maxDate)) {

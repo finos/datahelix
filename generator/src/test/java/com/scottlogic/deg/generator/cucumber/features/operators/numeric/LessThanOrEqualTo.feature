@@ -191,7 +191,7 @@ Scenario: not lessThanOrEqualTo run against a non contradicting not granularTo s
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting after should be successful
   Given foo is less than or equal to 5
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -206,7 +206,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting after should be succ
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting not after should be successful
   Given foo is less than or equal to 5
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -221,7 +221,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting not after should be 
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting afterOrAt should be successful
   Given foo is less than or equal to 5
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -236,7 +236,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting afterOrAt should be 
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting not afterOrAt should be successful
   Given foo is less than or equal to 5
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -251,7 +251,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting not afterOrAt should
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting before should be successful
   Given foo is less than or equal to 5
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -266,7 +266,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting before should be suc
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting not before should be successful
   Given foo is less than or equal to 5
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -281,7 +281,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting not before should be
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting beforeOrAt should be successful
   Given foo is less than or equal to 5
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
@@ -296,7 +296,7 @@ Scenario: lessThanOrEqualTo run against a non contradicting beforeOrAt should be
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThanOrEqualTo run against a non contradicting not beforeOrAt should be successful
   Given foo is less than or equal to 5
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null

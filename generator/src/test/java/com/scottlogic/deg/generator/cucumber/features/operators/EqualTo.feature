@@ -303,38 +303,38 @@ Scenario: Running an 'equalTo' request that includes the number zero should be s
 
 Scenario: Running an 'equalTo' request that includes a date value (not a string) should be successful
   Given there is a field foo
-    And foo is equal to 2010-01-01T00:00:00.000
+    And foo is equal to 2010-01-01T00:00:00.000Z
   Then the following data should be generated:
-   | foo                     |
-   | null                    |
-   | 2010-01-01T00:00:00.000 |
+   | foo                      |
+   | null                     |
+   | 2010-01-01T00:00:00.000Z |
 
 Scenario: Running an 'equalTo' request that includes a date value (leap year) should be successful
   Given there is a field foo
-    And foo is equal to 2020-02-29T00:00:00.000
+    And foo is equal to 2020-02-29T00:00:00.000Z
     And foo is of type "datetime"
   Then the following data should be generated:
-  | foo                     |
-  | null                    |
-  | 2020-02-29T00:00:00.000 |
+  | foo                      |
+  | null                     |
+  | 2020-02-29T00:00:00.000Z |
 
 Scenario: Running an 'equalTo' request that includes a date value (earliest date) should be successful
   Given there is a field foo
-    And foo is equal to 0001-01-01T00:00:01.000
+    And foo is equal to 0001-01-01T00:00:01.000Z
     And foo is of type "datetime"
   Then the following data should be generated:
-  | foo                     |
-  | null                    |
-  | 0001-01-01T00:00:01.000 |
+  | foo                      |
+  | null                     |
+  | 0001-01-01T00:00:01.000Z |
 
 Scenario: Running an 'equalTo' request that includes a date value (system max future dates) should be successful
   Given there is a field foo
-    And foo is equal to 9999-12-31T23:59:59.999
+    And foo is equal to 9999-12-31T23:59:59.999Z
     And foo is of type "datetime"
   Then the following data should be generated:
    | foo                      |
    | null                     |
-   | 9999-12-31T23:59:59.999  |
+   | 9999-12-31T23:59:59.999Z |
 
 Scenario: Running an 'equalTo' request that includes an empty string("") characters should be successful
   Given there is a field foo
@@ -351,13 +351,13 @@ Scenario: Running an 'equalTo' request that includes a null entry (null) charact
 
 Scenario: Running an 'equalTo' request that includes an invalid date value should fail with an error message
   Given there is a field foo
-    And foo is equal to 2010-13-40T00:00:00.000
+    And foo is equal to 2010-13-40T00:00:00.000Z
   Then I am presented with an error message
     And no data is created
 
 Scenario: Running an 'equalTo' request that includes an invalid time value  should fail with an error message
   Given there is a field foo
-    And foo is equal to 2010-01-01T55:00:00.000
+    And foo is equal to 2010-01-01T55:00:00.000Z
   Then I am presented with an error message
     And no data is created
 
@@ -555,12 +555,12 @@ Scenario: 'EqualTo' a decimal with 'ofType' decimal is successful
 
 Scenario: 'EqualTo' a date value with 'ofType' datetime is successful
   Given there is a field foo
-    And foo is equal to 2010-01-01T00:00:00.000
+    And foo is equal to 2010-01-01T00:00:00.000Z
     And foo is of type "datetime"
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2010-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2010-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' a number and not 'ofType' string is successful
   Given there is a field foo
@@ -573,12 +573,12 @@ Scenario: 'EqualTo' a number and not 'ofType' string is successful
 
 Scenario: 'EqualTo' a date and not 'ofType' string is successful
   Given there is a field foo
-    And foo is equal to 9999-12-31T23:59:59.999
+    And foo is equal to 9999-12-31T23:59:59.999Z
     And foo is anything but of type "string"
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 9999-12-31T23:59:59.999 |
+    | foo                      |
+    | null                     |
+    | 9999-12-31T23:59:59.999Z |
   
 Scenario: 'EqualTo' a string and not 'ofType' decimal is successful
   Given there is a field foo
@@ -591,12 +591,12 @@ Scenario: 'EqualTo' a string and not 'ofType' decimal is successful
 
 Scenario: 'EqualTo' a date and not 'ofType' decimal is successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
     And foo is anything but of type "decimal"
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' a string and not 'ofType' datetime is successful
   Given there is a field foo
@@ -632,7 +632,7 @@ Scenario: Not 'equalTo' a number and 'ofType' string is successful
 
 Scenario: Not 'equalTo' a date and 'ofType' string is successful
   Given there is a field foo
-    And foo is anything but equal to 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is of type "string"
     And foo is in set:
     | 1                         |
@@ -670,12 +670,12 @@ Scenario: Not 'equalTo' a string value and 'ofType' decimal is successful
 
 Scenario: Not 'equalTo' a date value and 'ofType' integer is successful
     Given there is a field foo
-      And foo is anything but equal to 2019-01-01T00:00:00.000
+      And foo is anything but equal to 2019-01-01T00:00:00.000Z
       And foo is of type "integer"
       And foo is in set:
-      | 1                       |
-      | 2019-01-01T00:00:00.000 |
-      | "1"                     |
+      | 1                        |
+      | 2019-01-01T00:00:00.000Z |
+      | "1"                      |
     Then the following data should be generated:
       | foo  |
       | null |
@@ -683,12 +683,12 @@ Scenario: Not 'equalTo' a date value and 'ofType' integer is successful
 
 Scenario: Not 'equalTo' a date value and 'ofType' decimal is successful
   Given there is a field foo
-    And foo is anything but equal to 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is of type "decimal"
     And foo is in set:
-    | 1.1                     |
-    | 2019-01-01T00:00:00.000 |
-    | "1"                     |
+    | 1.1                      |
+    | 2019-01-01T00:00:00.000Z |
+    | "1"                      |
   Then the following data should be generated:
     | foo  |
     | null |
@@ -699,26 +699,26 @@ Scenario: Not 'equalTo' a string value and 'ofType' datetime is successful
       And foo is anything but equal to "a"
       And foo is of type "datetime"
       And foo is in set:
-      | 2019-01-01T00:00:00.000   |
+      | 2019-01-01T00:00:00.000Z  |
       | "2019-01-01T00:00:00.000" |
       | "a"                       |
     Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: Not 'equalTo' an integer value and 'ofType' datetime is successful
     Given there is a field foo
       And foo is anything but equal to 1
       And foo is of type "datetime"
       And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-      | 100                     |
-      | 1                       |
+      | 2019-01-01T00:00:00.000Z |
+      | 100                      |
+      | 1                        |
     Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' an empty string and 'ofType' integer emits null
     Given there is a field foo
@@ -754,7 +754,7 @@ Scenario: 'EqualTo' an integer value and 'ofType' string emits null
 
 Scenario: 'EqualTo' a date value and 'ofType' string emits null
     Given there is a field foo
-      And foo is equal to 2010-01-01T00:00:00.000
+      And foo is equal to 2010-01-01T00:00:00.000Z
       And foo is of type "string"
     Then the following data should be generated:
       | foo  |
@@ -778,7 +778,7 @@ Scenario: 'EqualTo' a string value and 'ofType' decimal emits null
 
 Scenario: 'EqualTo' a date value and 'ofType' integer emits null
     Given there is a field foo
-      And foo is equal to 2010-01-01T00:00:00.000
+      And foo is equal to 2010-01-01T00:00:00.000Z
       And foo is of type "integer"
     Then the following data should be generated:
       | foo  |
@@ -786,7 +786,7 @@ Scenario: 'EqualTo' a date value and 'ofType' integer emits null
 
 Scenario: 'EqualTo' a date value and 'ofType' decimal emits null
   Given there is a field foo
-    And foo is equal to 2010-01-01T00:00:00.000
+    And foo is equal to 2010-01-01T00:00:00.000Z
     And foo is of type "decimal"
   Then the following data should be generated:
     | foo  |
@@ -826,7 +826,7 @@ Scenario: 'EqualTo' decimal and not 'ofType' decimal emits null
 
 Scenario: 'EqualTo' date and not 'ofType' datetime emits null
   Given there is a field foo
-    And foo is equal to 2019-02-12T09:11:53.000
+    And foo is equal to 2019-02-12T09:11:53.000Z
     And foo is anything but of type "datetime"
   Then the following data should be generated:
     | foo  |
@@ -873,12 +873,12 @@ Scenario: 'EqualTo' number and 'matchingReqex' should be successful
 
 Scenario: 'EqualTo' date and 'matchingReqex' should be successful
   Given there is a field foo
-    And foo is equal to 2018-01-01T00:00:00.000
+    And foo is equal to 2018-01-01T00:00:00.000Z
     And foo is matching regex /[a]{1}/
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2018-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' string value with contradictory 'matchingRegex' emits null
   Given there is a field foo
@@ -963,17 +963,17 @@ Scenario: 'EqualTo' a number with a non-contradictory 'containingRegex' is succe
 
 Scenario: 'EqualTo' a date with a non-contradictory 'containingRegex' is successful
   Given there is a field foo
-    And foo is equal to 2018-01-01T00:00:00.000
+    And foo is equal to 2018-01-01T00:00:00.000Z
     And foo is containing regex /[a]{1}/
     And foo is in set:
-      | 2018-01-01T00:00:00.000    |
+      | 2018-01-01T00:00:00.000Z   |
       | "2018-01-01T00:00:00.000"  |
       | "2018-01-01T00:00:00.000a" |
       | "a"                        |
   Then the following data should be generated:
       | foo                        |
       | null                       |
-      | 2018-01-01T00:00:00.000    |
+      | 2018-01-01T00:00:00.000Z   |
 
 Scenario: 'EqualTo' with a contradictory 'containingRegex' emits null
   Given there is a field foo
@@ -1055,9 +1055,9 @@ Scenario Outline: 'EqualTo' a non-string type with an 'ofLength' zero is success
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | 1                       |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | 1                        |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' request alongside a contradicting 'ofLength' constraint emits null
   Given there is a field foo
@@ -1119,9 +1119,9 @@ Scenario Outline: 'EqualTo' non string value run against a non contradicting 'lo
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | 1                       |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | 1                        |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'longerThan' should only generate null
   Given there is a field foo
@@ -1183,9 +1183,9 @@ Scenario Outline: 'EqualTo' a value of a different type with a non contradicting
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | 1                       |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | 1                        |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'shorterThan' should only generate null
   Given there is a field foo
@@ -1253,9 +1253,9 @@ Scenario Outline: 'EqualTo' a value of a different type with a non contradicting
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | 1                       |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | 1                        |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'aValid' ISIN should only generate null
   Given there is a field foo
@@ -1320,9 +1320,9 @@ Scenario Outline: 'EqualTo' value of a different type with a 'shorterThan' is su
     | null    |
     | <value> |
   Examples:
-     | value                   |
-     | "a"                     |
-     | 2018-01-01T00:00:00.000 |
+     | value                    |
+     | "a"                      |
+     | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'greaterThan' should only generate null
   Given there is a field foo
@@ -1384,9 +1384,9 @@ Scenario Outline: 'EqualTo' a value of a non-numeric type with 'shorterThan' sho
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | "abcdefghijklm"         |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | "abcdefghijklm"          |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'greaterThanOrEqualToOrEqualTo' should only generate null
   Given there is a field foo
@@ -1449,9 +1449,9 @@ Scenario Outline: 'EqualTo' a non-numeric value with 'lessThan' should be succes
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | "a"                     |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | "a"                      |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'lessThan' should only generate null
   Given there is a field foo
@@ -1515,9 +1515,9 @@ Scenario Outline: 'EqualTo' a non-numeric value with 'lessThanOrEqualTo' should 
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | "a"                     |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | "a"                      |
+    | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a contradicting 'lessThanOrEqualTo' should only generate null
   Given there is a field foo
@@ -1583,9 +1583,9 @@ Scenario Outline: 'EqualTo' a non-numeric value with 'granularTo' should be succ
     | null    |
     | <value> |
   Examples:
-    | value                   |
-    | "a"                     |
-    | 2018-01-01T00:00:00.000 |
+    | value                    |
+    | "a"                      |
+    | 2018-01-01T00:00:00.000Z |
 
 @ignore
 Scenario: 'EqualTo' run against a contradicting 'granularTo' should only generate null
@@ -1609,40 +1609,40 @@ Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only gen
 
 Scenario: 'EqualTo' run against a non contradicting 'after' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is after 2018-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is after 2018-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a non contradicting not 'after' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'after' should be successful
   Given there is a field foo
-    And foo is anything but equal to 2019-01-01T00:00:00.002
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2019-01-01T00:00:00.002Z
+    And foo is after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.001 |
-    | 2019-01-01T00:00:00.003 |
-    | 2019-01-01T00:00:00.004 |
-    | 2019-01-01T00:00:00.005 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.001Z |
+    | 2019-01-01T00:00:00.003Z |
+    | 2019-01-01T00:00:00.004Z |
+    | 2019-01-01T00:00:00.005Z |
 
 Scenario Outline: 'EqualTo' a non-datetime value with 'after' should be successful
   Given there is a field foo
     And foo is equal to <value>
-    And foo is after 2018-01-01T00:00:00.000
+    And foo is after 2018-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo     |
     | null    |
@@ -1654,16 +1654,16 @@ Scenario Outline: 'EqualTo' a non-datetime value with 'after' should be successf
 
 Scenario: 'EqualTo' run against a contradicting 'after' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'EqualTo' run against a contradicting not 'after' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.001
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.001Z
+    And foo is anything but after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1671,40 +1671,40 @@ Scenario: 'EqualTo' run against a contradicting not 'after' should only generate
 ### afterOrAt ###
 Scenario: 'EqualTo' run against a non contradicting 'afterOrAt' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a non contradicting not 'afterOrAt' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but after or at 2019-01-01T00:00:00.001
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but after or at 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'afterOrAt' should only be successful
   Given there is a field foo
-    And foo is anything but equal to 2019-01-01T00:00:00.000
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2019-01-01T00:00:00.000Z
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.001 |
-    | 2019-01-01T00:00:00.002 |
-    | 2019-01-01T00:00:00.003 |
-    | 2019-01-01T00:00:00.004 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.001Z |
+    | 2019-01-01T00:00:00.002Z |
+    | 2019-01-01T00:00:00.003Z |
+    | 2019-01-01T00:00:00.004Z |
 
 Scenario Outline: 'EqualTo' to a non-datetime value with 'afterOrAt' should be successful
   Given there is a field foo
     And foo is equal to <value>
-    And foo is after or at 2018-01-01T00:00:00.000
+    And foo is after or at 2018-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo     |
     | null    |
@@ -1716,16 +1716,16 @@ Scenario Outline: 'EqualTo' to a non-datetime value with 'afterOrAt' should be s
 
 Scenario: 'EqualTo' run against a contradicting 'afterOrAt' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is after or at 2019-01-01T00:00:00.001
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is after or at 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'EqualTo' run against a contradicting not 'afterOrAt' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1734,40 +1734,40 @@ Scenario: 'EqualTo' run against a contradicting not 'afterOrAt' should only gene
 
 Scenario: 'EqualTo' run against a non contradicting 'before' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is before 2019-01-01T00:00:00.001
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is before 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a non contradicting not 'before' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'before' should be successful
   Given there is a field foo
-    And foo is anything but equal to 2018-12-31T23:59:59.998
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2018-12-31T23:59:59.998Z
+    And foo is before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2018-12-31T23:59:59.999 |
-    | 2018-12-31T23:59:59.997 |
-    | 2018-12-31T23:59:59.996 |
-    | 2018-12-31T23:59:59.995 |
+    | foo                      |
+    | null                     |
+    | 2018-12-31T23:59:59.999Z |
+    | 2018-12-31T23:59:59.997Z |
+    | 2018-12-31T23:59:59.996Z |
+    | 2018-12-31T23:59:59.995Z |
 
 Scenario Outline: 'EqualTo' a non-datetime value with 'before' should be successful
   Given there is a field foo
     And foo is equal to <value>
-    And foo is before 2018-01-01T00:00:00.000
+    And foo is before 2018-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo     |
     | null    |
@@ -1779,16 +1779,16 @@ Scenario Outline: 'EqualTo' a non-datetime value with 'before' should be success
 
 Scenario: 'EqualTo' run against a contradicting 'before' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'EqualTo' run against a contradicting not 'before' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but before 2019-01-01T00:00:00.001
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but before 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
     | foo  |
     | null |
@@ -1797,40 +1797,40 @@ Scenario: 'EqualTo' run against a contradicting not 'before' should only generat
 
 Scenario: 'EqualTo' run against a non contradicting 'beforeOrAt' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.000 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'EqualTo' run against a non contradicting not 'beforeOrAt' should be successful
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.001
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.001Z
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2019-01-01T00:00:00.001 |
+    | foo                      |
+    | null                     |
+    | 2019-01-01T00:00:00.001Z |
 
 @ignore
 Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be successful
   Given there is a field foo
-    And foo is anything but equal to 2019-01-01T00:00:00.000
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is anything but equal to 2019-01-01T00:00:00.000Z
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
   Then the following data should be generated:
-    | foo                     |
-    | null                    |
-    | 2018-12-31T23:59:59.999 |
-    | 2018-12-31T23:59:59.997 |
-    | 2018-12-31T23:59:59.996 |
-    | 2018-12-31T23:59:59.995 |
+    | foo                      |
+    | null                     |
+    | 2018-12-31T23:59:59.999Z |
+    | 2018-12-31T23:59:59.997Z |
+    | 2018-12-31T23:59:59.996Z |
+    | 2018-12-31T23:59:59.995Z |
 
 Scenario Outline: 'EqualTo' a non-datetime value with 'beforeOrAt' should be successful
   Given there is a field foo
     And foo is equal to <value>
-    And foo is before 2018-01-01T00:00:00.000
+    And foo is before 2018-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo     |
     | null    |
@@ -1842,16 +1842,16 @@ Scenario Outline: 'EqualTo' a non-datetime value with 'beforeOrAt' should be suc
 
 Scenario: 'EqualTo' run against a contradicting 'beforeOrAt' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.001
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.001Z
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
 
 Scenario: 'EqualTo' run against a contradicting not 'beforeOrAt' should only generate null
   Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is equal to 2019-01-01T00:00:00.000Z
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
     | foo  |
     | null |
