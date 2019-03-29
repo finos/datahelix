@@ -91,9 +91,7 @@ And there is a constraint:
 ```
 
 ### Describing the outcome
-* _the profile is invalid_, executes the generator and asserts that any of the following exceptions were thrown: `InvalidProfileException`, `JsonParseException`, `IllegalArgumentException`, `ClassCastException`. I.e. something went wrong when trying to read or parse the profile
 * _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` was thrown with the message `{reason}`.
-* _I am presented with an error message_, executes the generator and asserts that a exception was thrown, doesn't discriminate over the type of exception
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.

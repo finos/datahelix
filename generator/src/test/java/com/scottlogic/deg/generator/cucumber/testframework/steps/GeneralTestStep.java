@@ -101,20 +101,6 @@ public class GeneralTestStep {
             empty());
     }
 
-    @Then("^the profile is invalid$")
-    public void theProfileIsInvalid() {
-        cucumberTestHelper.generateAndGetData();
-
-        Assert.assertThat(
-            "Expected invalid profile",
-            this.cucumberTestHelper.getThrownExceptions(),
-            hasItem( //TODO: #802: Stop catching generic errors! We should only be looking for InvalidProfileException here
-                either((Matcher)isA(InvalidProfileException.class))
-                    .or(isA(JsonParseException.class))
-                    .or(isA(IllegalArgumentException.class))
-                    .or(isA(ClassCastException.class))));
-    }
-
     @But("^the profile is invalid because \"(.+)\"$")
     public void profileIsInvalidWithError(String expectedError) {
         cucumberTestHelper.generateAndGetData();
@@ -149,13 +135,6 @@ public class GeneralTestStep {
                 errors,
                 hasItem(expectedError));
         }
-    }
-
-    @Then("^I am presented with an error message$")
-    public void dataGeneratorShouldError() {
-        cucumberTestHelper.generateAndGetData();
-
-        Assert.assertThat(cucumberTestHelper.generatorHasThrownException(), is(true));
     }
 
     @And("^no data is created$")
