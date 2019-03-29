@@ -132,13 +132,10 @@ DateTimes represent specific moments in time, and are specified in profiles thro
 ```
 
 The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, 
-with precisely 3 digits of sub-second precision, plus an optional offset specifier of either "Z" or a "+HH" format. 
-Values have the same maximum precision as Java's [OffsetDateTime](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html) class.
+with precisely 3 digits of sub-second precision, plus an optional offset specifier of "Z". All datetimes are treated as UTC.
 
-DateTimes can be in the range `0001-01-01T00:00:00.000` to `9999-12-31T23:59:59.999`
+DateTimes can be in the range `0001-01-01T00:00:00.000Z` to `9999-12-31T23:59:59.999Z`
 that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnight on the 31 December 9999`_**
-
-DateTimes are by default output per the user's locale, adjusted to their time zone.
 
 ### DateTime granularity
 
@@ -323,7 +320,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
 
 ## DateTime constraints
-All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_.
+All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_. The Z suffix can be included, but is not required. All datetimes are treated as UTC whether the Z suffix is included or not.
 
 Example: `{ "date": "2001-02-03T04:05:06.007" }`
 

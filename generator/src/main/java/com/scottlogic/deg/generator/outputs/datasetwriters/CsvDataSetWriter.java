@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
-    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
@@ -65,8 +65,8 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
             return ((BigDecimal) value).toPlainString();
         }
 
-        if (value instanceof LocalDateTime){
-            return standardDateFormat.format((LocalDateTime) value);
+        if (value instanceof OffsetDateTime){
+            return standardDateFormat.format((OffsetDateTime) value);
         }
 
         if (value instanceof String){

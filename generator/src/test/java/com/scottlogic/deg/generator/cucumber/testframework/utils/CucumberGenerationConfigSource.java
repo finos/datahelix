@@ -19,6 +19,11 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
+    public boolean requireFieldTyping() {
+        return state.requireFieldTyping;
+    }
+
+    @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return state.dataGenerationType;
     }

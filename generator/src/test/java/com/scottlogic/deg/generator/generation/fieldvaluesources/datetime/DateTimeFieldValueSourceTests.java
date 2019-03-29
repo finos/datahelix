@@ -5,9 +5,7 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -55,20 +53,20 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void whenGivenMultiHourRange() {
         LocalDate date = LocalDate.of(2018, 1, 10);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 0)), true);
-        givenUpperBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 3000000)), false);
+        givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 0)), ZoneOffset.UTC), true);
+        givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 3000000)), ZoneOffset.UTC), false);
         expectAllValues(
-            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 0)),
-            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 1000000)),
-            LocalDateTime.of(date, LocalTime.of(12, 0, 0, 2000000)));
+            OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 0)), ZoneOffset.UTC),
+            OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 1000000)), ZoneOffset.UTC),
+            OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 2000000)), ZoneOffset.UTC));
     }
 
 
     @Test
     public void getRandomValues_withExclusiveUpperBound_shouldGenerateCorrectValues() {
         LocalDate date = LocalDate.of(2018, 1, 10);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), true);
-        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), false);
+        givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
+        givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), false);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = lowerLimit;
@@ -82,7 +80,7 @@ public class DateTimeFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC)));
 
         rng.setNextDouble(1);
 
@@ -91,22 +89,22 @@ public class DateTimeFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(17, 59, 59, 999_000_000))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(17, 59, 59, 999_000_000)), ZoneOffset.UTC)));
 
         rng.setNextDouble(0.5);
 
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(14, 59, 59, 999_000_000))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(14, 59, 59, 999_000_000)), ZoneOffset.UTC)));
 
     }
 
     @Test
     public void getRandomValues_withInclusiveUpperBound_shouldGenerateCorrectValues() {
         LocalDate date = LocalDate.of(2018, 1, 10);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), true);
-        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), true);
+        givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
+        givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = lowerLimit;
@@ -120,7 +118,7 @@ public class DateTimeFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC)));
 
         rng.setNextDouble(1);
 
@@ -129,21 +127,21 @@ public class DateTimeFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(18, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC)));
 
         rng.setNextDouble(0.5);
 
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(15, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(15, 0, 0)), ZoneOffset.UTC)));
     }
 
     @Test
     public void getRandomValues_withExclusiveLowerBound_shouldGenerateCorrectValues() {
         LocalDate date = LocalDate.of(2018, 1, 10);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(12, 0, 0)), false);
-        givenUpperBound(LocalDateTime.of(date, LocalTime.of(18, 0, 0)), true);
+        givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), false);
+        givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = lowerLimit;
@@ -157,7 +155,7 @@ public class DateTimeFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(12, 0, 0, 1_000_000))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 1_000_000)), ZoneOffset.UTC)));
 
         rng.setNextDouble(1);
 
@@ -166,20 +164,19 @@ public class DateTimeFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(18, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC)));
 
         rng.setNextDouble(0.5);
 
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(15, 0, 0))));
+            equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(15, 0, 0)), ZoneOffset.UTC)));
     }
 
     @Test
     public void getRandomValues_withSmallPermittedRangeAtEndOfLegalRange_shouldGenerateCorrectValues() {
-        LocalDate date = LocalDate.of(9999, 12, 31);
-        givenLowerBound(LocalDateTime.of(date, LocalTime.of(23, 0, 0)), false);
+        givenLowerBound(OffsetDateTime.of(9999, 12, 31, 23, 0, 0,0, ZoneOffset.UTC), false);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = lowerLimit;
@@ -193,7 +190,7 @@ public class DateTimeFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(date, LocalTime.of(23, 59, 23, 999_000_000))));
+            equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 23, 999_000_000, ZoneOffset.UTC)));
     }
 
     @Test
@@ -217,24 +214,24 @@ public class DateTimeFieldValueSourceTests {
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000)));
+            equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000, ZoneOffset.UTC)));
 
         rng.setNextDouble(0.5);
 
         iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(LocalDateTime.of(5000, 07, 02, 11, 59, 59, 999_000_000)));
+            equalTo(OffsetDateTime.of(5000, 07, 02, 11, 59, 59, 999_000_000, ZoneOffset.UTC)));
     }
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -244,10 +241,10 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistInDifferentOrder(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MAX, LocalDateTime.MIN)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MAX, OffsetDateTime.MIN)));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -270,10 +267,10 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMin(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -282,10 +279,10 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMax(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-30"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -294,10 +291,10 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeUnequalWhenAllPropertiesMatchExceptBlacklist(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
+            new HashSet<>(Collections.singletonList(OffsetDateTime.MIN)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -306,10 +303,10 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeUnequalWhenOnlyBlacklistMatches(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-30"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -318,22 +315,22 @@ public class DateTimeFieldValueSourceTests {
     public void shouldBeUnequalWhenAllPropertiesDontMatch(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-28", "2010-11-30"),
-            new HashSet<>(Arrays.asList(LocalDateTime.MIN, LocalDateTime.MAX)));
+            new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
         DateTimeFieldValueSource b = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
-            new HashSet<>(Collections.singletonList(LocalDateTime.MIN)));
+            new HashSet<>(Collections.singletonList(OffsetDateTime.MIN)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
-    public void datetimeGenerateAllValues_withNoMin_startsAtLocalDateTimeMin(){
+    public void datetimeGenerateAllValues_withNoMin_startsAtOffsetDateTimeMin(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeRestrictions.DateTimeLimit(LocalDateTime.MAX, false);
+        max.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, false);
         DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
         //Act
-        LocalDateTime firstValue = (LocalDateTime) noMin.generateAllValues().iterator().next();
+        OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
         //Assert
         Assert.assertThat(firstValue, equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
     }
@@ -375,15 +372,15 @@ public class DateTimeFieldValueSourceTests {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return new DateTimeRestrictions.DateTimeLimit(
-            LocalDate.parse(dateString, formatter).atStartOfDay(),
+            LocalDate.parse(dateString, formatter).atStartOfDay().atOffset(ZoneOffset.UTC),
             true);
     }
 
-    private void givenLowerBound(LocalDateTime value, boolean inclusive) {
+    private void givenLowerBound(OffsetDateTime value, boolean inclusive) {
         lowerLimit = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
     }
 
-    private void givenUpperBound(LocalDateTime value, boolean inclusive) {
+    private void givenUpperBound(OffsetDateTime value, boolean inclusive) {
         upperLimit = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
     }
 
@@ -421,8 +418,8 @@ public class DateTimeFieldValueSourceTests {
         Assert.assertThat(actualValues, equalTo(expectedValues));
     }
 
-    private LocalDateTime createDate(int year, int month, int day) {
-        return LocalDateTime.of(year, month, day, 0, 0, 0);
+    private OffsetDateTime createDate(int year, int month, int day) {
+        return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
     }
 
     private class TestRandomNumberGenerator implements RandomNumberGenerator {

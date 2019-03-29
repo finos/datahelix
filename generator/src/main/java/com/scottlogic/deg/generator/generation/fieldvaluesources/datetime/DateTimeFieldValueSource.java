@@ -14,14 +14,14 @@ import java.util.Set;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
 
-    public static final LocalDateTime ISO_MAX_DATE = LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999);
-    public static final LocalDateTime ISO_MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
+    public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999, ZoneOffset.UTC);
+    public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0,0, 0, ZoneOffset.UTC);
 
     private final ChronoUnit granularity = ChronoUnit.MILLIS;
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
-    private final LocalDateTime inclusiveLower;
-    private final LocalDateTime exclusiveUpper;
+    private final OffsetDateTime inclusiveLower;
+    private final OffsetDateTime exclusiveUpper;
 
     public DateTimeFieldValueSource(
             DateTimeRestrictions restrictions,
@@ -80,21 +80,23 @@ public class DateTimeFieldValueSource implements FieldValueSource {
         ArrayList<Object> interestingValues = new ArrayList<>();
 
         if (restrictions.min != null && restrictions.min.getLimit() != null) {
-            LocalDateTime min = restrictions.min.getLimit();
+            OffsetDateTime min = restrictions.min.getLimit();
             interestingValues.add(restrictions.min.isInclusive() ? min : min.plusNanos(1_000_000));
         } else {
-            interestingValues.add(LocalDateTime.of(
+            interestingValues.add(OffsetDateTime.of(
                     LocalDate.of(1900, 01, 01),
-                    LocalTime.MIDNIGHT));
+                    LocalTime.MIDNIGHT,
+                    ZoneOffset.UTC));
         }
 
         if (restrictions.max != null && restrictions.max.getLimit() != null) {
-            LocalDateTime max = restrictions.max.getLimit();
+            OffsetDateTime max = restrictions.max.getLimit();
             interestingValues.add(restrictions.max.isInclusive() ? max : max.minusNanos(1_000_000));
         } else {
-            interestingValues.add(LocalDateTime.of(
+            interestingValues.add(OffsetDateTime.of(
                     LocalDate.of(2100, 01, 01),
-                    LocalTime.MIDNIGHT));
+                    LocalTime.MIDNIGHT,
+                    ZoneOffset.UTC));
         }
 
         return () -> new UpCastingIterator<>(
@@ -105,12 +107,12 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
 
-        LocalDateTime lower = inclusiveLower != null
+        OffsetDateTime lower = inclusiveLower != null
                 ? inclusiveLower
                 : ISO_MIN_DATE;
 
 
-        LocalDateTime upper = exclusiveUpper != null
+        OffsetDateTime upper = exclusiveUpper != null
                 ? exclusiveUpper
                 : ISO_MAX_DATE.plusNanos(1_000_000);
 
@@ -121,12 +123,12 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
     }
 
-    private LocalDateTime getExclusiveUpperBound(DateTimeRestrictions upper) {
+    private OffsetDateTime getExclusiveUpperBound(DateTimeRestrictions upper) {
         if (upper.max == null || upper.max.getLimit() == null) return null;
         return upper.max.isInclusive() ? upper.max.getLimit().plusNanos(1_000_000) : upper.max.getLimit();
     }
 
-    private LocalDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
+    private OffsetDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
         if (lower.min == null || lower.min.getLimit() == null) return null;
         return lower.min.isInclusive() ? lower.min.getLimit() : lower.min.getLimit().plusNanos(1_000_000);
     }
@@ -143,7 +145,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             equals(exclusiveUpper, otherSource.exclusiveUpper);
     }
 
-    private static boolean equals(LocalDateTime x, LocalDateTime y){
+    private static boolean equals(OffsetDateTime x, OffsetDateTime y){
         if (x == null && y == null) {
             return true;
         }

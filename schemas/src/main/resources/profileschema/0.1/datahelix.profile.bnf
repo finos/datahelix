@@ -38,7 +38,7 @@ inSet ::= '"' 'inSet' '"' ':' '[' ( ( datetime | string | number) ( ',' ( dateti
 equalTo ::= '"' 'equalTo' '"' ',' '"' 'value' '"' ':' ( number | string | datetime ) '}'
 
 datetime         ::= '{' '"' 'date' '"' ':' '"' datetimeValue '"' '}'
-datetimeValue    ::=datetimeYear'-'datetimeMonth '-'datetimeDay 'T' datetimeHour ':' datetimeMinute ':' datetimeSecond '.' datetimeMillisec
+datetimeValue    ::=datetimeYear'-'datetimeMonth '-'datetimeDay 'T' datetimeHour ':' datetimeMinute ':' datetimeSecond '.' datetimeMillisec [Z]?
 datetimeYear     ::= '0' '0' '0' [1-9] | '0' '0' [1-9] digit | '0' [1-9] digit digit | [1-9] digit digit digit
 datetimeMonth    ::= '0' [1-9] | '1' [0-2]
 datetimeDay      ::= '0' [1-9] | [1-2] digit | '3' [0-1]

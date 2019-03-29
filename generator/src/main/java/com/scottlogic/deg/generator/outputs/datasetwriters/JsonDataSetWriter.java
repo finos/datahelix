@@ -14,7 +14,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
@@ -56,8 +56,8 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
                 rowNode.put(fieldName, (BigDecimal) value);
             } else if (value instanceof String) {
                 rowNode.put(fieldName, (String) value);
-            } else if (value instanceof LocalDateTime) {
-                rowNode.put(fieldName, standardDateFormat.format((LocalDateTime)value));
+            } else if (value instanceof OffsetDateTime) {
+                rowNode.put(fieldName, standardDateFormat.format((OffsetDateTime)value));
             } else {
                 rowNode.put(fieldName, value.toString());
             }

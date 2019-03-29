@@ -2,15 +2,16 @@ package com.scottlogic.deg.generator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.function.Function;
 
 public class DateValueStep {
 
-    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})))";
+    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
@@ -20,30 +21,30 @@ public class DateValueStep {
     }
 
     @When("{fieldVar} is {operator} {date}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
         state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {date}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) throws Exception {
+    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
     @Then("{fieldVar} contains datetime data")
     public void producedDataShouldContainDateTimeValuesForField(String fieldName){
-        helper.assertFieldContainsNullOrMatching(fieldName, LocalDateTime.class);
+        helper.assertFieldContainsNullOrMatching(fieldName, OffsetDateTime.class);
     }
 
     @Then("{fieldVar} contains anything but datetime data")
     public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
-        helper.assertFieldContainsNullOrNotMatching(fieldName, LocalDateTime.class);
+        helper.assertFieldContainsNullOrNotMatching(fieldName, OffsetDateTime.class);
     }
 
     @Then("{fieldVar} contains datetimes between {date} and {date} inclusively")
     public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             isBetweenInclusively(minInclusive, maxInclusive));
     }
 
@@ -51,7 +52,7 @@ public class DateValueStep {
     public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> !isBetweenInclusively(min, max).apply(value));
     }
 
@@ -59,7 +60,7 @@ public class DateValueStep {
     public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, DateObject beforeInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> isBeforeOrAt(value, beforeInclusive));
     }
 
@@ -67,26 +68,26 @@ public class DateValueStep {
     public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, DateObject afterInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
-            LocalDateTime.class,
+            OffsetDateTime.class,
             value -> isAfterOrAt(value, afterInclusive));
     }
 
-    private Function<LocalDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+    private Function<OffsetDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
         return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
-    private LocalDateTime getDateTime(DateObject dateObject){
+    private OffsetDateTime getDateTime(DateObject dateObject){
         String dateString = (String)dateObject.get("date");
-        return LocalDateTime.parse(dateString);
+        return GeneratorTestUtilities.getOffsetDateTime(dateString);
     }
 
-    private boolean isAfterOrAt(LocalDateTime date, DateObject minInclusiveObject){
-        LocalDateTime minInclusive = getDateTime(minInclusiveObject);
+    private boolean isAfterOrAt(OffsetDateTime date, DateObject minInclusiveObject){
+        OffsetDateTime minInclusive = getDateTime(minInclusiveObject);
         return date.equals(minInclusive) || date.isAfter(minInclusive);
     }
 
-    private boolean isBeforeOrAt(LocalDateTime date, DateObject maxInclusiveObject){
-        LocalDateTime maxInclusive = getDateTime(maxInclusiveObject);
+    private boolean isBeforeOrAt(OffsetDateTime date, DateObject maxInclusiveObject){
+        OffsetDateTime maxInclusive = getDateTime(maxInclusiveObject);
         return date.equals(maxInclusive) || date.isBefore(maxInclusive);
     }
 }

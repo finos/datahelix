@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
         this.alerts = new ArrayList<>();
     }
 
-    public void isAfter(Field field, LocalDateTime referenceValue, boolean inclusive) {
+    public void isAfter(Field field, OffsetDateTime referenceValue, boolean inclusive) {
 
         DateTimeRestrictions candidateRestrictions = new DateTimeRestrictions();
         candidateRestrictions.min = new DateTimeRestrictions.DateTimeLimit(
@@ -42,7 +42,7 @@ public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
         }
     }
 
-    public void isBefore(Field field, LocalDateTime referenceValue, boolean inclusive) {
+    public void isBefore(Field field, OffsetDateTime referenceValue, boolean inclusive) {
 
         DateTimeRestrictions candidateRestrictions = new DateTimeRestrictions();
         candidateRestrictions.max = new DateTimeRestrictions.DateTimeLimit(
@@ -73,7 +73,7 @@ public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
                 && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
     }
 
-    private void logError(Field field, LocalDateTime referenceValue) {
+    private void logError(Field field, OffsetDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
             new DateTimeConstraintValidationMessages(
@@ -83,7 +83,7 @@ public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
             field));
     }
 
-    private void logInformation(Field field, LocalDateTime referenceValue) {
+    private void logInformation(Field field, OffsetDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,
             new DateTimeConstraintValidationMessages(

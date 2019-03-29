@@ -19,7 +19,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -402,7 +403,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsAfterConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()));
@@ -437,7 +438,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsAfterConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16,0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
@@ -472,7 +473,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsAfterOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
@@ -507,7 +508,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsAfterOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
@@ -543,7 +544,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()));
@@ -579,7 +580,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
@@ -614,7 +615,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceIsBeforeOrEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
@@ -650,7 +651,7 @@ class ConstraintReducerTest {
     @Test
     void shouldreduceNegatedIsBeforeorEqualToConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime testTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 16);
+        final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
@@ -685,8 +686,8 @@ class ConstraintReducerTest {
     @Test
     void shouldMergeAndReduceIsAfterConstantDateTimeConstraintWithIsBeforeConstantDateTimeConstraint() {
         final Field field = new Field("test0");
-        final LocalDateTime startTimestamp = LocalDateTime.of(2013, 11, 19, 10, 43, 12);
-        final LocalDateTime endTimestamp = LocalDateTime.of(2018, 2, 4, 23, 25, 8);
+        final OffsetDateTime startTimestamp = OffsetDateTime.of(2013, 11, 19, 10, 43, 12, 0, ZoneOffset.UTC);
+        final OffsetDateTime endTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 8, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsAfterConstantDateTimeConstraint(field, startTimestamp, rules()),
@@ -920,7 +921,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
-        LocalDateTime datetimeValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)"), rules()),
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)), rules())
@@ -941,7 +942,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
-        LocalDateTime datetimeValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 2, rules()),
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue)), rules())
@@ -962,8 +963,8 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
-        LocalDateTime datetimeValue = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
-        LocalDateTime oneHourLaterDateTimeValue = datetimeValue.plusHours(1);
+        OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
+        OffsetDateTime oneHourLaterDateTimeValue = datetimeValue.plusHours(1);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsAfterConstantDateTimeConstraint(field, datetimeValue, rules()),
             new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)), rules())

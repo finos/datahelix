@@ -16,11 +16,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AtomicConstraintReaderLookupTests {
@@ -40,8 +43,13 @@ public class AtomicConstraintReaderLookupTests {
         profileFields = new ProfileFields(fields);
     }
 
-    private static Stream<Arguments> testProvider() {
+    private static Object createDateObject(String dateStr) {
+        Map<String, String> date = new HashMap<>();
+        date.put("date", dateStr);
+        return date;
+    }
 
+    private static Stream<Arguments> testProvider() {
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
         stringValueDto.is = AtomicConstraintType.ISEQUALTOCONSTANT.toString();
@@ -54,9 +62,7 @@ public class AtomicConstraintReaderLookupTests {
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
 
-        Map date = new HashMap();
-        date.put("date", "2020-01-01T01:02:03.456");
-        dateValueDto.value = date;
+        dateValueDto.value = createDateObject("2020-01-01T01:02:03.456");
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
@@ -284,49 +290,103 @@ public class AtomicConstraintReaderLookupTests {
     }
 
     @Test
-    public void parseDate_withDateAtYear0000_shouldThrowInvalidProfileException() {
+    public void shouldRejectDatesAt0000() {
+        assertRejectedDateTimeParse("0000-01-01T00:00:00.000");
+        assertRejectedDateTimeParse("0000-01-01T00:00:00.000Z");
+    }
+
+    @Test
+    public void shouldRejectDatesBefore0000() {
+        assertRejectedDateTimeParse("-00001-01-01T00:00:00.000");
+        assertRejectedDateTimeParse("-00001-01-01T00:00:00.000Z");
+    }
+
+    @Test
+    public void shouldRejectDatesAfter9999(){
+        assertRejectedDateTimeParse("10000-01-01T00:00:00.000");
+        assertRejectedDateTimeParse("10000-01-01T00:00:00.000Z");
+    }
+
+    @Test
+    public void shouldAcceptDatesAtStartOf0001() throws InvalidProfileException {
+        assertSuccessfulDateParse(
+            "0001-01-01T00:00:00.000",
+            OffsetDateTime.of(1, 1, 1, 00, 00, 00, 0, ZoneOffset.UTC));
+
+        assertSuccessfulDateParse(
+            "0001-01-01T00:00:00.000Z",
+            OffsetDateTime.of(1, 1, 1, 00, 00, 00, 0, ZoneOffset.UTC));
+    }
+
+    @Test
+    public void shouldAcceptDatesAtEndOf9999() throws InvalidProfileException {
+        assertSuccessfulDateParse(
+            "9999-12-31T23:59:59.999",
+            OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999000000, ZoneOffset.UTC));
+
+        assertSuccessfulDateParse(
+            "9999-12-31T23:59:59.999Z",
+            OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999000000, ZoneOffset.UTC));
+    }
+
+    @Test
+    public void shouldRejectInvalidDates(){
+        assertRejectedDateTimeParse("2019-02-29T00:00:00.000");
+        assertRejectedDateTimeParse("2019-02-29T00:00:00.000Z");
+    }
+
+    @Test
+    public void shouldRejectInvalidTimes(){
+        assertRejectedDateTimeParse("2019-01-01T24:00:00.000");
+        assertRejectedDateTimeParse("2019-01-01T24:00:00.000Z");
+    }
+
+    @Test
+    public void shouldRejectPartiallySpecifiedDateTimes(){
+        assertRejectedDateTimeParse("2010-01-01");
+        assertRejectedDateTimeParse("2010-01-01T12:30:00");
+    }
+
+    @Test
+    public void shouldAssumeUTCWhenOffsetNotSpecified() throws InvalidProfileException {
+        assertSuccessfulDateParse(
+            "2018-04-01T00:00:00.000",
+            OffsetDateTime.of(2018, 04, 01, 00, 00, 00, 0, ZoneOffset.UTC));
+    }
+
+    @Test
+    public void shouldHandleExplicitHourOffsets() throws InvalidProfileException {
+        assertSuccessfulDateParse(
+            "2018-04-01T00:00:00.000+03",
+            OffsetDateTime.of(2018, 04, 01, 00, 00, 00, 0, ZoneOffset.ofHours(3)));
+    }
+
+    private void assertSuccessfulDateParse(String dateString, OffsetDateTime expectedDateTime) throws InvalidProfileException {
+        OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(createDateObject(dateString));
+
+        Assert.assertThat(actualDateTime, equalTo(expectedDateTime));
+    }
+
+    private void assertRejectedDateTimeParse(String dateString) {
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> AtomicConstraintReaderLookup.parseDate("0000-01-01T00:00:00.000"));
+            () -> tryParseConstraintDateTimeValue(createDateObject(dateString)));
     }
 
-    @Test
-    public void parseDate_withDateBefore0000_shouldThrowInvalidProfileException() {
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> AtomicConstraintReaderLookup.parseDate("-00001-01-01T00:00:00.000"));
-    }
+    private OffsetDateTime tryParseConstraintDateTimeValue(Object value) throws InvalidProfileException {
+        ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(
+            AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString());
 
-    @Test
-    public void parseDate_withDateAfter9999_shouldThrowInvalidProfileException(){
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> AtomicConstraintReaderLookup.parseDate("10000-01-01T00:00:00.000"));
-    }
+        ConstraintDTO dateDto = new ConstraintDTO();
+        dateDto.field = "test";
+        dateDto.value = value;
 
-    @Test
-    public void parseDate_withDateAtStartOf0001_shouldNotThrow(){
-        Assertions.assertDoesNotThrow(
-            () -> AtomicConstraintReaderLookup.parseDate("0001-01-01T00:00:00.000"));
-    }
+        RuleDTO rule = new RuleDTO();
+        rule.rule = "rule";
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
 
-    @Test
-    public void parseDate_withDateAtEndOf9999_shouldNotThrow(){
-        Assertions.assertDoesNotThrow(
-            () -> AtomicConstraintReaderLookup.parseDate("9999-12-31T23:59:59.999"));
-    }
+        IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) reader.apply(dateDto, profileFields, ruleInformation);
 
-    @Test
-    public void parseDate_withAnInvalidDateShouldThrow(){
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> AtomicConstraintReaderLookup.parseDate("2019-02-29T00:00:00.000"));
-    }
-
-    @Test
-    public void parseDate_withAnInvalidTimeShouldThrow(){
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> AtomicConstraintReaderLookup.parseDate("2019-01-01T24:00:00.000"));
+        return constraint.referenceValue;
     }
 }

@@ -32,6 +32,7 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean overwriteOutputFiles();
     boolean visualiseReductions();
     boolean shouldViolate();
+    boolean requireFieldTyping();
 
     GenerationConfig.OutputFormat getOutputFormat();
 }
