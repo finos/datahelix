@@ -203,22 +203,22 @@ Scenario: Running a 'matchingRegex' for a minimum length of 0 should be successf
 
 Scenario: Running a 'matchingRegex' for a maximum length smaller than the minimum length should fail with an error
      Given foo is matching regex /[a]{1,0}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Illegal repetition range near index 7\r\n\[a\]\{1,0\}\r\n       \^"
        And no data is created
 
 Scenario: Running a 'matchingRegex' for a minimum length of a decimal value should fail with an error
      Given foo is matching regex /[a]{1.1}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Unclosed counted closure near index 5\r\n\[a\]\{1.1\}\r\n     \^"
        And no data is created
 
 Scenario: Running a 'matchingRegex' for a minimum length that is less zero should fail with an error message
      Given foo is matching regex /[a]{-1}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Illegal repetition near index 2\r\n\[a\]\{-1\}\r\n  \^"
        And no data is created
 
 Scenario: Running a 'matchingRegex' with an empty regex should fail with an error message
      Given foo is matching regex /[]{}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Unclosed character class near index 3\r\n\[\]\{\}\r\n   \^"
        And no data is created
 
 Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error

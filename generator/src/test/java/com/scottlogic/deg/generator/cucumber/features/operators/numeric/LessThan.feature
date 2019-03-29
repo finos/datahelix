@@ -63,12 +63,12 @@ Scenario: Running a 'lessThan' request that specifies a decimal with trailing ze
 
 Scenario: Running a 'lessThan' request that specifies a string should be unsuccessful
   Given foo is less than "bar"
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "\?"
     And no data is created
 
 Scenario: Running a 'lessThan' request that specifies an empty string should be unsuccessful
     Given foo is less than ""
-    Then the profile is invalid because "??"
+    Then the profile is invalid because "\?"
       And no data is created
 
 Scenario: Running a 'lessThan' request that specifies null should be unsuccessful

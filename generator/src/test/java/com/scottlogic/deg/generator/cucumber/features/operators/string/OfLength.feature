@@ -58,7 +58,7 @@ Scenario Outline: Running an 'ofLength' request that includes a decimal number c
      Given foo is of length <length>
        And foo is in set:
          | "1" |
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "String-length operator must contain a integer value for its operand found \(\d+\.\d+ <BigDecimal>\) for field \[foo\]"
      Examples:
        | length      |
        | 1.1         |
@@ -72,7 +72,7 @@ Scenario Outline: Running an 'ofLength' request that includes a value that is no
      Given foo is of length <length>
        And foo is in set:
          | "a" |
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "(Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(String-length operator must contain a numeric value for its operand found \(.*\) for field \[foo\])"
        And no data is created
      Examples:
        | length                    |

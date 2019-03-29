@@ -180,7 +180,7 @@ Scenario: Running an 'if' request that is invalidly formatted (missing a then st
          "else": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Constraint is null"
        And no data is created
 
 Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
@@ -392,7 +392,7 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Couldn't recognise 'values' property, it must not contain 'null'"
        And no data is created
 
 Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful

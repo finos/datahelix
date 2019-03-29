@@ -16,17 +16,17 @@ Scenario: Running an 'aValid' request should be successful
 
 Scenario: Running a 'aValid' request that includes the string "isin" should fail with an error message
      Given foo is a valid "isin"
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes.isin"
        And no data is created
 
 Scenario: Running a 'aValid' request that includes a non ISIN string should fail with an error message
      Given foo is a valid "BURRITO"
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes.BURRITO"
        And no data is created
 
 Scenario: Running an 'aValid' request that includes a null entry ("") characters should fail with an error message
      Given foo is a valid ""
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes."
        And no data is created
 
 Scenario: Running an 'aValid' request with the value property set to a null entry (null) should throw an error

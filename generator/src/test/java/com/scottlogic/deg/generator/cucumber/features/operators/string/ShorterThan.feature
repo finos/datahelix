@@ -19,27 +19,27 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
 
 Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 0
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "\?"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than -1
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Cannot create an IsStringShorterThanConstraint for field 'foo' with a a negative length."
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 1.1
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "String-length operator must contain a integer value for its operand found \(1.1 <BigDecimal>\) for field \[foo\]"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than "5"
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "String-length operator must contain a numeric value for its operand found \(5\) for field \[foo\]"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than ""
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "String-length operator must contain a numeric value for its operand found \(\) for field \[foo\]"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message

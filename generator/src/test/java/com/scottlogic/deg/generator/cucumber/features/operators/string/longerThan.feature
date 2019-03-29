@@ -27,27 +27,27 @@ Scenario: Running a 'longerThan' request that includes the value zero should be 
 
 Scenario: 'longerThan' a negative number should fail with an error
   Given foo is longer than -5
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "Cannot create an IsStringLongerThanConstraint for field 'foo' with a a negative length."
     And no data is created
 
 Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message
   Given foo is longer than 1.1
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "String-length operator must contain a integer value for its operand found \(1.1 <BigDecimal>\) for field \[foo\]"
     And no data is created
 
 Scenario: 'longerThan' a string should fail with an error message
   Given foo is longer than "Test"
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "String-length operator must contain a numeric value for its operand found \(Test\) for field \[foo\]"
     And no data is created
 
 Scenario: 'longerThan' an empty string should fail with an error message
   Given foo is longer than ""
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "String-length operator must contain a numeric value for its operand found \(\) for field \[foo\]"
     And no data is created
 
 Scenario: 'longerThan' whitespace should fail with an error message
   Given foo is longer than " "
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "String-length operator must contain a numeric value for its operand found \( \) for field \[foo\]"
     And no data is created
 
 Scenario: 'longerThan' null should fail with an error message

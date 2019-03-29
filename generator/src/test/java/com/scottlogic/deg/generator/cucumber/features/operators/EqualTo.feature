@@ -352,13 +352,13 @@ Scenario: Running an 'equalTo' request that includes a null entry (null) charact
 Scenario: Running an 'equalTo' request that includes an invalid date value should fail with an error message
   Given there is a field foo
     And foo is equal to 2010-13-40T00:00:00.000
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "Date string '2010-13-40T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
     And no data is created
 
 Scenario: Running an 'equalTo' request that includes an invalid time value  should fail with an error message
   Given there is a field foo
     And foo is equal to 2010-01-01T55:00:00.000
-  Then the profile is invalid because "??"
+  Then the profile is invalid because "Date string '2010-01-01T55:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
     And no data is created
 
 Scenario: Running an 'equalTo' request that includes strings with <8k (including white spaces) characters should be successful

@@ -206,22 +206,22 @@ Scenario: Running a 'containingRegex' request for a range over a single characte
 
 Scenario: Running a 'containingRegex' for a maximum length smaller than the minimum length should fail with an error
      Given foo is containing regex /[a]{1,0}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Illegal repetition range near index 7\r\n\[a\]\{1,0\}\r\n       \^"
        And no data is created
 
 Scenario: Running a 'containingRegex' for a minimum length of a decimal value should fail with an error
      Given foo is containing regex /[a]{1.1}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Unclosed counted closure near index 5\r\n\[a\]\{1.1\}\r\n     \^"
        And no data is created
 
 Scenario: Running a 'containingRegex' for a minimum length that is less zero should fail with an error message
      Given foo is containing regex /[a]{-1}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Illegal repetition near index 2\r\n\[a\]\{-1\}\r\n  \^"
        And no data is created
 
 Scenario: Running a 'containingRegex' for an empty value should fail with an error message
      Given foo is containing regex /[]{}/
-     Then the profile is invalid because "??"
+     Then the profile is invalid because "Unclosed character class near index 3\r\n\[\]\{\}\r\n   \^"
        And no data is created
 
 Scenario: Running a 'containingRegex' request with the value property set to a null entry (null) should throw an error
