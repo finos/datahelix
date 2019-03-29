@@ -1,41 +1,41 @@
 Feature: Values can be specified by using if, then and else constraints
 
-Background:
-     Given the generation strategy is full
-     And the combination strategy is exhaustive
-     And the following fields exist:
+  Background:
+    Given the generation strategy is full
+    And the combination strategy is exhaustive
+    And the following fields exist:
       | foo |
       | bar |
 
-Scenario: Running an 'if' constraint for then condition only should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' constraint for then condition only should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
          "then": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
-       | "b" | 10  |
-       | "b" | 20  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
+      | "b" | 10  |
+      | "b" | 20  |
 
-Scenario: Running an 'if' constraint for then and else conditions should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' constraint for then and else conditions should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -43,23 +43,23 @@ Scenario: Running an 'if' constraint for then and else conditions should be succ
          "else": { "field": "bar", "is": "equalTo", "value": 5 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" |  3  |
-       | "b" |  5  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 3   |
+      | "b" | 5   |
 
-Scenario: Running an 'if' request that contains a valid anyOf statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' request that contains a valid anyOf statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "anyOf": [
@@ -70,25 +70,25 @@ Scenario: Running an 'if' request that contains a valid anyOf statement should b
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
-       | 2   | "a"  |
-       | 3   | "b"  |
-       | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
+      | 2   | "a" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running an 'if' request that contains a valid allOf statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' request that contains a valid allOf statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "allOf": [
@@ -99,25 +99,25 @@ Scenario: Running an 'if' request that contains a valid allOf statement should b
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "b"  |
-       | 2   | "a"  |
-       | 3   | "a"  |
-       | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "a" |
+      | 3   | "a" |
+      | 4   | "b" |
 
-Scenario: Running an 'if' request that contains a valid not statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' request that contains a valid not statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "not": { "field": "foo", "is": "equalTo", "value": 1 } },
@@ -125,26 +125,26 @@ Scenario: Running an 'if' request that contains a valid not statement should be 
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "b"  |
-       | 2   | "a"  |
-       | 3   | "a"  |
-       | 4   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "a" |
+      | 3   | "a" |
+      | 4   | "a" |
 
-Scenario: Running an 'if' request that contains a valid nested if statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' request that contains a valid nested if statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "greaterThan", "value": 1 },
@@ -154,48 +154,48 @@ Scenario: Running an 'if' request that contains a valid nested if statement shou
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "c"  |
-       | 2   | "b"  |
-       | 3   | "b"  |
-       | 4   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "c" |
+      | 2   | "b" |
+      | 3   | "b" |
+      | 4   | "a" |
 
-Scenario: Running an 'if' request that is invalidly formatted (missing a then statement) should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an 'if' request that is invalidly formatted (missing a then statement) should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
          "else": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then I am presented with an error message
-       And no data is created
+    Then I am presented with an error message
+    And no data is created
 
-Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -203,26 +203,26 @@ Scenario: Running a 'if' request that includes an invalid if value (not in field
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "b"  |
-       | 2   | "b"  |
-       | 3   | "b"  |
-       | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "b" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running a 'if' request that includes an invalid then value (not in field set) should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running a 'if' request that includes an invalid then value (not in field set) should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -230,25 +230,25 @@ Scenario: Running a 'if' request that includes an invalid then value (not in fie
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 2   | "b"  |
-       | 3   | "b"  |
-       | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 2   | "b" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running a 'if' request that includes an invalid else value (not in field set) should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running a 'if' request that includes an invalid else value (not in field set) should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -256,23 +256,23 @@ Scenario: Running a 'if' request that includes an invalid else value (not in fie
          "else": { "field": "bar", "is": "equalTo", "value": "X" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
 
-Scenario: Running an if request that contains a non contradictory inSet constraint within its if statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory inSet constraint within its if statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "inSet", "values": [1, 2] },
@@ -281,25 +281,25 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
          }
        """
     Then the following data should be generated:
-      | foo | bar  |
-      | 1   | "a"  |
-      | 2   | "a"  |
-      | 3   | "b"  |
-      | 4   | "b"  |
+      | foo | bar |
+      | 1   | "a" |
+      | 2   | "a" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running an if request that contains a non contradictory inSet constraint within its then statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory inSet constraint within its then statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -307,27 +307,27 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
-       | 1   | "b"  |
-       | 2   | "c"  |
-       | 3   | "c"  |
-       | 4   | "c"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
+      | 1   | "b" |
+      | 2   | "c" |
+      | 3   | "c" |
+      | 4   | "c" |
 
-Scenario: Running an if request that contains a non contradictory inSet constraint within its else statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory inSet constraint within its else statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -335,29 +335,29 @@ Scenario: Running an if request that contains a non contradictory inSet constrai
          "else": { "field": "bar", "is": "inSet", "values": [ "a", "c" ] }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "b"  |
-       | 2   | "a"  |
-       | 2   | "c"  |
-       | 3   | "a"  |
-       | 3   | "c"  |
-       | 4   | "a"  |
-       | 4   | "c"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "a" |
+      | 2   | "c" |
+      | 3   | "a" |
+      | 3   | "c" |
+      | 4   | "a" |
+      | 4   | "c" |
 
-Scenario: Running an if request that contains a contradictory inSet constraint within its if statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory inSet constraint within its if statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "inSet", "values": [ "X", "Y" ] },
@@ -365,26 +365,26 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "b"  |
-       | 2   | "b"  |
-       | 3   | "b"  |
-       | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "b" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running an if request that contains a contradictory inSet constraint within its then statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory inSet constraint within its then statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -392,22 +392,22 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then I am presented with an error message
-       And no data is created
+    Then I am presented with an error message
+    And no data is created
 
-Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -415,19 +415,19 @@ Scenario: Running an if request that contains a contradictory inSet constraint w
          "else": { "field": "bar", "is": "inSet", "values": [ "X", "Y" ] }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
 
-Scenario: Running an if request that contains a non contradictory null constraint within its if statement should be successful
-       Given foo is in set:
-         | 2    |
-         | 3    |
-         | 4    |
-       And bar is in set:
-         | "b"  |
-         | "c"  |
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory null constraint within its if statement should be successful
+    Given foo is in set:
+      | 2 |
+      | 3 |
+      | 4 |
+    And bar is in set:
+      | "b" |
+      | "c" |
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "null" },
@@ -435,26 +435,26 @@ Scenario: Running an if request that contains a non contradictory null constrain
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | null | "b"  |
-       | null | null |
-       | 2    | "c"  |
-       | 2    | null |
-       | 3    | "c"  |
-       | 3    | null |
-       | 4    | "c"  |
-       | 4    | null |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | null | "b"  |
+      | null | null |
+      | 2    | "c"  |
+      | 2    | null |
+      | 3    | "c"  |
+      | 3    | null |
+      | 4    | "c"  |
+      | 4    | null |
 
-Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
-       Given foo is in set:
-         | 2    |
-         | 3    |
-         | 4    |
-       And bar is in set:
-         | "b"  |
-         | "c"  |
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
+    Given foo is in set:
+      | 2 |
+      | 3 |
+      | 4 |
+    And bar is in set:
+      | "b" |
+      | "c" |
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 2 },
@@ -462,25 +462,25 @@ Scenario: Running an if request that contains a non contradictory null constrain
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | null | "c"  |
-       | null | null |
-       | 2    | null |
-       | 3    | "c"  |
-       | 3    | null |
-       | 4    | "c"  |
-       | 4    | null |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | null | "c"  |
+      | null | null |
+      | 2    | null |
+      | 3    | "c"  |
+      | 3    | null |
+      | 4    | "c"  |
+      | 4    | null |
 
-Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
-       Given foo is in set:
-         | 2    |
-         | 3    |
-         | 4    |
-       And bar is in set:
-         | "b"  |
-         | "c"  |
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
+    Given foo is in set:
+      | 2 |
+      | 3 |
+      | 4 |
+    And bar is in set:
+      | "b" |
+      | "c" |
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 2 },
@@ -488,28 +488,28 @@ Scenario: Running an if request that contains a non contradictory null constrain
          "else": { "field": "bar", "is": "null" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | null | null |
-       | null | "b"  |
-       | 2    | "b"  |
-       | 2    | null |
-       | 3    | null |
-       | 4    | null |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | null | null |
+      | null | "b"  |
+      | 2    | "b"  |
+      | 2    | null |
+      | 3    | null |
+      | 4    | null |
 
-Scenario: Running an if request that contains a contradictory null constraint within its if statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory null constraint within its if statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "null" },
@@ -517,26 +517,26 @@ Scenario: Running an if request that contains a contradictory null constraint wi
          "else": { "field": "bar", "is": "equalTo", "value": "b" }
          }
        """
-       Then the following data should be generated:
-         | foo | bar  |
-         | 1   | "b"  |
-         | 2   | "b"  |
-         | 3   | "b"  |
-         | 4   | "b"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "b" |
+      | 2   | "b" |
+      | 3   | "b" |
+      | 4   | "b" |
 
-Scenario: Running an if request that contains a contradictory null constraint within its then statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory null constraint within its then statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1},
@@ -544,25 +544,25 @@ Scenario: Running an if request that contains a contradictory null constraint wi
          "else": { "field": "bar", "is": "equalTo", "value": "a" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 2   | "a"  |
-       | 3   | "a"  |
-       | 4   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 2   | "a" |
+      | 3   | "a" |
+      | 4   | "a" |
 
-Scenario: Running an if request that contains a contradictory null constraint within its else statement should be successful
-       Given foo is in set:
-         | 1 |
-         | 2 |
-         | 3 |
-         | 4 |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory null constraint within its else statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1},
@@ -570,24 +570,24 @@ Scenario: Running an if request that contains a contradictory null constraint wi
          "else": { "field": "bar", "is": "null" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
 
-Scenario: Running an if request that contains a non contradictory ofType constraint within its if statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10   |
-         | 20   |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofType constraint within its if statement should be successful
+    Given foo is in set:
+      | 1   |
+      | 2   |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10   |
+      | 20   |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "ofType", "value": "string" },
@@ -595,27 +595,27 @@ Scenario: Running an if request that contains a non contradictory ofType constra
          "else": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | 10   |
-       | 2   | 10   |
-       | "a" | "AA" |
-       | "b" | "AA" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 1   | 10   |
+      | 2   | 10   |
+      | "a" | "AA" |
+      | "b" | "AA" |
 
-Scenario: Running an if request that contains a non contradictory ofType constraint within its then statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10   |
-         | 20   |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofType constraint within its then statement should be successful
+    Given foo is in set:
+      | 1   |
+      | 2   |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10   |
+      | 20   |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -623,28 +623,28 @@ Scenario: Running an if request that contains a non contradictory ofType constra
          "else": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | 10   |
-       | 2   | 10   |
-       | "a" | "AA" |
-       | "a" | "BB" |
-       | "b" | 10   |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 1   | 10   |
+      | 2   | 10   |
+      | "a" | "AA" |
+      | "a" | "BB" |
+      | "b" | 10   |
 
-Scenario: Running an if request that contains a non contradictory ofType constraint within its else statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10   |
-         | 20   |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofType constraint within its else statement should be successful
+    Given foo is in set:
+      | 1   |
+      | 2   |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10   |
+      | 20   |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -652,30 +652,30 @@ Scenario: Running an if request that contains a non contradictory ofType constra
          "else": { "field": "bar", "is": "ofType", "value": "integer" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | 10   |
-       | 1   | 20   |
-       | 2   | 10   |
-       | 2   | 20   |
-       | "a" | "AA" |
-       | "b" | 10   |
-       | "b" | 20   |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 1   | 10   |
+      | 1   | 20   |
+      | 2   | 10   |
+      | 2   | 20   |
+      | "a" | "AA" |
+      | "b" | 10   |
+      | "b" | 20   |
 
-Scenario: Running an if request that contains a contradictory ofType constraint within its if statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | 3   |
-         | 4   |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofType constraint within its if statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "ofType", "value": "string" },
@@ -683,27 +683,27 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "c"  |
-       | 2   | "c"  |
-       | 3   | "c"  |
-       | 4   | "c"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "c" |
+      | 2   | "c" |
+      | 3   | "c" |
+      | 4   | "c" |
 
-Scenario: Running an if request that contains a contradictory ofType constraint within its then statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | 3   |
-         | 4   |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofType constraint within its then statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -711,26 +711,26 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
          "else": { "field": "bar", "is": "equalTo", "value": "c" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 2   | "c"  |
-       | 3   | "c"  |
-       | 4   | "c"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 2   | "c" |
+      | 3   | "c" |
+      | 4   | "c" |
 
-Scenario: Running an if request that contains a contradictory ofType constraint within its else statement should be successful
-       Given foo is in set:
-         | 1   |
-         | 2   |
-         | 3   |
-         | 4   |
-       And foo is anything but null
-       And bar is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofType constraint within its else statement should be successful
+    Given foo is in set:
+      | 1 |
+      | 2 |
+      | 3 |
+      | 4 |
+    And foo is anything but null
+    And bar is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -738,24 +738,24 @@ Scenario: Running an if request that contains a contradictory ofType constraint 
          "else": { "field": "bar", "is": "ofType", "value": "integer" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | "a"  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | "a" |
 
-Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its if statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its if statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "matchingRegex", "value": "[a-z]{1}" },
@@ -763,27 +763,27 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "1" | "10" |
-       | "2" | "10" |
-       | "a" | "AA" |
-       | "b" | "AA" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "10" |
+      | "2" | "10" |
+      | "a" | "AA" |
+      | "b" | "AA" |
 
-Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its then statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its then statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -791,28 +791,28 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "1" | "AA" |
-       | "1" | "BB" |
-       | "2" | "10" |
-       | "a" | "10" |
-       | "b" | "10" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "AA" |
+      | "1" | "BB" |
+      | "2" | "10" |
+      | "a" | "10" |
+      | "b" | "10" |
 
-Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its else statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory matchingRegex constraint within its else statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -820,30 +820,30 @@ Scenario: Running an if request that contains a non contradictory matchingRegex 
          "else": { "field": "bar", "is": "matchingRegex", "value": "[0-9]{2}" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "1" | "AA" |
-       | "2" | "10" |
-       | "2" | "20" |
-       | "a" | "10" |
-       | "a" | "20" |
-       | "b" | "10" |
-       | "b" | "20" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "AA" |
+      | "2" | "10" |
+      | "2" | "20" |
+      | "a" | "10" |
+      | "a" | "20" |
+      | "b" | "10" |
+      | "b" | "20" |
 
-Scenario: Running an if request that contains a contradictory matchingRegex constraint within its if statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory matchingRegex constraint within its if statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "matchingRegex", "value": "[0-9]{10}" },
@@ -851,27 +851,27 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "1" | "10" |
-       | "2" | "10" |
-       | "a" | "10" |
-       | "b" | "10" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "10" |
+      | "2" | "10" |
+      | "a" | "10" |
+      | "b" | "10" |
 
-Scenario: Running an if request that contains a contradictory matchingRegex constraint within its then statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory matchingRegex constraint within its then statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -879,26 +879,26 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "1" | "10" |
-       | "2" | "10" |
-       | "b" | "10" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "10" |
+      | "2" | "10" |
+      | "b" | "10" |
 
-Scenario: Running an if request that contains a contradictory matchingRegex constraint within its else statement should be successful
-       Given foo is in set:
-         | "1" |
-         | "2" |
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory matchingRegex constraint within its else statement should be successful
+    Given foo is in set:
+      | "1" |
+      | "2" |
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -906,24 +906,24 @@ Scenario: Running an if request that contains a contradictory matchingRegex cons
          "else": { "field": "bar", "is": "matchingRegex", "value": "[😁-😡]{1}"}
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | "a" | "BB" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "a" | "BB" |
 
-Scenario: Running an if request that contains a non contradictory containingRegex constraint within its if statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory containingRegex constraint within its if statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "containingRegex", "value": "[1]{1}" },
@@ -931,27 +931,27 @@ Scenario: Running an if request that contains a non contradictory containingRege
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "1"  | "AA" |
-       | "2"  | "10" |
-       | "a1" | "AA" |
-       | "b2" | "10" |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | "1"  | "AA" |
+      | "2"  | "10" |
+      | "a1" | "AA" |
+      | "b2" | "10" |
 
-Scenario: Running an if request that contains a non contradictory containingRegex constraint within its then statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory containingRegex constraint within its then statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -959,28 +959,28 @@ Scenario: Running an if request that contains a non contradictory containingRege
          "else": { "field": "bar", "is": "equalTo", "value": "AA" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "1"  | "10" |
-       | "1"  | "20" |
-       | "2"  | "AA" |
-       | "a1" | "AA" |
-       | "b2" | "AA" |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | "1"  | "10" |
+      | "1"  | "20" |
+      | "2"  | "AA" |
+      | "a1" | "AA" |
+      | "b2" | "AA" |
 
-Scenario: Running an if request that contains a non contradictory containingRegex constraint within its else statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory containingRegex constraint within its else statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -988,30 +988,30 @@ Scenario: Running an if request that contains a non contradictory containingRege
          "else": { "field": "bar", "is": "containingRegex", "value": "[0]{1}" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "1"  | "BB" |
-       | "2"  | "10" |
-       | "2"  | "20" |
-       | "a1" | "10" |
-       | "a1" | "20" |
-       | "b2" | "10" |
-       | "b2" | "20" |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | "1"  | "BB" |
+      | "2"  | "10" |
+      | "2"  | "20" |
+      | "a1" | "10" |
+      | "a1" | "20" |
+      | "b2" | "10" |
+      | "b2" | "20" |
 
-Scenario: Running an if request that contains a contradictory containingRegex constraint within its if statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory containingRegex constraint within its if statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "containingRegex", "value": "[🚫]{1}" },
@@ -1019,27 +1019,27 @@ Scenario: Running an if request that contains a contradictory containingRegex co
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "1"  | "10" |
-       | "2"  | "10" |
-       | "a1" | "10" |
-       | "b2" | "10" |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | "1"  | "10" |
+      | "2"  | "10" |
+      | "a1" | "10" |
+      | "b2" | "10" |
 
-Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -1047,26 +1047,26 @@ Scenario: Running an if request that contains a contradictory containingRegex co
          "else": { "field": "bar", "is": "equalTo", "value": "10" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "2"  | "10" |
-       | "a1" | "10" |
-       | "b2" | "10" |
+    Then the following data should be generated:
+      | foo  | bar  |
+      | "2"  | "10" |
+      | "a1" | "10" |
+      | "b2" | "10" |
 
-Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
-       Given foo is in set:
-         | "1"  |
-         | "2"  |
-         | "a1" |
-         | "b2" |
-       And foo is anything but null
-       And bar is in set:
-         | "10" |
-         | "20" |
-         | "AA" |
-         | "BB" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
+    Given foo is in set:
+      | "1"  |
+      | "2"  |
+      | "a1" |
+      | "b2" |
+    And foo is anything but null
+    And bar is in set:
+      | "10" |
+      | "20" |
+      | "AA" |
+      | "BB" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "1" },
@@ -1074,24 +1074,24 @@ Scenario: Running an if request that contains a contradictory containingRegex co
          "else": { "field": "bar", "is": "containingRegex", "value": "[🚫]{1}" }
          }
        """
-     Then the following data should be generated:
-       | foo  | bar  |
-       | "1"  | "10" |
+    Then the following data should be generated:
+      | foo | bar  |
+      | "1" | "10" |
 
-Scenario: Running an if request that contains a non contradictory ofLength constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofLength constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "ofLength", "value": 2 },
@@ -1099,27 +1099,27 @@ Scenario: Running an if request that contains a non contradictory ofLength const
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "4444" |
-       | "bb"   | "1"    |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "4444" |
+      | "bb"   | "1"    |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a non contradictory ofLength constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofLength constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "bb" },
@@ -1127,27 +1127,27 @@ Scenario: Running an if request that contains a non contradictory ofLength const
          "else": { "field": "bar", "is": "equalTo", "value": "1" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar   |
-       | "a"    | "1"   |
-       | "bb"   | "333" |
-       | "ccc"  | "1"   |
-       | "dddd" | "1"   |
+    Then the following data should be generated:
+      | foo    | bar   |
+      | "a"    | "1"   |
+      | "bb"   | "333" |
+      | "ccc"  | "1"   |
+      | "dddd" | "1"   |
 
-Scenario: Running an if request that contains a non contradictory ofLength constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory ofLength constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -1155,27 +1155,27 @@ Scenario: Running an if request that contains a non contradictory ofLength const
          "else": { "field": "bar", "is": "ofLength", "value": 4 }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "1"    |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "1"    |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory ofLength constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofLength constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "ofLength", "value": 7 },
@@ -1183,27 +1183,27 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "4444" |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "4444" |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory ofLength constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofLength constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -1211,26 +1211,26 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory ofLength constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory ofLength constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -1238,24 +1238,24 @@ Scenario: Running an if request that contains a contradictory ofLength constrain
          "else": { "field": "bar", "is": "ofLength", "value": 10 }
          }
        """
-  Then the following data should be generated:
-    | foo | bar |
-    | "a" | "1" |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | "1" |
 
-Scenario: Running an if request that contains a non contradictory longerThan constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory longerThan constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "longerThan", "value": 2 },
@@ -1263,27 +1263,27 @@ Scenario: Running an if request that contains a non contradictory longerThan con
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "4444" |
-       | "bb"   | "4444" |
-       | "ccc"  | "1"    |
-       | "dddd" | "1"    |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "4444" |
+      | "bb"   | "4444" |
+      | "ccc"  | "1"    |
+      | "dddd" | "1"    |
 
-Scenario: Running an if request that contains a non contradictory longerThan constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory longerThan constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "bb" },
@@ -1291,28 +1291,28 @@ Scenario: Running an if request that contains a non contradictory longerThan con
          "else": { "field": "bar", "is": "equalTo", "value": "1" }
          }
        """
-       Then the following data should be generated:
-         | foo    | bar    |
-         | "a"    | "1"    |
-         | "bb"   | "333"  |
-         | "bb"   | "4444" |
-         | "ccc"  | "1"    |
-         | "dddd" | "1"    |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "1"    |
+      | "bb"   | "333"  |
+      | "bb"   | "4444" |
+      | "ccc"  | "1"    |
+      | "dddd" | "1"    |
 
-Scenario: Running an if request that contains a non contradictory longerThan constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory longerThan constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
@@ -1320,30 +1320,30 @@ Scenario: Running an if request that contains a non contradictory longerThan con
          "else": { "field": "bar", "is": "longerThan", "value": 2  }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "333"  |
-       | "a"    | "4444" |
-       | "bb"   | "333"  |
-       | "bb"   | "4444" |
-       | "ccc"  | "333"  |
-       | "ccc"  | "4444" |
-       | "dddd" | "1"    |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "333"  |
+      | "a"    | "4444" |
+      | "bb"   | "333"  |
+      | "bb"   | "4444" |
+      | "ccc"  | "333"  |
+      | "ccc"  | "4444" |
+      | "dddd" | "1"    |
 
-Scenario: Running an if request that contains a contradictory longerThan constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory longerThan constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "longerThan", "value": 25 },
@@ -1351,27 +1351,27 @@ Scenario: Running an if request that contains a contradictory longerThan constra
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "4444" |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "4444" |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory longerThan constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory longerThan constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -1379,26 +1379,26 @@ Scenario: Running an if request that contains a contradictory longerThan constra
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory longerThan constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory longerThan constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -1406,24 +1406,24 @@ Scenario: Running an if request that contains a contradictory longerThan constra
          "else": { "field": "bar", "is": "longerThan", "value": 100 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | "1" |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | "1" |
 
-Scenario: Running an if request that contains a non contradictory shorterThan constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory shorterThan constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "shorterThan", "value": 3 },
@@ -1431,27 +1431,27 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "1"    |
-       | "bb"   | "1"    |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "1"    |
+      | "bb"   | "1"    |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a non contradictory shorterThan constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory shorterThan constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
@@ -1459,28 +1459,28 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
          "else": { "field": "bar", "is": "equalTo", "value": "333" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar   |
-       | "a"    | "333" |
-       | "bb"   | "333" |
-       | "ccc"  | "1"   |
-       | "ccc"  | "22"  |
-       | "dddd" | "333" |
+    Then the following data should be generated:
+      | foo    | bar   |
+      | "a"    | "333" |
+      | "bb"   | "333" |
+      | "ccc"  | "1"   |
+      | "ccc"  | "22"  |
+      | "dddd" | "333" |
 
-Scenario: Running an if request that contains a non contradictory shorterThan constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory shorterThan constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
@@ -1488,33 +1488,33 @@ Scenario: Running an if request that contains a non contradictory shorterThan co
          "else": { "field": "bar", "is": "shorterThan", "value": 4 }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "1"    |
-       | "a"    | "22"   |
-       | "a"    | "333"  |
-       | "bb"   | "1"    |
-       | "bb"   | "22"   |
-       | "bb"   | "333"  |
-       | "ccc"  | "1"    |
-       | "ccc"  | "22"   |
-       | "ccc"  | "333"  |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "1"    |
+      | "a"    | "22"   |
+      | "a"    | "333"  |
+      | "bb"   | "1"    |
+      | "bb"   | "22"   |
+      | "bb"   | "333"  |
+      | "ccc"  | "1"    |
+      | "ccc"  | "22"   |
+      | "ccc"  | "333"  |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory shorterThan constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory shorterThan constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "shorterThan", "value": 1 },
@@ -1522,27 +1522,27 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "a"    | "4444" |
-       | "bb"   | "4444" |
-       | "ccc"  | "4444" |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "a"    | "4444" |
+      | "bb"   | "4444" |
+      | "ccc"  | "4444" |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a contradictory shorterThan constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory shorterThan constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
@@ -1550,26 +1550,26 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar    |
-       | "a"   | "4444" |
-       | "bb"  | "4444" |
-       | "ccc" | "4444" |
+    Then the following data should be generated:
+      | foo   | bar    |
+      | "a"   | "4444" |
+      | "bb"  | "4444" |
+      | "ccc" | "4444" |
 
-Scenario: Running an if request that contains a contradictory shorterThan constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"    |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "1"    |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory shorterThan constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"    |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "1"    |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
@@ -1577,24 +1577,24 @@ Scenario: Running an if request that contains a contradictory shorterThan constr
          "else": { "field": "bar", "is": "shorterThan", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar    |
-       | "dddd" | "4444" |
+    Then the following data should be generated:
+      | foo    | bar    |
+      | "dddd" | "4444" |
 
-Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
-       Given foo is in set:
-         | "GB0002634946" |
-         | "bb"           |
-         | "ccc"          |
-         | "dddd"         |
-       And foo is anything but null
-       And bar is in set:
-         | "GB0002634946" |
-         | "22"           |
-         | "333"          |
-         | "4444"         |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
+    Given foo is in set:
+      | "GB0002634946" |
+      | "bb"           |
+      | "ccc"          |
+      | "dddd"         |
+    And foo is anything but null
+    And bar is in set:
+      | "GB0002634946" |
+      | "22"           |
+      | "333"          |
+      | "4444"         |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "aValid", "value": "ISIN" },
@@ -1602,27 +1602,27 @@ Scenario: Running an if request that contains a non contradictory aValid constra
          "else": { "field": "bar", "is": "equalTo", "value": "4444" }
          }
        """
-     Then the following data should be generated:
-       | foo            | bar    |
-       | "GB0002634946" | "22"   |
-       | "bb"           | "4444" |
-       | "ccc"          | "4444" |
-       | "dddd"         | "4444" |
+    Then the following data should be generated:
+      | foo            | bar    |
+      | "GB0002634946" | "22"   |
+      | "bb"           | "4444" |
+      | "ccc"          | "4444" |
+      | "dddd"         | "4444" |
 
-Scenario: Running an if request that contains a non contradictory aValid constraint within its then statement should be successful
-       Given foo is in set:
-         | "GB0002634946" |
-         | "bb"           |
-         | "ccc"          |
-         | "dddd"         |
-       And foo is anything but null
-       And bar is in set:
-         | "GB0002634946" |
-         | "22"           |
-         | "333"          |
-         | "4444"         |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory aValid constraint within its then statement should be successful
+    Given foo is in set:
+      | "GB0002634946" |
+      | "bb"           |
+      | "ccc"          |
+      | "dddd"         |
+    And foo is anything but null
+    And bar is in set:
+      | "GB0002634946" |
+      | "22"           |
+      | "333"          |
+      | "4444"         |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "bb" },
@@ -1630,27 +1630,27 @@ Scenario: Running an if request that contains a non contradictory aValid constra
          "else": { "field": "bar", "is": "equalTo", "value": "333" }
          }
        """
-     Then the following data should be generated:
-       | foo            | bar            |
-       | "GB0002634946" | "333"          |
-       | "bb"           | "GB0002634946" |
-       | "ccc"          | "333"          |
-       | "dddd"         | "333"          |
+    Then the following data should be generated:
+      | foo            | bar            |
+      | "GB0002634946" | "333"          |
+      | "bb"           | "GB0002634946" |
+      | "ccc"          | "333"          |
+      | "dddd"         | "333"          |
 
-Scenario: Running an if request that contains a non contradictory aValid constraint within its else statement should be successful
-       Given foo is in set:
-         | "GB0002634946" |
-         | "bb"           |
-         | "ccc"          |
-         | "dddd"         |
-       And foo is anything but null
-       And bar is in set:
-         | "GB0002634946" |
-         | "22"           |
-         | "333"          |
-         | "4444"         |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory aValid constraint within its else statement should be successful
+    Given foo is in set:
+      | "GB0002634946" |
+      | "bb"           |
+      | "ccc"          |
+      | "dddd"         |
+    And foo is anything but null
+    And bar is in set:
+      | "GB0002634946" |
+      | "22"           |
+      | "333"          |
+      | "4444"         |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "bb" },
@@ -1658,27 +1658,27 @@ Scenario: Running an if request that contains a non contradictory aValid constra
          "else": { "field": "bar", "is": "aValid", "value": "ISIN" }
          }
        """
-     Then the following data should be generated:
-       | foo            | bar            |
-       | "GB0002634946" | "GB0002634946" |
-       | "bb"           | "22"           |
-       | "ccc"          | "GB0002634946" |
-       | "dddd"         | "GB0002634946" |
+    Then the following data should be generated:
+      | foo            | bar            |
+      | "GB0002634946" | "GB0002634946" |
+      | "bb"           | "22"           |
+      | "ccc"          | "GB0002634946" |
+      | "dddd"         | "GB0002634946" |
 
-Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
-       Given foo is in set:
-         | "aa"   |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "11"   |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
+    Given foo is in set:
+      | "aa"   |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "11"   |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "aValid", "value": "ISIN" },
@@ -1686,28 +1686,28 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
          "else": { "field": "bar", "is": "equalTo", "value": "333" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar   |
-       | "aa"   | "333" |
-       | "bb"   | "333" |
-       | "ccc"  | "333" |
-       | "dddd" | "333" |
+    Then the following data should be generated:
+      | foo    | bar   |
+      | "aa"   | "333" |
+      | "bb"   | "333" |
+      | "ccc"  | "333" |
+      | "dddd" | "333" |
 
 
-Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
-       Given foo is in set:
-         | "aa"   |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "11"   |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
+    Given foo is in set:
+      | "aa"   |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "11"   |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
@@ -1715,26 +1715,26 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
          "else": { "field": "bar", "is": "equalTo", "value": "333" }
          }
        """
-     Then the following data should be generated:
-       | foo    | bar   |
-       | "aa"   | "333" |
-       | "bb"   | "333" |
-       | "dddd" | "333" |
+    Then the following data should be generated:
+      | foo    | bar   |
+      | "aa"   | "333" |
+      | "bb"   | "333" |
+      | "dddd" | "333" |
 
-Scenario: Running an if request that contains a contradictory aValid constraint within its else statement should be successful
-       Given foo is in set:
-         | "aa"   |
-         | "bb"   |
-         | "ccc"  |
-         | "dddd" |
-       And foo is anything but null
-       And bar is in set:
-         | "11"   |
-         | "22"   |
-         | "333"  |
-         | "4444" |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory aValid constraint within its else statement should be successful
+    Given foo is in set:
+      | "aa"   |
+      | "bb"   |
+      | "ccc"  |
+      | "dddd" |
+    And foo is anything but null
+    And bar is in set:
+      | "11"   |
+      | "22"   |
+      | "333"  |
+      | "4444" |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
@@ -1742,24 +1742,24 @@ Scenario: Running an if request that contains a contradictory aValid constraint 
          "else": { "field": "bar", "is": "aValid", "value": "ISIN" }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar   |
-       | "ccc" | "333" |
+    Then the following data should be generated:
+      | foo   | bar   |
+      | "ccc" | "333" |
 
-Scenario: Running an if request that contains a non contradictory greaterThan constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThan constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "greaterThan", "value": 29 },
@@ -1767,27 +1767,27 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 1   |
-       | 30  | 22  |
-       | 40  | 22  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 1   |
+      | 30  | 22  |
+      | 40  | 22  |
 
-Scenario: Running an if request that contains a non contradictory greaterThan constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThan constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -1795,29 +1795,29 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 1    |
-       | 20  | 1    |
-       | 30  | 1    |
-       | 40  | 22   |
-       | 40  | 333  |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 1    |
+      | 20  | 1    |
+      | 30  | 1    |
+      | 40  | 22   |
+      | 40  | 333  |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a non contradictory greaterThan constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThan constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -1825,30 +1825,30 @@ Scenario: Running an if request that contains a non contradictory greaterThan co
          "else": { "field": "bar", "is": "greaterThan", "value": 300 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 333  |
-       | 10  | 4444 |
-       | 20  | 333  |
-       | 20  | 4444 |
-       | 30  | 333  |
-       | 30  | 4444 |
-       | 40  | 1    |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 333  |
+      | 10  | 4444 |
+      | 20  | 333  |
+      | 20  | 4444 |
+      | 30  | 333  |
+      | 30  | 4444 |
+      | 40  | 1    |
 
-Scenario: Running an if request that contains a contradictory greaterThan constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThan constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "greaterThan", "value": 8000 },
@@ -1856,27 +1856,27 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 1   |
-       | 30  | 1   |
-       | 40  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 1   |
+      | 30  | 1   |
+      | 40  | 1   |
 
-Scenario: Running an if request that contains a contradictory greaterThan constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThan constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -1884,26 +1884,26 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 1   |
-       | 30  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 1   |
+      | 30  | 1   |
 
-Scenario: Running an if request that contains a contradictory greaterThan constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThan constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -1911,24 +1911,24 @@ Scenario: Running an if request that contains a contradictory greaterThan constr
          "else": { "field": "bar", "is": "greaterThan", "value": 8000 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 40  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 40  | 1   |
 
-Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "greaterThanOrEqualTo", "value": 20 },
@@ -1936,27 +1936,27 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 22  |
-       | 30  | 22  |
-       | 40  | 22  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 22  |
+      | 30  | 22  |
+      | 40  | 22  |
 
-Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 20 },
@@ -1964,29 +1964,29 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 1    |
-       | 20  | 22   |
-       | 20  | 333  |
-       | 20  | 4444 |
-       | 30  | 1    |
-       | 40  | 1    |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 1    |
+      | 20  | 22   |
+      | 20  | 333  |
+      | 20  | 4444 |
+      | 30  | 1    |
+      | 40  | 1    |
 
-Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory greaterThanOrEqualTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 20 },
@@ -1994,33 +1994,33 @@ Scenario: Running an if request that contains a non contradictory greaterThanOrE
          "else": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 22 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 22   |
-       | 10  | 333  |
-       | 10  | 4444 |
-       | 20  | 1    |
-       | 30  | 22   |
-       | 30  | 333  |
-       | 30  | 4444 |
-       | 40  | 22   |
-       | 40  | 333  |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 22   |
+      | 10  | 333  |
+      | 10  | 4444 |
+      | 20  | 1    |
+      | 30  | 22   |
+      | 30  | 333  |
+      | 30  | 4444 |
+      | 40  | 22   |
+      | 40  | 333  |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "greaterThanOrEqualTo", "value": 8000 },
@@ -2028,27 +2028,27 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 1   |
-       | 30  | 1   |
-       | 40  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 1   |
+      | 30  | 1   |
+      | 40  | 1   |
 
-Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 10 },
@@ -2056,26 +2056,26 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
          "else": { "field": "bar", "is": "equalTo", "value": 333 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 20  | 333 |
-       | 30  | 333 |
-       | 40  | 333 |
+    Then the following data should be generated:
+      | foo | bar |
+      | 20  | 333 |
+      | 30  | 333 |
+      | 40  | 333 |
 
-Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 10 },
@@ -2083,24 +2083,24 @@ Scenario: Running an if request that contains a contradictory greaterThanOrEqual
          "else": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 8000 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 4444 |
 
-Scenario: Running an if request that contains a non contradictory lessThan constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThan constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "lessThan", "value": 20 },
@@ -2108,27 +2108,27 @@ Scenario: Running an if request that contains a non contradictory lessThan const
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-       Then the following data should be generated:
-         | foo | bar  |
-         | 10  | 4444 |
-         | 20  | 1    |
-         | 30  | 1    |
-         | 40  | 1    |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 4444 |
+      | 20  | 1    |
+      | 30  | 1    |
+      | 40  | 1    |
 
-Scenario: Running an if request that contains a non contradictory lessThan constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThan constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -2136,29 +2136,29 @@ Scenario: Running an if request that contains a non contradictory lessThan const
          "else": { "field": "bar", "is": "equalTo", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 20  | 1   |
-       | 30  | 1   |
-       | 40  | 1   |
-       | 40  | 22  |
-       | 40  | 333 |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 20  | 1   |
+      | 30  | 1   |
+      | 40  | 1   |
+      | 40  | 22  |
+      | 40  | 333 |
 
-Scenario: Running an if request that contains a non contradictory lessThan constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThan constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 40 },
@@ -2166,30 +2166,30 @@ Scenario: Running an if request that contains a non contradictory lessThan const
          "else": { "field": "bar", "is": "lessThan", "value": 300 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
-       | 10  | 22  |
-       | 20  | 1   |
-       | 20  | 22  |
-       | 30  | 1   |
-       | 30  | 22  |
-       | 40  | 333 |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
+      | 10  | 22  |
+      | 20  | 1   |
+      | 20  | 22  |
+      | 30  | 1   |
+      | 30  | 22  |
+      | 40  | 333 |
 
-Scenario: Running an if request that contains a contradictory lessThan constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThan constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "lessThan", "value": 1 },
@@ -2197,27 +2197,27 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
          "else": { "field": "bar", "is": "equalTo", "value": 22 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 22  |
-       | 20  | 22  |
-       | 30  | 22  |
-       | 40  | 22  |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 22  |
+      | 20  | 22  |
+      | 30  | 22  |
+      | 40  | 22  |
 
-Scenario: Running an if request that contains a contradictory lessThan constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThan constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 10 },
@@ -2225,26 +2225,26 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
          "else": { "field": "bar", "is": "equalTo", "value": 333 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 20  | 333 |
-       | 30  | 333 |
-       | 40  | 333 |
+    Then the following data should be generated:
+      | foo | bar |
+      | 20  | 333 |
+      | 30  | 333 |
+      | 40  | 333 |
 
-Scenario: Running an if request that contains a contradictory lessThan constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThan constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 30 },
@@ -2252,24 +2252,24 @@ Scenario: Running an if request that contains a contradictory lessThan constrain
          "else": { "field": "bar", "is": "lessThan", "value": 1 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 30  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 30  | 1   |
 
-Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "lessThanOrEqualTo", "value": 20 },
@@ -2277,27 +2277,27 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
          "else": { "field": "bar", "is": "equalTo", "value": 4444 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 1    |
-       | 20  | 1    |
-       | 30  | 4444 |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 1    |
+      | 20  | 1    |
+      | 30  | 4444 |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 20 },
@@ -2305,29 +2305,29 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
          "else": { "field": "bar", "is": "equalTo", "value": 4444 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 4444 |
-       | 20  | 1    |
-       | 20  | 22   |
-       | 20  | 333  |
-       | 30  | 4444 |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 4444 |
+      | 20  | 1    |
+      | 20  | 22   |
+      | 20  | 333  |
+      | 30  | 4444 |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory lessThanOrEqualTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 20 },
@@ -2335,36 +2335,36 @@ Scenario: Running an if request that contains a non contradictory lessThanOrEqua
          "else": { "field": "bar", "is": "lessThanOrEqualTo", "value": 4444 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 1    |
-       | 10  | 22   |
-       | 10  | 333  |
-       | 10  | 4444 |
-       | 20  | 333  |
-       | 30  | 1    |
-       | 30  | 22   |
-       | 30  | 333  |
-       | 30  | 4444 |
-       | 40  | 1    |
-       | 40  | 22   |
-       | 40  | 333  |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 1    |
+      | 10  | 22   |
+      | 10  | 333  |
+      | 10  | 4444 |
+      | 20  | 333  |
+      | 30  | 1    |
+      | 30  | 22   |
+      | 30  | 333  |
+      | 30  | 4444 |
+      | 40  | 1    |
+      | 40  | 22   |
+      | 40  | 333  |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its if statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "lessThanOrEqualTo", "value": 1 },
@@ -2372,27 +2372,27 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
          "else": { "field": "bar", "is": "equalTo", "value": 4444 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 10  | 4444 |
-       | 20  | 4444 |
-       | 30  | 4444 |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 10  | 4444 |
+      | 20  | 4444 |
+      | 30  | 4444 |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its then statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its then statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 10 },
@@ -2400,26 +2400,26 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
          "else": { "field": "bar", "is": "equalTo", "value": 4444 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 20  | 4444 |
-       | 30  | 4444 |
-       | 40  | 4444 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 20  | 4444 |
+      | 30  | 4444 |
+      | 40  | 4444 |
 
-Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-       And foo is anything but null
-       And bar is in set:
-         | 1    |
-         | 22   |
-         | 333  |
-         | 4444 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+    And foo is anything but null
+    And bar is in set:
+      | 1    |
+      | 22   |
+      | 333  |
+      | 4444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 10 },
@@ -2427,25 +2427,25 @@ Scenario: Running an if request that contains a contradictory lessThanOrEqualTo 
          "else": { "field": "bar", "is": "lessThanOrEqualTo", "value": 0 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | 10  | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | 10  | 1   |
 
-@ignore #issue 363  maybe also 756?
-Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
-      Given foo is in set:
-         | 1     |
-         | 1.1   |
-         | 1.11  |
-         | 1.111 |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 2.2   |
-         | 3.33  |
-         | 4.444 |
-       And bar is anything but null
-       And there is a constraint:
+  @ignore #issue 363  maybe also 756?
+  Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 1     |
+      | 1.1   |
+      | 1.11  |
+      | 1.111 |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 2.2   |
+      | 3.33  |
+      | 4.444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "granularTo", "value": 1 },
@@ -2453,28 +2453,28 @@ Scenario: Running an if request that contains a non contradictory granularTo con
          "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar |
-       | 1     | 1   |
-       | 1.1   | 2.2 |
-       | 1.11  | 2.2 |
-       | 1.111 | 2.2 |
+    Then the following data should be generated:
+      | foo   | bar |
+      | 1     | 1   |
+      | 1.1   | 2.2 |
+      | 1.11  | 2.2 |
+      | 1.111 | 2.2 |
 
-@ignore #issue 363
-Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 1     |
-         | 1.1   |
-         | 1.11  |
-         | 1.111 |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 2.2   |
-         | 3.33  |
-         | 4.444 |
-       And bar is anything but null
-       And there is a constraint:
+  @ignore #issue 363
+  Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 1     |
+      | 1.1   |
+      | 1.11  |
+      | 1.111 |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 2.2   |
+      | 3.33  |
+      | 4.444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -2482,28 +2482,28 @@ Scenario: Running an if request that contains a non contradictory granularTo con
          "else": { "field": "bar", "is": "granularTo", "value": 0.01 }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar  |
-       | 1     | 1    |
-       | 1.1   | 3.33 |
-       | 1.11  | 3.33 |
-       | 1.111 | 3.33 |
+    Then the following data should be generated:
+      | foo   | bar  |
+      | 1     | 1    |
+      | 1.1   | 3.33 |
+      | 1.11  | 3.33 |
+      | 1.111 | 3.33 |
 
-@ignore #issue 363
-Scenario: Running an if request that contains a contradictory granularTo constraint within its if statement should be successful
-       Given foo is in set:
-         | 1     |
-         | 1.1   |
-         | 1.11  |
-         | 1.111 |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 2.2   |
-         | 3.33  |
-         | 4.444 |
-       And bar is anything but null
-       And there is a constraint:
+  @ignore #issue 363
+  Scenario: Running an if request that contains a contradictory granularTo constraint within its if statement should be successful
+    Given foo is in set:
+      | 1     |
+      | 1.1   |
+      | 1.11  |
+      | 1.111 |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 2.2   |
+      | 3.33  |
+      | 4.444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "granularTo", "value": 0.00000001 },
@@ -2511,28 +2511,28 @@ Scenario: Running an if request that contains a contradictory granularTo constra
          "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar |
-       | 1     | 2.2 |
-       | 1.1   | 2.2 |
-       | 1.11  | 2.2 |
-       | 1.111 | 2.2 |
+    Then the following data should be generated:
+      | foo   | bar |
+      | 1     | 2.2 |
+      | 1.1   | 2.2 |
+      | 1.11  | 2.2 |
+      | 1.111 | 2.2 |
 
-@ignore #issue 363
-Scenario: Running an if request that contains a contradictory granularTo constraint within its then statement should be successful
-       Given foo is in set:
-         | 1     |
-         | 1.1   |
-         | 1.11  |
-         | 1.111 |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 2.2   |
-         | 3.33  |
-         | 4.444 |
-       And bar is anything but null
-       And there is a constraint:
+  @ignore #issue 363
+  Scenario: Running an if request that contains a contradictory granularTo constraint within its then statement should be successful
+    Given foo is in set:
+      | 1     |
+      | 1.1   |
+      | 1.11  |
+      | 1.111 |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 2.2   |
+      | 3.33  |
+      | 4.444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -2540,27 +2540,27 @@ Scenario: Running an if request that contains a contradictory granularTo constra
          "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
          }
        """
-     Then the following data should be generated:
-       | foo   | bar |
-       | 1.1   | 2.2 |
-       | 1.11  | 2.2 |
-       | 1.111 | 2.2 |
+    Then the following data should be generated:
+      | foo   | bar |
+      | 1.1   | 2.2 |
+      | 1.11  | 2.2 |
+      | 1.111 | 2.2 |
 
-@ignore #issue 363
-Scenario: Running an if request that contains a contradictory granularTo constraint within its else statement should be successful
-       Given foo is in set:
-         | 1     |
-         | 1.1   |
-         | 1.11  |
-         | 1.111 |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 2.2   |
-         | 3.33  |
-         | 4.444 |
-       And bar is anything but null
-       And there is a constraint:
+  @ignore #issue 363
+  Scenario: Running an if request that contains a contradictory granularTo constraint within its else statement should be successful
+    Given foo is in set:
+      | 1     |
+      | 1.1   |
+      | 1.11  |
+      | 1.111 |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 2.2   |
+      | 3.33  |
+      | 4.444 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": 1 },
@@ -2568,27 +2568,27 @@ Scenario: Running an if request that contains a contradictory granularTo constra
          "else": { "field": "bar", "is": "granularTo", "value": 0.00000001 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar  |
-       | 1   | 3.33 |
+    Then the following data should be generated:
+      | foo | bar  |
+      | 1   | 3.33 |
 
-Scenario: Running an if request that contains a non contradictory after constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory after constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "after", "value": { "date": "2018-01-02T00:00:00.000Z" } },
@@ -2596,32 +2596,32 @@ Scenario: Running an if request that contains a non contradictory after constrai
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory after constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory after constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-02-01T00:00:00.000Z" } },
@@ -2629,32 +2629,32 @@ Scenario: Running an if request that contains a non contradictory after constrai
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory after constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory after constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -2662,32 +2662,32 @@ Scenario: Running an if request that contains a non contradictory after constrai
          "else": { "field": "bar", "is": "after", "value": { "date": "2010-01-04T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory after constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory after constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "after", "value": { "date": "2020-01-01T00:00:00.000Z" } },
@@ -2704,23 +2704,23 @@ Scenario: Running an if request that contains a contradictory after constraint w
       | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory after constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory after constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -2728,31 +2728,31 @@ Scenario: Running an if request that contains a contradictory after constraint w
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-04T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory after constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory after constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -2760,27 +2760,27 @@ Scenario: Running an if request that contains a contradictory after constraint w
          "else": { "field": "bar", "is": "after", "value": { "date": "2020-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-05-01T00:00:00.000Z" } },
@@ -2788,32 +2788,32 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-05-01T00:00:00.000Z" } },
@@ -2821,33 +2821,33 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory afterOrAt constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-06-01T00:00:00.000Z" } },
@@ -2855,21 +2855,21 @@ Scenario: Running an if request that contains a non contradictory afterOrAt cons
          "else": { "field": "bar", "is": "afterOrAt", "value": { "date": "2010-01-04T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory afterOrAt constraint within its if statement should be successful
+  Scenario: Running an if request that contains a contradictory afterOrAt constraint within its if statement should be successful
     Given foo is in set:
       | 2018-01-01T00:00:00.000Z |
       | 2018-02-01T00:00:00.000Z |
@@ -2902,23 +2902,23 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory afterOrAt constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory afterOrAt constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -2926,31 +2926,31 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory afterOrAt constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory afterOrAt constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -2958,27 +2958,27 @@ Scenario: Running an if request that contains a contradictory afterOrAt constrai
          "else": { "field": "bar", "is": "afterOrAt", "value": { "date": "2020-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory before constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory before constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "before", "value": { "date": "2018-02-01T00:00:00.000Z" } },
@@ -2986,32 +2986,32 @@ Scenario: Running an if request that contains a non contradictory before constra
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory before constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory before constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3019,33 +3019,33 @@ Scenario: Running an if request that contains a non contradictory before constra
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-01-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-01-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory before constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory before constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3053,37 +3053,37 @@ Scenario: Running an if request that contains a non contradictory before constra
          "else": { "field": "bar", "is": "before", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory before constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory before constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "before", "value": { "date": "2010-01-01T00:00:00.000Z" } },
@@ -3091,32 +3091,32 @@ Scenario: Running an if request that contains a contradictory before constraint 
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory before constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory before constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3124,31 +3124,31 @@ Scenario: Running an if request that contains a contradictory before constraint 
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory before constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory before constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3156,27 +3156,27 @@ Scenario: Running an if request that contains a contradictory before constraint 
          "else": { "field": "bar", "is": "before", "value": { "date": "2010-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "beforeOrAt", "value": { "date": "2018-02-01T00:00:00.000Z" } },
@@ -3184,32 +3184,32 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3217,34 +3217,34 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-01-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-01-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory beforeOrAt constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3252,42 +3252,42 @@ Scenario: Running an if request that contains a non contradictory beforeOrAt con
          "else": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its if statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its if statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "beforeOrAt", "value": { "date": "2009-01-01T00:00:00.000Z" } },
@@ -3295,32 +3295,32 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its then statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its then statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3328,31 +3328,31 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
          "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
-Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its else statement should be successful
-       Given foo is in set:
-         | 2018-01-01T00:00:00.000Z |
-         | 2018-02-01T00:00:00.000Z |
-         | 2018-03-01T00:00:00.000Z |
-         | 2018-04-01T00:00:00.000Z |
-         | 2018-05-01T00:00:00.000Z |
-         | 2018-06-01T00:00:00.000Z |
-       And foo is anything but null
-       And bar is in set:
-         | 2010-01-01T00:00:00.000Z |
-         | 2010-01-02T00:00:00.000Z |
-         | 2010-01-03T00:00:00.000Z |
-         | 2010-01-04T00:00:00.000Z |
-         | 2010-01-05T00:00:00.000Z |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its else statement should be successful
+    Given foo is in set:
+      | 2018-01-01T00:00:00.000Z |
+      | 2018-02-01T00:00:00.000Z |
+      | 2018-03-01T00:00:00.000Z |
+      | 2018-04-01T00:00:00.000Z |
+      | 2018-05-01T00:00:00.000Z |
+      | 2018-06-01T00:00:00.000Z |
+    And foo is anything but null
+    And bar is in set:
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-02T00:00:00.000Z |
+      | 2010-01-03T00:00:00.000Z |
+      | 2010-01-04T00:00:00.000Z |
+      | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
@@ -3360,45 +3360,45 @@ Scenario: Running an if request that contains a contradictory beforeOrAt constra
          "else": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2009-01-01T00:00:00.000Z" } }
          }
        """
-     Then the following data should be generated:
-       | foo                      | bar                      |
-       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
 
-Scenario: Running an if request that contains a non contradictory not constraint within its if statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory not constraint within its if statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "not": { "field": "foo", "is": "equalTo", "value": "a" } },
          "then": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
-       | "a" | 20  |
-       | "a" | 30  |
-       | "b" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
+      | "a" | 20  |
+      | "a" | 30  |
+      | "b" | 10  |
 
-Scenario: Running an if request that contains a non contradictory not constraint within its then statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory not constraint within its then statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3406,23 +3406,23 @@ Scenario: Running an if request that contains a non contradictory not constraint
          "else": { "field": "bar", "is": "equalTo", "value": 10 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 20  |
-       | "a" | 30  |
-       | "b" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 20  |
+      | "a" | 30  |
+      | "b" | 10  |
 
-Scenario: Running an if request that contains a non contradictory not constraint within its else statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory not constraint within its else statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3430,22 +3430,22 @@ Scenario: Running an if request that contains a non contradictory not constraint
          "else": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
-       | "b" | 20  |
-       | "b" | 30  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
+      | "b" | 20  |
+      | "b" | 30  |
 
-Scenario: Running an if request that contains a contradictory not constraint within its if statement should be successful
-       Given foo is in set:
-         | "a" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory not constraint within its if statement should be successful
+    Given foo is in set:
+      | "a" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "not": { "field": "foo", "is": "equalTo", "value": "a" } },
@@ -3453,38 +3453,38 @@ Scenario: Running an if request that contains a contradictory not constraint wit
          "else": { "field": "bar", "is": "equalTo", "value": 30 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 30  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 30  |
 
-Scenario: Running an if request that contains a contradictory not constraint within its then statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory not constraint within its then statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
          "then": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "b" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "b" | 10  |
 
-Scenario: Running an if request that contains a contradictory not constraint within its else statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory not constraint within its else statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if": { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3492,26 +3492,26 @@ Scenario: Running an if request that contains a contradictory not constraint wit
          "else": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
 
-Scenario: Running an if request that contains a non contradictory anyOf constraint within its if statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory anyOf constraint within its if statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "anyOf": [
@@ -3521,30 +3521,30 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
          "else": { "field": "bar", "is": "equalTo", "value": 50 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
-       | "b" | 50  |
-       | "c" | 50  |
-       | "d" | 50  |
-       | "e" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
+      | "b" | 50  |
+      | "c" | 50  |
+      | "d" | 50  |
+      | "e" | 10  |
 
-Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3554,31 +3554,31 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
          "else": { "field": "bar", "is": "equalTo", "value": 50 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 20  |
-       | "a" | 40  |
-       | "b" | 50  |
-       | "c" | 50  |
-       | "d" | 50  |
-       | "e" | 50  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 20  |
+      | "a" | 40  |
+      | "b" | 50  |
+      | "c" | 50  |
+      | "d" | 50  |
+      | "e" | 50  |
 
-Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3588,34 +3588,34 @@ Scenario: Running an if request that contains a non contradictory anyOf constrai
            { "field": "bar", "is": "equalTo", "value": 40 } ] }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
-       | "b" | 20  |
-       | "b" | 40  |
-       | "c" | 20  |
-       | "c" | 40  |
-       | "d" | 20  |
-       | "d" | 40  |
-       | "e" | 20  |
-       | "e" | 40  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
+      | "b" | 20  |
+      | "b" | 40  |
+      | "c" | 20  |
+      | "c" | 40  |
+      | "d" | 20  |
+      | "d" | 40  |
+      | "e" | 20  |
+      | "e" | 40  |
 
-Scenario: Running an if request that contains a contradictory anyOf constraint within its if statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory anyOf constraint within its if statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "anyOf": [
@@ -3625,31 +3625,31 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
          "else": { "field": "bar", "is": "equalTo", "value": 50 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 50  |
-       | "b" | 50  |
-       | "c" | 50  |
-       | "d" | 50  |
-       | "e" | 50  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 50  |
+      | "b" | 50  |
+      | "c" | 50  |
+      | "d" | 50  |
+      | "e" | 50  |
 
 
-Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3659,29 +3659,29 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
          "else": { "field": "bar", "is": "equalTo", "value": 50 }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "b" | 50  |
-       | "c" | 50  |
-       | "d" | 50  |
-       | "e" | 50  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "b" | 50  |
+      | "c" | 50  |
+      | "d" | 50  |
+      | "e" | 50  |
 
-Scenario: Running an if request that contains a contradictory anyOf constraint within its else statement should be successful
-       Given foo is in set:
-         | "a" |
-         | "b" |
-         | "c" |
-         | "d" |
-         | "e" |
-       And foo is anything but null
-       And bar is in set:
-         | 10 |
-         | 20 |
-         | 30 |
-         | 40 |
-         | 50 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory anyOf constraint within its else statement should be successful
+    Given foo is in set:
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+    And foo is anything but null
+    And bar is in set:
+      | 10 |
+      | 20 |
+      | 30 |
+      | 40 |
+      | 50 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3691,26 +3691,26 @@ Scenario: Running an if request that contains a contradictory anyOf constraint w
            { "field": "bar", "is": "equalTo", "value": "Test2" } ] }
          }
        """
-     Then the following data should be generated:
-       | foo | bar |
-       | "a" | 10  |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 10  |
 
-Scenario: Running an if request that contains a non contradictory allOf constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory allOf constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "allOf": [
@@ -3720,30 +3720,30 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
          "else": { "field": "bar", "is": "equalTo", "value": 55555 }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar   |
-       | "a"     | 1     |
-       | "bb"    | 55555 |
-       | "ccc"   | 55555 |
-       | "dddd"  | 55555 |
-       | "eeeee" | 55555 |
+    Then the following data should be generated:
+      | foo     | bar   |
+      | "a"     | 1     |
+      | "bb"    | 55555 |
+      | "ccc"   | 55555 |
+      | "dddd"  | 55555 |
+      | "eeeee" | 55555 |
 
-Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3753,30 +3753,30 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
          "else": { "field": "bar", "is": "equalTo", "value": 55555 }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar   |
-       | "a"     | 22    |
-       | "bb"    | 55555 |
-       | "ccc"   | 55555 |
-       | "dddd"  | 55555 |
-       | "eeeee" | 55555 |
+    Then the following data should be generated:
+      | foo     | bar   |
+      | "a"     | 22    |
+      | "bb"    | 55555 |
+      | "ccc"   | 55555 |
+      | "dddd"  | 55555 |
+      | "eeeee" | 55555 |
 
-Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3786,30 +3786,30 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
            { "field": "bar", "is": "lessThan", "value": 30 } ] }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar |
-       | "a"     | 1   |
-       | "bb"    | 22  |
-       | "ccc"   | 22  |
-       | "dddd"  | 22  |
-       | "eeeee" | 22  |
+    Then the following data should be generated:
+      | foo     | bar |
+      | "a"     | 1   |
+      | "bb"    | 22  |
+      | "ccc"   | 22  |
+      | "dddd"  | 22  |
+      | "eeeee" | 22  |
 
-Scenario: Running an if request that contains a contradictory allOf constraint within its if statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a contradictory allOf constraint within its if statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "allOf": [
@@ -3819,30 +3819,30 @@ Scenario: Running an if request that contains a contradictory allOf constraint w
          "else": { "field": "bar", "is": "equalTo", "value": 55555 }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar   |
-       | "a"     | 55555 |
-       | "bb"    | 55555 |
-       | "ccc"   | 55555 |
-       | "dddd"  | 55555 |
-       | "eeeee" | 55555 |
+    Then the following data should be generated:
+      | foo     | bar   |
+      | "a"     | 55555 |
+      | "bb"    | 55555 |
+      | "ccc"   | 55555 |
+      | "dddd"  | 55555 |
+      | "eeeee" | 55555 |
 
-Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3852,29 +3852,29 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
          "else": { "field": "bar", "is": "equalTo", "value": 55555 }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar   |
-       | "bb"    | 55555 |
-       | "ccc"   | 55555 |
-       | "dddd"  | 55555 |
-       | "eeeee" | 55555 |
+    Then the following data should be generated:
+      | foo     | bar   |
+      | "bb"    | 55555 |
+      | "ccc"   | 55555 |
+      | "dddd"  | 55555 |
+      | "eeeee" | 55555 |
 
-Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
-       Given foo is in set:
-         | "a"     |
-         | "bb"    |
-         | "ccc"   |
-         | "dddd"  |
-         | "eeeee" |
-       And foo is anything but null
-       And bar is in set:
-         | 1     |
-         | 22    |
-         | 333   |
-         | 4444  |
-         | 55555 |
-       And bar is anything but null
-       And there is a constraint:
+  Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
+    Given foo is in set:
+      | "a"     |
+      | "bb"    |
+      | "ccc"   |
+      | "dddd"  |
+      | "eeeee" |
+    And foo is anything but null
+    And bar is in set:
+      | 1     |
+      | 22    |
+      | 333   |
+      | 4444  |
+      | 55555 |
+    And bar is anything but null
+    And there is a constraint:
        """
          {
          "if":  { "field": "foo", "is": "equalTo", "value": "a" },
@@ -3884,6 +3884,6 @@ Scenario: Running an if request that contains a non contradictory allOf constrai
            { "field": "bar", "is": "lessThan", "value": 300 } ] }
          }
        """
-     Then the following data should be generated:
-       | foo     | bar |
-       | "a"     | 1   |
+    Then the following data should be generated:
+      | foo | bar |
+      | "a" | 1   |
