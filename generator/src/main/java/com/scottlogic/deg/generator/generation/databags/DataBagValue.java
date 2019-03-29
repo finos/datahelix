@@ -1,10 +1,13 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.generation.databags;
+
+import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 
 import java.util.Objects;
 
 public class DataBagValue {
-    public final Object value;
-    public final String format;
+    final Object value;
+    private final String format;
 
     public final DataBagValueSource source;
 
@@ -32,6 +35,18 @@ public class DataBagValue {
     @Override
     public int hashCode() {
         return Objects.hash(value, format);
+    }
+
+    public Object getValue() throws InvalidProfileException {
+        if (format == null || value == null){
+            return value;
+        }
+
+        try {
+            return String.format(format, value);
+        } catch (Exception e) {
+            throw new InvalidProfileException(String.format("Unable to format value `%s` with format expression `%s`: %s", value, format, e.getMessage()));
+        }
     }
 }
 

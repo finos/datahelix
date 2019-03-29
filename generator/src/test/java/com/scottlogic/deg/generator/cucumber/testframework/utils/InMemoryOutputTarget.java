@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
@@ -22,30 +23,35 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException{
+    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException, InvalidProfileException {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
-    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
-        return generatedObjects
-            .collect(Collectors.toList())
-            .stream()
-            .map(genObj ->{
+    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException, InvalidProfileException {
+        try {
+            return generatedObjects
+                .collect(Collectors.toList())
+                .stream()
+                .map(genObj -> {
 
-                if (genObj == null){
-                    throw new IllegalStateException("GeneratedObject is null");
-                }
+                    if (genObj == null) {
+                        throw new IllegalStateException("GeneratedObject is null");
+                    }
 
-                return genObj.values
-                    .stream()
-                    .map(obj -> {
-                        if (obj.value != null && obj.format != null) {
-                            return String.format(obj.format, obj.value);
-                        }
-                        return obj.value;
-                    })
-                    .collect(Collectors.toList());
-            }).collect(Collectors.toList());
+                    return genObj.values
+                        .stream()
+                        .map(obj -> {
+                            try {
+                                return obj.getValue();
+                            } catch (InvalidProfileException e) {
+                                testState.addException(e);
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .collect(Collectors.toList());
+                }).collect(Collectors.toList());
+        } catch (RuntimeException exc){
+            throw (InvalidProfileException)exc.getCause();
+        }
     }
-
 }

@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -26,7 +27,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
     }
 
     @Override
-    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException, InvalidProfileException {
         List<Profile> violatedProfiles = this.profileViolator.violate(profile);
 
         if (violatedProfiles.isEmpty()) {

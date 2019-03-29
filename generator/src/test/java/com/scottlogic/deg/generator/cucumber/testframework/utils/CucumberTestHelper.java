@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -92,7 +93,7 @@ public class CucumberTestHelper {
     public Stream<String> getProfileValidationErrors(){
         return Stream.concat(
             testState.testExceptions.stream()
-                .filter(e -> e instanceof InvalidProfileException)
+                .filter(e -> e instanceof InvalidProfileException || e instanceof JsonParseException)
                 .map(Throwable::getMessage),
             testState.validationReporter
                 .getRecordedAlerts().stream()
