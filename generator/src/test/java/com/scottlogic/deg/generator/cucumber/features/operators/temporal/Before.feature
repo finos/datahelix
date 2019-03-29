@@ -53,17 +53,17 @@ Scenario: Running a 'before' request that specifies the lowest valid system date
 
 Scenario: Running a 'before' request that specifies an invalid date should be unsuccessful
      Given foo is before 2019-30-30T00:00:00.000Z
-     Then the profile is invalid because "Date string '2019-30-30T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+     Then the profile is invalid because "Date string '2019-30-30T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
        And no data is created
 
 Scenario: Running a 'before' request that specifies an invalid time should be unsuccessful
      Given foo is before 2019-01-01T24:00:00.000Z
-       Then the profile is invalid because "Date string '2019-01-01T24:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+       Then the profile is invalid because "Date string '2019-01-01T24:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
      And no data is created
 
 Scenario: Running a 'before' request that specifies an invalid leap year should be unsuccessful
      Given foo is before 2019-02-29T00:00:00.000Z
-       Then the profile is invalid because "Date string '2019-02-29T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+       Then the profile is invalid because "Date string '2019-02-29T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
      And no data is created
 
 #before
@@ -179,4 +179,4 @@ Scenario: Running a 'before' request that specifies null should be unsuccessful
 
 Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful
     Given foo is before 0000-01-01T00:00:00.000Z
-    Then the profile is invalid because "Date string '0000-01-01T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '0000-01-01T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"

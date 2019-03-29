@@ -222,7 +222,7 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
        And bar is in set:
          | 2010-01-01T00:00:00.000Z |
          | 2010-12-31T23:59:00.000Z |
-     Then the profile is invalid because "Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+     Then the profile is invalid because "Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
        And no data is created
   
 Scenario: Running an exhaustive combination strategy with invalid date formats should fail with an appropriate error message
@@ -239,7 +239,7 @@ Scenario: Running an exhaustive combination strategy with invalid date formats s
        And bar is in set:
          | 01-01-2010T00:00:00.000Z |
          | 2010-12-31T23:59:00.000Z |
-     Then the profile is invalid because "Unable to determine correct type for `01-01-2010T00:00:00.000`.\nEnsure strings are wrapped in double-quotes."
+     Then the profile is invalid because "Unable to determine correct type for `01-01-2010T00:00:00.000Z`.\nEnsure strings are wrapped in double-quotes."
        And no data is created
 
 Scenario: Running an exhaustive combination strategy with null values (empty strings) should be successful

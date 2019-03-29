@@ -88,14 +88,14 @@ Scenario: Running an 'ofType' = datetime request that includes an invalid date v
      Given there is a field foo
        And foo is equal to 2010-13-40T00:00:00.000Z
        And foo is of type "datetime"
-     Then the profile is invalid because "Date string '2010-13-40T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+     Then the profile is invalid because "Date string '2010-13-40T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
        And no data is created
 
 Scenario: Running an 'ofType' = datetime request that includes an invalid time value should fail with an error message
      Given there is a field foo
        And foo is equal to 2010-01-01T75:00:00.000Z
        And foo is of type "datetime"
-     Then the profile is invalid because "Date string '2010-01-01T75:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
+     Then the profile is invalid because "Date string '2010-01-01T75:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
        And no data is created
 
 Scenario: Running an 'ofType' = string request that includes a null entry ("") characters should be successful
