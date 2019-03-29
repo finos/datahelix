@@ -110,8 +110,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
-        description = "Remove the need for each field to have at least one compliant typing constraint applied",
-        defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
+        description = "Remove the need for each field to have at least one compliant typing constraint applied")
     private boolean allowUntypedFields = false;
 
     public boolean shouldDoPartitioning() {

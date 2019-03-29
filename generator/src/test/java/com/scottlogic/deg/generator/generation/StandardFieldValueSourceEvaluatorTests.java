@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 public class StandardFieldValueSourceEvaluatorTests {
@@ -100,8 +100,8 @@ public class StandardFieldValueSourceEvaluatorTests {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
         DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions() {{
-            min = new DateTimeLimit(LocalDateTime.MIN, false);
-            max = new DateTimeLimit(LocalDateTime.MAX, false);
+            min = new DateTimeLimit(OffsetDateTime.MIN, false);
+            max = new DateTimeLimit(OffsetDateTime.MAX, false);
         }};
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
             IsOfTypeConstraint.Types.DATETIME

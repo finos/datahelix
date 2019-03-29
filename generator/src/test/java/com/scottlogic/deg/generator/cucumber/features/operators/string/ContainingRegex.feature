@@ -547,7 +547,7 @@ Scenario: containingRegex string run against a non contradicting not granularTo 
 
 Scenario: Running a 'containingRegex' request alongside a after constraint should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is after 2018-10-10T00:00:00.000
+       And foo is after 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -560,7 +560,7 @@ Scenario: Running a 'containingRegex' request alongside a after constraint shoul
 
 Scenario: Running a 'containingRegex' request alongside a not after constraint should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is anything but after 2018-10-10T00:00:00.000
+       And foo is anything but after 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -573,7 +573,7 @@ Scenario: Running a 'containingRegex' request alongside a not after constraint s
 
 Scenario: containingRegex run against a non contradicting afterOrAt should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is after or at 2018-10-10T00:00:00.000
+       And foo is after or at 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -586,7 +586,7 @@ Scenario: containingRegex run against a non contradicting afterOrAt should be su
 
 Scenario: containingRegex run against a non contradicting not afterOrAt should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is anything but after or at 2018-10-10T00:00:00.000
+       And foo is anything but after or at 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -599,7 +599,7 @@ Scenario: containingRegex run against a non contradicting not afterOrAt should b
 
 Scenario: containingRegex run against a non contradicting before should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is before 2018-10-10T00:00:00.000
+       And foo is before 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -612,7 +612,7 @@ Scenario: containingRegex run against a non contradicting before should be succe
 
 Scenario: containingRegex run against a non contradicting not before should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is anything but before 2018-10-10T00:00:00.000
+       And foo is anything but before 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -625,7 +625,7 @@ Scenario: containingRegex run against a non contradicting not before should be s
 
 Scenario: containingRegex run against a non contradicting beforeOrAt should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is before or at 2018-10-10T00:00:00.000
+       And foo is before or at 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |
@@ -638,7 +638,7 @@ Scenario: containingRegex run against a non contradicting beforeOrAt should be s
 
 Scenario: containingRegex run against a non contradicting not beforeOrAt should be successful
      Given foo is containing regex /[b]{2}/
-       And foo is anything but before or at 2018-10-10T00:00:00.000
+       And foo is anything but before or at 2018-10-10T00:00:00.000Z
        And foo is in set:
          | "a"   |
          | "bb"  |

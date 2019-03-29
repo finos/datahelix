@@ -121,14 +121,14 @@ Scenario: 'longerThan' with contradicting not 'longerThan' should emit numeric,d
   Given foo is longer than 3
     And foo is anything but longer than 3
     And foo is in set:
-       | 1                       |
-       | "abc"                   |
-       | 2011-01-01T00:00:00.000 |
+       | 1                        |
+       | "abc"                    |
+       | 2011-01-01T00:00:00.000Z |
   Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 1                       |
-       | 2011-01-01T00:00:00.000 |
+       | foo                      |
+       | null                     |
+       | 1                        |
+       | 2011-01-01T00:00:00.000Z |
 
 Scenario: Running a 'longerThan' request against non contradicting 'shorterThan' should be successful
   Given foo is longer than 2
@@ -193,28 +193,28 @@ Scenario: 'longerThan' with contradicting 'shorterThan' should emit numeric,date
   Given foo is longer than 3
     And foo is shorter than 2
     And foo is in set:
-      | 1                       |
-      | "abc"                   |
-      | 2011-01-01T00:00:00.000 |
+      | 1                        |
+      | "abc"                    |
+      | 2011-01-01T00:00:00.000Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 1                       |
-      | 2011-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 1                        |
+      | 2011-01-01T00:00:00.000Z |
 
 Scenario: Not 'longerThan' with contradicting not 'shorterThan' should emit numeric,datetime and null
   Given foo is anything but longer than 3
     And foo is anything but shorter than 4
     And foo is in set:
-      | 1                       |
-      | "abc"                   |
-      | "abcd"                  |
-      | 2011-01-01T00:00:00.000 |
+      | 1                        |
+      | "abc"                    |
+      | "abcd"                   |
+      | 2011-01-01T00:00:00.000Z |
   Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 1                       |
-       | 2011-01-01T00:00:00.000 |
+       | foo                      |
+       | null                     |
+       | 1                        |
+       | 2011-01-01T00:00:00.000Z |
 
 @ignore #issue 487
 Scenario: 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
@@ -261,15 +261,15 @@ Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and
   Given foo is longer than 20
     And foo is a valid "ISIN"
     And foo is in set:
-      | 22                      |
-      | "abc"                   |
-      | "US0000XVGZA3"          |
-      | 2011-01-01T00:00:00.000 |
+      | 22                       |
+      | "abc"                    |
+      | "US0000XVGZA3"           |
+      | 2011-01-01T00:00:00.000Z |
   Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 22                      |
-       | 2011-01-01T00:00:00.000 |
+       | foo                      |
+       | null                     |
+       | 22                       |
+       | 2011-01-01T00:00:00.000Z |
 
 @ignore #issue 487
 Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
@@ -457,14 +457,14 @@ Scenario: Running a 'longerThan' request alongside a 'granularTo' constraint  sh
 
 Scenario: Running an 'longerThan' request alongside a 'after' constraint should be successful
   Given foo is longer than 1
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "aa"                      |
       | "aaaa"                    |
       | "aaaaaaaaaa"              |
       | "2019-01-01T00:00:00.001" |
-      |  2019-01-01T00:00:00.001  |
-      |  2019-01-01T00:00:00.000  |
+      |  2019-01-01T00:00:00.001Z |
+      |  2019-01-01T00:00:00.000Z |
   Then the following data should be generated:
        | foo                       |
        | null                      |
@@ -472,29 +472,29 @@ Scenario: Running an 'longerThan' request alongside a 'after' constraint should 
        | "aaaa"                    |
        | "aaaaaaaaaa"              |
        | "2019-01-01T00:00:00.001" |
-       |  2019-01-01T00:00:00.001  |
+       |  2019-01-01T00:00:00.001Z |
 
 Scenario: Running an 'longerThan' with a not 'after' constraint should be successful
   Given foo is longer than 1
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
-      |  2019-01-01T00:00:00.000  |
-      |  2019-01-01T00:00:00.001  |
+      |  2019-01-01T00:00:00.000Z |
+      |  2019-01-01T00:00:00.001Z |
   Then the following data should be generated:
       | foo                       |
       | null                      |
       | "aa"                      |
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
-      |  2019-01-01T00:00:00.000  |
+      |  2019-01-01T00:00:00.000Z |
 
 Scenario: Running an 'longerThan' request alongside a 'afterOrAt'  constraint should be successful
   Given foo is longer than 1
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
@@ -502,9 +502,9 @@ Scenario: Running an 'longerThan' request alongside a 'afterOrAt'  constraint sh
       | "aaaaaaaaaa"              |
       | "2019-01-01T00:00:00.000" |
       | "2018-09-01T00:00:00.001" |
-      | 2018-12-31T23:59:59.999   |
-      | 2019-01-01T00:00:00.000   |
-      | 2019-01-01T00:00:00.001   |
+      | 2018-12-31T23:59:59.999Z  |
+      | 2019-01-01T00:00:00.000Z  |
+      | 2019-01-01T00:00:00.001Z  |
   Then the following data should be generated:
       | foo                       |
       | null                      |
@@ -513,12 +513,12 @@ Scenario: Running an 'longerThan' request alongside a 'afterOrAt'  constraint sh
       | "aaaaaaaaaa"              |
       | "2019-01-01T00:00:00.000" |
       | "2018-09-01T00:00:00.001" |
-      | 2019-01-01T00:00:00.000   |
-      | 2019-01-01T00:00:00.001   |
+      | 2019-01-01T00:00:00.000Z  |
+      | 2019-01-01T00:00:00.001Z  |
 
 Scenario: Running an 'longerThan' request alongside a not 'afterOrAt' should be successful
   Given foo is longer than 1
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
@@ -526,9 +526,9 @@ Scenario: Running an 'longerThan' request alongside a not 'afterOrAt' should be 
       | "aaaaaaaaaa"              |
       | "2018-02-01T00:00:00.001" |
       | "2019-01-01T00:00:00.000" |
-      | 2018-12-31T23:59:59.999   |
-      | 2018-01-01T00:00:00.001   |
-      | 2019-01-01T00:00:00.000   |
+      | 2018-12-31T23:59:59.999Z  |
+      | 2018-01-01T00:00:00.001Z  |
+      | 2019-01-01T00:00:00.000Z  |
   Then the following data should be generated:
       | foo                       |
       | null                      |
@@ -537,83 +537,83 @@ Scenario: Running an 'longerThan' request alongside a not 'afterOrAt' should be 
       | "aaaaaaaaaa"              |
       | "2018-02-01T00:00:00.001" |
       | "2019-01-01T00:00:00.000" |
-      | 2018-12-31T23:59:59.999   |
-      |  2018-01-01T00:00:00.001  |
+      | 2018-12-31T23:59:59.999Z  |
+      | 2018-01-01T00:00:00.001Z  |
 
 Scenario: Running a 'longerThan' request alongside a 'before' constraint should be successful
   Given foo is longer than 1
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
       | "aaaaa"                   |
       | "2019-01-01T00:00:00.000" |
-      | 2018-01-01T00:00:00.000   |
-      | 2019-01-01T00:00:00.000   |
+      | 2018-01-01T00:00:00.000Z  |
+      | 2019-01-01T00:00:00.000Z  |
   Then the following data should be generated:
       | foo                       |
       | null                      |
       | "aa"                      |
       | "aaaaa"                   |
       | "2019-01-01T00:00:00.000" |
-      | 2018-01-01T00:00:00.000   |
+      | 2018-01-01T00:00:00.000Z  |
 
 Scenario: Running a 'longerThan' request alongside a not 'before' constraint should be successful
   Given foo is longer than 1
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
       | "aaaaa"                   |
       | "2019-01-01T00:00:00.000" |
-      | 2018-01-01T00:00:00.000   |
-      | 2019-02-01T00:00:00.000   |
-      | 2020-02-01T00:00:00.000   |
+      | 2018-01-01T00:00:00.000Z  |
+      | 2019-02-01T00:00:00.000Z  |
+      | 2020-02-01T00:00:00.000Z  |
   Then the following data should be generated:
       | foo                       |
       | null                      |
       | "aa"                      |
       | "aaaaa"                   |
       | "2019-01-01T00:00:00.000" |
-      | 2019-02-01T00:00:00.000   |
-      | 2020-02-01T00:00:00.000   |
+      | 2019-02-01T00:00:00.000Z  |
+      | 2020-02-01T00:00:00.000Z  |
 
 Scenario: Running a 'longerThan' request alongside a non contradicting 'beforeOrAt' constraint should be successful
   Given foo is longer than 1
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
-      | 2019-01-01T00:00:00.000   |
-      | 2018-01-01T00:00:00.000   |
-      | 2020-01-01T00:00:00.000   |
+      | 2019-01-01T00:00:00.000Z  |
+      | 2018-01-01T00:00:00.000Z  |
+      | 2020-01-01T00:00:00.000Z  |
   Then the following data should be generated:
       | foo                       |
       | null                      |
       | "aa"                      |
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
-      | 2019-01-01T00:00:00.000   |
-      | 2018-01-01T00:00:00.000   |
+      | 2019-01-01T00:00:00.000Z  |
+      | 2018-01-01T00:00:00.000Z  |
 
 Scenario: Running a 'longerThan' request alongside a non contradicting not 'beforeOrAt' should be successful
   Given foo is longer than 1
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "a"                       |
       | "aa"                      |
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
-      | 2019-01-01T00:00:00.000   |
-      | 2018-01-01T00:00:00.000   |
-      | 2020-01-01T00:00:00.000   |
+      | 2019-01-01T00:00:00.000Z  |
+      | 2018-01-01T00:00:00.000Z  |
+      | 2020-01-01T00:00:00.000Z  |
   Then the following data should be generated:
      | foo                       |
      | null                      |
      | "aa"                      |
      | "aaaa"                    |
      | "2019-01-01T00:00:00.000" |
-     | 2020-01-01T00:00:00.000   |
+     | 2020-01-01T00:00:00.000Z  |
 

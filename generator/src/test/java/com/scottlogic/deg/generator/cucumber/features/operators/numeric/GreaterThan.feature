@@ -394,7 +394,7 @@ Scenario: not greaterThan run against a non contradicting granularTo should be s
 Scenario: greaterThan run against a non contradicting after should be successful (greaterThan 1 AND after 2019-01-01T00:00:00.00)
   Given foo is greater than 1
     And foo is of type "integer"
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -407,7 +407,7 @@ Scenario: greaterThan run against a non contradicting after should be successful
 
 Scenario: greaterThan run against a non contradicting not after should be successful (greaterThan 1 AND not after 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
@@ -422,7 +422,7 @@ Scenario: greaterThan run against a non contradicting not after should be succes
 #afterOrAt
 Scenario: greaterThan run against a non contradicting afterOrAt should be successful (greaterThan 1 AND afterOrAt 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
@@ -436,7 +436,7 @@ Scenario: greaterThan run against a non contradicting afterOrAt should be succes
 
 Scenario: greaterThan run against a non contradicting not afterOrAt should be successful (greaterThan 1 AND not afterOrAt 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -451,7 +451,7 @@ Scenario: greaterThan run against a non contradicting not afterOrAt should be su
 #before
 Scenario: greaterThan run against a non contradicting before should be successful (greaterThan 1 AND before 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And foo is of type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
@@ -465,7 +465,7 @@ Scenario: greaterThan run against a non contradicting before should be successfu
 
 Scenario: greaterThan run against a non contradicting not before should be successful (greaterThan 1 AND not before 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -480,7 +480,7 @@ Scenario: greaterThan run against a non contradicting not before should be succe
 #beforeOrAt
 Scenario: greaterThan run against a non contradicting beforeOrAt should be successful (greaterThan 1 AND beforeOrAt 2019-01-01T00:00:00.00)
   Given foo is greater than 1
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -495,7 +495,7 @@ Scenario: greaterThan run against a non contradicting beforeOrAt should be succe
 Scenario: greaterThan run against a non contradicting not beforeOrAt should be successful (greaterThan 1 AND not beforeOrAt 2019-01-01T00:00:00.00)
   Given foo is greater than 1
     And foo is of type "integer"
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And the generator can generate at most 5 rows
   Then the following data should be generated:

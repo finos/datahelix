@@ -290,7 +290,7 @@ Scenario: not lessThan run against a non contradicting not granularTo should be 
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND after 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -306,7 +306,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not after 2019-01-01T00:00:00.00)
   Given foo is less than 1
     And foo is of type "integer"
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And the generator can generate at most 5 rows
   Then the following data should be generated:
@@ -321,7 +321,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND afterOrAt 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -336,7 +336,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not afterOrAt 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -352,7 +352,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND before 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -367,7 +367,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not before 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is anything but before 2019-01-01T00:00:00.000
+    And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -383,7 +383,7 @@ Scenario: lessThan run against a non contradicting not after should be successfu
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting after should be successful (lessThan 1 AND beforeOrAt 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows
@@ -398,7 +398,7 @@ Scenario: lessThan run against a non contradicting after should be successful (l
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
 Scenario: lessThan run against a non contradicting not after should be successful (lessThan 1 AND not beforeOrAt 2019-01-01T00:00:00.00)
   Given foo is less than 1
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is anything but null
     And foo is of type "integer"
     And the generator can generate at most 5 rows

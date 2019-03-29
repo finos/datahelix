@@ -299,53 +299,53 @@ Scenario: Running an 'inSet' request that includes the number zero should be suc
 Scenario: Running an 'inSet' request that includes a date value should be successful
   Given there is a field foo
     And foo is in set:
-     | 2010-01-01T00:00:00.000 |
-     | 2010-01-01T00:00:00.001 |
-     | 2011-01-01T00:00:00.000 |
+     | 2010-01-01T00:00:00.000Z |
+     | 2010-01-01T00:00:00.001Z |
+     | 2011-01-01T00:00:00.000Z |
   Then the following data should be generated:
-     | foo                     |
-     | null                    |
-     | 2010-01-01T00:00:00.000 |
-     | 2010-01-01T00:00:00.001 |
-     | 2011-01-01T00:00:00.000 |
+     | foo                      |
+     | null                     |
+     | 2010-01-01T00:00:00.000Z |
+     | 2010-01-01T00:00:00.001Z |
+     | 2011-01-01T00:00:00.000Z |
 
 Scenario: Running an 'inSet' request that includes a date value (leap year) should be successful
   Given there is a field foo
     And foo is in set:
-      | 2020-02-29T00:00:00.000 |
-      |  2016-02-29T00:00:00.000 |
-      | 2012-02-29T00:00:00.000 |
+      | 2020-02-29T00:00:00.000Z |
+      | 2016-02-29T00:00:00.000Z |
+      | 2012-02-29T00:00:00.000Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2020-02-29T00:00:00.000 |
-      | 2016-02-29T00:00:00.000 |
-      | 2012-02-29T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2020-02-29T00:00:00.000Z |
+      | 2016-02-29T00:00:00.000Z |
+      | 2012-02-29T00:00:00.000Z |
 
 Scenario: Running an 'inSet' request that includes a date value (system epoch dates) should be successful
   Given there is a field foo
     And foo is in set:
-      | 0001-01-01T00:00:01.000 |
-      | 9999-12-31T23:59:59.999 |
+      | 0001-01-01T00:00:01.000Z |
+      | 9999-12-31T23:59:59.999Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 0001-01-01T00:00:01.000 |
-      | 9999-12-31T23:59:59.999 |
+      | foo                      |
+      | null                     |
+      | 0001-01-01T00:00:01.000Z |
+      | 9999-12-31T23:59:59.999Z |
 
 Scenario: Running an 'inSet' request that includes an invalid date value should fail with an error message
   Given there is a field foo
     And foo is in set:
-      | 2010-13-40T00:00:00.000 |
-      | 2017-12-31T23:59:59.999 |
+      | 2010-13-40T00:00:00.000Z |
+      | 2017-12-31T23:59:59.999Z |
   Then the profile is invalid because "Date string '2010-13-40T00:00:00.000' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
     And no data is created
 
 Scenario: Running an 'inSet' request that includes an invalid time value should fail with an error message
   Given there is a field foo
     And foo is in set:
-      | 2017-12-31T40:59:59.999 |
-      | 2017-12-31T23:59:59.999 |
+      | 2017-12-31T40:59:59.999Z |
+      | 2017-12-31T23:59:59.999Z |
   Then the profile is invalid because "Date string '2017-12-31T40:59:59.999' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between \(inclusive\) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999"
     And no data is created
 
@@ -371,15 +371,15 @@ Scenario: Running an 'inSet' request that includes a null entry (null) character
 Scenario: Running an 'inSet' request that includes strings, numeric and datetime fields should be successful.
   Given there is a field foo
     And foo is in set:
-    | 1                       |
-    | 2010-01-01T00:00:00.000 |
-    | "String!"               |
+    | 1                        |
+    | 2010-01-01T00:00:00.000Z |
+    | "String!"                |
   Then the following data should be generated:
-    | foo                     |
-    | 1                       |
-    | 2010-01-01T00:00:00.000 |
-    | "String!"               |
-    | null                    |
+    | foo                      |
+    | 1                        |
+    | 2010-01-01T00:00:00.000Z |
+    | "String!"                |
+    | null                     |
 
 Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.
   Given there is a field foo
@@ -459,7 +459,7 @@ Scenario: 'InSet' with not null is successful
 Scenario: Not 'inSet' with null emits null
   Given there is a field foo
     And foo is anything but in set:
-      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.000Z |
     And foo is null
   Then the following data should be generated:
       | foo  |
@@ -515,12 +515,12 @@ Scenario: 'InSet' with non-contradicting 'ofType' decimal should be successful
 Scenario: 'InSet' with non-contradicting 'ofType' datetime should be successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000  |
+      | 2019-01-01T00:00:00.000Z |
     And foo is of type "datetime"
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario Outline: 'InSet' type values with non-contradicting not 'ofType' are successful
   Given there is a field foo
@@ -532,13 +532,13 @@ Scenario Outline: 'InSet' type values with non-contradicting not 'ofType' are su
       | null       |
       | <setValue> |
   Examples:
-      | setValue                | type       |
-      | 1                       | "string"   |
-      | 2019-01-01T00:00:00.000 | "string"   |
-      | "a"                     | "decimal"  |
-      | 2019-01-01T00:00:00.000 | "decimal"  |
-      | 1                       | "datetime" |
-      | "a"                     | "datetime" |
+      | setValue                 | type       |
+      | 1                        | "string"   |
+      | 2019-01-01T00:00:00.000Z | "string"   |
+      | "a"                      | "decimal"  |
+      | 2019-01-01T00:00:00.000Z | "decimal"  |
+      | 1                        | "datetime" |
+      | "a"                      | "datetime" |
 
 Scenario Outline: Not 'inSet' type values with non-contradicting 'ofType' are successful
   Given there is a field foo
@@ -546,21 +546,21 @@ Scenario Outline: Not 'inSet' type values with non-contradicting 'ofType' are su
       | <setValue> |
     And foo is of type <type>
     And foo is in set:
-      | 1                       |
-      | "a"                     |
-      | 2019-01-01T00:00:00.000 |
+      | 1                        |
+      | "a"                      |
+      | 2019-01-01T00:00:00.000Z |
   Then the following data should be generated:
       | foo             |
       | null            |
       | <expectedValue> |
   Examples:
-      | setValue                | type       | expectedValue           |
-      | 1                       | "string"   | "a"                     |
-      | 2019-01-01T00:00:00.000 | "string"   | "a"                     |
-      | "a"                     | "decimal"  | 1                       |
-      | 2019-01-01T00:00:00.000 | "decimal"  | 1                       |
-      | 1                       | "datetime" | 2019-01-01T00:00:00.000 |
-      | "a"                     | "datetime" | 2019-01-01T00:00:00.000 |
+      | setValue                 | type       | expectedValue            |
+      | 1                        | "string"   | "a"                      |
+      | 2019-01-01T00:00:00.000Z | "string"   | "a"                      |
+      | "a"                      | "decimal"  | 1                        |
+      | 2019-01-01T00:00:00.000Z | "decimal"  | 1                        |
+      | 1                        | "datetime" | 2019-01-01T00:00:00.000Z |
+      | "a"                      | "datetime" | 2019-01-01T00:00:00.000Z |
 
 
 Scenario Outline: Running a 'inSet' of string values with a contradicting ofType emits null
@@ -595,9 +595,9 @@ Scenario Outline: Running a 'inSet' of numeric values with a contradicting ofTyp
 Scenario Outline: Running a 'inSet' of date values with a contradicting ofType emits null
   Given there is a field foo
     And foo is in set:
-      | 2010-01-01T00:00:00.000 |
-      | 2010-01-01T00:00:00.001 |
-      | 2011-01-01T00:00:00.000 |
+      | 2010-01-01T00:00:00.000Z |
+      | 2010-01-01T00:00:00.001Z |
+      | 2011-01-01T00:00:00.000Z |
     And foo is of type <type>
   Then the following data should be generated:
       | foo  |
@@ -617,10 +617,10 @@ Scenario Outline: : 'InSet' equal to a type value and with not 'ofType' for the 
       | foo  |
       | null |
   Examples:
-      | typeValue               | type       |
-      | "a"                     | "string"   |
-      | 1                       | "decimal"  |
-      | 2010-01-01T00:00:00.000 | "datetime" |
+      | typeValue                | type       |
+      | "a"                      | "string"   |
+      | 1                        | "decimal"  |
+      | 2010-01-01T00:00:00.000Z | "datetime" |
 
 ### matchingRegex ###
 
@@ -668,10 +668,10 @@ Scenario Outline: 'InSet' value of non-string type with 'matchingRegex' is succe
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
-      | true                    |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
+      | true                     |
 
 Scenario: 'InSet' alongside a contradicting 'matchingRegex' constraint should produce null
   Given there is a field foo
@@ -761,10 +761,10 @@ Scenario Outline: 'InSet' value of non-string type with 'containingRegex' is suc
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
-      | true                    |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
+      | true                     |
 
 Scenario: 'InSet' alongside a contradicting 'containingRegex' constraint should produce null
   Given there is a field foo
@@ -838,9 +838,9 @@ Scenario Outline: 'InSet' of a non-string type value with a non contradicting 'o
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'ofLength' emits null
   Given there is a field foo
@@ -905,9 +905,9 @@ Scenario Outline: 'InSet' of a non-string type value with a non contradicting 'l
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'longerThan' emits null
   Given there is a field foo
@@ -972,9 +972,9 @@ Scenario Outline: 'InSet' of a non-string type value with a non contradicting 's
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'shorterThan' emits null
   Given there is a field foo
@@ -1041,9 +1041,9 @@ Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | 1                       |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | 1                        |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' run against a contradicting 'aValid' ISIN emits null
   Given there is a field foo
@@ -1109,9 +1109,9 @@ Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting '
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | "a"                     |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | "a"                      |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'greaterThan' emits null
   Given there is a field foo
@@ -1176,9 +1176,9 @@ Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting '
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | "a"                     |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | "a"                      |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'greaterThanOrEqualTo' emits null
   Given there is a field foo
@@ -1244,9 +1244,9 @@ Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting '
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | "a"                     |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | "a"                      |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'lessThan' emits null
   Given there is a field foo
@@ -1311,9 +1311,9 @@ Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting '
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | "a"                     |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | "a"                      |
+      | 2018-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a contradicting 'lessThanOrEqualTo' emits null
   Given there is a field foo
@@ -1392,9 +1392,9 @@ Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting '
       | null        |
       | <typeValue> |
   Examples:
-      | typeValue               |
-      | "a"                     |
-      | 2018-01-01T00:00:00.000 |
+      | typeValue                |
+      | "a"                      |
+      | 2018-01-01T00:00:00.000Z |
 
 @ignore
 Scenario: 'InSet' with a contradicting 'granularTo' emits null
@@ -1421,42 +1421,42 @@ Scenario: 'InSet' with a contradicting not 'granularTo' emits null
 Scenario: 'InSet' with a non contradicting 'after' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is after 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.001Z |
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.001 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.001Z |
 
 Scenario: 'InSet' with a non contradicting not 'after' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but after 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: Not 'inSet' with a non contradicting 'after' is successful
   Given there is a field foo
     And foo is anything but in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is after 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.001Z |
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-      | 2019-01-01T00:00:00.001 |
-      | 2019-01-01T00:00:00.002 |
+      | 2019-01-01T00:00:00.000Z |
+      | 2019-01-01T00:00:00.001Z |
+      | 2019-01-01T00:00:00.002Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.002 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.002Z |
 
 Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 'after' is successful
   Given there is a field foo
     And foo is in set:
       | <typeValue> |
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo         |
       | null        |
@@ -1469,8 +1469,8 @@ Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 
 Scenario: 'InSet' with a contradicting 'after' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is after 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1478,8 +1478,8 @@ Scenario: 'InSet' with a contradicting 'after' emits null
 Scenario: 'InSet' with a contradicting not 'after' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is anything but after 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.001Z |
+    And foo is anything but after 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1489,41 +1489,41 @@ Scenario: 'InSet' with a contradicting not 'after' emits null
 Scenario: 'InSet' with a non contradicting 'afterOrAt' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is after or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a non contradicting not 'afterOrAt' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but after or at 2019-01-01T00:00:00.001
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but after or at 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: Not 'inSet' with a non contradicting 'afterOrAt' is successful
   Given there is a field foo
     And foo is anything but in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is after or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-      | 2019-01-01T00:00:00.001 |
+      | 2019-01-01T00:00:00.000Z |
+      | 2019-01-01T00:00:00.001Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.001 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.001Z |
 
 Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 'afterOrAt' is successful
   Given there is a field foo
     And foo is in set:
       | <typeValue> |
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo         |
       | null        |
@@ -1536,8 +1536,8 @@ Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 
 Scenario: 'InSet' with a contradicting 'afterOrAt' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is after or at 2019-01-01T00:00:00.001
+      | 2019-01-01T00:00:00.000Z |
+    And foo is after or at 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1545,8 +1545,8 @@ Scenario: 'InSet' with a contradicting 'afterOrAt' emits null
 Scenario: 'InSet' with a contradicting not 'afterOrAt' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1556,42 +1556,42 @@ Scenario: 'InSet' with a contradicting not 'afterOrAt' emits null
 Scenario: 'InSet' with a non contradicting 'before' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is before 2019-01-01T00:00:00.001
+      | 2019-01-01T00:00:00.000Z |
+    And foo is before 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
       | foo                     |
       | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a non contradicting not 'before' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but before 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo                     |
       | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: Not 'inSet' with a non contradicting 'before' is successful
   Given there is a field foo
     And foo is anything but in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is before 2019-01-01T00:00:00.002
+      | 2019-01-01T00:00:00.001Z |
+    And foo is before 2019-01-01T00:00:00.002Z
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-      | 2019-01-01T00:00:00.001 |
-      | 2019-01-01T00:00:00.002 |
+      | 2019-01-01T00:00:00.000Z |
+      | 2019-01-01T00:00:00.001Z |
+      | 2019-01-01T00:00:00.002Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 'before' is successful
   Given there is a field foo
     And foo is in set:
       | <typeValue> |
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo         |
       | null        |
@@ -1604,8 +1604,8 @@ Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 
 Scenario: 'InSet' with a contradicting 'before' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is before 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is before 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1613,8 +1613,8 @@ Scenario: 'InSet' with a contradicting 'before' emits null
 Scenario: 'InSet' with a contradicting not 'before' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but before 2019-01-01T00:00:00.001
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but before 2019-01-01T00:00:00.001Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1624,43 +1624,43 @@ Scenario: 'InSet' with a contradicting not 'before' emits null
 Scenario: 'InSet' with a non contradicting 'beforeOrAt' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is before or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
 
 Scenario: 'InSet' with a non contradicting not 'beforeOrAt' is successful
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.001Z |
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.001 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.001Z |
 
 Scenario: Not 'inSet' with a non contradicting 'beforeOrAt' is successful
   Given there is a field foo
     And foo is anything but in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is before or at 2019-01-01T00:00:00.002
+      | 2019-01-01T00:00:00.001Z |
+    And foo is before or at 2019-01-01T00:00:00.002Z
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-      | 2019-01-01T00:00:00.001 |
-      | 2019-01-01T00:00:00.002 |
+      | 2019-01-01T00:00:00.000Z |
+      | 2019-01-01T00:00:00.001Z |
+      | 2019-01-01T00:00:00.002Z |
   Then the following data should be generated:
-      | foo                     |
-      | null                    |
-      | 2019-01-01T00:00:00.000 |
-      | 2019-01-01T00:00:00.002 |
+      | foo                      |
+      | null                     |
+      | 2019-01-01T00:00:00.000Z |
+      | 2019-01-01T00:00:00.002Z |
 
 Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 'beforeOrAt' is successful
   Given there is a field foo
     And foo is in set:
       | <typeValue> |
-    And foo is before or at 2019-01-01T00:00:00.000
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo         |
       | null        |
@@ -1673,8 +1673,8 @@ Scenario Outline: 'InSet' of a non-datetime type value with a non contradicting 
 Scenario: 'InSet' with a contradicting 'beforeOrAt' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.001 |
-    And foo is before or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.001Z |
+    And foo is before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1682,8 +1682,8 @@ Scenario: 'InSet' with a contradicting 'beforeOrAt' emits null
 Scenario: 'InSet' with a contradicting not 'beforeOrAt' emits null
   Given there is a field foo
     And foo is in set:
-      | 2019-01-01T00:00:00.000 |
-    And foo is anything but before or at 2019-01-01T00:00:00.000
+      | 2019-01-01T00:00:00.000Z |
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
   Then the following data should be generated:
       | foo  |
       | null |
@@ -1765,16 +1765,16 @@ Scenario: Running a 'inSet' request alongside a contradicting ofType = decimal s
 Scenario: Running a 'inSet' request alongside an ofType = datetime should be successful
      Given there is a field foo
        And foo is in set:
-       | 2010-01-01T00:00:00.000 |
-       | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
+       | 2010-01-01T00:00:00.000Z |
+       | 2010-01-01T00:00:00.001Z |
+       | 2011-01-01T00:00:00.000Z |
        And foo is of type "datetime"
      Then the following data should be generated:
-       | foo                     |
-       | null                    |
-       | 2010-01-01T00:00:00.000 |
-       | 2010-01-01T00:00:00.001 |
-       | 2011-01-01T00:00:00.000 |
+       | foo                      |
+       | null                     |
+       | 2010-01-01T00:00:00.000Z |
+       | 2010-01-01T00:00:00.001Z |
+       | 2011-01-01T00:00:00.000Z |
 
 Scenario: Running a 'inSet' request alongside a contradicting ofType = datetime should produce null
      Given there is a field foo
@@ -2039,7 +2039,7 @@ Scenario: Running a 'inSet' request alongside a after constraint should be succe
        | "test"  |
        | "Testt" |
        | "Test7" |
-       And foo is after 2010-01-01T00:00:00.000
+       And foo is after 2010-01-01T00:00:00.000Z
      Then the following data should be generated:
        | foo     |
        | null    |
@@ -2055,7 +2055,7 @@ Scenario: Running a 'inSet' request alongside a afterOrAt constraint should be s
        | "test"  |
        | "Testt" |
        | "Test7" |
-       And foo is after or at 2010-01-01T00:00:00.000
+       And foo is after or at 2010-01-01T00:00:00.000Z
      Then the following data should be generated:
        | foo     |
        | null    |
@@ -2071,7 +2071,7 @@ Scenario: Running a 'inSet' request alongside a before constraint should be succ
        | "test"  |
        | "Testt" |
        | "Test7" |
-       And foo is before 2010-01-01T00:00:00.000
+       And foo is before 2010-01-01T00:00:00.000Z
      Then the following data should be generated:
        | foo     |
        | null    |
@@ -2087,7 +2087,7 @@ Scenario: Running a 'inSet' request alongside a beforeOrAt constraint should be 
        | "test"  |
        | "Testt" |
        | "Test7" |
-       And foo is before or at 2010-01-01T00:00:00.000
+       And foo is before or at 2010-01-01T00:00:00.000Z
      Then the following data should be generated:
        | foo     |
        | null    |
