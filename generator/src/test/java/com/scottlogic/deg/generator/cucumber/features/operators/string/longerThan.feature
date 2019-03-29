@@ -616,4 +616,3 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
       | 2020-01-01T00:00:00.000Z  |
-

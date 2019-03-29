@@ -846,4 +846,3 @@ Feature: User can create data across multiple fields for all combinations availa
       | "alpha" | 10   | "test10"  |
       | "alpha" | 100  | "test100" |
       | "alpha" | 1000 | "other"   |
-
