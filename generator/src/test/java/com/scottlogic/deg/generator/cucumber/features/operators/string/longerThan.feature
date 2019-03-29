@@ -27,7 +27,7 @@ Scenario: Running a 'longerThan' request that includes the value zero should be 
 
 Scenario: 'longerThan' a negative number should fail with an error
   Given foo is longer than -5
-  Then the profile is invalid because "Cannot create an IsStringLongerThanConstraint for field 'foo' with a a negative length."
+  Then the profile is invalid because "longerThan constraint must have a operand/value >= 0, currently is -5 for field \[foo\]"
     And no data is created
 
 Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message

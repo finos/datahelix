@@ -19,12 +19,12 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
 
 Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 0
-     Then the profile is invalid because "\?"
+     Then the profile is invalid because "shorterThan constraint must have a operand/value >= 1, currently is 0 for field \[foo\]"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than -1
-     Then the profile is invalid because "Cannot create an IsStringShorterThanConstraint for field 'foo' with a a negative length."
+     Then the profile is invalid because "shorterThan constraint must have a operand/value >= 1, currently is -1 for field \[foo\]"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message

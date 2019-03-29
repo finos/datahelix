@@ -186,7 +186,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 0);
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -196,7 +196,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 1);
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -206,7 +206,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 0);
                     return new StringHasLengthConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -247,7 +247,7 @@ class AtomicConstraintReaderLookup {
         return values;
     }
 
-    private static int getIntegerLength(ConstraintDTO dto) throws InvalidProfileException {
+    private static int getIntegerLength(ConstraintDTO dto, int minimumInclusive) throws InvalidProfileException {
         Object value = throwIfValueInvalid(dto.value, Number.class);
         BigDecimal decimal;
 
@@ -277,7 +277,19 @@ class AtomicConstraintReaderLookup {
                     dto.field));
         }
 
-        return decimal.intValue();
+        int length = decimal.intValue();
+
+        if (length < minimumInclusive){
+            throw new InvalidProfileException(
+                String.format(
+                    "%s constraint must have a operand/value >= %d, currently is %d for field [%s]",
+                    dto.is,
+                    minimumInclusive,
+                    length,
+                    dto.field));
+        }
+
+        return length;
     }
 
     private static Set<Object> mapValues(Collection<Object> values) throws InvalidProfileException {
