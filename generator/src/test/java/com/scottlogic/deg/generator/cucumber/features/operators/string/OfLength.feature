@@ -72,7 +72,7 @@ Scenario Outline: Running an 'ofLength' request that includes a value that is no
      Given foo is of length <length>
        And foo is in set:
          | "a" |
-     Then the profile is invalid because "(Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(String-length operator must contain a numeric value for its operand found \(.*\) for field \[foo\])"
+     Then the profile is invalid because "(Couldn't recognise 'value' property, it must be a Number but was a String with value `.*`)|(Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)"
        And no data is created
      Examples:
        | length                    |
