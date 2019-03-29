@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -135,8 +135,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        Assert.assertThat(this.getResultingProfile().rules, not(empty()));
-        expectRules(rule -> Assert.assertThat(rule.constraints, empty()));
+        expectInvalidProfileException();
     }
 
     @Test
@@ -549,14 +548,14 @@ public class JsonProfileReaderTests {
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
-                            equalTo(LocalDateTime.parse("2019-01-01T00:00:00.000")));
+                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
                     }),
                 typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
-                            equalTo(LocalDateTime.parse("2019-01-03T00:00:00.000")));
+                            equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
                     })
                 )
         );

@@ -53,6 +53,9 @@ public class JsonProfileReader implements ProfileReader {
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
             r -> {
+                if (r.constraints.isEmpty()) {
+                    throw new InvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: " + r.rule);
+                }
                 RuleInformation constraintRule = new RuleInformation(r);
                 return new Rule(
                     constraintRule,

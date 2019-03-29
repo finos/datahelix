@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -208,7 +208,7 @@ public class FieldSpecFactory {
         return constructIsAfterConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructIsAfterConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
+    private FieldSpec constructIsAfterConstraint(OffsetDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
@@ -230,7 +230,7 @@ public class FieldSpecFactory {
         return constructIsBeforeConstraint(constraint.referenceValue, true, negate, constraint, violated);
     }
 
-    private FieldSpec constructIsBeforeConstraint(LocalDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
+    private FieldSpec constructIsBeforeConstraint(OffsetDateTime limit, boolean inclusive, boolean negate, AtomicConstraint constraint, boolean violated) {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {

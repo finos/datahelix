@@ -183,7 +183,7 @@ Scenario: aValid run against a non contradicting not granularTo should be succes
 
 Scenario: aValid run against a non contradicting after should be successful
     Given foo is a valid "ISIN"
-    And foo is after 2019-01-01T00:00:00.000
+    And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "GB0002634946"  |
       | "GB000263494"   |
@@ -196,7 +196,7 @@ Scenario: aValid run against a non contradicting after should be successful
 
 Scenario: aValid run against a non contradicting not after should be successful
     Given foo is a valid "ISIN"
-    And foo is anything but after 2019-01-01T00:00:00.000
+    And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "GB0002634946"  |
       | "GB000263494"   |
@@ -209,7 +209,7 @@ Scenario: aValid run against a non contradicting not after should be successful
 
 Scenario: aValid run against a non contradicting afterOrAt should be successful
     Given foo is a valid "ISIN"
-    And foo is after or at 2019-01-01T00:00:00.000
+    And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "GB0002634946"  |
       | "GB000263494"   |
@@ -222,7 +222,7 @@ Scenario: aValid run against a non contradicting afterOrAt should be successful
 
 Scenario: aValid run against a non contradicting not afterOrAt should be successful
     Given foo is a valid "ISIN"
-    And foo is anything but after or at 2019-01-01T00:00:00.000
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "GB0002634946"  |
       | "GB000263494"   |
@@ -235,7 +235,7 @@ Scenario: aValid run against a non contradicting not afterOrAt should be success
 
 Scenario: aValid run against a non contradicting before should be successful
     Given foo is a valid "ISIN"
-    And foo is before 2019-01-01T00:00:00.000
+    And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
       | "GB0002634946"  |
       | "GB000263494"   |
@@ -248,7 +248,7 @@ Scenario: aValid run against a non contradicting before should be successful
 
 Scenario: aValid run against a non contradicting not before should be successful
      Given foo is a valid "ISIN"
-       And foo is anything but before 2019-01-01T00:00:00.000
+       And foo is anything but before 2019-01-01T00:00:00.000Z
        And foo is in set:
          | "GB0002634946"  |
          | "GB000263494"   |
@@ -261,7 +261,7 @@ Scenario: aValid run against a non contradicting not before should be successful
 
 Scenario: aValid run against a non contradicting beforeOrAt should be successful
      Given foo is a valid "ISIN"
-       And foo is before or at 2019-01-01T00:00:00.000
+       And foo is before or at 2019-01-01T00:00:00.000Z
        And foo is in set:
          | "GB0002634946"  |
          | "GB000263494"   |
@@ -274,7 +274,7 @@ Scenario: aValid run against a non contradicting beforeOrAt should be successful
 
 Scenario: aValid run against a non contradicting not beforeOrAt should be successful
      Given foo is a valid "ISIN"
-       And foo is anything but before or at 2019-01-01T00:00:00.000
+       And foo is anything but before or at 2019-01-01T00:00:00.000Z
        And foo is in set:
          | "GB0002634946"  |
          | "GB000263494"   |
