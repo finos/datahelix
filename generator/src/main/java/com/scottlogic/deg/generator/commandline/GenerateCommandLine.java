@@ -108,6 +108,12 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
     private GenerationConfig.OutputFormat outputFormat;
 
+    @CommandLine.Option(
+        names = {"--allow-untyped-fields"},
+        description = "Remove the need for each field to have at least one compliant typing constraint applied",
+        defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
+    private boolean allowUntypedFields = false;
+
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
@@ -165,6 +171,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return constraintsToNotViolate;
+    }
+
+    @Override
+    public boolean requireFieldTyping(){
+        return !allowUntypedFields;
     }
 
     @Override
