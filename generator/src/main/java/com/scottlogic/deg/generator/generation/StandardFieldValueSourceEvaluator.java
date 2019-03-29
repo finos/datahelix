@@ -62,15 +62,20 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
-        Stream<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream();
+        List<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream().collect(Collectors.toList());
 
         if (mayBeNull(fieldSpec)) {
+            if (whitelist.isEmpty()){
+                return Arrays.asList(nullOnlySource);
+            }
+
             return Arrays.asList(
-                new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())),
+                new CannedValuesFieldValueSource(whitelist),
                 nullOnlySource);
         }
+        // does not check for no whitelist and not null, has already been rejected as contradictory
 
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
+        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
