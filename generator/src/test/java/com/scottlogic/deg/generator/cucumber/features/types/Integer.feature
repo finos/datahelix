@@ -60,7 +60,6 @@ Scenario: Equal to constraint with integer type produces valid integer
     | foo |
     | 10  |
 
-@ignore #795 - Using equalTo constraint on field of type integer allows generation of non-integer value
 Scenario: Equal to constraint with integer type rejects invalid integer (decimal)
   Given foo is equal to 10.1
   Then no data is created
