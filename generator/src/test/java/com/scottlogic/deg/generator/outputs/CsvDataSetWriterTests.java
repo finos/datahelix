@@ -11,13 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 
 public class CsvDataSetWriterTests {
     private final CSVFormat format = CSVFormat.DEFAULT.withEscape('\0').withQuoteMode(QuoteMode.NONE);
+
     @Test
-    public void bigDecimalNoFormatShouldOutputCorrectly() throws IOException {
+    public void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
@@ -26,14 +28,14 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("0.00000001", stringBuffer.toString().trim());
     }
 
     @Test
-    void bigDecimalWithFormatShouldOutputCorrectly() throws IOException{
+    void writeRow_withBigDecimalAndAFormat_shouldOutputFormattedValue() throws IOException{
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
@@ -42,14 +44,14 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("\"1.0e-08\"", stringBuffer.toString().trim());
     }
 
     @Test
-    void nullShouldOutputCorrectly() throws IOException {
+    void writeRow_withNullValue_shouldOutputEmptyValue() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
@@ -58,14 +60,14 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("", stringBuffer.toString().trim());
     }
 
     @Test
-    void nonBigDecimalNoFormatShouldOutputCorrectly() throws IOException {
+    void writeRow_withNonBigDecimalNumberAndNoFormat_shouldOutputNumberFormattedCorrectly() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
@@ -74,14 +76,14 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("1.2", stringBuffer.toString().trim());
     }
 
     @Test
-    void nonBigDecimalWithFormatShouldOutputCorrectly() throws IOException {
+    void writeRow_withStringAndFormat_shouldOutputValueQuotedAndFormatted() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
@@ -90,16 +92,16 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("\"Hello\"", stringBuffer.toString().trim());
     }
 
     @Test
-    void dateTimeWithNoFormatShouldUseDefaultFormat() throws IOException {
+    void writeRow_withDateTimeGranularToASecondAndNoFormat_shouldFormatDateUsingISO8601Format() throws IOException {
         // Arrange
-        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
             Collections.singletonList(getValue(date)), // Format string to max 5 chars
@@ -107,16 +109,33 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
-        Assert.assertEquals("03-02-2001 04:05:06", stringBuffer.toString().trim());
+        Assert.assertEquals("2001-02-03T04:05:06Z", stringBuffer.toString().trim());
     }
 
     @Test
-    void dateTimeWithNFormatShouldUsePrescribedFormat() throws IOException {
+    void writeRow_withDateTimeGranularToAMillisecondAndNoFormat_shouldFormatDateUsingISO8601Format() throws IOException {
         // Arrange
-        LocalDateTime date = LocalDateTime.of(2001, 02, 03, 04, 05, 06);
+        OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 777_000_000, ZoneOffset.UTC);
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = new GeneratedObject(
+            Collections.singletonList(getValue(date)), // Format string to max 5 chars
+            new RowSource(Collections.emptyList()));
+        CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+
+        // Act
+        writeToBuffer(printer, generatedObject);
+
+        // Assert
+        Assert.assertEquals("2001-02-03T04:05:06.777Z", stringBuffer.toString().trim());
+    }
+
+    @Test
+    void writeRow_withDateTimeAndAFormat_shouldUsePrescribedFormat() throws IOException {
+        // Arrange
+        OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = new GeneratedObject(
             Collections.singletonList(getValueWithFormat(date, "%tF")), // Format string to max 5 chars
@@ -124,7 +143,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        WriteToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject);
 
         // Assert
         Assert.assertEquals("\"2001-02-03\"", stringBuffer.toString().trim());
@@ -138,7 +157,7 @@ public class CsvDataSetWriterTests {
         return new DataBagValue(value, format, DataBagValueSource.Empty);
     }
 
-    private void WriteToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {
+    private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {
         CsvDataSetWriter writer = new CsvDataSetWriter();
         writer.writeRow(printer, generatedObject);
         printer.close();

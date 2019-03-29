@@ -3,16 +3,16 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Iterator;
 
-class RandomDateIterator implements Iterator<LocalDateTime> {
-    private final LocalDateTime minDate;
-    private final LocalDateTime maxDate;
+class RandomDateIterator implements Iterator<OffsetDateTime> {
+    private final OffsetDateTime minDate;
+    private final OffsetDateTime maxDate;
     private final RandomNumberGenerator random;
 
-    RandomDateIterator(LocalDateTime minDate, LocalDateTime maxDate, RandomNumberGenerator randomNumberGenerator) {
+    RandomDateIterator(OffsetDateTime minDate, OffsetDateTime maxDate, RandomNumberGenerator randomNumberGenerator) {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.random = randomNumberGenerator;
@@ -24,12 +24,12 @@ class RandomDateIterator implements Iterator<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime next() {
-        long min = this.minDate.toInstant(ZoneOffset.UTC).toEpochMilli();
-        long max = this.maxDate.toInstant(ZoneOffset.UTC).toEpochMilli() - 1;
+    public OffsetDateTime next() {
+        long min = this.minDate.toInstant().toEpochMilli();
+        long max = this.maxDate.toInstant().toEpochMilli() - 1;
 
         long generatedLong = (long)random.nextDouble(min, max);
 
-        return Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toLocalDateTime();
+        return Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
     }
 }

@@ -6,8 +6,13 @@ import com.scottlogic.deg.generator.restrictions.*;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
+import static com.scottlogic.deg.generator.restrictions.NumericRestrictions.isNumeric;
+import static com.scottlogic.deg.generator.restrictions.StringRestrictions.isString;
 
 public class SetRestrictionsMergeOperation implements RestrictionMergeOperation {
     private static final SetRestrictionsMerger setRestrictionsMerger = new SetRestrictionsMerger();
@@ -34,33 +39,36 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-                filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x));
+                filterStream = filterStream.filter(x -> !isNumeric(x));
             }
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-                filterStream = filterStream.filter(x -> !StringRestrictions.isString(x));
+                filterStream = filterStream.filter(x -> !isString(x));
             }
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
-                filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x));
+                filterStream = filterStream.filter(x -> !isDateTime(x));
             }
 
-            StringRestrictions stringRestrictions = merging.getStringRestrictions();
-            if(stringRestrictions != null){
-                filterStream = filterStream.filter(x -> !StringRestrictions.isString(x) || stringRestrictions.match(x));
+            if(merging.getStringRestrictions() != null){
+                filterStream = filterStream.filter(x -> !isString(x) || merging.getStringRestrictions().match(x));
             }
 
-            NumericRestrictions numberRestrictions = merging.getNumericRestrictions();
-            if(numberRestrictions != null){
-                filterStream = filterStream.filter(x -> !NumericRestrictions.isNumeric(x) || numberRestrictions.match(x));
+            if(merging.getNumericRestrictions() != null){
+                filterStream = filterStream.filter(x -> !isNumeric(x) || merging.getNumericRestrictions().match(x));
             }
 
-            DateTimeRestrictions dateTimeRestrictions = merging.getDateTimeRestrictions();
-            if(dateTimeRestrictions != null){
-                filterStream = filterStream.filter(x -> !DateTimeRestrictions.isDateTime(x) || dateTimeRestrictions.match(x));
+            if(merging.getDateTimeRestrictions() != null){
+                filterStream = filterStream.filter(x -> !isDateTime(x) || merging.getDateTimeRestrictions().match(x));
             }
 
-            SetRestrictions newSetRestrictions = new SetRestrictions(filterStream.collect(Collectors.toCollection(HashSet::new)),
+            GranularityRestrictions granularityRestrictions = merging.getGranularityRestrictions();
+            if (granularityRestrictions != null) {
+                filterStream = filterStream.filter(x -> !isNumeric(x) || GranularityRestrictions.isCorrectScale((Number)x, granularityRestrictions.getNumericScale()));
+            }
+
+            Set<Object> whitelist = filterStream.collect(Collectors.toCollection(HashSet::new));
+            SetRestrictions newSetRestrictions = new SetRestrictions(whitelist,
                 setRestrictions.getBlacklist());
 
             setRestrictions = newSetRestrictions;
