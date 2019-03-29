@@ -1356,7 +1356,7 @@ Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
       | 1.1  |
 
 @ignore #issue #824 - 2.0 should be generated with a granularity of 1
-Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
+Scenario: Integer within an inSet and a non contradicting 'granularTo' is successful
   Given there is a field foo
     And foo is granular to 1
     And foo is in set:
@@ -1368,6 +1368,19 @@ Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
       | null |
       | 1    |
       | 2.0  |
+
+Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
+  Given there is a field foo
+    And foo is anything but in set:
+      | 1.1 |
+    And foo is granular to 1
+    And foo is in set:
+      | 1.1 |
+      | 1   |
+  Then the following data should be generated:
+      | foo  |
+      | null |
+      | 1    |
 
 Scenario Outline: 'InSet' of a non-numeric type value with a non contradicting 'granularTo' is successful
   Given there is a field foo
