@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
@@ -21,7 +20,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            return getSetRestrictionSources(fieldSpec);
+            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec);
+            if (mayBeNull(fieldSpec)){
+                setRestrictionSources.add(nullOnlySource);
+            }
+            return setRestrictionSources;
         }
 
         List<FieldValueSource> validSources = new ArrayList<>();
@@ -62,18 +65,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
-        List<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream().collect(Collectors.toList());
-
-        if (mayBeNull(fieldSpec)) {
-            if (whitelist.isEmpty()){
-                return Arrays.asList(nullOnlySource);
-            }
-
-            return Arrays.asList(
-                new CannedValuesFieldValueSource(whitelist),
-                nullOnlySource);
-        }
-        // does not check for no whitelist and not null, has already been rejected as contradictory
+        List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
+         if (whitelist.isEmpty()){
+             return new ArrayList<>();
+         }
 
         return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
     }
