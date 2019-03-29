@@ -53,17 +53,17 @@ Scenario: Running a 'before' request that specifies the lowest valid system date
 
 Scenario: Running a 'before' request that specifies an invalid date should be unsuccessful
      Given foo is before 2019-30-30T00:00:00.000
-     Then the profile is invalid
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'before' request that specifies an invalid time should be unsuccessful
      Given foo is before 2019-01-01T24:00:00.000
-       Then the profile is invalid
+       Then the profile is invalid because "??"
      And no data is created
 
 Scenario: Running a 'before' request that specifies an invalid leap year should be unsuccessful
      Given foo is before 2019-02-29T00:00:00.000
-       Then the profile is invalid
+       Then the profile is invalid because "??"
      And no data is created
 
 #before

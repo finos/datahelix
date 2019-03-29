@@ -88,14 +88,14 @@ Scenario: Running an 'ofType' = datetime request that includes an invalid date v
      Given there is a field foo
        And foo is equal to 2010-13-40T00:00:00.000
        And foo is of type "datetime"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an 'ofType' = datetime request that includes an invalid time value should fail with an error message
      Given there is a field foo
        And foo is equal to 2010-01-01T75:00:00.000
        And foo is of type "datetime"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an 'ofType' = string request that includes a null entry ("") characters should be successful

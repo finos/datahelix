@@ -37,22 +37,22 @@ Scenario: User requires to create a datetime field with date and time (YYYY-MM-D
 
 Scenario: Running afterOrAt request that includes datetime field with date (YYYY-MM-DD) values that has invalid date should fail
      Given foo is after or at 2019-15-32T00:00:00.000
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid time should fail
      Given foo is after or at 2018-10-01T25:25:05.000
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
      Given foo is after or at 0000-01-10T00:00:00.000
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
      Given foo is after or at "2018-Jan-31stT00:00:00.000"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year

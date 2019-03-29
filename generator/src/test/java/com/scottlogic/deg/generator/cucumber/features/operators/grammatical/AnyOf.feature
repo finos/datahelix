@@ -254,7 +254,7 @@ Scenario: Running an 'anyOf' request that contains an invalid nested anyOf reque
   """
   And foo is of type "string"
   And foo is anything but null
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
   And no data is created
 
 Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
@@ -273,7 +273,7 @@ Scenario: Running an 'anyOf' request that contains an invalid nested allOf reque
   """
   And foo is of type "string"
   And foo is anything but null
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
   And no data is created
 
 Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message

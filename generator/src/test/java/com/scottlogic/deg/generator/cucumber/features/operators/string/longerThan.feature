@@ -27,27 +27,27 @@ Scenario: Running a 'longerThan' request that includes the value zero should be 
 
 Scenario: 'longerThan' a negative number should fail with an error
   Given foo is longer than -5
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message
   Given foo is longer than 1.1
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: 'longerThan' a string should fail with an error message
   Given foo is longer than "Test"
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: 'longerThan' an empty string should fail with an error message
   Given foo is longer than ""
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: 'longerThan' whitespace should fail with an error message
   Given foo is longer than " "
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: 'longerThan' null should fail with an error message

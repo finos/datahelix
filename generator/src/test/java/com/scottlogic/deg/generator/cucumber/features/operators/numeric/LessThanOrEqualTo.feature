@@ -68,13 +68,13 @@ Scenario: Running a 'lessThanOrEqualTo' request that includes 0 should be succes
 Scenario: Running a 'lessThanOrEqualTo' request that includes a string should fail
   Given foo is less than or equal to "Zero"
     And foo is of type "integer"
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: Running a 'lessThanOrEqualTo' request that includes an empty string should fail
   Given foo is less than or equal to ""
     And foo is of type "integer"
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: Running a 'lessThanOrEqualTo' request that specifies null should be unsuccessful

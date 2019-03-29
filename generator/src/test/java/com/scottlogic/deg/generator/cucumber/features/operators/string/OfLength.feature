@@ -58,7 +58,7 @@ Scenario Outline: Running an 'ofLength' request that includes a decimal number c
      Given foo is of length <length>
        And foo is in set:
          | "1" |
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
      Examples:
        | length      |
        | 1.1         |
@@ -72,7 +72,7 @@ Scenario Outline: Running an 'ofLength' request that includes a value that is no
      Given foo is of length <length>
        And foo is in set:
          | "a" |
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
      Examples:
        | length                    |

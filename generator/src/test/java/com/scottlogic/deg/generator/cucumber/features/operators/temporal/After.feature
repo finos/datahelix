@@ -24,7 +24,7 @@ Scenario: 'After' valid date is successful
 
 Scenario Outline: 'After' invalid datetime fails with error
   Given foo is after <dateValue>
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
   Examples:
     | dateValue               |
@@ -34,7 +34,7 @@ Scenario Outline: 'After' invalid datetime fails with error
 
 Scenario: 'After' non-existent leap year date fails with error
   Given foo is after 2019-02-29T00:00:00.000
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
   And no data is created
 
   ### after ###

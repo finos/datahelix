@@ -16,17 +16,17 @@ Scenario: Running an 'aValid' request should be successful
 
 Scenario: Running a 'aValid' request that includes the string "isin" should fail with an error message
      Given foo is a valid "isin"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'aValid' request that includes a non ISIN string should fail with an error message
      Given foo is a valid "BURRITO"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an 'aValid' request that includes a null entry ("") characters should fail with an error message
      Given foo is a valid ""
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an 'aValid' request with the value property set to a null entry (null) should throw an error

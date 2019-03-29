@@ -19,27 +19,27 @@ Scenario: Running a 'shorterThan' request using a number to specify a the length
 
 Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 0
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than -1
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than 1.1
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than "5"
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than ""
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message

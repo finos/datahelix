@@ -167,7 +167,7 @@ Scenario: Running an exhaustive combination strategy with invalid integer values
        And bar is in set:
          | 12 |
          | 0  |
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an exhaustive combination strategy with invalid decimal values should fail with an appropriate error message
@@ -184,7 +184,7 @@ Scenario: Running an exhaustive combination strategy with invalid decimal values
     And bar is in set:
       | 12.01 |
       | 0     |
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: Running an exhaustive combination strategy with valid date values should be successful
@@ -222,7 +222,7 @@ Scenario: Running an exhaustive combination strategy with invalid date values sh
        And bar is in set:
          | 2010-01-01T00:00:00.000 |
          | 2010-12-31T23:59:00.000 |
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
   
 Scenario: Running an exhaustive combination strategy with invalid date formats should fail with an appropriate error message
@@ -239,7 +239,7 @@ Scenario: Running an exhaustive combination strategy with invalid date formats s
        And bar is in set:
          | 01-01-2010T00:00:00.000 |
          | 2010-12-31T23:59:00.000 |
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running an exhaustive combination strategy with null values (empty strings) should be successful

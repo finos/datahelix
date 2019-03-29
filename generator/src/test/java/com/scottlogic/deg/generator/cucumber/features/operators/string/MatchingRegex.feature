@@ -203,22 +203,22 @@ Scenario: Running a 'matchingRegex' for a minimum length of 0 should be successf
 
 Scenario: Running a 'matchingRegex' for a maximum length smaller than the minimum length should fail with an error
      Given foo is matching regex /[a]{1,0}/
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'matchingRegex' for a minimum length of a decimal value should fail with an error
      Given foo is matching regex /[a]{1.1}/
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'matchingRegex' for a minimum length that is less zero should fail with an error message
      Given foo is matching regex /[a]{-1}/
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'matchingRegex' with an empty regex should fail with an error message
      Given foo is matching regex /[]{}/
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
 
 Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error

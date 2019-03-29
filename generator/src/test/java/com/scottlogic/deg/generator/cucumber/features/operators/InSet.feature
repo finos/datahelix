@@ -338,7 +338,7 @@ Scenario: Running an 'inSet' request that includes an invalid date value should 
     And foo is in set:
       | 2010-13-40T00:00:00.000 |
       | 2017-12-31T23:59:59.999 |
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: Running an 'inSet' request that includes an invalid time value should fail with an error message
@@ -346,7 +346,7 @@ Scenario: Running an 'inSet' request that includes an invalid time value should 
     And foo is in set:
       | 2017-12-31T40:59:59.999 |
       | 2017-12-31T23:59:59.999 |
-  Then I am presented with an error message
+  Then the profile is invalid because "??"
     And no data is created
 
 Scenario: Running an 'inSet' request that includes a null entry ("") characters should be successful

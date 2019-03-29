@@ -59,12 +59,12 @@ Scenario: Running a 'greaterThanOrEqualTo' request that includes 0 should be suc
 
 Scenario: Running a 'greaterThanOrEqualTo' request that includes a string should fail
    Given foo is greater than or equal to "Zero"
-   Then the profile is invalid
+   Then the profile is invalid because "??"
       And no data is created
 
 Scenario: Running a 'greaterThanOrEqualTo' request that includes an empty string should fail
    Given foo is greater than or equal to ""
-   Then the profile is invalid
+   Then the profile is invalid because "??"
      And no data is created
 
 Scenario: Running a 'greaterThanOrEqualTo' request that specifies null should be unsuccessful

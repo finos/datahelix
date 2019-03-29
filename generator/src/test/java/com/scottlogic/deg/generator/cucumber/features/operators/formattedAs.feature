@@ -190,7 +190,7 @@ Scenario Outline: Running an invalid 'formattedAs' request should fail with an e
        | <input> |
        And foo is formatted as <format>
        And foo is anything but null
-     Then I am presented with an error message
+     Then the profile is invalid because "??"
        And no data is created
      Examples:
       | input                    | format      |
