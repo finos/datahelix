@@ -37,22 +37,22 @@ Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail wi
 
 Scenario: 'longerThan' a string should fail with an error message
   Given foo is longer than "Test"
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `Test`"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `Test`, field: foo"
     And no data is created
 
 Scenario: 'longerThan' an empty string should fail with an error message
   Given foo is longer than ""
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``, field: foo"
     And no data is created
 
 Scenario: 'longerThan' whitespace should fail with an error message
   Given foo is longer than " "
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ` `"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ` `, field: foo"
     And no data is created
 
 Scenario: 'longerThan' null should fail with an error message
   Given foo is longer than null
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
     And no data is created
 
 Scenario: 'longerThan' a decimal number with a zero mantissa should be successful

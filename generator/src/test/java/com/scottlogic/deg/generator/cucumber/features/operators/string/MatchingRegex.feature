@@ -224,7 +224,7 @@ Scenario: Running a 'matchingRegex' with an empty regex should fail with an erro
 Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
      Given there is a field foo
        And foo is matching regex null
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
        And no data is created
 
 Scenario: User using matchingRegex operator to provide an exact set of values

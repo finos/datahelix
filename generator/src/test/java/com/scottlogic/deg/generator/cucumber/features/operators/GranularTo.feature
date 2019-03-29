@@ -90,10 +90,10 @@ Scenario: User requires to create a numeric field with negative data values that
 
 Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
   Given foo is granular to "0.1"
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `0.1`"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `0.1`, field: foo"
         And no data is created
 
 Scenario: Running a 'granularTo' request that specifies null should be unsuccessful
     Given foo is granular to null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
       And no data is created

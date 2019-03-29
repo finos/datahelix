@@ -174,7 +174,7 @@ Scenario: 'before' run against a contradicting not 'beforeOrAt' should only only
 
 Scenario: Running a 'before' request that specifies null should be unsuccessful
     Given foo is before null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
       And no data is created
 
 Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful

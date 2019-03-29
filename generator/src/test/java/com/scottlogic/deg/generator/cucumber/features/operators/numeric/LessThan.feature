@@ -63,17 +63,17 @@ Scenario: Running a 'lessThan' request that specifies a decimal with trailing ze
 
 Scenario: Running a 'lessThan' request that specifies a string should be unsuccessful
   Given foo is less than "bar"
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `bar`"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `bar`, field: foo"
     And no data is created
 
 Scenario: Running a 'lessThan' request that specifies an empty string should be unsuccessful
     Given foo is less than ""
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``, field: foo"
       And no data is created
 
 Scenario: Running a 'lessThan' request that specifies null should be unsuccessful
     Given foo is less than null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
       And no data is created
 
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided

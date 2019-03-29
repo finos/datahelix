@@ -68,19 +68,19 @@ Scenario: Running a 'lessThanOrEqualTo' request that includes 0 should be succes
 Scenario: Running a 'lessThanOrEqualTo' request that includes a string should fail
   Given foo is less than or equal to "Zero"
     And foo is of type "integer"
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `Zero`"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `Zero`, field: foo"
     And no data is created
 
 Scenario: Running a 'lessThanOrEqualTo' request that includes an empty string should fail
   Given foo is less than or equal to ""
     And foo is of type "integer"
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``, field: foo"
     And no data is created
 
 Scenario: Running a 'lessThanOrEqualTo' request that specifies null should be unsuccessful
   Given foo is less than or equal to null
     And foo is of type "integer"
-  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+  Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
     And no data is created
 
 @ignore #594 - Reverse order of value generation when only upper-bound operators are provided

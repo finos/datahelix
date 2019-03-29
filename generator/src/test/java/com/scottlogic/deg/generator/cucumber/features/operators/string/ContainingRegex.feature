@@ -226,7 +226,7 @@ Scenario: Running a 'containingRegex' for an empty value should fail with an err
 
 Scenario: Running a 'containingRegex' request with the value property set to a null entry (null) should throw an error
      Given foo is containing regex null
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
        And no data is created
 
 Scenario: containingRegex run against a non contradicting containingRegex should be successful

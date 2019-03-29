@@ -34,17 +34,17 @@ Scenario: Running a 'shorterThan' request using a number (decimal number) to spe
 
 Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
      Given foo is shorter than "5"
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `5`"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value `5`, field: foo"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than ""
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be a Number but was a String with value ``, field: foo"
        And no data is created
 
 Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
      Given foo is shorter than null
-     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
        And no data is created
 
 Scenario: shorterThan run against a non contradicting shorterThan should be successful
