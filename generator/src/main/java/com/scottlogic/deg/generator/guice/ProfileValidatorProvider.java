@@ -7,6 +7,8 @@ import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.validators.GenerationOutputValidator;
 
+import java.util.ArrayList;
+
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
     private final ProfileContradictionsValidator contradictionCheckingValidator;
@@ -28,15 +30,18 @@ public class ProfileValidatorProvider implements Provider<ProfileValidator> {
 
     @Override
     public ProfileValidator get() {
+        ArrayList<ProfileValidator> validators = new ArrayList<>();
+
         if(configSource.getValidateProfile()) {
-            return new MultipleProfileValidator(
-                contradictionCheckingValidator,
-                untypedValidator,
-                outputValidator);
+            validators.add(contradictionCheckingValidator);
         }
 
-        return new MultipleProfileValidator(
-            untypedValidator,
-            outputValidator);
+        if(configSource.requireFieldTyping()) {
+            validators.add(untypedValidator);
+        }
+
+        validators.add(outputValidator);
+
+        return new MultipleProfileValidator(validators);
     }
 }

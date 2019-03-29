@@ -348,7 +348,6 @@ Scenario: 'Null' with a contradicting not 'lessThanOrEqualTo' should only genera
 
 ### granularTo ###
 
-@ignore #Relates to issue #677 - Granularity ignored when generating from set
 Scenario: Not 'null' with a non contradicting 'granularTo' should be successful
   Given foo is anything but null
     And foo is granular to 1

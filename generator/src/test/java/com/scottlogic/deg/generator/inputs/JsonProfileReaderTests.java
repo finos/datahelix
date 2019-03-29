@@ -135,8 +135,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        Assert.assertThat(this.getResultingProfile().rules, not(empty()));
-        expectRules(rule -> Assert.assertThat(rule.constraints, empty()));
+        expectInvalidProfileException();
     }
 
     @Test
