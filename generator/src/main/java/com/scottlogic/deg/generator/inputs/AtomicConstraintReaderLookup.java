@@ -268,6 +268,17 @@ class AtomicConstraintReaderLookup {
                     dto.field));
         }
 
+        if (valueAsBigDecimal.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) > 0){
+            //length is greater than the largest possible int
+            throw new InvalidProfileException(
+                String.format(
+                    "%s constraint must have a operand/value <= %d, currently is %s for field [%s]",
+                    dto.is,
+                    Integer.MAX_VALUE,
+                    valueAsBigDecimal.toPlainString(),
+                    dto.field));
+        }
+
         int length = valueAsBigDecimal.intValue();
 
         if (length >= minimumInclusive) {
