@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,8 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class StandardFieldValueSourceEvaluatorTests {
 
@@ -29,6 +32,20 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
+        Assert.assertThat(sources, hasSize(1));
+        AssertLastSourceIsNullOnlySource(sources);
+    }
+
+    @Test
+    public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
+        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
+        FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
+        FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
+            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.emptySet()), fieldSpecSource);
+
+        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
+
+        Assert.assertThat(sources, hasSize(1));
         AssertLastSourceIsNullOnlySource(sources);
     }
 
