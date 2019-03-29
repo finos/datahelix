@@ -43,10 +43,10 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 }
 ~~~
 
-Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/) in the same folder as the profile, open up a terminal, and execute the following:
+Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ~~~
-$ java -jar generator.jar generate --max-rows=100 --replace profile.json output.csv
+$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace profile.json output.csv
 Generation started at: 08:02:52
 
 Number of rows | Velocity (rows/sec) | Velocity trend
