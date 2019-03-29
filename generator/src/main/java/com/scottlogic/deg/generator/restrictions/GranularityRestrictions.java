@@ -1,6 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.math.BigDecimal;
 import java.util.Objects;
+
+import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class GranularityRestrictions {
     private final int numericScale;
@@ -11,6 +14,11 @@ public class GranularityRestrictions {
 
     private GranularityRestrictions(int numericScale) {
         this.numericScale = numericScale;
+    }
+
+    public static boolean isCorrectScale(Number inputNumber, double granularity) {
+        BigDecimal inputAsBigDecimal = coerceToBigDecimal(inputNumber);
+        return inputAsBigDecimal.scale() <= granularity;
     }
 
     public int getNumericScale() {
