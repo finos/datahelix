@@ -51,12 +51,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         hidden = true)
     private boolean dontPartitionTrees;
 
-    @CommandLine.Option(names = {"-w", "--walker-type"},
-        description = "Determines the tree walker that should be used.",
-        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
-        hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType;
-
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
@@ -160,11 +154,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
-    }
-
-    @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
-        return this.walkerType;
     }
 
     @Override

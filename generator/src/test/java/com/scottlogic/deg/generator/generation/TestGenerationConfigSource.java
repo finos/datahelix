@@ -43,11 +43,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
-        return this.walkerType;
-    }
-
-    @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return Collections.emptyList();
     }

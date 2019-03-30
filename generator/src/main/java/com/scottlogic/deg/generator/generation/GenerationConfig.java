@@ -9,14 +9,12 @@ import java.util.Optional;
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
-    private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategy;
     private final Optional<Long> maxRows;
 
     @Inject
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
-        this.walkerType = source.getWalkerType();
         this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
     }
@@ -26,22 +24,7 @@ public class GenerationConfig {
     }
 
     public CombinationStrategy getCombinationStrategy() {
-        if (this.walkerType == TreeWalkerType.REDUCTIVE){
-            return new ReductiveCombinationStrategy();
-        }
-
-        switch(this.combinationStrategy){
-            case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
-            case PINNING: return new PinningCombinationStrategy();
-            case MINIMAL: return new MinimalCombinationStrategy();
-            default:
-                throw new UnsupportedOperationException(
-                    "$Combination strategy {this.combinationStrategy} is unsupported.");
-        }
-    }
-
-    public TreeWalkerType getWalkerType() {
-        return this.walkerType;
+        return new ReductiveCombinationStrategy();
     }
 
     public Optional<Long> getMaxRows() { return maxRows; }

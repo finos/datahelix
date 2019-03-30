@@ -34,11 +34,6 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
-        return state.walkerType;
-    }
-
-    @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return state.getConstraintsToNotViolate();
     }

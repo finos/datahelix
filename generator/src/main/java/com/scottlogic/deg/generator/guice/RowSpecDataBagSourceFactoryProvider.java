@@ -25,10 +25,9 @@ public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecData
 
     @Override
     public RowSpecDataBagSourceFactory get() {
-        boolean isReductive = configSource.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE;
         boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
 
-        if (isRandom && isReductive){
+        if (isRandom){
             return reductiveRandomFactory;
         }
 

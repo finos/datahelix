@@ -19,11 +19,6 @@ public interface GenerationConfigSource extends ConfigSource {
      */
     GenerationConfig.CombinationStrategyType getCombinationStrategyType();
 
-    /**
-     * Gets a value signifying the current tree walker type, i.e. the reductive walker.
-     * @return Enum value of the current decision tree walker.
-     */
-    GenerationConfig.TreeWalkerType getWalkerType();
     GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
     Optional<Long> getMaxRows();
