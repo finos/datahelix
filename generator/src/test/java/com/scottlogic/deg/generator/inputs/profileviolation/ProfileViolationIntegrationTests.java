@@ -42,7 +42,6 @@ public class ProfileViolationIntegrationTests {
     public void setUp() {
         TestGenerationConfigSource configSource = new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
         configSource.outputPath = initTempOutputPath();

@@ -67,22 +67,4 @@ public class FixFieldStrategyFactoryTests {
         Assert.assertThat(actualStrategy, instanceOf(HierarchicalDependencyFixFieldStrategy.class));
         Assert.assertThat(actualStrategy, sameBeanAs(expectedStrategy));
     }
-
-    /**
-     * Tests that the getWalkerStrategy with a config for a walker other than the reductive walker returns a null.
-     */
-    @ParameterizedTest
-    @EnumSource(
-        value = GenerationConfig.TreeWalkerType.class,
-        names = {"ROUTED", "CARTESIAN_PRODUCT"}
-    )
-    public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsNull(GenerationConfig.TreeWalkerType walkerType) {
-        // Arrange
-
-        //Act
-        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree);
-
-        //Assert
-        Assert.assertThat(actualStrategy, nullValue());
-    }
 }

@@ -55,7 +55,6 @@ class ExampleProfilesViolationTests {
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
@@ -71,7 +70,6 @@ class ExampleProfilesViolationTests {
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.PINNING));
                 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
@@ -85,7 +83,6 @@ class ExampleProfilesViolationTests {
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
                 GenerationConfig.CombinationStrategyType.PINNING));
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {

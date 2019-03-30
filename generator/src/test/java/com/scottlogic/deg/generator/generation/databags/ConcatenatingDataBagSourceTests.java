@@ -18,7 +18,6 @@ class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
-            GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
             GenerationConfig.CombinationStrategyType.PINNING)
     );
 

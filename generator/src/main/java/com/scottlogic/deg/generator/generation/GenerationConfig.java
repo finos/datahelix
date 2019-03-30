@@ -46,23 +46,6 @@ public class GenerationConfig {
         }
     }
 
-    public enum TreeWalkerType {
-        CARTESIAN_PRODUCT(Constants.WalkerTypes.CARTESIAN_PRODUCT),
-        ROUTED(Constants.WalkerTypes.ROUTED),
-        REDUCTIVE(Constants.WalkerTypes.REDUCTIVE);
-
-        private final String text;
-
-        TreeWalkerType(String text){
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
     public enum MonitorType {
         VERBOSE(Constants.MonitorTypes.VERBOSE),
         QUIET(Constants.MonitorTypes.QUIET),

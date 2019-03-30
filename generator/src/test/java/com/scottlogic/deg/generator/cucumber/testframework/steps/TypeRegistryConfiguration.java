@@ -28,7 +28,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     public void configureTypeRegistry(TypeRegistry tr) {
         this.defineDataGenerationStrategyType(tr);
         this.defineCombinationStrategyType(tr);
-        this.defineWalkerType(tr);
         this.defineOperationParameterType(tr);
         this.defineGenerationMode(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
@@ -94,19 +93,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "combinationStrategy",
             "(.*)$",
             GenerationConfig.CombinationStrategyType.class,
-            transformer));
-    }
-
-    private void defineWalkerType(TypeRegistry tr) {
-        Transformer<GenerationConfig.TreeWalkerType> transformer = strategyString ->
-            Arrays.stream(GenerationConfig.TreeWalkerType.values())
-                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT);
-
-        tr.defineParameterType(new ParameterType<>(
-            "walkerType",
-            "(.*)$",
-            GenerationConfig.TreeWalkerType.class,
             transformer));
     }
 

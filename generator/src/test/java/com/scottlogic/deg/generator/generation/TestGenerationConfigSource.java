@@ -11,7 +11,6 @@ import java.util.Optional;
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
     public GenerationConfig.CombinationStrategyType combinationStrategy;
-    public GenerationConfig.TreeWalkerType walkerType;
     public Long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
@@ -20,11 +19,9 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
-        GenerationConfig.TreeWalkerType walkerType,
         GenerationConfig.CombinationStrategyType combinationStrategy) {
         this.generationType = generationType;
         this.combinationStrategy = combinationStrategy;
-        this.walkerType = walkerType;
     }
 
     @Override

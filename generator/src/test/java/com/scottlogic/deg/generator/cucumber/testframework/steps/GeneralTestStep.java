@@ -58,11 +58,6 @@ public class GeneralTestStep {
         this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
     }
 
-    @When("the walker type is {walkerType}")
-    public void setTheCombinationStrategy(GenerationConfig.TreeWalkerType walkerType) {
-        this.state.walkerType = walkerType;
-    }
-
     @Given("the data requested is {generationMode}")
     public void setTheGenerationMode(CucumberGenerationMode generationMode) {
         switch (generationMode) {
