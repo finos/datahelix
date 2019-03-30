@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
@@ -23,7 +24,11 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
-import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveFieldSpecBuilder;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveRowSpecGenerator;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -100,16 +105,32 @@ class ExampleProfilesViolationTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
+            ConstraintReducer constraintReducer = new ConstraintReducer(
+                new FieldSpecFactory(
+                    new FieldSpecMerger()),
+                new FieldSpecMerger());
+
+            ReductiveDecisionTreeWalker reductiveDecisionTreeWalker = new ReductiveDecisionTreeWalker(
+                new NoOpIterationVisualiser(),
+                new ReductiveFieldSpecBuilder(constraintReducer),
+                new NoopDataGeneratorMonitor(),
+                new ReductiveTreePruner(
+                    new FieldSpecMerger(),
+                    constraintReducer,
+                    new FieldSpecHelper()),
+                new ReductiveRowSpecGenerator(
+                    new FieldSpecHelper(),
+                    new NoopDataGeneratorMonitor()),
+                new FieldSpecValueGenerator(
+                    config,
+                    new StandardFieldValueSourceEvaluator(),
+                    new JavaUtilRandomNumberGenerator()));
+
+
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 StandardGenerationEngine engine = new StandardGenerationEngine(
                     new DecisionTreeDataGenerator(
-                        new CartesianProductDecisionTreeWalker(
-                            new ConstraintReducer(
-                                new FieldSpecFactory(new FieldSpecMerger()),
-                                new FieldSpecMerger()
-                            ),
-                            new RowSpecMerger(new FieldSpecMerger())
-                        ),
+                        reductiveDecisionTreeWalker,
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         new NoopDataGeneratorMonitor(),
