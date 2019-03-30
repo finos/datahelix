@@ -54,7 +54,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         final Stream<Stream<RowSpec>> rowSpecsByPartition = partitionedTrees
             .stream()
             .map(tree -> treeWalker.walk(tree,
-                walkerStrategyFactory.getWalkerStrategy(profile, tree, generationConfig)));
+                walkerStrategyFactory.getWalkerStrategy(profile, tree)));
 
         final Stream<DataBagSource> allDataBagSources =
             rowSpecsByPartition
