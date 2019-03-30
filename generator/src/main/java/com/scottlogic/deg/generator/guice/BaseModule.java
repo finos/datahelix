@@ -34,6 +34,7 @@ import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
@@ -65,7 +66,6 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
-        bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
@@ -74,6 +74,7 @@ public class BaseModule extends AbstractModule {
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
 
         // Bind known implementations - no user input required
+        bind(DecisionTreeWalker.class).to(ReductiveDecisionTreeWalker.class);
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
