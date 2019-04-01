@@ -97,7 +97,10 @@
       "type": "number",
       "minimum": -1E20,
       "maximum": 1E20,
-      "default": 0,
+      "default": 0
+    },
+    "integer": {
+      "$ref": "#/definitions/numeric",
       "multipleOf": 1
     },
     "string": {
@@ -285,18 +288,70 @@
           "if": {
             "properties": {
               "is": {
-                "enum": [
-                  "shorterThan",
-                  "longerThan",
-                  "granularTo"
-                ]
+                "const": "shorterThan"
               }
             }
           },
           "then": {
             "properties": {
               "value": {
-                "$ref": "#/definitions/numeric"
+                "$ref": "#/definitions/integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "longerThan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "granularTo"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "enum": [
+                  1E0,
+                  1E-1,
+                  1E-2,
+                  1E-3,
+                  1E-4,
+                  1E-5,
+                  1E-6,
+                  1E-7,
+                  1E-8,
+                  1E-9,
+                  1E-10,
+                  1E-11,
+                  1E-12,
+                  1E-13,
+                  1E-14,
+                  1E-15,
+                  1E-16,
+                  1E-17,
+                  1E-18,
+                  1E-19,
+                  1E-20
+                ]
               }
             }
           }
@@ -316,7 +371,9 @@
           },
           "then": {
             "properties": {
-              "value": {"$ref": "#/definitions/numeric" }
+              "value": {
+                "$ref": "#/definitions/numeric"
+              }
             }
           }
         },
