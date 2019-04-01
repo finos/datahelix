@@ -63,7 +63,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
                             .map(dataBagSourceFactory::createDataBagSource)));
 
         Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
-            .generate(generationConfig);
+            .generate(generationConfig)
+            .map(o->o.orderValues(profile.fields));
 
         monitor.generationStarting(generationConfig);
 
