@@ -137,27 +137,21 @@ Note these steps work for asserting both integer and decimal data. There are no 
 * All block-level indentation should be 2 spaces, as below: 
 
 ```gherkin
-Feature: Tetris row scoring
-  Users score points by completing horizontal rows, which then disappear. The number of points
-  they receive is proportional to the number of rows they simultaneously complete.
+Feature: ...
+  ...
 
   Background:
-    Given a Tetris game is in progress
+    Given ...
 
-  Scenario: The player scores a Tetris
-    Given the field is:
-      |    X  X |
-      | XXXXXXXX|
-      | XXXXXXXX|
-      | XXXXXXXX|
-      | XXXXXXXX|
-    And the user's score is 2910
-    When the player places a vertical line in the leftmost column
-    Then the user's score becomes 3910 
-    And the field becomes:
-      |         |
-      |         |
-      |         |
-      |         |
-      |    X  X |
+  Scenario: ...
+    Given ...:
+      | ... |
+      | ... |
+      | ... |
+    And ...:
+      """
+      """
+    When ...
+    Then ... 
+    And ...
 ```
