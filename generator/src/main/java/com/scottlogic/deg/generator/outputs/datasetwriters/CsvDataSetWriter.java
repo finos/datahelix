@@ -1,8 +1,7 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -33,7 +32,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     }
 
     public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
-        writer.printRecord(row.values.stream()
+        writer.printRecord(row.getValues().stream()
             .map(CsvDataSetWriter::extractCellValue)
             .map(CsvDataSetWriter::wrapInQuotesIfString)
             .collect(Collectors.toList()));

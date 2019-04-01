@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
-class DataBagTests {
+class GeneratedObjectTests {
     @Test
     void getShouldReturnSettedValue() {
         // ARRANGE
         Field idField = new Field("id");
 
         // ACT
-        DataBag objectUnderTest = DataBag.startBuilding().set(idField, 3, DataBagValueSource.Empty).build();
+        GeneratedObject objectUnderTest = GeneratedObject.startBuilding().set(idField, 3, DataBagValueSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
@@ -31,7 +31,7 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> DataBag.startBuilding()
+            () -> GeneratedObject.startBuilding()
                 .set(idField, 3, DataBagValueSource.Empty)
                 .set(idField, 3, DataBagValueSource.Empty)
                 .build());
@@ -42,7 +42,7 @@ class DataBagTests {
         // ARRANGE
         Field idField = new Field("id");
 
-        DataBag objectUnderTest = DataBag.empty;
+        GeneratedObject objectUnderTest = GeneratedObject.empty;
 
         // ACT / ASSERT
         Assertions.assertThrows(
@@ -56,19 +56,19 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
-        DataBag dataBag2 = DataBag.startBuilding().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
+        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
 
         // ACT
-        DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
+        GeneratedObject mergedGeneratedObject = GeneratedObject.merge(generatedObject1, generatedObject2);
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.getValue(idField),
+            mergedGeneratedObject.getValue(idField),
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.getValue(priceField),
+            mergedGeneratedObject.getValue(priceField),
             equalTo(4));
     }
 
@@ -78,11 +78,11 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding()
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding()
             .set(idField, "foo", DataBagValueSource.Empty)
             .build();
 
-        DataBag dataBag2 = DataBag.startBuilding()
+        GeneratedObject generatedObject2 = GeneratedObject.startBuilding()
             .set(idField, "foo", DataBagValueSource.Empty)
             .set(priceField, 4, DataBagValueSource.Empty)
             .build();
@@ -90,6 +90,6 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> DataBag.merge(dataBag1, dataBag2));
+            () -> GeneratedObject.merge(generatedObject1, generatedObject2));
     }
 }

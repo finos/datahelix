@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.utils.RestartableIterator;
 
 import java.util.List;
@@ -13,21 +13,21 @@ import java.util.stream.StreamSupport;
 
 public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-        List<RestartableIterator<DataBag>> bagsAsLists = dataBagSequences
+    public Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences) {
+        List<RestartableIterator<GeneratedObject>> bagsAsLists = dataBagSequences
             .map(dbs -> new RestartableIterator<>(dbs.iterator()))
             .collect(Collectors.toList());
 
-        return next(DataBag.empty, bagsAsLists, 0);
+        return next(GeneratedObject.empty, bagsAsLists, 0);
     }
 
-    public Stream<DataBag> next(DataBag accumulatingBag, List<RestartableIterator<DataBag>> bagSequences, int bagSequenceIndex) {
+    public Stream<GeneratedObject> next(GeneratedObject accumulatingBag, List<RestartableIterator<GeneratedObject>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
-            RestartableIterator<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
+            RestartableIterator<GeneratedObject> nextStream = bagSequences.get(bagSequenceIndex);
             nextStream.restart();
 
             return FlatMappingSpliterator.flatMap(StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
-                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
+                .map(innerBag -> GeneratedObject.merge(innerBag, accumulatingBag)),
                 innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else

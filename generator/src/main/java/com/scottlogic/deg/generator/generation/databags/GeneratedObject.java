@@ -8,14 +8,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class DataBag {
-    public static final DataBag empty = new DataBag(new HashMap<>());
+public class GeneratedObject {
+    public static final GeneratedObject empty = new GeneratedObject(new HashMap<>());
     public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     private final Map<Field, DataBagValue> fieldToValue;
 
-    DataBag(Map<Field, DataBagValue> fieldToValue) {
+    GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
         this.fieldToValue = fieldToValue;
+    }
+
+    public Collection<DataBagValue> getValues() {
+        return fieldToValue.values();
     }
 
     public Object getValue(Field field) {
@@ -32,7 +36,7 @@ public class DataBag {
         return this.fieldToValue.get(field);
     }
 
-    public static DataBag merge(DataBag... bags) {
+    public static GeneratedObject merge(GeneratedObject... bags) {
         Map<Field, DataBagValue> newFieldToValue = new HashMap<>();
 
         FlatMappingSpliterator.flatMap(Arrays.stream(bags)
@@ -45,15 +49,15 @@ public class DataBag {
                 newFieldToValue.put(entry.getKey(), entry.getValue());
             });
 
-        return new DataBag(newFieldToValue);
+        return new GeneratedObject(newFieldToValue);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DataBag dataBag = (DataBag) o;
-        return Objects.equals(fieldToValue, dataBag.fieldToValue);
+        GeneratedObject generatedObject = (GeneratedObject) o;
+        return Objects.equals(fieldToValue, generatedObject.fieldToValue);
     }
 
     @Override
@@ -61,9 +65,9 @@ public class DataBag {
         return Objects.hash(fieldToValue);
     }
 
-    public RowSource getRowSource(ProfileFields fields) {
+    public RowSource getRowSource() {
         return new RowSource(
-            fields
+            fieldToValue.keySet()
                 .stream()
                 .map(field -> {
                     DataBagValue value = this.fieldToValue.get(field);
@@ -93,8 +97,8 @@ public class DataBag {
             return this.set(field, new DataBagValue(value, source));
         }
 
-        public DataBag build() {
-            return new DataBag(this.fieldToValue);
+        public GeneratedObject build() {
+            return new GeneratedObject(this.fieldToValue);
         }
     }
 }
