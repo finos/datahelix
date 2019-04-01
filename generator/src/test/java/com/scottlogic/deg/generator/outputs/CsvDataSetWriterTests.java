@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.CsvDataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -17,14 +19,13 @@ import java.util.Collections;
 
 public class CsvDataSetWriterTests {
     private final CSVFormat format = CSVFormat.DEFAULT.withEscape('\0').withQuoteMode(QuoteMode.NONE);
+    Field field1 = new Field("field1");
 
     @Test
     public void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValue(new BigDecimal("0.00000001"))),
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValue(new BigDecimal("0.00000001"))).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -38,9 +39,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withBigDecimalAndAFormat_shouldOutputFormattedValue() throws IOException{
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -54,9 +53,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNullValue_shouldOutputEmptyValue() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValue(null)),
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValue(null)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -70,9 +67,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNonBigDecimalNumberAndNoFormat_shouldOutputNumberFormattedCorrectly() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(new DataBagValue(1.2f, DataBagValueSource.Empty)),
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, new DataBagValue(1.2f, DataBagValueSource.Empty)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -86,9 +81,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withStringAndFormat_shouldOutputValueQuotedAndFormatted() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValueWithFormat("Hello World", "%.5s")), // Format string to max 5 chars
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValueWithFormat("Hello World", "%.5s")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -103,9 +96,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValue(date)), // Format string to max 5 chars
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValue(date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -120,9 +111,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 777_000_000, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValue(date)), // Format string to max 5 chars
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValue(date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -137,9 +126,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = new GeneratedObject(
-            Collections.singletonList(getValueWithFormat(date, "%tF")), // Format string to max 5 chars
-            new RowSource(Collections.emptyList()));
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, getValueWithFormat(date, "%tF")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act

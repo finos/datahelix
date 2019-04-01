@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.CellSource;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;
 
 import java.io.*;
@@ -38,8 +38,8 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
 
     @Override
     public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row) throws IOException {
-        Collection<TracingDto> dto = row.source != null
-            ? TracingDto.fromRowSource(row.source)
+        Collection<TracingDto> dto = row.getRowSource() != null
+            ? TracingDto.fromRowSource(row.getRowSource())
             : TracingDto.empty;
         closeable.writeArrayItem(serialise(dto));
     }

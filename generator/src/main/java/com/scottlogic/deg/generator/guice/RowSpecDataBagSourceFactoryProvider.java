@@ -29,7 +29,7 @@ public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecData
         boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
 
         if (isRandom && isReductive){
-            return reductiveRandomFactory;
+        //    return reductiveRandomFactory;
         }
 
         return normalFactory;

@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
-class ConcatenatingDataBagSourceTests {
+class ConcatenatingGeneratedObjectSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
@@ -25,12 +25,12 @@ class ConcatenatingDataBagSourceTests {
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
         // ARRANGE
-        DataBag dataBag1 = DataBag.startBuilding().build();
-        DataBag dataBag2 = DataBag.startBuilding().build();
-        DataBag dataBag3 = DataBag.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject3 = GeneratedObject.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
-        DataBagSource dataBagSource2 = new DummyDataBagSource(dataBag3);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1, generatedObject2);
+        DataBagSource dataBagSource2 = new DummyDataBagSource(generatedObject3);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
@@ -39,52 +39,52 @@ class ConcatenatingDataBagSourceTests {
                     dataBagSource2));
 
         // ACT
-        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
+        List<GeneratedObject> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
             output,
             contains(
                 Arrays.asList(
-                    sameInstance(dataBag1),
-                    sameInstance(dataBag2),
-                    sameInstance(dataBag3)
+                    sameInstance(generatedObject1),
+                    sameInstance(generatedObject2),
+                    sameInstance(generatedObject3)
                 )));
     }
 
     @Test
     void whenOnePopulatedSourceIsProvided() {
         // ARRANGE
-        DataBag dataBag1 = DataBag.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
                 Stream.of(dataBagSource1));
 
         // ACT
-        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
+        List<GeneratedObject> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
             output,
             contains(
                 Arrays.asList(
-                    sameInstance(dataBag1)
+                    sameInstance(generatedObject1)
                 )));
     }
 
     @Test
     void whenMiddleSourceIsEmpty() {
         // ARRANGE
-        DataBag dataBag1 = DataBag.startBuilding().build();
-        DataBag dataBag2 = DataBag.startBuilding().build();
-        DataBag dataBag3 = DataBag.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject3 = GeneratedObject.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(dataBag1, dataBag2);
+        DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1, generatedObject2);
         DataBagSource dataBagSource2 = new DummyDataBagSource();
-        DataBagSource dataBagSource3 = new DummyDataBagSource(dataBag3);
+        DataBagSource dataBagSource3 = new DummyDataBagSource(generatedObject3);
 
         ConcatenatingDataBagSource objectUnderTest =
             new ConcatenatingDataBagSource(
@@ -94,16 +94,16 @@ class ConcatenatingDataBagSourceTests {
                     dataBagSource3));
 
         // ACT
-        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
+        List<GeneratedObject> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(
             output,
             contains(
                 Arrays.asList(
-                    sameInstance(dataBag1),
-                    sameInstance(dataBag2),
-                    sameInstance(dataBag3)
+                    sameInstance(generatedObject1),
+                    sameInstance(generatedObject2),
+                    sameInstance(generatedObject3)
                 )));
     }
 
@@ -120,7 +120,7 @@ class ConcatenatingDataBagSourceTests {
                     dataBagSource2));
 
         // ACT
-        List<DataBag> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
+        List<GeneratedObject> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
 
         // ASSERT
         Assert.assertThat(output, empty());

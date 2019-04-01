@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -15,29 +15,29 @@ import java.util.stream.Collectors;
 class ReductiveCombinationStrategyTests {
     @Test
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
-        List<DataBag> firstFieldDataBags = new ArrayList<DataBag>() {{
+        List<GeneratedObject> firstFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).build()
             );
         }};
-        List<DataBag> secondFieldDataBags = new ArrayList<DataBag>() {{
+        List<GeneratedObject> secondFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("Second Field"),
                     new DataBagValue("A", new DataBagValueSource(null))
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("Second Field"),
                     new DataBagValue("B", new DataBagValueSource(null))
                 ).build()
@@ -45,16 +45,16 @@ class ReductiveCombinationStrategyTests {
         }};
         ReductiveCombinationStrategy combinationStrategy = new ReductiveCombinationStrategy();
 
-        ArrayList<List<DataBag>> dataBagSequences = new ArrayList<List<DataBag>>() {{
-            add(firstFieldDataBags);
-            add(secondFieldDataBags);
+        ArrayList<List<GeneratedObject>> dataBagSequences = new ArrayList<List<GeneratedObject>>() {{
+            add(firstFieldGeneratedObjects);
+            add(secondFieldGeneratedObjects);
         }};
-        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
+        final List<GeneratedObject> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
             .collect(Collectors.toList());
 
-        List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{
+        List<GeneratedObject> expectedGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).set(
@@ -63,7 +63,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).set(
@@ -72,7 +72,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).set(
@@ -81,7 +81,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                GeneratedObject.startBuilding().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).set(
@@ -90,6 +90,6 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
         }};
-        Assert.assertEquals(expectedDataBags, result);
+        Assert.assertEquals(expectedGeneratedObjects, result);
     }
 }
