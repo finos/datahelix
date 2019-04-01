@@ -91,7 +91,7 @@ And there is a constraint:
 ```
 
 ### Describing the outcome
-* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason can be a regular expression.
+* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.
@@ -99,6 +99,8 @@ And there is a constraint:
 * _the following data should not be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is **not** present in the generated data (regardless of order)
 * _some data should be generated_, executes the generator and asserts that at least one row of data was emitted
 * _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
+
+\* Because `{reason}` is a regular expression, certain characters will need to be escaped, by including a `\` before them, e.g. `\(`, `\)`, `\[`, `\]`, etc.
 
 ### Validating the data in the output
 
