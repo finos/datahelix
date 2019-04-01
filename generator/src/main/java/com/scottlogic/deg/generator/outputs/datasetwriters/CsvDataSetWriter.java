@@ -31,6 +31,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
                 StandardCharsets.UTF_8);
     }
 
+    @Override
     public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
         writer.printRecord(row.getValues().stream()
             .map(CsvDataSetWriter::extractCellValue)
