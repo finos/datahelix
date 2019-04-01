@@ -59,7 +59,7 @@
       "field" : {
         "name" : "EventType"
       },
-      "requiredType" : "integer"
+      "requiredType" : "numeric"
     }, {
       "type" : "IsInSetConstraint",
       "field" : {
