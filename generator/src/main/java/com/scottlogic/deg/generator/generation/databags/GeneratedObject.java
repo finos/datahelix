@@ -13,13 +13,27 @@ public class GeneratedObject {
     public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     private final Map<Field, DataBagValue> fieldToValue;
+    private Optional<ProfileFields> fieldOrdering;
 
     GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
         this.fieldToValue = fieldToValue;
+        fieldOrdering = Optional.empty();
     }
 
     public Collection<DataBagValue> getValues() {
-        return fieldToValue.values();
+        if (!fieldOrdering.isPresent()) {
+            return fieldToValue.values();
+        }
+
+        return fieldOrdering.get().stream()
+            .map(fieldToValue::get)
+            .collect(Collectors.toList());
+    }
+
+    public GeneratedObject orderValues(ProfileFields profileFields){
+        GeneratedObject generatedObject = new GeneratedObject(fieldToValue);
+        generatedObject.fieldOrdering = Optional.of(profileFields);
+        return generatedObject;
     }
 
     public Object getValue(Field field) {
