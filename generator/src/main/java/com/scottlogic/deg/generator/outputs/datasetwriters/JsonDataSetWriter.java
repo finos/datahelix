@@ -7,8 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();
 
-        Iterator<DataBagValue> dataBagIterator = row.values.iterator();
+        Iterator<DataBagValue> dataBagIterator = row.getValues().iterator();
         Iterator<Field> fieldNameIterator = writer.profileFields.iterator();
 
         while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){

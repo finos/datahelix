@@ -14,7 +14,7 @@ public class ConcatenatingDataBagSource implements DataBagSource {
     }
 
     @Override
-    public Stream<DataBag> generate(GenerationConfig generationConfig) {
+    public Stream<GeneratedObject> generate(GenerationConfig generationConfig) {
         return FlatMappingSpliterator.flatMap(
             this.subSources
                 .map(source -> source.generate(generationConfig)),

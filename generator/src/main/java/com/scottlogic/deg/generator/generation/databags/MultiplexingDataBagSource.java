@@ -12,7 +12,7 @@ public class MultiplexingDataBagSource implements DataBagSource {
     }
 
     @Override
-    public Stream<DataBag> generate(GenerationConfig generationConfig) {
+    public Stream<GeneratedObject> generate(GenerationConfig generationConfig) {
 
         return generationConfig.getCombinationStrategy().permute(
             this.subGenerators

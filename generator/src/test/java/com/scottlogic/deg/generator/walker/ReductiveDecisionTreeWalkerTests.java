@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -84,11 +84,11 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        DataBag dataBag = DataBag.startBuilding().set(field1, "yes", DataBagValueSource.Empty).build();
+        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, "yes", DataBagValueSource.Empty).build();
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-        when(fieldSpecValueGenerator.generate(any(), any())).thenReturn(Stream.of(dataBag));
+        when(fieldSpecValueGenerator.generate(any(), any())).thenReturn(Stream.of(generatedObject));
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 

@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.*;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
@@ -64,12 +63,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
                             .map(dataBagSourceFactory::createDataBagSource)));
 
         Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
-            .generate(generationConfig)
-            .map(dataBag -> new GeneratedObject(
-                profile.fields.stream()
-                    .map(dataBag::getValueAndFormat)
-                    .collect(Collectors.toList()),
-                dataBag.getRowSource(profile.fields)));
+            .generate(generationConfig);
 
         monitor.generationStarting(generationConfig);
 

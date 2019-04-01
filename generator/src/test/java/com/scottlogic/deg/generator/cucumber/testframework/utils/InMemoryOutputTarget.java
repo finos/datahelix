@@ -2,8 +2,7 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class InMemoryOutputTarget implements OutputTarget {
                     throw new IllegalStateException("GeneratedObject is null");
                 }
 
-                return genObj.values
+                return genObj.getValues()
                     .stream()
                     .map(DataBagValue::getFormattedValue)
                     .collect(Collectors.toList());

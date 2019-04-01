@@ -4,8 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -26,7 +25,7 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
-    public Stream<DataBag> generate(Field field, FieldSpec spec) {
+    public Stream<GeneratedObject> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
@@ -42,7 +41,7 @@ public class FieldSpecValueGenerator {
                         : null,
                     new DataBagValueSource(spec.getFieldSpecSource()));
 
-                return DataBag.startBuilding()
+                return GeneratedObject.startBuilding()
                     .set(
                         field,
                         dataBagValue)

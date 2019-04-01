@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 
 import java.util.*;
 import java.util.stream.*;
@@ -8,8 +8,8 @@ import java.util.stream.*;
 public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-        List<Iterator<DataBag>> iterators = dataBagSequences
+    public Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences) {
+        List<Iterator<GeneratedObject>> iterators = dataBagSequences
                 .map(BaseStream::iterator)
                 .collect(Collectors.toList());
 
@@ -18,15 +18,15 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
             : Stream.empty();
     }
 
-    private Iterable<DataBag> iterable(List<Iterator<DataBag>> iterators) {
+    private Iterable<GeneratedObject> iterable(List<Iterator<GeneratedObject>> iterators) {
         return () -> new InternalIterator(iterators);
     }
 
-    class InternalIterator implements Iterator<DataBag> {
-        private final List<Iterator<DataBag>> iterators;
-        private final Map<Iterator<DataBag>, DataBag> lastValues;
+    class InternalIterator implements Iterator<GeneratedObject> {
+        private final List<Iterator<GeneratedObject>> iterators;
+        private final Map<Iterator<GeneratedObject>, GeneratedObject> lastValues;
 
-        InternalIterator(List<Iterator<DataBag>> iterators) {
+        InternalIterator(List<Iterator<GeneratedObject>> iterators) {
             this.iterators = iterators;
             this.lastValues = new HashMap<>();
         }
@@ -39,13 +39,13 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
         }
 
         @Override
-        public DataBag next() {
+        public GeneratedObject next() {
             iterators
                 .stream()
                 .filter(Iterator::hasNext)
                 .forEach(iterator -> lastValues.put(iterator, iterator.next()));
 
-            return DataBag.merge(lastValues.values().toArray(new DataBag[0]));
+            return GeneratedObject.merge(lastValues.values().toArray(new GeneratedObject[0]));
         }
     }
 }

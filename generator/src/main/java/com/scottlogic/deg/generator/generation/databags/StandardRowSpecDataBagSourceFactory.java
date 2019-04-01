@@ -35,14 +35,14 @@ public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSource
     }
 
     class StreamDataBagSource implements DataBagSource{
-        private final Stream<DataBag> dataBags;
+        private final Stream<GeneratedObject> dataBags;
 
-        StreamDataBagSource(Stream<DataBag> dataBags) {
+        StreamDataBagSource(Stream<GeneratedObject> dataBags) {
             this.dataBags = dataBags;
         }
 
         @Override
-        public Stream<DataBag> generate(GenerationConfig generationConfig) {
+        public Stream<GeneratedObject> generate(GenerationConfig generationConfig) {
             return dataBags;
         }
     }
