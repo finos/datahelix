@@ -67,10 +67,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
         List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
          if (whitelist.isEmpty()){
-             return new ArrayList<>();
+             return new LinkedList<>();
          }
 
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
+        return new LinkedList<>(Arrays.asList(new CannedValuesFieldValueSource(whitelist)));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
