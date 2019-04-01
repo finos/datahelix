@@ -1,27 +1,23 @@
-The cucumber framework has been developed to facilitate the production of behavioural driven development and testing.
-The framework uses [gherkin specs](https://docs.cucumber.io/gherkin/) which allow for 'english language' tests to be executed using the [cucumber](https://docs.cucumber.io/) framework.
+# Cucumber syntax
 
-The cucumber framework has been integrated into the generator to support the [[Testing strategy]].
+We use cucumber for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests like the below:
 
-### Example
-```
+```gherkin
 Feature: the name of my feature
 
-Background:
-     Given the generation strategy is interesting
-       And there is a field foo
+  Background:
+    Given the generation strategy is interesting
+    And there is a field foo
 
   Scenario: Running the generator should emit the correct data
-     Given foo is equal to 8
-     Then the following data should be generated:
-       | foo  |
-       | 8    |
-       | null |
+    Given foo is equal to 8
+    Then the following data should be generated:
+      | foo  |
+      | 8    |
+      | null |
 ```
 
 More examples can be seen in the [generator cucumber features](https://github.com/ScottLogic/datahelix/tree/master/generator/src/test/java/com/scottlogic/deg/generator/cucumber)
-
-We wont go into details on [gherkin specs](https://docs.cucumber.io/gherkin/) in this document, please use the gherkin documentation to understand the syntax.
 
 The framework supports setting configuration settings for the generator, defining the profile and describing the expected outcome. All of these are described below, all variable elements (e.g. `{generationStrategy}` are case insensitive), all fields and values **are case sensitive**.
 
@@ -71,23 +67,23 @@ datetimes must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
 * `inSet` &rarr; 
 ```
 Given foo is in set: 
-  | foo | 
-  | 1 | 
-  | 2 | 
-  | 3 |
+  | foo |
+  | 1   |
+  | 2   |
+  | 3   |
 ```
 * `not(after 01/02/2003)` &rarr; `Given foo is anything but after 2003-02-01T00:00:00.00`
 
 In addition the following shows how the _there is a constraint_ step can be used:
 ```
 And there is a constraint:
-       """
-         {
-         "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-         "then": { "field": "bar", "is": "equalTo", "value": "4444" },
-         "else": { "field": "bar", "is": "shorterThan", "value": 1 }
-         }
-       """
+  """
+    {
+      "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
+      "then": { "field": "bar", "is": "equalTo", "value": "4444" },
+      "else": { "field": "bar", "is": "shorterThan", "value": 1 }
+    }
+  """
 ```
 
 ### Describing the outcome
@@ -135,11 +131,27 @@ Note these steps work for asserting both integer and decimal data. There are no 
 * _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
 
 ### Cucumber test style guide
-* Tests should be written to validate one piece of logic only per test.
+* Each test should be specific to one requirement.
 * Tests should specify definite expected results rather than using "should include".
-* All tables should use pipe characters "|" to denote the edges of the table and the table should be sized according to the largest item in the table.
-* The indentation of cucumber tests should be:
->   * **Feature / Background / Scenario / Scenario outline** - 0 spaces
->   * **Given / When / Then** - 5 spaces
->   * **And** - 7 spaces
->   * **Tables / JSON snippets** - 2 spaces indented from the above statement
+* All tables should be padded to the width of the largest item.
+* All block-level indentation should be 2 spaces, as below: 
+
+```gherkin
+Feature: ...
+  ...
+
+  Background:
+    Given ...
+
+  Scenario: ...
+    Given ...:
+      | ... |
+      | ... |
+      | ... |
+    And ...:
+      """
+      """
+    When ...
+    Then ... 
+    And ...
+```
