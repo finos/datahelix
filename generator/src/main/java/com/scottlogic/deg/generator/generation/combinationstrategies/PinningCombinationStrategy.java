@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,22 +13,22 @@ import java.util.stream.StreamSupport;
 public class PinningCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-        Iterable<DataBag> iterable = new PinningCombinationStrategy
+    public Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences) {
+        Iterable<GeneratedObject> iterable = new PinningCombinationStrategy
                 .InternalIterable(dataBagSequences);
 
         return StreamSupport.stream(iterable.spliterator(), false);
     }
 
-    class InternalIterable implements Iterable<DataBag> {
-        private final Stream<Stream<DataBag>> dataBagSequences;
+    class InternalIterable implements Iterable<GeneratedObject> {
+        private final Stream<Stream<GeneratedObject>> dataBagSequences;
 
-        InternalIterable(Stream<Stream<DataBag>> dataBagSequences) {
+        InternalIterable(Stream<Stream<GeneratedObject>> dataBagSequences) {
             this.dataBagSequences = dataBagSequences;
         }
 
         @Override
-        public Iterator<DataBag> iterator() {
+        public Iterator<GeneratedObject> iterator() {
             List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
                     .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
                     .collect(Collectors.toList());
@@ -41,15 +41,15 @@ public class PinningCombinationStrategy implements CombinationStrategy {
     }
 
     class SequenceAndBaselineTuple {
-        private Iterator<DataBag> iterator;
-        private DataBag baseline;
+        private Iterator<GeneratedObject> iterator;
+        private GeneratedObject baseline;
 
-        public SequenceAndBaselineTuple(Iterator<DataBag> iterator) {
+        public SequenceAndBaselineTuple(Iterator<GeneratedObject> iterator) {
             this.iterator = iterator;
             this.baseline = iterator.hasNext() ? iterator.next() : null;
         }
 
-        public DataBag next(){
+        public GeneratedObject next(){
             return iterator.next();
         }
 
@@ -58,7 +58,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
         }
     }
 
-    class InternalIterator implements Iterator<DataBag> {
+    class InternalIterator implements Iterator<GeneratedObject> {
         private final List<SequenceAndBaselineTuple> tuples;
 
         private Integer indexOfSequenceToVary;
@@ -78,13 +78,13 @@ public class PinningCombinationStrategy implements CombinationStrategy {
         }
 
         @Override
-        public DataBag next() {
+        public GeneratedObject next() {
             if (this.indexOfSequenceToVary == null) {
                 this.indexOfSequenceToVary = 0;
 
                 return this.tuples.stream()
                         .map(tuple -> tuple.baseline)
-                    .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
+                    .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObject.merge(db1, db2));
             }
 
             return IntStream.range(0, this.tuples.size())
@@ -100,7 +100,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
                     }
                     return tuple.next();
                 })
-                .reduce(DataBag.empty, (db1, db2) -> DataBag.merge(db1, db2));
+                .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObject.merge(db1, db2));
         }
     }
 }
