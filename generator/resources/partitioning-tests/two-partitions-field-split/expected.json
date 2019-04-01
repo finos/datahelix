@@ -49,7 +49,7 @@
 			"field": {
 				"name": "EventType"
 			},
-			"requiredType": "numeric"
+			"requiredType": "integer"
 		}],
 		"decisions": [{
 			"options": [{

@@ -5,7 +5,7 @@
       "rule": "rule 1",
       "constraints": [
         {
-          "if": "numeric",
+          "if": "integer",
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
           "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
         }
