@@ -55,6 +55,11 @@ Scenario: 'longerThan' null should fail with an error message
   Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
     And no data is created
 
+Scenario: Running a 'longerThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
+    Given foo is longer than 2147483647
+    Then the profile is invalid because "longerThan constraint must have a operand/value <= 2147483646, currently is 2147483647 for field \[foo\]"
+    And no data is created
+
 Scenario: 'longerThan' a decimal number with a zero mantissa should be successful
   Given foo is longer than 2.0
     And foo is in set:

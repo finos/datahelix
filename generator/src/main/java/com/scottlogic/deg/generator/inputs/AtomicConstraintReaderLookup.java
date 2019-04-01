@@ -187,7 +187,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto, 0);
+                    int length = getIntegerLength(dto, 0, false);
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -197,7 +197,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto, 1);
+                    int length = getIntegerLength(dto, 1, true);
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -207,7 +207,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto, 0);
+                    int length = getIntegerLength(dto, 0, true);
                     return new StringHasLengthConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -253,7 +253,7 @@ class AtomicConstraintReaderLookup {
         return values;
     }
 
-    private static int getIntegerLength(ConstraintDTO dto, int minimumInclusive) throws InvalidProfileException {
+    private static int getIntegerLength(ConstraintDTO dto, int minimumInclusive, boolean maxInclusive) throws InvalidProfileException {
         Number value = throwIfValueInvalid(dto, Number.class);
         BigDecimal valueAsBigDecimal = NumberUtils
             .coerceToBigDecimal(value)
@@ -268,13 +268,18 @@ class AtomicConstraintReaderLookup {
                     dto.field));
         }
 
-        if (valueAsBigDecimal.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) > 0){
+        BigDecimal max = BigDecimal.valueOf(Integer.MAX_VALUE);
+        if (!maxInclusive){
+            max = max.subtract(BigDecimal.ONE);
+        }
+
+        if (valueAsBigDecimal.compareTo(max) > 0){
             //length is greater than the largest possible int
             throw new InvalidProfileException(
                 String.format(
-                    "%s constraint must have a operand/value <= %d, currently is %s for field [%s]",
+                    "%s constraint must have a operand/value <= %s, currently is %s for field [%s]",
                     dto.is,
-                    Integer.MAX_VALUE,
+                    max.toPlainString(),
                     valueAsBigDecimal.toPlainString(),
                     dto.field));
         }

@@ -47,6 +47,11 @@ Scenario: Running a 'shorterThan' request using null to specify a the length of 
      Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
        And no data is created
 
+Scenario: Running a 'shorterThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
+    Given foo is shorter than 2147483648
+    Then the profile is invalid because "shorterThan constraint must have a operand/value <= 2147483647, currently is 2147483648 for field \[foo\]"
+      And no data is created
+
 Scenario: shorterThan run against a non contradicting shorterThan should be successful
      Given foo is shorter than 4
        And foo is shorter than 3
