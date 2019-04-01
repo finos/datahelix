@@ -38,13 +38,13 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         this.walkerStrategyFactory = walkerStrategyFactory;
     }
 
-    private DataBagSource getDataBagSourceForTree(Profile profile, DecisionTree tree, GenerationConfig generationConfig){
+    private Stream<GeneratedObject> getDataBagSourceForTree(Profile profile, DecisionTree tree, GenerationConfig generationConfig){
         Stream<RowSpec> walked = treeWalker.walk(tree,
             walkerStrategyFactory.getWalkerStrategy(profile, tree, generationConfig));
 
         return new ConcatenatingDataBagSource(
-            walked.map(dataBagSourceFactory::createDataBagSource));
-
+            walked.map(dataBagSourceFactory::createDataBagSource))
+            .generate(generationConfig);
     }
 
     @Override
@@ -59,12 +59,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
                 .map(this.treeOptimiser::optimiseTree)
                 .collect(Collectors.toList());
 
-        final Stream<DataBagSource> allDataBagSources = partitionedTrees
+        final Stream<Stream<GeneratedObject>> allDataBagSources = partitionedTrees
             .stream()
             .map(tree -> getDataBagSourceForTree(profile, tree, generationConfig));
 
-        Stream<GeneratedObject> dataRows = new MultiplexingDataBagSource(allDataBagSources)
-            .generate(generationConfig)
+        Stream<GeneratedObject> dataRows = generationConfig.getCombinationStrategy()
+            .permute(allDataBagSources)
             .map(o->o.orderValues(profile.fields));
 
         monitor.generationStarting(generationConfig);
