@@ -29,11 +29,6 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return state.combinationStrategyType;
-    }
-
-    @Override
     public List<AtomicConstraintType> getConstraintsToNotViolate() {
         return state.getConstraintsToNotViolate();
     }

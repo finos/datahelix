@@ -35,16 +35,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         hidden = true)
     private GenerationConfig.DataGenerationType generationType;
 
-    @CommandLine.Option(names = {"-c", "--combination-strategy"},
-        description = "Determines the type of combination strategy used (" +
-            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
-            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
-            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
-        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT,
-        hidden = true)
-    @SuppressWarnings("unused")
-    private GenerationConfig.CombinationStrategyType combinationType;
-
     @CommandLine.Option(
         names = {"--no-partition"},
         description = "Prevents tree partitioning",
@@ -149,11 +139,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return this.generationType;
-    }
-
-    @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return this.combinationType;
     }
 
     @Override

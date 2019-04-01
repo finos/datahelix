@@ -27,7 +27,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     @Override
     public void configureTypeRegistry(TypeRegistry tr) {
         this.defineDataGenerationStrategyType(tr);
-        this.defineCombinationStrategyType(tr);
         this.defineOperationParameterType(tr);
         this.defineGenerationMode(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
@@ -80,19 +79,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "generationStrategy",
             "(.*)$",
             GenerationConfig.DataGenerationType.class,
-            transformer));
-    }
-
-    private void defineCombinationStrategyType(TypeRegistry tr){
-        Transformer<GenerationConfig.CombinationStrategyType> transformer = strategyString ->
-            Arrays.stream(GenerationConfig.CombinationStrategyType.values())
-                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(GenerationConfig.CombinationStrategyType.PINNING);
-
-        tr.defineParameterType(new ParameterType<>(
-            "combinationStrategy",
-            "(.*)$",
-            GenerationConfig.CombinationStrategyType.class,
             transformer));
     }
 

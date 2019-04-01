@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  */
 public class CucumberTestState {
     public GenerationConfig.DataGenerationType dataGenerationType;
-    public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.

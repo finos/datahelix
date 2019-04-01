@@ -48,11 +48,6 @@ public class GeneralTestStep {
         this.state.dataGenerationType = strategy;
     }
 
-    @When("the combination strategy is {combinationStrategy}")
-    public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
-        this.state.combinationStrategyType = strategy;
-    }
-
     @When("we do not violate any {operator} constraints")
     public void constraintTypeIsNotViolated(String operator){
         this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));

@@ -13,12 +13,6 @@ public interface GenerationConfigSource extends ConfigSource {
      */
     GenerationConfig.DataGenerationType getGenerationType();
 
-    /**
-     * Gets a value signifying the combination strategy, i.e. one of exhaustive, pinning or minimal
-     * @return Enum value of the current combination strategy.
-     */
-    GenerationConfig.CombinationStrategyType getCombinationStrategyType();
-
     GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
     Optional<Long> getMaxRows();

@@ -645,7 +645,6 @@ Scenario: matchingRegex string run against a non contradicting not beforeOrAt sh
 
 Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
      Given there is a field bar
-       And the combination strategy is exhaustive
        And foo is matching regex /[a]{1}/
        And bar is in set:
          | "AA" |

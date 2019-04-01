@@ -17,8 +17,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 class ConcatenatingDataBagSourceTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.INTERESTING,
-            GenerationConfig.CombinationStrategyType.PINNING)
+            GenerationConfig.DataGenerationType.INTERESTING)
     );
 
     @Test

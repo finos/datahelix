@@ -57,8 +57,7 @@ class FieldSpecValueGeneratorTests {
             );
         GenerationConfig config = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             config,
@@ -127,8 +126,7 @@ class FieldSpecValueGeneratorTests {
         );
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -200,8 +198,7 @@ class FieldSpecValueGeneratorTests {
             );
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -263,8 +260,7 @@ class FieldSpecValueGeneratorTests {
             );
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -305,8 +301,7 @@ class FieldSpecValueGeneratorTests {
                 fieldSpecSource);
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -351,8 +346,7 @@ class FieldSpecValueGeneratorTests {
                 fieldSpecSource);
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.INTERESTING)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -416,8 +410,7 @@ class FieldSpecValueGeneratorTests {
 
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
@@ -473,8 +466,7 @@ class FieldSpecValueGeneratorTests {
 
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
+                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL)
         );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,

@@ -9,13 +9,11 @@ import java.util.Optional;
 public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
-    private final CombinationStrategyType combinationStrategy;
     private final Optional<Long> maxRows;
 
     @Inject
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
-        this.combinationStrategy = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
     }
 
@@ -63,23 +61,6 @@ public class GenerationConfig {
         }
     }
 
-    public enum CombinationStrategyType {
-
-        EXHAUSTIVE(Constants.CombinationStrategies.EXHAUSTIVE),
-        PINNING(Constants.CombinationStrategies.PINNING),
-        MINIMAL(Constants.CombinationStrategies.MINIMAL);
-        private final String text;
-
-        CombinationStrategyType(String text){
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
     public enum OutputFormat {
         CSV(Constants.OutputFormats.CSV),
         JSON(Constants.OutputFormats.JSON);
@@ -96,22 +77,6 @@ public class GenerationConfig {
     }
 
     public static class Constants {
-        public static class WalkerTypes {
-            public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
-            public static final String ROUTED = "ROUTED";
-            public static final String REDUCTIVE = "REDUCTIVE";
-
-            public static final String DEFAULT = REDUCTIVE;
-        }
-
-        public static class CombinationStrategies {
-            public static final String EXHAUSTIVE = "EXHAUSTIVE";
-            public static final String PINNING = "PINNING";
-            public static final String MINIMAL = "MINIMAL";
-
-            public static final String DEFAULT = PINNING;
-        }
-
         public static class GenerationTypes {
             public static final String FULL_SEQUENTIAL = "FULL_SEQUENTIAL";
             public static final String INTERESTING = "INTERESTING";

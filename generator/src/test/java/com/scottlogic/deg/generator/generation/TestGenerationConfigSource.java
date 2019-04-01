@@ -10,18 +10,14 @@ import java.util.Optional;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
-    public GenerationConfig.CombinationStrategyType combinationStrategy;
     public Long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
     public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
     public boolean requireFieldTyping = true;
 
-    public TestGenerationConfigSource(
-        GenerationConfig.DataGenerationType generationType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
+    public TestGenerationConfigSource(GenerationConfig.DataGenerationType generationType) {
         this.generationType = generationType;
-        this.combinationStrategy = combinationStrategy;
     }
 
     @Override
@@ -32,11 +28,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public GenerationConfig.DataGenerationType getGenerationType() {
         return this.generationType;
-    }
-
-    @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
-        return this.combinationStrategy;
     }
 
     @Override
