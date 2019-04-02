@@ -56,8 +56,8 @@ class GeneratedObjectTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
-        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
+        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().set(idField, new DataBagValue(idField, 3)).build();
+        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().set(priceField, new DataBagValue(priceField, 4)).build();
 
         // ACT
         GeneratedObject mergedGeneratedObject = GeneratedObject.merge(generatedObject1, generatedObject2);
