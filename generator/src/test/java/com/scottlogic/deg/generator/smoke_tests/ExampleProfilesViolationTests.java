@@ -115,12 +115,11 @@ class ExampleProfilesViolationTests {
                         new JavaUtilRandomNumberGenerator()));
 
                 WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
-                    standardRowSpecDataBagSourceFactory,
-                    new FixFieldStrategyFactory(new FieldDependencyAnalyser()));
+                    standardRowSpecDataBagSourceFactory);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(
-                    new PartitioningDataGenerator(
+                    new PartitioningDataGeneratorDecorator(
                         walkingDataGenerator,
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),

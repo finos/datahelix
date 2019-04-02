@@ -32,7 +32,7 @@ public class DecisionTreeRoutesTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy){
+    public Stream<RowSpec> walk(DecisionTree tree){
         ConstraintNode rootNode = tree.getRootNode();
         ProfileFields fields = tree.getFields();
         Stream<RowSpecRoute> routes = this.producer.produceRoutes(tree);
