@@ -15,6 +15,7 @@ indent_size=2
 [*.feature]
 indent_style=space
 indent_size=2
+insert_final_newline=true
 
 [{*.sc,*.scala}]
 indent_style=space
