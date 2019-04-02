@@ -4,7 +4,11 @@
   "title": "The Scott Logic DataHelix Profile Schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "fields", "rules"],
+  "required": [
+    "schemaVersion",
+    "fields",
+    "rules"
+  ],
   "properties": {
     "additionalProperties": false,
     "schemaVersion": {
@@ -32,7 +36,9 @@
         "title": "A set of Rule objects.",
         "type": "object",
         "additionalProperties": false,
-        "required": ["constraints"],
+        "required": [
+          "constraints"
+        ],
         "properties": {
           "rule": {
             "title": "A collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.",
@@ -40,7 +46,9 @@
           },
           "constraints": {
             "type": "array",
-            "items": {"$ref": "#/definitions/constraint"}
+            "items": {
+              "$ref": "#/definitions/constraint"
+            }
           }
         }
       }
@@ -53,10 +61,28 @@
       "default": "0.1",
       "pattern": "^[0-9]+[.][0-9]+$"
     },
+    "dataType": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/datetime"
+        },
+        {
+          "$ref": "#/definitions/string"
+        },
+        {
+          "$ref": "#/definitions/numeric"
+        }
+      ]
+    },
     "datetime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["date"],
+      "required": [
+        "date"
+      ],
+      "default": {
+        "date": "2000-01-01T09:00:00.000"
+      },
       "properties": {
         "additionalProperties": false,
         "date": {
@@ -67,28 +93,48 @@
         }
       }
     },
+    "numeric": {
+      "type": "number",
+      "minimum": -1E20,
+      "maximum": 1E20,
+      "default": 0
+    },
+    "integer": {
+      "$ref": "#/definitions/numeric",
+      "multipleOf": 1
+    },
+    "string": {
+      "type": "string",
+      "maxLength": 8000,
+      "default": "string"
+    },
     "fieldName": {
       "title": "The name of a field to generate data for",
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
-      "default": "field name",
+      "required": [
+        "name"
+      ],
+      "default": {
+        "name": "fieldName"
+      },
       "properties": {
-        "name": {"type": "string"}
+        "name": {
+          "type": "string"
+        }
       }
     },
     "constraint": {
       "oneOf": [
         {
-          "$ref": "#/definitions/grammaticalConstraint"
+          "$ref": "#/definitions/dataConstraint"
         },
         {
-          "$ref": "#/definitions/dataConstraint"
-        }
-      ]
-    },
-    "grammaticalConstraint": {
-      "oneOf": [
+          "$ref": "#/definitions/nullConstraint"
+        },
+        {
+          "$ref": "#/definitions/inSetConstraint"
+        },
         {
           "$ref": "#/definitions/notConstraint"
         },
@@ -99,80 +145,123 @@
           "$ref": "#/definitions/allOfConstraint"
         },
         {
-          "$ref": "#/definitions/ifConstraint"
+          "$ref": "#/definitions/ifThenConstraint"
+        },
+        {
+          "$ref": "#/definitions/ifThenElseConstraint"
         }
       ]
     },
     "dataConstraint": {
       "type": "object",
-      "required": ["field", "is"],
+      "required": [
+        "field",
+        "is",
+        "value"
+      ],
+      "additionalProperties": false,
       "properties": {
-        "field": {"type": "string"},
+        "field": {
+          "type": "string"
+        },
         "is": {
           "enum": [
-            "ofType", "equalTo", "aValid", "inSet",
-            "formattedAs", "matchingRegex", "containingRegex", "ofLength", "longerThan", "shorterThan",
-            "null",
-            "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo", "granularTo",
-            "after", "afterOrAt", "before", "beforeOrAt"
+            "ofType",
+            "equalTo",
+            "aValid",
+            "formattedAs",
+            "matchingRegex",
+            "containingRegex",
+            "ofLength",
+            "longerThan",
+            "shorterThan",
+            "greaterThan",
+            "lessThan",
+            "greaterThanOrEqualTo",
+            "lessThanOrEqualTo",
+            "granularTo",
+            "after",
+            "afterOrAt",
+            "before",
+            "beforeOrAt"
           ]
-        }
+        },
+        "value": {}
       },
       "allOf": [
         {
           "if": {
-            "properties": {"is": {"enum": ["after", "afterOrAt", "before", "beforeOrAt"]}}
+            "properties": {
+              "is": {
+                "enum": [
+                  "after",
+                  "afterOrAt",
+                  "before",
+                  "beforeOrAt"
+                ]
+              }
+            }
           },
           "then": {
-            "properties": {"value": {"$ref": "#/definitions/datetime"}}
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/datetime"
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": {"is": {"const": "equalTo"}}
+            "properties": {
+              "is": {
+                "const": "equalTo"
+              }
+            }
           },
           "then": {
-            "properties": {"value": {}}
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/dataType"
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": {"is": {"const": "ofType"}}
+            "properties": {
+              "is": {
+                "const": "ofType"
+              }
+            }
           },
           "then": {
-            "properties": {"value": {"enum": ["decimal", "integer", "string", "datetime"]}}
+            "properties": {
+              "value": {
+                "enum": [
+                  "decimal",
+                  "integer",
+                  "string",
+                  "datetime"
+                ]
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": {"is": {"const": "inSet"}}
+            "properties": {
+              "is": {
+                "const": "formattedAs"
+              }
+            }
           },
           "then": {
-            "properties": {"values": {"type": "array"}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "null"}}
-          },
-          "then": {
-            "properties": {"not": {}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"const": "formattedAs"}}
-          },
-          "then": {
-            "properties": {"value": {"pattern": "^%.+$"}}
-          }
-        },
-        {
-          "if": {
-            "properties": {"is": {"enum": ["matchingRegex", "containingRegex"]}}
-          },
-          "then": {
-            "properties": {"value": {"type": "string", "default": ".*"}}
+            "properties": {
+              "value": {
+                "pattern": "^%.+$",
+                "default": "%"
+              }
+            }
           }
         },
         {
@@ -180,13 +269,91 @@
             "properties": {
               "is": {
                 "enum": [
-                  "shorterThan", "longerThan", "granularTo"
+                  "matchingRegex",
+                  "containingRegex"
                 ]
               }
             }
           },
           "then": {
-            "properties": {"value": {"type": "number" }}
+            "properties": {
+              "value": {
+                "type": "string",
+                "default": ".*"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "shorterThan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "longerThan"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "granularTo"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "enum": [
+                  1E0,
+                  1E-1,
+                  1E-2,
+                  1E-3,
+                  1E-4,
+                  1E-5,
+                  1E-6,
+                  1E-7,
+                  1E-8,
+                  1E-9,
+                  1E-10,
+                  1E-11,
+                  1E-12,
+                  1E-13,
+                  1E-14,
+                  1E-15,
+                  1E-16,
+                  1E-17,
+                  1E-18,
+                  1E-19,
+                  1E-20
+                ]
+              }
+            }
           }
         },
         {
@@ -194,21 +361,37 @@
             "properties": {
               "is": {
                 "enum": [
-                  "greaterThan", "lessThan", "greaterThanOrEqualTo", "lessThanOrEqualTo"
+                  "greaterThan",
+                  "lessThan",
+                  "greaterThanOrEqualTo",
+                  "lessThanOrEqualTo"
                 ]
               }
             }
           },
           "then": {
-            "properties": {"value": {"type": "number", "maximum": 1E20, "minimum": -1E20}}
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/numeric"
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": {"is": {"const": "aValid"}}
+            "properties": {
+              "is": {
+                "const": "aValid"
+              }
+            }
           },
           "then": {
-            "properties": {"value": {"const": "ISIN", "default": "ISIN"}}
+            "properties": {
+              "value": {
+                "const": "ISIN",
+                "default": "ISIN"
+              }
+            }
           }
         }
       ]
@@ -216,15 +399,21 @@
     "notConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["not"],
+      "required": [
+        "not"
+      ],
       "properties": {
-        "not": {"$ref": "#/definitions/constraint"}
+        "not": {
+          "$ref": "#/definitions/constraint"
+        }
       }
     },
     "anyOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["anyOf"],
+      "required": [
+        "anyOf"
+      ],
       "properties": {
         "anyOf": {
           "type": "array",
@@ -238,7 +427,9 @@
     "allOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["allOf"],
+      "required": [
+        "allOf"
+      ],
       "properties": {
         "allOf": {
           "type": "array",
@@ -249,9 +440,30 @@
         }
       }
     },
-    "ifConstraint": {
+    "ifThenConstraint": {
       "type": "object",
-      "required": ["if", "then"],
+      "required": [
+        "if",
+        "then"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "if": {
+          "$ref": "#/definitions/constraint"
+        },
+        "then": {
+          "$ref": "#/definitions/constraint"
+        }
+      }
+    },
+    "ifThenElseConstraint": {
+      "type": "object",
+      "required": [
+        "if",
+        "then",
+        "else"
+      ],
+      "additionalProperties": false,
       "properties": {
         "if": {
           "$ref": "#/definitions/constraint"
@@ -259,9 +471,56 @@
         "then": {
           "$ref": "#/definitions/constraint"
         },
-        "additionalProperties": {
-          "else": {
-            "$ref": "#/definitions/constraint"
+        "else": {
+          "$ref": "#/definitions/constraint"
+        }
+      }
+    },
+    "nullConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "is"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "const": "null"
+        }
+      }
+    },
+    "inSetConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "is",
+        "values"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "const": "inSet"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/datetime"
+              },
+              {
+                "$ref": "#/definitions/numeric"
+              },
+              {
+                "$ref": "#/definitions/string"
+              }
+            ]
           }
         }
       }
