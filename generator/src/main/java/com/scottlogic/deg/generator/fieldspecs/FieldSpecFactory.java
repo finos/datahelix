@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -12,21 +11,22 @@ import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     private final FieldSpecMerger fieldSpecMerger;
+    private final StringGeneratorFactory generatorFactory;
 
     @Inject
-    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger) {
+    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger, StringGeneratorFactory generatorFactory) {
         this.fieldSpecMerger = fieldSpecMerger;
+        this.generatorFactory = generatorFactory;
     }
-
-    private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
 
     private static final Map<StandardConstraintTypes, StringGenerator>
         standardNameToStringGenerator = new HashMap<StandardConstraintTypes, StringGenerator>() {{
@@ -287,17 +287,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
-        AtomicConstraintConstructTuple atomicConstraintConstructTuple = new AtomicConstraintConstructTuple(constraint, matchFullString, negate);
-        StringGenerator regexStringGenerator;
-        if (constraintToStringGeneratorMap.containsKey(atomicConstraintConstructTuple)) {
-            regexStringGenerator = constraintToStringGeneratorMap.get(atomicConstraintConstructTuple);
-        } else {
-            regexStringGenerator = new RegexStringGenerator(pattern.toString(), matchFullString);
-            if (negate) {
-                regexStringGenerator = regexStringGenerator.complement();
-            }
-            constraintToStringGeneratorMap.put(atomicConstraintConstructTuple, regexStringGenerator);
-        }
+        StringGenerator regexStringGenerator = generatorFactory.create(constraint, matchFullString, negate, pattern);
         return construct(regexStringGenerator, negate, constraint, violated);
     }
 

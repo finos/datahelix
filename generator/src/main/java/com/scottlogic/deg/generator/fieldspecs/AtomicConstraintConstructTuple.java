@@ -9,7 +9,7 @@ public class AtomicConstraintConstructTuple {
     private final boolean matchFullString;
     private final boolean negate;
 
-    AtomicConstraintConstructTuple(AtomicConstraint atomicConstraint, boolean matchFullString, boolean negate) {
+    public AtomicConstraintConstructTuple(AtomicConstraint atomicConstraint, boolean matchFullString, boolean negate) {
         this.atomicConstraint = atomicConstraint;
         this.matchFullString = matchFullString;
         this.negate = negate;

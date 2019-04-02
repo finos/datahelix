@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-        new FieldSpecFactory(new FieldSpecMerger()),
+        new FieldSpecFactory(new FieldSpecMerger(), new StringGeneratorFactory()),
         new FieldSpecMerger()
     );
 
