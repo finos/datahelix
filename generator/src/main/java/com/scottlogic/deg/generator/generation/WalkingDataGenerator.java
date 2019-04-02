@@ -23,6 +23,7 @@ public class WalkingDataGenerator implements DataGenerator {
         this.treeWalker = treeWalker;
         this.dataBagSourceFactory = dataBagSourceFactory;
     }
+
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile, GenerationConfig generationConfig) {
         Stream<RowSpec> walked = treeWalker.walk(analysedProfile);

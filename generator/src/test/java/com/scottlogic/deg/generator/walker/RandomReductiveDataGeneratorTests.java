@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 class RandomReductiveDataGeneratorTests {
     private DecisionTree tree;
-    private RandomReductiveDecisionTreeWalker walker;
+    private RestartingDataGeneratorDecorator walker;
     private ReductiveDataGenerator underlyingWalker;
     Profile profile = mock(Profile.class);
     GenerationConfig config = mock(GenerationConfig.class);
@@ -36,7 +35,7 @@ class RandomReductiveDataGeneratorTests {
             "test-tree");
 
         underlyingWalker = mock(ReductiveDataGenerator.class);
-        walker = new RandomReductiveDecisionTreeWalker(underlyingWalker);
+        walker = new RestartingDataGeneratorDecorator(underlyingWalker);
     }
 
     /**

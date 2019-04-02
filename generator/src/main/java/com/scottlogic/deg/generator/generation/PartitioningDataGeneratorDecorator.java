@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -13,21 +12,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PartitioningDataGeneratorDecorator implements DataGenerator {
-    private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final DataGenerator underlying;
 
-    @Inject
     public PartitioningDataGeneratorDecorator(
         DataGenerator underlying,
         TreePartitioner treePartitioner,
-        DecisionTreeOptimiser optimiser,
-        DataGeneratorMonitor monitor) {
+        DecisionTreeOptimiser optimiser) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.underlying = underlying;
-        this.monitor = monitor;
     }
 
     @Override
@@ -37,15 +32,11 @@ public class PartitioningDataGeneratorDecorator implements DataGenerator {
         GenerationConfig generationConfig) {
         CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
 
-        final List<DecisionTree> partitionedTrees =
+        final Stream<Stream<GeneratedObject>> partitionedGeneratedObjects =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
                 .map(this.treeOptimiser::optimiseTree)
-                .collect(Collectors.toList());
-
-        final Stream<Stream<GeneratedObject>> partitionedGeneratedObjects =
-            partitionedTrees.stream()
-            .map(tree -> underlying.generateData(profile, tree, generationConfig));
+                .map(tree -> underlying.generateData(profile, tree, generationConfig));
 
         return partitionCombiner
             .permute(partitionedGeneratedObjects);
