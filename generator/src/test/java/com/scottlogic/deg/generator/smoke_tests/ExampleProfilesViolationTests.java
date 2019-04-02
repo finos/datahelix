@@ -101,24 +101,30 @@ class ExampleProfilesViolationTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
+                CartesianProductDecisionTreeWalker cartesianProductDecisionTreeWalker = new CartesianProductDecisionTreeWalker(
+                    new ConstraintReducer(
+                        new FieldSpecFactory(new FieldSpecMerger()),
+                        new FieldSpecMerger()
+                    ),
+                    new RowSpecMerger(new FieldSpecMerger()));
+
+                StandardRowSpecDataBagSourceFactory standardRowSpecDataBagSourceFactory = new StandardRowSpecDataBagSourceFactory(
+                    new FieldSpecValueGenerator(
+                        config,
+                        new StandardFieldValueSourceEvaluator(),
+                        new JavaUtilRandomNumberGenerator()));
+
+                WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
+                    standardRowSpecDataBagSourceFactory,
+                    new FixFieldStrategyFactory(new FieldDependencyAnalyser()));
+
+
                 StandardGenerationEngine engine = new StandardGenerationEngine(
-                    new TreePartitioningDataGenerator(
-                        new CartesianProductDecisionTreeWalker(
-                            new ConstraintReducer(
-                                new FieldSpecFactory(new FieldSpecMerger()),
-                                new FieldSpecMerger()
-                            ),
-                            new RowSpecMerger(new FieldSpecMerger())
-                        ),
+                    new PartitioningDataGenerator(
+                        walkingDataGenerator,
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
-                        new NoopDataGeneratorMonitor(),
-                        new StandardRowSpecDataBagSourceFactory(
-                            new FieldSpecValueGenerator(
-                                config,
-                                new StandardFieldValueSourceEvaluator(),
-                                new JavaUtilRandomNumberGenerator())),
-                        new FixFieldStrategyFactory(new FieldDependencyAnalyser())),
+                        new NoopDataGeneratorMonitor()),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
