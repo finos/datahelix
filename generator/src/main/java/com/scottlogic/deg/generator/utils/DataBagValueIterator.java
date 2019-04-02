@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.utils;
 
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 
 import java.util.Iterator;
 
@@ -9,9 +9,9 @@ public class DataBagValueIterator<T> implements Iterator<DataBagValue> {
 
     private Iterator<T> underlyingIterator;
     private String formatString;
-    private final DataBagValueSource source;
+    private final FieldSpecSource source;
 
-    public DataBagValueIterator(Iterator<T> underlyingIterator, String formatString, DataBagValueSource source) {
+    public DataBagValueIterator(Iterator<T> underlyingIterator, String formatString, FieldSpecSource source) {
         this.underlyingIterator = underlyingIterator;
         this.formatString = formatString;
         this.source = source;

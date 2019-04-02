@@ -1,10 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -39,7 +38,7 @@ public class FieldSpecValueGenerator {
                 spec.getFormatRestrictions() != null
                     ? spec.getFormatRestrictions().formatString
                     : null,
-                new DataBagValueSource(spec.getFieldSpecSource())));
+                spec.getFieldSpecSource()));
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {

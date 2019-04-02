@@ -1,12 +1,11 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Assert;
@@ -354,7 +353,7 @@ class FieldSpecValueGeneratorTests {
                     new BigDecimal("29.99999999999999999999")),
                 new DataBagValue(
                     new Field("First Field"),
-                    null, null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    null, null, fieldSpec.getFieldSpecSource())
             )
         );
 
