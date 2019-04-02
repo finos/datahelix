@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.*;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.RowSource;
 
@@ -107,7 +108,7 @@ public class GeneratedObject {
             return this;
         }
 
-        public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
+        public DataBagBuilder set(Field field, Object value, FieldSpecSource source) {
             return this.set(field, new DataBagValue(field, value, null, source));
         }
 
