@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PartitioningDataGenerator implements DataGenerator {
+public class PartitioningDataGeneratorDecorator implements DataGenerator {
     private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
-    private final WalkingDataGenerator underlying;
+    private final DataGenerator underlying;
 
     @Inject
-    public PartitioningDataGenerator(
-        WalkingDataGenerator underlying,
+    public PartitioningDataGeneratorDecorator(
+        DataGenerator underlying,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor) {
