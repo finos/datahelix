@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -108,11 +109,11 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(new IsOfTypeConstraint(fooField, requiredType, null));
     }
 
-    public ConstraintChainBuilder<T> withAfterConstraint(Field field, LocalDateTime dateTime) {
+    public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
         return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime, null));
     }
 
-    public ConstraintChainBuilder<T> withBeforeConstraint(Field field, LocalDateTime dateTime) {
+    public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
         return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, dateTime, null));
     }
 

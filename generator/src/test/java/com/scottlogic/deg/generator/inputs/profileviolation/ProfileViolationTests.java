@@ -115,12 +115,12 @@ public class ProfileViolationTests {
             );
 
         BaseConstraintBuilder<OrConstraint> orConstraintBuilder = new OrBuilder()
-            .withAfterConstraint(staticField, LocalDateTime.of(2018, 1, 15, 12, 0))
-            .withBeforeConstraint(staticField, LocalDateTime.of(2019, 1, 15, 12, 0));
+            .withAfterConstraint(staticField, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC))
+            .withBeforeConstraint(staticField, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC));
 
         BaseConstraintBuilder<AndConstraint> violatedOrConstraintBuilder = new AndBuilder()
-            .withAfterConstraint(staticField, LocalDateTime.of(2018, 1, 15, 12, 0)).negate().wrapAtomicWithViolate()
-            .withBeforeConstraint(staticField, LocalDateTime.of(2019, 1, 15, 12, 0)).negate().wrapAtomicWithViolate();
+            .withAfterConstraint(staticField, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate()
+            .withBeforeConstraint(staticField, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
             .withIf(new SingleConstraintBuilder().withOfTypeConstraint(staticField, IsOfTypeConstraint.Types.NUMERIC))
