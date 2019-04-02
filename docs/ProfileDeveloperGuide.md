@@ -374,6 +374,7 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 
 
 # Grammatical constraints
+<div id="Grammatical-constraints"></div>
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
@@ -428,6 +429,7 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 
 
 # Presentational Constraints
+<div id="Presentational-constraints"></div>
 
 ### `formattedAs` _(field, value)_
 
