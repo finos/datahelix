@@ -65,23 +65,17 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
 
-        Set<GeneratedObject> expectedGeneratedObjects = new HashSet<>(
+        Set<DataBagValue> expectedGeneratedObjects = new HashSet<>(
             Arrays.asList(
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(1, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                new DataBagValue(
+                    new Field("First Field"), 1),
+                new DataBagValue(
+                    new Field("First Field"),5),
+                new DataBagValue(
+                    new Field("First Field"), 10)
             )
         );
 
@@ -136,35 +130,29 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
 
-        Set<GeneratedObject> expectedGeneratedObjects = new HashSet<>(
+        Set<DataBagValue> expectedGeneratedObjects = new HashSet<>(
             Arrays.asList(
-                GeneratedObject.startBuilding().set(
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("10.00000000000000000001")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("10.00000000000000000002")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("15"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("15")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("25"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("25")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("29.99999999999999999998")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                    new BigDecimal("29.99999999999999999999"))
             )
         );
 
@@ -210,23 +198,17 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
         assertTrue(result.size() > 2);
         assertTrue(
             result.contains(
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue("Test One", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                new DataBagValue(
+                    new Field("First Field"),"Test One")
             ) &&
                 result.contains(
-                    GeneratedObject.startBuilding().set(
-                        new Field("First Field"),
-                        new DataBagValue("Test Two", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                    ).build()
-                )
-        );
+                    new DataBagValue(
+                        new Field("First Field"),"Test Two")));
     }
 
     @Test
@@ -274,18 +256,14 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<GeneratedObject> expectedGeneratedObjects = new HashSet<>(
+        Set<DataBagValue> expectedGeneratedObjects = new HashSet<>(
             Arrays.asList(
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue("ba", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue("ab", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                new DataBagValue(
+                    new Field("First Field"),"ba"),
+                new DataBagValue(
+                    new Field("First Field"), "ab")
             )
         );
 
@@ -317,22 +295,16 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<GeneratedObject> expectedGeneratedObjects = new HashSet<>(
+        Set<DataBagValue> expectedGeneratedObjects = new HashSet<>(
             Arrays.asList(
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(30, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                new DataBagValue(
+                    new Field("First Field"),10),
+                new DataBagValue(
+                    new Field("First Field"), 20),
+                new DataBagValue(
+                    new Field("First Field"),30)
             )
         );
 
@@ -364,30 +336,25 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<GeneratedObject> expectedGeneratedObjects = new HashSet<>(
+        Set<DataBagValue> expectedGeneratedObjects = new HashSet<>(
             Arrays.asList(
-                GeneratedObject.startBuilding().set(
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("10.00000000000000000001")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("10.00000000000000000002")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("29.99999999999999999998")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                GeneratedObject.startBuilding().set(
+                    new BigDecimal("29.99999999999999999999")),
+                new DataBagValue(
                     new Field("First Field"),
-                    new DataBagValue(null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                    null, null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
             )
         );
 
@@ -431,12 +398,12 @@ class FieldSpecValueGeneratorTests {
             new JavaUtilRandomNumberGenerator());
 
         //Act
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
 
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
         result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+            valuesForFirstField.add(dataBag.getValue());
         });
         
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(
@@ -489,12 +456,12 @@ class FieldSpecValueGeneratorTests {
             new JavaUtilRandomNumberGenerator());
 
         //Act
-        final Set<GeneratedObject> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field("First Field"), rootFieldSpec).collect(Collectors.toSet());
 
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
         result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+            valuesForFirstField.add(dataBag.getValue());
         });
 
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(
