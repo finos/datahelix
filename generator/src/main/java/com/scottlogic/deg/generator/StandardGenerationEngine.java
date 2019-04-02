@@ -31,8 +31,8 @@ public class StandardGenerationEngine implements GenerationEngine {
         final Stream<GeneratedObject> generatedDataItems =
             this.dataGenerator.generateData(profile, analysedProfile.getMergedTree(), config);
 
+        monitor.generationStarting(config);
         outputTarget.outputDataset(generatedDataItems, profile.fields);
-
         monitor.endGeneration();
     }
 }
