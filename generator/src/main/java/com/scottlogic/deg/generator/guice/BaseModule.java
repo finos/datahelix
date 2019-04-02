@@ -70,7 +70,6 @@ public class BaseModule extends AbstractModule {
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
-        bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
         bind(DataGenerator.class).toProvider(DataGeneratorProvider.class);
 

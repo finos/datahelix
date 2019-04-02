@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSourceFactory {
+public class RowSpecDataBagSourceFactory {
     private final FieldSpecValueGenerator generator;
 
     @Inject
-    public StandardRowSpecDataBagSourceFactory (
+    public RowSpecDataBagSourceFactory(
         FieldSpecValueGenerator generator) {
         this.generator = generator;
     }
