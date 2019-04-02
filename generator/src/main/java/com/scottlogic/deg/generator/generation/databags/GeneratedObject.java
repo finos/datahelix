@@ -16,7 +16,7 @@ public class GeneratedObject {
     private final Map<Field, DataBagValue> fieldToValue;
     private Optional<ProfileFields> fieldOrdering;
 
-    GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
+    public GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
         this.fieldToValue = fieldToValue;
         fieldOrdering = Optional.empty();
     }

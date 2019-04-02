@@ -7,9 +7,5 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixF
 import java.util.stream.Stream;
 
 public interface DecisionTreeWalker {
-    Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy);
-
-    default Stream<RowSpec> walk(DecisionTree tree) {
-        return walk(tree, null);
-    }
+    Stream<RowSpec> walk(DecisionTree tree);
 }
