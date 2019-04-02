@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TreePartitioningDataGenerator implements DataGenerator {
+public class PartitioningDataGenerator implements DataGenerator {
     private final DataGeneratorMonitor monitor;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
-    private final TreeWalkingDataGenerator underlying;
+    private final WalkingDataGenerator underlying;
 
     @Inject
-    public TreePartitioningDataGenerator(
-        TreeWalkingDataGenerator underlying,
+    public PartitioningDataGenerator(
+        WalkingDataGenerator underlying,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor) {
@@ -43,14 +43,11 @@ public class TreePartitioningDataGenerator implements DataGenerator {
                 .map(this.treeOptimiser::optimiseTree)
                 .collect(Collectors.toList());
 
-        final Stream<Stream<GeneratedObject>> allDataBagSources =
+        final Stream<Stream<GeneratedObject>> partitionedGeneratedObjects =
             partitionedTrees.stream()
             .map(tree -> underlying.generateData(profile, tree, generationConfig));
 
         return partitionCombiner
-            .permute(allDataBagSources)
-            .map(o->o.orderValues(profile.fields))
-            .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
-            .peek(this.monitor::rowEmitted);
+            .permute(partitionedGeneratedObjects);
     }
 }

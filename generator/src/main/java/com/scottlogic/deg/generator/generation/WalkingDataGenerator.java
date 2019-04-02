@@ -13,14 +13,14 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixF
 
 import java.util.stream.Stream;
 
-public class TreeWalkingDataGenerator implements DataGenerator {
+public class WalkingDataGenerator implements DataGenerator {
 
     private final DecisionTreeWalker treeWalker;
     private final RowSpecDataBagSourceFactory dataBagSourceFactory;
     private final FixFieldStrategyFactory walkerStrategyFactory;
 
     @Inject
-    public TreeWalkingDataGenerator(
+    public WalkingDataGenerator(
         DecisionTreeWalker treeWalker,
         RowSpecDataBagSourceFactory dataBagSourceFactory,
         FixFieldStrategyFactory walkerStrategyFactory) {
