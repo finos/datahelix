@@ -1,13 +1,11 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
+import com.scottlogic.deg.generator.restrictions.FormatRestrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,9 +28,9 @@ public class ReductiveRowSpecGenerator {
         Map<Field, FieldSpec> fieldSpecsPerField =
             reductiveState.getFieldValues().values().stream()
                 .collect(Collectors.toMap(
-                    FieldValue::getField,
+                    DataBagValue::getField,
                     fieldValue -> fieldSpecHelper.getFieldSpecForValue(fieldValue)
-                                    .withFormatRestrictions(fieldValue.getFormatRestrictions(), fieldValue.getFieldSpecSource())));
+                                    .withFormatRestrictions(new FormatRestrictions(fieldValue.getFormat()), FieldSpecSource.Empty)));//TODO PAUL
 
         RowSpec rowSpec = new RowSpec(reductiveState.getFields(), fieldSpecsPerField);
         monitor.rowSpecEmitted(rowSpec);

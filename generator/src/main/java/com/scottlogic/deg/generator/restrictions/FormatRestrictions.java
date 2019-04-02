@@ -3,6 +3,12 @@ package com.scottlogic.deg.generator.restrictions;
 import java.util.Objects;
 
 public class FormatRestrictions {
+    public FormatRestrictions(String formatString) {
+        this.formatString = formatString;
+    }
+    public FormatRestrictions() {
+    }
+
     public String formatString;
 
     @Override

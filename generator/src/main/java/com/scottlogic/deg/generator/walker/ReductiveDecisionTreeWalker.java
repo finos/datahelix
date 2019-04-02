@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -10,7 +11,6 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 
 import java.io.IOException;
@@ -59,8 +59,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Stream<FieldValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
-            .map(dataBag -> new FieldValue(fieldToFix, dataBag.getValue(), nextFieldSpec.get()));
+        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get());
 
         return FlatMappingSpliterator.flatMap(
             values,
@@ -71,7 +70,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
-        FieldValue fieldValue){
+        DataBagValue fieldValue){
 
         Merged<ConstraintNode> reducedTree = this.treePruner.pruneConstraintNode(tree, fieldValue);
 
