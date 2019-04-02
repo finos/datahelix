@@ -24,10 +24,10 @@ interpret the profile fields and rules. The latest version is 0.1.
 - **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../../generator/docs/SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
 
-    - [Epistemic Constraints](../EpistemicConstraints.md) - predicates that define any given value as being 
+    - [Predicate Constraints](..ProfileDeveloperGuide.md#Predicate-constraints) - predicates that define any given value as being 
     _valid_ or _invalid_
-    - [Grammatical Constraints](../GrammaticalConstraints.md) - used to combine or modify other constraints
-    - [Presentational Constraints](../PresentationalConstraints.md) - used by output serialisers where
+    - [Grammatical Constraints](../ProfileDeveloperGuide.md#Grammatical-constraints) - used to combine or modify other constraints
+    - [Presentational Constraints](../ProfileDeveloperGuide.md#Presentational-constraints) - used by output serialisers where
      string output is required 
      
 Here is a list of two rules comprised of one constraint each:
