@@ -30,7 +30,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
 
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(valueGenerator);
+        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(valueGenerator);
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
 
@@ -45,7 +45,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
 
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(valueGenerator);
+        RowSpecDataBagSourceFactory factory = new RowSpecDataBagSourceFactory(valueGenerator);
 
         factory.createDataBagSource(rowSpec);
 

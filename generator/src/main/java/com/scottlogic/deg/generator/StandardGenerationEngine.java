@@ -31,6 +31,7 @@ public class StandardGenerationEngine implements GenerationEngine {
 
         final Stream<GeneratedObject> generatedDataItems =
             dataGenerator.generateData(profile, analysedProfile, config)
+
                 .map(o->o.orderValues(profile.fields))
                 .limit(config.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
                 .peek(this.monitor::rowEmitted);
