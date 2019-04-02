@@ -2,15 +2,14 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
-import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
@@ -29,7 +28,7 @@ import static org.hamcrest.Matchers.*;
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-        new FieldSpecFactory(new FieldSpecMerger(), new StringGeneratorFactory()),
+        new FieldSpecFactory(new FieldSpecMerger()),
         new FieldSpecMerger()
     );
 
@@ -751,8 +750,6 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have a string generator",
-            outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
     }
 
     @Test
@@ -831,8 +828,6 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have aa string generator",
-            outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     @Test
@@ -861,8 +856,6 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have a string generator",
-            outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     @Test
@@ -891,8 +884,6 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions has a string generator",
-            outputSpec.getStringRestrictions().stringGenerator, notNullValue());
     }
 
     @Test
@@ -977,31 +968,6 @@ class ConstraintReducerTest {
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
         Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
-    }
-
-    @Test
-    void shouldReduceMatchesRegexWithSingletonConstraint() {
-        final Field field = new Field("test0");
-
-        String infinitePattern = ".*";
-        String singletonPattern = "thisisatest";
-
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-        List<AtomicConstraint> constraints = Arrays.asList(
-            new MatchesRegexConstraint(field, Pattern.compile(infinitePattern), rules()),
-            new MatchesRegexConstraint(field, Pattern.compile(singletonPattern), rules()));
-
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
-
-        FieldSpec outputSpec = testOutput.get().getSpecForField(field);
-
-        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
-            Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions have an stringGenerator",
-            outputSpec.getStringRestrictions().stringGenerator, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec string restrictions stringGenerator has nodes",
-            outputSpec.getStringRestrictions().stringGenerator.getValueCount(),
-            Matchers.greaterThan(0L));
     }
     
     @Test

@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.MatchesRegexConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -235,9 +236,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                new StringRestrictions(new StringConstraintsCollection(Collections.emptySet())) {{
-                    stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
-                }},
+                new StringRestrictions(matchesRegex("/[ab]{2}/"), true),
                 fieldSpecSource)
             .withTypeRestrictions(
                 new DataTypeRestrictions(
@@ -509,5 +508,9 @@ class FieldSpecValueGeneratorTests {
             new BigDecimal("1.8E-19"),
             new BigDecimal("1.9E-19")
             ));
+    }
+
+    private static MatchesRegexConstraint matchesRegex(String regex){
+        return new MatchesRegexConstraint(new Field("field"), Pattern.compile(regex), Collections.emptySet());
     }
 }

@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.MatchesRegexConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
@@ -17,6 +18,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
@@ -96,10 +98,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        StringRestrictions stringRestrictions =
-            new StringRestrictions(new StringConstraintsCollection(Collections.emptySet())) {{
-                stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
-            }};
+        StringRestrictions stringRestrictions = new StringRestrictions(matchesRegex("/[ab]{2}/"), false);
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
             IsOfTypeConstraint.Types.STRING
         ));
@@ -431,5 +430,9 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
         Assert.assertTrue(sources.get(lastSourceIndex).getValueCount() == 1);
         Assert.assertTrue(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0) == null);
+    }
+
+    private static MatchesRegexConstraint matchesRegex(String regex){
+        return new MatchesRegexConstraint(new Field("field"), Pattern.compile(regex), Collections.emptySet());
     }
 }

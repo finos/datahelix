@@ -111,16 +111,14 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
         StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
+        if (stringRestrictions != null) {
             Set<Object> blacklist = getBlacklist(fieldSpec);
 
-            final StringGenerator generator;
+            StringGenerator generator = stringRestrictions.createGenerator();
             if (blacklist.size() > 0) {
                 RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
-                generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
-            } else {
-                generator = stringRestrictions.stringGenerator;
+                generator = generator.intersect(blacklistGenerator);
             }
 
             return generator.asFieldValueSource();

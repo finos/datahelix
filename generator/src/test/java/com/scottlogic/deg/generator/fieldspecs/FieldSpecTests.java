@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.MatchesRegexConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -559,11 +560,12 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockStringRestrictions(boolean isEqual) {
-            super(new StringConstraintsCollection(
+            super(
                 new StringHasLengthConstraint(
                     new Field("field"),
                     10,
-                    Collections.emptySet())));
+                    Collections.emptySet()),
+                false);
             this.isEqual = isEqual;
         }
 

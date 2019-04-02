@@ -12,7 +12,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.restrictions.StringGeneratorFactory;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
@@ -27,7 +26,7 @@ class CartesianProductDecisionTreeWalkerTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
             new ConstraintReducer(
-                    new FieldSpecFactory(new FieldSpecMerger(), new StringGeneratorFactory()),
+                    new FieldSpecFactory(new FieldSpecMerger()),
                     fieldSpecMerger
             ),
             new RowSpecMerger(

@@ -21,7 +21,6 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringGeneratorFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
@@ -106,7 +105,7 @@ class ExampleProfilesViolationTests {
                     new DecisionTreeDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
-                                new FieldSpecFactory(new FieldSpecMerger(), new StringGeneratorFactory()),
+                                new FieldSpecFactory(new FieldSpecMerger()),
                                 new FieldSpecMerger()
                             ),
                             new RowSpecMerger(new FieldSpecMerger())
