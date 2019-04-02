@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.walker;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -84,7 +85,7 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        GeneratedObject generatedObject = GeneratedObject.startBuilding().set(field1, "yes", DataBagValueSource.Empty).build();
+        DataBagValue generatedObject = new DataBagValue(field1, "yes");
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
