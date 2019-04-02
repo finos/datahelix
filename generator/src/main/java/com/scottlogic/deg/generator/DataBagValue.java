@@ -26,11 +26,6 @@ public class DataBagValue {
         this(null, value, format, source);
     }
 
-    //unsafe, replace uses
-    public DataBagValue(Object value, DataBagValueSource source){
-        this(value, null, source);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
