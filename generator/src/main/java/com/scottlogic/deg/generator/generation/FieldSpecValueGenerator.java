@@ -25,7 +25,7 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
-    public Stream<GeneratedObject> generate(Field field, FieldSpec spec) {
+    public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
@@ -33,20 +33,13 @@ public class FieldSpecValueGenerator {
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
         return StreamSupport.stream(iterable.spliterator(), false)
-            .map(value -> {
-                DataBagValue dataBagValue = new DataBagValue(
-                    value,
-                    spec.getFormatRestrictions() != null
-                        ? spec.getFormatRestrictions().formatString
-                        : null,
-                    new DataBagValueSource(spec.getFieldSpecSource()));
-
-                return GeneratedObject.startBuilding()
-                    .set(
-                        field,
-                        dataBagValue)
-                    .build();
-            });
+            .map(value -> new DataBagValue(
+                field,
+                value,
+                spec.getFormatRestrictions() != null
+                    ? spec.getFormatRestrictions().formatString
+                    : null,
+                new DataBagValueSource(spec.getFieldSpecSource())));
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
