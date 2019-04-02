@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
@@ -64,7 +65,6 @@ public class BaseModule extends AbstractModule {
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
-        bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
@@ -72,11 +72,11 @@ public class BaseModule extends AbstractModule {
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
+        bind(DataGenerator.class).toProvider(DataGeneratorProvider.class);
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
-        bind(DataGenerator.class).to(TreePartitioningDataGenerator.class);
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
@@ -86,6 +86,7 @@ public class BaseModule extends AbstractModule {
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
+        bind(TreePartitioner.class).to(RelatedFieldTreePartitioner.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);
