@@ -112,6 +112,7 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 4   |
       | 5   |
 
+   @ignore #issue 769 not sure what is expected result
   Scenario: Running granularTo run against a non contradicting not granularTo should be successful
     Given foo is granular to 1
     And foo is anything but granular to 0.1
