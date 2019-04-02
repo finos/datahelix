@@ -43,10 +43,10 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 }
 ~~~
 
-Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/) in the same folder as the profile, open up a terminal, and execute the following:
+Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ~~~
-$ java -jar generator.jar generate --max-rows=100 --replace profile.json output.csv
+$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace profile.json output.csv
 Generation started at: 08:02:52
 
 Number of rows | Velocity (rows/sec) | Velocity trend
@@ -296,9 +296,9 @@ You can find out more about the various constraints the generator supports in th
 The generator supports a number of different generation modes:
 
  - **random** - generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
- - **interesting** - generates data that is typically deemed 'interesting' from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
+ - **interesting** - generates data that is typically [deemed 'interesting'](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
-The mode is specified via the `--generation-mode` option. The following example outputs 'interesting' values for the current profile:
+The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
 ~~~
 $ java -jar generator.jar generate --generation-type interesting --overwrite profile.json output.csv

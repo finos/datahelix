@@ -214,6 +214,10 @@ Is satisfied if `field` is of type represented by `value` (valid options: `decim
 
 Is satisfied if `field` is a string matching the regular expression expressed in `value`. The regular expression must match the entire string in `field`, start and end anchors `^` & `$` are ignored.
 
+The following non-capturing groups are unsupported:
+- Negative look ahead/behind, e.g. `(?!xxx)` and `(?<!xxx)`
+- Positive look ahead/behind, e.g. `(?=xxx)` and `(?<=xxx)`
+
 <div id="predicate-containingregex"></div>
 
 ### `containingRegex` _(field, value)_
@@ -223,6 +227,10 @@ Is satisfied if `field` is a string matching the regular expression expressed in
 ```
 
 Is satisfied if `field` is a string containing the regular expression expressed in `value`. Using both start and end anchors `^` & `$` make the constraint behave like `matchingRegex`.
+
+The following non-capturing groups are unsupported:
+- Negative look ahead/behind, e.g. `(?!xxx)` and `(?<!xxx)`
+- Positive look ahead/behind, e.g. `(?=xxx)` and `(?<=xxx)`
 
 <div id="predicate-oflength"></div>
 
@@ -366,6 +374,7 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 
 
 # Grammatical constraints
+<div id="Grammatical-constraints"></div>
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
@@ -420,6 +429,7 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 
 
 # Presentational Constraints
+<div id="Presentational-constraints"></div>
 
 ### `formattedAs` _(field, value)_
 
