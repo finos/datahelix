@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
@@ -22,7 +23,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
             List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec);
             if (mayBeNull(fieldSpec)){
-                setRestrictionSources.add(nullOnlySource);
+                return addNullSource(setRestrictionSources);
             }
             return setRestrictionSources;
         }
@@ -59,6 +60,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return validSources;
     }
 
+    private List<FieldValueSource> addNullSource(List<FieldValueSource> setRestrictionSources) {
+        return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
+    }
+
     private boolean mustBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() != null
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
@@ -67,10 +72,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
         List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
          if (whitelist.isEmpty()){
-             return new LinkedList<>();
+             return Collections.emptyList();
          }
 
-        return new LinkedList<>(Arrays.asList(new CannedValuesFieldValueSource(whitelist)));
+        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
