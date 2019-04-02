@@ -28,12 +28,6 @@ public class FieldSpecFactory {
         this.generatorFactory = generatorFactory;
     }
 
-    private static final Map<StandardConstraintTypes, StringGenerator>
-        standardNameToStringGenerator = new HashMap<StandardConstraintTypes, StringGenerator>() {{
-            put(StandardConstraintTypes.ISIN, new IsinStringGenerator());
-            put(StandardConstraintTypes.SEDOL, new SedolStringGenerator());
-    }};
-
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
     }
@@ -253,7 +247,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        StringGenerator generator = standardNameToStringGenerator.get(constraint.standard);
+        StringGenerator generator = generatorFactory.create(constraint, true, negate, null);
         return construct(negate ? generator.complement() : generator, negate, constraint, violated);
     }
 
