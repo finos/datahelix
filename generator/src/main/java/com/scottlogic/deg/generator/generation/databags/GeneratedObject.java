@@ -108,7 +108,7 @@ public class GeneratedObject {
         }
 
         public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
-            return this.set(field, new DataBagValue(value, source));
+            return this.set(field, new DataBagValue(field, value, null, source));
         }
 
         public GeneratedObject build() {
