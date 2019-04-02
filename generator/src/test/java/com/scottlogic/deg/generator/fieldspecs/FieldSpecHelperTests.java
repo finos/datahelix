@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -19,7 +20,7 @@ class FieldSpecHelperTests {
 
     @Test
     void getFieldSpecForValue() {
-        FieldValue input = new FieldValue(field, "value", FieldSpec.Empty);
+        DataBagValue input = new DataBagValue(field, "value");
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
@@ -32,7 +33,7 @@ class FieldSpecHelperTests {
 
     @Test
     void getFieldSpecForNullValue() {
-        FieldValue input = new FieldValue(field, null, FieldSpec.Empty);
+        DataBagValue input = new DataBagValue(field, null, null, DataBagValueSource.Empty);
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
