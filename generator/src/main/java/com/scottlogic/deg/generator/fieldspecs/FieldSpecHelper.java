@@ -11,11 +11,11 @@ import java.util.HashSet;
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue){
         if (fieldValue.getValue() == null) {
-            return getNullRequiredFieldSpec(FieldSpecSource.Empty);//TODO PAUL
+            return getNullRequiredFieldSpec(fieldValue.source);
         }
         return FieldSpec.Empty
-            .withSetRestrictions(new SetRestrictions(new HashSet<>(Collections.singletonList(fieldValue.getValue())), null), FieldSpecSource.Empty)//TODO PAUL
-            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);//TODO PAUL
+            .withSetRestrictions(new SetRestrictions(new HashSet<>(Collections.singletonList(fieldValue.getValue())), null), fieldValue.source)
+            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldValue.source);
     }
 
     private FieldSpec getNullRequiredFieldSpec(FieldSpecSource fieldSpecSource) {

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.junit.Assert;
@@ -38,7 +38,7 @@ class CombinationStrategyTester {
         GeneratedObject.DataBagBuilder builder = GeneratedObject.startBuilding();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName), "whatever", DataBagValueSource.Empty);
+            builder.set(new Field(fieldName), "whatever", FieldSpecSource.Empty);
         }
 
         return builder.build();
