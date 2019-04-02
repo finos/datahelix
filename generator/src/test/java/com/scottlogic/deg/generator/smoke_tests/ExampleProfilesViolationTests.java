@@ -102,7 +102,7 @@ class ExampleProfilesViolationTests {
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
                 StandardGenerationEngine engine = new StandardGenerationEngine(
-                    new DecisionTreeDataGenerator(
+                    new TreePartitioningDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
                                 new FieldSpecFactory(new FieldSpecMerger()),
