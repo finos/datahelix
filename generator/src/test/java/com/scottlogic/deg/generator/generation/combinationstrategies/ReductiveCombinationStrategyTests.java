@@ -13,33 +13,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class ReductiveCombinationStrategyTests {
+    final Field first_field = new Field("First Field");
+    final Field second_field = new Field("Second Field");
+
     @Test
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
         List<GeneratedObject> firstFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 10)
                 ).build()
             );
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 20)
                 ).build()
             );
         }};
         List<GeneratedObject> secondFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "B")
                 ).build()
             );
         }};
@@ -55,38 +58,38 @@ class ReductiveCombinationStrategyTests {
         List<GeneratedObject> expectedGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 10)
                 ).set(
-                    new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 10)
                 ).set(
-                    new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "B")
                 ).build()
             );
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 20)
                 ).set(
-                    new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObject.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    first_field,
+                    new DataBagValue(first_field, 20)
                 ).set(
-                    new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    second_field,
+                    new DataBagValue(second_field, "B")
                 ).build()
             );
         }};
