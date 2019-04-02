@@ -38,15 +38,13 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
             }
         }
 
-        if (violate.size() > 0) {
+        if (!violate.isEmpty()) {
             newConstraints.add(
                 violateConstraint(
                     violate.size() == 1
                     ? violate.get(0)
                     : new AndConstraint(violate)
-                )
-        );
-
+                ));
         }
         return new Rule(rule.ruleInformation, newConstraints);
     }

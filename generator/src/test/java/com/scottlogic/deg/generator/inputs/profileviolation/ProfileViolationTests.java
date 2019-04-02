@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
+import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,6 +177,26 @@ public class ProfileViolationTests {
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
     }
 
+    @Test
+    public void violate_withNoConstraints_producesViolatedEmptyProfile() throws IOException {
+        //Arrange
+        Rule rule = new RuleBuilder("Empty rule")
+            .build();
+
+        TestProfiles testProfiles = createTestProfiles(
+            "Empty rule profile",
+            Collections.singletonList(field1),
+            Collections.singletonList(new Pair<>(rule, rule))
+        );
+
+        //Act
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+
+        //Assert
+        assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
 
     @ParameterizedTest
     @MethodSource("allAtomicConstraints")
@@ -195,6 +216,30 @@ public class ProfileViolationTests {
             "Input Profile",
             Collections.singletonList(field1),
             Collections.singletonList(new Pair<>(rule, violatedRule))
+        );
+
+        //Act
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+
+        //Assert
+        assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
+        verify(mockManifestWriter, times(1))
+            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
+    }
+
+    @Test
+    public void violate_withFilteredConstraintType_producesViolatedProfile() throws IOException {
+        //Arrange
+        Rule rule = new RuleBuilder("Input Rule")
+            .withGreaterThanConstraint(field1, 100)
+            .build();
+
+        constraintsToNotViolate.add(new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class));
+
+        TestProfiles testProfiles = createTestProfiles(
+            "Input Profile",
+            Collections.singletonList(field1),
+            Collections.singletonList(new Pair<>(rule, rule))
         );
 
         //Act
