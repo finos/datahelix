@@ -298,7 +298,7 @@ The generator supports a number of different generation modes:
  - **random** - generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
  - **interesting** - generates data that is typically deemed 'interesting' from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
-The mode is specified via the `--generation-mode` option. The following example outputs 'interesting' values for the current profile:
+The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
 ~~~
 $ java -jar generator.jar generate --generation-type interesting --overwrite profile.json output.csv
