@@ -27,7 +27,8 @@ import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class ProfileViolationTests {
 
 
     private static Stream<Arguments> allAtomicConstraints() {
-        LocalDateTime sampleDate = LocalDateTime.of(2019, 1, 15, 12, 0);
+        OffsetDateTime sampleDate = OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC);
         final HashSet<Object> sampleSet = new HashSet<>(Arrays.asList("hello", 10));
 
         return Stream.of(
@@ -333,8 +334,8 @@ public class ProfileViolationTests {
     /**
      * Tests that the violator can take a profile of two simple rules and return two violated profiles with the correct
      * negation combinations.
-     *  Input: Profile with 2 fields foo and bar, 2 single atomic constraint rules affecting foo and bar
-     *  Output: 2 Profiles, one with rule 1 negated and rule 2 unaffected, one with rule 1 unaffected and rule 2 negated
+     * Input: Profile with 2 fields foo and bar, 2 single atomic constraint rules affecting foo and bar
+     * Output: 2 Profiles, one with rule 1 negated and rule 2 unaffected, one with rule 1 unaffected and rule 2 negated
      */
     @Test
     public void violate_withTwoSimpleRuleProfile_producesTwoViolatedProfiles() throws IOException {
@@ -394,6 +395,7 @@ public class ProfileViolationTests {
      * Tests that an if-then constraint nested inside the conditional of another if-then constraint violates as
      * expected.
      * In shorthand where A,B,C are atomic constraints: VIOLATE(IF(IF A THEN B) THEN C) -> (IF A THEN B) AND VIOLATE(C)
+     *
      * @throws IOException if the manifest writer fails to write.
      */
     @Test
@@ -442,8 +444,9 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF(IF A THEN B ELSE C) THEN D ELSE E)
-     *   ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (VIOLATE(IF A THEN B ELSE C) AND VIOLATE(E))
-     *   ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
+     * ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (VIOLATE(IF A THEN B ELSE C) AND VIOLATE(E))
+     * ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
+     *
      * @throws IOException if the manifest writer fails to write.
      */
     @Test
@@ -511,8 +514,9 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF A THEN (IF B THEN C ELSE D) ELSE E)
-     *   ->   (A AND VIOLATE(IF B THEN C ELSE D)) OR (VIOLATE(A) AND VIOLATE(E))
-     *   ->   (A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+     * ->   (A AND VIOLATE(IF B THEN C ELSE D)) OR (VIOLATE(A) AND VIOLATE(E))
+     * ->   (A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+     *
      * @throws IOException if the manifest writer fails to write.
      */
     @Test
@@ -575,8 +579,9 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF A THEN B ELSE (IF C THEN D ELSE E))
-     *   ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(IF C THEN D ELSE E))
-     *   ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+     * ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(IF C THEN D ELSE E))
+     * ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+     *
      * @throws IOException if the manifest writer fails to write.
      */
     @Test

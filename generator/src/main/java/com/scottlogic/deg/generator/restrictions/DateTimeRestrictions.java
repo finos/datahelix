@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 public class DateTimeRestrictions {
@@ -8,7 +8,7 @@ public class DateTimeRestrictions {
     public DateTimeLimit max;
 
     public static boolean isDateTime(Object o){
-        return o instanceof LocalDateTime;
+        return o instanceof OffsetDateTime;
     }
 
     public boolean match(Object o) {
@@ -16,7 +16,7 @@ public class DateTimeRestrictions {
             return false;
         }
 
-        LocalDateTime d = (LocalDateTime) o;
+        OffsetDateTime d = (OffsetDateTime) o;
 
         if(min != null){
             if(d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
@@ -50,15 +50,15 @@ public class DateTimeRestrictions {
     }
 
     public static class DateTimeLimit {
-        private final LocalDateTime limit;
+        private final OffsetDateTime limit;
         private final boolean inclusive;
 
-        public DateTimeLimit(LocalDateTime limit, boolean inclusive) {
+        public DateTimeLimit(OffsetDateTime limit, boolean inclusive) {
             this.limit = limit;
             this.inclusive = inclusive;
         }
 
-        public LocalDateTime getLimit() {
+        public OffsetDateTime getLimit() {
             return limit;
         }
 
@@ -81,13 +81,13 @@ public class DateTimeRestrictions {
         }
 
         public boolean isAfter(DateTimeLimit max) {
-            LocalDateTime minLimit = getReferenceTime(1);
-            LocalDateTime maxLimit = max.getReferenceTime(-1);
+            OffsetDateTime minLimit = getReferenceTime(1);
+            OffsetDateTime maxLimit = max.getReferenceTime(-1);
 
             return minLimit.isAfter(maxLimit);
         }
 
-        private LocalDateTime getReferenceTime(int nanoOffset){
+        private OffsetDateTime getReferenceTime(int nanoOffset){
             if (inclusive){
                 return limit;
             }

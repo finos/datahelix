@@ -1,20 +1,20 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
 
 public class IsAfterOrEqualToConstantDateTimeConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
-    public final LocalDateTime referenceValue;
+    public final OffsetDateTime referenceValue;
     private final Set<RuleInformation> rules;
 
-    public IsAfterOrEqualToConstantDateTimeConstraint(Field field, LocalDateTime referenceValue, Set<RuleInformation> rules) {
+    public IsAfterOrEqualToConstantDateTimeConstraint(Field field, OffsetDateTime referenceValue, Set<RuleInformation> rules) {
         this.field = field;
         this.referenceValue = referenceValue;
         this.rules= rules;

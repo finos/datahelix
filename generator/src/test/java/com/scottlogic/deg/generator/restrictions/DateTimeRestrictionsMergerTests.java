@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -52,10 +52,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now().minusDays(7), false
+            OffsetDateTime.now().minusDays(7), false
         );
         DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
@@ -73,10 +73,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now().minusDays(7), false
+            OffsetDateTime.now().minusDays(7), false
         );
         DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
@@ -94,10 +94,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now().minusDays(10), false
+            OffsetDateTime.now().minusDays(10), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
@@ -113,10 +113,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now().minusDays(10), false
+            OffsetDateTime.now().minusDays(10), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
@@ -132,7 +132,7 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ min = minDateTimeLimit; }};
@@ -150,7 +150,7 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
 
         DateTimeRestrictions.DateTimeLimit maxDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
-            LocalDateTime.now(), false
+            OffsetDateTime.now(), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
         DateTimeRestrictions right = new DateTimeRestrictions() {{ max = maxDateTimeLimit; }};
@@ -166,7 +166,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_minExclusiveSameAsMaxInclusive_shouldReturnAsUnsuccessful() {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
-        LocalDateTime referenceTime = LocalDateTime.now();
+        OffsetDateTime referenceTime = OffsetDateTime.now();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
             referenceTime, false
@@ -186,7 +186,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_minExclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
-        LocalDateTime referenceTime = LocalDateTime.now();
+        OffsetDateTime referenceTime = OffsetDateTime.now();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
             referenceTime, false
@@ -206,7 +206,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_minInclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
         DateTimeRestrictionsMerger merger = new DateTimeRestrictionsMerger();
-        LocalDateTime referenceTime = LocalDateTime.now();
+        OffsetDateTime referenceTime = OffsetDateTime.now();
 
         DateTimeRestrictions.DateTimeLimit minDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(
             referenceTime, true

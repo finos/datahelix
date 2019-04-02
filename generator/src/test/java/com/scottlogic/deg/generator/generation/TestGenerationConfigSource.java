@@ -16,6 +16,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public boolean validateProfile = false;
     public Path outputPath;
     public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
+    public boolean requireFieldTyping = true;
 
     public TestGenerationConfigSource(
         GenerationConfig.DataGenerationType generationType,
@@ -24,6 +25,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
         this.generationType = generationType;
         this.combinationStrategy = combinationStrategy;
         this.walkerType = walkerType;
+    }
+
+    @Override
+    public boolean requireFieldTyping() {
+        return requireFieldTyping;
     }
 
     @Override

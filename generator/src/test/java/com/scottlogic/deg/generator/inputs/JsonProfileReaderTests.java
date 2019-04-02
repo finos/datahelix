@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.inputs.validation.NoopProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -41,7 +40,7 @@ public class JsonProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException, InvalidProfileException {
         if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader(new NoopProfileValidator());
+            JsonProfileReader objectUnderTest = new JsonProfileReader();
             this.profile = objectUnderTest.read(this.json);
         }
 
@@ -136,8 +135,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        Assert.assertThat(this.getResultingProfile().rules, not(empty()));
-        expectRules(rule -> Assert.assertThat(rule.constraints, empty()));
+        expectInvalidProfileException();
     }
 
     @Test
@@ -550,14 +548,14 @@ public class JsonProfileReaderTests {
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
-                            equalTo(LocalDateTime.parse("2019-01-01T00:00:00.000")));
+                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
                     }),
                 typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
-                            equalTo(LocalDateTime.parse("2019-01-03T00:00:00.000")));
+                            equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
                     })
                 )
         );

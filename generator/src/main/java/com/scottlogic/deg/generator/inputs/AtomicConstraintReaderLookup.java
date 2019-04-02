@@ -9,10 +9,14 @@ import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -299,30 +303,42 @@ class AtomicConstraintReaderLookup {
         return parseDate((String)date);
     }
 
-    private static LocalDateTime unwrapDate(Object value) throws InvalidProfileException {
+    private static OffsetDateTime unwrapDate(Object value) throws InvalidProfileException {
         Object date = potentialUnwrapDate(value);
-        if (date instanceof LocalDateTime)
-            return (LocalDateTime) date;
+        if (date instanceof OffsetDateTime)
+            return (OffsetDateTime) date;
 
         throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
     }
 
-    static LocalDateTime parseDate(String value) throws InvalidProfileException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS").withResolverStyle(ResolverStyle.STRICT);
+    private static OffsetDateTime parseDate(String value) throws InvalidProfileException {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
+            .optionalStart()
+            .appendOffset("+HH", "Z")
+            .toFormatter()
+            .withResolverStyle(ResolverStyle.STRICT);
+
         try {
-            LocalDateTime parsedDateTime = LocalDateTime.parse(value, formatter);
+            TemporalAccessor temporalAccessor = formatter.parse(value);
+
+            OffsetDateTime parsedDateTime =
+                temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)
+                    ? OffsetDateTime.from(temporalAccessor)
+                    : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
+
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
                 throwDateTimeError(value);
 
             return parsedDateTime;
-        } catch (DateTimeParseException dtpe){
+        } catch (DateTimeParseException dtpe) {
             throwDateTimeError(value);
             return null;
         }
     }
 
     private static void throwDateTimeError(String profileDate) throws InvalidProfileException {
-        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS between (inclusive) 0001-01-01T00:00:00.000 and 9999-12-31T23:59:59.999", profileDate));
+        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z", profileDate));
     }
 
     ConstraintReader getByTypeCode(String typeCode) {
