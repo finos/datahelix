@@ -30,7 +30,7 @@ public class ReductiveRowSpecGenerator {
                 .collect(Collectors.toMap(
                     DataBagValue::getField,
                     fieldValue -> fieldSpecHelper.getFieldSpecForValue(fieldValue)
-                                    .withFormatRestrictions(new FormatRestrictions(fieldValue.getFormat()), FieldSpecSource.Empty)));//TODO PAUL
+                                    .withFormatRestrictions(new FormatRestrictions(fieldValue.getFormat()), fieldValue.source)));
 
         RowSpec rowSpec = new RowSpec(reductiveState.getFields(), fieldSpecsPerField);
         monitor.rowSpecEmitted(rowSpec);

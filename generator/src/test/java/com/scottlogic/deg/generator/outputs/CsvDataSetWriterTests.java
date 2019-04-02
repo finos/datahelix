@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.CsvDataSetWriter;
 import org.apache.commons.csv.CSVFormat;
@@ -137,7 +137,7 @@ public class CsvDataSetWriterTests {
     }
 
     private DataBagValue getValueWithFormat(Object value, String format) {
-        return new DataBagValue(value, format, DataBagValueSource.Empty);
+        return new DataBagValue(value, format, FieldSpecSource.Empty);
     }
 
     private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {

@@ -1,7 +1,8 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class GeneratedObjectTests {
         Field idField = new Field("id");
 
         // ACT
-        GeneratedObject objectUnderTest = GeneratedObject.startBuilding().set(idField, 3, DataBagValueSource.Empty).build();
+        GeneratedObject objectUnderTest = GeneratedObject.startBuilding().set(idField, 3, FieldSpecSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
@@ -32,8 +33,8 @@ class GeneratedObjectTests {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> GeneratedObject.startBuilding()
-                .set(idField, 3, DataBagValueSource.Empty)
-                .set(idField, 3, DataBagValueSource.Empty)
+                .set(idField, 3, FieldSpecSource.Empty)
+                .set(idField, 3, FieldSpecSource.Empty)
                 .build());
     }
 
@@ -79,12 +80,12 @@ class GeneratedObjectTests {
         Field priceField = new Field("price");
 
         GeneratedObject generatedObject1 = GeneratedObject.startBuilding()
-            .set(idField, "foo", DataBagValueSource.Empty)
+            .set(idField, "foo", FieldSpecSource.Empty)
             .build();
 
         GeneratedObject generatedObject2 = GeneratedObject.startBuilding()
-            .set(idField, "foo", DataBagValueSource.Empty)
-            .set(priceField, 4, DataBagValueSource.Empty)
+            .set(idField, "foo", FieldSpecSource.Empty)
+            .set(priceField, 4, FieldSpecSource.Empty)
             .build();
 
         // ACT / ASSERT

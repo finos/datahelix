@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
+
 import java.util.Objects;
 
 public class DataBagValue {
@@ -7,9 +9,9 @@ public class DataBagValue {
     public final Object value;
     public final String format;
 
-    public final DataBagValueSource source;
+    public final FieldSpecSource source;
 
-    public DataBagValue(Field field, Object value, String format, DataBagValueSource source){
+    public DataBagValue(Field field, Object value, String format, FieldSpecSource source){
         this.field = field;
         this.value = value;
         this.format = format;
@@ -18,11 +20,11 @@ public class DataBagValue {
 
     //unsafe, only used in test
     public DataBagValue(Field field, Object value){
-        this(field, value, null, DataBagValueSource.Empty);
+        this(field, value, null, FieldSpecSource.Empty);
     }
 
     //unsafe, usage should be replaced
-    public DataBagValue(Object value, String format, DataBagValueSource source){
+    public DataBagValue(Object value, String format, FieldSpecSource source){
         this(null, value, format, source);
     }
 
@@ -60,7 +62,7 @@ public class DataBagValue {
         return format;
     }
 
-    public DataBagValueSource getSource() {
+    public FieldSpecSource getSource() {
         return source;
     }
 

@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Set;
@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 public class CellSource {
     public final Field field;
-    private final DataBagValueSource source;
+    private final FieldSpecSource source;
 
     public CellSource(DataBagValue value, Field field) {
         this.field = field;
-        this.source = value.source != null ? value.source : DataBagValueSource.Empty;
+        this.source = value.source != null ? value.source : FieldSpecSource.Empty;
     }
 
     public Set<AtomicConstraint> getConstraints(){
