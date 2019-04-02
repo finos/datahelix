@@ -1,17 +1,16 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ReductiveState {
 
     private final ProfileFields fields;
-    private final Map<Field, FieldValue> fieldValues;
+    private final Map<Field, DataBagValue> fieldValues;
 
     public ReductiveState(ProfileFields fields) {
         this(fields, new HashMap<>());
@@ -19,13 +18,13 @@ public class ReductiveState {
 
     private ReductiveState(
         ProfileFields fields,
-        Map<Field, FieldValue> fieldValues) {
+        Map<Field, DataBagValue> fieldValues) {
         this.fields = fields;
         this.fieldValues = fieldValues;
     }
 
-    public ReductiveState withFixedFieldValue(FieldValue value) {
-        Map<Field, FieldValue> newFixedFieldsMap = new HashMap<>(fieldValues);
+    public ReductiveState withFixedFieldValue(DataBagValue value) {
+        Map<Field, DataBagValue> newFixedFieldsMap = new HashMap<>(fieldValues);
         newFixedFieldsMap.put(value.getField(), value);
 
         return new ReductiveState(fields, newFixedFieldsMap);
@@ -44,7 +43,7 @@ public class ReductiveState {
         return toString(false);
     }
 
-    public Map<Field, FieldValue> getFieldValues() {
+    public Map<Field, DataBagValue> getFieldValues() {
         return this.fieldValues;
     }
 
@@ -54,7 +53,7 @@ public class ReductiveState {
             : String.join(", ", this.fieldValues.values()
             .stream()
             .sorted(Comparator.comparing(ff -> ff.getValue().toString()))
-            .map(FieldValue::toString)
+            .map(DataBagValue::toString)
             .collect(Collectors.toList()));
     }
 

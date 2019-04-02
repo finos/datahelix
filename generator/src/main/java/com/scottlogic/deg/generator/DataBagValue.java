@@ -16,14 +16,17 @@ public class DataBagValue {
         this.source = source;
     }
 
+    //unsafe, only used in test
     public DataBagValue(Field field, Object value){
         this(field, value, null, DataBagValueSource.Empty);
     }
 
+    //unsafe, usage should be replaced
     public DataBagValue(Object value, String format, DataBagValueSource source){
         this(null, value, format, source);
     }
 
+    //unsafe, replace uses
     public DataBagValue(Object value, DataBagValueSource source){
         this(value, null, source);
     }
