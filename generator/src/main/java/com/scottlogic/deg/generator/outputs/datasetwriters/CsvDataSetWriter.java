@@ -48,11 +48,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     }
 
     private static Object extractCellValue(DataBagValue cell) {
-        try {
-            return cell.getValue();
-        } catch (InvalidProfileException e) {
-            return new RuntimeException(e);
-        }
+        return cell.getFormattedValue();
     }
 
     private static Object wrapInQuotesIfString(Object value){

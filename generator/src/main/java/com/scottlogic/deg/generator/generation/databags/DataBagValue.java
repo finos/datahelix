@@ -37,16 +37,12 @@ public class DataBagValue {
         return Objects.hash(value, format);
     }
 
-    public Object getValue() throws InvalidProfileException {
+    public Object getFormattedValue() {
         if (format == null || value == null){
             return value;
         }
 
-        try {
-            return String.format(format, value);
-        } catch (Exception e) {
-            throw new InvalidProfileException(String.format("Unable to format value `%s` with format expression `%s`: %s", value, format, e.getMessage()));
-        }
+        return String.format(format, value);
     }
 }
 

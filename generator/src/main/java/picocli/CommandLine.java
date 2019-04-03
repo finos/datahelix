@@ -5186,7 +5186,7 @@ public class CommandLine {
          * the matched option for each of the option parameters encountered.
          * </p><p>
          * For multi-value options, the {@code type} may be an array, a {@code Collection} or a {@code Map}. In this case
-         * the parser will get the data structure by calling {@link #getValue() getValue} and modify the contents of this data structure.
+         * the parser will get the data structure by calling {@link #getValue() getFormattedValue} and modify the contents of this data structure.
          * (In the case of arrays, the array is replaced with a new instance with additional elements.)
          * </p><p>
          * Before calling the setter, picocli converts the option parameter value from a String to the option parameter's type.
@@ -5213,7 +5213,7 @@ public class CommandLine {
          * to that field or method: this field is set (or the method is invoked) when the option is matched and
          * {@link #setValue(Object) setValue} is called.
          * Programmatically constructed {@code OptionSpec} instances will remember the value passed to the
-         * {@link #setValue(Object) setValue} method so it can be retrieved with the {@link #getValue() getValue} method.
+         * {@link #setValue(Object) setValue} method so it can be retrieved with the {@link #getValue() getFormattedValue} method.
          * This behaviour can be customized by installing a custom {@link IGetter} and {@link ISetter} on the {@code OptionSpec}.
          * </p>
          * @since 3.0 */
@@ -5384,7 +5384,7 @@ public class CommandLine {
          * arguments starting from the current index. The parser will call {@link #setValue(Object) setValue} on
          * the {@code PositionalParamSpec} for each of the parameters encountered.
          * For multi-value positional parameters, the {@code type} may be an array, a {@code Collection} or a {@code Map}. In this case
-         * the parser will get the data structure by calling {@link #getValue() getValue} and modify the contents of this data structure.
+         * the parser will get the data structure by calling {@link #getValue() getFormattedValue} and modify the contents of this data structure.
          * (In the case of arrays, the array is replaced with a new instance with additional elements.)
          * </p><p>
          * Before calling the setter, picocli converts the positional parameter value from a String to the parameter's type.
@@ -5410,7 +5410,7 @@ public class CommandLine {
          * it is "bound" to that field or method: this field is set (or the method is invoked) when the position is matched
          * and {@link #setValue(Object) setValue} is called.
          * Programmatically constructed {@code PositionalParamSpec} instances will remember the value passed to the
-         * {@link #setValue(Object) setValue} method so it can be retrieved with the {@link #getValue() getValue} method.
+         * {@link #setValue(Object) setValue} method so it can be retrieved with the {@link #getValue() getFormattedValue} method.
          * This behaviour can be customized by installing a custom {@link IGetter} and {@link ISetter} on the {@code PositionalParamSpec}.
          * </p>
          * @since 3.0 */
@@ -6412,26 +6412,26 @@ public class CommandLine {
         }
         /** Returns the option with the specified short name, or {@code null} if no option with that name was matched
          * on the command line.
-         * <p>Use {@link OptionSpec#getValue() getValue} on the returned {@code OptionSpec} to get the matched value (or values),
+         * <p>Use {@link OptionSpec#getValue() getFormattedValue} on the returned {@code OptionSpec} to get the matched value (or values),
          * converted to the type of the option. Alternatively, use {@link OptionSpec#stringValues() stringValues}
          * to get the matched String values after they were {@linkplain OptionSpec#splitRegex() split} into parts, or
          * {@link OptionSpec#originalStringValues() originalStringValues} to get the original String values that were
          * matched on the command line, before any processing.
          * </p><p>To get the {@linkplain OptionSpec#defaultValue() default value} of an option that was
          * {@linkplain #hasMatchedOption(char) <em>not</em> matched} on the command line, use
-         * {@code parseResult.commandSpec().findOption(shortName).getValue()}. </p>
+         * {@code parseResult.commandSpec().findOption(shortName).getFormattedValue()}. </p>
          * @see CommandSpec#findOption(char)  */
         public OptionSpec matchedOption(char shortName) { return CommandSpec.findOption(shortName, matchedOptions); }
 
         /** Returns the option with the specified name, or {@code null} if no option with that name was matched on the command line.
-         * <p>Use {@link OptionSpec#getValue() getValue} on the returned {@code OptionSpec} to get the matched value (or values),
+         * <p>Use {@link OptionSpec#getValue() getFormattedValue} on the returned {@code OptionSpec} to get the matched value (or values),
          * converted to the type of the option. Alternatively, use {@link OptionSpec#stringValues() stringValues}
          * to get the matched String values after they were {@linkplain OptionSpec#splitRegex() split} into parts, or
          * {@link OptionSpec#originalStringValues() originalStringValues} to get the original String values that were
          * matched on the command line, before any processing.
          * </p><p>To get the {@linkplain OptionSpec#defaultValue() default value} of an option that was
          * {@linkplain #hasMatchedOption(String) <em>not</em> matched} on the command line, use
-         * {@code parseResult.commandSpec().findOption(String).getValue()}. </p>
+         * {@code parseResult.commandSpec().findOption(String).getFormattedValue()}. </p>
          * @see CommandSpec#findOption(String)
          * @param name used to search the matched options. May be an alias of the option name that was actually specified on the command line.
          *      The specified name may include option name prefix characters or not. */

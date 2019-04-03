@@ -45,7 +45,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
             String fieldName = fieldNameIterator.next().name;
             DataBagValue dataBagValue = dataBagIterator.next();
 
-            Object value = dataBagValue.getValue();
+            Object value = dataBagValue.getFormattedValue();
 
             if (value == null) {
                 rowNode.put(fieldName, (String) null);
