@@ -59,7 +59,7 @@ class ReductiveDataGeneratorTests {
         fixFieldStrategy = mock(FixFieldStrategy.class);
         when(fixFieldStrategy.getNextFieldToFix(any(), any())).thenReturn(field1, field2);
         fixFieldStrategyFactory = mock(FixFieldStrategyFactory.class);
-        when(fixFieldStrategyFactory.getWalkerStrategy(any(), any(), any())).thenReturn(fixFieldStrategy);
+        when(fixFieldStrategyFactory.getWalkerStrategy(any(), any())).thenReturn(fixFieldStrategy);
 
 
         walker = new ReductiveDataGenerator(
@@ -78,7 +78,7 @@ class ReductiveDataGeneratorTests {
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(eq(rootNode), any())).thenReturn(Optional.empty());
 
-        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree, mock(GenerationConfig.class)).collect(Collectors.toList());
+        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
@@ -98,7 +98,7 @@ class ReductiveDataGeneratorTests {
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 
-        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree, mock(GenerationConfig.class)).collect(Collectors.toList());;
+        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());;
 
         verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());

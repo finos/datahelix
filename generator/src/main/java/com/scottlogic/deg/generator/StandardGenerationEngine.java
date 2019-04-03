@@ -30,7 +30,7 @@ public class StandardGenerationEngine implements GenerationEngine {
         final DecisionTree analysedProfile = this.decisionTreeGenerator.analyse(profile).getMergedTree();
 
         final Stream<GeneratedObject> generatedDataItems =
-            dataGenerator.generateData(profile, analysedProfile, config)
+            dataGenerator.generateData(profile, analysedProfile)
 
                 .map(o->o.orderValues(profile.fields))
                 .limit(config.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))

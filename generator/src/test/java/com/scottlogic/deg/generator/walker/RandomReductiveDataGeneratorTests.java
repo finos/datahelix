@@ -25,7 +25,6 @@ class RandomReductiveDataGeneratorTests {
     private RestartingDataGeneratorDecorator walker;
     private ReductiveDataGenerator underlyingWalker;
     Profile profile = mock(Profile.class);
-    GenerationConfig config = mock(GenerationConfig.class);
 
     @BeforeEach
     public void beforeEach(){
@@ -44,14 +43,14 @@ class RandomReductiveDataGeneratorTests {
      */
     @Test
     public void shouldProduceTwoRowsOfRandomDataOneGeneratedObjectFromEachIteration() {
-        when(underlyingWalker.generateData(profile, tree, config)).thenReturn(
+        when(underlyingWalker.generateData(profile, tree)).thenReturn(
             Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree, config).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(2)).generateData(profile, tree, config);
+        verify(underlyingWalker, times(2)).generateData(profile, tree);
         Assert.assertThat(
             result.stream().map(GeneratedObject::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "second-iteration-first-random-row"));
@@ -59,15 +58,15 @@ class RandomReductiveDataGeneratorTests {
 
     @Test
     public void shouldProduceNoData() {
-        when(underlyingWalker.generateData(profile, tree, config)).thenReturn(
+        when(underlyingWalker.generateData(profile, tree)).thenReturn(
             Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
             Stream.empty(),
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree, config).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(3)).generateData(profile, tree, config);
+        verify(underlyingWalker, times(3)).generateData(profile, tree);
         Assert.assertThat(
             result.stream().map(GeneratedObject::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "third-iteration-first-random-row"));
@@ -75,13 +74,13 @@ class RandomReductiveDataGeneratorTests {
 
     @Test
     public void shouldAccommodateNoDataInSubsequentIteration() {
-        when(underlyingWalker.generateData(profile, tree, config)).thenReturn(
+        when(underlyingWalker.generateData(profile, tree)).thenReturn(
             Stream.empty()
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree, config).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(1)).generateData(profile, tree, config);
+        verify(underlyingWalker, times(1)).generateData(profile, tree);
         Assert.assertThat(
             result.stream().iterator().hasNext(),
             is(false));
