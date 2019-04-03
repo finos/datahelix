@@ -288,9 +288,10 @@ Feature: User can specify that a value is so formatted
       | 1                        | null   |
       | 2018-02-01T16:17:18.199Z | null   |
 
-  Scenario: Running an 'formattedAs' request with a null value should not attempt to format the data
+  @ignore #266, formattedAs %b doesn't work correctly with null values
+  Scenario: Running an 'formattedAs' request with a null value should return false
     Given foo is null
     And foo is formatted as "%b"
     Then the following data should be generated:
-      | foo  |
-      | null |
+      | foo   |
+      | false |
