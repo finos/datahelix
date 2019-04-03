@@ -24,28 +24,24 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException, InvalidProfileException {
+    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
-    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException, InvalidProfileException {
-        try {
-            return generatedObjects
-                .collect(Collectors.toList())
-                .stream()
-                .map(genObj -> {
+    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
+        return generatedObjects
+            .collect(Collectors.toList())
+            .stream()
+            .map(genObj -> {
 
-                    if (genObj == null) {
-                        throw new IllegalStateException("GeneratedObject is null");
-                    }
+                if (genObj == null) {
+                    throw new IllegalStateException("GeneratedObject is null");
+                }
 
-                    return genObj.values
-                        .stream()
-                        .map(DataBagValue::getFormattedValue)
-                        .collect(Collectors.toList());
-                }).collect(Collectors.toList());
-        } catch (RuntimeException exc){
-            throw (InvalidProfileException)exc.getCause();
-        }
+                return genObj.values
+                    .stream()
+                    .map(DataBagValue::getFormattedValue)
+                    .collect(Collectors.toList());
+            }).collect(Collectors.toList());
     }
 }

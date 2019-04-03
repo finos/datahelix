@@ -8,5 +8,5 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public interface OutputTarget {
-    void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException, InvalidProfileException;
+    void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IOException;
 }
