@@ -1,21 +1,16 @@
 package com.scottlogic.deg.schemas.v0_1;
 
 import com.scottlogic.deg.schemas.common.ValidationResult;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
-import javafx.util.Pair;
 import org.leadpony.justify.api.JsonSchema;
 import org.leadpony.justify.api.JsonValidationService;
 import org.leadpony.justify.api.Problem;
 import org.leadpony.justify.api.ProblemHandler;
 
 import javax.json.stream.JsonParser;
-import javax.print.DocFlavor;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Used to validate a DataHelix Profile JSON file.
