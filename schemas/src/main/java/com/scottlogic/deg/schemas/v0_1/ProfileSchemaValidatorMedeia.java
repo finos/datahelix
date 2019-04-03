@@ -29,15 +29,13 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
         }
     }
 
-    @Override
-    public ValidationResult validateProfile(InputStream profileStream) {
+    private ValidationResult validateProfile(InputStream profileStream) {
         return validateProfile(
             this.getClass().getResourceAsStream(datahelixProfileSchema),
             profileStream);
     }
 
-    @Override
-    public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");

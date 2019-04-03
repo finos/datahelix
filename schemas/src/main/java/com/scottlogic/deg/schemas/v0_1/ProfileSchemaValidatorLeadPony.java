@@ -57,16 +57,14 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
      *
      * @return the result of validating the provided profile
      */
-    @Override
-    public ValidationResult validateProfile(InputStream profileStream) {
+    private ValidationResult validateProfile(InputStream profileStream) {
         return validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), profileStream);
     }
 
     /**
      * @return the result of validating the provided DataHelix Profile
      */
-    @Override
-    public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");
