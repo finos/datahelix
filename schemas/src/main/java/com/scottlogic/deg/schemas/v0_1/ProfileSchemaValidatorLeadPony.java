@@ -34,9 +34,9 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
             profileJsonLines = readAllLines(data);
             return validateProfile(new ByteArrayInputStream(data));
         } catch (IOException e) {
-            List<String> errMsgs = new ArrayList<>();
-            errMsgs.add(e.getLocalizedMessage());
-            return new ValidationResult(errMsgs);
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add(e.getLocalizedMessage());
+            return new ValidationResult(errorMessages);
         }
     }
 
@@ -92,7 +92,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
 
             //Add all of the problems as error messages
             if(!problems.isEmpty()) {
-                HashMap<Integer, String> problemDictionary = new HashMap<>();
+                TreeMap<Integer, String> problemDictionary = new TreeMap<>();
                 extractProblems(problems, problemDictionary);
                 errorMessages.addAll(formatProblems(problemDictionary));
             }
@@ -108,13 +108,13 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
         return new ValidationResult(errorMessages);
     }
 
-    private void extractProblems(List<Problem> problems, HashMap<Integer, String> problemDictionary) {
+    private void extractProblems(List<Problem> problems, TreeMap<Integer, String> problemDictionary) {
         for (Problem problem : problems) {
             extractProblem(problem, problemDictionary);
         }
     }
 
-    private void extractProblem(Problem problem, HashMap<Integer, String> problemDictionary) {
+    private void extractProblem(Problem problem, TreeMap<Integer, String> problemDictionary) {
         if (!problem.hasBranches()) {
             int lineNumber = (int)problem.getLocation().getLineNumber();
             String formattedMessage = "- " + problem.getMessage() + "\n";
@@ -125,7 +125,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
         extractProblems(problem.getBranch(0), problemDictionary);
     }
 
-    private List<String> formatProblems(HashMap<Integer, String> problemDictionary) {
+    private List<String> formatProblems(TreeMap<Integer, String> problemDictionary) {
         List<String> outputList = new ArrayList<>();
         String messageFormat = "Problem found at line %d\n... %s ...\nSuggested fix:\n%s";
 
