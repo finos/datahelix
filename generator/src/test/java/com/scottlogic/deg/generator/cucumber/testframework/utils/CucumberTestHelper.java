@@ -34,18 +34,14 @@ public class CucumberTestHelper {
             return;
         }
 
-        try {
-            Module concatenatedModule =
-                Modules
-                    .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
-                    .with(new CucumberTestModule(testState));
+        Module concatenatedModule =
+            Modules
+                .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
+                .with(new CucumberTestModule(testState));
 
-            Injector injector = Guice.createInjector(concatenatedModule);
+        Injector injector = Guice.createInjector(concatenatedModule);
 
-            injector.getInstance(GenerateExecute.class).run();
-        } catch (Exception e) {
-            testState.addException(e);
-        }
+        injector.getInstance(GenerateExecute.class).run();
 
         testState.generationHasAlreadyOccured = true;
     }
