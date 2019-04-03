@@ -214,6 +214,10 @@ Is satisfied if `field` is of type represented by `value` (valid options: `decim
 
 Is satisfied if `field` is a string matching the regular expression expressed in `value`. The regular expression must match the entire string in `field`, start and end anchors `^` & `$` are ignored.
 
+The following non-capturing groups are unsupported:
+- Negative look ahead/behind, e.g. `(?!xxx)` and `(?<!xxx)`
+- Positive look ahead/behind, e.g. `(?=xxx)` and `(?<=xxx)`
+
 <div id="predicate-containingregex"></div>
 
 ### `containingRegex` _(field, value)_
@@ -223,6 +227,10 @@ Is satisfied if `field` is a string matching the regular expression expressed in
 ```
 
 Is satisfied if `field` is a string containing the regular expression expressed in `value`. Using both start and end anchors `^` & `$` make the constraint behave like `matchingRegex`.
+
+The following non-capturing groups are unsupported:
+- Negative look ahead/behind, e.g. `(?!xxx)` and `(?<!xxx)`
+- Positive look ahead/behind, e.g. `(?=xxx)` and `(?<=xxx)`
 
 <div id="predicate-oflength"></div>
 
@@ -366,6 +374,7 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 
 
 # Grammatical constraints
+<div id="Grammatical-constraints"></div>
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
@@ -420,6 +429,7 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 
 
 # Presentational Constraints
+<div id="Presentational-constraints"></div>
 
 ### `formattedAs` _(field, value)_
 
@@ -443,6 +453,11 @@ The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/
 
 ## JetBrains IntelliJ
 
+**_Although IntelliJ tries to validate the profile json files against the schema, it incorrectly shows the whol profile as invalid instead of specific errors._**
+
+**_For this reason we recommend using Visual Studio Code for writing and editing profiles._**
+
+
 To use the DataHelix profile JSON schema in IntelliJ we need to  set up the intellij editor to validate all json files under the `json` and/or `examples` directories against the `datahelix.schema.json` schema file.
 
 To setup IntelliJ to validate json files against the schema follow these steps:
@@ -464,10 +479,6 @@ Now when you open a json file from the `json` directory in IntelliJ, it will be 
 
 ## Microsoft Visual Studio Code
 
-**_Although Visual Studio Code appears to validate the profile json files against the schema, it incorrectly shows some profile files as valid when there are syntactic errors in them._**
-
-**_For this reason the use of Visual Stuido Code is not recommended for DataHelix development._**
-
 To enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
 
 To do this:
@@ -481,7 +492,7 @@ To do this:
     Edit in settings.json
     ```
 1. Click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileWatch"` value with an appropriate value for your configuration):
+1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileMatch"` value with an appropriate value for your configuration):
     ```
       "json.schemas": [
         {
@@ -492,7 +503,9 @@ To do this:
         }
       ]
     ```
-    to verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
+    Alternatively you can configure this to any naming convention you want for profile files, for example `"*.profile.json"`.
+
+    To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
 1. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
 
 
