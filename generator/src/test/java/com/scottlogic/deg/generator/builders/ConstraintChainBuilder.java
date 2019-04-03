@@ -9,7 +9,10 @@ import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Defines a builder for a class that can contain constraints.
@@ -53,9 +56,9 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
      * Wraps the current constraint in a ViolatedAtomicConstraint.
      * @return New builder with the violated head constraint and the same tail.
      */
-    public ConstraintChainBuilder<T> violate() {
+    public ConstraintChainBuilder<T> wrapAtomicWithViolate() {
         if (!(headConstraint instanceof AtomicConstraint)) {
-            throw new RuntimeException("Can only mark atomic constraints as violated.");
+            return this;
         }
 
         return this.set(new ViolatedAtomicConstraint((AtomicConstraint) headConstraint));
@@ -63,6 +66,10 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
 
     public ConstraintChainBuilder<T> appendBuilder(ConstraintChainBuilder<? extends Constraint> builder) {
         return this.saveAndSet(builder.headConstraint, builder.tailConstraints);
+    }
+
+    public ConstraintChainBuilder<T> appendBuilder(BaseConstraintBuilder<? extends Constraint> builder) {
+        return this.saveAndSet(builder.build());
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
@@ -100,6 +107,22 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
 
     public ConstraintChainBuilder<T> withOfTypeConstraint(Field fooField, IsOfTypeConstraint.Types requiredType) {
         return saveAndSet(new IsOfTypeConstraint(fooField, requiredType, null));
+    }
+
+    public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
+        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime, null));
+    }
+
+    public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
+        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, dateTime, null));
+    }
+
+    public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {
+        return saveAndSet(new MatchesRegexConstraint(field, pattern, null));
+    }
+
+    public ConstraintChainBuilder<T> withContainsRegexConstraint(Field field, Pattern pattern) {
+        return saveAndSet(new ContainsRegexConstraint(field, pattern, null));
     }
 
     public ConstraintChainBuilder<T> withAtomicConstraint(
