@@ -444,3 +444,15 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | null |
       | "1"  |
+
+  Scenario: ofLength with maximum permitted value should be successful
+    Given foo is of length 1000
+    And the generator can generate at most 1 rows
+    And the generation strategy is random
+    And foo is anything but null
+    Then foo contains strings of length between 1000 and 1000 inclusively
+
+@ignore #awaiting rest of #848
+  Scenario: ofLength with value larger than maximum permitted should fail with an error message
+    Given foo is of length 1001
+    Then the profile is invalid because "'value' property is out of upper bound"
