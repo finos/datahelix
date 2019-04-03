@@ -16,13 +16,7 @@ public class FixFieldStrategyFactory {
 
     public FixFieldStrategy getWalkerStrategy(
         Profile profile,
-        DecisionTree tree,
-        GenerationConfig generationConfig){
-
-        if (generationConfig.getWalkerType() != GenerationConfig.TreeWalkerType.REDUCTIVE){
-            return null;
-        }
-
+        DecisionTree tree){
         return new HierarchicalDependencyFixFieldStrategy(profile, analyser, tree);
     }
 }

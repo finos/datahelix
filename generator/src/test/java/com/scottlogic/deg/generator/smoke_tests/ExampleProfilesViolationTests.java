@@ -113,14 +113,14 @@ class ExampleProfilesViolationTests {
                         new JavaUtilRandomNumberGenerator()));
 
                 WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
-                    rowSpecDataBagSourceFactory);
+                    rowSpecDataBagSourceFactory, config);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(
                     new PartitioningDataGeneratorDecorator(
                         walkingDataGenerator,
                         new RelatedFieldTreePartitioner(),
-                        new MostProlificConstraintOptimiser()),
+                        new MostProlificConstraintOptimiser(), config),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
