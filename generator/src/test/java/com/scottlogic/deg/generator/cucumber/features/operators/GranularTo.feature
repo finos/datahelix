@@ -97,3 +97,86 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
     Given foo is granular to null
     Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
+
+
+  Scenario: Running granularTo against a non contradicting granularTo should be successful
+    Given foo is granular to 1
+    And foo is granular to 1
+    And foo is greater than 0
+    And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo |
+      | 1   |
+      | 2   |
+      | 3   |
+      | 4   |
+      | 5   |
+
+   @ignore #issue 769 not sure what is expected result
+  Scenario: Running granularTo run against a non contradicting not granularTo should be successful
+    Given foo is granular to 1
+    And foo is anything but granular to 0.1
+    And foo is greater than 0
+    And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo |
+      | 1   |
+      | 2   |
+      | 3   |
+      | 4   |
+      | 5   |
+
+  @ignore #issue 769 not sure what is expected result
+  Scenario: Running not granularTo against a non contradicting not granularTo should be successful
+    Given foo is anything but granular to 1
+    And foo is anything but granular to 0.1
+    And the generator can generate at most 4 rows
+    Then the following data should be generated:
+      | foo |
+      | 0.2 |
+      | 0.3 |
+      | 0.4 |
+      | 0.5 |
+
+  @ignore #issue 769 not sure what is expected result
+  Scenario: Running granularTo run against a contradicting granularTo should only generate string, temporal null and integers
+    Given foo is granular to 1
+    And foo is anything but granular to 1
+    And foo is greater than 0
+    And the generator can generate at most 2 rows
+    Then the following data should be generated:
+
+  @ignore #issue 769 not sure what is expected result
+  Scenario: Running granularTo against a non contradicting after should be successful
+    Given foo is granular to 1
+    And foo is after 2018-09-01T00:00:00.001Z
+    And foo is greater than 0
+    And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo                      |
+      | 1                        |
+      | 2                        |
+      | 2018-09-01T00:00:00.002Z |
+      | 2018-09-01T00:00:00.003Z |
+      | 2018-09-01T00:00:00.004Z |
+
+  @ignore #issue 769 not sure what is expected result
+  Scenario: Running granularTo against a non contradicting not after should be successful
+    Given foo is granular to 1
+    And foo is anything but after 2018-09-01T00:00:00.005Z
+    And foo is greater than 0
+    And the generator can generate at most 5 rows
+    Then the following data should be generated:
+      | foo                      |
+      | 1                        |
+      | 2                        |
+      | 2018-09-01T00:00:00.001Z |
+      | 2018-09-01T00:00:00.002Z |
+      | 2018-09-01T00:00:00.003Z |
+
+
+
+
+
+
+
