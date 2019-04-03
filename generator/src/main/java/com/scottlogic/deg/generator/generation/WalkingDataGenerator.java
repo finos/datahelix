@@ -15,17 +15,19 @@ public class WalkingDataGenerator implements DataGenerator {
 
     private final DecisionTreeWalker treeWalker;
     private final RowSpecDataBagSourceFactory dataBagSourceFactory;
+    private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
         DecisionTreeWalker treeWalker,
-        RowSpecDataBagSourceFactory dataBagSourceFactory) {
+        RowSpecDataBagSourceFactory dataBagSourceFactory, GenerationConfig generationConfig) {
         this.treeWalker = treeWalker;
         this.dataBagSourceFactory = dataBagSourceFactory;
+        this.generationConfig = generationConfig;
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile, GenerationConfig generationConfig) {
+    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
         Stream<RowSpec> walked = treeWalker.walk(analysedProfile);
 
         return new ConcatenatingDataBagSource(

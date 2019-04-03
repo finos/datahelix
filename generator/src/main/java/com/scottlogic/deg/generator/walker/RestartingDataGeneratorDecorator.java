@@ -17,8 +17,8 @@ public class RestartingDataGeneratorDecorator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile, GenerationConfig generationConfig) {
-        Optional<GeneratedObject> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile, generationConfig);
+    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
+        Optional<GeneratedObject> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile);
         //noinspection OptionalIsPresent
         if (!firstGeneratedObject.isPresent()) {
             return Stream.empty();
@@ -27,13 +27,13 @@ public class RestartingDataGeneratorDecorator implements DataGenerator {
         return Stream.concat(
             Stream.of(firstGeneratedObject.get()),
             Stream.generate(() ->
-                getFirstGeneratedObjectFromIteration(profile, analysedProfile, generationConfig))
+                getFirstGeneratedObjectFromIteration(profile, analysedProfile))
                 .filter(Optional::isPresent)
                 .map(Optional::get));
     }
 
-    private Optional<GeneratedObject> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile, GenerationConfig generationConfig){
-        return underlyingWalker.generateData(profile, analysedProfile, generationConfig)
+    private Optional<GeneratedObject> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile){
+        return underlyingWalker.generateData(profile, analysedProfile)
             .findFirst();
     }
 

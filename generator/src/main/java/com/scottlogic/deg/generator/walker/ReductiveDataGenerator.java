@@ -47,8 +47,8 @@ public class ReductiveDataGenerator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree tree, GenerationConfig generationConfig) {
-        FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getWalkerStrategy(profile, tree, generationConfig);
+    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree tree) {
+        FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getWalkerStrategy(profile, tree);
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
