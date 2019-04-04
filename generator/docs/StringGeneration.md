@@ -64,10 +64,10 @@ In the above `A` looks like:
 
 ### `State`
 A state holds the following properties and are represented as circles in the above graph
-- `accept: boolean` - ?
-- `transitions: HashSet<Transition>` - ?
-- `number: int` - ?
-- `id: int` - ?
+- `accept: boolean` - is this a termination state, can string production stop here?
+- `transitions: HashSet<Transition>` - which transitions, if any, follow this state
+- `number: int` - the number of this state
+- `id: int` - the id of this state
 
 In the above `s0` looks like:
 
