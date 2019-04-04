@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import org.junit.Assert;
