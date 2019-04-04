@@ -167,7 +167,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 12 |
       | 0  |
-    Then I am presented with an error message
+    Then the profile is invalid because "Unexpected character \('1' \(code 49\)\) in numeric value: expected digit \(0-9\) to follow minus sign, for valid numeric value\n at \[Source: \(String\)\"\+12\"; line: 1, column: 3\]"
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with invalid decimal values should fail with an appropriate error message
@@ -184,7 +184,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 12.01 |
       | 0     |
-    Then I am presented with an error message
+    Then the profile is invalid because "Unexpected character \('1' \(code 49\)\) in numeric value: expected digit \(0-9\) to follow minus sign, for valid numeric value\n at \[Source: \(String\)\"\+12\"; line: 1, column: 3\]"
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with valid date values should be successful
@@ -222,7 +222,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 2010-01-01T00:00:00.000Z |
       | 2010-12-31T23:59:00.000Z |
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with invalid date formats should fail with an appropriate error message
@@ -239,7 +239,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 01-01-2010T00:00:00.000Z |
       | 2010-12-31T23:59:00.000Z |
-    Then I am presented with an error message
+    Then the profile is invalid because "Unable to determine correct type for `01-01-2010T00:00:00.000Z`.\nEnsure strings are wrapped in double-quotes."
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with null values (empty strings) should be successful

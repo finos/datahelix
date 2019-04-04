@@ -184,7 +184,7 @@ Feature: Values can be specified by using if, then and else constraints
         "else": { "field": "bar", "is": "equalTo", "value": 10 }
       }
       """
-    Then I am presented with an error message
+    Then the profile is invalid because "Constraint is null"
     And no data is created
 
   Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
@@ -396,7 +396,7 @@ Feature: Values can be specified by using if, then and else constraints
         "else": { "field": "bar", "is": "equalTo", "value": "c" }
       }
       """
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[bar\]: Couldn't recognise 'values' property, it must not contain 'null'"
     And no data is created
 
   Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful
