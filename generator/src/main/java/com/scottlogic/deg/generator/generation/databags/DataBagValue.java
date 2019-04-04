@@ -1,10 +1,12 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.generation.databags;
+
+import com.scottlogic.deg.generator.DataBagValueSource;
 
 import java.util.Objects;
 
 public class DataBagValue {
-    public final Object value;
-    public final String format;
+    final Object value;
+    private final String format;
 
     public final DataBagValueSource source;
 
@@ -32,6 +34,14 @@ public class DataBagValue {
     @Override
     public int hashCode() {
         return Objects.hash(value, format);
+    }
+
+    public Object getFormattedValue() {
+        if (format == null || value == null){
+            return value;
+        }
+
+        return String.format(format, value);
     }
 }
 

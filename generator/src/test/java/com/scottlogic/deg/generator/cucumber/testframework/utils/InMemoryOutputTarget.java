@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
@@ -22,7 +23,7 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException{
+    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
         this.testState.generatedObjects = getRows(generatedObjects);
     }
 
@@ -30,22 +31,16 @@ public class InMemoryOutputTarget implements OutputTarget {
         return generatedObjects
             .collect(Collectors.toList())
             .stream()
-            .map(genObj ->{
+            .map(genObj -> {
 
-                if (genObj == null){
+                if (genObj == null) {
                     throw new IllegalStateException("GeneratedObject is null");
                 }
 
                 return genObj.values
                     .stream()
-                    .map(obj -> {
-                        if (obj.value != null && obj.format != null) {
-                            return String.format(obj.format, obj.value);
-                        }
-                        return obj.value;
-                    })
+                    .map(DataBagValue::getFormattedValue)
                     .collect(Collectors.toList());
             }).collect(Collectors.toList());
     }
-
 }

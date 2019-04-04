@@ -9,14 +9,15 @@ import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -30,45 +31,44 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new FormatConstraint(
                         fields.getByName(dto.field),
-                        (String) throwIfValueInvalid(dto.value),
+                        throwIfValueInvalid(dto, String.class),
                         rules));
 
         add(AtomicConstraintType.ISEQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        mapValues(Collections.singleton(throwIfValueInvalid(dto.value))),
+                        Collections.singleton(unwrapDateValueIfDateObject(
+                            throwIfValueInvalid(dto, Object.class),
+                            dto.field)),
                         rules));
 
         add(AtomicConstraintType.ISINSET.toString(),
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        mapValues(throwIfValuesNull(dto.values)),
+                        mapValues(dto),
                         rules));
 
-        //noinspection RedundantCast
         add(AtomicConstraintType.CONTAINSREGEX.toString(),
             (dto, fields, rules) ->
                 new ContainsRegexConstraint(
                     fields.getByName(dto.field),
-                    Pattern.compile((String) throwIfValueInvalid(dto.value)),
+                    Pattern.compile(throwIfValueInvalid(dto, String.class)),
                     rules));
 
-        //noinspection RedundantCast
         add(AtomicConstraintType.MATCHESREGEX.toString(),
                 (dto, fields, rules) ->
                     new MatchesRegexConstraint(
                         fields.getByName(dto.field),
-                        Pattern.compile((String) throwIfValueInvalid(dto.value)),
+                        Pattern.compile(throwIfValueInvalid(dto, String.class)),
                         rules));
 
-        //noinspection RedundantCast
         add(AtomicConstraintType.AVALID.toString(),
                 (dto, fields, rules) ->
                     new MatchesStandardConstraint(
                         fields.getByName(dto.field),
-                        StandardConstraintTypes.valueOf((String) throwIfValueInvalid(dto.value)),
+                        StandardConstraintTypes.valueOf(throwIfValueInvalid(dto, String.class)),
                         rules
                     ));
 
@@ -76,7 +76,7 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new IsGreaterThanConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueInvalid(dto.value),
+                        throwIfValueInvalid(dto, Number.class),
                         rules)
         );
 
@@ -84,56 +84,56 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                     new IsGreaterThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueInvalid(dto.value),
+                        throwIfValueInvalid(dto, Number.class),
                         rules));
 
         add(AtomicConstraintType.ISLESSTHANCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsLessThanConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueInvalid(dto.value),
+                        throwIfValueInvalid(dto, Number.class),
                         rules));
 
         add(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT.toString(),
                 (dto, fields, rules) ->
                     new IsLessThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        (Number) throwIfValueInvalid(dto.value),
+                        throwIfValueInvalid(dto, Number.class),
                         rules));
 
         add(AtomicConstraintType.ISBEFORECONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsBeforeConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueInvalid(dto.value)),
+                        unwrapDate(dto),
                         rules));
 
         add(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsBeforeOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueInvalid(dto.value)),
+                        unwrapDate(dto),
                         rules));
 
         add(AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsAfterConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueInvalid(dto.value)),
+                        unwrapDate(dto),
                         rules));
 
         add(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME.toString(),
                 (dto, fields, rules) ->
                     new IsAfterOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        unwrapDate(throwIfValueInvalid(dto.value)),
+                        unwrapDate(dto),
                         rules));
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields, rules) ->
                     new IsGranularToConstraint(
                         fields.getByName(dto.field),
-                        ParsedGranularity.parse(throwIfValueInvalid(dto.value)),
+                        ParsedGranularity.parse(throwIfValueInvalid(dto, Number.class)),
                         rules));
 
         add(AtomicConstraintType.ISNULL.toString(),
@@ -143,7 +143,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISOFTYPE.toString(),
                 (dto, fields, rules) ->
                 {
-                    String typeString = (String) throwIfValueInvalid(dto.value);
+                    String typeString = throwIfValueInvalid(dto, String.class);
                     if (typeString.equals("integer")) {
                         return new AndConstraint(
                             new IsOfTypeConstraint(
@@ -190,7 +190,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 0, false);
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -200,7 +200,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 1, true);
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -210,7 +210,7 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) -> {
 
-                    int length = getIntegerLength(dto);
+                    int length = getIntegerLength(dto, 0, true);
                     return new StringHasLengthConstraint(
                         fields.getByName(dto.field),
                         length,
@@ -218,67 +218,99 @@ class AtomicConstraintReaderLookup {
                 });
     }
 
-    private static <T> T throwIfValueInvalid(T value) throws InvalidProfileException {
+    /**
+     * @param dto The ConstraintDTO instance
+     * @param requiredType the type of value required, pass Object.class if any type is acceptable
+     * @param <T>
+     * @return the value in the ConstraintDTO cast as T
+     * @throws InvalidProfileException if the value is null, not of type T, or (when a number) outside of the allowed range
+     */
+    private static <T> T throwIfValueInvalid(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
+        Object value = dto.value;
+
         if (value == null) {
-            throw new InvalidProfileException("Couldn't recognise 'value' property, it must be set to a value");
+            throw new InvalidProfileException(
+                String.format("Field [%s]: Couldn't recognise 'value' property, it must be set to a value", dto.field));
         }
+
+        if (!requiredType.isInstance(value)){
+            throw new InvalidProfileException(
+                String.format(
+                    "Field [%s]: Couldn't recognise 'value' property, it must be a %s but was a %s with value `%s`",
+                    dto.field,
+                    requiredType.getSimpleName(),
+                    value.getClass().getSimpleName(),
+                    value));
+        }
+
         if(value instanceof Number) {
             BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
             if (GenerationConfig.Constants.NUMERIC_MAX.compareTo(valueAsBigDecimal) < 0) {
-                throw new InvalidProfileException("'value' property is out of upper bound");
+                throw new InvalidProfileException(String.format("Field [%s]: 'value' property is out of upper bound", dto.field));
             }
             if (GenerationConfig.Constants.NUMERIC_MIN.compareTo(valueAsBigDecimal) > 0) {
-                throw new InvalidProfileException("'value' property is out of lower bound");
+                throw new InvalidProfileException(String.format("Field [%s]: 'value' property is out of lower bound", dto.field));
             }
         }
-        return value;
+
+        return requiredType.cast(value);
     }
 
-    private static <T> Collection<T> throwIfValuesNull(Collection<T> values) throws InvalidProfileException {
-        if (values == null) {
-            throw new InvalidProfileException("Couldn't recognise 'values' property, it must not contain 'null'");
-        }
-        return values;
-    }
+    private static int getIntegerLength(ConstraintDTO dto, int minimumInclusive, boolean maxInclusive) throws InvalidProfileException {
+        Number value = throwIfValueInvalid(dto, Number.class);
+        BigDecimal valueAsBigDecimal = NumberUtils
+            .coerceToBigDecimal(value)
+            .stripTrailingZeros();
 
-    private static int getIntegerLength(ConstraintDTO dto) throws InvalidProfileException {
-        Object value = throwIfValueInvalid(dto.value);
-        BigDecimal decimal;
-
-        if (value instanceof Integer){
-            value = BigDecimal.valueOf((Integer)value);
-        }
-
-        //the profile reader (jackson) has been told to deserialise all numbers as BigDecimal's
-        if (value instanceof BigDecimal){
-            decimal = (BigDecimal)value;
-        } else {
+        if (valueAsBigDecimal.scale() > 0){
             throw new InvalidProfileException(
                 String.format(
-                    "String-length operator must contain a numeric value for its operand found (%s) for field [%s]",
-                    dto.value == null ? "<null>" : dto.value.toString(),
-                    dto.field));
-        }
-
-        decimal = decimal.stripTrailingZeros();
-
-        if (decimal.scale() > 0){
-            throw new InvalidProfileException(
-                String.format(
-                    "String-length operator must contain a integer value for its operand found (%s <%s>) for field [%s]",
+                    "Field [%s]: String-length operator must contain a integer value for its operand found (%s <%s>)",
+                    dto.field,
                     dto.value,
-                    dto.value.getClass().getSimpleName(),
-                    dto.field));
+                    dto.value.getClass().getSimpleName()));
         }
 
-        return decimal.intValue();
+        BigDecimal max = BigDecimal.valueOf(Integer.MAX_VALUE);
+        if (!maxInclusive){
+            max = max.subtract(BigDecimal.ONE);
+        }
+
+        if (valueAsBigDecimal.compareTo(max) > 0){
+            //length is greater than the largest possible int
+            throw new InvalidProfileException(
+                String.format(
+                    "Field [%s]: %s constraint must have a operand/value <= %s, currently is %s",
+                    dto.field,
+                    dto.is,
+                    max.toPlainString(),
+                    valueAsBigDecimal.toPlainString()));
+        }
+
+        int length = valueAsBigDecimal.intValue();
+
+        if (length >= minimumInclusive) {
+            return length;
+        }
+
+        throw new InvalidProfileException(
+            String.format(
+                "Field [%s]: %s constraint must have a operand/value >= %d, currently is %d",
+                dto.field,
+                dto.is,
+                minimumInclusive,
+                length));
     }
 
-    private static Set<Object> mapValues(Collection<Object> values) throws InvalidProfileException {
+    private static Set<Object> mapValues(ConstraintDTO dto) throws InvalidProfileException {
         HashSet<Object> mappedValues = new HashSet<>();
 
-        for (Object value: values){
-            mappedValues.add(AtomicConstraintReaderLookup.potentialUnwrapDate(value));
+        if (dto.values == null) {
+            throw new InvalidProfileException(String.format("Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'", dto.field));
+        }
+
+        for (Object value: dto.values){
+            mappedValues.add(unwrapDateValueIfDateObject(value, dto.field));
         }
 
         return mappedValues;
@@ -288,30 +320,31 @@ class AtomicConstraintReaderLookup {
         typeCodeToSpecificReader.put(typeCode, func);
     }
 
-    private static Object potentialUnwrapDate(Object value) throws InvalidProfileException {
+    private static Object unwrapDateValueIfDateObject(Object value, String field) throws InvalidProfileException {
         if (!(value instanceof Map))
             return value;
 
         Map objectMap = (Map) value;
         if (!objectMap.containsKey("date"))
-            throw new InvalidProfileException(String.format("Object found but no 'date' property exists, found %s", Objects.toString(objectMap.keySet())));
+            throw new InvalidProfileException(String.format("Field [%s]: Object found but no 'date' property exists, found %s", field, Objects.toString(objectMap.keySet())));
 
         Object date = objectMap.get("date");
         if (!(date instanceof String))
-            throw new InvalidProfileException(String.format("Date on date object must be a string, found %s", date));
+            throw new InvalidProfileException(String.format("Field [%s]: Date on date object must be a string, found %s", field, date));
 
-        return parseDate((String)date);
+        return parseDate((String)date, field);
     }
 
-    private static OffsetDateTime unwrapDate(Object value) throws InvalidProfileException {
-        Object date = potentialUnwrapDate(value);
-        if (date instanceof OffsetDateTime)
+    private static OffsetDateTime unwrapDate(ConstraintDTO dto) throws InvalidProfileException {
+        Object date = unwrapDateValueIfDateObject(throwIfValueInvalid(dto, Object.class), dto.field);
+        if (date instanceof OffsetDateTime) {
             return (OffsetDateTime) date;
+        }
 
-        throw new InvalidProfileException(String.format("Dates should be expressed in object format e.g. { \"date\": \"%s\" }", value));
+        throw new InvalidProfileException(String.format("Field [%s]: Dates should be expressed in object format e.g. { \"date\": \"%s\" }", dto.field, dto.value));
     }
 
-    private static OffsetDateTime parseDate(String value) throws InvalidProfileException {
+    private static OffsetDateTime parseDate(String value, String field) throws InvalidProfileException {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
             .optionalStart()
@@ -328,17 +361,21 @@ class AtomicConstraintReaderLookup {
                     : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
 
             if (parsedDateTime.getYear() > 9999 || parsedDateTime.getYear() < 1)
-                throwDateTimeError(value);
+                throwDateTimeError(value, field);
 
             return parsedDateTime;
         } catch (DateTimeParseException dtpe) {
-            throwDateTimeError(value);
+            throwDateTimeError(value, field);
             return null;
         }
     }
 
-    private static void throwDateTimeError(String profileDate) throws InvalidProfileException {
-        throw new InvalidProfileException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z", profileDate));
+    private static void throwDateTimeError(String profileDate, String field) throws InvalidProfileException {
+        throw new InvalidProfileException(String.format(
+            "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
+                "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
+            field,
+            profileDate));
     }
 
     ConstraintReader getByTypeCode(String typeCode) {
