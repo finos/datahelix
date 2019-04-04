@@ -7,14 +7,9 @@ import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.Collections;
 
@@ -55,7 +50,7 @@ public class FixFieldStrategyFactoryTests {
         // Arrange
 
         //Act
-        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree);
+        FixFieldStrategy actualStrategy = target.getFixedFieldStrategy(inputProfile, inputTree);
 
         //Assert
         HierarchicalDependencyFixFieldStrategy expectedStrategy = new HierarchicalDependencyFixFieldStrategy(

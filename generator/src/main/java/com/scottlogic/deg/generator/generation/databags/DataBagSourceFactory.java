@@ -8,26 +8,26 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class RowSpecDataBagSourceFactory {
-    private final FieldSpecValueGenerator generator;
+public class DataBagSourceFactory {
+    private final FieldSpecValueGenerator dataBagValueGenerator;
 
     @Inject
-    public RowSpecDataBagSourceFactory(
-        FieldSpecValueGenerator generator) {
-        this.generator = generator;
+    public DataBagSourceFactory(FieldSpecValueGenerator dataBagValueGenerator) {
+        this.dataBagValueGenerator = dataBagValueGenerator;
     }
 
     public DataBagSource createDataBagSource(RowSpec rowSpec){
-        List<Stream<GeneratedObject>> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
+        List<Stream<GeneratedObject>> fieldDataBagSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldDataBagSources.add(
-                generator.generate(field, fieldSpec)
+                dataBagValueGenerator.generate(field, fieldSpec)
                     .map(this::toGeneratedObject)
             );
         }
@@ -36,6 +36,7 @@ public class RowSpecDataBagSourceFactory {
     }
 
     private GeneratedObject toGeneratedObject(DataBagValue dataBagValue) {
-        return GeneratedObject.startBuilding().set(dataBagValue.getField(), dataBagValue).build();
+        return new GeneratedObject(new HashMap<Field, DataBagValue>() {{
+            put(dataBagValue.field, dataBagValue); }});
     }
 }

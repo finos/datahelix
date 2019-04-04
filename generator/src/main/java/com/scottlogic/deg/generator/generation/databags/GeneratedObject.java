@@ -14,27 +14,29 @@ public class GeneratedObject {
     public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     private final Map<Field, DataBagValue> fieldToValue;
-    private Optional<ProfileFields> fieldOrdering;
+    private final ProfileFields fieldOrdering;
 
     public GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
+        this(fieldToValue, null);
+    }
+
+    private GeneratedObject(Map<Field, DataBagValue> fieldToValue, ProfileFields fieldOrdering){
         this.fieldToValue = fieldToValue;
-        fieldOrdering = Optional.empty();
+        this.fieldOrdering = fieldOrdering;
     }
 
     public Collection<DataBagValue> getValues() {
-        if (!fieldOrdering.isPresent()) {
+        if (fieldOrdering == null) {
             return fieldToValue.values();
         }
 
-        return fieldOrdering.get().stream()
+        return fieldOrdering.stream()
             .map(fieldToValue::get)
             .collect(Collectors.toList());
     }
 
-    public GeneratedObject orderValues(ProfileFields profileFields){
-        GeneratedObject generatedObject = new GeneratedObject(fieldToValue);
-        generatedObject.fieldOrdering = Optional.of(profileFields);
-        return generatedObject;
+    public GeneratedObject withOrdering(ProfileFields fieldOrdering){
+        return new GeneratedObject(fieldToValue, fieldOrdering);
     }
 
     public Object getValue(Field field) {

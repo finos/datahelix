@@ -39,20 +39,20 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
         boolean isReductive = configSource.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE;
         boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
 
-        DataGenerator underlying = isReductive
+        DataGenerator generator = isReductive
             ? reductiveDataGenerator
             : walkingDataGenerator;
 
-        if (configSource.shouldDoPartitioning()){
-            underlying = decorateWithPartitioning(underlying);
+        if (configSource.shouldDoPartitioning()) {
+            generator = decorateWithPartitioning(generator);
         }
 
-        if (isRandom && isReductive){
+        if (isRandom && isReductive) {
             //restarting should be the outermost step if used with partitioning.
-            underlying = decorateWithRestarting(underlying);
+            generator = decorateWithRestarting(generator);
         }
 
-        return underlying;
+        return generator;
     }
 
     private DataGenerator decorateWithPartitioning(DataGenerator underlying) {

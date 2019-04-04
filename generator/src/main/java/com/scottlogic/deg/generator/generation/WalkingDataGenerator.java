@@ -7,21 +7,24 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;
 
+/**
+ * Generates data by walking a tree to get RowSpecs, then creating data from the RowSpecs
+ */
 public class WalkingDataGenerator implements DataGenerator {
 
     private final DecisionTreeWalker treeWalker;
-    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
+    private final DataBagSourceFactory dataBagSourceFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
         DecisionTreeWalker treeWalker,
-        RowSpecDataBagSourceFactory dataBagSourceFactory,
+        DataBagSourceFactory dataBagSourceFactory,
         GenerationConfig generationConfig) {
         this.treeWalker = treeWalker;
         this.dataBagSourceFactory = dataBagSourceFactory;
