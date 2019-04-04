@@ -21,7 +21,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            return getSetRestrictionSources(fieldSpec);
+            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec);
+            if (mayBeNull(fieldSpec)){
+                return addNullSource(setRestrictionSources);
+            }
+            return setRestrictionSources;
         }
 
         List<FieldValueSource> validSources = new ArrayList<>();
@@ -56,21 +60,22 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return validSources;
     }
 
+    private List<FieldValueSource> addNullSource(List<FieldValueSource> setRestrictionSources) {
+        return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
+    }
+
     private boolean mustBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() != null
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
     private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
-        Stream<Object> whitelist = fieldSpec.getSetRestrictions().getWhitelist().stream();
+        List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
+         if (whitelist.isEmpty()){
+             return Collections.emptyList();
+         }
 
-        if (mayBeNull(fieldSpec)) {
-            return Arrays.asList(
-                new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())),
-                nullOnlySource);
-        }
-
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist.collect(Collectors.toList())));
+        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {

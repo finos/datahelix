@@ -23,21 +23,4 @@ public interface ProfileSchemaValidator {
      * @return the result of validating the provided profile
      */
     ValidationResult validateProfile(File profileFile);
-
-    /**
-     * Validates a json file against the DataHelix Profile JSON Schema.
-     *
-     * @param profileStream an InputStream of the profile to validate
-     * @return the result of validating the provided profile
-     */
-    ValidationResult validateProfile(InputStream profileStream);
-
-    /**
-     * Validates a json file against a customised DataHelix Profile JSON Schema.
-     *
-     * @param schemaStream  an InputStream of the schema to validate the profile against
-     * @param profileStream an InputStream of the profile to validate
-     * @return the result of validating the provided profile against the provided schema
-     */
-    ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream);
 }

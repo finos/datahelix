@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;

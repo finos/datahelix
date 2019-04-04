@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -33,18 +34,14 @@ public class CucumberTestHelper {
             return;
         }
 
-        try {
-            Module concatenatedModule =
-                Modules
-                    .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
-                    .with(new CucumberTestModule(testState));
+        Module concatenatedModule =
+            Modules
+                .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
+                .with(new CucumberTestModule(testState));
 
-            Injector injector = Guice.createInjector(concatenatedModule);
+        Injector injector = Guice.createInjector(concatenatedModule);
 
-            injector.getInstance(GenerateExecute.class).run();
-        } catch (Exception e) {
-            testState.addException(e);
-        }
+        injector.getInstance(GenerateExecute.class).run();
 
         testState.generationHasAlreadyOccured = true;
     }
@@ -92,7 +89,7 @@ public class CucumberTestHelper {
     public Stream<String> getProfileValidationErrors(){
         return Stream.concat(
             testState.testExceptions.stream()
-                .filter(e -> e instanceof InvalidProfileException)
+                .filter(e -> e instanceof InvalidProfileException || e instanceof JsonParseException)
                 .map(Throwable::getMessage),
             testState.validationReporter
                 .getRecordedAlerts().stream()

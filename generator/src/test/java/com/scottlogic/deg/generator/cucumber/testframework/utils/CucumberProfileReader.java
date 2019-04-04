@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
+import com.google.gson.JsonParseException;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -28,11 +29,11 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     @Override
-    public Profile read(Path filePath) {
+    public Profile read(Path filePath) throws InvalidProfileException {
         return this.getProfile();
     }
 
-    private Profile getProfile(){
+    private Profile getProfile() throws InvalidProfileException {
         try {
             MainConstraintReader constraintReader = new MainConstraintReader();
             ProfileFields profileFields = new ProfileFields(state.profileFields);
@@ -49,13 +50,22 @@ public class CucumberProfileReader implements ProfileReader {
             }).collect(Collectors.toList());
 
             if (exceptionInMapping.get()){
-                return null;
+                Exception firstException = state.testExceptions.get(0);
+                if (firstException instanceof InvalidProfileException){
+                    throw (InvalidProfileException)firstException;
+                }
+
+                if (firstException instanceof JsonParseException){
+                    throw (JsonParseException)firstException;
+                }
+
+                throw new RuntimeException(firstException);
             }
 
             return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(new RuleDTO()), mappedConstraints)));
-        } catch (Exception e) {
+        } catch (JsonParseException e) {
             state.addException(e);
-            return null;
+            throw e;
         }
     }
 
