@@ -7,7 +7,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class AutomationUtils {
+class AutomatonUtils {
 
     private static final char printableChar = ' ';
 
@@ -30,7 +30,7 @@ class AutomationUtils {
                 return examples.get(transition);
             }
 
-            String example = AutomationUtils.getLongestExample(transition, this);
+            String example = AutomatonUtils.getLongestExample(transition, this);
             examples.put(transition, example);
             return example;
         }
