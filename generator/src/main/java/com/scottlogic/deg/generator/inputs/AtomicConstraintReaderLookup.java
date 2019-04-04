@@ -219,7 +219,7 @@ class AtomicConstraintReaderLookup {
     /**
      * @param dto The ConstraintDTO instance
      * @param requiredType the type of value required, pass Object.class if any type is acceptable
-     * @param <T> 
+     * @param <T>
      * @return the value in the ConstraintDTO cast as T
      * @throws InvalidProfileException if the value is null, not of type T, or (when a number) outside of the allowed range
      */

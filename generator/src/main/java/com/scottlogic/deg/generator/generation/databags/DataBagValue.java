@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 
 import java.util.Objects;
 

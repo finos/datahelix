@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.outputs.targets;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 
@@ -41,7 +40,7 @@ public class FileOutputTarget implements OutputTarget{
             generatedObjects.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row);
-                } catch (IOException | InvalidProfileException e) {
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });

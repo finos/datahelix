@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
@@ -13,7 +12,7 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.List;
 
 public class ViolationGenerationEngine implements GenerationEngine {
     private final GenerationEngine generationEngine;
@@ -27,7 +26,7 @@ public class ViolationGenerationEngine implements GenerationEngine {
     }
 
     @Override
-    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException, InvalidProfileException {
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         List<Profile> violatedProfiles = this.profileViolator.violate(profile);
 
         if (violatedProfiles.isEmpty()) {

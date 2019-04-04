@@ -3,8 +3,9 @@ package com.scottlogic.deg.generator;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
-import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
@@ -26,7 +27,7 @@ public class StandardGenerationEngine implements GenerationEngine {
         this.monitor = monitor;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException, InvalidProfileException {
+    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         final DecisionTreeCollection analysedProfile = this.decisionTreeGenerator.analyse(profile);
 
         final Stream<GeneratedObject> generatedDataItems =
