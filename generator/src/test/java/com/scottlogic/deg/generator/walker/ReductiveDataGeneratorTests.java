@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
@@ -59,7 +57,7 @@ class ReductiveDataGeneratorTests {
         fixFieldStrategy = mock(FixFieldStrategy.class);
         when(fixFieldStrategy.getNextFieldToFix(any(), any())).thenReturn(field1, field2);
         fixFieldStrategyFactory = mock(FixFieldStrategyFactory.class);
-        when(fixFieldStrategyFactory.getWalkerStrategy(any(), any())).thenReturn(fixFieldStrategy);
+        when(fixFieldStrategyFactory.getFixedFieldStrategy(any(), any())).thenReturn(fixFieldStrategy);
 
 
         walker = new ReductiveDataGenerator(

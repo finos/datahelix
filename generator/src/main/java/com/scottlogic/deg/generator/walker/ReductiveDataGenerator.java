@@ -8,10 +8,8 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.walker.reductive.*;
@@ -48,7 +46,7 @@ public class ReductiveDataGenerator implements DataGenerator {
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree tree) {
-        FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getWalkerStrategy(profile, tree);
+        FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getFixedFieldStrategy(profile, tree);
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);

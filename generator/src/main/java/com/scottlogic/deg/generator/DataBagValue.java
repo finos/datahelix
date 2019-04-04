@@ -4,6 +4,10 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 
 import java.util.Objects;
 
+/**
+ * Stores details about a Generated Value
+ * The Field, the Value, the Format, and the source
+ */
 public class DataBagValue {
     public final Field field;
     public final Object value;
@@ -18,14 +22,8 @@ public class DataBagValue {
         this.source = source;
     }
 
-    //unsafe, only used in test
     public DataBagValue(Field field, Object value){
         this(field, value, null, FieldSpecSource.Empty);
-    }
-
-    //unsafe, usage should be replaced
-    public DataBagValue(Object value, String format, FieldSpecSource source){
-        this(null, value, format, source);
     }
 
     @Override
