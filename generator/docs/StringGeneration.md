@@ -78,6 +78,47 @@ In the above `s0` looks like:
 | number | 4 |
 | id | 49 |
 
+### Textual representation
+The automaton can represent the state machine in a textual representation such as:
+
+```
+initial state: 4
+state 0 [reject]:
+  a-z -> 3
+  A-B -> 1
+state 1 [accept]:
+state 2 [reject]:
+  B -> 5
+state 3 [reject]:
+  A-B -> 1
+state 4 [reject]:
+  A -> 2
+state 5 [reject]:
+  C -> 0
+```
+
+This shows each state and each transition in the automaton, lines 2-4 show the `State` as shown in the previous section.
+Lines 10-11 show the transition 'A' as shown in the prior section.
+
+The pathway through the automaton is:
+- transition to state **4** (because the initial - empty string state - is rejected/incomplete)
+- add an 'A' (state 4)
+- transition to state **2** (because the current state "A" is rejected/incomplete)
+- add a 'B' (state 2)
+- transition to state **5** (because the current state "AB" is rejected/incomplete)
+- add a 'C' (state 5)
+- transition to state **0** (because the current state "ABC" is rejected/incomplete)
+   - _either_
+      - add a letter between `a..z` (state 0, transition 1)
+      - transition to state **3** (because the current state "ABCa" is rejected/incomplete)
+      - add either 'A' or 'B' (state 3)
+      - transition to state **1** (because the current state "ABCaA" is rejected/incomplete)
+      - current state is accepted so exit with the current string "ABCaA"
+   - _or_   
+      - add either 'A' or 'B' (state 0, transition 2)
+      - transition to state **1** (because the current state "ABCA" is rejected/incomplete)
+      - current state is accepted so exit with the current string "ABCA"
+
 ## Character support
 
 The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
