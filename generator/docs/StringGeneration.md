@@ -56,27 +56,27 @@ A transition holds the following properties and are represented as lines in the 
 
 In the above `A` looks like:
 
-| property | value |
-| ---- | ---- |
-| min | A |
-| max | A |
-| to | 1 state, B |
+| property | initial | \[a-z\] | 
+| ---- | ---- | ---- |
+| min | A | a |
+| max | A | z |
+| to | 1 state, `s1` | 1 state, `s4` |
 
 ### `State`
 A state holds the following properties and are represented as circles in the above graph
 - `accept: boolean` - is this a termination state, can string production stop here?
 - `transitions: HashSet<Transition>` - which transitions, if any, follow this state
 - `number: int` - the number of this state
-- `id: int` - the id of this state
+- `id: int` - the id of this state (not sure what this is used for)
 
 In the above `s0` looks like:
 
-| property | value |
-| ---- | ---- |
-| accept | false |
-| transitions | 1 transition, -> A |
-| number | 4 |
-| id | 49 |
+| property | initial | s3 |
+| ---- | ---- | ---- |
+| accept | false | false |
+| transitions | 1 transition, &rarr; `A` | 2 transitions:<br /> &rarr; `[a-z]`<br /> &rarr; `A|B` |
+| number | 4 | 0 |
+| id | 49 | 50 |
 
 ### Textual representation
 The automaton can represent the state machine in a textual representation such as:
