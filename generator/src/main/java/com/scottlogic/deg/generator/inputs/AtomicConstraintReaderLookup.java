@@ -9,14 +9,15 @@ import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -215,6 +216,13 @@ class AtomicConstraintReaderLookup {
                 });
     }
 
+    /**
+     * @param dto The ConstraintDTO instance
+     * @param requiredType the type of value required, pass Object.class if any type is acceptable
+     * @param <T> 
+     * @return the value in the ConstraintDTO cast as T
+     * @throws InvalidProfileException if the value is null, not of type T, or (when a number) outside of the allowed range
+     */
     private static <T> T throwIfValueInvalid(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
         Object value = dto.value;
 
