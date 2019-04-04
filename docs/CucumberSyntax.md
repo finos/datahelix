@@ -47,7 +47,7 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 
 #### Operators
-See [Epistemic Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/EpistemicConstraints.md), [Grammatical Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/GrammaticalConstraints.md) and [Presentational Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/PresentationalConstraints.md) documents for details of the constraints.
+See [Predicate constraints](ProfileDeveloperGuide.md#Predicate-constraints), [Grammatical Constraints](ProfileDeveloperGuide.md#Grammatical-constraints) and [Presentational Constraints](ProfileDeveloperGuide.md#Presentational-constraints) for details of the constraints.
 
 #### Operands
 When specifying the operator/s for a field, ensure to format the value as in the table below:
