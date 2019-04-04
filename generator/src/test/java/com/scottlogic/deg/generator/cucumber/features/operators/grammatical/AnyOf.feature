@@ -242,7 +242,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       """
     And foo is of type "string"
     And foo is anything but null
-    Then the profile is invalid because "ofLength constraint must have a operand/value >= 0, currently is -1 for field \[foo\]"
+    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have a operand/value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
@@ -257,7 +257,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       """
     And foo is of type "string"
     And foo is anything but null
-    Then the profile is invalid because "ofLength constraint must have a operand/value >= 0, currently is -1 for field \[foo\]"
+    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have a operand/value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message

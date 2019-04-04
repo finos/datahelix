@@ -226,7 +226,7 @@ Feature: User can specify that contains a specified regex
 
   Scenario: Running a 'containingRegex' request with the value property set to a null entry (null) should throw an error
     Given foo is containing regex null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value, field: foo"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
   Scenario: containingRegex run against a non contradicting containingRegex should be successful
