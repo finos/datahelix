@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 

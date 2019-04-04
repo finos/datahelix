@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.*;
 
 public class ViolationGenerationEngine implements GenerationEngine {
     private final GenerationEngine generationEngine;

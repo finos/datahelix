@@ -6,9 +6,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MultiDataSetWriter implements DataSetWriter<Closeable> {
