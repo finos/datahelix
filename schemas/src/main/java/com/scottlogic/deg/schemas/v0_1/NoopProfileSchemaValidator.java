@@ -14,14 +14,4 @@ public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
     public ValidationResult validateProfile(File profileFile) {
         return result;
     }
-
-    @Override
-    public ValidationResult validateProfile(InputStream profileStream) {
-        return result;
-    }
-
-    @Override
-    public ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
-        return result;
-    }
 }
