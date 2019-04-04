@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
 
 public class CsvDataSetWriterTests {
     private final CSVFormat format = CSVFormat.DEFAULT.withEscape('\0').withQuoteMode(QuoteMode.NONE);
@@ -137,7 +136,7 @@ public class CsvDataSetWriterTests {
     }
 
     private DataBagValue getValueWithFormat(Object value, String format) {
-        return new DataBagValue(value, format, FieldSpecSource.Empty);
+        return new DataBagValue(field1, value, format, FieldSpecSource.Empty);
     }
 
     private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {

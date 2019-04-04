@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -106,14 +106,14 @@ class ExampleProfilesViolationTests {
                     ),
                     new RowSpecMerger(new FieldSpecMerger()));
 
-                RowSpecDataBagSourceFactory rowSpecDataBagSourceFactory = new RowSpecDataBagSourceFactory(
+                DataBagSourceFactory dataBagSourceFactory = new DataBagSourceFactory(
                     new FieldSpecValueGenerator(
                         config,
                         new StandardFieldValueSourceEvaluator(),
                         new JavaUtilRandomNumberGenerator()));
 
                 WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
-                    rowSpecDataBagSourceFactory, config);
+                    dataBagSourceFactory, config);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(

@@ -14,9 +14,7 @@ public class FixFieldStrategyFactory {
         this.analyser = analyser;
     }
 
-    public FixFieldStrategy getWalkerStrategy(
-        Profile profile,
-        DecisionTree tree){
+    public FixFieldStrategy getFixedFieldStrategy(Profile profile, DecisionTree tree){
         return new HierarchicalDependencyFixFieldStrategy(profile, analyser, tree);
     }
 }

@@ -5,8 +5,10 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 import java.util.List;
 import java.util.stream.Stream;
 
-/** Given a list of streams of GeneratedObjects, each list referring to a single field.
- *  return a single stream of GeneratedObjects with all the different fields added */
+/**
+ * Given a list of streams of GeneratedObjects, each list referring to a single field.
+ *  return a single stream of GeneratedObjects with all the different fields added
+ */
 public class FieldCombiningDataBagSource implements DataBagSource {
     private final List<Stream<GeneratedObject>> subGenerators;
 
