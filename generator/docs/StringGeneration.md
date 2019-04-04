@@ -43,6 +43,41 @@ Due to the way that the generator computes textual data internally the generatio
 
 dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](https://github.com/ScottLogic/datahelix/blob/master/docs/ProfileDeveloperGuide.md#predicate-matchingregex) and [containingRegex](https://github.com/ScottLogic/datahelix/blob/master/docs/ProfileDeveloperGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
 
+## Automaton data types
+The automaton represents the state machine using the following types:
+- `Transition`
+- `State`
+
+### `Transition`
+A transition holds the following properties and are represented as lines in the above graph
+- `min: char` - The minimum permitted character that can be emitted at this position
+- `max: char` - The maximum permitted character that can be emitted at this position
+- `to: State[]` - The `State`s that can follow this transition
+
+In the above `A` looks like:
+
+| property | value |
+| ---- | ---- |
+| min | A |
+| max | A |
+| to | 1 state, B |
+
+### `State`
+A state holds the following properties and are represented as circles in the above graph
+- `accept: boolean` - ?
+- `transitions: HashSet<Transition>` - ?
+- `number: int` - ?
+- `id: int` - ?
+
+In the above `s0` looks like:
+
+| property | value |
+| ---- | ---- |
+| accept | false |
+| transitions | 1 transition, -> A |
+| number | 4 |
+| id | 49 |
+
 ## Character support
 
 The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
