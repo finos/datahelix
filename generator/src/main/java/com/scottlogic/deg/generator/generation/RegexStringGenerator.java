@@ -33,6 +33,15 @@ public class RegexStringGenerator implements StringGenerator {
     private final String regexRepresentation;
 
     public RegexStringGenerator(String regexStr, boolean matchFullString) {
+        Automaton generatedAutomaton = createAutomaton(regexStr, matchFullString);
+
+        String prefix = matchFullString ? "" : "*";
+        String suffix = matchFullString ? "" : "*";
+        this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
+        this.automaton = generatedAutomaton;
+    }
+
+    static Automaton createAutomaton(String regexStr, boolean matchFullString) {
         final String anchoredStr = convertEndAnchors(regexStr, matchFullString);
         final String requotedStr = escapeCharacters(anchoredStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
@@ -40,10 +49,7 @@ public class RegexStringGenerator implements StringGenerator {
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
 
-        String prefix = matchFullString ? "" : "*";
-        String suffix = matchFullString ? "" : "*";
-        this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
-        this.automaton = generatedAutomaton;
+        return generatedAutomaton;
     }
 
     private RegexStringGenerator(Automaton automaton, String regexRepresentation) {
@@ -188,7 +194,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     }
 
-    private String escapeCharacters(String regex) {
+    private static String escapeCharacters(String regex) {
         final Pattern patternRequoted = Pattern.compile("\\\\Q(.*?)\\\\E");
         final Pattern patternSpecial = Pattern.compile("[.^$*+?(){|\\[\\\\@]");
         StringBuilder sb = new StringBuilder(regex);
@@ -199,7 +205,7 @@ public class RegexStringGenerator implements StringGenerator {
         return sb.toString();
     }
 
-    private String convertEndAnchors(String regexStr, boolean matchFullString) {
+    private static String convertEndAnchors(String regexStr, boolean matchFullString) {
         final Matcher startAnchorMatcher = Pattern.compile("^\\^").matcher(regexStr);
 
         if (startAnchorMatcher.find()) {
@@ -222,7 +228,7 @@ public class RegexStringGenerator implements StringGenerator {
     /*
      * As the Briks regex parser doesn't recognise shorthand classes we need to convert them to character groups
      */
-    private RegExp expandShorthandClasses(String regex) {
+    private static RegExp expandShorthandClasses(String regex) {
         String finalRegex = regex;
         for (Map.Entry<String, String> charClass : PREDEFINED_CHARACTER_CLASSES.entrySet()) {
             finalRegex = finalRegex.replaceAll(charClass.getKey(), charClass.getValue());
