@@ -42,14 +42,11 @@ subprojects {
 }
 
 task release(){
-	println project.version
-
 	if (project.version == "unspecified") {
-		def message = "No version is specified on the command line, e.g. `gradle -Pversion=0.1 release`"
+		def message = "No version is specified on the command line, use `gradle -Pversion=0.1 release` to specify a version, will use 0.0 as the default"
 		def out = services.get(org.gradle.internal.logging.text.StyledTextOutputFactory).create("")
-		def failure = out.withStyle(org.gradle.internal.logging.text.StyledTextOutput.Style.Failure)
+		def warning = out.withStyle(org.gradle.internal.logging.text.StyledTextOutput.Style.Failure)
 		
-		failure.println(message)
-		throw new StopExecutionException("Unable to build release without a version")
+		warning.println(message)
 	}
 }

@@ -27,7 +27,7 @@ task release() {
 	jar.archiveFileName = 'schemas.jar'
 	jar.manifest {
 			attributes 'Created-By': 'Scott Logic',
-				'Implementation-Version': version,
+                'Implementation-Version': version != null ? version : "0.0",
 				'Built-By': System.properties['user.name']
 		}
 
