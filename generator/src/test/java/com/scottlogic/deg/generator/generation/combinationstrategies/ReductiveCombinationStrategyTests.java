@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +20,13 @@ class ReductiveCombinationStrategyTests {
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
         List<GeneratedObject> firstFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 10)
                 ).build()
             );
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 20)
                 ).build()
@@ -33,13 +34,13 @@ class ReductiveCombinationStrategyTests {
         }};
         List<GeneratedObject> secondFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     second_field,
                     new DataBagValue(second_field, "A")
                 ).build()
             );
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     second_field,
                     new DataBagValue(second_field, "B")
                 ).build()
@@ -56,7 +57,7 @@ class ReductiveCombinationStrategyTests {
 
         List<GeneratedObject> expectedGeneratedObjects = new ArrayList<GeneratedObject>() {{
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 10)
                 ).set(
@@ -65,7 +66,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 10)
                 ).set(
@@ -74,7 +75,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 20)
                 ).set(
@@ -83,7 +84,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObject.startBuilding().set(
+                GeneratedObjectBuilder.startBuilding().set(
                     first_field,
                     new DataBagValue(first_field, 20)
                 ).set(

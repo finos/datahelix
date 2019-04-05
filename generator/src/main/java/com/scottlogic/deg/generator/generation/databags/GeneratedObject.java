@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class GeneratedObject {
     public static final GeneratedObject empty = new GeneratedObject(new HashMap<>());
-    public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     private final Map<Field, DataBagValue> fieldToValue;
     private final ProfileFields fieldOrdering;
@@ -92,30 +91,5 @@ public class GeneratedObject {
                 })
                 .collect(Collectors.toList())
         );
-    }
-
-    public static class DataBagBuilder {
-        private final Map<Field, DataBagValue> fieldToValue;
-
-        private DataBagBuilder() {
-            this.fieldToValue = new HashMap<>();
-        }
-
-        public DataBagBuilder set(Field field, DataBagValue value) {
-            if (this.fieldToValue.containsKey(field))
-                throw new IllegalArgumentException("Databag already contains a value for " + field);
-
-            this.fieldToValue.put(field, value);
-
-            return this;
-        }
-
-        public DataBagBuilder set(Field field, Object value, FieldSpecSource source) {
-            return this.set(field, new DataBagValue(field, value, null, source));
-        }
-
-        public GeneratedObject build() {
-            return new GeneratedObject(this.fieldToValue);
-        }
     }
 }
