@@ -25,9 +25,9 @@ class ConcatenatingGeneratedObjectSourceTests {
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
         // ARRANGE
-        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
-        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().build();
-        GeneratedObject generatedObject3 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().build();
+        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().build();
+        GeneratedObject generatedObject3 = GeneratedObjectBuilder.startBuilding().build();
 
         DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1, generatedObject2);
         DataBagSource dataBagSource2 = new DummyDataBagSource(generatedObject3);
@@ -55,7 +55,7 @@ class ConcatenatingGeneratedObjectSourceTests {
     @Test
     void whenOnePopulatedSourceIsProvided() {
         // ARRANGE
-        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().build();
 
         DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1);
 
@@ -78,9 +78,9 @@ class ConcatenatingGeneratedObjectSourceTests {
     @Test
     void whenMiddleSourceIsEmpty() {
         // ARRANGE
-        GeneratedObject generatedObject1 = GeneratedObject.startBuilding().build();
-        GeneratedObject generatedObject2 = GeneratedObject.startBuilding().build();
-        GeneratedObject generatedObject3 = GeneratedObject.startBuilding().build();
+        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().build();
+        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().build();
+        GeneratedObject generatedObject3 = GeneratedObjectBuilder.startBuilding().build();
 
         DataBagSource dataBagSource1 = new DummyDataBagSource(generatedObject1, generatedObject2);
         DataBagSource dataBagSource2 = new DummyDataBagSource();
