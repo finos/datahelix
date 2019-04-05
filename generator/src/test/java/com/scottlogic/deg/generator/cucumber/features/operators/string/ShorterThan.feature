@@ -19,32 +19,37 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than 0
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value >= 1, currently is 0"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than -1
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value >= 1, currently is -1"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than 1.1
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: String-length operator must contain a integer value for its operand found \(1.1 <BigDecimal>\)"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than "5"
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `5`"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
     Given foo is shorter than ""
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
     Given foo is shorter than null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
+    And no data is created
+
+  Scenario: Running a 'shorterThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
+    Given foo is shorter than 2147483648
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value <= 2147483647, currently is 2147483648"
     And no data is created
 
   Scenario: shorterThan run against a non contradicting shorterThan should be successful

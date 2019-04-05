@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
-import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -47,13 +47,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     }
 
     private static Object extractCellValue(DataBagValue cell) {
-        if (cell.value == null) {
-            return null;
-        }
-
-        return cell.format != null
-            ? String.format(cell.format, cell.value)
-            : cell.value;
+        return cell.getFormattedValue();
     }
 
     private static Object wrapInQuotesIfString(Object value){
