@@ -4,7 +4,6 @@
 
 allprojects {
     group = 'com.scottlogic.deg'
-    version = '0.1'
 }
 
 subprojects {
@@ -39,5 +38,18 @@ subprojects {
 		finalizedBy {
 			test
 		}
+	}
+}
+
+task release(){
+	println project.version
+
+	if (project.version == "unspecified") {
+		def message = "No version is specified on the command line, e.g. `gradle -Pversion=0.1 release`"
+		def out = services.get(org.gradle.internal.logging.text.StyledTextOutputFactory).create("")
+		def failure = out.withStyle(org.gradle.internal.logging.text.StyledTextOutput.Style.Failure)
+		
+		failure.println(message)
+		throw new StopExecutionException("Unable to build release without a version")
 	}
 }

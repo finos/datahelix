@@ -22,3 +22,14 @@ dependencies {
 }
 
 description = 'DataHelix Schema Library'
+
+task release() {
+	jar.archiveFileName = 'schemas.jar'
+	jar.manifest {
+			attributes 'Created-By': 'Scott Logic',
+				'Implementation-Version': version,
+				'Built-By': System.properties['user.name']
+		}
+
+	jar
+}
