@@ -628,4 +628,4 @@ Feature: User can specify that a string length is longer than, a specified numbe
   @ignore #awaiting rest of #848
   Scenario: longerThan with value larger than maximum permitted should fail with an error message
     Given foo is longer than 1000
-    Then the profile is invalid because "'value' property is out of upper bound"
+    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have a operand/value <= 999, currently is 1000"
