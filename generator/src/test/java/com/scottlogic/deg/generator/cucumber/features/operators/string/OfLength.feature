@@ -455,4 +455,4 @@ Feature: User can specify the length of generated string data using 'ofLength'
 @ignore #awaiting rest of #848
   Scenario: ofLength with value larger than maximum permitted should fail with an error message
     Given foo is of length 1001
-    Then the profile is invalid because "'value' property is out of upper bound"
+    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have a operand/value <= 1000, currently is 1001"
