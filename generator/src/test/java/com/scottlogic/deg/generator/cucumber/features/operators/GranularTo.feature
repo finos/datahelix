@@ -173,20 +173,6 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 2018-09-01T00:00:00.003Z |
       | 2018-09-01T00:00:00.004Z |
 
-  @ignore #issue 769 not sure what is expected result
-  Scenario: Running granularTo against a non contradicting not after should be successful
-    Given foo is granular to 1
-    And foo is anything but after 2018-09-01T00:00:00.005Z
-    And foo is greater than 0
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 1                        |
-      | 2                        |
-      | 2018-09-01T00:00:00.001Z |
-      | 2018-09-01T00:00:00.002Z |
-      | 2018-09-01T00:00:00.003Z |
-
 
 
 
