@@ -257,4 +257,4 @@ Feature: User can specify that a string length is lower than, a specified number
   @ignore #awaiting rest of #848
   Scenario: shorterThan with value larger than maximum permitted should fail with an error message
     Given foo is shorter than 1001
-    Then the profile is invalid because "'value' property is out of upper bound"
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1000, currently is 1001"
