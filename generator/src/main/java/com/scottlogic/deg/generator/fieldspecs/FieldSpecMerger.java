@@ -1,9 +1,13 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -21,6 +25,17 @@ public class FieldSpecMerger {
         new GranularityRestrictionsMergeOperation(),
         new MustContainRestrictionMergeOperation()
     };
+
+    private static final StringRestrictions maxLengthRestriction = createMaxLengthStringRestriction(1000);
+
+    private static StringRestrictions createMaxLengthStringRestriction(@SuppressWarnings("SameParameterValue") int maxLength) {
+        StringRestrictions restrictions = new StringRestrictions(
+            new StringConstraintsCollection(Collections.emptySet()));
+
+        restrictions.stringGenerator = new RegexStringGenerator(".{0," + maxLength + "}", true);
+
+        return restrictions;
+    }
 
     private static final RestrictionMergeOperation finalMergeOperation = new SetRestrictionsMergeOperation();
 
@@ -40,7 +55,9 @@ public class FieldSpecMerger {
             return Optional.of(left);
         }
 
-        Optional<FieldSpec> merging = Optional.of(FieldSpec.Empty);
+        Optional<FieldSpec> merging = Optional.of(
+            FieldSpec.Empty
+                .withStringRestrictions(maxLengthRestriction, FieldSpecSource.Empty));
 
         //operation/s that must happen first
         merging = initialMergeOperation.applyMergeOperation(left, right, merging.get());
