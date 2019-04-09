@@ -17,11 +17,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class CsvDataSetWriterTests {
     private final CSVFormat format = CSVFormat.DEFAULT.withEscape('\0').withQuoteMode(QuoteMode.NONE);
     Field field1 = new Field("field1");
+    Field field2 = new Field("field2");
+    ProfileFields profileFields = new ProfileFields(Collections.singletonList(field1));
 
     @Test
     public void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
@@ -31,7 +34,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("0.00000001", stringBuffer.toString().trim());
@@ -45,7 +48,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("\"1.0e-08\"", stringBuffer.toString().trim());
@@ -59,7 +62,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("", stringBuffer.toString().trim());
@@ -73,7 +76,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("1.2", stringBuffer.toString().trim());
@@ -87,7 +90,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("\"Hello\"", stringBuffer.toString().trim());
@@ -102,7 +105,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("2001-02-03T04:05:06Z", stringBuffer.toString().trim());
@@ -117,7 +120,7 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("2001-02-03T04:05:06.777Z", stringBuffer.toString().trim());
@@ -132,18 +135,55 @@ public class CsvDataSetWriterTests {
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, profileFields);
 
         // Assert
         Assert.assertEquals("\"2001-02-03\"", stringBuffer.toString().trim());
+    }
+
+    @Test
+    void writeRow_withProfileFieldsOrder_generatesInOrder() throws IOException {
+        String value1 = "value1";
+        String value2 = "value2";
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding()
+            .set(field1, new DataBagValue(field1, value1))
+            .set(field2, new DataBagValue(field2, value2)).build();
+        CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+
+        profileFields = new ProfileFields(Arrays.asList(field1, field2));
+
+        // Act
+        writeToBuffer(printer, generatedObject, profileFields);
+
+        // Assert
+        Assert.assertEquals("\"value1\",\"value2\"", stringBuffer.toString().trim());
+    }
+
+    @Test
+    void writeRow_withProfileFieldsReverseOrder_generatesInReverseOrder() throws IOException {
+        String value1 = "value1";
+        String value2 = "value2";
+        StringBuffer stringBuffer = new StringBuffer();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding()
+            .set(field1, new DataBagValue(field1, value1))
+            .set(field2, new DataBagValue(field2, value2)).build();
+        CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+
+        profileFields = new ProfileFields(Arrays.asList(field2, field1));
+
+        // Act
+        writeToBuffer(printer, generatedObject, profileFields);
+
+        // Assert
+        Assert.assertEquals("\"value2\",\"value1\"", stringBuffer.toString().trim());
     }
 
     private DataBagValue getValueWithFormat(Object value, String format) {
         return new DataBagValue(field1, value, format, FieldSpecSource.Empty);
     }
 
-    private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field1));
+    private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject, ProfileFields profileFields) throws IOException {
         CsvDataSetWriter writer = new CsvDataSetWriter();
         writer.writeRow(printer, generatedObject, profileFields);
         printer.close();
