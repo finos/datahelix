@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -84,7 +85,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
 
                 return this.tuples.stream()
                         .map(tuple -> tuple.baseline)
-                    .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObject.merge(db1, db2));
+                    .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObjectMerger.merge(db1, db2));
             }
 
             return IntStream.range(0, this.tuples.size())
@@ -100,7 +101,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
                     }
                     return tuple.next();
                 })
-                .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObject.merge(db1, db2));
+                .reduce(GeneratedObject.empty, (db1, db2) -> GeneratedObjectMerger.merge(db1, db2));
         }
     }
 }
