@@ -65,18 +65,6 @@ public class GeneratedObject {
         return Objects.hash(fieldToValue);
     }
 
-    public RowSource getRowSource() {
-        return new RowSource(
-            fieldToValue.keySet()
-                .stream()
-                .map(field -> {
-                    DataBagValue value = this.fieldToValue.get(field);
-                    return new CellSource(value, field);
-                })
-                .collect(Collectors.toList())
-        );
-    }
-
     public Map<Field, DataBagValue> getFieldToValue() {
         return fieldToValue;
     }
