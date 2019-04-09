@@ -61,7 +61,7 @@ class GeneratedObjectTests {
         GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().set(priceField, new DataBagValue(priceField, 4)).build();
 
         // ACT
-        GeneratedObject mergedGeneratedObject = GeneratedObject.merge(generatedObject1, generatedObject2);
+        GeneratedObject mergedGeneratedObject = GeneratedObjectMerger.merge(generatedObject1, generatedObject2);
 
         // ASSERT
         Assert.assertThat(
@@ -91,6 +91,6 @@ class GeneratedObjectTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> GeneratedObject.merge(generatedObject1, generatedObject2));
+            () -> GeneratedObjectMerger.merge(generatedObject1, generatedObject2));
     }
 }
