@@ -52,24 +52,6 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 0.19 |
       | 0.20 |
 
-  Scenario: User requires to create a numeric field with data values that include a decimal value to five decimal points
-    Given foo is granular to 0.00001
-    And foo is greater than or equal to 0
-    And foo is less than or equal to 0.0001
-    Then the following data should be generated:
-      | foo     |
-      | 0 |
-      | 0.00001 |
-      | 0.00002 |
-      | 0.00003 |
-      | 0.00004 |
-      | 0.00005 |
-      | 0.00006 |
-      | 0.00007 |
-      | 0.00008 |
-      | 0.00009 |
-      | 0.00010 |
-
   Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
     Given foo is granular to 0.1
     And foo is less than or equal to 0
