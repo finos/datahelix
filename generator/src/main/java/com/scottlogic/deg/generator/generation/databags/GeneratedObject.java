@@ -52,22 +52,6 @@ public class GeneratedObject {
         return this.fieldToValue.get(field);
     }
 
-    public static GeneratedObject merge(GeneratedObject... bags) {
-        Map<Field, DataBagValue> newFieldToValue = new HashMap<>();
-
-        FlatMappingSpliterator.flatMap(Arrays.stream(bags)
-            .map(r -> r.fieldToValue.entrySet().stream()),
-            entrySetStream -> entrySetStream)
-            .forEach(entry -> {
-                if (newFieldToValue.containsKey(entry.getKey()))
-                    throw new IllegalArgumentException("Databags can't be merged because they overlap on field " + entry.getKey().name);
-
-                newFieldToValue.put(entry.getKey(), entry.getValue());
-            });
-
-        return new GeneratedObject(newFieldToValue);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,5 +75,9 @@ public class GeneratedObject {
                 })
                 .collect(Collectors.toList())
         );
+    }
+
+    public Map<Field, DataBagValue> getFieldToValue() {
+        return fieldToValue;
     }
 }

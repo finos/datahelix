@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
 
 import java.util.*;
 import java.util.stream.*;
@@ -45,7 +46,7 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
                 .filter(Iterator::hasNext)
                 .forEach(iterator -> lastValues.put(iterator, iterator.next()));
 
-            return GeneratedObject.merge(lastValues.values().toArray(new GeneratedObject[0]));
+            return GeneratedObjectMerger.merge(lastValues.values().toArray(new GeneratedObject[0]));
         }
     }
 }
