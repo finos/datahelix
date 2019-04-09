@@ -34,8 +34,8 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     }
 
     @Override
-    public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
-        writer.printRecord(row.getValues().stream()
+    public void writeRow(CSVPrinter writer, GeneratedObject row, ProfileFields profileFields) throws IOException {
+        writer.printRecord(row.getOrderedValues(profileFields).stream()
             .map(CsvDataSetWriter::extractCellValue)
             .map(CsvDataSetWriter::wrapInQuotesIfString)
             .collect(Collectors.toList()));

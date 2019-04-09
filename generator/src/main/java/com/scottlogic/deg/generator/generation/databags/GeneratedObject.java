@@ -13,33 +13,19 @@ public class GeneratedObject {
     public static final GeneratedObject empty = new GeneratedObject(new HashMap<>());
 
     private final Map<Field, DataBagValue> fieldToValue;
-    private final ProfileFields fieldOrdering;
 
     public GeneratedObject(Map<Field, DataBagValue> fieldToValue) {
-        this(fieldToValue, null);
-    }
-
-    private GeneratedObject(Map<Field, DataBagValue> fieldToValue, ProfileFields fieldOrdering){
         this.fieldToValue = fieldToValue;
-        this.fieldOrdering = fieldOrdering;
     }
 
     public Map<Field, DataBagValue> getFieldToValue() {
         return fieldToValue;
     }
 
-    public Collection<DataBagValue> getValues() {
-        if (fieldOrdering == null) {
-            return fieldToValue.values();
-        }
-
+    public Collection<DataBagValue> getOrderedValues(ProfileFields fieldOrdering) {
         return fieldOrdering.stream()
             .map(fieldToValue::get)
             .collect(Collectors.toList());
-    }
-
-    public GeneratedObject withOrdering(ProfileFields fieldOrdering){
-        return new GeneratedObject(fieldToValue, fieldOrdering);
     }
 
     @Override

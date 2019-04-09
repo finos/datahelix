@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
 
 public class CsvDataSetWriterTests {
     private final CSVFormat format = CSVFormat.DEFAULT.withEscape('\0').withQuoteMode(QuoteMode.NONE);
@@ -141,8 +143,9 @@ public class CsvDataSetWriterTests {
     }
 
     private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {
+        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field1));
         CsvDataSetWriter writer = new CsvDataSetWriter();
-        writer.writeRow(printer, generatedObject);
+        writer.writeRow(printer, generatedObject, profileFields);
         printer.close();
     }
 }
