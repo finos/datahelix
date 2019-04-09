@@ -22,12 +22,6 @@ public class GeneratedObject {
         return fieldToValue;
     }
 
-    public Collection<DataBagValue> getOrderedValues(ProfileFields fieldOrdering) {
-        return fieldOrdering.stream()
-            .map(fieldToValue::get)
-            .collect(Collectors.toList());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

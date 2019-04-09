@@ -37,9 +37,8 @@ public class InMemoryOutputTarget implements OutputTarget {
                     throw new IllegalStateException("GeneratedObject is null");
                 }
 
-                return genObj.getOrderedValues(profileFields)
-                    .stream()
-                    .map(DataBagValue::getFormattedValue)
+                return profileFields.stream()
+                    .map(field -> genObj.getFieldToValue().get(field).getFormattedValue())
                     .collect(Collectors.toList());
             }).collect(Collectors.toList());
     }

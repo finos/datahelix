@@ -43,14 +43,14 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
             ? reductiveDataGenerator
             : walkingDataGenerator;
 
+        if (isRandom && isReductive) {
+            generator = decorateWithRestarting(generator);
+        }
+
         if (configSource.shouldDoPartitioning()) {
             generator = decorateWithPartitioning(generator);
         }
 
-        if (isRandom && isReductive) {
-            //restarting should be the outermost step if used with partitioning.
-            generator = decorateWithRestarting(generator);
-        }
 
         return generator;
     }

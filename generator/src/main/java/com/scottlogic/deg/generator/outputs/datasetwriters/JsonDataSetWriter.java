@@ -37,7 +37,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();
 
-        Iterator<DataBagValue> dataBagIterator = row.getOrderedValues(profileFields).iterator();
+        Iterator<DataBagValue> dataBagIterator = row.getFieldToValue().values().iterator();
         Iterator<Field> fieldNameIterator = writer.profileFields.iterator();
 
         while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
