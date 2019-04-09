@@ -248,13 +248,13 @@ Feature: User can specify that a string length is lower than, a specified number
       | "x"  |
 
   Scenario: shorterThan with maximum permitted value should be successful
-    Given foo is shorter than 1000
+    Given foo is shorter than 1001
     And the generation strategy is random
     And the generator can generate at most 1 rows
     And foo is anything but null
-    Then foo contains strings of length between 1 and 1000 inclusively
+    Then foo contains strings of length between 0 and 1000 inclusively
 
   @ignore #awaiting rest of #848
   Scenario: shorterThan with value larger than maximum permitted should fail with an error message
-    Given foo is shorter than 1001
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1000, currently is 1001"
+    Given foo is shorter than 1002
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1001, currently is 1002"
