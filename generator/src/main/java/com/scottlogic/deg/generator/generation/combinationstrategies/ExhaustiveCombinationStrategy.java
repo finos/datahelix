@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
             return FlatMappingSpliterator.flatMap(nextStream
                 .stream()
-                .map(innerBag -> GeneratedObject.merge(innerBag, accumulatingBag)),
+                .map(innerBag -> GeneratedObjectMerger.merge(innerBag, accumulatingBag)),
                 innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else
