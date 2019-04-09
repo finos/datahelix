@@ -29,7 +29,6 @@ public class StandardGenerationEngine implements GenerationEngine {
         final DecisionTree tree = decisionTreeGenerator.analyse(profile).getMergedTree();
 
         final Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile, tree)
-                .map(o->o.withOrdering(profile.fields))
                 .limit(config.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
                 .peek(this.monitor::rowEmitted);
 

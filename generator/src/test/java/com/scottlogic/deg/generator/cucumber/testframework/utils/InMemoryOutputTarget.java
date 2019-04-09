@@ -24,10 +24,10 @@ public class InMemoryOutputTarget implements OutputTarget {
 
     @Override
     public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
-        this.testState.generatedObjects = getRows(generatedObjects);
+        this.testState.generatedObjects = getRows(generatedObjects, profileFields);
     }
 
-    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
+    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
         return generatedObjects
             .collect(Collectors.toList())
             .stream()
@@ -37,7 +37,7 @@ public class InMemoryOutputTarget implements OutputTarget {
                     throw new IllegalStateException("GeneratedObject is null");
                 }
 
-                return genObj.getValues()
+                return genObj.getOrderedValues(profileFields)
                     .stream()
                     .map(DataBagValue::getFormattedValue)
                     .collect(Collectors.toList());

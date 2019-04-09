@@ -33,12 +33,12 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
     }
 
     @Override
-    public void writeRow(Closeable closeable, GeneratedObject row) throws IOException {
+    public void writeRow(Closeable closeable, GeneratedObject row, ProfileFields profileFields) throws IOException {
         ThrownExceptions exceptions = new ThrownExceptions();
 
         this.writers.forEach(writer -> {
             try {
-                writer.writeRow(row);
+                writer.writeRow(row, profileFields);
             } catch (IOException e) {
                 exceptions.add(e);
             }
@@ -111,12 +111,12 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
             this.closeable = this.writer.openWriter(directory, this.fileName, profileFields);
         }
 
-        void writeRow(GeneratedObject row) throws IOException {
+        void writeRow(GeneratedObject row, ProfileFields profileFields) throws IOException {
             if (this.closeable == null){
                 throw new IllegalStateException("Writer has not been initialised");
             }
 
-            this.writer.writeRow(this.closeable, row);
+            this.writer.writeRow(this.closeable, row, profileFields);
         }
 
         String getFileNameAndRemember(String fileNameWithoutExtension) {
