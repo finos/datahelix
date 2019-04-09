@@ -24,6 +24,7 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 0.9 |
       | 1.0 |
 
+  @ignore #issue related to 867
   Scenario: User requires to create a numeric field with data values that include a decimal value to two decimal points
     Given foo is granular to 0.01
     And foo is greater than or equal to 0
@@ -40,7 +41,7 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 0.07 |
       | 0.08 |
       | 0.09 |
-      | 0.10 |
+      | 0.1  |
       | 0.11 |
       | 0.12 |
       | 0.13 |
@@ -50,7 +51,7 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 0.17 |
       | 0.18 |
       | 0.19 |
-      | 0.20 |
+      | 0.2  |
 
   Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
     Given foo is granular to 0.1
