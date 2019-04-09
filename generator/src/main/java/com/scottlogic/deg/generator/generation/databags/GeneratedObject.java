@@ -24,6 +24,10 @@ public class GeneratedObject {
         this.fieldOrdering = fieldOrdering;
     }
 
+    public Map<Field, DataBagValue> getFieldToValue() {
+        return fieldToValue;
+    }
+
     public Collection<DataBagValue> getValues() {
         if (fieldOrdering == null) {
             return fieldToValue.values();
@@ -38,20 +42,6 @@ public class GeneratedObject {
         return new GeneratedObject(fieldToValue, fieldOrdering);
     }
 
-    public Object getValue(Field field) {
-        if (!this.fieldToValue.containsKey(field))
-            throw new IllegalStateException("Databag has no value stored for " + field);
-
-        return this.fieldToValue.get(field).value;
-    }
-
-    public DataBagValue getValueAndFormat(Field field) {
-        if (!this.fieldToValue.containsKey(field))
-            throw new IllegalStateException("Databag has no value stored for " + field);
-
-        return this.fieldToValue.get(field);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,9 +53,5 @@ public class GeneratedObject {
     @Override
     public int hashCode() {
         return Objects.hash(fieldToValue);
-    }
-
-    public Map<Field, DataBagValue> getFieldToValue() {
-        return fieldToValue;
     }
 }

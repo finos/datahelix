@@ -20,35 +20,11 @@ class GeneratedObjectTests {
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.getValue(idField),
+            objectUnderTest
+                .getFieldToValue()
+                .get(idField)
+                .getValue(),
             equalTo(3));
-    }
-
-    @Test
-    void setShouldThrowExceptionIfAlreadyHasValueForField() {
-        // ARRANGE
-        Field idField = new Field("id");
-
-        // ACT / ASSERT
-        Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> GeneratedObjectBuilder.startBuilding()
-                .set(idField, 3, FieldSpecSource.Empty)
-                .set(idField, 3, FieldSpecSource.Empty)
-                .build());
-    }
-
-    @Test
-    void getShouldThrowIfFieldNotSpecified() {
-        // ARRANGE
-        Field idField = new Field("id");
-
-        GeneratedObject objectUnderTest = GeneratedObject.empty;
-
-        // ACT / ASSERT
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> objectUnderTest.getValueAndFormat(idField));
     }
 
     @Test
@@ -65,11 +41,11 @@ class GeneratedObjectTests {
 
         // ASSERT
         Assert.assertThat(
-            mergedGeneratedObject.getValue(idField),
+            mergedGeneratedObject.getFieldToValue().get(idField).getValue(),
             equalTo(3));
 
         Assert.assertThat(
-            mergedGeneratedObject.getValue(priceField),
+            mergedGeneratedObject.getFieldToValue().get(priceField).getValue(),
             equalTo(4));
     }
 
