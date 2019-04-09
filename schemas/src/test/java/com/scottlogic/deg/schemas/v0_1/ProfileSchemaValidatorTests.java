@@ -50,8 +50,8 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                InputStream testProfile = this.getClass().getResourceAsStream(TEST_PROFILE_DIR + INVALID_PROFILE_DIR + File.separator + profileFilename);
-                ValidationResult result = profileValidator.validateProfile(testProfile);
+                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename);
+                ValidationResult result = profileValidator.validateProfile(new File(testProfileUrl.getPath()));
                 Supplier<String> msgSupplier = () -> "Profile ["
                     + profileFilename + "] should not be valid";
                 Assertions.assertFalse(result.isValid(), msgSupplier);
@@ -68,8 +68,8 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                InputStream testProfile = this.getClass().getResourceAsStream(TEST_PROFILE_DIR + VALID_PROFILE_DIR + File.separator + profileFilename);
-                ValidationResult result = profileValidator.validateProfile(testProfile);
+                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename);
+                ValidationResult result = profileValidator.validateProfile(new File(testProfileUrl.getPath()));
                 Assert.assertTrue("Profile [" + profileFilename + "] should be valid [" + result.errorMessages + "]", result.isValid());
             });
             dynTsts.add(test);

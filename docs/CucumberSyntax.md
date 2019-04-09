@@ -47,7 +47,7 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 
 #### Operators
-See [Epistemic Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/EpistemicConstraints.md), [Grammatical Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/GrammaticalConstraints.md) and [Presentational Constraints](https://github.com/ScottLogic/datahelix/blob/master/docs/PresentationalConstraints.md) documents for details of the constraints.
+See [Predicate constraints](ProfileDeveloperGuide.md#Predicate-constraints), [Grammatical Constraints](ProfileDeveloperGuide.md#Grammatical-constraints) and [Presentational Constraints](ProfileDeveloperGuide.md#Presentational-constraints) for details of the constraints.
 
 #### Operands
 When specifying the operator/s for a field, ensure to format the value as in the table below:
@@ -87,9 +87,7 @@ And there is a constraint:
 ```
 
 ### Describing the outcome
-* _the profile is invalid_, executes the generator and asserts that any of the following exceptions were thrown: `InvalidProfileException`, `JsonParseException`, `IllegalArgumentException`, `ClassCastException`. I.e. something went wrong when trying to read or parse the profile
-* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` was thrown with the message `{reason}`.
-* _I am presented with an error message_, executes the generator and asserts that a exception was thrown, doesn't discriminate over the type of exception
+* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.
@@ -97,6 +95,8 @@ And there is a constraint:
 * _the following data should not be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is **not** present in the generated data (regardless of order)
 * _some data should be generated_, executes the generator and asserts that at least one row of data was emitted
 * _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
+
+\* Because `{reason}` is a regular expression, certain characters will need to be escaped, by including a `\` before them, e.g. `\(`, `\)`, `\[`, `\]`, etc.
 
 ### Validating the data in the output
 

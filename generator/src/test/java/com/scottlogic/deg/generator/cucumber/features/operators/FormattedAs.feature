@@ -185,12 +185,13 @@ Feature: User can specify that a value is so formatted
 #      | 2018-02-01T16:17:08.199Z  | "%tZ"        | "08"                           | requires timezone information
 #      | 2018-02-01T16:17:08.199Z  | "%tz"        | "08"                           | requires timezone information
 
+  @ignore #857: Format exceptions do not throw an InvalidProfile exception therefore cannot be caught and asserted against
   Scenario Outline: Running an invalid 'formattedAs' request should fail with an error message
     Given foo is in set:
       | <input> |
     And foo is formatted as <format>
     And foo is anything but null
-    Then I am presented with an error message
+    Then the profile is invalid because "Unable to format value `.+` with format expression `.+`: .*"
     And no data is created
     Examples:
       | input                    | format      |
@@ -280,7 +281,7 @@ Feature: User can specify that a value is so formatted
       | <input> |
     And foo is formatted as <format>
     And foo is anything but null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
     Examples:
       | input                    | format |

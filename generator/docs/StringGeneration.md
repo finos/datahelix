@@ -41,7 +41,83 @@ Due to the way that the generator computes textual data internally the generatio
 
 ## Anchors
 
-dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](https://github.com/ScottLogic/datahelix/blob/generator-documentation/docs/EpistemicConstraints.md#matchingregex-field-value) and [containingRegex](https://github.com/ScottLogic/datahelix/blob/generator-documentation/docs/EpistemicConstraints.md#containingregex-field-value). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](https://github.com/ScottLogic/datahelix/blob/master/docs/ProfileDeveloperGuide.md#predicate-matchingregex) and [containingRegex](https://github.com/ScottLogic/datahelix/blob/master/docs/ProfileDeveloperGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+
+## Automaton data types
+The automaton represents the state machine using the following types:
+- `Transition`
+- `State`
+
+### `Transition`
+A transition holds the following properties and are represented as lines in the above graph
+- `min: char` - The minimum permitted character that can be emitted at this position
+- `max: char` - The maximum permitted character that can be emitted at this position
+- `to: State[]` - The `State`s that can follow this transition
+
+In the above `A` looks like:
+
+| property | initial | \[a-z\] | 
+| ---- | ---- | ---- |
+| min | A | a |
+| max | A | z |
+| to | 1 state, `s1` | 1 state, `s4` |
+
+### `State`
+A state holds the following properties and are represented as circles in the above graph
+- `accept: boolean` - is this a termination state, can string production stop here?
+- `transitions: HashSet<Transition>` - which transitions, if any, follow this state
+- `number: int` - the number of this state
+- `id: int` - the id of this state (not sure what this is used for)
+
+In the above `s0` looks like:
+
+| property | initial | s3 |
+| ---- | ---- | ---- |
+| accept | false | false |
+| transitions | 1 transition, &rarr; `A` | 2 transitions:<br /> &rarr; `[a-z]`<br /> &rarr; `A|B` |
+| number | 4 | 0 |
+| id | 49 | 50 |
+
+### Textual representation
+The automaton can represent the state machine in a textual representation such as:
+
+```
+initial state: 4
+state 0 [reject]:
+  a-z -> 3
+  A-B -> 1
+state 1 [accept]:
+state 2 [reject]:
+  B -> 5
+state 3 [reject]:
+  A-B -> 1
+state 4 [reject]:
+  A -> 2
+state 5 [reject]:
+  C -> 0
+```
+
+This shows each state and each transition in the automaton, lines 2-4 show the `State` as shown in the previous section.
+Lines 10-11 show the transition 'A' as shown in the prior section.
+
+The pathway through the automaton is:
+- transition to state **4** (because the initial - empty string state - is rejected/incomplete)
+- add an 'A' (state 4)
+- transition to state **2** (because the current state "A" is rejected/incomplete)
+- add a 'B' (state 2)
+- transition to state **5** (because the current state "AB" is rejected/incomplete)
+- add a 'C' (state 5)
+- transition to state **0** (because the current state "ABC" is rejected/incomplete)
+   - _either_
+      - add a letter between `a..z` (state 0, transition 1)
+      - transition to state **3** (because the current state "ABCa" is rejected/incomplete)
+      - add either 'A' or 'B' (state 3)
+      - transition to state **1** (because the current state "ABCaA" is rejected/incomplete)
+      - current state is accepted so exit with the current string "ABCaA"
+   - _or_   
+      - add either 'A' or 'B' (state 0, transition 2)
+      - transition to state **1** (because the current state "ABCA" is rejected/incomplete)
+      - current state is accepted so exit with the current string "ABCA"
 
 ## Character support
 

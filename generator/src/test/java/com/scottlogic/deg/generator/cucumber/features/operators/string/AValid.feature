@@ -16,22 +16,22 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
 
   Scenario: Running a 'aValid' request that includes the string "isin" should fail with an error message
     Given foo is a valid "isin"
-    Then I am presented with an error message
+    Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes.isin"
     And no data is created
 
   Scenario: Running a 'aValid' request that includes a non ISIN string should fail with an error message
     Given foo is a valid "BURRITO"
-    Then I am presented with an error message
+    Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes.BURRITO"
     And no data is created
 
   Scenario: Running an 'aValid' request that includes a null entry ("") characters should fail with an error message
     Given foo is a valid ""
-    Then I am presented with an error message
+    Then the profile is invalid because "No enum constant com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes."
     And no data is created
 
   Scenario: Running an 'aValid' request with the value property set to a null entry (null) should throw an error
     Given foo is a valid null
-    Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
   Scenario: aValid run against a non contradicting aValid should be successful

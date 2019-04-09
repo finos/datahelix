@@ -58,7 +58,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length <length>
     And foo is in set:
       | "1" |
-    Then I am presented with an error message
+    Then the profile is invalid because "Field \[foo\]: String-length operator must contain a integer value for its operand found \(\d+\.\d+ <BigDecimal>\)"
     Examples:
       | length      |
       | 1.1         |
@@ -72,7 +72,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length <length>
     And foo is in set:
       | "a" |
-    Then I am presented with an error message
+    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have a operand/value >= 0, currently is -?\d+)"
     And no data is created
     Examples:
       | length                    |
