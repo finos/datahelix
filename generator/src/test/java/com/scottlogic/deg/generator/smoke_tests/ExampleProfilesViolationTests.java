@@ -169,7 +169,7 @@ class ExampleProfilesViolationTests {
         }
 
         @Override
-        public void writeRow(Closeable closeable, GeneratedObject row) {
+        public void writeRow(Closeable closeable, GeneratedObject row, ProfileFields profileFields) {
         }
 
         @Override

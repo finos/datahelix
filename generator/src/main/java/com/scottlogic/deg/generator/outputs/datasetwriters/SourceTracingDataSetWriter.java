@@ -38,7 +38,7 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
     }
 
     @Override
-    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row) throws IOException {
+    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row, ProfileFields profileFields) throws IOException {
         Collection<TracingDto> dto = getRowSource(row) != null
             ? TracingDto.fromRowSource(getRowSource(row))
             : TracingDto.empty;

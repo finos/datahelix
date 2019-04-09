@@ -13,7 +13,7 @@ public interface DataSetWriter<TWriter extends Closeable> {
         String fileName,
         ProfileFields profileFields) throws IOException;
 
-    void writeRow(TWriter writer, GeneratedObject row) throws IOException;
+    void writeRow(TWriter writer, GeneratedObject row, ProfileFields profileFields) throws IOException;
 
     String getFileName(String fileNameWithoutExtension);
 }

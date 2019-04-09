@@ -39,7 +39,7 @@ public class FileOutputTarget implements OutputTarget{
         try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileName, profileFields)) {
             generatedObjects.forEach(row -> {
                 try {
-                    this.dataSetWriter.writeRow(writer, row);
+                    this.dataSetWriter.writeRow(writer, row, profileFields);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
