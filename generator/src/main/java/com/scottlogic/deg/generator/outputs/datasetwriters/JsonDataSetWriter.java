@@ -32,12 +32,12 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
     }
 
     @Override
-    public void writeRow(JsonDataSetWriter.JsonWriter writer, GeneratedObject row) {
+    public void writeRow(JsonWriter writer, GeneratedObject row, ProfileFields profileFields) {
         //TODO: Change this type to write progressively to the JSON file, currently it holds all rows in memory: Issue: #256
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();
 
-        Iterator<DataBagValue> dataBagIterator = row.getValues().iterator();
+        Iterator<DataBagValue> dataBagIterator = row.getOrderedValues(profileFields).iterator();
         Iterator<Field> fieldNameIterator = writer.profileFields.iterator();
 
         while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
