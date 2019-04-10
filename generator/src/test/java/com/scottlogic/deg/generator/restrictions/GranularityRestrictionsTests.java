@@ -11,8 +11,8 @@ import static org.hamcrest.core.IsNot.not;
 class GranularityRestrictionsTests {
     @Test
     public void shouldBeEqualIfNumericScaleIsTheSame(){
-        GranularityRestrictions a = restrictions(0.1);
-        GranularityRestrictions b = restrictions(0.1);
+        NumericRestrictions a = restrictions(0.1);
+        NumericRestrictions b = restrictions(0.1);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -20,14 +20,14 @@ class GranularityRestrictionsTests {
 
     @Test
     public void shouldBeUnequalIfNumericScalesAreDifferent(){
-        GranularityRestrictions a = restrictions(0.1);
-        GranularityRestrictions b = restrictions(0.01);
+        NumericRestrictions a = restrictions(0.1);
+        NumericRestrictions b = restrictions(0.01);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
-    private static GranularityRestrictions restrictions(double numericScale){
-        GranularityRestrictions restrictions = new GranularityRestrictions(
+    private static NumericRestrictions restrictions(double numericScale){
+        NumericRestrictions restrictions = new NumericRestrictions(
             ParsedGranularity.parse(BigDecimal.valueOf(numericScale))
         );
 

@@ -10,7 +10,6 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
     private EqualityComparer typeRestrictionsComparer = new TypeRestrictionsEqualityComparer();
     private EqualityComparer dateTimeRestrictionsComparer = new DateTimeRestrictionsEqualityComparer();
     private EqualityComparer formatRestrictionsComparer = new FormatRestrictionsEqualityComparer();
-    private EqualityComparer granularityRestrictionsComparer = new GranularityRestrictionsEqualityComparer();
     private EqualityComparer mustContainRestrictionsComparer = new MustContainRestrictionsEqualityComparer(this);
 
     @Override
@@ -39,7 +38,6 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
         && typeRestrictionsComparer.equals(fieldSpec1.getTypeRestrictions(), fieldSpec2.getTypeRestrictions())
         && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions())
         && formatRestrictionsComparer.equals(fieldSpec1.getFormatRestrictions(), fieldSpec2.getFormatRestrictions())
-        && granularityRestrictionsComparer.equals(fieldSpec1.getGranularityRestrictions(), fieldSpec2.getGranularityRestrictions())
         && mustContainRestrictionsComparer.equals(fieldSpec1.getMustContainRestriction(), fieldSpec2.getMustContainRestriction());
     }
 }

@@ -12,7 +12,6 @@ public class ConstraintValidator {
     public final SetConstraintValidator setConstraintValidator;
     public final StringConstraintValidator stringConstraintValidator;
     public final NullConstraintValidator nullConstraintValidator;
-    public final GranularityConstraintValidator granularityConstraintValidator;
     public final NumericConstraintValidator numericConstraintValidator;
 
     public ConstraintValidator(TypeConstraintValidator typeConstraintValidator,
@@ -20,7 +19,6 @@ public class ConstraintValidator {
                                   SetConstraintValidator setConstraintValidator,
                                   StringConstraintValidator stringConstraintValidator,
                                   NullConstraintValidator nullConstraintValidator,
-                                  GranularityConstraintValidator granularityConstraintValidator,
                                   NumericConstraintValidator numericConstraintValidator)
     {
         this.typeConstraintValidator = typeConstraintValidator;
@@ -28,7 +26,6 @@ public class ConstraintValidator {
         this.setConstraintValidator = setConstraintValidator;
         this.stringConstraintValidator = stringConstraintValidator;
         this.nullConstraintValidator = nullConstraintValidator;
-        this.granularityConstraintValidator = granularityConstraintValidator;
         this.numericConstraintValidator = numericConstraintValidator;
     }
 
@@ -41,7 +38,6 @@ public class ConstraintValidator {
         alerts.addAll(setConstraintValidator.getAlerts());
         alerts.addAll(stringConstraintValidator.getAlerts());
         alerts.addAll(nullConstraintValidator.getAlerts());
-        alerts.addAll(granularityConstraintValidator.getAlerts());
         alerts.addAll(numericConstraintValidator.getAlerts());
 
         return alerts;

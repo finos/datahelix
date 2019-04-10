@@ -195,8 +195,8 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withGranularityRestrictions(
-            new GranularityRestrictions(constraint.granularity),
+        return FieldSpec.Empty.withNumericRestrictions(
+            new NumericRestrictions(constraint.granularity),
             FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 
