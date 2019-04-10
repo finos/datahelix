@@ -4,6 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 import com.scottlogic.deg.generator.restrictions.GranularityRestrictions;
+import com.scottlogic.deg.generator.restrictions.GranularityRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public class GranularityConstraintValidator implements ConstraintValidatorAlerts
         ParsedGranularity parsedReferenceValue = ParsedGranularity.parse(referenceValue);
         GranularityRestrictions candidateRestrictions = new GranularityRestrictions(parsedReferenceValue);
 
-        GranularityRestrictions result = GranularityRestrictions.merge(currentRestrictions, candidateRestrictions);
+        GranularityRestrictions result = GranularityRestrictionsMerger.merge(currentRestrictions, candidateRestrictions);
 
         if (currentRestrictions != null && currentRestrictions.getNumericScale() != result.getNumericScale()) {
             // Alert information that granularity has changed. This is allowed but may be unexpected to the user.

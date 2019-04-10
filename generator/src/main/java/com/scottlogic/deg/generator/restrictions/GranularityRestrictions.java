@@ -12,7 +12,7 @@ public class GranularityRestrictions {
         this.numericScale = granularity.getNumericGranularity().scale();
     }
 
-    private GranularityRestrictions(int numericScale) {
+    public GranularityRestrictions(int numericScale) {
         this.numericScale = numericScale;
     }
 
@@ -25,14 +25,6 @@ public class GranularityRestrictions {
         return this.numericScale;
     }
 
-    public static GranularityRestrictions merge(GranularityRestrictions left, GranularityRestrictions right) {
-        if (left == null || right == null) {
-            return left == null ? right : left;
-        }
-
-        return new GranularityRestrictions(
-            Math.min(left.numericScale, right.numericScale));
-    }
 
     @Override
     public String toString() {
