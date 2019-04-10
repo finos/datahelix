@@ -209,7 +209,6 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
 ### beforeOrAt ###
 
-  @ignore #191 - or at date not created
   Scenario: 'After' with a non-contradicting 'Before' is successful
     Given foo is after 2019-01-01T00:00:00.000Z
     And foo is before or at 2020-01-01T00:00:00.000Z
