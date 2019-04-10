@@ -29,10 +29,7 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterString() {
-        StringRestrictions restriction = new StringRestrictions(new MatchesRegexConstraint(
-            new Field("field"),
-            Pattern.compile("H(i|ello) World"),
-            Collections.emptySet()), false);
+        StringRestrictions restriction = TextualRestrictions.withStringMatching(Pattern.compile("H(i|ello) World"), false);
 
         Assert.assertThat(restriction.match("Hello World"), Is.is(true));
         Assert.assertThat(restriction.match("Hi World"), Is.is(true));

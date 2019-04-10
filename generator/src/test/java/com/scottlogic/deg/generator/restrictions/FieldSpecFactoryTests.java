@@ -17,8 +17,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 class FieldSpecFactoryTests {
     private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
     private TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
-    private StringRestrictions longerThanRestriction = new StringRestrictions(new IsStringLongerThanConstraint(null, 2 , null), false);
-    private StringRestrictions shorterThanRestriction = new StringRestrictions(new IsStringShorterThanConstraint(null, 5 , null), false);
+    private StringRestrictions longerThanRestriction = TextualRestrictions.withMinLength(3);
+    private StringRestrictions shorterThanRestriction = TextualRestrictions.withMaxLength(4);
 
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {
@@ -194,25 +194,6 @@ class FieldSpecFactoryTests {
     }
 
     @Test
-    void construct_stringHasLengthConstraintInstancesAreNotEqual_returnsDifferentStringGeneratorInstances() {
-        StringHasLengthConstraint firstConstraint = new StringHasLengthConstraint(
-            new Field("Test"),
-            20,
-            null
-        );
-        StringHasLengthConstraint secondConstraint = new StringHasLengthConstraint(
-            new Field("Different"),
-            20,
-            null
-        );
-
-        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
-
-        Assert.assertNotEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
-    }
-
-    @Test
     void construct_isStringLongerThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(
             new Field("Test"),
@@ -262,25 +243,6 @@ class FieldSpecFactoryTests {
     }
 
     @Test
-    void construct_isStringLongerThanConstraintInstancesAreNotEqual_returnsDifferentStringGeneratorInstances() {
-        IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(
-            new Field("Test"),
-            20,
-            null
-        );
-        IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(
-            new Field("Different"),
-            20,
-            null
-        );
-
-        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
-
-        Assert.assertNotEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
-    }
-
-    @Test
     void construct_isStringShorterThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(
             new Field("Test"),
@@ -327,24 +289,5 @@ class FieldSpecFactoryTests {
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
         Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
-    }
-
-    @Test
-    void construct_isStringShorterThanConstraintInstancesAreNotEqual_returnsDifferentStringGeneratorInstances() {
-        IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(
-            new Field("Test"),
-            20,
-            null
-        );
-        IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(
-            new Field("Different"),
-            20,
-            null
-        );
-
-        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
-
-        Assert.assertNotEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 }

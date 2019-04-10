@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
  */
 public class Restriction<T> {
     private final T value;
-    private final boolean isSoftRestriction;
+    final boolean isSoftRestriction;
 
     public Restriction(T value, boolean isSoftRestriction) {
         this.value = value;
