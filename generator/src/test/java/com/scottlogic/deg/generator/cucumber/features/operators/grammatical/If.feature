@@ -2493,10 +2493,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 1.11  | 3.33 |
       | 1.111 | 3.33 |
 
-  @ignore #issue 363
   Scenario: Running an if request that contains a contradictory granularTo constraint within its if statement should be successful
     Given foo is in set:
-      | 1     |
       | 1.1   |
       | 1.11  |
       | 1.111 |
@@ -2510,19 +2508,17 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "granularTo", "value": 0.00000001 },
+        "if": { "field": "foo", "is": "granularTo", "value": 1 },
         "then": { "field": "bar", "is": "equalTo", "value": 1 },
         "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
       }
       """
     Then the following data should be generated:
       | foo   | bar |
-      | 1     | 2.2 |
       | 1.1   | 2.2 |
       | 1.11  | 2.2 |
       | 1.111 | 2.2 |
 
-  @ignore #issue 363
   Scenario: Running an if request that contains a contradictory granularTo constraint within its then statement should be successful
     Given foo is in set:
       | 1     |
@@ -2531,7 +2527,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 1.111 |
     And foo is anything but null
     And bar is in set:
-      | 1     |
       | 2.2   |
       | 3.33  |
       | 4.444 |
@@ -2540,7 +2535,7 @@ Feature: Values can be specified by using if, then and else constraints
       """
       {
         "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "granularTo", "value": 0.00000001 },
+        "then": { "field": "bar", "is": "granularTo", "value": 1 },
         "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
       }
       """
@@ -2550,7 +2545,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 1.11  | 2.2 |
       | 1.111 | 2.2 |
 
-  @ignore #issue 363
   Scenario: Running an if request that contains a contradictory granularTo constraint within its else statement should be successful
     Given foo is in set:
       | 1     |
@@ -2559,7 +2553,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 1.111 |
     And foo is anything but null
     And bar is in set:
-      | 1     |
       | 2.2   |
       | 3.33  |
       | 4.444 |
@@ -2569,7 +2562,7 @@ Feature: Values can be specified by using if, then and else constraints
       {
         "if": { "field": "foo", "is": "equalTo", "value": 1 },
         "then": { "field": "bar", "is": "equalTo", "value": 3.33 },
-        "else": { "field": "bar", "is": "granularTo", "value": 0.00000001 }
+        "else": { "field": "bar", "is": "granularTo", "value": 1 }
       }
       """
     Then the following data should be generated:
