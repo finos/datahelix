@@ -2435,7 +2435,7 @@ Feature: Values can be specified by using if, then and else constraints
       | foo | bar |
       | 10  | 1   |
 
-  @ignore #issue 363  maybe also 756?
+  @ignore #issue 363
   Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
     Given foo is in set:
       | 1     |
