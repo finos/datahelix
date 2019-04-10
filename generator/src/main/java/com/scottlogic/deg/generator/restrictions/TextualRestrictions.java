@@ -20,6 +20,7 @@ public class TextualRestrictions implements StringRestrictions {
     private final Set<Integer> excludedLengths;
     private final Set<Pattern> notMatchingRegex;
     private final Set<Pattern> notContainingRegex;
+    private StringGenerator matchGenerator;
     private StringGenerator generator;
 
     private TextualRestrictions(
@@ -176,7 +177,11 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         String s = (String) o;
-        return createGenerator().match(s);
+        return createGenerator(true).match(s);
+    }
+
+    public StringGenerator createGenerator() {
+        return createGenerator(false);
     }
 
     /**
@@ -184,14 +189,18 @@ public class TextualRestrictions implements StringRestrictions {
      *
      * Create a StringGenerator that will produce strings that match all of the given constraints
      */
-    public StringGenerator createGenerator() {
-        if (generator != null){
-            return generator;
+    private StringGenerator createGenerator(boolean matchGenerator) {
+        StringGenerator cachedGenerator = matchGenerator
+            ? this.matchGenerator
+            : this.generator;
+
+        if (cachedGenerator != null){
+            return cachedGenerator;
         }
 
         //determine the boundaries and exclusions defined in the given constraints
         int minLength = this.minLength != null ? this.minLength.getValue() : 0;
-        int maxLength = this.maxLength != null ? this.maxLength.getValue() : StringRestrictions.MAX_STRING_LENGTH;
+        int maxLength = getMaxLength(minLength, matchGenerator);
 
         //detect contradictions
         if (minLength > maxLength
@@ -209,7 +218,7 @@ public class TextualRestrictions implements StringRestrictions {
         //combine (merge/intersect) each non-length related constraint to produce a single string generator
         //e.g. would combine /[a-z]{0,9}/ with /.{0,255}/ (lengthConstrainingGenerator) to produce a single generator
         //that looks like /[a-z]{0,9} ∩ .{0,255}/, which is equivalent to /[a-z]{0,9}/
-        return generator = getPatternConstraints()
+        StringGenerator generator = getPatternConstraints()
             .reduce(
                 lengthConstrainingGenerator,
                 (prev, current) -> {
@@ -220,6 +229,29 @@ public class TextualRestrictions implements StringRestrictions {
                     return prev.intersect(current);
                 },
                 (a, b) -> null);
+
+        if (matchGenerator) {
+            this.matchGenerator = generator;
+        } else {
+            this.generator = generator;
+        }
+
+        return generator;
+    }
+
+    private int getMaxLength(int minLength, boolean matchGenerator) {
+        int maxLength = this.maxLength != null ? this.maxLength.getValue() : StringRestrictions.MAX_STRING_LENGTH;
+        boolean maxLengthIsSoft = this.maxLength == null || this.maxLength.isSoftRestriction;
+
+        if (maxLengthIsSoft && matchGenerator){
+            return StringRestrictions.MAX_STRING_LENGTH;
+        }
+
+        if (maxLength < minLength && maxLengthIsSoft){
+            return StringRestrictions.MAX_STRING_LENGTH;
+        }
+
+        return maxLength;
     }
 
     private boolean allLengthsAreExcluded(int minLength, int maxLength, Set<Integer> excludedLengths) {

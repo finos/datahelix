@@ -558,6 +558,26 @@ class TextualRestrictionsTests {
         Assert.assertThat(generator.toString(), equalTo("/^.{0,3}$/"));
     }
 
+    @Test
+    void createGenerator_withLongerThanDefaultMax_shouldReturnStringsUpToHardMaximum() {
+        StringRestrictions restrictions = minLength(300, false)
+            .intersect(maxLength(255, true));
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("/^.{300,1000}$/"));
+    }
+
+    @Test
+    void createGenerator_withContradictingLengths_shouldReturnNoStrings() {
+        StringRestrictions restrictions = ofLength(1, false, false)
+            .intersect(ofLength(2, false, false));
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        assertGeneratorCannotGenerateAnyStrings(generator);
+    }
+
     private static StringRestrictions ofLength(int length, boolean negate, boolean soft){
         return negate
             ? TextualRestrictions.withoutLength(length)
