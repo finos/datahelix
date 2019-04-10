@@ -55,11 +55,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
-  Scenario: Running a 'longerThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
-    Given foo is longer than 2147483647
-    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have a operand/value <= 2147483646, currently is 2147483647"
-    And no data is created
-
   Scenario: 'longerThan' a decimal number with a zero mantissa should be successful
     Given foo is longer than 2.0
     And foo is in set:
@@ -621,3 +616,16 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
       | 2020-01-01T00:00:00.000Z  |
+
+  @ignore #awaiting rest of #848
+  Scenario: longerThan with maximum permitted value should be successful
+    Given foo is longer than 999
+    And the generation strategy is random
+    And the generator can generate at most 1 rows
+    And foo is anything but null
+    Then foo contains strings of length between 1000 and 1000 inclusively
+
+  @ignore #awaiting rest of #848
+  Scenario: longerThan with value larger than maximum permitted should fail with an error message
+    Given foo is longer than 1000
+    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have a operand/value <= 999, currently is 1000"

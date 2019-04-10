@@ -47,11 +47,6 @@ Feature: User can specify that a string length is lower than, a specified number
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
-  Scenario: Running a 'shorterThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
-    Given foo is shorter than 2147483648
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value <= 2147483647, currently is 2147483648"
-    And no data is created
-
   Scenario: shorterThan run against a non contradicting shorterThan should be successful
     Given foo is shorter than 4
     And foo is shorter than 3
@@ -251,3 +246,15 @@ Feature: User can specify that a string length is lower than, a specified number
       | foo  |
       | null |
       | "x"  |
+
+  Scenario: shorterThan with maximum permitted value should be successful
+    Given foo is shorter than 1001
+    And the generation strategy is random
+    And the generator can generate at most 1 rows
+    And foo is anything but null
+    Then foo contains strings of length between 0 and 1000 inclusively
+
+  @ignore #awaiting rest of #848
+  Scenario: shorterThan with value larger than maximum permitted should fail with an error message
+    Given foo is shorter than 1002
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1001, currently is 1002"
