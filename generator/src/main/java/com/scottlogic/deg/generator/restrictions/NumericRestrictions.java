@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class NumericRestrictions {
-
     public static boolean isNumeric(Object o){
         return o instanceof Number;
     }
@@ -34,25 +33,6 @@ public class NumericRestrictions {
         }
 
         return true;
-    }
-
-    public boolean areLimitValuesInteger() {
-        if (min == null || max == null) {
-            return false;
-        }
-
-        // If either of the min or max values have decimal points or if the sign differs when converting to an integer
-        // the value is not an integer
-        BigDecimal minLimit = min.getLimit();
-        BigDecimal maxLimit = max.getLimit();
-        if (minLimit.scale() > 0 || maxLimit.scale() > 0 ||
-            minLimit.signum() != Integer.signum(minLimit.intValue()) ||
-            maxLimit.signum() != Integer.signum(maxLimit.intValue())) {
-            return false;
-        }
-
-        return (minLimit.toBigInteger().signum() == 0 || minLimit.intValue() != 0) &&
-               (maxLimit.toBigInteger().signum() == 0 || maxLimit.intValue() != 0);
     }
 
     @Override
