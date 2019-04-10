@@ -135,6 +135,13 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
      * @return True if constraint van be violated, otherwise false.
      */
     private boolean canViolate(Constraint constraint){
+        if (constraint instanceof AtomicConstraint){
+            AtomicConstraint atomicConstraint = (AtomicConstraint) constraint;
+            if (atomicConstraint.isSoftConstraint()){
+                return false;
+            }
+        }
+
         for (ViolationFilter filter : constraintsToNotViolate) {
             if (!filter.canViolate(constraint)){
                 return false;

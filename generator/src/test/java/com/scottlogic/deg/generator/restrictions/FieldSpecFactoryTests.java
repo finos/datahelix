@@ -17,8 +17,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 class FieldSpecFactoryTests {
     private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
     private TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
-    private StringRestrictions longerThanRestriction = TextualRestrictions.withMinLength(3);
-    private StringRestrictions shorterThanRestriction = TextualRestrictions.withMaxLength(4);
+    private StringRestrictions longerThanRestriction = TextualRestrictions.withMinLength(3, false);
+    private StringRestrictions shorterThanRestriction = TextualRestrictions.withMaxLength(4, false);
 
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {

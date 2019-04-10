@@ -1,12 +1,14 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.generator.inputs.SoftConstraintAppendingProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
@@ -33,7 +35,7 @@ public class CucumberTestModule extends AbstractModule {
     @Override
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
-        bind(ProfileReader.class).to(CucumberProfileReader.class);
+        bind(ProfileReader.class).toProvider(CucumberProfileReaderProvider.class);
         bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(OutputTarget.class).to(InMemoryOutputTarget.class).in(Singleton.class);
@@ -51,3 +53,4 @@ public class CucumberTestModule extends AbstractModule {
         }
     }
 }
+

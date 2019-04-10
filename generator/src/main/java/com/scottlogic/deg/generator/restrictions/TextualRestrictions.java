@@ -13,9 +13,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TextualRestrictions implements StringRestrictions {
-    private static final Restriction<Integer> defaultMinLength = null;
-    private static final Restriction<Integer> defaultMaxLength = new Restriction<>(255, true);
-
     private final Restriction<Integer> minLength;
     private final Restriction<Integer> maxLength;
     private final Set<Pattern> matchingRegex;
@@ -44,8 +41,8 @@ public class TextualRestrictions implements StringRestrictions {
 
     public static TextualRestrictions withStringMatching(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
+            null,
+            null,
             negate
                 ? Collections.emptySet()
                 : Collections.singleton(pattern),
@@ -60,8 +57,8 @@ public class TextualRestrictions implements StringRestrictions {
 
     public static TextualRestrictions withStringContaining(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
+            null,
+            null,
             Collections.emptySet(),
             negate
                 ? Collections.emptySet()
@@ -74,24 +71,22 @@ public class TextualRestrictions implements StringRestrictions {
         );
     }
 
-    public static TextualRestrictions withLength(int length, boolean negate) {
+    public static TextualRestrictions withoutLength(int length) {
         return new TextualRestrictions(
-            negate ? defaultMinLength : new Restriction<>(length, false),
-            negate ? defaultMaxLength : new Restriction<>(length, false),
+            null,
+            null,
             Collections.emptySet(),
             Collections.emptySet(),
-            negate
-                ? Collections.singleton(length)
-                : Collections.emptySet(),
+            Collections.singleton(length),
             Collections.emptySet(),
             Collections.emptySet()
         );
     }
 
-    public static TextualRestrictions withMinLength(int length){
+    public static TextualRestrictions withLength(int length, boolean softConstraint) {
         return new TextualRestrictions(
-            new Restriction<>(length, false),
-            defaultMaxLength,
+            new Restriction<>(length, softConstraint),
+            new Restriction<>(length, softConstraint),
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
@@ -100,10 +95,22 @@ public class TextualRestrictions implements StringRestrictions {
         );
     }
 
-    public static TextualRestrictions withMaxLength(int length){
+    public static TextualRestrictions withMinLength(int length, boolean softConstraint){
         return new TextualRestrictions(
-            defaultMinLength,
-            new Restriction<>(length, false),
+            new Restriction<>(length, softConstraint),
+            null,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet()
+        );
+    }
+
+    public static TextualRestrictions withMaxLength(int length, boolean softConstraint){
+        return new TextualRestrictions(
+            null,
+            new Restriction<>(length, softConstraint),
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
@@ -129,7 +136,9 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         if (other instanceof MatchesStandardStringRestrictions){
-            return new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints");
+            return hasAnyHardRestrictions()
+                ? new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints")
+                : other;
         }
 
         TextualRestrictions textualRestrictions = (TextualRestrictions) other;
@@ -348,8 +357,8 @@ public class TextualRestrictions implements StringRestrictions {
         TextualRestrictions that = (TextualRestrictions) o;
 
         return excludedLengths.equals(that.excludedLengths)
-            && maxLength.equals(that.maxLength)
-            && ((minLength == null && that.minLength == null) || (minLength != null && minLength.equals(that.minLength)))
+            && restrictionsAreEqual(maxLength, that.maxLength)
+            && restrictionsAreEqual(minLength, that.minLength)
             && containingRegex.equals(that.containingRegex)
             && matchingRegex.equals(that.matchingRegex)
             && notContainingRegex.equals(that.notContainingRegex)
@@ -359,5 +368,23 @@ public class TextualRestrictions implements StringRestrictions {
     @Override
     public int hashCode() {
         return Objects.hash(excludedLengths, maxLength, minLength, containingRegex, matchingRegex, notMatchingRegex, notContainingRegex);
+    }
+
+    private static <T> boolean restrictionsAreEqual(Restriction<T> one, Restriction<T> other){
+        if (one == null && other == null){
+            return true;
+        }
+
+        return one != null && one.equals(other);
+    }
+
+    private boolean hasAnyHardRestrictions() {
+        return !excludedLengths.isEmpty()
+            || (maxLength != null && !maxLength.isSoftRestriction)
+            || (minLength != null && !minLength.isSoftRestriction)
+            || !containingRegex.isEmpty()
+            || !matchingRegex.isEmpty()
+            || !notContainingRegex.isEmpty()
+            || !notMatchingRegex.isEmpty();
     }
 }

@@ -14,7 +14,6 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
@@ -80,7 +79,7 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
-        bind(ProfileReader.class).to(JsonProfileReader.class);
+        bind(ProfileReader.class).toProvider(ProfileReaderProvider.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
@@ -107,3 +106,4 @@ public class BaseModule extends AbstractModule {
         }
     }
 }
+

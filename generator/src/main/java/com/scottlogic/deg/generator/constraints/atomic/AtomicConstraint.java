@@ -28,4 +28,8 @@ public interface AtomicConstraint extends Constraint {
     }
 
     AtomicConstraint withRules(Set<RuleInformation> rules);
+
+    default boolean isSoftConstraint(){
+        return false;
+    }
 }

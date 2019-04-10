@@ -270,7 +270,9 @@ public class FieldSpecFactory {
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty
             .withStringRestrictions(
-                TextualRestrictions.withLength(constraint.referenceValue, negate),
+                negate
+                    ? TextualRestrictions.withoutLength(constraint.referenceValue)
+                    : TextualRestrictions.withLength(constraint.referenceValue, constraint.isSoftConstraint()),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -279,8 +281,8 @@ public class FieldSpecFactory {
         return FieldSpec.Empty
             .withStringRestrictions(
                 negate
-                    ? TextualRestrictions.withMinLength(constraint.referenceValue)
-                    : TextualRestrictions.withMaxLength(constraint.referenceValue - 1),
+                    ? TextualRestrictions.withMinLength(constraint.referenceValue, constraint.isSoftConstraint())
+                    : TextualRestrictions.withMaxLength(constraint.referenceValue - 1, constraint.isSoftConstraint()),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -289,8 +291,8 @@ public class FieldSpecFactory {
         return FieldSpec.Empty
             .withStringRestrictions(
                 negate
-                    ? TextualRestrictions.withMaxLength(constraint.referenceValue)
-                    : TextualRestrictions.withMinLength(constraint.referenceValue + 1),
+                    ? TextualRestrictions.withMaxLength(constraint.referenceValue, constraint.isSoftConstraint())
+                    : TextualRestrictions.withMinLength(constraint.referenceValue + 1, constraint.isSoftConstraint()),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
