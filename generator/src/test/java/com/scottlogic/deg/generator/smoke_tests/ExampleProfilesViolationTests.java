@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
@@ -149,7 +149,7 @@ class ExampleProfilesViolationTests {
         }
 
         @Override
-        public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) {
+        public void outputDataset(Stream<Row> generatedObjects, ProfileFields profileFields) {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
 
             generatedObjects.forEach(
@@ -169,7 +169,7 @@ class ExampleProfilesViolationTests {
         }
 
         @Override
-        public void writeRow(Closeable closeable, GeneratedObject row, ProfileFields profileFields) {
+        public void writeRow(Closeable closeable, Row row, ProfileFields profileFields) {
         }
 
         @Override

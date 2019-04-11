@@ -5,12 +5,12 @@ import com.scottlogic.deg.generator.*;
 import java.util.*;
 
 
-public class GeneratedObject {
-    public static final GeneratedObject empty = new GeneratedObject(new HashMap<>());
+public class Row {
+    public static final Row empty = new Row(new HashMap<>());
 
     private final Map<Field, Value> fieldToValue;
 
-    public GeneratedObject(Map<Field, Value> fieldToValue) {
+    public Row(Map<Field, Value> fieldToValue) {
         this.fieldToValue = fieldToValue;
     }
 
@@ -22,8 +22,8 @@ public class GeneratedObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GeneratedObject generatedObject = (GeneratedObject) o;
-        return Objects.equals(fieldToValue, generatedObject.fieldToValue);
+        Row row = (Row) o;
+        return Objects.equals(fieldToValue, row.fieldToValue);
     }
 
     @Override

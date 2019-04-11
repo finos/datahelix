@@ -5,8 +5,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,11 +47,11 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(2)).generateData(profile, tree);
         Assert.assertThat(
-            result.stream().map(GeneratedObject::toString).collect(Collectors.toList()),
+            result.stream().map(Row::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "second-iteration-first-random-row"));
     }
 
@@ -64,11 +63,11 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(3)).generateData(profile, tree);
         Assert.assertThat(
-            result.stream().map(GeneratedObject::toString).collect(Collectors.toList()),
+            result.stream().map(Row::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "third-iteration-first-random-row"));
     }
 
@@ -78,7 +77,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.empty()
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(1)).generateData(profile, tree);
         Assert.assertThat(
@@ -86,7 +85,7 @@ class RandomReductiveDataGeneratorTests {
             is(false));
     }
 
-    private static GeneratedObject rowSpec(String detail) {
-        return mock(GeneratedObject.class, detail);
+    private static Row rowSpec(String detail) {
+        return mock(Row.class, detail);
     }
 }

@@ -28,8 +28,8 @@ public class GeneratedObjectBuilder {
         return this.set(field, new Value(field, value, null, source));
     }
 
-    public GeneratedObject build() {
-        return new GeneratedObject(this.fieldToValue);
+    public Row build() {
+        return new Row(this.fieldToValue);
     }
 }
 

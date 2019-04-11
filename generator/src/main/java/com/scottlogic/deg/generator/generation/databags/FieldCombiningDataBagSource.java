@@ -10,14 +10,14 @@ import java.util.stream.Stream;
  *  return a single stream of GeneratedObjects with all the different fields added
  */
 public class FieldCombiningDataBagSource implements DataBagSource {
-    private final List<Stream<GeneratedObject>> subGenerators;
+    private final List<Stream<Row>> subGenerators;
 
-    FieldCombiningDataBagSource(List<Stream<GeneratedObject>> subGenerators) {
+    FieldCombiningDataBagSource(List<Stream<Row>> subGenerators) {
         this.subGenerators = subGenerators;
     }
 
     @Override
-    public Stream<GeneratedObject> generate(GenerationConfig generationConfig) {
+    public Stream<Row> generate(GenerationConfig generationConfig) {
         return generationConfig.getCombinationStrategy()
             .permute(subGenerators.stream());
     }

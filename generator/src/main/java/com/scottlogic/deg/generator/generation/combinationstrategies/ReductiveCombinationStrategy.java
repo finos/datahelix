@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
 import com.scottlogic.deg.generator.utils.RestartableIterator;
 
@@ -14,17 +14,17 @@ import java.util.stream.StreamSupport;
 
 public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
-    public Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences) {
-        List<RestartableIterator<GeneratedObject>> bagsAsLists = dataBagSequences
+    public Stream<Row> permute(Stream<Stream<Row>> dataBagSequences) {
+        List<RestartableIterator<Row>> bagsAsLists = dataBagSequences
             .map(dbs -> new RestartableIterator<>(dbs.iterator()))
             .collect(Collectors.toList());
 
-        return next(GeneratedObject.empty, bagsAsLists, 0);
+        return next(Row.empty, bagsAsLists, 0);
     }
 
-    public Stream<GeneratedObject> next(GeneratedObject accumulatingBag, List<RestartableIterator<GeneratedObject>> bagSequences, int bagSequenceIndex) {
+    public Stream<Row> next(Row accumulatingBag, List<RestartableIterator<Row>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
-            RestartableIterator<GeneratedObject> nextStream = bagSequences.get(bagSequenceIndex);
+            RestartableIterator<Row> nextStream = bagSequences.get(bagSequenceIndex);
             nextStream.restart();
 
             return FlatMappingSpliterator.flatMap(StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)

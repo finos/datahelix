@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.math.BigDecimal;
@@ -49,7 +49,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
     
     @Override
-    public void rowEmitted(GeneratedObject row) {
+    public void rowEmitted(Row row) {
         rowsSinceLastSample++;
         rowsEmitted = rowsEmitted.add(BigInteger.ONE);
     }

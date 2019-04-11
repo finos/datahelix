@@ -8,9 +8,9 @@ import java.util.*;
 
 
 public class GeneratedObjectMerger {
-    public static final GeneratedObject empty = new GeneratedObject(new HashMap<>());
+    public static final Row empty = new Row(new HashMap<>());
 
-    public static GeneratedObject merge(GeneratedObject... bags) {
+    public static Row merge(Row... bags) {
         Map<Field, Value> newFieldToValue = new HashMap<>();
 
         FlatMappingSpliterator.flatMap(Arrays.stream(bags)
@@ -23,6 +23,6 @@ public class GeneratedObjectMerger {
                 newFieldToValue.put(entry.getKey(), entry.getValue());
             });
 
-        return new GeneratedObject(newFieldToValue);
+        return new Row(newFieldToValue);
     }
 }

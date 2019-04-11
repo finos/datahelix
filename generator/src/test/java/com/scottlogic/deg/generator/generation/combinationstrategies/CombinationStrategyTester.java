@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.junit.Assert;
@@ -11,31 +11,31 @@ import java.util.stream.Stream;
 
 class CombinationStrategyTester {
     private CombinationStrategy strategy;
-    private Stream<Stream<GeneratedObject>> dataBags;
+    private Stream<Stream<Row>> dataBags;
 
     CombinationStrategyTester(CombinationStrategy combinationStrategy) {
         strategy = combinationStrategy;
     }
 
     @SafeVarargs
-    final void given(Stream<GeneratedObject>... bagSequences) {
+    final void given(Stream<Row>... bagSequences) {
         dataBags = Stream.of(bagSequences);
     }
 
-    void expect(Stream<GeneratedObject> bagSequence) {
-        GeneratedObject[] results = strategy.permute(dataBags).toArray(GeneratedObject[]::new);
-        GeneratedObject[] bagArray = bagSequence.toArray(GeneratedObject[]::new);
+    void expect(Stream<Row> bagSequence) {
+        Row[] results = strategy.permute(dataBags).toArray(Row[]::new);
+        Row[] bagArray = bagSequence.toArray(Row[]::new);
 
         Assert.assertThat(results, IsArrayContainingInAnyOrder.arrayContainingInAnyOrder(bagArray));
     }
 
     void expectEmpty() {
-        Stream<GeneratedObject> results = strategy.permute(dataBags);
+        Stream<Row> results = strategy.permute(dataBags);
 
         Assert.assertFalse(results.iterator().hasNext());
     }
 
-    static GeneratedObject bag(String... fieldNames) {
+    static Row bag(String... fieldNames) {
         GeneratedObjectBuilder builder = GeneratedObjectBuilder.startBuilding();
 
         for (String fieldName : fieldNames) {

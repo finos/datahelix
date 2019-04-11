@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
 
 import java.util.*;
@@ -12,20 +12,20 @@ import java.util.stream.StreamSupport;
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences) {
+    public Stream<Row> permute(Stream<Stream<Row>> dataBagSequences) {
 
-        List<List<GeneratedObject>> bagsAsLists = dataBagSequences
+        List<List<Row>> bagsAsLists = dataBagSequences
             .map(sequence ->
                 StreamSupport.stream(sequence.spliterator(), false)
                     .collect(Collectors.toList()))
             .collect(Collectors.toList());
 
-        return next(GeneratedObject.empty, bagsAsLists, 0);
+        return next(Row.empty, bagsAsLists, 0);
     }
 
-    public Stream<GeneratedObject> next(GeneratedObject accumulatingBag, List<List<GeneratedObject>> bagSequences, int bagSequenceIndex) {
+    public Stream<Row> next(Row accumulatingBag, List<List<Row>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
-            List<GeneratedObject> nextStream = bagSequences.get(bagSequenceIndex);
+            List<Row> nextStream = bagSequences.get(bagSequenceIndex);
 
             return FlatMappingSpliterator.flatMap(nextStream
                 .stream()

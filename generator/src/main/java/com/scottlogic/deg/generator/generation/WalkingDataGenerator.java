@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
@@ -32,13 +32,13 @@ public class WalkingDataGenerator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
+    public Stream<Row> generateData(Profile profile, DecisionTree analysedProfile) {
         Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
 
         return generateDataFromRowSpecs(rowSpecs);
     }
 
-    private Stream<GeneratedObject> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
+    private Stream<Row> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
         Stream<DataBagSource> dataBagSources = rowSpecs.map(dataBagSourceFactory::createDataBagSource);
 
         return new ConcatenatingDataBagSource(dataBagSources)

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
     }
 
     @Override
-    public void writeRow(Closeable closeable, GeneratedObject row, ProfileFields profileFields) throws IOException {
+    public void writeRow(Closeable closeable, Row row, ProfileFields profileFields) throws IOException {
         ThrownExceptions exceptions = new ThrownExceptions();
 
         this.writers.forEach(writer -> {
@@ -111,7 +111,7 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
             this.closeable = this.writer.openWriter(directory, this.fileName, profileFields);
         }
 
-        void writeRow(GeneratedObject row, ProfileFields profileFields) throws IOException {
+        void writeRow(Row row, ProfileFields profileFields) throws IOException {
             if (this.closeable == null){
                 throw new IllegalStateException("Writer has not been initialised");
             }

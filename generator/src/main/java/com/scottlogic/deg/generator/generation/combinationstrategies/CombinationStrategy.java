@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.util.stream.Stream;
 
 public interface CombinationStrategy {
-    Stream<GeneratedObject> permute(Stream<Stream<GeneratedObject>> dataBagSequences);
+    Stream<Row> permute(Stream<Stream<Row>> dataBagSequences);
 }

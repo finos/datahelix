@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -21,8 +21,8 @@ public class RestartingDataGeneratorDecorator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
-        Optional<GeneratedObject> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile);
+    public Stream<Row> generateData(Profile profile, DecisionTree analysedProfile) {
+        Optional<Row> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile);
         if (!firstGeneratedObject.isPresent()) {
             return Stream.empty();
         }
@@ -35,7 +35,7 @@ public class RestartingDataGeneratorDecorator implements DataGenerator {
                 .map(Optional::get));
     }
 
-    private Optional<GeneratedObject> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile){
+    private Optional<Row> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile){
         return innerGenerator.generateData(profile, analysedProfile)
             .findFirst();
     }

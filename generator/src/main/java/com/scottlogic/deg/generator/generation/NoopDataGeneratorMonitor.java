@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
     public void generationStarting(GenerationConfig generationConfig) { }
 
     @Override
-    public void rowEmitted(GeneratedObject row) { }
+    public void rowEmitted(Row row) { }
 
     @Override
     public void endGeneration() { }

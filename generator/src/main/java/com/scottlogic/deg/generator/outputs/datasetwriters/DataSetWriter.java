@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -13,7 +13,7 @@ public interface DataSetWriter<TWriter extends Closeable> {
         String fileName,
         ProfileFields profileFields) throws IOException;
 
-    void writeRow(TWriter writer, GeneratedObject row, ProfileFields profileFields) throws IOException;
+    void writeRow(TWriter writer, Row row, ProfileFields profileFields) throws IOException;
 
     String getFileName(String fileNameWithoutExtension);
 }

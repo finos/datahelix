@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class ReductiveCombinationStrategyTests {
 
     @Test
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
-        List<GeneratedObject> firstFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
+        List<Row> firstFieldRows = new ArrayList<Row>() {{
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
@@ -32,7 +32,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
         }};
-        List<GeneratedObject> secondFieldGeneratedObjects = new ArrayList<GeneratedObject>() {{
+        List<Row> secondFieldRows = new ArrayList<Row>() {{
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     second_field,
@@ -48,14 +48,14 @@ class ReductiveCombinationStrategyTests {
         }};
         ReductiveCombinationStrategy combinationStrategy = new ReductiveCombinationStrategy();
 
-        ArrayList<List<GeneratedObject>> dataBagSequences = new ArrayList<List<GeneratedObject>>() {{
-            add(firstFieldGeneratedObjects);
-            add(secondFieldGeneratedObjects);
+        ArrayList<List<Row>> dataBagSequences = new ArrayList<List<Row>>() {{
+            add(firstFieldRows);
+            add(secondFieldRows);
         }};
-        final List<GeneratedObject> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
+        final List<Row> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
             .collect(Collectors.toList());
 
-        List<GeneratedObject> expectedGeneratedObjects = new ArrayList<GeneratedObject>() {{
+        List<Row> expectedRows = new ArrayList<Row>() {{
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
@@ -93,6 +93,6 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
         }};
-        Assert.assertEquals(expectedGeneratedObjects, result);
+        Assert.assertEquals(expectedRows, result);
     }
 }

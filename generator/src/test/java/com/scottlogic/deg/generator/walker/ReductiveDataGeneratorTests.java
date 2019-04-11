@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -76,7 +76,7 @@ class ReductiveDataGeneratorTests {
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(eq(rootNode), any())).thenReturn(Optional.empty());
 
-        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());
+        List<Row> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
@@ -96,7 +96,7 @@ class ReductiveDataGeneratorTests {
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 
-        List<GeneratedObject> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());;
+        List<Row> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());;
 
         verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());

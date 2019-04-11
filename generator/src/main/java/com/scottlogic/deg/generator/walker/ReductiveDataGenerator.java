@@ -11,7 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
@@ -45,14 +45,14 @@ public class ReductiveDataGenerator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree tree) {
+    public Stream<Row> generateData(Profile profile, DecisionTree tree) {
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getFixedFieldStrategy(profile, tree);
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<GeneratedObject> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    private Stream<Row> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, tree);
         Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(tree, fieldToFix);
@@ -70,7 +70,7 @@ public class ReductiveDataGenerator implements DataGenerator {
             fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldValue));
     }
 
-    private Stream<GeneratedObject> pruneTreeForNextValue(
+    private Stream<Row> pruneTreeForNextValue(
         ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
@@ -91,7 +91,7 @@ public class ReductiveDataGenerator implements DataGenerator {
             reductiveState.withFixedFieldValue(fieldValue);
 
         if (newReductiveState.allFieldsAreFixed()){
-            return Stream.of(new GeneratedObject(newReductiveState.getFieldValues()));
+            return Stream.of(new Row(newReductiveState.getFieldValues()));
         }
 
         return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);

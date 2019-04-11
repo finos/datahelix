@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
-class GeneratedObjectTests {
+class RowTests {
     @Test
     void getShouldReturnSettedValue() {
         // ARRANGE
         Field idField = new Field("id");
 
         // ACT
-        GeneratedObject objectUnderTest = GeneratedObjectBuilder.startBuilding().set(idField, 3, FieldSpecSource.Empty).build();
+        Row objectUnderTest = GeneratedObjectBuilder.startBuilding().set(idField, 3, FieldSpecSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
@@ -33,19 +33,19 @@ class GeneratedObjectTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().set(idField, new Value(idField, 3)).build();
-        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().set(priceField, new Value(priceField, 4)).build();
+        Row row1 = GeneratedObjectBuilder.startBuilding().set(idField, new Value(idField, 3)).build();
+        Row row2 = GeneratedObjectBuilder.startBuilding().set(priceField, new Value(priceField, 4)).build();
 
         // ACT
-        GeneratedObject mergedGeneratedObject = GeneratedObjectMerger.merge(generatedObject1, generatedObject2);
+        Row mergedRow = GeneratedObjectMerger.merge(row1, row2);
 
         // ASSERT
         Assert.assertThat(
-            mergedGeneratedObject.getFieldToValue().get(idField).getValue(),
+            mergedRow.getFieldToValue().get(idField).getValue(),
             equalTo(3));
 
         Assert.assertThat(
-            mergedGeneratedObject.getFieldToValue().get(priceField).getValue(),
+            mergedRow.getFieldToValue().get(priceField).getValue(),
             equalTo(4));
     }
 
@@ -55,11 +55,11 @@ class GeneratedObjectTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding()
+        Row row1 = GeneratedObjectBuilder.startBuilding()
             .set(idField, "foo", FieldSpecSource.Empty)
             .build();
 
-        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding()
+        Row row2 = GeneratedObjectBuilder.startBuilding()
             .set(idField, "foo", FieldSpecSource.Empty)
             .set(priceField, 4, FieldSpecSource.Empty)
             .build();
@@ -67,6 +67,6 @@ class GeneratedObjectTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> GeneratedObjectMerger.merge(generatedObject1, generatedObject2));
+            () -> GeneratedObjectMerger.merge(row1, row2));
     }
 }

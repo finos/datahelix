@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.RowSource;
@@ -38,19 +38,19 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
     }
 
     @Override
-    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row, ProfileFields profileFields) throws IOException {
+    public void writeRow(JsonArrayOutputWriter closeable, Row row, ProfileFields profileFields) throws IOException {
         Collection<TracingDto> dto = getRowSource(row) != null
             ? TracingDto.fromRowSource(getRowSource(row))
             : TracingDto.empty;
         closeable.writeArrayItem(serialise(dto));
     }
 
-    public RowSource getRowSource(GeneratedObject generatedObject) {
+    public RowSource getRowSource(Row row) {
         return new RowSource(
-            generatedObject.getFieldToValue().keySet()
+            row.getFieldToValue().keySet()
                 .stream()
                 .map(field -> {
-                    Value value = generatedObject.getFieldToValue().get(field);
+                    Value value = row.getFieldToValue().get(field);
                     return new CellSource(value, field);
                 })
                 .collect(Collectors.toList())

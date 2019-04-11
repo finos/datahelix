@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.*;
 
-class StandardRowSpecGeneratedObjectSourceFactoryTests {
+class StandardRowSpecRowSourceFactoryTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
     }
 
     @Override
-    public void writeRow(JsonWriter writer, GeneratedObject row, ProfileFields profileFields) {
+    public void writeRow(JsonWriter writer, Row row, ProfileFields profileFields) {
         //TODO: Change this type to write progressively to the JSON file, currently it holds all rows in memory: Issue: #256
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();

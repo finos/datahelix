@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 
 public interface DataGeneratorMonitor {
     void generationStarting(GenerationConfig generationConfig);
-    void rowEmitted(GeneratedObject row);
+    void rowEmitted(Row row);
     void endGeneration();
 }
 

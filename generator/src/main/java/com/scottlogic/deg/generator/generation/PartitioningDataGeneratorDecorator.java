@@ -31,10 +31,10 @@ public class PartitioningDataGeneratorDecorator implements DataGenerator {
     }
 
     @Override
-    public Stream<GeneratedObject> generateData(Profile profile, DecisionTree decisionTree) {
+    public Stream<Row> generateData(Profile profile, DecisionTree decisionTree) {
         CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
 
-        final Stream<Stream<GeneratedObject>> partitionedGeneratedObjects =
+        final Stream<Stream<Row>> partitionedGeneratedObjects =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
                 .map(this.treeOptimiser::optimiseTree)

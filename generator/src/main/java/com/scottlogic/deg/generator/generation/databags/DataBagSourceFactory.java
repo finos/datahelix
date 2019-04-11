@@ -21,7 +21,7 @@ public class DataBagSourceFactory {
     }
 
     public DataBagSource createDataBagSource(RowSpec rowSpec){
-        List<Stream<GeneratedObject>> fieldDataBagSources = new ArrayList<>();
+        List<Stream<Row>> fieldDataBagSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
@@ -35,8 +35,8 @@ public class DataBagSourceFactory {
         return new FieldCombiningDataBagSource(fieldDataBagSources);
     }
 
-    private GeneratedObject toGeneratedObject(Value value) {
-        return new GeneratedObject(new HashMap<Field, Value>() {{
+    private Row toGeneratedObject(Value value) {
+        return new Row(new HashMap<Field, Value>() {{
             put(value.field, value); }});
     }
 }

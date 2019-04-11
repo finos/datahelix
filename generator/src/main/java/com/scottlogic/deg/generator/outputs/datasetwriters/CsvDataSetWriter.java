@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
+import com.scottlogic.deg.generator.generation.databags.Row;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -34,7 +34,7 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     }
 
     @Override
-    public void writeRow(CSVPrinter writer, GeneratedObject row, ProfileFields profileFields) throws IOException {
+    public void writeRow(CSVPrinter writer, Row row, ProfileFields profileFields) throws IOException {
         writer.printRecord(profileFields.stream()
             .map(field -> row.getFieldToValue().get(field))
             .map(CsvDataSetWriter::extractCellValue)

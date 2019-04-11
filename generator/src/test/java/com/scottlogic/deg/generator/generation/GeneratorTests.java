@@ -2,7 +2,7 @@
 //
 //import com.scottlogic.deg.generator.Field;
 //import com.scottlogic.deg.generator.ProfileFields;
-//import com.scottlogic.deg.generator.outputs.GeneratedObject;
+//import com.scottlogic.deg.generator.outputs.Row;
 //
 //import com.scottlogic.deg.generator.restrictions.*;
 //import org.junit.Assert;
@@ -20,11 +20,11 @@
 //        RowSpec rowSpec = new RowSpec(fields, makeMap(field, getFieldSpecThatMustBeNull()));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -43,11 +43,11 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, fieldSpecs));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(5, testRow.values.size());
 //        List<Object> values = new ArrayList<>(testRow.values);
@@ -64,11 +64,11 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -84,11 +84,11 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -104,11 +104,11 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -124,13 +124,13 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(4, testOutput.size());
-//        List<GeneratedObject> testRows = new ArrayList<>(testOutput);
+//        List<Row> testRows = new ArrayList<>(testOutput);
 //        ArrayList<String> seenValues = new ArrayList<>();
-//        for (GeneratedObject testRow : testRows) {
+//        for (Row testRow : testRows) {
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(1, testRow.values.size());
 //            Object testField = testRow.values.iterator().nextInt();
@@ -150,11 +150,11 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, invalidValues)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -172,13 +172,13 @@
 //                makeMap(field, getFieldSpecThatMustBelongToSetOfString(validValues, invalidValues)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(2, testOutput.size());
-//        List<GeneratedObject> testRows = new ArrayList<>(testOutput);
+//        List<Row> testRows = new ArrayList<>(testOutput);
 //        ArrayList<String> seenValues = new ArrayList<>();
-//        for (GeneratedObject testRow : testRows) {
+//        for (Row testRow : testRows) {
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(1, testRow.values.size());
 //            Object testField = testRow.values.iterator().nextInt();
@@ -198,11 +198,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.TEN, true), null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -218,11 +218,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.TEN, false), null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -238,11 +238,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.TEN, true))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -258,11 +258,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.TEN, false))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -279,11 +279,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), true))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -300,11 +300,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), false))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -321,11 +321,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), true))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -342,11 +342,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(20), false))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -363,11 +363,11 @@
 //                        new NumericRestrictions.NumericLimit(BigDecimal.valueOf(0.7), false))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Object testField = testRow.values.iterator().nextInt();
@@ -387,11 +387,11 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, specs));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec, GenerationConfig.Minimal);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(2, testRow.values.size());
 //        ArrayList<Object> values = new ArrayList<>(testRow.values);
@@ -418,13 +418,13 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(fields), makeMap(fields, specs));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(6, testOutput.size());
-//        ArrayList<GeneratedObject> outputRows = new ArrayList<>(testOutput);
+//        ArrayList<Row> outputRows = new ArrayList<>(testOutput);
 //        ArrayList<String> seenCombinations = new ArrayList<>();
-//        for (GeneratedObject testRow : outputRows) {
+//        for (Row testRow : outputRows) {
 //            Assert.assertNotNull(testRow);
 //            Assert.assertEquals(2, testRow.values.size());
 //            ArrayList<Object> values = new ArrayList<>(testRow.values);
@@ -447,11 +447,11 @@
 //                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Assert.assertEquals(matchValue, testRow.values.iterator().nextInt());
@@ -466,11 +466,11 @@
 //                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Assert.assertTrue(((String)testRow.values.iterator().nextInt()).startsWith(matchValueStart));
@@ -485,11 +485,11 @@
 //                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, null)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        Assert.assertTrue(((String)testRow.values.iterator().nextInt()).startsWith(matchValueStart));
@@ -503,7 +503,7 @@
 //                makeMap(field, getFieldSpecThatMatchesRegex(matchValue, Collections.singletonList(matchValue))));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(0, testOutput.size());
@@ -518,11 +518,11 @@
 //                makeMap(field, getFieldSpecThatMatchesRegex(matchPattern, illegalValues)));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        List<String> legalValues = Arrays.asList("ab", "ba", "bb");
@@ -539,7 +539,7 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(0, testOutput.size());
@@ -555,7 +555,7 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(0, testOutput.size());
@@ -572,7 +572,7 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(0, testOutput.size());
@@ -588,11 +588,11 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        String testValue = (String)testRow.values.iterator().nextInt();
@@ -610,11 +610,11 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        String testValue = (String)testRow.values.iterator().nextInt();
@@ -633,11 +633,11 @@
 //        RowSpec rowSpec = new RowSpec(new ProfileFields(Collections.singletonList(field)), makeMap(field, spec));
 //        Generator testObject = new Generator();
 //
-//        Collection<GeneratedObject> testOutput = testObject.generateData(rowSpec);
+//        Collection<Row> testOutput = testObject.generateData(rowSpec);
 //
 //        Assert.assertNotNull(testOutput);
 //        Assert.assertEquals(1, testOutput.size());
-//        GeneratedObject testRow = testOutput.iterator().nextInt();
+//        Row testRow = testOutput.iterator().nextInt();
 //        Assert.assertNotNull(testRow);
 //        Assert.assertEquals(1, testRow.values.size());
 //        String testValue = (String)testRow.values.iterator().nextInt();
