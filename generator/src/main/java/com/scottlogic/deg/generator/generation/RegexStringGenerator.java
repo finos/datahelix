@@ -26,6 +26,9 @@ public class RegexStringGenerator implements StringGenerator {
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
 
+    private static final Map<String, Automaton> matchingRegexAutomatonCache = new HashMap<>();
+    private static final Map<String, Automaton> containingRegexAutomatonCache = new HashMap<>();
+
     private Automaton automaton;
     private Node rootNode;
     private boolean isRootNodeBuilt;
@@ -33,7 +36,10 @@ public class RegexStringGenerator implements StringGenerator {
     private final String regexRepresentation;
 
     public RegexStringGenerator(String regexStr, boolean matchFullString) {
-        Automaton generatedAutomaton = createAutomaton(regexStr, matchFullString);
+        Map<String, Automaton> cache = matchFullString ? matchingRegexAutomatonCache : containingRegexAutomatonCache;
+        Automaton generatedAutomaton = cache.containsKey(regexStr)
+            ? cache.get(regexStr)
+            : createAutomaton(regexStr, matchFullString, cache);
 
         String prefix = matchFullString ? "" : "*";
         String suffix = matchFullString ? "" : "*";
@@ -41,7 +47,7 @@ public class RegexStringGenerator implements StringGenerator {
         this.automaton = generatedAutomaton;
     }
 
-    static Automaton createAutomaton(String regexStr, boolean matchFullString) {
+    static Automaton createAutomaton(String regexStr, boolean matchFullString, Map<String, Automaton> cache) {
         final String anchoredStr = convertEndAnchors(regexStr, matchFullString);
         final String requotedStr = escapeCharacters(anchoredStr);
         final RegExp bricsRegExp = expandShorthandClasses(requotedStr);
@@ -49,6 +55,7 @@ public class RegexStringGenerator implements StringGenerator {
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
 
+        cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;
     }
 

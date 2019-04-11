@@ -151,7 +151,7 @@ class AutomatonUtilsTests {
     }
 
     private static Automaton getAutomaton(String regex){
-        return RegexStringGenerator.createAutomaton(regex, true);
+        return RegexStringGenerator.createAutomaton(regex, true, new HashMap<>());
     }
 
     private static String repeat(Character character, int times){
