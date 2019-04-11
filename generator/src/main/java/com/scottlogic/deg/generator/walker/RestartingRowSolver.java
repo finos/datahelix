@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.generation.RowSolver;
 import com.scottlogic.deg.generator.generation.databags.Row;
 
 import java.util.Optional;
@@ -13,15 +13,15 @@ import java.util.stream.Stream;
  * Can then repeatedly call the inner generator
  * This is used to reset the random mode for reductive
  */
-public class RestartingDataGeneratorDecorator implements DataGenerator {
-    private final DataGenerator innerGenerator;
+public class RestartingRowSolver implements RowSolver {
+    private final RowSolver innerGenerator;
 
-    public RestartingDataGeneratorDecorator(DataGenerator innerGenerator) {
+    public RestartingRowSolver(RowSolver innerGenerator) {
         this.innerGenerator = innerGenerator;
     }
 
     @Override
-    public Stream<Row> generateData(Profile profile, DecisionTree analysedProfile) {
+    public Stream<Row> generateRows(Profile profile, DecisionTree analysedProfile) {
         Optional<Row> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile);
         if (!firstGeneratedObject.isPresent()) {
             return Stream.empty();
@@ -36,7 +36,7 @@ public class RestartingDataGeneratorDecorator implements DataGenerator {
     }
 
     private Optional<Row> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile){
-        return innerGenerator.generateData(profile, analysedProfile)
+        return innerGenerator.generateRows(profile, analysedProfile)
             .findFirst();
     }
 

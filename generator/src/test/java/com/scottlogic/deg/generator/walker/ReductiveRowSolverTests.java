@@ -32,11 +32,11 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-class ReductiveDataGeneratorTests {
+class ReductiveRowSolverTests {
     private TreeConstraintNode rootNode;
     private DecisionTree tree;
     private ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
-    private ReductiveDataGenerator walker;
+    private ReductiveRowSolver walker;
     private FixFieldStrategy fixFieldStrategy;
     private FixFieldStrategyFactory fixFieldStrategyFactory;
     private FieldSpecValueGenerator fieldSpecValueGenerator;
@@ -60,7 +60,7 @@ class ReductiveDataGeneratorTests {
         when(fixFieldStrategyFactory.getFixedFieldStrategy(any(), any())).thenReturn(fixFieldStrategy);
 
 
-        walker = new ReductiveDataGenerator(
+        walker = new ReductiveRowSolver(
             new NoOpIterationVisualiser(),
             reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),
@@ -76,7 +76,7 @@ class ReductiveDataGeneratorTests {
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(eq(rootNode), any())).thenReturn(Optional.empty());
 
-        List<Row> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());
+        List<Row> result = walker.generateRows(mock(Profile.class), tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());
@@ -96,7 +96,7 @@ class ReductiveDataGeneratorTests {
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 
-        List<Row> result = walker.generateData(mock(Profile.class), tree).collect(Collectors.toList());;
+        List<Row> result = walker.generateRows(mock(Profile.class), tree).collect(Collectors.toList());;
 
         verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
         Assert.assertThat(result, empty());

@@ -13,14 +13,14 @@ import java.util.stream.Stream;
 public class StandardGenerationEngine implements GenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
     private ReductiveDataGeneratorMonitor monitor;
-    private final DataGenerator dataGenerator;
+    private final RowSolver rowSolver;
 
     @Inject
     public StandardGenerationEngine(
-        DataGenerator dataGenerator,
+        RowSolver rowSolver,
         DecisionTreeFactory decisionTreeGenerator,
         ReductiveDataGeneratorMonitor monitor) {
-        this.dataGenerator = dataGenerator;
+        this.rowSolver = rowSolver;
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.monitor = monitor;
     }
@@ -28,7 +28,7 @@ public class StandardGenerationEngine implements GenerationEngine {
     public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         final DecisionTree tree = decisionTreeGenerator.analyse(profile).getMergedTree();
 
-        final Stream<Row> generatedDataItems = dataGenerator.generateData(profile, tree)
+        final Stream<Row> generatedDataItems = rowSolver.generateRows(profile, tree)
                 .limit(config.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
                 .peek(this.monitor::rowEmitted);
 

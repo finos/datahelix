@@ -19,10 +19,10 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
-class RandomReductiveDataGeneratorTests {
+class RandomReductiveRowSolverTests {
     private DecisionTree tree;
-    private RestartingDataGeneratorDecorator walker;
-    private ReductiveDataGenerator underlyingWalker;
+    private RestartingRowSolver walker;
+    private ReductiveRowSolver underlyingWalker;
     Profile profile = mock(Profile.class);
 
     @BeforeEach
@@ -32,8 +32,8 @@ class RandomReductiveDataGeneratorTests {
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2"))),
             "test-tree");
 
-        underlyingWalker = mock(ReductiveDataGenerator.class);
-        walker = new RestartingDataGeneratorDecorator(underlyingWalker);
+        underlyingWalker = mock(ReductiveRowSolver.class);
+        walker = new RestartingRowSolver(underlyingWalker);
     }
 
     /**
@@ -42,14 +42,14 @@ class RandomReductiveDataGeneratorTests {
      */
     @Test
     public void shouldProduceTwoRowsOfRandomDataOneGeneratedObjectFromEachIteration() {
-        when(underlyingWalker.generateData(profile, tree)).thenReturn(
+        when(underlyingWalker.generateRows(profile, tree)).thenReturn(
             Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateRows(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(2)).generateData(profile, tree);
+        verify(underlyingWalker, times(2)).generateRows(profile, tree);
         Assert.assertThat(
             result.stream().map(Row::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "second-iteration-first-random-row"));
@@ -57,15 +57,15 @@ class RandomReductiveDataGeneratorTests {
 
     @Test
     public void shouldProduceNoData() {
-        when(underlyingWalker.generateData(profile, tree)).thenReturn(
+        when(underlyingWalker.generateRows(profile, tree)).thenReturn(
             Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
             Stream.empty(),
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateRows(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(3)).generateData(profile, tree);
+        verify(underlyingWalker, times(3)).generateRows(profile, tree);
         Assert.assertThat(
             result.stream().map(Row::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "third-iteration-first-random-row"));
@@ -73,13 +73,13 @@ class RandomReductiveDataGeneratorTests {
 
     @Test
     public void shouldAccommodateNoDataInSubsequentIteration() {
-        when(underlyingWalker.generateData(profile, tree)).thenReturn(
+        when(underlyingWalker.generateRows(profile, tree)).thenReturn(
             Stream.empty()
         );
 
-        List<Row> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<Row> result = walker.generateRows(profile, tree).limit(2).collect(Collectors.toList());
 
-        verify(underlyingWalker, times(1)).generateData(profile, tree);
+        verify(underlyingWalker, times(1)).generateRows(profile, tree);
         Assert.assertThat(
             result.stream().iterator().hasNext(),
             is(false));

@@ -15,14 +15,14 @@ import java.util.stream.Stream;
 /**
  * Generates data by walking a tree to get RowSpecs, then creating data from the RowSpecs
  */
-public class WalkingDataGenerator implements DataGenerator {
+public class CartesianRowSolver implements RowSolver {
 
     private final DecisionTreeWalker treeWalker;
     private final RowSourceFactory rowSourceFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
-    public WalkingDataGenerator(
+    public CartesianRowSolver(
         DecisionTreeWalker treeWalker,
         RowSourceFactory rowSourceFactory,
         GenerationConfig generationConfig) {
@@ -32,7 +32,7 @@ public class WalkingDataGenerator implements DataGenerator {
     }
 
     @Override
-    public Stream<Row> generateData(Profile profile, DecisionTree analysedProfile) {
+    public Stream<Row> generateRows(Profile profile, DecisionTree analysedProfile) {
         Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
 
         return generateDataFromRowSpecs(rowSpecs);
