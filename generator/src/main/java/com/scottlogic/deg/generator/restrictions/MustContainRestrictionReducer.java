@@ -26,8 +26,7 @@ public class MustContainRestrictionReducer {
                     spec.getNullRestrictions() != null && specFromRemainingRequiredObjects.getNullRestrictions() != null ||
                     spec.getTypeRestrictions() != null && specFromRemainingRequiredObjects.getTypeRestrictions() != null ||
                     spec.getDateTimeRestrictions() != null && specFromRemainingRequiredObjects.getDateTimeRestrictions() != null ||
-                    spec.getFormatRestrictions() != null && specFromRemainingRequiredObjects.getFormatRestrictions() != null ||
-                    spec.getGranularityRestrictions() != null && specFromRemainingRequiredObjects.getGranularityRestrictions() != null) {
+                    spec.getFormatRestrictions() != null && specFromRemainingRequiredObjects.getFormatRestrictions() != null) {
 
                     final Optional<FieldSpec> mergeResult = merger.merge(spec, specFromRemainingRequiredObjects);
 

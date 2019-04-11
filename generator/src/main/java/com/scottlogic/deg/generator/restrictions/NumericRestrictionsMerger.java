@@ -19,7 +19,8 @@ public class NumericRestrictionsMerger {
         if (right == null)
             return new MergeResult<>(left);
 
-        final NumericRestrictions merged = new NumericRestrictions();
+        int granularity = Math.min(left.getNumericScale(), right.getNumericScale());
+        final NumericRestrictions merged = new NumericRestrictions(granularity);
 
         merged.min = getMergedLimitStructure(MergeLimit.MIN, left.min, right.min);
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);

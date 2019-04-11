@@ -107,7 +107,6 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
-        state.granularityConstraintValidator.granularTo(constraint.getField(), constraint.granularity.getNumericGranularity());
     }
 
     @Override
@@ -174,7 +173,6 @@ public class ProfileValidationVisitor implements ProfileVisitor {
                 new SetConstraintValidator(),
                 new StringConstraintValidator(),
                 new NullConstraintValidator(),
-                new GranularityConstraintValidator(),
                 new NumericConstraintValidator());
 
             allFieldsState.put(field, noRestrictions);

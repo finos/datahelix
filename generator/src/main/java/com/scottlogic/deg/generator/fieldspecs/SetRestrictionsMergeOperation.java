@@ -62,11 +62,6 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 filterStream = filterStream.filter(x -> !isDateTime(x) || merging.getDateTimeRestrictions().match(x));
             }
 
-            GranularityRestrictions granularityRestrictions = merging.getGranularityRestrictions();
-            if (granularityRestrictions != null) {
-                filterStream = filterStream.filter(x -> !isNumeric(x) || GranularityRestrictions.isCorrectScale((Number)x, granularityRestrictions.getNumericScale()));
-            }
-
             Set<Object> whitelist = filterStream.collect(Collectors.toCollection(HashSet::new));
             SetRestrictions newSetRestrictions = new SetRestrictions(whitelist,
                 setRestrictions.getBlacklist());

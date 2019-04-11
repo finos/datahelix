@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+
 public class NumericRestrictionsTests {
     @Test
     void equals_whenOtherObjectIsNull_returnsFalse() {
@@ -415,7 +418,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal(10), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(1000), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertTrue(result);
     }
@@ -426,7 +429,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal(-2147483648), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(2147483647), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertTrue(result);
     }
@@ -437,7 +440,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal("1E+38"), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(10), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -448,7 +451,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
         restrictions.max = new NumericLimit<>(new BigDecimal("1E+38"), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -459,7 +462,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal(15.5), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -470,7 +473,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(500.25), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -480,7 +483,7 @@ public class NumericRestrictionsTests {
         NumericRestrictions restrictions = new NumericRestrictions();
         restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -490,7 +493,7 @@ public class NumericRestrictionsTests {
         NumericRestrictions restrictions = new NumericRestrictions();
         restrictions.min = new NumericLimit<>(new BigDecimal(100), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -501,7 +504,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal("-2147483649"), false);
         restrictions.max = new NumericLimit<>(new BigDecimal("100"), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -512,7 +515,7 @@ public class NumericRestrictionsTests {
         restrictions.min = new NumericLimit<>(new BigDecimal("0"), false);
         restrictions.max = new NumericLimit<>(new BigDecimal("2147483648"), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
@@ -523,10 +526,57 @@ public class NumericRestrictionsTests {
         restrictions.max = new NumericLimit<>(new BigDecimal(5.00), false);
         restrictions.max = new NumericLimit<>(new BigDecimal(10.00), false);
 
-        boolean result = restrictions.areLimitValuesInteger();
+        boolean result = areLimitValuesInteger(restrictions);
 
         Assert.assertFalse(result);
     }
+
+
+
+    public boolean areLimitValuesInteger(NumericRestrictions restrictions) {
+        if (restrictions.min == null || restrictions.max == null) {
+            return false;
+        }
+
+        // If either of the min or max values have decimal points or if the sign differs when converting to an integer
+        // the value is not an integer
+        BigDecimal minLimit = restrictions.min.getLimit();
+        BigDecimal maxLimit = restrictions.max.getLimit();
+        if (minLimit.scale() > 0 || maxLimit.scale() > 0 ||
+            minLimit.signum() != Integer.signum(minLimit.intValue()) ||
+            maxLimit.signum() != Integer.signum(maxLimit.intValue())) {
+            return false;
+        }
+
+        return (minLimit.toBigInteger().signum() == 0 || minLimit.intValue() != 0) &&
+            (maxLimit.toBigInteger().signum() == 0 || maxLimit.intValue() != 0);
+    }
+
+    @Test
+    public void shouldBeEqualIfNumericScaleIsTheSame(){
+        NumericRestrictions a = restrictions(0.1);
+        NumericRestrictions b = restrictions(0.1);
+
+        Assert.assertThat(a, equalTo(b));
+        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void shouldBeUnequalIfNumericScalesAreDifferent(){
+        NumericRestrictions a = restrictions(0.1);
+        NumericRestrictions b = restrictions(0.01);
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    private static NumericRestrictions restrictions(double numericScale){
+        NumericRestrictions restrictions = new NumericRestrictions(
+            ParsedGranularity.parse(BigDecimal.valueOf(numericScale))
+        );
+
+        return restrictions;
+    }
+
 }
 
 
