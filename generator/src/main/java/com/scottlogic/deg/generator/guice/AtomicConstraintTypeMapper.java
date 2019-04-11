@@ -49,5 +49,66 @@ public class AtomicConstraintTypeMapper {
                 throw new UnsupportedOperationException();
         }
     }
+
+    public AtomicConstraintType fromConstraintClass(Class<? extends AtomicConstraint> atomicConstraint) {
+        if (atomicConstraint == IsNullConstraint.class) {
+            return AtomicConstraintType.ISNULL;
+        }
+        if (atomicConstraint == IsOfTypeConstraint.class) {
+            return AtomicConstraintType.ISOFTYPE;
+        }
+        if (atomicConstraint == MatchesRegexConstraint.class) {
+            return AtomicConstraintType.MATCHESREGEX;
+        }
+        if (atomicConstraint == ContainsRegexConstraint.class) {
+            return AtomicConstraintType.CONTAINSREGEX;
+        }
+        if (atomicConstraint == FormatConstraint.class) {
+            return AtomicConstraintType.FORMATTEDAS;
+        }
+        if (atomicConstraint == MatchesStandardConstraint.class) {
+            return AtomicConstraintType.AVALID;
+        }
+        if (atomicConstraint == StringHasLengthConstraint.class) {
+            return AtomicConstraintType.HASLENGTH;
+        }
+        if (atomicConstraint == IsStringLongerThanConstraint.class) {
+            return AtomicConstraintType.ISSTRINGLONGERTHAN;
+        }
+        if (atomicConstraint == IsStringShorterThanConstraint.class) {
+            return AtomicConstraintType.ISSTRINGSHORTERTHAN;
+        }
+        if (atomicConstraint == IsGreaterThanConstantConstraint.class) {
+            return AtomicConstraintType.ISGREATERTHANCONSTANT;
+        }
+        if (atomicConstraint == IsGreaterThanOrEqualToConstantConstraint.class) {
+            return AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT;
+        }
+        if (atomicConstraint == IsLessThanConstantConstraint.class) {
+            return AtomicConstraintType.ISLESSTHANCONSTANT;
+        }
+        if (atomicConstraint == IsLessThanOrEqualToConstantConstraint.class) {
+            return AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT;
+        }
+        if (atomicConstraint == IsAfterConstantDateTimeConstraint.class) {
+            return AtomicConstraintType.ISAFTERCONSTANTDATETIME;
+        }
+        if (atomicConstraint == IsAfterOrEqualToConstantDateTimeConstraint.class) {
+            return AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME;
+        }
+        if (atomicConstraint == IsBeforeConstantDateTimeConstraint.class) {
+            return AtomicConstraintType.ISBEFORECONSTANTDATETIME;
+        }
+        if (atomicConstraint == IsBeforeOrEqualToConstantDateTimeConstraint.class) {
+            return AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME;
+        }
+        if (atomicConstraint == IsGranularToConstraint.class) {
+            return AtomicConstraintType.ISGRANULARTO;
+        }
+        if (atomicConstraint == IsInSetConstraint.class) {
+            return AtomicConstraintType.ISINSET;
+        }
+        throw new UnsupportedOperationException();
+    }
 }
 

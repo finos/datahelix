@@ -1,15 +1,19 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.DateObject;
+import com.scottlogic.deg.generator.guice.AtomicConstraintTypeMapper;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.generator.inputs.MainConstraintReader;
+import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
+import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -126,30 +130,49 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withAtomicConstraint(
-        Field fooField,
+        Field field,
         Class<? extends AtomicConstraint> atomicConstraint,
         Object value) {
 
-        if(value == null) {
-            try {
-                final Constructor<?>[] constructors = atomicConstraint.getConstructors();
-                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField, null);
-                return saveAndSet(constraint);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException("Unable to build constraint of type " + atomicConstraint.toString() +
-                    "from class alone");
-            }
+        ConstraintDTO constraintDTO = new ConstraintDTO();
+        if (value instanceof Collection) {
+            constraintDTO.values = (Collection<Object>)value;
+        } else {
+            constraintDTO.value = getValueForConstraint(value);
         }
-        else {
-            try {
-                final Constructor<?>[] constructors = atomicConstraint.getConstructors();
-                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField, value, null);
-                return saveAndSet(constraint);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException("Unable to build constraint of type " + atomicConstraint.toString() +
-                    "from class and sample value: " + value.toString());
-            }
+        constraintDTO.field = field.name;
+        constraintDTO.is = new AtomicConstraintTypeMapper().fromConstraintClass(atomicConstraint).toString();
+
+        try {
+            Constraint constraint = new MainConstraintReader().apply(
+                constraintDTO,
+                new ProfileFields(Collections.singletonList(field)),
+                Collections.emptySet());
+
+            return saveAndSet(constraint);
+        } catch (InvalidProfileException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private static Object getValueForConstraint(Object value){
+        if (value == null){
+            return null;
+        }
+
+        if (value instanceof Number) {
+            return value;
+        } else if (value instanceof ParsedGranularity) {
+            return ((ParsedGranularity) value).getNumericGranularity();
+        } else if (value instanceof StandardConstraintTypes) {
+            return value.toString().toUpperCase();
+        } else if (value instanceof Enum) {
+            return value.toString().toLowerCase();
+        } else if (value instanceof OffsetDateTime) {
+            return DateObject.fromDate((OffsetDateTime) value);
+        }
+
+        return value.toString();
     }
 
     /**

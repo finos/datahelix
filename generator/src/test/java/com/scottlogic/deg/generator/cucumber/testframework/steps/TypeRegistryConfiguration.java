@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.constraints.atomic.DateObject;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;

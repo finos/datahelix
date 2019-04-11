@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.generator.constraints.atomic.DateObject;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
