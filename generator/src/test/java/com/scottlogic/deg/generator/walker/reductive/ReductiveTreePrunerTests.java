@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -46,7 +46,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO"));
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -64,7 +64,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -87,7 +87,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO"));
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -110,7 +110,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -133,7 +133,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -159,7 +159,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -186,7 +186,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -217,7 +217,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO"));
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -246,7 +246,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -276,7 +276,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -308,7 +308,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -341,7 +341,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO"));
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -368,7 +368,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new DataBagValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new Value(field, "TODO")).get();
 
         //Assert
         ConstraintNode expected = tree;

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -28,7 +28,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
-        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
+        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
         DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
 
@@ -43,7 +43,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
-        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
+        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
         DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
@@ -14,7 +14,7 @@ public class CellSource {
     public final Field field;
     private final FieldSpecSource source;
 
-    public CellSource(DataBagValue value, Field field) {
+    public CellSource(Value value, Field field) {
         this.field = field;
         this.source = value.source != null ? value.source : FieldSpecSource.Empty;
     }

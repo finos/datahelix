@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
@@ -35,7 +35,7 @@ public class ReductiveTreePruner {
      * @param value the field and value to prune for.
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
-    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, DataBagValue value) {
+    public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Value value) {
         return pruneConstraintNode(constraintNode, value.getField(), fieldSpecHelper.getFieldSpecForValue(value));
     }
 

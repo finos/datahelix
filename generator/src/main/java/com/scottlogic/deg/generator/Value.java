@@ -8,21 +8,21 @@ import java.util.Objects;
  * Stores details about a Generated Value
  * The Field, the Value, the Format, and the source
  */
-public class DataBagValue {
+public class Value {
     public final Field field;
     public final Object value;
     public final String format;
 
     public final FieldSpecSource source;
 
-    public DataBagValue(Field field, Object value, String format, FieldSpecSource source){
+    public Value(Field field, Object value, String format, FieldSpecSource source){
         this.field = field;
         this.value = value;
         this.format = format;
         this.source = source;
     }
 
-    public DataBagValue(Field field, Object value){
+    public Value(Field field, Object value){
         this(field, value, null, FieldSpecSource.Empty);
     }
 
@@ -30,7 +30,7 @@ public class DataBagValue {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DataBagValue that = (DataBagValue) o;
+        Value that = (Value) o;
         return Objects.equals(value, that.value) &&
             Objects.equals(format, that.format);
     }

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -35,8 +35,8 @@ public class DataBagSourceFactory {
         return new FieldCombiningDataBagSource(fieldDataBagSources);
     }
 
-    private GeneratedObject toGeneratedObject(DataBagValue dataBagValue) {
-        return new GeneratedObject(new HashMap<Field, DataBagValue>() {{
-            put(dataBagValue.field, dataBagValue); }});
+    private GeneratedObject toGeneratedObject(Value value) {
+        return new GeneratedObject(new HashMap<Field, Value>() {{
+            put(value.field, value); }});
     }
 }

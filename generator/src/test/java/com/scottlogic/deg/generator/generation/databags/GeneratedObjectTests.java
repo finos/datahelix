@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import org.junit.Assert;
@@ -33,8 +33,8 @@ class GeneratedObjectTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().set(idField, new DataBagValue(idField, 3)).build();
-        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().set(priceField, new DataBagValue(priceField, 4)).build();
+        GeneratedObject generatedObject1 = GeneratedObjectBuilder.startBuilding().set(idField, new Value(idField, 3)).build();
+        GeneratedObject generatedObject2 = GeneratedObjectBuilder.startBuilding().set(priceField, new Value(priceField, 4)).build();
 
         // ACT
         GeneratedObject mergedGeneratedObject = GeneratedObjectMerger.merge(generatedObject1, generatedObject2);

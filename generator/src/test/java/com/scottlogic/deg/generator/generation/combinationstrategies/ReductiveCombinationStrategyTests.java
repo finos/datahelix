@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
@@ -22,13 +22,13 @@ class ReductiveCombinationStrategyTests {
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 10)
+                    new Value(first_field, 10)
                 ).build()
             );
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 20)
+                    new Value(first_field, 20)
                 ).build()
             );
         }};
@@ -36,13 +36,13 @@ class ReductiveCombinationStrategyTests {
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     second_field,
-                    new DataBagValue(second_field, "A")
+                    new Value(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     second_field,
-                    new DataBagValue(second_field, "B")
+                    new Value(second_field, "B")
                 ).build()
             );
         }};
@@ -59,37 +59,37 @@ class ReductiveCombinationStrategyTests {
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 10)
+                    new Value(first_field, 10)
                 ).set(
                     second_field,
-                    new DataBagValue(second_field, "A")
+                    new Value(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 10)
+                    new Value(first_field, 10)
                 ).set(
                     second_field,
-                    new DataBagValue(second_field, "B")
+                    new Value(second_field, "B")
                 ).build()
             );
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 20)
+                    new Value(first_field, 20)
                 ).set(
                     second_field,
-                    new DataBagValue(second_field, "A")
+                    new Value(second_field, "A")
                 ).build()
             );
             add(
                 GeneratedObjectBuilder.startBuilding().set(
                     first_field,
-                    new DataBagValue(first_field, 20)
+                    new Value(first_field, 20)
                 ).set(
                     second_field,
-                    new DataBagValue(second_field, "B")
+                    new Value(second_field, "B")
                 ).build()
             );
         }};

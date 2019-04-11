@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.walker;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
@@ -63,7 +63,7 @@ public class ReductiveDataGenerator implements DataGenerator {
             return Stream.empty();
         }
 
-        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get());
+        Stream<Value> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get());
 
         return FlatMappingSpliterator.flatMap(
             values,
@@ -74,7 +74,7 @@ public class ReductiveDataGenerator implements DataGenerator {
         ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
-        DataBagValue fieldValue){
+        Value fieldValue){
 
         Merged<ConstraintNode> reducedTree = this.treePruner.pruneConstraintNode(tree, fieldValue);
 

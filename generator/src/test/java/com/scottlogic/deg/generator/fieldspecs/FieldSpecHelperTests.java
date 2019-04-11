@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
@@ -19,7 +19,7 @@ class FieldSpecHelperTests {
 
     @Test
     void getFieldSpecForValue() {
-        DataBagValue input = new DataBagValue(field, "value");
+        Value input = new Value(field, "value");
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
@@ -32,7 +32,7 @@ class FieldSpecHelperTests {
 
     @Test
     void getFieldSpecForNullValue() {
-        DataBagValue input = new DataBagValue(field, null, null, FieldSpecSource.Empty);
+        Value input = new Value(field, null, null, FieldSpecSource.Empty);
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 

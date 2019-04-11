@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
@@ -30,7 +30,7 @@ public class CsvDataSetWriterTests {
     public void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new DataBagValue(field1, new BigDecimal("0.00000001"))).build();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, new BigDecimal("0.00000001"))).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -58,7 +58,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNullValue_shouldOutputEmptyValue() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new DataBagValue(field1, null)).build();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, null)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -72,7 +72,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNonBigDecimalNumberAndNoFormat_shouldOutputNumberFormattedCorrectly() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new DataBagValue(field1, 1.2f)).build();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, 1.2f)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -101,7 +101,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new DataBagValue(field1, date)).build();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -116,7 +116,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 777_000_000, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new DataBagValue(field1, date)).build();
+        GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -147,8 +147,8 @@ public class CsvDataSetWriterTests {
         String value2 = "value2";
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding()
-            .set(field1, new DataBagValue(field1, value1))
-            .set(field2, new DataBagValue(field2, value2)).build();
+            .set(field1, new Value(field1, value1))
+            .set(field2, new Value(field2, value2)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         profileFields = new ProfileFields(Arrays.asList(field1, field2));
@@ -166,8 +166,8 @@ public class CsvDataSetWriterTests {
         String value2 = "value2";
         StringBuffer stringBuffer = new StringBuffer();
         GeneratedObject generatedObject = GeneratedObjectBuilder.startBuilding()
-            .set(field1, new DataBagValue(field1, value1))
-            .set(field2, new DataBagValue(field2, value2)).build();
+            .set(field1, new Value(field1, value1))
+            .set(field2, new Value(field2, value2)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         profileFields = new ProfileFields(Arrays.asList(field2, field1));
@@ -179,8 +179,8 @@ public class CsvDataSetWriterTests {
         Assert.assertEquals("\"value2\",\"value1\"", stringBuffer.toString().trim());
     }
 
-    private DataBagValue getValueWithFormat(Object value, String format) {
-        return new DataBagValue(field1, value, format, FieldSpecSource.Empty);
+    private Value getValueWithFormat(Object value, String format) {
+        return new Value(field1, value, format, FieldSpecSource.Empty);
     }
 
     private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject, ProfileFields profileFields) throws IOException {

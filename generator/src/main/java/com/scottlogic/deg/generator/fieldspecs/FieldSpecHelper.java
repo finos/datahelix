@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class FieldSpecHelper {
-    public FieldSpec getFieldSpecForValue(DataBagValue fieldValue){
+    public FieldSpec getFieldSpecForValue(Value fieldValue){
         if (fieldValue.getValue() == null) {
             return getNullRequiredFieldSpec(fieldValue.source);
         }

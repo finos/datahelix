@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
@@ -24,7 +24,7 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
-    public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
+    public Stream<Value> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
@@ -32,7 +32,7 @@ public class FieldSpecValueGenerator {
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, generationConfig.getDataGenerationType());
 
         return StreamSupport.stream(iterable.spliterator(), false)
-            .map(value -> new DataBagValue(
+            .map(value -> new Value(
                 field,
                 value,
                 spec.getFormatRestrictions() != null

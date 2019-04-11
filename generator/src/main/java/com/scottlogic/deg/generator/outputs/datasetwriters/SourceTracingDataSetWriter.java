@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.outputs.datasetwriters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.scottlogic.deg.generator.DataBagValue;
+import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
@@ -50,7 +50,7 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
             generatedObject.getFieldToValue().keySet()
                 .stream()
                 .map(field -> {
-                    DataBagValue value = generatedObject.getFieldToValue().get(field);
+                    Value value = generatedObject.getFieldToValue().get(field);
                     return new CellSource(value, field);
                 })
                 .collect(Collectors.toList())

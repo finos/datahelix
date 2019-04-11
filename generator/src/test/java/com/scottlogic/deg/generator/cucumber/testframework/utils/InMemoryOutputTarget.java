@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.DataBagValue;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
