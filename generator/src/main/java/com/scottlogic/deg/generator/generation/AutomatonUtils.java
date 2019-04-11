@@ -7,7 +7,7 @@ import dk.brics.automaton.Transition;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class AutomationUtils {
+class AutomatonUtils {
 
     private static final char printableChar = ' ';
 

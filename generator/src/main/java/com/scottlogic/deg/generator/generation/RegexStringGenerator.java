@@ -114,8 +114,8 @@ public class RegexStringGenerator implements StringGenerator {
     @Override
     public Iterable<String> generateInterestingValues() {
         try {
-            String shortestString = AutomationUtils.getShortestExample(automaton);
-            String longestString = AutomationUtils.getLongestExample(automaton);
+            String shortestString = AutomatonUtils.getShortestExample(automaton);
+            String longestString = AutomatonUtils.getLongestExample(automaton);
 
             return shortestString.equals(longestString)
                 ? Collections.singleton(shortestString)
