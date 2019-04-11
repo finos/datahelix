@@ -15,7 +15,7 @@ public class NumericRestrictions {
         numericScale = DEFAULT_NUMERIC_SCALE;
     }
 
-    NumericRestrictions(int numericScale){
+    public NumericRestrictions(int numericScale){
         this.numericScale = numericScale;
     }
 

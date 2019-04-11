@@ -97,12 +97,9 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             ? new NumericRestrictions()
             : fieldSpec.getNumericRestrictions();
 
-        int numericScale = restrictions.getNumericScale();
-
         return new RealNumberFieldValueSource(
             restrictions,
-            getBlacklist(fieldSpec),
-            numericScale);
+            getBlacklist(fieldSpec));
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
