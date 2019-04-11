@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Given a list of streams of GeneratedObjects, each list referring to a single field.
- *  return a single stream of GeneratedObjects with all the different fields added
+ * Given a list of streams of rows, each list referring to a single field.
+ *  return a single stream of rows with all the different fields added
  */
-public class FieldCombiningDataBagSource implements DataBagSource {
+public class FieldCombiningRowSource implements RowSource {
     private final List<Stream<Row>> subGenerators;
 
-    FieldCombiningDataBagSource(List<Stream<Row>> subGenerators) {
+    FieldCombiningRowSource(List<Stream<Row>> subGenerators) {
         this.subGenerators = subGenerators;
     }
 

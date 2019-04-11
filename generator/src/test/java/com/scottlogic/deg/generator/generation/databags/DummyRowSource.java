@@ -4,11 +4,11 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-class DummyDataBagSource implements DataBagSource
+class DummyRowSource implements RowSource
 {
     private final Stream<Row> dataBags;
 
-    public DummyDataBagSource(Row... rows) {
+    public DummyRowSource(Row... rows) {
         this.dataBags = Stream.of(rows);
     }
 

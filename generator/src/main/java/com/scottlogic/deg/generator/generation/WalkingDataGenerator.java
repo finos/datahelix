@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
+import com.scottlogic.deg.generator.generation.databags.ConcatenatingRowSource;
+import com.scottlogic.deg.generator.generation.databags.RowSource;
 import com.scottlogic.deg.generator.generation.databags.Row;
-import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.RowSourceFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;
@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 public class WalkingDataGenerator implements DataGenerator {
 
     private final DecisionTreeWalker treeWalker;
-    private final DataBagSourceFactory dataBagSourceFactory;
+    private final RowSourceFactory rowSourceFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
         DecisionTreeWalker treeWalker,
-        DataBagSourceFactory dataBagSourceFactory,
+        RowSourceFactory rowSourceFactory,
         GenerationConfig generationConfig) {
         this.treeWalker = treeWalker;
-        this.dataBagSourceFactory = dataBagSourceFactory;
+        this.rowSourceFactory = rowSourceFactory;
         this.generationConfig = generationConfig;
     }
 
@@ -39,9 +39,9 @@ public class WalkingDataGenerator implements DataGenerator {
     }
 
     private Stream<Row> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
-        Stream<DataBagSource> dataBagSources = rowSpecs.map(dataBagSourceFactory::createDataBagSource);
+        Stream<RowSource> rowSourceStream = rowSpecs.map(rowSourceFactory::createRowSource);
 
-        return new ConcatenatingDataBagSource(dataBagSources)
+        return new ConcatenatingRowSource(rowSourceStream)
             .generate(generationConfig);
     }
 }

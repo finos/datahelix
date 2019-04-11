@@ -23,18 +23,18 @@ class StandardRowSpecRowSourceFactoryTests {
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
 
     @Test
-    void shouldCreateMultiplexingDataBagSourceForRowSpec() {
+    void shouldCreateMultiplexingRowSourceForRowSpec() {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
+        RowSourceFactory factory = new RowSourceFactory(valueGenerator);
 
-        DataBagSource result = factory.createDataBagSource(rowSpec);
+        RowSource result = factory.createRowSource(rowSpec);
 
-        Assert.assertThat(result, instanceOf(FieldCombiningDataBagSource.class));
+        Assert.assertThat(result, instanceOf(FieldCombiningRowSource.class));
     }
 
     @Test
@@ -45,9 +45,9 @@ class StandardRowSpecRowSourceFactoryTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
+        RowSourceFactory factory = new RowSourceFactory(valueGenerator);
 
-        factory.createDataBagSource(rowSpec);
+        factory.createRowSource(rowSpec);
 
         verify(valueGenerator, times(1)).generate(field, fieldSpec);
     }

@@ -29,14 +29,14 @@ class ConcatenatingRowSourceTests {
         Row row2 = GeneratedObjectBuilder.startBuilding().build();
         Row row3 = GeneratedObjectBuilder.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(row1, row2);
-        DataBagSource dataBagSource2 = new DummyDataBagSource(row3);
+        RowSource rowSource1 = new DummyRowSource(row1, row2);
+        RowSource rowSource2 = new DummyRowSource(row3);
 
-        ConcatenatingDataBagSource objectUnderTest =
-            new ConcatenatingDataBagSource(
+        ConcatenatingRowSource objectUnderTest =
+            new ConcatenatingRowSource(
                 Stream.of(
-                    dataBagSource1,
-                    dataBagSource2));
+                    rowSource1,
+                    rowSource2));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -57,11 +57,11 @@ class ConcatenatingRowSourceTests {
         // ARRANGE
         Row row1 = GeneratedObjectBuilder.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(row1);
+        RowSource rowSource1 = new DummyRowSource(row1);
 
-        ConcatenatingDataBagSource objectUnderTest =
-            new ConcatenatingDataBagSource(
-                Stream.of(dataBagSource1));
+        ConcatenatingRowSource objectUnderTest =
+            new ConcatenatingRowSource(
+                Stream.of(rowSource1));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -82,16 +82,16 @@ class ConcatenatingRowSourceTests {
         Row row2 = GeneratedObjectBuilder.startBuilding().build();
         Row row3 = GeneratedObjectBuilder.startBuilding().build();
 
-        DataBagSource dataBagSource1 = new DummyDataBagSource(row1, row2);
-        DataBagSource dataBagSource2 = new DummyDataBagSource();
-        DataBagSource dataBagSource3 = new DummyDataBagSource(row3);
+        RowSource rowSource1 = new DummyRowSource(row1, row2);
+        RowSource rowSource2 = new DummyRowSource();
+        RowSource rowSource3 = new DummyRowSource(row3);
 
-        ConcatenatingDataBagSource objectUnderTest =
-            new ConcatenatingDataBagSource(
+        ConcatenatingRowSource objectUnderTest =
+            new ConcatenatingRowSource(
                 Stream.of(
-                    dataBagSource1,
-                    dataBagSource2,
-                    dataBagSource3));
+                    rowSource1,
+                    rowSource2,
+                    rowSource3));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -110,14 +110,14 @@ class ConcatenatingRowSourceTests {
     @Test
     void whenAllSourcesAreEmpty() {
         // ARRANGE
-        DataBagSource dataBagSource1 = new DummyDataBagSource();
-        DataBagSource dataBagSource2 = new DummyDataBagSource();
+        RowSource rowSource1 = new DummyRowSource();
+        RowSource rowSource2 = new DummyRowSource();
 
-        ConcatenatingDataBagSource objectUnderTest =
-            new ConcatenatingDataBagSource(
+        ConcatenatingRowSource objectUnderTest =
+            new ConcatenatingRowSource(
                 Stream.of(
-                    dataBagSource1,
-                    dataBagSource2));
+                    rowSource1,
+                    rowSource2));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());

@@ -12,27 +12,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class DataBagSourceFactory {
+public class RowSourceFactory {
     private final FieldSpecValueGenerator dataBagValueGenerator;
 
     @Inject
-    public DataBagSourceFactory(FieldSpecValueGenerator dataBagValueGenerator) {
+    public RowSourceFactory(FieldSpecValueGenerator dataBagValueGenerator) {
         this.dataBagValueGenerator = dataBagValueGenerator;
     }
 
-    public DataBagSource createDataBagSource(RowSpec rowSpec){
-        List<Stream<Row>> fieldDataBagSources = new ArrayList<>();
+    public RowSource createRowSource(RowSpec rowSpec){
+        List<Stream<Row>> fieldFowSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-            fieldDataBagSources.add(
+            fieldFowSources.add(
                 dataBagValueGenerator.generate(field, fieldSpec)
                     .map(this::toGeneratedObject)
             );
         }
 
-        return new FieldCombiningDataBagSource(fieldDataBagSources);
+        return new FieldCombiningRowSource(fieldFowSources);
     }
 
     private Row toGeneratedObject(Value value) {

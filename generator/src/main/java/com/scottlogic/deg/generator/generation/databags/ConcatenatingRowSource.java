@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-/** Given a set of data bag sources, return a new one that concatenates the results of each one, in sequence */
-public class ConcatenatingDataBagSource implements DataBagSource {
-    private final Stream<DataBagSource> subSources;
+/** Given a set of row sources, return a new one that concatenates the results of each one, in sequence */
+public class ConcatenatingRowSource implements RowSource {
+    private final Stream<RowSource> subSources;
 
-    public ConcatenatingDataBagSource(Stream<DataBagSource> subSources) {
+    public ConcatenatingRowSource(Stream<RowSource> subSources) {
         this.subSources = subSources;
     }
 
