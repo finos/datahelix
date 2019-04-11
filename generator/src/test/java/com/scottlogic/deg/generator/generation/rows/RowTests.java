@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.generation.rows;
 
-import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import org.junit.Assert;

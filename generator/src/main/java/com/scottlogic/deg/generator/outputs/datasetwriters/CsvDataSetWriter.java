@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
-import com.scottlogic.deg.generator.Value;
+import com.scottlogic.deg.generator.generation.rows.Value;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.rows.Row;
 import org.apache.commons.csv.CSVFormat;

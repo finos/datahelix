@@ -1,5 +1,6 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.generator.generation.rows;
 
+import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 
 import java.util.Objects;

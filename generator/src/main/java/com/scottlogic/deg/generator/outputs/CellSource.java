@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.Value;
+import com.scottlogic.deg.generator.generation.rows.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;

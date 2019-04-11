@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.outputs.datasetwriters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.scottlogic.deg.generator.Value;
+import com.scottlogic.deg.generator.generation.rows.Value;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.generation.rows.Row;

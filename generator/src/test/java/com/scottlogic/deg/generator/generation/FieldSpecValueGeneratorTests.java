@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Value;
+import com.scottlogic.deg.generator.generation.rows.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
