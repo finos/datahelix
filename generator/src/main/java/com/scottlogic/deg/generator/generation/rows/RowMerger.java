@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import java.util.*;
 
 
-public class GeneratedObjectMerger {
+public class RowMerger {
     public static final Row empty = new Row(new HashMap<>());
 
     public static Row merge(Row... bags) {
@@ -17,7 +17,7 @@ public class GeneratedObjectMerger {
             entrySetStream -> entrySetStream)
             .forEach(entry -> {
                 if (newFieldToValue.containsKey(entry.getKey()))
-                    throw new IllegalArgumentException("Databags can't be merged because they overlap on field " + entry.getKey().name);
+                    throw new IllegalArgumentException("Rows can't be merged because they overlap on field " + entry.getKey().name);
 
                 newFieldToValue.put(entry.getKey(), entry.getValue());
             });

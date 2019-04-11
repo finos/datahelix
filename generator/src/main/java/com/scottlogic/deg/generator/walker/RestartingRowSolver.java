@@ -22,20 +22,20 @@ public class RestartingRowSolver implements RowSolver {
 
     @Override
     public Stream<Row> generateRows(Profile profile, DecisionTree analysedProfile) {
-        Optional<Row> firstGeneratedObject = getFirstGeneratedObjectFromIteration(profile, analysedProfile);
-        if (!firstGeneratedObject.isPresent()) {
+        Optional<Row> firstRow = getFirstRowFromIteration(profile, analysedProfile);
+        if (!firstRow.isPresent()) {
             return Stream.empty();
         }
 
         return Stream.concat(
-            Stream.of(firstGeneratedObject.get()),
+            Stream.of(firstRow.get()),
             Stream.generate(() ->
-                getFirstGeneratedObjectFromIteration(profile, analysedProfile))
+                getFirstRowFromIteration(profile, analysedProfile))
                 .filter(Optional::isPresent)
                 .map(Optional::get));
     }
 
-    private Optional<Row> getFirstGeneratedObjectFromIteration(Profile profile, DecisionTree analysedProfile){
+    private Optional<Row> getFirstRowFromIteration(Profile profile, DecisionTree analysedProfile){
         return innerGenerator.generateRows(profile, analysedProfile)
             .findFirst();
     }

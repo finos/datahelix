@@ -41,7 +41,7 @@ class RandomReductiveRowSolverTests {
      * values for each row
      */
     @Test
-    public void shouldProduceTwoRowsOfRandomDataOneGeneratedObjectFromEachIteration() {
+    public void shouldProduceTwoRowsOfRandomDataOneRowFromEachIteration() {
         when(underlyingWalker.generateRows(profile, tree)).thenReturn(
             Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")),
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))

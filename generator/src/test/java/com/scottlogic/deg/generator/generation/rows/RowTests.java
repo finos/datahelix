@@ -15,7 +15,7 @@ class RowTests {
         Field idField = new Field("id");
 
         // ACT
-        Row objectUnderTest = GeneratedObjectBuilder.startBuilding().set(idField, 3, FieldSpecSource.Empty).build();
+        Row objectUnderTest = RowBuilder.startBuilding().set(idField, 3, FieldSpecSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
@@ -27,16 +27,16 @@ class RowTests {
     }
 
     @Test
-    void mergedDataBagsShouldContainTheSameValuesAsInputs() {
+    void mergedRowsShouldContainTheSameValuesAsInputs() {
         // ARRANGE
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        Row row1 = GeneratedObjectBuilder.startBuilding().set(idField, new Value(idField, 3)).build();
-        Row row2 = GeneratedObjectBuilder.startBuilding().set(priceField, new Value(priceField, 4)).build();
+        Row row1 = RowBuilder.startBuilding().set(idField, new Value(idField, 3)).build();
+        Row row2 = RowBuilder.startBuilding().set(priceField, new Value(priceField, 4)).build();
 
         // ACT
-        Row mergedRow = GeneratedObjectMerger.merge(row1, row2);
+        Row mergedRow = RowMerger.merge(row1, row2);
 
         // ASSERT
         Assert.assertThat(
@@ -49,16 +49,16 @@ class RowTests {
     }
 
     @Test
-    void mergeShouldThrowIfDataBagsOverlap() {
+    void mergeShouldThrowIfRowsOverlap() {
         // ARRANGE
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        Row row1 = GeneratedObjectBuilder.startBuilding()
+        Row row1 = RowBuilder.startBuilding()
             .set(idField, "foo", FieldSpecSource.Empty)
             .build();
 
-        Row row2 = GeneratedObjectBuilder.startBuilding()
+        Row row2 = RowBuilder.startBuilding()
             .set(idField, "foo", FieldSpecSource.Empty)
             .set(priceField, 4, FieldSpecSource.Empty)
             .build();
@@ -66,6 +66,6 @@ class RowTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> GeneratedObjectMerger.merge(row1, row2));
+            () -> RowMerger.merge(row1, row2));
     }
 }

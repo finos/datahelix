@@ -25,9 +25,9 @@ class ConcatenatingRowSourceTests {
     @Test
     void whenMultiplePopulatedSourcesAreProvided() {
         // ARRANGE
-        Row row1 = GeneratedObjectBuilder.startBuilding().build();
-        Row row2 = GeneratedObjectBuilder.startBuilding().build();
-        Row row3 = GeneratedObjectBuilder.startBuilding().build();
+        Row row1 = RowBuilder.startBuilding().build();
+        Row row2 = RowBuilder.startBuilding().build();
+        Row row3 = RowBuilder.startBuilding().build();
 
         RowSource rowSource1 = new DummyRowSource(row1, row2);
         RowSource rowSource2 = new DummyRowSource(row3);
@@ -55,7 +55,7 @@ class ConcatenatingRowSourceTests {
     @Test
     void whenOnePopulatedSourceIsProvided() {
         // ARRANGE
-        Row row1 = GeneratedObjectBuilder.startBuilding().build();
+        Row row1 = RowBuilder.startBuilding().build();
 
         RowSource rowSource1 = new DummyRowSource(row1);
 
@@ -78,9 +78,9 @@ class ConcatenatingRowSourceTests {
     @Test
     void whenMiddleSourceIsEmpty() {
         // ARRANGE
-        Row row1 = GeneratedObjectBuilder.startBuilding().build();
-        Row row2 = GeneratedObjectBuilder.startBuilding().build();
-        Row row3 = GeneratedObjectBuilder.startBuilding().build();
+        Row row1 = RowBuilder.startBuilding().build();
+        Row row2 = RowBuilder.startBuilding().build();
+        Row row3 = RowBuilder.startBuilding().build();
 
         RowSource rowSource1 = new DummyRowSource(row1, row2);
         RowSource rowSource2 = new DummyRowSource();

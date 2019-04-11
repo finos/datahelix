@@ -22,12 +22,12 @@ public class InMemoryOutputTarget implements OutputTarget {
     }
 
     @Override
-    public void outputDataset(Stream<Row> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
-        this.testState.generatedObjects = getRows(generatedObjects, profileFields);
+    public void outputDataset(Stream<Row> rows, ProfileFields profileFields) throws IllegalStateException {
+        this.testState.rows = getRows(rows, profileFields);
     }
 
-    private List<List<Object>> getRows(Stream<Row> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
-        return generatedObjects
+    private List<List<Object>> getRows(Stream<Row> rows, ProfileFields profileFields) throws IllegalStateException {
+        return rows
             .collect(Collectors.toList())
             .stream()
             .map(genObj -> {

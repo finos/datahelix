@@ -34,13 +34,13 @@ public class PartitioningRowSolver implements RowSolver {
     public Stream<Row> generateRows(Profile profile, DecisionTree decisionTree) {
         CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
 
-        final Stream<Stream<Row>> partitionedGeneratedObjects =
+        final Stream<Stream<Row>> partitionedRows =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
                 .map(this.treeOptimiser::optimiseTree)
                 .map(tree -> innerGenerator.generateRows(profile, tree));
 
         return partitionCombiner
-            .permute(partitionedGeneratedObjects);
+            .permute(partitionedRows);
     }
 }

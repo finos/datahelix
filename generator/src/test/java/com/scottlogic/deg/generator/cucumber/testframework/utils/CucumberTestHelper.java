@@ -60,9 +60,9 @@ public class CucumberTestHelper {
             runGenerationProcess();
         }
 
-        return testState.generatedObjects == null
+        return testState.rows == null
             ? new ArrayList<>()
-            : testState.generatedObjects;
+            : testState.rows;
     }
 
     public void runChecksWithoutGeneratingData() {
@@ -79,7 +79,7 @@ public class CucumberTestHelper {
     }
 
     public boolean hasDataBeenGenerated() {
-        return testState.generatedObjects != null && testState.generatedObjects.size() > 0;
+        return testState.rows != null && testState.rows.size() > 0;
     }
 
     public Collection<Exception> getThrownExceptions(){

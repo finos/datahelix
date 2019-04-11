@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.GeneratedObjectMerger;
+import com.scottlogic.deg.generator.generation.rows.RowMerger;
 import com.scottlogic.deg.generator.utils.RestartableIterator;
 
 import java.util.List;
@@ -14,8 +14,8 @@ import java.util.stream.StreamSupport;
 
 public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
-    public Stream<Row> permute(Stream<Stream<Row>> dataBagSequences) {
-        List<RestartableIterator<Row>> bagsAsLists = dataBagSequences
+    public Stream<Row> permute(Stream<Stream<Row>> rowSequences) {
+        List<RestartableIterator<Row>> bagsAsLists = rowSequences
             .map(dbs -> new RestartableIterator<>(dbs.iterator()))
             .collect(Collectors.toList());
 
@@ -28,7 +28,7 @@ public class ReductiveCombinationStrategy implements CombinationStrategy {
             nextStream.restart();
 
             return FlatMappingSpliterator.flatMap(StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
-                .map(innerBag -> GeneratedObjectMerger.merge(innerBag, accumulatingBag)),
+                .map(innerBag -> RowMerger.merge(innerBag, accumulatingBag)),
                 innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else

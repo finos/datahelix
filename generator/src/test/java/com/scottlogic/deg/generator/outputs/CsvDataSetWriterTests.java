@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.GeneratedObjectBuilder;
+import com.scottlogic.deg.generator.generation.rows.RowBuilder;
 import com.scottlogic.deg.generator.outputs.datasetwriters.CsvDataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -30,7 +30,7 @@ public class CsvDataSetWriterTests {
     public void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, new BigDecimal("0.00000001"))).build();
+        Row row = RowBuilder.startBuilding().set(field1, new Value(field1, new BigDecimal("0.00000001"))).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -44,7 +44,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withBigDecimalAndAFormat_shouldOutputFormattedValue() throws IOException{
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")).build();
+        Row row = RowBuilder.startBuilding().set(field1, getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -58,7 +58,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNullValue_shouldOutputEmptyValue() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, null)).build();
+        Row row = RowBuilder.startBuilding().set(field1, new Value(field1, null)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -72,7 +72,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withNonBigDecimalNumberAndNoFormat_shouldOutputNumberFormattedCorrectly() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, 1.2f)).build();
+        Row row = RowBuilder.startBuilding().set(field1, new Value(field1, 1.2f)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -86,7 +86,7 @@ public class CsvDataSetWriterTests {
     void writeRow_withStringAndFormat_shouldOutputValueQuotedAndFormatted() throws IOException {
         // Arrange
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, getValueWithFormat("Hello World", "%.5s")).build();
+        Row row = RowBuilder.startBuilding().set(field1, getValueWithFormat("Hello World", "%.5s")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -101,7 +101,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, date)).build();
+        Row row = RowBuilder.startBuilding().set(field1, new Value(field1, date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -116,7 +116,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 777_000_000, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, new Value(field1, date)).build();
+        Row row = RowBuilder.startBuilding().set(field1, new Value(field1, date)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -131,7 +131,7 @@ public class CsvDataSetWriterTests {
         // Arrange
         OffsetDateTime date = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding().set(field1, getValueWithFormat(date, "%tF")).build();
+        Row row = RowBuilder.startBuilding().set(field1, getValueWithFormat(date, "%tF")).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
 
         // Act
@@ -146,7 +146,7 @@ public class CsvDataSetWriterTests {
         String value1 = "value1";
         String value2 = "value2";
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding()
+        Row row = RowBuilder.startBuilding()
             .set(field1, new Value(field1, value1))
             .set(field2, new Value(field2, value2)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
@@ -165,7 +165,7 @@ public class CsvDataSetWriterTests {
         String value1 = "value1";
         String value2 = "value2";
         StringBuffer stringBuffer = new StringBuffer();
-        Row row = GeneratedObjectBuilder.startBuilding()
+        Row row = RowBuilder.startBuilding()
             .set(field1, new Value(field1, value1))
             .set(field2, new Value(field2, value2)).build();
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);

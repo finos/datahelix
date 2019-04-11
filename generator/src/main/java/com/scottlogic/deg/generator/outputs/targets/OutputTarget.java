@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public interface OutputTarget {
-    void outputDataset(Stream<Row> generatedObjects, ProfileFields profileFields) throws IOException;
+    void outputDataset(Stream<Row> rows, ProfileFields profileFields) throws IOException;
 }

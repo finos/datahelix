@@ -67,7 +67,7 @@ class ValueGeneratorTests {
         final Set<Value> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
 
-        Set<Value> expectedGeneratedObjects = new HashSet<>(
+        Set<Value> expectedRows = new HashSet<>(
             Arrays.asList(
                 new Value(
                     new Field("First Field"), 1),
@@ -78,7 +78,7 @@ class ValueGeneratorTests {
             )
         );
 
-        assertThat(result, sameBeanAs(expectedGeneratedObjects));
+        assertThat(result, sameBeanAs(expectedRows));
     }
 
     @Test
@@ -132,7 +132,7 @@ class ValueGeneratorTests {
         final Set<Value> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec)
             .collect(Collectors.toSet());
 
-        Set<Value> expectedGeneratedObjects = new HashSet<>(
+        Set<Value> expectedRows = new HashSet<>(
             Arrays.asList(
                 new Value(
                     new Field("First Field"),
@@ -155,7 +155,7 @@ class ValueGeneratorTests {
             )
         );
 
-        assertThat(result, sameBeanAs(expectedGeneratedObjects));
+        assertThat(result, sameBeanAs(expectedRows));
     }
 
     @Test
@@ -257,7 +257,7 @@ class ValueGeneratorTests {
 
         final Set<Value> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<Value> expectedGeneratedObjects = new HashSet<>(
+        Set<Value> expectedRows = new HashSet<>(
             Arrays.asList(
                 new Value(
                     new Field("First Field"),"ba"),
@@ -266,11 +266,11 @@ class ValueGeneratorTests {
             )
         );
 
-        assertThat(result, sameBeanAs(expectedGeneratedObjects));
+        assertThat(result, sameBeanAs(expectedRows));
     }
 
     @Test
-    void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
+    void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsRowsWithValuesInSetRestrictions() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withSetRestrictions(
@@ -296,7 +296,7 @@ class ValueGeneratorTests {
 
         final Set<Value> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<Value> expectedGeneratedObjects = new HashSet<>(
+        Set<Value> expectedRows = new HashSet<>(
             Arrays.asList(
                 new Value(
                     new Field("First Field"),10),
@@ -307,11 +307,11 @@ class ValueGeneratorTests {
             )
         );
 
-        assertThat(result, sameBeanAs(expectedGeneratedObjects));
+        assertThat(result, sameBeanAs(expectedRows));
     }
 
     @Test
-    void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
+    void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedRowsForNumericRestriction() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNumericRestrictions(
                 new NumericRestrictions() {{
@@ -337,7 +337,7 @@ class ValueGeneratorTests {
 
         final Set<Value> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
 
-        Set<Value> expectedGeneratedObjects = new HashSet<>(
+        Set<Value> expectedRows = new HashSet<>(
             Arrays.asList(
                 new Value(
                     new Field("First Field"),
@@ -357,7 +357,7 @@ class ValueGeneratorTests {
             )
         );
 
-        assertThat(result, sameBeanAs(expectedGeneratedObjects));
+        assertThat(result, sameBeanAs(expectedRows));
     }
 
     @Test
@@ -401,9 +401,7 @@ class ValueGeneratorTests {
 
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
-        result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue());
-        });
+        result.forEach(row -> valuesForFirstField.add(row.getValue()));
         
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(
             new BigDecimal("1.1E-19"),
@@ -459,8 +457,8 @@ class ValueGeneratorTests {
 
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
-        result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue());
+        result.forEach(row -> {
+            valuesForFirstField.add(row.getValue());
         });
 
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(

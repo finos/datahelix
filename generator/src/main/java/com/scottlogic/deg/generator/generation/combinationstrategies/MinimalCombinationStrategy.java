@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.GeneratedObjectMerger;
+import com.scottlogic.deg.generator.generation.rows.RowMerger;
 
 import java.util.*;
 import java.util.stream.*;
@@ -9,8 +9,8 @@ import java.util.stream.*;
 public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<Row> permute(Stream<Stream<Row>> dataBagSequences) {
-        List<Iterator<Row>> iterators = dataBagSequences
+    public Stream<Row> permute(Stream<Stream<Row>> rowSequences) {
+        List<Iterator<Row>> iterators = rowSequences
                 .map(BaseStream::iterator)
                 .collect(Collectors.toList());
 
@@ -46,7 +46,7 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
                 .filter(Iterator::hasNext)
                 .forEach(iterator -> lastValues.put(iterator, iterator.next()));
 
-            return GeneratedObjectMerger.merge(lastValues.values().toArray(new Row[0]));
+            return RowMerger.merge(lastValues.values().toArray(new Row[0]));
         }
     }
 }

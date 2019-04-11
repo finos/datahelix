@@ -24,7 +24,7 @@ public class FileOutputTarget implements OutputTarget{
 
     @Override
     public void outputDataset(
-        Stream<Row> generatedObjects,
+        Stream<Row> rows,
         ProfileFields profileFields)
         throws IOException {
 
@@ -37,7 +37,7 @@ public class FileOutputTarget implements OutputTarget{
         String fileName = this.dataSetWriter.getFileName(fileNameWithoutExtension);
 
         try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileName, profileFields)) {
-            generatedObjects.forEach(row -> {
+            rows.forEach(row -> {
                 try {
                     this.dataSetWriter.writeRow(writer, row, profileFields);
                 } catch (IOException e) {

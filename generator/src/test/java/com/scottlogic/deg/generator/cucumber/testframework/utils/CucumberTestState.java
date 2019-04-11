@@ -34,7 +34,7 @@ public class CucumberTestState {
     public Optional<Long> maxRows = Optional.empty();
 
     public Boolean generationHasAlreadyOccured = false;
-    public List<List<Object>> generatedObjects;
+    public List<List<Object>> rows;
 
     final List<Field> profileFields = new ArrayList<>();
     final List<ConstraintDTO> constraints = new ArrayList<>();
@@ -93,7 +93,7 @@ public class CucumberTestState {
         this.profileFields.clear();
         this.constraints.clear();
         this.testExceptions.clear();
-        this.generatedObjects = null;
+        this.rows = null;
         this.generationHasAlreadyOccured = false;
         this.shouldSkipGeneration = false;
     }

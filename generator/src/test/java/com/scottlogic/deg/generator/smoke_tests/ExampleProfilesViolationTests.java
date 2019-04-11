@@ -149,10 +149,10 @@ class ExampleProfilesViolationTests {
         }
 
         @Override
-        public void outputDataset(Stream<Row> generatedObjects, ProfileFields profileFields) {
+        public void outputDataset(Stream<Row> rows, ProfileFields profileFields) {
             // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
 
-            generatedObjects.forEach(
+            rows.forEach(
                 row -> Assert.assertThat(row, notNullValue())); // might as well assert non-null while we're at it
         }
 

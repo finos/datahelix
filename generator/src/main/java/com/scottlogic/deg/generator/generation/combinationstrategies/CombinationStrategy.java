@@ -5,5 +5,5 @@ import com.scottlogic.deg.generator.generation.rows.Row;
 import java.util.stream.Stream;
 
 public interface CombinationStrategy {
-    Stream<Row> permute(Stream<Stream<Row>> dataBagSequences);
+    Stream<Row> permute(Stream<Stream<Row>> rowSequences);
 }

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.GeneratedObjectMerger;
+import com.scottlogic.deg.generator.generation.rows.RowMerger;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -14,23 +14,23 @@ import java.util.stream.StreamSupport;
 public class PinningCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<Row> permute(Stream<Stream<Row>> dataBagSequences) {
+    public Stream<Row> permute(Stream<Stream<Row>> rowSequences) {
         Iterable<Row> iterable = new PinningCombinationStrategy
-                .InternalIterable(dataBagSequences);
+                .InternalIterable(rowSequences);
 
         return StreamSupport.stream(iterable.spliterator(), false);
     }
 
     class InternalIterable implements Iterable<Row> {
-        private final Stream<Stream<Row>> dataBagSequences;
+        private final Stream<Stream<Row>> rowSequences;
 
-        InternalIterable(Stream<Stream<Row>> dataBagSequences) {
-            this.dataBagSequences = dataBagSequences;
+        InternalIterable(Stream<Stream<Row>> rowSequences) {
+            this.rowSequences = rowSequences;
         }
 
         @Override
         public Iterator<Row> iterator() {
-            List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
+            List<SequenceAndBaselineTuple> tuples = this.rowSequences
                     .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
                     .collect(Collectors.toList());
 
@@ -85,7 +85,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
 
                 return this.tuples.stream()
                         .map(tuple -> tuple.baseline)
-                    .reduce(Row.empty, (db1, db2) -> GeneratedObjectMerger.merge(db1, db2));
+                    .reduce(Row.empty, (db1, db2) -> RowMerger.merge(db1, db2));
             }
 
             return IntStream.range(0, this.tuples.size())
@@ -101,7 +101,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
                     }
                     return tuple.next();
                 })
-                .reduce(Row.empty, (db1, db2) -> GeneratedObjectMerger.merge(db1, db2));
+                .reduce(Row.empty, (db1, db2) -> RowMerger.merge(db1, db2));
         }
     }
 }

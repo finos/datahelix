@@ -88,11 +88,11 @@ class ReductiveRowSolverTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        Value generatedObject = new Value(field1, "yes");
+        Value row = new Value(field1, "yes");
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(generatedObject));
+        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(row));
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 

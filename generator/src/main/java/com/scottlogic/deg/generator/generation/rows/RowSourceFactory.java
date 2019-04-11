@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static javax.swing.UIManager.put;
+
 public class RowSourceFactory {
     private final ValueGenerator valueGenerator;
 
@@ -27,15 +29,16 @@ public class RowSourceFactory {
 
             fieldFowSources.add(
                 valueGenerator.generate(field, fieldSpec)
-                    .map(this::toGeneratedObject)
+                    .map(this::toRow)
             );
         }
 
         return new FieldCombiningRowSource(fieldFowSources);
     }
 
-    private Row toGeneratedObject(Value value) {
-        return new Row(new HashMap<Field, Value>() {{
-            put(value.field, value); }});
+    private Row toRow(Value value) {
+        HashMap<Field, Value> fieldValue = new HashMap<>();
+        fieldValue.put(value.field, value);
+        return new Row(fieldValue);
     }
 }

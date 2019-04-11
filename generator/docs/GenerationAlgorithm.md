@@ -42,22 +42,9 @@ The reduction algorithm works by converting each constraint into a corresponding
 * The two fieldspecs specify overlapping but compatible restrictions (eg, `X is in [2, 3, 8]` and `X is in [0, 2, 3]`), and the more restrictive interpretation is chosen (eg, `X is in [2, 3]`).
 * The two fieldspecs specify overlapping but incompatible restrictions (eg, `X > 2` and `X < 2`), the merge fails and the interpretation of the decision tree is rejected
 
-# Databags
-
-A **databag** is an immutable mapping from fields to outputs, where outputs are a pairing of a *value* and *formatting information* (eg, a date formatting string or a number of decimal places).
-
-Databags can be merged, but merging two databags fails if they have any keys in common.
-
-Fieldspecs are able to produce streams of databags containing valid values for the field they describe. Additional operations can then be applied over these streams, such as:
-
-* A memoizing decorator that records values being output so they can be replayed inexpensively
-* A filtering decorator that prevents repeated values being output
-* A merger that takes multiple streams and applies one of the available [combination strategies](CombinationStrategies.md)
-* A concatenator that takes multiple streams and outputs all the members of each
-
 # Output
 
-Once fieldspecs have generated streams of single-field databags, and databag stream combiners have merged them together, we should have a stream of databags that each contains all the information needed for a single datum. At this point, a serialiser can take each databag in turn and create an output. For instance,
+Once fieldspecs have generated streams of single-field rows, and row stream combiners have merged them together, we should have a stream of databags that each contains all the information needed for a single datum. At this point, a serialiser can take each databag in turn and create an output. For instance,
 
 ## CSV
 

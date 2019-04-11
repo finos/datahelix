@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 import com.scottlogic.deg.generator.generation.rows.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.GeneratedObjectBuilder;
+import com.scottlogic.deg.generator.generation.rows.RowBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -17,16 +17,16 @@ class ReductiveCombinationStrategyTests {
     final Field second_field = new Field("Second Field");
 
     @Test
-    void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
+    void permute_rowSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
         List<Row> firstFieldRows = new ArrayList<Row>() {{
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 10)
                 ).build()
             );
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 20)
                 ).build()
@@ -34,13 +34,13 @@ class ReductiveCombinationStrategyTests {
         }};
         List<Row> secondFieldRows = new ArrayList<Row>() {{
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     second_field,
                     new Value(second_field, "A")
                 ).build()
             );
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     second_field,
                     new Value(second_field, "B")
                 ).build()
@@ -48,16 +48,16 @@ class ReductiveCombinationStrategyTests {
         }};
         ReductiveCombinationStrategy combinationStrategy = new ReductiveCombinationStrategy();
 
-        ArrayList<List<Row>> dataBagSequences = new ArrayList<List<Row>>() {{
+        ArrayList<List<Row>> rowSequences = new ArrayList<List<Row>>() {{
             add(firstFieldRows);
             add(secondFieldRows);
         }};
-        final List<Row> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
+        final List<Row> result = combinationStrategy.permute(rowSequences.stream().map(Collection::stream))
             .collect(Collectors.toList());
 
         List<Row> expectedRows = new ArrayList<Row>() {{
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 10)
                 ).set(
@@ -66,7 +66,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 10)
                 ).set(
@@ -75,7 +75,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 20)
                 ).set(
@@ -84,7 +84,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                GeneratedObjectBuilder.startBuilding().set(
+                RowBuilder.startBuilding().set(
                     first_field,
                     new Value(first_field, 20)
                 ).set(
