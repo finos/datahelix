@@ -55,7 +55,7 @@ class ViolationFiltersProviderTest {
             is(false));
 
         assertThat(filter.canViolate(
-            new IsStringShorterThanConstraint(null, 5, Collections.emptySet(), false)),
+            new IsStringShorterThanConstraint(null, 5, Collections.emptySet())),
             is(true));
     }
 

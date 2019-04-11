@@ -8,12 +8,12 @@ import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
 import java.util.Objects;
 import java.util.Set;
 
-public class IsStringShorterThanConstraint extends AtomicConstraintBase implements AtomicConstraint, VisitableProfileElement {
+public class IsStringShorterThanConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     private final Set<RuleInformation> rules;
     public final int referenceValue;
 
-    public IsStringShorterThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules, boolean isSoftConstraint) {
+    public IsStringShorterThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
         if (referenceValue < 0){
             throw new IllegalArgumentException("Cannot create an IsStringShorterThanConstraint for field '" +
                 field.name + "' with a a negative length.");
@@ -22,7 +22,6 @@ public class IsStringShorterThanConstraint extends AtomicConstraintBase implemen
         this.referenceValue = referenceValue;
         this.field = field;
         this.rules = rules;
-        this.isSoftConstraint = isSoftConstraint;
     }
 
     @Override
@@ -66,6 +65,6 @@ public class IsStringShorterThanConstraint extends AtomicConstraintBase implemen
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsStringShorterThanConstraint(field, referenceValue, rules, isSoftConstraint);
+        return new IsStringShorterThanConstraint(field, referenceValue, rules);
     }
 }

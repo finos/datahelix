@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Rule;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.UnviolatableConstraintException;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.SoftAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
@@ -135,11 +136,8 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
      * @return True if constraint van be violated, otherwise false.
      */
     private boolean canViolate(Constraint constraint){
-        if (constraint instanceof AtomicConstraint){
-            AtomicConstraint atomicConstraint = (AtomicConstraint) constraint;
-            if (atomicConstraint.isSoftConstraint()){
-                return false;
-            }
+        if (constraint instanceof SoftAtomicConstraint){
+            return false;
         }
 
         for (ViolationFilter filter : constraintsToNotViolate) {

@@ -194,8 +194,7 @@ class AtomicConstraintReaderLookup {
                     return new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
                         length,
-                        rules,
-                        false);
+                        rules);
                 });
 
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
@@ -205,8 +204,7 @@ class AtomicConstraintReaderLookup {
                     return new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
                         length,
-                        rules,
-                        false);
+                        rules);
                 });
 
         add(AtomicConstraintType.HASLENGTH.toString(),

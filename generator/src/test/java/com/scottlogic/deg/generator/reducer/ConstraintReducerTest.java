@@ -807,7 +807,7 @@ class ConstraintReducerTest {
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsStringLongerThanConstraint(field, 5, rules(), false)
+            new IsStringLongerThanConstraint(field, 5, rules())
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -836,7 +836,7 @@ class ConstraintReducerTest {
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsStringShorterThanConstraint(field, 5, rules(), false)
+            new IsStringShorterThanConstraint(field, 5, rules())
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -974,7 +974,7 @@ class ConstraintReducerTest {
     public void shouldReduceConstraintsCorrectlyWhereOneIsViolated(){
         Field field = new Field("field");
         AtomicConstraint violatedConstraint = new ViolatedAtomicConstraint(new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules()).negate());
-        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100, rules(), false);
+        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100, rules());
         AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"), rules());
 
         Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
