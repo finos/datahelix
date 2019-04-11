@@ -198,7 +198,8 @@ class FieldSpecFactoryTests {
         IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(
             new Field("Test"),
             15,
-            null
+            null,
+            false
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
@@ -213,7 +214,8 @@ class FieldSpecFactoryTests {
             new IsStringLongerThanConstraint(
                 new Field("Test"),
                 10,
-                null
+                null,
+                false
             )
         );
 
@@ -228,12 +230,14 @@ class FieldSpecFactoryTests {
         IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(
             new Field("Test"),
             20,
-            null
+            null,
+            false
         );
         IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(
             new Field("Test"),
             20,
-            null
+            null,
+            false
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
@@ -247,7 +251,8 @@ class FieldSpecFactoryTests {
         IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(
             new Field("Test"),
             25,
-            null
+            null,
+            false
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
@@ -262,7 +267,8 @@ class FieldSpecFactoryTests {
             new IsStringShorterThanConstraint(
                 new Field("Test"),
                 10,
-                null
+                null,
+                false
             )
         );
 
@@ -277,12 +283,14 @@ class FieldSpecFactoryTests {
         IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(
             new Field("Test"),
             20,
-            null
+            null,
+            false
         );
         IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(
             new Field("Test"),
             20,
-            null
+            null,
+            false
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);

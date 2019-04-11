@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstr
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,7 +55,7 @@ public class SoftConstraintAppendingProfileReader implements ProfileReader {
 
     private Stream<Constraint> createSoftConstraintsForField(Field field) {
         return Stream.of(
-            IsStringShorterThanConstraint.softConstraint(field, 256)
+            new IsStringShorterThanConstraint(field, 256, Collections.emptySet(), true)
         );
     }
 

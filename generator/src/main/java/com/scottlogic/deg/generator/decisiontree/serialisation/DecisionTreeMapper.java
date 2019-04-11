@@ -204,7 +204,7 @@ public class DecisionTreeMapper {
     }
 
     private static AtomicConstraint fromDto(IsStringShorterThanConstraintDto dto) {
-        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue, rules(dto.rule));
+        return new IsStringShorterThanConstraint(new Field(dto.field.name), dto.referenceValue, rules(dto.rule), false);
     }
     
     private static AtomicConstraint fromDto(IsOfTypeConstraintDto dto) {
