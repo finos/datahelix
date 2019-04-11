@@ -2,10 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.Nullness;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -17,7 +14,7 @@ public class FieldSpecMerger {
     private static final RestrictionMergeOperation initialMergeOperation = new TypesRestrictionMergeOperation();
 
     private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
-        new StringRestrictionsMergeOperation(),
+        new StringRestrictionsMergeOperation(new StringRestrictionsMerger()),
         new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
         new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
         new NullRestrictionsMergeOperation(),

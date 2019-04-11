@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +17,20 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class FieldSpecFactoryTests {
-    FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
-    TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
-    StringRestrictions longerThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringLongerThanConstraint(null, 2 , null))));
-    StringRestrictions shorterThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringShorterThanConstraint(null, 5 , null))));
+    private static final FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
+    private static final TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
+    private static final StringRestrictions longerThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringLongerThanConstraint(null, 2 , null))));
+    private static final StringRestrictions shorterThanRestriction = new StringRestrictions(new StringConstraintsCollection(Collections.singleton(new IsStringShorterThanConstraint(null, 5 , null))));
+    private final StringRestrictions maxLengthRestriction;
+
+    FieldSpecFactoryTests() {
+        maxLengthRestriction = new StringRestrictions(
+            new StringConstraintsCollection(
+                Collections.singleton(
+                    new IsStringShorterThanConstraint(null, 1001, null))));
+
+        maxLengthRestriction.stringGenerator = new RegexStringGenerator(".{0,1000}", true);
+    }
 
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {
@@ -31,9 +42,13 @@ class FieldSpecFactoryTests {
             new MustContainRestriction(
                 new HashSet<FieldSpec>() {{
                     add(
-                        FieldSpec.Empty.withNullRestrictions(
-                            new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty)
-                        .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, null)
+                        FieldSpec.Empty
+                            .withStringRestrictions(
+                                maxLengthRestriction,
+                                FieldSpecSource.Empty)
+                            .withNullRestrictions(
+                                new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty)
+                            .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, null)
                     );
                 }}
             )
