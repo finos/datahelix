@@ -107,7 +107,7 @@ class ExampleProfilesViolationTests {
                     new RowSpecMerger(new FieldSpecMerger()));
 
                 RowSourceFactory rowSourceFactory = new RowSourceFactory(
-                    new FieldSpecValueGenerator(
+                    new ValueGenerator(
                         config,
                         new StandardFieldValueSourceEvaluator(),
                         new JavaUtilRandomNumberGenerator()));

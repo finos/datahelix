@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.ValueGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class StandardRowSpecRowSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
+        ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
         RowSourceFactory factory = new RowSourceFactory(valueGenerator);
@@ -41,7 +41,7 @@ class StandardRowSpecRowSourceFactoryTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
+        ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
         RowSourceFactory factory = new RowSourceFactory(valueGenerator);

@@ -6,14 +6,14 @@ import java.util.stream.Stream;
 
 class DummyRowSource implements RowSource
 {
-    private final Stream<Row> dataBags;
+    private final Stream<Row> rows;
 
     public DummyRowSource(Row... rows) {
-        this.dataBags = Stream.of(rows);
+        this.rows = Stream.of(rows);
     }
 
     @Override
     public Stream<Row> generate(GenerationConfig generationConfig) {
-        return this.dataBags;
+        return this.rows;
     }
 }

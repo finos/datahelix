@@ -20,7 +20,7 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
-class FieldSpecValueGeneratorTests {
+class ValueGeneratorTests {
     private final NullRestrictions notNull = new NullRestrictions(Nullness.MUST_NOT_BE_NULL);
     private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
@@ -59,7 +59,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             config,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -124,7 +124,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -192,7 +192,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -250,7 +250,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -289,7 +289,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -330,7 +330,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -391,7 +391,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
@@ -449,7 +449,7 @@ class FieldSpecValueGeneratorTests {
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
                 GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
         );
-        FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
+        ValueGenerator fieldSpecFulfiller = new ValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());

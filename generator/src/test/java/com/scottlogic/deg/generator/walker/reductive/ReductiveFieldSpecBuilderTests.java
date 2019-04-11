@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.ValueGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class ReductiveFieldSpecBuilderTests {
     @Test
     public void shouldReturnFixedFieldWhenRootNodeContainsNoContradictions(){
         ConstraintReducer reducer = mock(ConstraintReducer.class);
-        FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
+        ValueGenerator valueGenerator = mock(ValueGenerator.class);
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer);
         Field field1 = new Field("field");
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));

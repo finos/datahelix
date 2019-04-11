@@ -42,9 +42,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
 
         while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
             String fieldName = fieldNameIterator.next().name;
-            Value dataBagValue = dataBagIterator.next();
-
-            Object value = dataBagValue.getFormattedValue();
+            Object value = dataBagIterator.next().getFormattedValue();
 
             if (value == null) {
                 rowNode.put(fieldName, (String) null);

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.ValueGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class RowSourceFactory {
-    private final FieldSpecValueGenerator dataBagValueGenerator;
+    private final ValueGenerator valueGenerator;
 
     @Inject
-    public RowSourceFactory(FieldSpecValueGenerator dataBagValueGenerator) {
-        this.dataBagValueGenerator = dataBagValueGenerator;
+    public RowSourceFactory(ValueGenerator valueGenerator) {
+        this.valueGenerator = valueGenerator;
     }
 
     public RowSource createRowSource(RowSpec rowSpec){
@@ -26,7 +26,7 @@ public class RowSourceFactory {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
             fieldFowSources.add(
-                dataBagValueGenerator.generate(field, fieldSpec)
+                valueGenerator.generate(field, fieldSpec)
                     .map(this::toGeneratedObject)
             );
         }

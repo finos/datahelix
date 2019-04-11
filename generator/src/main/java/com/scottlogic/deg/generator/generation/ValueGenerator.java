@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class FieldSpecValueGenerator {
+public class ValueGenerator {
     private final GenerationConfig generationConfig;
     private final FieldValueSourceEvaluator sourceFactory;
     private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public FieldSpecValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
+    public ValueGenerator(GenerationConfig generationConfig, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.generationConfig = generationConfig;
         this.sourceFactory = sourceEvaluator;
         this.randomNumberGenerator = randomNumberGenerator;

@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.RowSolver;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.ValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.walker.reductive.*;
@@ -25,7 +25,7 @@ public class ReductiveRowSolver implements RowSolver {
     private final IterationVisualiser iterationVisualiser;
     private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
-    private final FieldSpecValueGenerator fieldSpecValueGenerator;
+    private final ValueGenerator valueGenerator;
     private final FixFieldStrategyFactory fixFieldStrategyFactory;
 
     @Inject
@@ -34,13 +34,13 @@ public class ReductiveRowSolver implements RowSolver {
         ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
-        FieldSpecValueGenerator fieldSpecValueGenerator,
+        ValueGenerator valueGenerator,
         FixFieldStrategyFactory fixFieldStrategyFactory) {
         this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
-        this.fieldSpecValueGenerator = fieldSpecValueGenerator;
+        this.valueGenerator = valueGenerator;
         this.fixFieldStrategyFactory = fixFieldStrategyFactory;
     }
 
@@ -63,7 +63,7 @@ public class ReductiveRowSolver implements RowSolver {
             return Stream.empty();
         }
 
-        Stream<Value> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get());
+        Stream<Value> values = valueGenerator.generate(fieldToFix, nextFieldSpec.get());
 
         return FlatMappingSpliterator.flatMap(
             values,

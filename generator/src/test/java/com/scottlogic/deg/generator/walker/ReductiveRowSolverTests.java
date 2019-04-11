@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.ValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
@@ -39,7 +39,7 @@ class ReductiveRowSolverTests {
     private ReductiveRowSolver walker;
     private FixFieldStrategy fixFieldStrategy;
     private FixFieldStrategyFactory fixFieldStrategyFactory;
-    private FieldSpecValueGenerator fieldSpecValueGenerator;
+    private ValueGenerator valueGenerator;
     private Field field1 = new Field("field1");
     private Field field2 = new Field("field2");
 
@@ -52,7 +52,7 @@ class ReductiveRowSolverTests {
         when(treePruner.pruneConstraintNode(eq(rootNode), any())).thenReturn(Merged.of(rootNode));
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
-        fieldSpecValueGenerator = mock(FieldSpecValueGenerator.class);
+        valueGenerator = mock(ValueGenerator.class);
 
         fixFieldStrategy = mock(FixFieldStrategy.class);
         when(fixFieldStrategy.getNextFieldToFix(any(), any())).thenReturn(field1, field2);
@@ -65,7 +65,7 @@ class ReductiveRowSolverTests {
             reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),
             treePruner,
-            fieldSpecValueGenerator,
+            valueGenerator,
             fixFieldStrategyFactory);
     }
 
@@ -92,7 +92,7 @@ class ReductiveRowSolverTests {
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-        when(fieldSpecValueGenerator.generate(any(), any())).thenReturn(Stream.of(generatedObject));
+        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(generatedObject));
 
         when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
 
