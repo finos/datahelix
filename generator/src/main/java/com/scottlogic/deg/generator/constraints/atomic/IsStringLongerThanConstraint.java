@@ -1,17 +1,16 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class IsStringLongerThanConstraint implements AtomicConstraint, VisitableProfileElement {
-    private final Set<RuleInformation> rules;
-
     public final Field field;
+    private final Set<RuleInformation> rules;
     public final int referenceValue;
 
     public IsStringLongerThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
@@ -20,9 +19,9 @@ public class IsStringLongerThanConstraint implements AtomicConstraint, Visitable
                 field.name + "' with a a negative length.");
         }
 
+        this.referenceValue = referenceValue;
         this.field = field;
         this.rules = rules;
-        this.referenceValue = referenceValue;
     }
 
     @Override
@@ -66,6 +65,6 @@ public class IsStringLongerThanConstraint implements AtomicConstraint, Visitable
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsStringLongerThanConstraint(field, referenceValue, rules);
+        return new IsStringLongerThanConstraint(this.field, this.referenceValue, rules);
     }
 }

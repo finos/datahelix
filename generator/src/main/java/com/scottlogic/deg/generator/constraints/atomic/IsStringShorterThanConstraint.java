@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
@@ -65,6 +65,6 @@ public class IsStringShorterThanConstraint implements AtomicConstraint, Visitabl
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsStringShorterThanConstraint(field, referenceValue, rules);
+        return new IsStringShorterThanConstraint(this.field, this.referenceValue, rules);
     }
 }

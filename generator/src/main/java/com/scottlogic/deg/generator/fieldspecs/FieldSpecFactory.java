@@ -41,35 +41,6 @@ public class FieldSpecFactory {
         );
     }
 
-    private static class ConstraintChainDetail {
-        private final boolean negated;
-        private final boolean violated;
-        private final boolean soft;
-
-        ConstraintChainDetail() {
-            this(false, false, false);
-        }
-
-        private ConstraintChainDetail(boolean negated, boolean violated, boolean soft) {
-
-            this.negated = negated;
-            this.violated = violated;
-            this.soft = soft;
-        }
-
-        ConstraintChainDetail negated(){
-            return new ConstraintChainDetail(true, violated, soft);
-        }
-
-        ConstraintChainDetail violated(){
-            return new ConstraintChainDetail(negated, true, soft);
-        }
-
-        ConstraintChainDetail soft(){
-            return new ConstraintChainDetail(negated, violated, true);
-        }
-    }
-
     private FieldSpec construct(AtomicConstraint constraint, ConstraintChainDetail chain) {
         if (constraint instanceof ViolatedAtomicConstraint){
             return construct(((ViolatedAtomicConstraint)constraint).violatedConstraint, chain.violated());
@@ -328,5 +299,34 @@ public class FieldSpecFactory {
                     : TextualRestrictions.withMinLength(constraint.referenceValue + 1, chain.soft),
                 FieldSpecSource.fromConstraint(constraint, chain.negated, chain.violated)
             );
+    }
+
+    private static class ConstraintChainDetail {
+        private final boolean negated;
+        private final boolean violated;
+        private final boolean soft;
+
+        ConstraintChainDetail() {
+            this(false, false, false);
+        }
+
+        private ConstraintChainDetail(boolean negated, boolean violated, boolean soft) {
+
+            this.negated = negated;
+            this.violated = violated;
+            this.soft = soft;
+        }
+
+        ConstraintChainDetail negated(){
+            return new ConstraintChainDetail(true, violated, soft);
+        }
+
+        ConstraintChainDetail violated(){
+            return new ConstraintChainDetail(negated, true, soft);
+        }
+
+        ConstraintChainDetail soft(){
+            return new ConstraintChainDetail(negated, violated, true);
+        }
     }
 }
