@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;

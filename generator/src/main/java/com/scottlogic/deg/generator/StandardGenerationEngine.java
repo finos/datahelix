@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.io.IOException;

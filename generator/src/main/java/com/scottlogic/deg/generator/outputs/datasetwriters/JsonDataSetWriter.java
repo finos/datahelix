@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 
 import java.io.Closeable;
 import java.io.IOException;

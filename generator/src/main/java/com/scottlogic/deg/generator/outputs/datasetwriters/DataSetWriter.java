@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 
 import java.io.Closeable;
 import java.io.IOException;

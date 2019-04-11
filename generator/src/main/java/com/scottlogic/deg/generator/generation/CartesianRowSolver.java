@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.ConcatenatingRowSource;
-import com.scottlogic.deg.generator.generation.databags.RowSource;
-import com.scottlogic.deg.generator.generation.databags.Row;
-import com.scottlogic.deg.generator.generation.databags.RowSourceFactory;
+import com.scottlogic.deg.generator.generation.rows.ConcatenatingRowSource;
+import com.scottlogic.deg.generator.generation.rows.RowSource;
+import com.scottlogic.deg.generator.generation.rows.Row;
+import com.scottlogic.deg.generator.generation.rows.RowSourceFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;

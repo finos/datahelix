@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation.databags;
+package com.scottlogic.deg.generator.generation.rows;
 
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;

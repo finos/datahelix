@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.Row;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObjectMerger;
+import com.scottlogic.deg.generator.generation.rows.Row;
+import com.scottlogic.deg.generator.generation.rows.GeneratedObjectMerger;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.Value;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.generation.databags.Row;
-import com.scottlogic.deg.generator.generation.databags.GeneratedObjectBuilder;
+import com.scottlogic.deg.generator.generation.rows.Row;
+import com.scottlogic.deg.generator.generation.rows.GeneratedObjectBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

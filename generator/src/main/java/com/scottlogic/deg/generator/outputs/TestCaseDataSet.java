@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.stream.Stream;

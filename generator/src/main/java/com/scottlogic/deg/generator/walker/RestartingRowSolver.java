@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.RowSolver;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 
 import java.util.Optional;
 import java.util.stream.Stream;

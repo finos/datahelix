@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.Row;
+import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 
 import java.util.List;

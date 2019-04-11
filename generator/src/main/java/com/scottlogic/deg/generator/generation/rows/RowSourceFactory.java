@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation.databags;
+package com.scottlogic.deg.generator.generation.rows;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Value;
