@@ -28,7 +28,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         NumericRestrictions restrictions,
         Set<Object> blacklist) {
         this.scale = restrictions.getNumericScale();
-        this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
+        this.stepSize = restrictions.getStepSize();
 
         NumericLimit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
 
