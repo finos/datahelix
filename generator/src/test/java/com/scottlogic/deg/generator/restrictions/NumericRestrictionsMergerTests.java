@@ -109,7 +109,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions();
         left.min = new NumericLimit<>(BigDecimal.ZERO, true);
         left.max = new NumericLimit<>(BigDecimal.ONE, true);
-        NumericRestrictions right = new NumericRestrictions(1);
+        NumericRestrictions right = new NumericRestrictions(0);
 
         MergeResult<NumericRestrictions> result = merger.merge(left, right);
 
@@ -123,7 +123,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions();
         left.min = new NumericLimit<>(BigDecimal.ZERO, true);
         left.max = new NumericLimit<>(BigDecimal.ONE, false);
-        NumericRestrictions right = new NumericRestrictions(1);
+        NumericRestrictions right = new NumericRestrictions(0);
 
         MergeResult<NumericRestrictions> result = merger.merge(left, right);
 
@@ -137,7 +137,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions();
         left.min = new NumericLimit<>(BigDecimal.ZERO, false);
         left.max = new NumericLimit<>(BigDecimal.ONE, true);
-        NumericRestrictions right = new NumericRestrictions(1);
+        NumericRestrictions right = new NumericRestrictions(0);
 
         MergeResult<NumericRestrictions> result = merger.merge(left, right);
 
@@ -151,7 +151,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions();
         left.min = new NumericLimit<>(BigDecimal.ZERO, false);
         left.max = new NumericLimit<>(BigDecimal.ONE, false);
-        NumericRestrictions right = new NumericRestrictions(1);
+        NumericRestrictions right = new NumericRestrictions(0);
 
         MergeResult<NumericRestrictions> result = merger.merge(left, right);
 
