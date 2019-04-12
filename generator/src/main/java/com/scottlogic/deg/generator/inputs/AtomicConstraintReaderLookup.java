@@ -280,7 +280,7 @@ class AtomicConstraintReaderLookup {
             //length is greater than the largest possible int
             throw new InvalidProfileException(
                 String.format(
-                    "Field [%s]: %s constraint must have a operand/value <= %s, currently is %s",
+                    "Field [%s]: %s constraint must have an operand/value <= %s, currently is %s",
                     dto.field,
                     dto.is,
                     max.toPlainString(),
@@ -295,7 +295,7 @@ class AtomicConstraintReaderLookup {
 
         throw new InvalidProfileException(
             String.format(
-                "Field [%s]: %s constraint must have a operand/value >= %d, currently is %d",
+                "Field [%s]: %s constraint must have an operand/value >= %d, currently is %d",
                 dto.field,
                 dto.is,
                 minimumInclusive,
