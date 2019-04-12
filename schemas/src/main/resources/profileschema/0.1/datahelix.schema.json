@@ -105,7 +105,7 @@
     },
     "string": {
       "type": "string",
-      "maxLength": 8000,
+      "maxLength": 1000,
       "default": "string"
     },
     "fieldName": {
