@@ -230,15 +230,15 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
     private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
@@ -256,18 +256,18 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
     private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
     private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate, boolean violated) {
-        return construct(negate, constraint, violated);
+        return constructForStringConstraint(negate, constraint, violated);
     }
 
-    private FieldSpec construct(boolean negate, AtomicConstraint constraint, boolean violated) {
+    private FieldSpec constructForStringConstraint(boolean negate, AtomicConstraint constraint, boolean violated) {
         final StringRestrictions stringRestrictions = new StringRestrictions(constraint, negate);
 
         return FieldSpec.Empty.withStringRestrictions(
