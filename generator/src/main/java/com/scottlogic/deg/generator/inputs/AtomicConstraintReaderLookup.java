@@ -218,6 +218,10 @@ class AtomicConstraintReaderLookup {
                 });
     }
 
+    private static <T> T throwIfValueInvalid(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
+        return throwIfValueInvalid(dto, dto.value, requiredType);
+    }
+
     /**
      * @param dto The ConstraintDTO instance
      * @param requiredType the type of value required, pass Object.class if any type is acceptable
@@ -225,9 +229,7 @@ class AtomicConstraintReaderLookup {
      * @return the value in the ConstraintDTO cast as T
      * @throws InvalidProfileException if the value is null, not of type T, or (when a number) outside of the allowed range
      */
-    private static <T> T throwIfValueInvalid(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
-        Object value = dto.value;
-
+    private static <T> T throwIfValueInvalid(ConstraintDTO dto, Object value, Class<T> requiredType) throws InvalidProfileException {
         if (value == null) {
             throw new InvalidProfileException(
                 String.format("Field [%s]: Couldn't recognise 'value' property, it must be set to a value", dto.field));
@@ -310,7 +312,11 @@ class AtomicConstraintReaderLookup {
         }
 
         for (Object value: dto.values){
-            mappedValues.add(unwrapDateValueIfDateObject(value, dto.field));
+            if (value == null){
+                throw new InvalidProfileException(String.format("Field [%s]: Set must not contain null", dto.field));
+            }
+
+            mappedValues.add(unwrapDateValueIfDateObject(throwIfValueInvalid(dto, value, Object.class), dto.field));
         }
 
         return mappedValues;

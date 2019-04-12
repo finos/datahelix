@@ -365,7 +365,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | null |
       | 1    |
-    Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null."
+    Then the profile is invalid because "Field \[foo\]: Set must not contain null"
     And no data is created
 
   Scenario: Running an 'inSet' request that includes strings, numeric and datetime fields should be successful.
