@@ -118,8 +118,8 @@ public class AtomicConstraintReaderLookupTests {
         stringValueDto.value = "value";
 
         ConstraintDTO nullValueDto = new ConstraintDTO();
-        stringValueDto.field = "test";
-        stringValueDto.value = null;
+        nullValueDto.field = "test";
+        nullValueDto.value = null;
 
         return Stream.of(
             Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto),
