@@ -623,15 +623,13 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 2020-01-01T00:00:00.000Z  |
 
   Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
-    Given there is a field foo
-    And foo is of type "string"
+    Given foo is of type "string"
     And foo is longer than 254
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 254 and 255 inclusively
 
   Scenario: Running a 'longerThan' request with a value equal to the implicit max (255) should generate data of length between 255 and hard maximum (1000)
-    Given there is a field foo
-    And foo is of type "string"
+    Given foo is of type "string"
     And foo is longer than 255
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 255 and 1000 inclusively
