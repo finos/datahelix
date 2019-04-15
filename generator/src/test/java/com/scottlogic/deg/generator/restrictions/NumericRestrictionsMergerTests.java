@@ -132,7 +132,7 @@ class NumericRestrictionsMergerTests {
     }
 
     @Test
-    public void merge_withScaleEqualToRangeeExclusiveMin_shouldReturnSuccessful(){
+    public void merge_withScaleEqualToRangeExclusiveMin_shouldReturnSuccessful(){
         NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
         NumericRestrictions left = new NumericRestrictions();
         left.min = new NumericLimit<>(BigDecimal.ZERO, false);
@@ -159,5 +159,17 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result.successful, is(false));
     }
 
+    @Test
+    public void merge_smallerScaleExlusiveLimit_shouldReturnSuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, false);
+        left.max = new NumericLimit<>(BigDecimal.ONE, false);
+        NumericRestrictions right = new NumericRestrictions(1);
 
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+    }
 }

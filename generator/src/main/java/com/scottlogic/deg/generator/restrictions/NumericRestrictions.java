@@ -56,7 +56,7 @@ public class NumericRestrictions {
     }
 
     public BigDecimal getStepSize() {
-        return new BigDecimal("1").scaleByPowerOfTen(numericScale * -1);
+        return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
     }
 
     private boolean isCorrectScale(Number inputNumber) {
