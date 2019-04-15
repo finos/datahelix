@@ -24,7 +24,7 @@ public class StringRestrictionsEqualityComparer implements EqualityComparer {
             return true;
         }
 
-        return item1.constraints.equals(item2.constraints);
+        return item1.equals(item2);
     }
 
 }

@@ -230,15 +230,27 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                TextualRestrictions.withStringMatching(constraint.regex, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                TextualRestrictions.withStringContaining(constraint.regex, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                new MatchesStandardStringRestrictions(constraint.standard, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
@@ -256,22 +268,30 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                TextualRestrictions.withLength(constraint.referenceValue, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                negate
+                    ? TextualRestrictions.withMinLength(constraint.referenceValue)
+                    : TextualRestrictions.withMaxLength(constraint.referenceValue - 1),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate, boolean violated) {
-        return constructForStringConstraint(negate, constraint, violated);
-    }
-
-    private FieldSpec constructForStringConstraint(boolean negate, AtomicConstraint constraint, boolean violated) {
-        final StringRestrictions stringRestrictions = new StringRestrictions(constraint, negate);
-
-        return FieldSpec.Empty.withStringRestrictions(
-            stringRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate, violated));
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                negate
+                    ? TextualRestrictions.withMaxLength(constraint.referenceValue)
+                    : TextualRestrictions.withMinLength(constraint.referenceValue + 1),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 }

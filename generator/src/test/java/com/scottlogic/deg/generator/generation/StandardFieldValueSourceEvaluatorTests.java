@@ -98,7 +98,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        StringRestrictions stringRestrictions = new StringRestrictions(matchesRegex("/[ab]{2}/"), false);
+        StringRestrictions stringRestrictions = matchesRegex("/[ab]{2}/", false);
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
             IsOfTypeConstraint.Types.STRING
         ));
@@ -432,7 +432,7 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertTrue(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0) == null);
     }
 
-    private static MatchesRegexConstraint matchesRegex(String regex){
-        return new MatchesRegexConstraint(new Field("field"), Pattern.compile(regex), Collections.emptySet());
+    private static TextualRestrictions matchesRegex(String regex, boolean negate){
+        return TextualRestrictions.withStringMatching(Pattern.compile(regex), negate);
     }
 }

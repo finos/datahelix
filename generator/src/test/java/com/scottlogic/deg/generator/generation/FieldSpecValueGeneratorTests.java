@@ -236,7 +236,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                new StringRestrictions(matchesRegex("/[ab]{2}/"), true),
+                TextualRestrictions.withStringMatching(Pattern.compile("/[ab]{2}/"), true),
                 fieldSpecSource)
             .withTypeRestrictions(
                 new DataTypeRestrictions(
@@ -508,9 +508,5 @@ class FieldSpecValueGeneratorTests {
             new BigDecimal("1.8E-19"),
             new BigDecimal("1.9E-19")
             ));
-    }
-
-    private static MatchesRegexConstraint matchesRegex(String regex){
-        return new MatchesRegexConstraint(new Field("field"), Pattern.compile(regex), Collections.emptySet());
     }
 }
