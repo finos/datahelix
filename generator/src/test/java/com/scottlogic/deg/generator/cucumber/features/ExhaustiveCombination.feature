@@ -275,7 +275,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 2    |
       | null |
-    Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null."
+    Then the profile is invalid because "Field \[bar\]: Set must not contain null"
 
   Scenario: Running an exhaustive combination strategy should be successful
     Given the following fields exist:
