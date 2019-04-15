@@ -13,21 +13,21 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TextualRestrictions implements StringRestrictions {
-    private static final Restriction<Integer> defaultMinLength = null;
-    private static final Restriction<Integer> defaultMaxLength = new Restriction<>(255, true);
+    private static final Integer defaultMinLength = 0;
+    private static final Integer defaultMaxLength = 255;
 
-    private final Restriction<Integer> minLength;
-    private final Restriction<Integer> maxLength;
+    private final Integer minLength;
+    private final Integer maxLength;
+    private final Set<Integer> excludedLengths;
     private final Set<Pattern> matchingRegex;
     private final Set<Pattern> containingRegex;
-    private final Set<Integer> excludedLengths;
     private final Set<Pattern> notMatchingRegex;
     private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
 
     private TextualRestrictions(
-        Restriction<Integer> minLength,
-        Restriction<Integer> maxLength,
+        Integer minLength,
+        Integer maxLength,
         Set<Pattern> matchingRegex,
         Set<Pattern> containingRegex,
         Set<Integer> excludedLengths,
@@ -76,8 +76,8 @@ public class TextualRestrictions implements StringRestrictions {
 
     public static TextualRestrictions withLength(int length, boolean negate) {
         return new TextualRestrictions(
-            negate ? defaultMinLength : new Restriction<>(length, false),
-            negate ? defaultMaxLength : new Restriction<>(length, false),
+            negate ? defaultMinLength : length,
+            negate ? defaultMaxLength : length,
             Collections.emptySet(),
             Collections.emptySet(),
             negate
@@ -90,7 +90,7 @@ public class TextualRestrictions implements StringRestrictions {
 
     public static TextualRestrictions withMinLength(int length){
         return new TextualRestrictions(
-            new Restriction<>(length, false),
+            length,
             defaultMaxLength,
             Collections.emptySet(),
             Collections.emptySet(),
@@ -103,7 +103,7 @@ public class TextualRestrictions implements StringRestrictions {
     public static TextualRestrictions withMaxLength(int length){
         return new TextualRestrictions(
             defaultMinLength,
-            new Restriction<>(length, false),
+            length,
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
@@ -145,20 +145,20 @@ public class TextualRestrictions implements StringRestrictions {
         );
     }
 
-    private Restriction<Integer> mergeMinLengths(Restriction<Integer> otherMinLength) {
+    private Integer mergeMinLengths(Integer otherMinLength) {
         if (minLength == null){
             return otherMinLength;
         }
 
-        return minLength.merge(otherMinLength, Math::max);
+        return Math.max(minLength, otherMinLength);
     }
 
-    private Restriction<Integer> mergeMaxLengths(Restriction<Integer> otherMaxLength) {
+    private Integer mergeMaxLengths(Integer otherMaxLength) {
         if (maxLength == null){
             return otherMaxLength;
         }
 
-        return maxLength.merge(otherMaxLength, Math::min);
+        return Math.min(maxLength, otherMaxLength);
     }
 
     public boolean match(Object o) {
@@ -181,8 +181,8 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         //determine the boundaries and exclusions defined in the given constraints
-        int minLength = this.minLength != null ? this.minLength.getValue() : 0;
-        int maxLength = this.maxLength != null ? this.maxLength.getValue() : StringRestrictions.MAX_STRING_LENGTH;
+        int minLength = this.minLength != null ? this.minLength : 0;
+        int maxLength = this.maxLength != null ? this.maxLength : StringRestrictions.MAX_STRING_LENGTH;
 
         //detect contradictions
         if (minLength > maxLength
@@ -325,8 +325,8 @@ public class TextualRestrictions implements StringRestrictions {
     @Override
     public String toString() {
         return String.format("Strings: %d..%d (not: %s)\nmatching: %s\ncontaining: %s\nnotMatching: %s\nnotContaining: %s",
-            minLength != null ? (int)minLength.getValue() : 0,
-            maxLength != null ? (int)maxLength.getValue() : Integer.MAX_VALUE,
+            minLength != null ? minLength : 0,
+            maxLength != null ? maxLength : Integer.MAX_VALUE,
             excludedLengths.toString(),
             patternsAsString(matchingRegex),
             patternsAsString(containingRegex),
