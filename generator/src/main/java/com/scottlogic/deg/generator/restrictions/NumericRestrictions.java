@@ -55,6 +55,10 @@ public class NumericRestrictions {
         return isCorrectScale(n);
     }
 
+    public BigDecimal getStepSize() {
+        return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
+    }
+
     private boolean isCorrectScale(Number inputNumber) {
         BigDecimal inputAsBigDecimal = coerceToBigDecimal(inputNumber);
         return inputAsBigDecimal.scale() <= numericScale;
