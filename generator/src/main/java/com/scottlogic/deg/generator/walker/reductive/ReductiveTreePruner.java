@@ -11,10 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ReductiveTreePruner {
 
@@ -47,6 +44,7 @@ public class ReductiveTreePruner {
 
         Collection<AtomicConstraint> newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
         Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
+        Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
 
         for (DecisionNode decision : constraintNode.getDecisions()) {
             Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
@@ -58,6 +56,7 @@ public class ReductiveTreePruner {
             if (onlyOneOption(prunedDecisionNode)) {
                 ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
 
+                pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
                 newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
                 newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
             }
@@ -66,7 +65,14 @@ public class ReductiveTreePruner {
             }
         }
 
-        return Merged.of(new TreeConstraintNode(newAtomicConstraints, newDecisionNodes));
+        TreeConstraintNode newConstraintNode = new TreeConstraintNode(newAtomicConstraints, newDecisionNodes);
+
+        if (pulledUpAtomicConstraints.isEmpty()){
+            return Merged.of(newConstraintNode);
+        }
+
+        return pruneForPulledUpDecision(pulledUpAtomicConstraints, newConstraintNode);
+
     }
 
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
@@ -101,6 +107,35 @@ public class ReductiveTreePruner {
 
         return Merged.of(newFieldSpec.get());
     }
+
+    private Merged<ConstraintNode> pruneForPulledUpDecision(Collection<AtomicConstraint> pulledUpAtomicConstraints, ConstraintNode newConstraintNode) {
+        Map<Field, Collection<AtomicConstraint>> m = new HashMap<>();
+        pulledUpAtomicConstraints.forEach(constraint -> {
+            if (!m.containsKey(constraint.getField())) {
+                m.put(constraint.getField(), new ArrayList<>(Arrays.asList(constraint)));
+            } else {
+                Collection<AtomicConstraint> atomicConstraints = m.get(constraint.getField());
+                    atomicConstraints.add(constraint);
+            }
+        });
+
+        ConstraintNode newNewConstraintNode = newConstraintNode;
+
+        for (Field field : m.keySet()) {
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(m.get(field));
+            if (!fieldSpec.isPresent()){
+                return Merged.contradictory();
+            }
+            Merged<ConstraintNode> constraintNodeMerged = pruneConstraintNode(newNewConstraintNode, field, fieldSpec.get());
+            if (constraintNodeMerged.isContradictory()){
+                return Merged.contradictory();
+            }
+            newNewConstraintNode = constraintNodeMerged.get();
+        }
+
+        return Merged.of(newNewConstraintNode);
+    }
+
 
     private boolean onlyOneOption(Merged<DecisionNode> prunedDecisionNode) {
         return prunedDecisionNode.get().getOptions().size() == 1;
