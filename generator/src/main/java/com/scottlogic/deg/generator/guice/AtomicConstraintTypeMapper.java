@@ -41,7 +41,7 @@ public class AtomicConstraintTypeMapper {
             case ISBEFOREOREQUALTOCONSTANTDATETIME:
                 return IsBeforeOrEqualToConstantDateTimeConstraint.class;
             case ISGRANULARTO:
-                return IsGranularToConstraint.class;
+                return IsGranularToNumericConstraint.class;
             case ISEQUALTOCONSTANT:
             case ISINSET:
                 return IsInSetConstraint.class;

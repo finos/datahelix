@@ -77,8 +77,10 @@ public class FieldSpecFactory {
             return construct((IsBeforeConstantDateTimeConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsBeforeOrEqualToConstantDateTimeConstraint) {
             return construct((IsBeforeOrEqualToConstantDateTimeConstraint) constraint, negate, violated);
-        } else if (constraint instanceof IsGranularToConstraint) {
-            return construct((IsGranularToConstraint) constraint, negate, violated);
+        } else if (constraint instanceof IsGranularToNumericConstraint) {
+            return construct((IsGranularToNumericConstraint) constraint, negate, violated);
+        } else if (constraint instanceof IsGranularToDateConstraint){
+            return construct((IsGranularToDateConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsNullConstraint) {
             return constructIsNull(negate, constraint, violated);
         } else if (constraint instanceof MatchesRegexConstraint) {
@@ -189,7 +191,7 @@ public class FieldSpecFactory {
             FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
-    private FieldSpec construct(IsGranularToConstraint constraint, boolean negate, boolean violated) {
+    private FieldSpec construct(IsGranularToNumericConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
             // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
             return FieldSpec.Empty;
@@ -197,6 +199,17 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(constraint.granularity),
+            FieldSpecSource.fromConstraint(constraint, false, violated));
+    }
+
+    private FieldSpec construct(IsGranularToDateConstraint constraint, boolean negate, boolean violated) {
+        if (negate) {
+            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            return FieldSpec.Empty;
+        }
+
+        return FieldSpec.Empty.withDateTimeRestrictions(
+            new DateTimeRestrictions(constraint.granularity.getGranularity()),
             FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 

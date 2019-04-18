@@ -3,6 +3,8 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
+import com.scottlogic.deg.generator.restrictions.ParsedDateGranularity;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
@@ -129,10 +131,24 @@ class AtomicConstraintReaderLookup {
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields, rules) ->
-                    new IsGranularToConstraint(
-                        fields.getByName(dto.field),
-                        ParsedGranularity.parse(getValidatedValue(dto, Number.class)),
-                        rules));
+                {   // TODO: If type is not number, the error will imply to the user that we should be using String
+                    // Should be explicit that the value should be Number OR String
+                    Class classDef = dto.value.getClass();
+                    if (classDef == Number.class) {
+                        return new IsGranularToNumericConstraint(
+                            fields.getByName(dto.field),
+                            ParsedGranularity.parse(getValidatedValue(dto, Number.class)),
+                            rules);
+                    } else if (classDef == String.class) {
+                        return new IsGranularToDateConstraint(
+                            fields.getByName(dto.field),
+                            ParsedDateGranularity.parse(getValidatedValue(dto, String.class)),
+                            rules);
+                    } else {
+                        throw new IllegalArgumentException("granularTo requires number or timescale input");
+                    }
+                }
+        );
 
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields, rules) ->
@@ -149,7 +165,7 @@ class AtomicConstraintReaderLookup {
                                 IsOfTypeConstraint.Types.NUMERIC,
                                 rules
                             ),
-                            new IsGranularToConstraint(
+                            new IsGranularToNumericConstraint(
                                 fields.getByName(dto.field),
                                 new ParsedGranularity(BigDecimal.ONE),
                                 rules

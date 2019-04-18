@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
+import org.jetbrains.annotations.Contract;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -15,19 +16,20 @@ import java.util.Set;
 public class DateTimeFieldValueSource implements FieldValueSource {
 
     public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999, ZoneOffset.UTC);
-    public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0,0, 0, ZoneOffset.UTC);
+    public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
-    private final ChronoUnit granularity = ChronoUnit.MILLIS;
+    private final Timescale granularity;
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
     private final OffsetDateTime inclusiveLower;
     private final OffsetDateTime exclusiveUpper;
 
     public DateTimeFieldValueSource(
-            DateTimeRestrictions restrictions,
-            Set<Object> blacklist) {
+        DateTimeRestrictions restrictions,
+        Set<Object> blacklist) {
 
         this.restrictions = restrictions;
+        this.granularity = this.restrictions.getGranularity();
 
         this.inclusiveLower = getInclusiveLowerBounds(restrictions);
         this.exclusiveUpper = getExclusiveUpperBound(restrictions);
@@ -38,9 +40,9 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     @Override
     public boolean isFinite() {
         return restrictions.min != null &&
-                restrictions.min.getLimit() != null &&
-                restrictions.max != null &&
-                restrictions.max.getLimit() != null;
+            restrictions.min.getLimit() != null &&
+            restrictions.max != null &&
+            restrictions.max.getLimit() != null;
     }
 
     @Override
@@ -50,14 +52,14 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             Duration duration = Duration.between(inclusiveLower, exclusiveUpper);
             Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
 
-            if (granularity == ChronoUnit.MILLIS) return (duration.getNano() / 1000000) +1;
+            if (granularity == Timescale.MILLIS) return (duration.getNano() / 1000000) + 1;
             // future work to add customisable datetime granularity #141
-            if (granularity == ChronoUnit.SECONDS) return duration.getSeconds() + 1;
-            if (granularity == ChronoUnit.MINUTES) return (duration.getSeconds() / 60) + 1;
-            if (granularity == ChronoUnit.HOURS) return (duration.getSeconds() / 360) + 1;
-            if (granularity == ChronoUnit.DAYS) return (period.getDays() + 1);
-            if (granularity == ChronoUnit.MONTHS) return (period.getMonths() + 1);
-            if (granularity == ChronoUnit.YEARS) return (period.getYears() + 1);
+            if (granularity == Timescale.SECONDS) return duration.getSeconds() + 1;
+            if (granularity == Timescale.MINUTES) return (duration.getSeconds() / 60) + 1;
+            if (granularity == Timescale.HOURS) return (duration.getSeconds() / 360) + 1;
+            if (granularity == Timescale.DAYS) return (period.getDays() + 1);
+            if (granularity == Timescale.MONTHS) return (period.getMonths() + 1);
+            if (granularity == Timescale.YEARS) return (period.getYears() + 1);
         }
 
         throw new IllegalStateException("Cannot get count of an infinite series");
@@ -84,9 +86,9 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             interestingValues.add(restrictions.min.isInclusive() ? min : min.plusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
-                    LocalDate.of(1900, 01, 01),
-                    LocalTime.MIDNIGHT,
-                    ZoneOffset.UTC));
+                LocalDate.of(1900, 01, 01),
+                LocalTime.MIDNIGHT,
+                ZoneOffset.UTC));
         }
 
         if (restrictions.max != null && restrictions.max.getLimit() != null) {
@@ -94,32 +96,32 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             interestingValues.add(restrictions.max.isInclusive() ? max : max.minusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
-                    LocalDate.of(2100, 01, 01),
-                    LocalTime.MIDNIGHT,
-                    ZoneOffset.UTC));
+                LocalDate.of(2100, 01, 01),
+                LocalTime.MIDNIGHT,
+                ZoneOffset.UTC));
         }
 
         return () -> new UpCastingIterator<>(
-                new FilteringIterator<>(interestingValues.iterator(),
-                        i -> !blacklist.contains(i)));
+            new FilteringIterator<>(interestingValues.iterator(),
+                i -> !blacklist.contains(i)));
     }
 
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
 
         OffsetDateTime lower = inclusiveLower != null
-                ? inclusiveLower
-                : ISO_MIN_DATE;
+            ? inclusiveLower
+            : ISO_MIN_DATE;
 
 
         OffsetDateTime upper = exclusiveUpper != null
-                ? exclusiveUpper
-                : ISO_MAX_DATE.plusNanos(1_000_000);
+            ? exclusiveUpper
+            : ISO_MAX_DATE.plusNanos(1_000_000);
 
 
         return () -> new UpCastingIterator<>(
-                new FilteringIterator<>(new RandomDateIterator(lower, upper, randomNumberGenerator),
-                        i -> !blacklist.contains(i)));
+            new FilteringIterator<>(new RandomDateIterator(lower, upper, randomNumberGenerator, granularity),
+                i -> !blacklist.contains(i)));
 
     }
 
@@ -145,7 +147,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             equals(exclusiveUpper, otherSource.exclusiveUpper);
     }
 
-    private static boolean equals(OffsetDateTime x, OffsetDateTime y){
+    private static boolean equals(OffsetDateTime x, OffsetDateTime y) {
         if (x == null && y == null) {
             return true;
         }

@@ -350,7 +350,14 @@
                   1E-17,
                   1E-18,
                   1E-19,
-                  1E-20
+                  1E-20,
+                  "MILLIS",
+                  "SECONDS",
+                  "MINUTES",
+                  "HOURS",
+                  "DAYS",
+                  "MONTHS",
+                  "YEARS"
                 ]
               }
             }
