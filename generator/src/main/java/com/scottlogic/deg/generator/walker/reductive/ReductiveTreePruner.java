@@ -12,6 +12,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReductiveTreePruner {
 
@@ -33,12 +34,14 @@ public class ReductiveTreePruner {
      * @return A pruned tree if the new tree is valid, Combined.contradictory otherwise
      */
     public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, FieldValue value) {
-        return pruneConstraintNode(constraintNode, value.getField(), fieldSpecHelper.getFieldSpecForValue(value));
+        Map<Field, FieldSpec> fieldToSpec = new HashMap<>();
+        fieldToSpec.put(value.getField(), fieldSpecHelper.getFieldSpecForValue(value));
+        return pruneConstraintNode(constraintNode, fieldToSpec);
     }
 
-    private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, FieldSpec mergingFieldSpec) {
-        Merged<FieldSpec> newFieldSpec = combineConstraintsWithParent(field, constraintNode, mergingFieldSpec);
-        if (newFieldSpec.isContradictory()){
+    private Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Map<Field, FieldSpec> fieldSpecs) {
+        Merged<Map<Field, FieldSpec>> newFieldSpecs = combineConstraintsWithParent(constraintNode, fieldSpecs);
+        if (newFieldSpecs.isContradictory()){
             return Merged.contradictory();
         }
 
@@ -47,7 +50,7 @@ public class ReductiveTreePruner {
         Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
 
         for (DecisionNode decision : constraintNode.getDecisions()) {
-            Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, field, newFieldSpec.get());
+            Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, newFieldSpecs.get());
 
             if (prunedDecisionNode.isContradictory()) {
                 return Merged.contradictory();
@@ -71,15 +74,20 @@ public class ReductiveTreePruner {
             return Merged.of(newConstraintNode);
         }
 
-        return pruneForPulledUpDecision(pulledUpAtomicConstraints, newConstraintNode);
+        Merged<Map<Field, FieldSpec>> fieldSpecMap = createFieldSpecMap(pulledUpAtomicConstraints, null);
+        if (fieldSpecMap.isContradictory()){
+            return Merged.contradictory();
+        }
 
+        return pruneConstraintNode(newConstraintNode, fieldSpecMap.get());
     }
 
-    private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode, Field field, FieldSpec mergingFieldSpec) {
+
+    private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
-            pruneConstraintNode(constraintNode, field, mergingFieldSpec).ifPresent(newConstraintNodes::add);
+            pruneConstraintNode(constraintNode, fieldSpecs).ifPresent(newConstraintNodes::add);
         }
 
         if (newConstraintNodes.isEmpty()) {
@@ -89,51 +97,56 @@ public class ReductiveTreePruner {
         return Merged.of(new TreeDecisionNode(newConstraintNodes));
     }
 
-    private Merged<FieldSpec> combineConstraintsWithParent(Field field, ConstraintNode constraintNode, FieldSpec parentFieldSpec){
-        List<AtomicConstraint> atomicConstraintsForField =
-            AtomicConstraintsHelper.getConstraintsForField(constraintNode.getAtomicConstraints(), field);
-
-        Optional<FieldSpec> nodeFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(atomicConstraintsForField);
-
-        if (!nodeFieldSpec.isPresent()) {
+    private Merged<Map<Field, FieldSpec>> combineConstraintsWithParent(ConstraintNode constraintNode, Map<Field, FieldSpec> parentFieldspecs) {
+        Set<Field> relevantFields = parentFieldspecs.keySet();
+        Merged<Map<Field, FieldSpec>> mergedMap = createFieldSpecMap(constraintNode.getAtomicConstraints(), relevantFields);
+        if (mergedMap.isContradictory()){
             return Merged.contradictory();
         }
+        Map<Field, FieldSpec> newMap = mergedMap.get();
 
-        Optional<FieldSpec> newFieldSpec = merger.merge(nodeFieldSpec.get(), parentFieldSpec);
-
-        if (!newFieldSpec.isPresent()) {
-            return Merged.contradictory();
+        for (Map.Entry<Field, FieldSpec> entry : parentFieldspecs.entrySet()) {
+            if (!newMap.containsKey(entry.getKey())){
+                newMap.put(entry.getKey(), entry.getValue());
+            }else {
+                Optional<FieldSpec> mergedSpec = merger.merge(entry.getValue(), newMap.get(entry.getKey()));
+                if (!mergedSpec.isPresent()){
+                    return Merged.contradictory();
+                }
+                newMap.put(entry.getKey(), mergedSpec.get());
+            }
         }
 
-        return Merged.of(newFieldSpec.get());
+        return Merged.of(newMap);
     }
 
-    private Merged<ConstraintNode> pruneForPulledUpDecision(Collection<AtomicConstraint> pulledUpAtomicConstraints, ConstraintNode newConstraintNode) {
+    private Merged<Map<Field, FieldSpec>> createFieldSpecMap(Collection<AtomicConstraint> pulledUpAtomicConstraints, Set<Field> relevantFields){
         Map<Field, Collection<AtomicConstraint>> m = new HashMap<>();
         pulledUpAtomicConstraints.forEach(constraint -> {
+            if (relevantFields != null && !relevantFields.contains(constraint.getField())){
+        //        return;
+            }
+
             if (!m.containsKey(constraint.getField())) {
                 m.put(constraint.getField(), new ArrayList<>(Arrays.asList(constraint)));
             } else {
                 Collection<AtomicConstraint> atomicConstraints = m.get(constraint.getField());
-                    atomicConstraints.add(constraint);
+                atomicConstraints.add(constraint);
             }
         });
 
-        ConstraintNode newNewConstraintNode = newConstraintNode;
 
-        for (Field field : m.keySet()) {
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(m.get(field));
+        Map<Field, FieldSpec> newFieldSpecs = new HashMap<>();
+
+        for (Map.Entry<Field, Collection<AtomicConstraint>> fieldToConstraints : m.entrySet()) {
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(fieldToConstraints.getValue());
             if (!fieldSpec.isPresent()){
                 return Merged.contradictory();
             }
-            Merged<ConstraintNode> constraintNodeMerged = pruneConstraintNode(newNewConstraintNode, field, fieldSpec.get());
-            if (constraintNodeMerged.isContradictory()){
-                return Merged.contradictory();
-            }
-            newNewConstraintNode = constraintNodeMerged.get();
+            newFieldSpecs.put(fieldToConstraints.getKey(), fieldSpec.get());
         }
 
-        return Merged.of(newNewConstraintNode);
+        return Merged.of(newFieldSpecs);
     }
 
 
