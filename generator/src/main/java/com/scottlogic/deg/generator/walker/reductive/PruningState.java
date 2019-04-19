@@ -35,8 +35,8 @@ public class PruningState {
         }
     }
 
-    public boolean hasNoPulledUpDecisions() {
-        return pulledUpAtomicConstraints.isEmpty();
+    public boolean hasPulledUpDecisions() {
+        return !pulledUpAtomicConstraints.isEmpty();
     }
 
     public ConstraintNode getNewConstraintNode() {

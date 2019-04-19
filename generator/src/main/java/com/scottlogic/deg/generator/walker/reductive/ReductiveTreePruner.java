@@ -56,13 +56,13 @@ public class ReductiveTreePruner {
             state.addPrunedDecision(prunedDecisionNode.get());
         }
 
-        if (state.hasNoPulledUpDecisions()){
-            return Merged.of(state.getNewConstraintNode());
+        if (state.hasPulledUpDecisions()){
+            return pruneConstraintNode(
+                state.getNewConstraintNode(),
+                state.addPulledUpFieldsToMap(fieldSpecs));
         }
 
-        return pruneConstraintNode(
-            state.getNewConstraintNode(),
-            state.addPulledUpFieldsToMap(fieldSpecs));
+        return Merged.of(state.getNewConstraintNode());
     }
 
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
