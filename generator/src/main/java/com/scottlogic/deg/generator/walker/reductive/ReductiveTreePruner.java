@@ -74,12 +74,12 @@ public class ReductiveTreePruner {
             return Merged.of(newConstraintNode);
         }
 
-        Merged<Map<Field, FieldSpec>> fieldSpecMap = createFieldSpecMap(pulledUpAtomicConstraints, null);
-        if (fieldSpecMap.isContradictory()){
-            return Merged.contradictory();
+        Map<Field, FieldSpec> mapWithPulledUpFields = new HashMap<>(fieldSpecs);
+        for (AtomicConstraint c : pulledUpAtomicConstraints) {
+            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.Empty);
         }
 
-        return pruneConstraintNode(newConstraintNode, fieldSpecMap.get());
+        return pruneConstraintNode(newConstraintNode, mapWithPulledUpFields);
     }
 
 
