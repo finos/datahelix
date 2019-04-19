@@ -17,15 +17,18 @@ import java.util.stream.Stream;
  */
 public class WalkingDataGenerator implements DataGenerator {
 
+    private final GeneratorPartitioner generatorPartitioner;
     private final DecisionTreeWalker treeWalker;
     private final DataBagSourceFactory dataBagSourceFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
+        GeneratorPartitioner generatorPartitioner,
         DecisionTreeWalker treeWalker,
         DataBagSourceFactory dataBagSourceFactory,
         GenerationConfig generationConfig) {
+        this.generatorPartitioner = generatorPartitioner;
         this.treeWalker = treeWalker;
         this.dataBagSourceFactory = dataBagSourceFactory;
         this.generationConfig = generationConfig;
@@ -33,9 +36,11 @@ public class WalkingDataGenerator implements DataGenerator {
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
-        Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
+        return generatorPartitioner.partitionThenGenerate(profile, analysedProfile, (p, t) -> {
+            Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
 
-        return generateDataFromRowSpecs(rowSpecs);
+            return generateDataFromRowSpecs(rowSpecs);
+        });
     }
 
     private Stream<GeneratedObject> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {

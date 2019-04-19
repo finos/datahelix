@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
@@ -20,32 +18,55 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.RANDOM;
+
 public class ReductiveDataGenerator implements DataGenerator {
     private final ReductiveTreePruner treePruner;
+    private final GeneratorPartitioner generatorPartitioner;
+    private final GeneratorRestarter generatorRestarter;
     private final IterationVisualiser iterationVisualiser;
     private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator fieldSpecValueGenerator;
     private final FixFieldStrategyFactory fixFieldStrategyFactory;
+    private final GenerationConfig config;
 
     @Inject
     public ReductiveDataGenerator(
+        GeneratorPartitioner generatorPartitioner,
+        GeneratorRestarter generatorRestarter,
         IterationVisualiser iterationVisualiser,
         ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
         FieldSpecValueGenerator fieldSpecValueGenerator,
-        FixFieldStrategyFactory fixFieldStrategyFactory) {
+        FixFieldStrategyFactory fixFieldStrategyFactory,
+        GenerationConfig config) {
+        this.generatorPartitioner = generatorPartitioner;
+        this.generatorRestarter = generatorRestarter;
         this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
         this.fieldSpecValueGenerator = fieldSpecValueGenerator;
         this.fixFieldStrategyFactory = fixFieldStrategyFactory;
+        this.config = config;
     }
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree tree) {
+        if (config.getDataGenerationType() == RANDOM) {
+            return generatorRestarter.generateAndRestart(profile, tree, this::partitionThenGenerate);
+        }
+
+        return partitionThenGenerate(profile, tree);
+    }
+
+    private Stream<GeneratedObject> partitionThenGenerate(Profile profile, DecisionTree tree) {
+        return generatorPartitioner.partitionThenGenerate(profile, tree, this::doSomeGeneration);
+    }
+
+    private Stream<GeneratedObject> doSomeGeneration(Profile profile, DecisionTree tree) {
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.getFixedFieldStrategy(profile, tree);
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);

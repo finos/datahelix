@@ -60,13 +60,7 @@ class ReductiveDataGeneratorTests {
         when(fixFieldStrategyFactory.getFixedFieldStrategy(any(), any())).thenReturn(fixFieldStrategy);
 
 
-        walker = new ReductiveDataGenerator(
-            new NoOpIterationVisualiser(),
-            reductiveFieldSpecBuilder,
-            new NoopDataGeneratorMonitor(),
-            treePruner,
-            fieldSpecValueGenerator,
-            fixFieldStrategyFactory);
+        walker = null;
     }
 
     /**

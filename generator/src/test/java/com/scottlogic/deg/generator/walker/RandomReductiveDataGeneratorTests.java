@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 class RandomReductiveDataGeneratorTests {
     private DecisionTree tree;
-    private RestartingDataGeneratorDecorator walker;
+    private GeneratorRestarter walker;
     private ReductiveDataGenerator underlyingWalker;
     Profile profile = mock(Profile.class);
 
@@ -34,7 +33,7 @@ class RandomReductiveDataGeneratorTests {
             "test-tree");
 
         underlyingWalker = mock(ReductiveDataGenerator.class);
-        walker = new RestartingDataGeneratorDecorator(underlyingWalker);
+        walker = null;
     }
 
     /**
@@ -48,7 +47,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = null;
 
         verify(underlyingWalker, times(2)).generateData(profile, tree);
         Assert.assertThat(
@@ -64,7 +63,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = null;
 
         verify(underlyingWalker, times(3)).generateData(profile, tree);
         Assert.assertThat(
@@ -78,7 +77,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.empty()
         );
 
-        List<GeneratedObject> result = walker.generateData(profile, tree).limit(2).collect(Collectors.toList());
+        List<GeneratedObject> result = null;
 
         verify(underlyingWalker, times(1)).generateData(profile, tree);
         Assert.assertThat(
