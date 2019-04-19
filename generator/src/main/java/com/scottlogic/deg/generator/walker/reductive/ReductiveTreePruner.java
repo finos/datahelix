@@ -45,43 +45,25 @@ public class ReductiveTreePruner {
             return Merged.contradictory();
         }
 
-        Collection<AtomicConstraint> newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
-        Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
-        Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
+        PruningState state = new PruningState(constraintNode);
 
         for (DecisionNode decision : constraintNode.getDecisions()) {
             Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, newFieldSpecs.get());
-
             if (prunedDecisionNode.isContradictory()) {
                 return Merged.contradictory();
             }
 
-            if (onlyOneOption(prunedDecisionNode)) {
-                ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
-
-                pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-                newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-                newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
-            }
-            else {
-                newDecisionNodes.add(prunedDecisionNode.get());
-            }
+            state.addPrunedDecision(prunedDecisionNode.get());
         }
 
-        TreeConstraintNode newConstraintNode = new TreeConstraintNode(newAtomicConstraints, newDecisionNodes);
-
-        if (pulledUpAtomicConstraints.isEmpty()){
-            return Merged.of(newConstraintNode);
+        if (state.hasNoPulledUpDecisions()){
+            return Merged.of(state.getNewConstraintNode());
         }
 
-        Map<Field, FieldSpec> mapWithPulledUpFields = new HashMap<>(fieldSpecs);
-        for (AtomicConstraint c : pulledUpAtomicConstraints) {
-            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.Empty);
-        }
-
-        return pruneConstraintNode(newConstraintNode, mapWithPulledUpFields);
+        return pruneConstraintNode(
+            state.getNewConstraintNode(),
+            state.addPulledUpFieldsToMap(fieldSpecs));
     }
-
 
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
@@ -147,14 +129,5 @@ public class ReductiveTreePruner {
         }
 
         return Merged.of(newFieldSpecs);
-    }
-
-
-    private boolean onlyOneOption(Merged<DecisionNode> prunedDecisionNode) {
-        return prunedDecisionNode.get().getOptions().size() == 1;
-    }
-
-    private ConstraintNode getOnlyRemainingOption(Merged<DecisionNode> prunedDecisionNode) {
-        return prunedDecisionNode.get().getOptions().iterator().next();
     }
 }
