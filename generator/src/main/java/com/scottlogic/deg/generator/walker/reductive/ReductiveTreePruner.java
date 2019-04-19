@@ -124,7 +124,7 @@ public class ReductiveTreePruner {
         Map<Field, Collection<AtomicConstraint>> m = new HashMap<>();
         pulledUpAtomicConstraints.forEach(constraint -> {
             if (relevantFields != null && !relevantFields.contains(constraint.getField())){
-        //        return;
+                return;
             }
 
             if (!m.containsKey(constraint.getField())) {
