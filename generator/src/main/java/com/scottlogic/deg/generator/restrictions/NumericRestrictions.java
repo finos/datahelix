@@ -59,9 +59,8 @@ public class NumericRestrictions {
         return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
     }
 
-    private boolean isCorrectScale(Number inputNumber) {
-        BigDecimal inputAsBigDecimal = coerceToBigDecimal(inputNumber);
-        return inputAsBigDecimal.scale() <= numericScale;
+    private boolean isCorrectScale(BigDecimal inputNumber) {
+        return inputNumber.stripTrailingZeros().scale() <= numericScale;
     }
 
     @Override
