@@ -52,10 +52,10 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     }
 
     @Override
-    public BigDecimal nextBigDecimal(double lowerInclusive, double upperExclusive, int scale) {
+    public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
         return new BigDecimal(random.nextDouble())
-            .multiply(new BigDecimal(upperExclusive - lowerInclusive))
-            .add(new BigDecimal(lowerInclusive))
+            .multiply(upperExclusive.subtract(lowerInclusive))
+            .add(lowerInclusive)
             .setScale(scale, RoundingMode.HALF_UP);
     }
 }

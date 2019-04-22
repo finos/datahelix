@@ -111,8 +111,8 @@ public class RealNumberFieldValueSource implements FieldValueSource {
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->
                     randomNumberGenerator.nextBigDecimal(
-                        inclusiveLowerLimit.doubleValue(),
-                        inclusiveUpperLimit.doubleValue(),
+                        inclusiveLowerLimit,
+                        inclusiveUpperLimit,
                         scale)),
                 i -> !blacklist.contains(i)));
     }

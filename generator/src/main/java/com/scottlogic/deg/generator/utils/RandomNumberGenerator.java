@@ -7,5 +7,5 @@ public interface RandomNumberGenerator {
     int nextInt(int bound);
     int nextInt(int lowerInclusive, int upperExclusive);
     double nextDouble(double lowerInclusive, double upperExclusive);
-    BigDecimal nextBigDecimal(double lowerInclusive, double upperExclusive, int scale);
+    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale);
 }

@@ -452,8 +452,8 @@ public class DateTimeFieldValueSourceTests {
         }
 
         @Override
-        public BigDecimal nextBigDecimal(double lowerInclusive, double upperExclusive, int scale) {
-            return new BigDecimal(nextDouble(lowerInclusive, upperExclusive));
+        public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
+            return new BigDecimal(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
         }
     }
 }
