@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
@@ -28,6 +29,8 @@ public class CucumberTestState {
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration = false;
+    private int maxStringLength = 200;
+
     public Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
     public void disableGeneration() { shouldSkipGeneration = true; }
 
@@ -145,6 +148,18 @@ public class CucumberTestState {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
+    }
+
+    int getMaxStringLength() {
+        return maxStringLength;
+    }
+
+    public void setMaxStringLength(int maxLength) {
+        if (maxLength > 1000){
+            throw new IllegalArgumentException("String lengths are limited to 1000 characters in production");
+        }
+
+        maxStringLength = maxLength;
     }
 }
 
