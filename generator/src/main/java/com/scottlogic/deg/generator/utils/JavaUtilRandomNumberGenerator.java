@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
@@ -47,5 +49,13 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     @Override
     public double nextDouble(double lowerInclusive, double upperExclusive) {
         return random.nextDouble() * (upperExclusive - lowerInclusive) + lowerInclusive;
+    }
+
+    @Override
+    public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
+        return new BigDecimal(random.nextDouble())
+            .multiply(upperExclusive.subtract(lowerInclusive))
+            .add(lowerInclusive)
+            .setScale(scale, RoundingMode.HALF_UP);
     }
 }
