@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -448,6 +449,11 @@ public class DateTimeFieldValueSourceTests {
         @Override
         public double nextDouble(double lower, double upper) {
             return nextDoubleValue * (upper - lower) + lower;
+        }
+
+        @Override
+        public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
+            return new BigDecimal(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
         }
     }
 }
