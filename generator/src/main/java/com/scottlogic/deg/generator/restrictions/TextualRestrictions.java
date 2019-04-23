@@ -249,7 +249,7 @@ public class TextualRestrictions implements StringRestrictions {
     /**
      * Produce a regular expression that permits any character, but restricts the length of the generated string
      * Will either:
-     * 1. Return a regex like /.{nnn}/ where nnn is the defined length constraint, or the shorterThan and longerThan are the same ??TODO: Fix this
+     * 1. Return a regex like /.{nnn}/ where nnn is the defined length constraint, or the shorterThan and longerThan are the same
      * 2. Return a regex like /.{aaa,bbb}/ where aaa is the shortest length and bbb is the longest length
      * 3. Return a regex like /.{0,aaa}|.{bbb,ccc}/ where
      *      aaa is the last length before an excluded length
