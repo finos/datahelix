@@ -48,7 +48,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{11,255}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{11,1000}$/"));
     }
 
     @Test
@@ -146,7 +146,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{11,255}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{11,1000}$/"));
     }
 
     @Test
@@ -177,7 +177,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,255}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{0,1000}$/ ∩ /[a-z]{0,9}/"));
     }
 
     @Test
@@ -187,7 +187,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,255}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{6,1000}$/ ∩ /[a-z]{0,9}/"));
     }
 
     @Test
@@ -257,7 +257,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,255}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{0,1000}$/ ∩ */[a-z]{0,9}/*"));
     }
 
     @Test
@@ -267,7 +267,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,255}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{6,1000}$/ ∩ */[a-z]{0,9}/*"));
     }
 
     @Test
@@ -396,7 +396,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{10,255}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{10,1000}$/"));
     }
 
     @Test
@@ -414,7 +414,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^(.{0,9}|.{11,255})$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^(.{0,9}|.{11,1000})$/"));
     }
 
     @Test
@@ -514,7 +514,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{10,255}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{10,1000}$/"));
     }
 
     @Test
