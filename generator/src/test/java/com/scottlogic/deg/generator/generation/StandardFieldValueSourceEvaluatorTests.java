@@ -432,7 +432,7 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertTrue(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0) == null);
     }
 
-    private static TextualRestrictions matchesRegex(String regex, boolean negate){
-        return TextualRestrictions.withStringMatching(Pattern.compile(regex), negate);
+    private static StringRestrictions matchesRegex(String regex, boolean negate){
+        return new StringRestrictionsFactory().forStringMatching(Pattern.compile(regex), negate);
     }
 }

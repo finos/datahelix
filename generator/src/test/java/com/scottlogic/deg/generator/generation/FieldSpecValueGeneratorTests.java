@@ -236,7 +236,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                TextualRestrictions.withStringMatching(Pattern.compile("/[ab]{2}/"), true),
+                new StringRestrictionsFactory().forStringMatching(Pattern.compile("/[ab]{2}/"), true),
                 fieldSpecSource)
             .withTypeRestrictions(
                 new DataTypeRestrictions(

@@ -15,10 +15,11 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class FieldSpecFactoryTests {
-    private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger());
+    private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
+    private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger(), stringRestrictionsFactory);
     private TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
-    private StringRestrictions longerThanRestriction = TextualRestrictions.withMinLength(3);
-    private StringRestrictions shorterThanRestriction = TextualRestrictions.withMaxLength(4);
+    private StringRestrictions longerThanRestriction = stringRestrictionsFactory.forMinLength(3);
+    private StringRestrictions shorterThanRestriction = stringRestrictionsFactory.forMaxLength(4);
 
     @Test
     void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {

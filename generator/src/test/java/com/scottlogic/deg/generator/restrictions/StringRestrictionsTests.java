@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.generation.StringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
@@ -550,23 +551,62 @@ class StringRestrictionsTests {
     }
 
     private static StringRestrictions ofLength(int length, boolean negate){
-        return TextualRestrictions.withLength(length, negate);
+        return new TextualRestrictions(
+            negate ? null : length,
+            negate ? null : length,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            negate ? Collections.singleton(length) : Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet());
     }
 
     private static StringRestrictions maxLength(int length){
-        return TextualRestrictions.withMaxLength(length);
+        return new TextualRestrictions(
+            null,
+            length,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet());
     }
 
     private static StringRestrictions minLength(int length){
-        return TextualRestrictions.withMinLength(length);
+        return new TextualRestrictions(
+            length,
+            null,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet());
     }
 
     private static StringRestrictions matchingRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
-        return TextualRestrictions.withStringMatching(Pattern.compile(regex), negate);
+        Pattern pattern = Pattern.compile(regex);
+
+        return new TextualRestrictions(
+            null,
+            null,
+            negate ? Collections.emptySet() : Collections.singleton(pattern),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            negate ? Collections.singleton(pattern) : Collections.emptySet(),
+            Collections.emptySet());
     }
 
     private static StringRestrictions containsRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
-        return TextualRestrictions.withStringContaining(Pattern.compile(regex), negate);
+        Pattern pattern = Pattern.compile(regex);
+
+        return new TextualRestrictions(
+            null,
+            null,
+            Collections.emptySet(),
+            negate ? Collections.emptySet() : Collections.singleton(pattern),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            negate ? Collections.singleton(pattern) : Collections.emptySet());
     }
 
     private static StringRestrictions aValid(@SuppressWarnings("SameParameterValue") StandardConstraintTypes type, @SuppressWarnings("SameParameterValue") boolean negate){

@@ -13,9 +13,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TextualRestrictions implements StringRestrictions {
-    private static final Integer defaultMinLength = 0;
-    private static final Integer defaultMaxLength = 255;
-
     private final Integer minLength;
     private final Integer maxLength;
     private final Set<Integer> excludedLengths;
@@ -25,7 +22,7 @@ public class TextualRestrictions implements StringRestrictions {
     private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
 
-    private TextualRestrictions(
+    TextualRestrictions(
         Integer minLength,
         Integer maxLength,
         Set<Pattern> matchingRegex,
@@ -40,76 +37,6 @@ public class TextualRestrictions implements StringRestrictions {
         this.excludedLengths = excludedLengths;
         this.notMatchingRegex = notMatchingRegex;
         this.notContainingRegex = notContainingRegex;
-    }
-
-    public static TextualRestrictions withStringMatching(Pattern pattern, boolean negate) {
-        return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
-            negate
-                ? Collections.emptySet()
-                : Collections.singleton(pattern),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            negate
-                ? Collections.singleton(pattern)
-                : Collections.emptySet(),
-            Collections.emptySet()
-        );
-    }
-
-    public static TextualRestrictions withStringContaining(Pattern pattern, boolean negate) {
-        return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
-            Collections.emptySet(),
-            negate
-                ? Collections.emptySet()
-                : Collections.singleton(pattern),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            negate
-                ? Collections.singleton(pattern)
-                : Collections.emptySet()
-        );
-    }
-
-    public static TextualRestrictions withLength(int length, boolean negate) {
-        return new TextualRestrictions(
-            negate ? defaultMinLength : length,
-            negate ? defaultMaxLength : length,
-            Collections.emptySet(),
-            Collections.emptySet(),
-            negate
-                ? Collections.singleton(length)
-                : Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet()
-        );
-    }
-
-    public static TextualRestrictions withMinLength(int length){
-        return new TextualRestrictions(
-            length,
-            defaultMaxLength,
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet()
-        );
-    }
-
-    public static TextualRestrictions withMaxLength(int length){
-        return new TextualRestrictions(
-            defaultMinLength,
-            length,
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet()
-        );
     }
 
     @Override

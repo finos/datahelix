@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     private final FieldSpecMerger fieldSpecMerger;
+    private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
-    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger) {
+    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger, StringRestrictionsFactory stringRestrictionsFactory) {
         this.fieldSpecMerger = fieldSpecMerger;
+        this.stringRestrictionsFactory = stringRestrictionsFactory;
     }
 
     public FieldSpec construct(AtomicConstraint constraint) {
@@ -232,7 +234,7 @@ public class FieldSpecFactory {
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty
             .withStringRestrictions(
-                TextualRestrictions.withStringMatching(constraint.regex, negate),
+                stringRestrictionsFactory.forStringMatching(constraint.regex, negate),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -240,7 +242,7 @@ public class FieldSpecFactory {
     private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty
             .withStringRestrictions(
-                TextualRestrictions.withStringContaining(constraint.regex, negate),
+                stringRestrictionsFactory.forStringContaining(constraint.regex, negate),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -270,7 +272,7 @@ public class FieldSpecFactory {
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty
             .withStringRestrictions(
-                TextualRestrictions.withLength(constraint.referenceValue, negate),
+                stringRestrictionsFactory.forLength(constraint.referenceValue, negate),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -279,8 +281,8 @@ public class FieldSpecFactory {
         return FieldSpec.Empty
             .withStringRestrictions(
                 negate
-                    ? TextualRestrictions.withMinLength(constraint.referenceValue)
-                    : TextualRestrictions.withMaxLength(constraint.referenceValue - 1),
+                    ? stringRestrictionsFactory.forMinLength(constraint.referenceValue)
+                    : stringRestrictionsFactory.forMaxLength(constraint.referenceValue - 1),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
@@ -289,8 +291,8 @@ public class FieldSpecFactory {
         return FieldSpec.Empty
             .withStringRestrictions(
                 negate
-                    ? TextualRestrictions.withMaxLength(constraint.referenceValue)
-                    : TextualRestrictions.withMinLength(constraint.referenceValue + 1),
+                    ? stringRestrictionsFactory.forMaxLength(constraint.referenceValue)
+                    : stringRestrictionsFactory.forMinLength(constraint.referenceValue + 1),
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }

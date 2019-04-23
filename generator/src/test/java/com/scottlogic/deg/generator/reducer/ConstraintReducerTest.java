@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -28,7 +29,7 @@ import static org.hamcrest.Matchers.*;
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-        new FieldSpecFactory(new FieldSpecMerger()),
+        new FieldSpecFactory(new FieldSpecMerger(), new StringRestrictionsFactory()),
         new FieldSpecMerger()
     );
 
