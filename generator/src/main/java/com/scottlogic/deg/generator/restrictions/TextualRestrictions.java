@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
@@ -125,7 +126,7 @@ public class TextualRestrictions implements StringRestrictions {
 
         //determine the boundaries and exclusions defined in the given constraints
         int minLength = this.minLength != null ? this.minLength : 0;
-        int maxLength = this.maxLength != null ? this.maxLength : StringRestrictions.MAX_STRING_LENGTH;
+        int maxLength = this.maxLength != null ? this.maxLength : GenerationConfig.Constants.MAX_STRING_LENGTH.intValue();
 
         //detect contradictions
         if (minLength > maxLength
