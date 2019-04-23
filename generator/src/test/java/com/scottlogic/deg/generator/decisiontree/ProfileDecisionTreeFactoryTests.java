@@ -4,9 +4,15 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.constraints.atomic.MatchesRegexConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
@@ -20,8 +26,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.Matchers.*;
 
 class ProfileDecisionTreeFactoryTests {
     private final Field fieldA = new Field("A");
@@ -124,8 +130,10 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat("Decision tree root atomic constraint list is same size as original constraint list",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(inputConstraints.size()));
         for (Constraint constraint : inputConstraints) {
+            AtomicConstraint atomicConstraint = (AtomicConstraint) constraint;
+
             Assert.assertThat("Each input constraint is in the decision tree root node atomic constraint list",
-                outputRule.getRootNode().getAtomicConstraints().contains(constraint), Is.is(true));
+                outputRule.getRootNode().getAtomicConstraints(), hasItem(atomicConstraint));
         }
     }
 
@@ -314,7 +322,7 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
                             Arrays.asList(
@@ -393,7 +401,7 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
                             Arrays.asList(
@@ -482,14 +490,14 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
-                            Arrays.asList(constraintA.negate()),
+                            Collections.singletonList(constraintA.negate()),
                             Collections.emptySet()
                         ),
                         new TreeConstraintNode(
-                            Arrays.asList(constraintB.negate()),
+                            Collections.singletonList(constraintB.negate()),
                             Collections.emptySet()
                         )
                     )
@@ -527,14 +535,6 @@ class ProfileDecisionTreeFactoryTests {
         );
     }
 
-    private void treeRootShouldMatch(ConstraintNode expected) {
-        ConstraintNode actual = this.getActualOutput().getMergedTree().getRootNode();
-
-        Assert.assertTrue(
-            isEquivalentTo(actual, expected)
-        );
-    }
-
     private boolean isEquivalentTo(ConstraintNode expected, ConstraintNode actual) {
         TreeComparisonContext context = new TreeComparisonContext();
         AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
@@ -551,20 +551,6 @@ class ProfileDecisionTreeFactoryTests {
         }
 
         return match;
-    }
-
-    private final AtomicConstraint aIsNull = new IsNullConstraint(new Field("A"), rules());
-    private final AtomicConstraint bEquals10 = new IsInSetConstraint(new Field("B"), Collections.singleton(10), rules());
-    private final AtomicConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC, rules());
-    private final AtomicConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING, rules());
-
-    private void assertOptionContainsSingleConstraint(ConstraintNode option, Constraint constraint) {
-        Assert.assertThat("Option contains no decisions", option.getDecisions().size(), Is.is(0));
-        Assert.assertThat("Option contains one atomic constraint", option.getAtomicConstraints().size(),
-            Is.is(1));
-        Assert.assertThat("Option's atomic constraint is the given constraint",
-            option.getAtomicConstraints().contains(constraint), Is.is(true));
-        Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 
     private static Set<RuleInformation> rules(){
