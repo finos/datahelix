@@ -6,4 +6,8 @@ public class ErrorReporter {
     public void display(ValidationResult validationResult) {
         validationResult.errorMessages.forEach(e -> System.err.println("* " + e));
     }
+
+    public void displayException(Exception e) {
+        e.printStackTrace(System.err);
+    }
 }
