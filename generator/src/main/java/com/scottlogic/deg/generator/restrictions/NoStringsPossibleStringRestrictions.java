@@ -28,4 +28,9 @@ public class NoStringsPossibleStringRestrictions implements StringRestrictions {
     public StringGenerator createGenerator() {
         return new NoStringsStringGenerator(reason);
     }
+
+    @Override
+    public boolean isContradictory() {
+        return false;
+    }
 }

@@ -13,7 +13,11 @@ public class StringRestrictionsMerger {
         if (right == null)
             return new MergeResult<>(left);
 
-        return new MergeResult<>(left.intersect(right));
+        StringRestrictions mergedRestrictions = left.intersect(right);
+
+        return mergedRestrictions.isContradictory()
+            ? MergeResult.UNSUCCESSFUL
+            : new MergeResult<>(mergedRestrictions);
     }
 }
 

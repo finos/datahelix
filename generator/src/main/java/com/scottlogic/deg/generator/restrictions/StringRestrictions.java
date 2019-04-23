@@ -18,6 +18,8 @@ public interface StringRestrictions {
     }
 
     StringGenerator createGenerator();
+
+    boolean isContradictory();
 }
 
 

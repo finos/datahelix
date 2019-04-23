@@ -145,6 +145,16 @@ public class TextualRestrictions implements StringRestrictions {
         );
     }
 
+    @Override
+    public boolean isContradictory() {
+        if (matchingRegex.isEmpty() && containingRegex.isEmpty()){
+            return false; //no regular expressions exist that can contradict
+        }
+
+        StringGenerator generator = createGenerator();
+        return generator instanceof NoStringsStringGenerator;
+    }
+
     private Integer mergeMinLengths(Integer otherMinLength) {
         if (minLength == null){
             return otherMinLength;

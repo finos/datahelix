@@ -57,4 +57,9 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             ? this
             : new NoStringsPossibleStringRestrictions(String.format("Intersection of aValid %s and not(aValid %s)", type, type));
     }
+
+    @Override
+    public boolean isContradictory() {
+        return false;
+    }
 }

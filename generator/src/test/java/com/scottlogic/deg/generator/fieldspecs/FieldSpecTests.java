@@ -579,6 +579,11 @@ class FieldSpecTests {
         }
 
         @Override
+        public boolean isContradictory() {
+            return false;
+        }
+
+        @Override
         public boolean match(String x) {
             throw new NotImplementedException();
         }
