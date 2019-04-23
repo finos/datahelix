@@ -11,11 +11,8 @@ import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstrain
 import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -127,7 +124,8 @@ class ProfileDecisionTreeFactoryTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        assertStringLengthConstraintsExist(outputRule.getRootNode(), inputFieldList);
+        Assert.assertThat("Decision tree root atomic constraint list is same size as original constraint list",
+            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(inputConstraints.size()));
         for (Constraint constraint : inputConstraints) {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraint;
 
@@ -175,7 +173,8 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat("analyse() output contain decision tree list", testOutput.getDecisionTrees(),
             Is.is(IsNull.notNullValue()));
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        assertStringLengthConstraintsExist(outputRule.getRootNode(), inputFieldList);
+        Assert.assertThat("Decision tree root contains correct number of atomic constraints",
+            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(3));
         Assert.assertThat("Decision tree root atomic constraints list contains constraint 0",
             outputRule.getRootNode().getAtomicConstraints().contains(constraint0), Is.is(true));
         Assert.assertThat("Decision tree root atomic constraints list contains constraint 1",
@@ -221,7 +220,8 @@ class ProfileDecisionTreeFactoryTests {
         DecisionTreeCollection testOutput = testObject.analyse(testInput);
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-        assertStringLengthConstraintsExist(outputRule.getRootNode(), inputFieldList);
+        Assert.assertThat("Decision tree root contains no atomic constraints",
+            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
     }
 
     // checks (A OR B) AND (C OR D)
@@ -355,15 +355,8 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertTrue(
             isEquivalentTo(
-                getResultingRootOption(),
-                new TreeConstraintNode(
-                    new HashSet<>(
-                        Arrays.asList(
-                            stringMaxLengthAtomicConstraint(fieldA),
-                            stringMaxLengthAtomicConstraint(fieldB),
-                            stringMaxLengthAtomicConstraint(fieldC)
-                        )
-                    ),
+                getResultingRootOption(), new TreeConstraintNode(
+                    Collections.emptyList(),
                     Collections.singletonList(
                         new TreeDecisionNode(
                             /* OPTION 1: AND(C, OR(A, B))  */
@@ -404,13 +397,7 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
-                new HashSet<>(
-                    Arrays.asList(
-                        stringMaxLengthAtomicConstraint(new Field("one")),
-                        stringMaxLengthAtomicConstraint(new Field("two")),
-                        stringMaxLengthAtomicConstraint(new Field("three"))
-                    )
-                ),
+                Collections.emptySet(),
                 Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
@@ -448,17 +435,13 @@ class ProfileDecisionTreeFactoryTests {
 
         ConstraintNode expectedOutput = new TreeConstraintNode(
             aEqualTo10,
-            bGreaterThan20.negate(),
-            stringMaxLengthAtomicConstraint(fieldA),
-            stringMaxLengthAtomicConstraint(fieldB),
-            stringMaxLengthAtomicConstraint(fieldC));
+            bGreaterThan20.negate());
 
         givenRule(inputRule);
 
         Assert.assertTrue(
             isEquivalentTo(
-                getResultingRootOption(),
-                expectedOutput
+                getResultingRootOption(), expectedOutput
             )
         );
     }
@@ -478,7 +461,8 @@ class ProfileDecisionTreeFactoryTests {
 
         DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         // Result should just be A.
-        assertStringLengthConstraintsExist(outputRule.getRootNode(), inputFieldList);
+        Assert.assertThat("Decision tree root contains one atomic constraint",
+            outputRule.getRootNode().getAtomicConstraints().size(), Is.is(1));
         Assert.assertThat("Decision tree root contains no decisions",
             outputRule.getRootNode().getDecisions().size(), Is.is(0));
         Assert.assertThat("Atomic constraint of decision tree root is constraint A",
@@ -502,13 +486,7 @@ class ProfileDecisionTreeFactoryTests {
         // Result should be (NOT A) OR (NOT B)
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
-                new HashSet<>(
-                    Arrays.asList(
-                        stringMaxLengthAtomicConstraint(new Field("one")),
-                        stringMaxLengthAtomicConstraint(new Field("two")),
-                        stringMaxLengthAtomicConstraint(new Field("three"))
-                    )
-                ),
+                Collections.emptySet(),
                 Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
@@ -542,13 +520,7 @@ class ProfileDecisionTreeFactoryTests {
             isEquivalentTo(
                 getResultingRootOption(),
                 new TreeConstraintNode(
-                    new HashSet<>(
-                        Arrays.asList(
-                            stringMaxLengthAtomicConstraint(fieldA),
-                            stringMaxLengthAtomicConstraint(fieldB),
-                            stringMaxLengthAtomicConstraint(fieldC)
-                        )
-                    ),
+                    Collections.emptyList(),
                     Collections.singletonList(
                         new TreeDecisionNode(
                             new TreeConstraintNode(constraintA),
@@ -586,57 +558,5 @@ class ProfileDecisionTreeFactoryTests {
         RuleDTO rule = new RuleDTO();
         rule.rule = description;
         return new RuleInformation(rule);
-    }
-
-    private static void assertStringLengthConstraintsExist(ConstraintNode node, List<Field> fields){
-        IsStringShorterThanConstraint stringMaxLengthConstraint = stringMaxLengthAtomicConstraint(new Field("any"));
-
-        for (Field field : fields) {
-            Assert.assertThat(
-                "Root node contains constraints that are unexpected",
-                node.getAtomicConstraints(),
-                hasItem(
-                    new BaseMatcher<AtomicConstraint>() {
-                        private final int requiredValue = stringMaxLengthConstraint.referenceValue;
-
-                        @Override
-                        public boolean matches(Object o) {
-                            return o instanceof IsStringShorterThanConstraint
-                                && ((IsStringShorterThanConstraint)o).referenceValue == requiredValue
-                                && ((IsStringShorterThanConstraint)o).field.equals(field);
-                        }
-
-                        @Override
-                        public void describeMismatch(Object o, Description description) {
-                            if (!(o instanceof IsStringShorterThanConstraint)){
-                                description.appendText(String.format("Item is of type %s, expected %s", o.getClass().getName(), stringMaxLengthConstraint.getClass().getName()));
-                                return;
-                            }
-
-                            IsStringShorterThanConstraint shorterThanConstraint = (IsStringShorterThanConstraint) o;
-                            if (shorterThanConstraint.referenceValue != requiredValue){
-                                description.appendText(String.format("Constraint has referenceValue %d, expected %d", shorterThanConstraint.referenceValue, requiredValue));
-                                return;
-                            }
-
-                            if (!shorterThanConstraint.field.equals(field)) {
-                                description.appendText(String.format("Constraint has field %s, expected %s", shorterThanConstraint.field.name, field.name));
-                            }
-                        }
-
-                        @Override
-                        public void describeTo(Description description) {
-                            description.appendText("IsStringShorterThanConstraint with referenceValue = " + requiredValue);
-                        }
-                    }
-                ));
-        }
-    }
-
-    private static IsStringShorterThanConstraint stringMaxLengthAtomicConstraint(Field field){
-        return new IsStringShorterThanConstraint(
-            field,
-            GenerationConfig.Constants.MAX_STRING_LENGTH.intValue() + 1,
-            Collections.emptySet());
     }
 }

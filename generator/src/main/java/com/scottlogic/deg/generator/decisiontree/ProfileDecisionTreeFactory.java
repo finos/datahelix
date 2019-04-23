@@ -3,15 +3,17 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -74,24 +76,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             profile.rules.stream()
                 .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
                 .map(decisionTreeSimplifier::simplify)
-                .map(this::injectConstraints)
                 .collect(Collectors.toList()));
-    }
-
-    private DecisionTree injectConstraints(DecisionTree tree) {
-        int shorterThanValue = GenerationConfig.Constants.MAX_STRING_LENGTH.intValue() + 1;
-        Set<RuleInformation> rules = Collections.emptySet(); //TODO: inject some detail here?
-
-        return new DecisionTree(
-            tree.rootNode.addAtomicConstraints(
-                tree.fields
-                    .stream()
-                    .map(field -> new IsStringShorterThanConstraint(field, shorterThanValue, rules))
-                    .collect(Collectors.toList())
-            ),
-            tree.fields,
-            tree.description
-        );
     }
 
     private ConstraintNode convertRule(Rule rule) {
