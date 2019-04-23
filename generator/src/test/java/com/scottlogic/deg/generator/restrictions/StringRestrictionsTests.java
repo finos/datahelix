@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
+import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{11,1000}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{11,}$/"));
     }
 
     @Test
@@ -146,7 +147,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{11,1000}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{11,}$/"));
     }
 
     @Test
@@ -177,7 +178,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,1000}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("/[a-z]{0,9}/"));
     }
 
     @Test
@@ -187,7 +188,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,1000}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ /[a-z]{0,9}/"));
     }
 
     @Test
@@ -257,7 +258,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,1000}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("*/[a-z]{0,9}/*"));
     }
 
     @Test
@@ -267,7 +268,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,1000}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ */[a-z]{0,9}/*"));
     }
 
     @Test
@@ -277,7 +278,8 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        Assert.assertThat(generator, instanceOf(RegexStringGenerator.class));
+        Assert.assertThat(generator.isFinite(), is(false));
     }
 
     @Test
@@ -416,7 +418,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{10,1000}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{10,}$/"));
     }
 
     @Test
@@ -434,7 +436,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^(.{0,9}|.{11,1000})$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^(.{0,9}|.{11,})$/"));
     }
 
     @Test
@@ -534,7 +536,7 @@ class StringRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{10,1000}$/"));
+        Assert.assertThat(generator.toString(), equalTo("/^.{10,}$/"));
     }
 
     @Test

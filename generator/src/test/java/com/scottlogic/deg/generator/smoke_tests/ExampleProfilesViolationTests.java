@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberManifestWriter;
+import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
@@ -120,7 +121,7 @@ class ExampleProfilesViolationTests {
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator())),
                         new FixFieldStrategyFactory(new FieldDependencyAnalyser())),
-                    new ProfileDecisionTreeFactory(),
+                    new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(

@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
@@ -111,7 +110,8 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         String s = (String) o;
-        return createGenerator().match(s);
+        StringGenerator generator = createGenerator();
+        return generator == null || generator.match(s);
     }
 
     /**
@@ -124,22 +124,22 @@ public class TextualRestrictions implements StringRestrictions {
             return generator;
         }
 
-        //determine the boundaries and exclusions defined in the given constraints
         int minLength = this.minLength != null ? this.minLength : 0;
-        int maxLength = this.maxLength != null ? this.maxLength : GenerationConfig.Constants.MAX_STRING_LENGTH.intValue();
 
         //detect contradictions
-        if (minLength > maxLength
-            || allLengthsAreExcluded(minLength, maxLength, excludedLengths)) {
+        if (maxLength != null && (minLength > maxLength
+            || allLengthsAreExcluded(minLength, maxLength, excludedLengths))) {
             return generator = new NoStringsStringGenerator("Lengths are contradictory");
         }
 
         //produce a regex, and a generator for it, that can produce ANY string within the given bounds
         //emits /.{&lt;shortest&gt;,&lt;longest&gt;}/
         //can also emit /.{&lt;0&gt;,&lt;5&gt;}|.{&lt;7&gt;,&lt;255&gt;}/ if 6 is an excluded length
-        StringGenerator lengthConstrainingGenerator = new RegexStringGenerator(
-            createStringLengthRestrictionRegex(minLength, maxLength),
-            true);
+        StringGenerator lengthConstrainingGenerator = minLength == 0 && maxLength == null && excludedLengths.isEmpty()
+            ? null
+            : new RegexStringGenerator(
+                createStringLengthRestrictionRegex(minLength, maxLength),
+                true);
 
         //combine (merge/intersect) each non-length related constraint to produce a single string generator
         //e.g. would combine /[a-z]{0,9}/ with /.{0,255}/ (lengthConstrainingGenerator) to produce a single generator
@@ -148,6 +148,10 @@ public class TextualRestrictions implements StringRestrictions {
             .reduce(
                 lengthConstrainingGenerator,
                 (prev, current) -> {
+                    if (prev == null){
+                        return current;
+                    }
+
                     if (prev instanceof NoStringsStringGenerator){
                         return prev;
                     }
@@ -206,8 +210,8 @@ public class TextualRestrictions implements StringRestrictions {
      * @param minLength the minimum length for the string
      * @param maxLength the maximum length for the string
      */
-    private String createStringLengthRestrictionRegex(int minLength, int maxLength) {
-        if (minLength == maxLength){
+    private String createStringLengthRestrictionRegex(int minLength, Integer maxLength) {
+        if (maxLength != null && maxLength.equals(minLength)){
             //longerThan 5 & shorterThan 7, only possible string is 6 (5 + 1)
             return restrictStringLength(minLength);
         }
@@ -221,10 +225,10 @@ public class TextualRestrictions implements StringRestrictions {
         List<String> regexes = new ArrayList<>();
         Integer lastExcludedLength = null;
         for (int excludedLength : orderedExcludedLengths) {
-            if (excludedLength > maxLength || excludedLength < minLength){
+            if ((maxLength != null && excludedLength > maxLength) || excludedLength < minLength){
                 continue; //the excluded length is beyond the permitted length, ignore it
             }
-            if (excludedLength == maxLength){
+            if (maxLength != null && excludedLength == maxLength){
                 maxLength--; //the excluded length is the same as the longest, reduce the max-length
             }
             if (excludedLength == minLength){
@@ -249,8 +253,10 @@ public class TextualRestrictions implements StringRestrictions {
             return restrictStringLength(lastExcludedLength != null ? lastExcludedLength + 1 : minLength, maxLength);
         }
 
-        if (lastExcludedLength + 1 < maxLength - 1) {
+        if (maxLength != null && lastExcludedLength + 1 < maxLength - 1) {
             regexes.add(String.format(".{%d,%d}", lastExcludedLength + 1, maxLength));
+        } else if (maxLength == null){
+            regexes.add(String.format(".{%d,}", lastExcludedLength + 1));
         }
 
         return String.format(
@@ -262,7 +268,11 @@ public class TextualRestrictions implements StringRestrictions {
         return String.format("^.{%d}$", length);
     }
 
-    private String restrictStringLength(int min, int max){
+    private String restrictStringLength(int min, Integer max){
+        if (max == null) {
+            return String.format("^.{%d,}$", min);
+        }
+
         return String.format("^.{%d,%d}$", min, max);
     }
 
