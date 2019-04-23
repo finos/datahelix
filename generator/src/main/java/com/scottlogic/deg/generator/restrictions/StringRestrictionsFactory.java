@@ -4,13 +4,10 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class StringRestrictionsFactory {
-    private static final Integer defaultMinLength = 0;
-    private static final Integer defaultMaxLength = 255;
-
     public StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
+            null,
+            null,
             negate
                 ? Collections.emptySet()
                 : Collections.singleton(pattern),
@@ -25,8 +22,8 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            defaultMinLength,
-            defaultMaxLength,
+            null,
+            null,
             Collections.emptySet(),
             negate
                 ? Collections.emptySet()
@@ -41,8 +38,8 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forLength(int length, boolean negate) {
         return new TextualRestrictions(
-            negate ? defaultMinLength : length,
-            negate ? defaultMaxLength : length,
+            negate ? null : length,
+            negate ? null : length,
             Collections.emptySet(),
             Collections.emptySet(),
             negate
@@ -56,7 +53,7 @@ public class StringRestrictionsFactory {
     public StringRestrictions forMinLength(int length){
         return new TextualRestrictions(
             length,
-            defaultMaxLength,
+            null,
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
@@ -67,7 +64,7 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forMaxLength(int length){
         return new TextualRestrictions(
-            defaultMinLength,
+            null,
             length,
             Collections.emptySet(),
             Collections.emptySet(),

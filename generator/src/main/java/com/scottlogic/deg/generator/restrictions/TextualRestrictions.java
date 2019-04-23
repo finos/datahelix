@@ -86,6 +86,9 @@ public class TextualRestrictions implements StringRestrictions {
         if (minLength == null){
             return otherMinLength;
         }
+        if (otherMinLength == null){
+            return minLength;
+        }
 
         return Math.max(minLength, otherMinLength);
     }
@@ -93,6 +96,9 @@ public class TextualRestrictions implements StringRestrictions {
     private Integer mergeMaxLengths(Integer otherMaxLength) {
         if (maxLength == null){
             return otherMaxLength;
+        }
+        if (otherMaxLength == null){
+            return maxLength;
         }
 
         return Math.min(maxLength, otherMaxLength);
@@ -285,7 +291,7 @@ public class TextualRestrictions implements StringRestrictions {
         TextualRestrictions that = (TextualRestrictions) o;
 
         return excludedLengths.equals(that.excludedLengths)
-            && maxLength.equals(that.maxLength)
+            && ((maxLength == null && that.maxLength == null) || (maxLength != null && maxLength.equals(that.maxLength)))
             && ((minLength == null && that.minLength == null) || (minLength != null && minLength.equals(that.minLength)))
             && containingRegex.equals(that.containingRegex)
             && matchingRegex.equals(that.matchingRegex)
