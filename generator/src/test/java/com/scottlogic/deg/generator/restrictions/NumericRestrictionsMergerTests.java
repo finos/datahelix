@@ -102,4 +102,74 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(false));
     }
+
+    @Test
+    public void merge_withScaleEqualToRange_shouldReturnSuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, true);
+        left.max = new NumericLimit<>(BigDecimal.ONE, true);
+        NumericRestrictions right = new NumericRestrictions(0);
+
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+    }
+
+    @Test
+    public void merge_withScaleEqualToRangeExclusiveMax_shouldReturnSuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, true);
+        left.max = new NumericLimit<>(BigDecimal.ONE, false);
+        NumericRestrictions right = new NumericRestrictions(0);
+
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+    }
+
+    @Test
+    public void merge_withScaleEqualToRangeExclusiveMin_shouldReturnSuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, false);
+        left.max = new NumericLimit<>(BigDecimal.ONE, true);
+        NumericRestrictions right = new NumericRestrictions(0);
+
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+    }
+
+    @Test
+    public void merge_withScaleLargerThan_shouldReturnUnsuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, false);
+        left.max = new NumericLimit<>(BigDecimal.ONE, false);
+        NumericRestrictions right = new NumericRestrictions(0);
+
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(false));
+    }
+
+    @Test
+    public void merge_smallerScaleExlusiveLimit_shouldReturnSuccessful(){
+        NumericRestrictionsMerger merger = new NumericRestrictionsMerger();
+        NumericRestrictions left = new NumericRestrictions();
+        left.min = new NumericLimit<>(BigDecimal.ZERO, false);
+        left.max = new NumericLimit<>(BigDecimal.ONE, false);
+        NumericRestrictions right = new NumericRestrictions(1);
+
+        MergeResult<NumericRestrictions> result = merger.merge(left, right);
+
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertThat(result.successful, is(true));
+    }
 }

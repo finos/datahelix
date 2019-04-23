@@ -55,9 +55,12 @@ public class NumericRestrictions {
         return isCorrectScale(n);
     }
 
-    private boolean isCorrectScale(Number inputNumber) {
-        BigDecimal inputAsBigDecimal = coerceToBigDecimal(inputNumber);
-        return inputAsBigDecimal.scale() <= numericScale;
+    public BigDecimal getStepSize() {
+        return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
+    }
+
+    private boolean isCorrectScale(BigDecimal inputNumber) {
+        return inputNumber.stripTrailingZeros().scale() <= numericScale;
     }
 
     @Override

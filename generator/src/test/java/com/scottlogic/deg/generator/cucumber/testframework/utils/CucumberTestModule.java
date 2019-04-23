@@ -7,17 +7,16 @@ import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Class which defines bindings for Guice injection specific for cucumber testing. The test state is persisted through
@@ -41,6 +40,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
         bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
+        bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
 
         if (testState.shouldSkipGeneration()) {
             bind(GenerationEngine.class).toInstance(mock(GenerationEngine.class));

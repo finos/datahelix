@@ -28,7 +28,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         NumericRestrictions restrictions,
         Set<Object> blacklist) {
         this.scale = restrictions.getNumericScale();
-        this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
+        this.stepSize = restrictions.getStepSize();
 
         NumericLimit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
 
@@ -110,11 +110,10 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->
-                    new BigDecimal(
-                        randomNumberGenerator.nextDouble(
-                            inclusiveLowerLimit.doubleValue(),
-                            inclusiveUpperLimit.doubleValue()
-                        )).setScale(scale, RoundingMode.HALF_UP)),
+                    randomNumberGenerator.nextBigDecimal(
+                        inclusiveLowerLimit,
+                        inclusiveUpperLimit,
+                        scale)),
                 i -> !blacklist.contains(i)));
     }
 
