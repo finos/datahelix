@@ -14,13 +14,13 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TextualRestrictions implements StringRestrictions {
-    private final Integer minLength;
-    private final Integer maxLength;
-    private final Set<Integer> excludedLengths;
-    private final Set<Pattern> matchingRegex;
-    private final Set<Pattern> containingRegex;
-    private final Set<Pattern> notMatchingRegex;
-    private final Set<Pattern> notContainingRegex;
+    final Integer minLength;
+    final Integer maxLength;
+    final Set<Integer> excludedLengths;
+    final Set<Pattern> matchingRegex;
+    final Set<Pattern> containingRegex;
+    final Set<Pattern> notMatchingRegex;
+    final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
 
     TextualRestrictions(
@@ -57,7 +57,7 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         if (other instanceof MatchesStandardStringRestrictions){
-            return new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints");
+            return other.intersect(this);
         }
 
         TextualRestrictions textualRestrictions = (TextualRestrictions) other;

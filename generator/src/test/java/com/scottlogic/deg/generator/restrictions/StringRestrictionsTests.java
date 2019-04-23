@@ -341,33 +341,53 @@ class StringRestrictionsTests {
     }
 
     @Test
-    void createGenerator_withMinLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withMinLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(minLength(1));
 
         StringGenerator generator = restrictions.createGenerator();
 
+        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+    }
+
+    @Test
+    void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+            .intersect(maxLength(10));
+
+        StringGenerator generator = restrictions.createGenerator();
+
         assertGeneratorCannotGenerateAnyStrings(generator);
     }
 
     @Test
-    void createGenerator_withMaxLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withMaxLengthAtLengthOfCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+            .intersect(maxLength(12));
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+    }
+
+    @Test
+    void createGenerator_withMaxLengthLongerThanCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(maxLength(100));
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
     }
 
     @Test
-    void createGenerator_withOfLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withOfLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(ofLength(12, false));
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
     }
 
     @Test

@@ -41,7 +41,12 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     @Override
     public StringRestrictions intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
-            return other.intersect(this);
+            TextualRestrictions textualRestrictions = (TextualRestrictions) other;
+            if (!wouldAffectValuesProduced(textualRestrictions)){
+                return this; //no impact on values produced by this type
+            }
+
+            return new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints");
         }
 
         if (!(other instanceof MatchesStandardStringRestrictions)){
@@ -56,6 +61,34 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         return that.negated == negated
             ? this
             : new NoStringsPossibleStringRestrictions(String.format("Intersection of aValid %s and not(aValid %s)", type, type));
+    }
+
+    private boolean wouldAffectValuesProduced(TextualRestrictions textualRestrictions) {
+        boolean hasRegexRestrictions = !textualRestrictions.containingRegex.isEmpty()
+            || !textualRestrictions.matchingRegex.isEmpty()
+            || !textualRestrictions.notMatchingRegex.isEmpty()
+            || !textualRestrictions.notContainingRegex.isEmpty();
+
+        if (hasRegexRestrictions){
+            return true; //because we dont know they wouldn't affect the values - see #487
+        }
+
+        int maxLength = textualRestrictions.maxLength != null ? textualRestrictions.maxLength : Integer.MAX_VALUE;
+        int minLength = textualRestrictions.minLength != null ? textualRestrictions.minLength : 0;
+        int codeLength = getCodeLength(type);
+
+        return codeLength < minLength || codeLength > maxLength || textualRestrictions.excludedLengths.contains(codeLength);
+    }
+
+    private int getCodeLength(StandardConstraintTypes type) {
+        switch (type){
+            case ISIN:
+                return IsinStringGenerator.VALUE_LENGTH;
+            case SEDOL:
+                return SedolStringGenerator.VALUE_LENGTH;
+        }
+
+        throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
     }
 
     @Override
