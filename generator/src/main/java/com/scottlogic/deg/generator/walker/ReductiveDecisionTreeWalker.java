@@ -82,10 +82,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         monitor.fieldFixedToValue(fieldValue.getField(), fieldValue.getValue());
-        visualise(reducedTree.get(), reductiveState);
 
         ReductiveState newReductiveState =
             reductiveState.withFixedFieldValue(fieldValue);
+        visualise(reducedTree.get(), newReductiveState);
 
         if (newReductiveState.allFieldsAreFixed()){
             return Stream.of(reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState));
