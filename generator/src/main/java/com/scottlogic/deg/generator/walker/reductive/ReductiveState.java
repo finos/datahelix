@@ -49,12 +49,14 @@ public class ReductiveState {
     }
 
     public String toString(boolean detailAllFields) {
-        return fieldValues.size() > 10 && !detailAllFields
-            ? String.format("Fixed fields: %d of %d", this.fieldValues.size(), this.fields.size())
-            : String.join(", ", this.fieldValues.values()
+        if (fieldValues.size() > 10 && !detailAllFields){
+            return String.format("Fixed fields: %d of %d", this.fieldValues.size(), this.fields.size());
+        }
+
+        return String.join(", ", this.fieldValues.values()
             .stream()
-            .sorted(Comparator.comparing(ff -> ff.getValue().toString()))
-            .map(FieldValue::toString)
+            .sorted(Comparator.comparing(ff -> ff.getField().toString()))
+            .map(ff -> String.format("%s: %s", ff.getField(), ff.getValue()))
             .collect(Collectors.toList()));
     }
 
