@@ -5,6 +5,10 @@ import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 
+/**
+ * Represents the restriction of a field to an `aValid` operator
+ * Holds the type of the value that is required and whether the field has been negated
+ */
 public class MatchesStandardStringRestrictions implements StringRestrictions{
     private final StandardConstraintTypes type;
     private final boolean negated;
@@ -38,6 +42,19 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
     }
 
+    /**
+     * Will combine/intersect another StringRestrictions within this instance
+     *
+     * Rules are:
+     * Return this instance within modification if the other restrictions matches the following:
+     *   1. It is an equivalent MatchesStandardStringRestrictions instance (all properties match)
+     *   2. It is a TextualRestrictions that has:
+     *     2.1. no regex restrictions of any kind
+     *     2.2. any present length restrictions do not impact the ability to create any value
+     *
+     * @param other The other restrictions to combine/intersect
+     * @return Either this instance (success) or a NoStringsPossibleStringRestrictions if the other restrictions could not be merged or intersected
+     */
     @Override
     public StringRestrictions intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
@@ -63,6 +80,15 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             : new NoStringsPossibleStringRestrictions(String.format("Intersection of aValid %s and not(aValid %s)", type, type));
     }
 
+    /**
+     * Calculate if the given TextualRestrictions could impact the ability to create some or all values
+     * If there are ANY regex statements then they COULD affect the ability to create values (therefore yield true)
+     * Get the length of the codes that would be produced, e.g. an ISIN is 12 characters.
+     * Check if any length restrictions exist that would prevent strings of this length being produced.
+     *
+     * @param textualRestrictions The other restrictions type to check
+     * @return
+     */
     private boolean wouldAffectValuesProduced(TextualRestrictions textualRestrictions) {
         boolean hasRegexRestrictions = !textualRestrictions.containingRegex.isEmpty()
             || !textualRestrictions.matchingRegex.isEmpty()
@@ -83,9 +109,9 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     private int getCodeLength(StandardConstraintTypes type) {
         switch (type){
             case ISIN:
-                return IsinStringGenerator.VALUE_LENGTH;
+                return IsinStringGenerator.ISIN_LENGTH;
             case SEDOL:
-                return SedolStringGenerator.VALUE_LENGTH;
+                return SedolStringGenerator.SEDOL_LENGTH;
         }
 
         throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));

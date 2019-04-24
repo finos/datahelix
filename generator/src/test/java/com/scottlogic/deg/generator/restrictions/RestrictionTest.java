@@ -1,13 +1,10 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.MatchesRegexConstraint;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class RestrictionTest {

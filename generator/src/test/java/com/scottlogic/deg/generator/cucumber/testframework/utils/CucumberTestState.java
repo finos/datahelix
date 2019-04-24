@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
 
@@ -155,8 +154,8 @@ public class CucumberTestState {
     }
 
     public void setMaxStringLength(int maxLength) {
-        if (maxLength > 1000){
-            throw new IllegalArgumentException("String lengths are limited to 1000 characters in production");
+        if (maxLength > GenerationConfig.Constants.MAX_STRING_LENGTH.intValue()){
+            throw new IllegalArgumentException("String lengths are limited to " + GenerationConfig.Constants.MAX_STRING_LENGTH.intValue() + " characters in production");
         }
 
         maxStringLength = maxLength;

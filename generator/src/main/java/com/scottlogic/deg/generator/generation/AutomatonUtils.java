@@ -11,11 +11,22 @@ class AutomatonUtils {
 
     private static final char printableChar = ' ';
 
-    // Returns a string of printable characters based on the supplied automaton.
-    // This method ignores transitions that lead back to the same node so recursive states will only ever produce a
-    // single character. This means for infinite automatons the resulting string isn't the longest possible (as the
-    // longest example would have an infinite length) but is based on the longest path from the start state to
-    // the "furthest" end state.
+    /**
+     * Get the longest string possible given the regex (in the form of the Automaton)
+     * There may be many optional sections within a regex which need to be inspected to calculate the longest possible
+     * string. The automaton has done the hard work of turning the regex into a set of transitions and states.
+     * see https://github.com/ScottLogic/datahelix/blob/master/generator/docs/StringGeneration.md for more detail.
+     *
+     * This method is a recursive implementation that will test each starting point calculating the string and returning
+     * the longest possible variant.
+     *
+     * TODO:
+     * 1) turn this into a non-recursive algorithm
+     * 2) improve performance and/or memory management (don't build strings as part of the process)
+     *
+     * @param automaton The automaton that represents the regex
+     * @return The longest possible string for the given regex/automaton
+     */
     static String getLongestExample(Automaton automaton) {
         List<Transition> transitions = automaton.getInitialState()
             .getSortedTransitions(true)
@@ -36,6 +47,10 @@ class AutomatonUtils {
         return longest;
     }
 
+    /**
+     * A cache of transitions to calculated strings, to save recalculating the string fragment for a transition multiple
+     * times.
+     */
     private static class TransitionLongestExampleCache {
         private final Map<Transition, String> examples = new HashMap<>();
 

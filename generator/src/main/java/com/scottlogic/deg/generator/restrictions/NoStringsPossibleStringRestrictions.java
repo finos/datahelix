@@ -3,10 +3,13 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 
+/**
+ * Represents a set of string restrictions that could never produce and values
+ */
 public class NoStringsPossibleStringRestrictions implements StringRestrictions {
     private final String reason;
 
-    public NoStringsPossibleStringRestrictions(String reason) {
+    NoStringsPossibleStringRestrictions(String reason) {
         this.reason = reason;
     }
 

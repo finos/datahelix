@@ -26,7 +26,14 @@ public class RegexStringGenerator implements StringGenerator {
         PREDEFINED_CHARACTER_CLASSES = Collections.unmodifiableMap(characterClasses);
     }
 
+    /**
+     * Cache of all matching regex automatons, keyed on their regex
+     */
     private static final Map<String, Automaton> matchingRegexAutomatonCache = new HashMap<>();
+
+    /**
+     * Cache of all containing regex automatons, keyed on their regex
+     */
     private static final Map<String, Automaton> containingRegexAutomatonCache = new HashMap<>();
 
     private Automaton automaton;
@@ -47,6 +54,17 @@ public class RegexStringGenerator implements StringGenerator {
         this.automaton = generatedAutomaton;
     }
 
+    /**
+     * Create an automaton and store its instance in the cache, keyed on the given regex
+     * The cache will vary based on &lt;matchFullString&gt;.
+     *
+     * The creation of an automaton is a time-consuming process, especially for more complex expressions.
+     *
+     * @param regexStr The string to create the automaton from
+     * @param matchFullString Whether the string represents a matchingRegex (true) or containingRegex (false) expression
+     * @param cache The cache to store the automaton instance in
+     * @return The created automaton
+     */
     static Automaton createAutomaton(String regexStr, boolean matchFullString, Map<String, Automaton> cache) {
         final String anchoredStr = convertEndAnchors(regexStr, matchFullString);
         final String requotedStr = escapeCharacters(anchoredStr);

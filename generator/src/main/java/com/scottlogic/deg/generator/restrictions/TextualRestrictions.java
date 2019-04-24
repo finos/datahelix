@@ -45,10 +45,8 @@ public class TextualRestrictions implements StringRestrictions {
     }
 
     /**
-     * Produce another StringRestrictions object that represents the constraints from @param other as well as those in
-     * this instance.
-     *
-     * e.g. &lt;shorterThan 10&gt; intersect &lt;longerThan 5&gt; &rarr; &lt;shorterThan 10 &amp; longerThan 5&gt;
+     * Produce a new string restrictions instance that represents the intersection of this and the other given restrictions
+     * See MatchesStandardStringRestrictions.intersect() for more details on how the `aValid` operator can be merged
      */
     public StringRestrictions intersect(StringRestrictions other){
         if (other instanceof NoStringsPossibleStringRestrictions){
@@ -72,6 +70,11 @@ public class TextualRestrictions implements StringRestrictions {
         );
     }
 
+    /**
+     * Detect if the intersection of length constraints & any given regex constraints contradict (can't emit any values)
+     *
+     * @return Whether this restrictions type is contradictory
+     */
     @Override
     public boolean isContradictory() {
         if (matchingRegex.isEmpty() && containingRegex.isEmpty()){
@@ -82,6 +85,12 @@ public class TextualRestrictions implements StringRestrictions {
         return generator instanceof NoStringsStringGenerator;
     }
 
+    /**
+     * Yield the appropriate minimum length from self and/or other min length
+     *
+     * @param otherMinLength Optionally another length to compare
+     * @return The appropriate or highest of the lengths
+     */
     private Integer mergeMinLengths(Integer otherMinLength) {
         if (minLength == null){
             return otherMinLength;
@@ -93,6 +102,12 @@ public class TextualRestrictions implements StringRestrictions {
         return Math.max(minLength, otherMinLength);
     }
 
+    /**
+     * Yield the appropriate maximum length from self and/or other max length
+     *
+     * @param otherMaxLength Optionally another length to compare
+     * @return The appropriate or lowest of the lengths
+     */
     private Integer mergeMaxLengths(Integer otherMaxLength) {
         if (maxLength == null){
             return otherMaxLength;
@@ -118,6 +133,7 @@ public class TextualRestrictions implements StringRestrictions {
      * Singleton method: Will always return the same instance after the first successful execution on this instance
      *
      * Create a StringGenerator that will produce strings that match all of the given constraints
+     * Yield NoStringsGenerator if no strings could be produced for the given restrictions
      */
     public StringGenerator createGenerator() {
         if (generator != null){
@@ -161,7 +177,19 @@ public class TextualRestrictions implements StringRestrictions {
                 (a, b) -> null);
     }
 
-    private boolean allLengthsAreExcluded(int minLength, int maxLength, Set<Integer> excludedLengths) {
+    /**
+     * Detect if the list of excluded lengths represents all possible string-lengths that could be produced
+     *
+     * @param minLength The minimum string length
+     * @param maxLength The maximum string length if one is defined, will always return false if this is null
+     * @param excludedLengths The set of excluded lengths
+     * @return Whether excludedLengths represents all possible string lengths, and therefore no strings could be created
+     */
+    private static boolean allLengthsAreExcluded(int minLength, Integer maxLength, Set<Integer> excludedLengths) {
+        if (maxLength == null){
+            return false; //cannot determine for unbounded lengths
+        }
+
         long permittedLengths = IntStream.range(minLength, maxLength + 1)
             .filter(length -> !excludedLengths.contains(length))
             .count();
@@ -169,6 +197,11 @@ public class TextualRestrictions implements StringRestrictions {
         return permittedLengths == 0;
     }
 
+    /**
+     * Get a stream of StringGenerators that represent each regex restriction in this type
+     *
+     * @return
+     */
     private Stream<StringGenerator> getPatternConstraints() {
         return concatStreams(
             getStringGenerators(matchingRegex, regex -> new RegexStringGenerator(regex, true)),
@@ -197,22 +230,18 @@ public class TextualRestrictions implements StringRestrictions {
     /**
      * Produce a regular expression that permits any character, but restricts the length of the generated string
      * Will either:
-     * 1. Return a regex like /.{nnn}/ where nnn is the defined length constraint, or the shorterThan and longerThan are the same
+     * 1. Return a regex like /.{nnn}/ where nnn is the defined length constraint, or the shorterThan and longerThan represent the same string length
      * 2. Return a regex like /.{aaa,bbb}/ where aaa is the shortest length and bbb is the longest length
      * 3. Return a regex like /.{0,aaa}|.{bbb,ccc}/ where
      *      aaa is the last length before an excluded length
      *      bbb is the first length after the previously excluded length
      *      ccc is the appropriate maximum length for the string
      *
-     * The appropriate maximum length is either 255 or 1000, depending on whether the string length constraints breach
-     * the 255 boundary. If they do, 1000 will be used, otherwise 255 (the default) will be used.
-     *
      * @param minLength the minimum length for the string
      * @param maxLength the maximum length for the string
      */
     private String createStringLengthRestrictionRegex(int minLength, Integer maxLength) {
         if (maxLength != null && maxLength.equals(minLength)){
-            //longerThan 5 & shorterThan 7, only possible string is 6 (5 + 1)
             return restrictStringLength(minLength);
         }
 
@@ -222,7 +251,7 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         List<Integer> orderedExcludedLengths = excludedLengths.stream().sorted().collect(Collectors.toList()); //ensure the excluded lengths are ordered
-        List<String> regexes = new ArrayList<>();
+        List<String> patterns = new ArrayList<>();
         Integer lastExcludedLength = null;
         for (int excludedLength : orderedExcludedLengths) {
             if ((maxLength != null && excludedLength > maxLength) || excludedLength < minLength){
@@ -238,30 +267,30 @@ public class TextualRestrictions implements StringRestrictions {
 
             if (lastExcludedLength == null) {
                 if (minLength < excludedLength - 1) {
-                    regexes.add(String.format(".{%d,%d}", minLength, excludedLength - 1));
+                    patterns.add(String.format(".{%d,%d}", minLength, excludedLength - 1));
                 }
             } else {
-                regexes.add(String.format(".{%d,%d}", lastExcludedLength + 1, excludedLength - 1));
+                patterns.add(String.format(".{%d,%d}", lastExcludedLength + 1, excludedLength - 1));
             }
 
             lastExcludedLength = excludedLength;
         }
 
-        if (regexes.isEmpty()) {
+        if (patterns.isEmpty()) {
             //if no lengths have been excluded, i.e. each excluded length is either > maxLength or
             // the same maxLength -1 (at which point appropriateMaxLength will have been modified)
             return restrictStringLength(lastExcludedLength != null ? lastExcludedLength + 1 : minLength, maxLength);
         }
 
         if (maxLength != null && lastExcludedLength + 1 < maxLength - 1) {
-            regexes.add(String.format(".{%d,%d}", lastExcludedLength + 1, maxLength));
+            patterns.add(String.format(".{%d,%d}", lastExcludedLength + 1, maxLength));
         } else if (maxLength == null){
-            regexes.add(String.format(".{%d,}", lastExcludedLength + 1));
+            patterns.add(String.format(".{%d,}", lastExcludedLength + 1));
         }
 
         return String.format(
-            regexes.size() == 1 ? "^%s$" : "^(%s)$",
-            String.join("|", regexes));
+            patterns.size() == 1 ? "^%s$" : "^(%s)$",
+            String.join("|", patterns));
     }
 
     private String restrictStringLength(int length){
@@ -278,9 +307,9 @@ public class TextualRestrictions implements StringRestrictions {
 
     @Override
     public String toString() {
-        return String.format("Strings: %d..%d (not: %s)\nmatching: %s\ncontaining: %s\nnotMatching: %s\nnotContaining: %s",
+        return String.format("Strings: %d..%s (not: %s)\nmatching: %s\ncontaining: %s\nnotMatching: %s\nnotContaining: %s",
             minLength != null ? minLength : 0,
-            maxLength != null ? maxLength : Integer.MAX_VALUE,
+            maxLength != null ? maxLength.toString() : "",
             excludedLengths.toString(),
             patternsAsString(matchingRegex),
             patternsAsString(containingRegex),
