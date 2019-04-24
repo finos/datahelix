@@ -64,7 +64,7 @@ public enum Timescale {
         return Arrays.stream(Timescale.values())
             .filter(t -> t.name.equals(name))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No timescale exists for argument " + name));
+            .orElseThrow(() -> new IllegalArgumentException("Must be one of the supported datetime units (millis, seconds, minutes, hours, days, months, years"));
     }
 
     public Function<OffsetDateTime, OffsetDateTime> getNext() {

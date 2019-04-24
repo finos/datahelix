@@ -38,7 +38,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
 
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number or one of the supported datetime units (millis, seconds, minutes, hours, days, months, years)"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units."
     And no data is created
 
   Scenario: Applying a decimal granularTo constraint does not affect granularity
