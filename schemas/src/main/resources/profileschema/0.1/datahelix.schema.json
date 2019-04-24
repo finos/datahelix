@@ -351,13 +351,13 @@
                   1E-18,
                   1E-19,
                   1E-20,
-                  "MILLIS",
-                  "SECONDS",
-                  "MINUTES",
-                  "HOURS",
-                  "DAYS",
-                  "MONTHS",
-                  "YEARS"
+                  "millis",
+                  "seconds",
+                  "minutes",
+                  "hours",
+                  "days",
+                  "months",
+                  "years"
                 ]
               }
             }

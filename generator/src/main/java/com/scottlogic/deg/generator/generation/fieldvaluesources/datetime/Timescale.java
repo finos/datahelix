@@ -13,7 +13,7 @@ import java.util.function.Function;
 public enum Timescale {
 
     MILLIS("millis",
-        current -> current.plusNanos(1_000),
+        current -> current.plusNanos(1_000_000),
         d -> OffsetDateTime.of(d.getYear(), d.getMonth().getValue(), d.getDayOfMonth(), d.getHour(), d.getMinute(), d.getSecond(), nanoToMilli(d.getNano()), ZoneOffset.UTC)),
 
     SECONDS("seconds",
