@@ -12,13 +12,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PruningState {
+public class PrunedConstraint {
 
     Collection<AtomicConstraint> newAtomicConstraints;
     Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
     Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
 
-    public PruningState(ConstraintNode constraintNode){
+    public PrunedConstraint(ConstraintNode constraintNode){
         newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
     }
 
