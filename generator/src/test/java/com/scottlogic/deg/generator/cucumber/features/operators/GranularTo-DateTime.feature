@@ -6,7 +6,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
     And foo is anything but null
     And foo is of type "datetime"
 
-  @ignore #awaiting development from rest of 141
+
   Scenario Outline: User is able to specify supported temporal granularities
     Given foo is granular to <unit>
     And foo is after 2000-01-01T00:00:00.000Z
@@ -25,7 +25,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
       | "months"  | 2000-02-01T00:00:00.000Z  |
       | "years"   | 2001-01-01T00:00:00.000Z  |
 
-  @ignore #awaiting development from rest of 141
+
   Scenario: Applying two valid datetime granularTo constraints generates data that matches both (coarser)
     Given foo is granular to "millis"
     And foo is granular to "seconds"
@@ -35,7 +35,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
       | foo                       |
       | 2000-01-01T00:00:01.000Z  |
 
-  @ignore #awaiting development from rest of 141
+
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number or one of the supported datetime units (millis, seconds, minutes, hours, days, months, years)"

@@ -18,7 +18,7 @@ public class ParsedDateGranularity {
     }
 
     public static ParsedDateGranularity parse(String granularityExpression) {
-        return new ParsedDateGranularity(Timescale.valueOf(granularityExpression));
+        return new ParsedDateGranularity(Timescale.getByName(granularityExpression));
     }
 
     public Timescale getGranularity() {

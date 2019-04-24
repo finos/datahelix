@@ -133,22 +133,29 @@ class AtomicConstraintReaderLookup {
                 (dto, fields, rules) ->
                 {   // TODO: If type is not number, the error will imply to the user that we should be using String
                     // Should be explicit that the value should be Number OR String
-                    Class classDef = dto.value.getClass();
-                    if (classDef == Number.class) {
+                    List<Exception> exceptions = new ArrayList<>();
+                    try {
                         return new IsGranularToNumericConstraint(
                             fields.getByName(dto.field),
                             ParsedGranularity.parse(getValidatedValue(dto, Number.class)),
                             rules);
-                    } else if (classDef == String.class) {
+                    } catch (InvalidProfileException|IllegalArgumentException e) {
+                        exceptions.add(e);
+                    }
+
+                    try {
                         return new IsGranularToDateConstraint(
                             fields.getByName(dto.field),
                             ParsedDateGranularity.parse(getValidatedValue(dto, String.class)),
                             rules);
-                    } else {
-                        throw new IllegalArgumentException("granularTo requires number or timescale input");
+                    } catch (InvalidProfileException|IllegalArgumentException e) {
+                        exceptions.add(e);
                     }
+
+                    throw new InvalidProfileException("No valid granularTo method found, must satisfy at least one of:" + exceptionToPrettyString(exceptions));
                 }
         );
+
 
         add(AtomicConstraintType.ISNULL.toString(),
                 (dto, fields, rules) ->
@@ -221,6 +228,13 @@ class AtomicConstraintReaderLookup {
                         fields.getByName(dto.field),
                         ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, GenerationConfig.Constants.MAX_STRING_LENGTH),
                         rules));
+    }
+
+    private static String exceptionToPrettyString(List<Exception> exceptions) {
+        return exceptions.stream()
+            .map(e -> "\n" + e.getMessage())
+            .reduce((a,b) -> a + b)
+            .orElse("No exceptions.");
     }
 
     private static Object getValidatedValue(ConstraintDTO dto) throws InvalidProfileException {
