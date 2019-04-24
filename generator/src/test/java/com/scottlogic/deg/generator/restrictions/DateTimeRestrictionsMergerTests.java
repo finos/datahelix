@@ -284,7 +284,11 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
         DateTimeRestrictions restrictions = result.restrictions;
 
-        assertThat(result).isNotNull().extracting(e -> e.successful).isEqualTo(true);
+        assertThat(result)
+            .isNotNull()
+            .extracting(e -> e.successful)
+            .isEqualTo(true);
+
         try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
             softly.assertThat(restrictions)
                 .isNotNull()
