@@ -26,6 +26,11 @@ public class GenerationConfig {
     }
 
     public CombinationStrategy getCombinationStrategy() {
+
+        if (dataGenerationType == DataGenerationType.RANDOM){
+            return new MinimalCombinationStrategy();
+        }
+
         if (this.walkerType == TreeWalkerType.REDUCTIVE){
             return new ReductiveCombinationStrategy();
         }
