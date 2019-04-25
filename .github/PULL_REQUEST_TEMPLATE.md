@@ -13,6 +13,4 @@
 ...Any comments about the acceptance criteria that has been met or missed
 
 ### Issue
-...Include a link to the associated Issue Number, use "Resolves" to close the issue when the pull request is merged.
-
-`e.g. Resolves #123`
+Resolves #000
