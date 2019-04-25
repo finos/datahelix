@@ -20,7 +20,7 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
 
     @Inject
     public MaxStringLengthInjectingDecisionTreeFactory(ProfileDecisionTreeFactory underlyingFactory) {
-        this(underlyingFactory, GenerationConfig.Constants.MAX_STRING_LENGTH.intValue());
+        this(underlyingFactory, GenerationConfig.Constants.MAX_STRING_LENGTH);
     }
 
     public MaxStringLengthInjectingDecisionTreeFactory(DecisionTreeFactory underlyingFactory, int maxLength) {

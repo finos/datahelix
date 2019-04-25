@@ -154,8 +154,8 @@ public class CucumberTestState {
     }
 
     public void setMaxStringLength(int maxLength) {
-        if (maxLength > GenerationConfig.Constants.MAX_STRING_LENGTH.intValue()){
-            throw new IllegalArgumentException("String lengths are limited to " + GenerationConfig.Constants.MAX_STRING_LENGTH.intValue() + " characters in production");
+        if (maxLength > GenerationConfig.Constants.MAX_STRING_LENGTH){
+            throw new IllegalArgumentException("String lengths are limited to " + GenerationConfig.Constants.MAX_STRING_LENGTH + " characters in production");
         }
 
         maxStringLength = maxLength;
