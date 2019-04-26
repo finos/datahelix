@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
-import java.sql.Time;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -34,6 +35,12 @@ class TimescaleTest {
     @Test
     public void mostCoarseTestSame() {
         assertEquals(Timescale.MONTHS, Timescale.getMostCoarse(Timescale.MONTHS, Timescale.MONTHS));
+    }
+
+    @Test
+    public void testGetByNameThrowsExceptionWithUsefulMessage(){
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> { Timescale.getByName("ShouldntWork"); })
+            .withMessageContaining("Must be one of the supported datetime units");
     }
 
 }

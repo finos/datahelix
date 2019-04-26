@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *  * Order of the enums are important. Ensure most fine is top, and each further down is increasingly coarse.
@@ -63,10 +65,16 @@ public enum Timescale {
     }
 
     public static Timescale getByName(String name) {
+
+        String enumNames = Stream.of(Timescale.values())
+            .map(Timescale::name)
+            .map(String::toLowerCase)
+            .collect(Collectors.joining(", "));
+
         return Arrays.stream(Timescale.values())
             .filter(t -> t.name.equals(name))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Must be one of the supported datetime units (millis, seconds, minutes, hours, days, months, years"));
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Must be one of the supported datetime units (%s)", enumNames)));
     }
 
     public Function<OffsetDateTime, OffsetDateTime> getNext() {
