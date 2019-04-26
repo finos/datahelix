@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
