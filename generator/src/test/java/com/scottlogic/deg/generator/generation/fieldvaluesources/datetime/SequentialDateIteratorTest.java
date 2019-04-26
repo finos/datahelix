@@ -111,4 +111,13 @@ class SequentialDateIteratorTest {
 
         Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
     }
+
+    @Test
+    void checkNextIsIncorrectWhenGranularityIsNotMillis() {
+        referenceDate = Timescale.MILLIS.getGranularityFunction().apply(inclusiveMinDate.plusNanos(1_000));
+
+        SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MILLIS);
+
+        Assert.assertNotEquals(sequentialDateIterator.next(), referenceDate);
+    }
 }

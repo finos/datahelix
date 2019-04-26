@@ -41,11 +41,6 @@ class RandomDateIterator implements Iterator<OffsetDateTime> {
         return date.toInstant().toEpochMilli();
     }
 
-    private int nanoToMilli(int nano) {
-        int factor = 1_000;
-        return (nano / factor) * 1_000;
-    }
-
     private OffsetDateTime trimUnwantedGranularity(OffsetDateTime dateToTrim, Timescale granularity) {
         return granularity.getGranularityFunction().apply(dateToTrim);
     }

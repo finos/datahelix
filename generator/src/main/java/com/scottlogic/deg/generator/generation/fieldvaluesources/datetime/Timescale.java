@@ -40,6 +40,8 @@ public enum Timescale {
         current -> current.plusYears(1),
         d -> OffsetDateTime.of(d.getYear(), 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
 
+    private static final int NANOS_IN_MILLIS = 1_000_000;
+
     private final String name;
 
     private final Function<OffsetDateTime, OffsetDateTime> next;
@@ -76,7 +78,7 @@ public enum Timescale {
     }
 
     private static int nanoToMilli(int nano) {
-        int factor = 1_000;
-        return (nano / factor) * 1_000;
+        int factor = NANOS_IN_MILLIS;
+        return (nano / factor) * factor;
     }
 }
