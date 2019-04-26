@@ -12,38 +12,37 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PrunedConstraint {
+class PrunedConstraintState {
 
-    Collection<AtomicConstraint> newAtomicConstraints;
-    Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
-    Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
+    private final Collection<AtomicConstraint> newAtomicConstraints;
+    private final Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
+    private final Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
 
-    public PrunedConstraint(ConstraintNode constraintNode){
+    PrunedConstraintState(ConstraintNode constraintNode){
         newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
     }
 
-    public void addPrunedDecision(DecisionNode prunedDecisionNode) {
-        if (onlyOneOption(prunedDecisionNode)) {
-            ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
-
-            pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-            newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-            newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
-        }
-        else {
+    void addPrunedDecision(DecisionNode prunedDecisionNode) {
+        if (!onlyOneOption(prunedDecisionNode)) {
             newDecisionNodes.add(prunedDecisionNode);
+            return;
         }
+        
+        ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
+        pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
+        newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
+        newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
     }
 
-    public boolean hasPulledUpDecisions() {
+    boolean hasPulledUpDecisions() {
         return !pulledUpAtomicConstraints.isEmpty();
     }
 
-    public ConstraintNode getNewConstraintNode() {
+    ConstraintNode getNewConstraintNode() {
         return new TreeConstraintNode(newAtomicConstraints, newDecisionNodes);
     }
 
-    public Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {
+    Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {
         Map<Field, FieldSpec> mapWithPulledUpFields = new HashMap<>(previousFieldSpecs);
         for (AtomicConstraint c : pulledUpAtomicConstraints) {
             mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.Empty);
