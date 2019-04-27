@@ -1,43 +1,53 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.utils.SetUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SetRestrictions {
-    private static final SetRestrictions neutral = new SetRestrictions();
+    private static final SetRestrictions neutral = new SetRestrictions(null, null);
 
+    @Nullable
     private final Set<Object> whitelist;
+
+    @NotNull
     private final Set<Object> blacklist;
 
+    @Nullable
     public Set<Object> getWhitelist() {
         return this.whitelist;
     }
 
+    @NotNull
     public Set<Object> getBlacklist() {
         return this.blacklist;
     }
 
-    private SetRestrictions(){
-        this.whitelist = null;
-        this.blacklist = new HashSet<>();
-    }
+    public SetRestrictions( // TODO: Make this private
+        @Nullable Set<Object> whitelist,
+        @Nullable Set<Object> blacklist) {
 
-    public SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
         this.whitelist = whitelist;
-        this.blacklist = blacklist;
+
+        // normalise such that blacklist cannot be an empty set, to avoid ambiguity between null and {}
+        this.blacklist = blacklist == null ? Collections.emptySet() : blacklist;
     }
 
-    public boolean isEmpty(){
-        return ((this.whitelist == null || this.whitelist.isEmpty())
-            && (this.blacklist == null || this.blacklist.isEmpty()));
+    private boolean isEmpty(){
+        return (this.whitelist == null || this.whitelist.isEmpty())
+            && this.blacklist.isEmpty();
     }
 
-    public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
+    public static SetRestrictions allowNoValues() {
+        return fromWhitelist(Collections.emptySet());
+    }
+
+    public static SetRestrictions fromWhitelist(@NotNull Set<Object> whitelist) {
         return new SetRestrictions(whitelist, null);
     }
 
@@ -101,15 +111,12 @@ public class SetRestrictions {
                     "NOT IN %s",
                     Objects.toString(blacklist));
 
-        if (blacklist == null || blacklist.isEmpty())
+        if (blacklist.isEmpty())
             return String.format(
                     "IN %s",
                     Objects.toString(whitelist));
 
-        return String.format(
-            "IN %s AND NOT IN %s",
-            Objects.toString(whitelist, "-"),
-            Objects.toString(blacklist, "-"));
+        throw new RuntimeException("SetRestrictions is in illegal state (both whitelist and blacklist populated)");
     }
 
     @Override

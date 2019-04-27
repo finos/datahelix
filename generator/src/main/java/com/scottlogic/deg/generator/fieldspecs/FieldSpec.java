@@ -42,14 +42,24 @@ public class FieldSpec {
         FormatRestrictions formatRestrictions,
         MustContainRestriction mustContainRestriction,
         FieldSpecSource source) {
+
         this.setRestrictions = setRestrictions;
-        this.numericRestrictions = numericRestrictions;
-        this.stringRestrictions = stringRestrictions;
         this.nullRestrictions = nullRestrictions;
-        this.typeRestrictions = typeRestrictions;
-        this.dateTimeRestrictions = dateTimeRestrictions;
-        this.formatRestrictions = formatRestrictions;
         this.mustContainRestriction = mustContainRestriction;
+        this.formatRestrictions = formatRestrictions;
+
+        if (setRestrictions != null && setRestrictions.getWhitelist() != null && setRestrictions.getWhitelist().size() > 0) {
+            this.numericRestrictions = null;
+            this.stringRestrictions = null;
+            this.typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED; // ugh, super inconsistent, null should be fine here
+            this.dateTimeRestrictions = null;
+        } else {
+            this.numericRestrictions = numericRestrictions;
+            this.stringRestrictions = stringRestrictions;
+            this.typeRestrictions = typeRestrictions;
+            this.dateTimeRestrictions = dateTimeRestrictions;
+        }
+
         this.source = source;
     }
 
