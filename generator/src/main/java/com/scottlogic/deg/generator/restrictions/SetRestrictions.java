@@ -28,7 +28,7 @@ public class SetRestrictions {
         return this.blacklist;
     }
 
-    public SetRestrictions( // TODO: Make this private
+    public SetRestrictions(
         @Nullable Set<Object> whitelist,
         @Nullable Set<Object> blacklist) {
 

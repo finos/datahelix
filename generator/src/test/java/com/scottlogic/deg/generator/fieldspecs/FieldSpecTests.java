@@ -51,7 +51,7 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(new SetRestrictions(null, null), null);
+            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("whitelist")), null);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -67,7 +67,7 @@ class FieldSpecTests {
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
-                new SetRestrictions(null, null),
+                SetRestrictions.fromWhitelist(Collections.singleton("whitelist")),
                 null)
         );
 
@@ -81,22 +81,18 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
-                    ),
-                    null
-                ),
+                    )),
                 null);
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
-                    ),
-                    null
-                ),
+                    )),
                 null)
         );
 
