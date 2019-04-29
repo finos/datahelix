@@ -137,7 +137,7 @@ The current profile outputs random text strings for the `firstName` field. Depen
 The generator has been designed to be fast and efficient, allowing you to generate large quantities of test and simulation data. If you supply a large number for the `--max-rows` option, the data will be streamed to the output file, with the progress / velocity reported during generation.
 
 ```
-$ java -jar generator.jar generate --max-rows=10000 --overwrite profile.json output.csv
+$ java -jar generator.jar generate --max-rows=10000 --replace profile.json output.csv
 Generation started at: 16:41:44
 
 Number of rows | Velocity (rows/sec) | Velocity trend
@@ -301,7 +301,7 @@ The generator supports a number of different generation modes:
 The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
 ~~~
-$ java -jar generator.jar generate --generation-type interesting --overwrite profile.json output.csv
+$ java -jar generator.jar generate --generation-type interesting --replace profile.json output.csv
 ~~~
 
 In this case it generates just 14 rows where you can see that it is exploring the boundary values of the constraints:
@@ -331,7 +331,7 @@ firstName,age,nationalInsurance
 One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `--violate` command line option. This time you need to specify an output directory rather than a file:
 
 ~~~
-$ java -jar generator.jar generate --violate --max-rows=100 --overwrite profile.json out
+$ java -jar generator.jar generate --violate --max-rows=100 --replace profile.json out
 ~~~
 
 When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
@@ -380,7 +380,7 @@ However, it might be a surprise to see nulls, numbers and dates as values for th
 
 ~~~
 $ java -jar generator.jar generate --violate --dont-violate=ofType null \
-  --max-rows=100 --overwrite profile.json out
+  --max-rows=100 --replace profile.json out
 ~~~
 
 Or, alternatively, you can re-arrange your constraints so that the ones that define types / null, are grouped as a single rule. After By re-grouping constraints, the following output, with random strings that violate the regex constraint, is generated:
