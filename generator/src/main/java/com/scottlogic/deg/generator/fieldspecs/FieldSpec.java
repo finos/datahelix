@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -15,7 +17,8 @@ import static com.scottlogic.deg.generator.restrictions.StringRestrictions.isStr
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(null,
+    public static final FieldSpec Empty = new FieldSpec(
+        null,
         null,
         null,
         null,
@@ -25,26 +28,26 @@ public class FieldSpec {
         null,
         FieldSpecSource.Empty);
 
-    private final SetRestrictions setRestrictions;
-    private final NumericRestrictions numericRestrictions;
-    private final StringRestrictions stringRestrictions;
-    private final NullRestrictions nullRestrictions;
-    private final TypeRestrictions typeRestrictions;
-    private final DateTimeRestrictions dateTimeRestrictions;
-    private final FormatRestrictions formatRestrictions;
-    private final MustContainRestriction mustContainRestriction;
-    private final FieldSpecSource source;
+    @Nullable private final SetRestrictions setRestrictions;
+    @Nullable private final NumericRestrictions numericRestrictions;
+    @Nullable private final StringRestrictions stringRestrictions;
+    @Nullable private final NullRestrictions nullRestrictions;
+    @Nullable private final TypeRestrictions typeRestrictions;
+    @Nullable private final DateTimeRestrictions dateTimeRestrictions;
+    @Nullable private final FormatRestrictions formatRestrictions;
+    @Nullable private final MustContainRestriction mustContainRestriction;
+    @NotNull  private final FieldSpecSource source;
 
     private FieldSpec(
-        SetRestrictions setRestrictions,
-        NumericRestrictions numericRestrictions,
-        StringRestrictions stringRestrictions,
-        NullRestrictions nullRestrictions,
-        TypeRestrictions typeRestrictions,
-        DateTimeRestrictions dateTimeRestrictions,
-        FormatRestrictions formatRestrictions,
-        MustContainRestriction mustContainRestriction,
-        FieldSpecSource source) {
+        @Nullable SetRestrictions setRestrictions,
+        @Nullable NumericRestrictions numericRestrictions,
+        @Nullable StringRestrictions stringRestrictions,
+        @Nullable NullRestrictions nullRestrictions,
+        @Nullable TypeRestrictions typeRestrictions,
+        @Nullable DateTimeRestrictions dateTimeRestrictions,
+        @Nullable FormatRestrictions formatRestrictions,
+        @Nullable MustContainRestriction mustContainRestriction,
+        @NotNull  FieldSpecSource source) {
 
         this.setRestrictions = setRestrictions;
         this.nullRestrictions = nullRestrictions;
@@ -54,7 +57,7 @@ public class FieldSpec {
         if (setRestrictions != null && setRestrictions.getWhitelist() != null && setRestrictions.getWhitelist().size() > 0) {
             this.numericRestrictions = null;
             this.stringRestrictions = null;
-            this.typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED; // ugh, super inconsistent, null should be fine here
+            this.typeRestrictions = null;
             this.dateTimeRestrictions = null;
         } else {
             this.numericRestrictions = numericRestrictions;
@@ -66,31 +69,15 @@ public class FieldSpec {
         this.source = source;
     }
 
-    public SetRestrictions getSetRestrictions() {
-        return setRestrictions;
-    }
-
-    public NumericRestrictions getNumericRestrictions() {
-        return numericRestrictions;
-    }
-
-    public StringRestrictions getStringRestrictions() {
-        return stringRestrictions;
-    }
-
-    public NullRestrictions getNullRestrictions() {
-        return nullRestrictions;
-    }
-
-    public TypeRestrictions getTypeRestrictions() {
-        return typeRestrictions;
-    }
-
-    public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
-
-    public MustContainRestriction getMustContainRestriction() {
-        return mustContainRestriction;
-    }
+    @Nullable public SetRestrictions getSetRestrictions() { return setRestrictions; }
+    @Nullable public NumericRestrictions getNumericRestrictions() { return numericRestrictions; }
+    @Nullable public StringRestrictions getStringRestrictions() { return stringRestrictions; }
+    @Nullable public NullRestrictions getNullRestrictions() { return nullRestrictions; }
+    @Nullable public TypeRestrictions getTypeRestrictions() { return typeRestrictions; }
+    @Nullable public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
+    @Nullable public MustContainRestriction getMustContainRestriction() { return mustContainRestriction; }
+    @Nullable public FormatRestrictions getFormatRestrictions() { return formatRestrictions; }
+    @NotNull  public FieldSpecSource getFieldSpecSource() { return this.source; }
 
     public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
         return new FieldSpec(
@@ -183,10 +170,6 @@ public class FieldSpec {
         return String.join(" & ", propertyStrings);
     }
 
-    public FormatRestrictions getFormatRestrictions() {
-        return formatRestrictions;
-    }
-
     public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
         return new FieldSpec(
             this.setRestrictions,
@@ -214,40 +197,36 @@ public class FieldSpec {
     }
 
     /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
-    public Predicate<Object> getValueValidityPredicate() {
-        TypeRestrictions typeRestrictions = getTypeRestrictions();
-
+    Predicate<Object> getValueValidityPredicate() {
         List<Predicate<Object>> predicates = new ArrayList<>();
 
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-            predicates.add(x -> !isNumeric(x));
+        if (typeRestrictions != null) {
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+                predicates.add(x -> !isNumeric(x));
+            }
+
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
+                predicates.add(x -> !isString(x));
+            }
+
+            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
+                predicates.add(x -> !isDateTime(x));
+            }
         }
 
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-            predicates.add(x -> !isString(x));
+        if (stringRestrictions != null) {
+            predicates.add(x -> !isString(x) || stringRestrictions.match(x));
         }
 
-        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
-            predicates.add(x -> !isDateTime(x));
+        if (numericRestrictions != null) {
+            predicates.add(x -> !isNumeric(x) || numericRestrictions.match(x));
         }
 
-        if (getStringRestrictions() != null) {
-            predicates.add(x -> !isString(x) || getStringRestrictions().match(x));
-        }
-
-        if (getNumericRestrictions() != null) {
-            predicates.add(x -> !isNumeric(x) || getNumericRestrictions().match(x));
-        }
-
-        if (getDateTimeRestrictions() != null) {
-            predicates.add(x -> !isDateTime(x) || getDateTimeRestrictions().match(x));
+        if (dateTimeRestrictions != null) {
+            predicates.add(x -> !isDateTime(x) || dateTimeRestrictions.match(x));
         }
 
         return x -> predicates.stream().allMatch(p -> p.test(x));
-    }
-
-    public FieldSpecSource getFieldSpecSource() {
-        return this.source;
     }
 
     public int hashCode(){

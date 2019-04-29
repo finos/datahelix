@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec);
+            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec.getSetRestrictions().getWhitelist());
             if (mayBeNull(fieldSpec)){
                 return addNullSource(setRestrictionSources);
             }
@@ -69,13 +70,14 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
-    private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
-        List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
-         if (whitelist.isEmpty()){
-             return Collections.emptyList();
-         }
+    private List<FieldValueSource> getSetRestrictionSources(@Nullable Set<Object> whitelist) {
+        if (whitelist == null || whitelist.isEmpty()){
+            return Collections.emptyList();
+        }
 
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
+        return Collections.singletonList(
+            new CannedValuesFieldValueSource(
+                new ArrayList<>(whitelist)));
     }
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
