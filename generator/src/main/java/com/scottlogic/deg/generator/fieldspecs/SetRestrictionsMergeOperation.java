@@ -67,22 +67,18 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             return null;
         }
 
-        // filter down the merged whitelist to remove values excluded by other restrictions (eg NumericRestrictions)
-        Set<Object> whitelistAfterExcludingInvalidValues = filterSet(
-            mergedSetRestrictions.getWhitelist(),
-            valueIsValid);
-
-        // no members of the merged whitelist are valid, so no values are permitted
-        // (this could happen if we merged, eg, "X > 10" with "X in [1, 2]")
-        if (whitelistAfterExcludingInvalidValues.isEmpty()) {
-            return SetRestrictions.allowNoValues();
+        // filter down whitelist/blacklist to remove values excluded by other restrictions (eg NumericRestrictions)
+        if (mergedSetRestrictions.getWhitelist() != null) {
+            return SetRestrictions.fromWhitelist(
+                filterSet(
+                    mergedSetRestrictions.getWhitelist(),
+                    valueIsValid));
+        } else {
+            return SetRestrictions.fromBlacklist(
+                filterSet(
+                    mergedSetRestrictions.getBlacklist(),
+                    valueIsValid));
         }
-
-        return new SetRestrictions(
-            whitelistAfterExcludingInvalidValues,
-            filterSet(
-                mergedSetRestrictions.getBlacklist(),
-                valueIsValid));
     }
 
     /** If input is non-null, return set of all values that match the given predicate */
