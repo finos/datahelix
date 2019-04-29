@@ -1,12 +1,15 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
+import static com.scottlogic.deg.generator.restrictions.NumericRestrictions.isNumeric;
+import static com.scottlogic.deg.generator.restrictions.StringRestrictions.isString;
 
 /**
  * Details a column's atomic constraints
@@ -208,6 +211,39 @@ public class FieldSpec {
             this.formatRestrictions,
             mustContainRestriction,
             this.source);
+    }
+
+    /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
+    public Predicate<Object> getValueValidityPredicate() {
+        TypeRestrictions typeRestrictions = getTypeRestrictions();
+
+        List<Predicate<Object>> predicates = new ArrayList<>();
+
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+            predicates.add(x -> !isNumeric(x));
+        }
+
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
+            predicates.add(x -> !isString(x));
+        }
+
+        if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
+            predicates.add(x -> !isDateTime(x));
+        }
+
+        if (getStringRestrictions() != null) {
+            predicates.add(x -> !isString(x) || getStringRestrictions().match(x));
+        }
+
+        if (getNumericRestrictions() != null) {
+            predicates.add(x -> !isNumeric(x) || getNumericRestrictions().match(x));
+        }
+
+        if (getDateTimeRestrictions() != null) {
+            predicates.add(x -> !isDateTime(x) || getDateTimeRestrictions().match(x));
+        }
+
+        return x -> predicates.stream().allMatch(p -> p.test(x));
     }
 
     public FieldSpecSource getFieldSpecSource() {
