@@ -5,11 +5,12 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.NoopDecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.treepartitioning.NoopTreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
@@ -58,9 +59,19 @@ class ReductiveDataGeneratorTests {
         when(fixFieldStrategy.getNextFieldToFix(any(), any())).thenReturn(field1, field2);
         fixFieldStrategyFactory = mock(FixFieldStrategyFactory.class);
         when(fixFieldStrategyFactory.getFixedFieldStrategy(any(), any())).thenReturn(fixFieldStrategy);
+        
+        GenerationConfig config = new GenerationConfig(new TestGenerationConfigSource(GenerationConfig.DataGenerationType.RANDOM, GenerationConfig.TreeWalkerType.REDUCTIVE, GenerationConfig.CombinationStrategyType.MINIMAL));
 
-
-        walker = null;
+        walker = new ReductiveDataGenerator(
+            new GeneratorPartitioner(new NoopTreePartitioner(), new NoopDecisionTreeOptimiser(), config),
+            new GeneratorRestarter(),
+            new NoOpIterationVisualiser(),
+            reductiveFieldSpecBuilder,
+            new NoopDataGeneratorMonitor(),
+            treePruner,
+            fieldSpecValueGenerator,
+            fixFieldStrategyFactory,
+            config);
     }
 
     /**

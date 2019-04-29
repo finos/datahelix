@@ -33,7 +33,7 @@ class RandomReductiveDataGeneratorTests {
             "test-tree");
 
         underlyingWalker = mock(ReductiveDataGenerator.class);
-        walker = null;
+        walker = new GeneratorRestarter();
     }
 
     /**
@@ -47,7 +47,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = null;
+        List<GeneratedObject> result = walker.generateAndRestart(profile, tree,(p, t)->underlyingWalker.generateData(p, t)).collect(Collectors.toList());
 
         verify(underlyingWalker, times(2)).generateData(profile, tree);
         Assert.assertThat(
@@ -63,7 +63,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<GeneratedObject> result = null;
+        List<GeneratedObject> result = walker.generateAndRestart(profile, tree,(p, t)->underlyingWalker.generateData(p, t)).collect(Collectors.toList());
 
         verify(underlyingWalker, times(3)).generateData(profile, tree);
         Assert.assertThat(
@@ -77,7 +77,7 @@ class RandomReductiveDataGeneratorTests {
             Stream.empty()
         );
 
-        List<GeneratedObject> result = null;
+        List<GeneratedObject> result = walker.generateAndRestart(profile, tree,(p, t)->underlyingWalker.generateData(p, t)).collect(Collectors.toList());
 
         verify(underlyingWalker, times(1)).generateData(profile, tree);
         Assert.assertThat(
