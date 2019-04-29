@@ -16,6 +16,9 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
 
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+
 class DateTimeRestrictionsMergerTests {
 
     private DateTimeRestrictionsMerger merger;
@@ -293,7 +296,112 @@ class DateTimeRestrictionsMergerTests {
                 .extracting(DateTimeRestrictions::getGranularity)
                 .isEqualTo(Timescale.HOURS);
             softly.assertThat(restrictions.min)
-                .isEqualTo(new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), false));
+                .isEqualTo(new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
         }
+    }
+
+    @Test
+    void merge_minOfDifferentGranularity_shouldReturnMostCoarseAndBeInclusiveWhenWeWouldOtherwiseLoseAValidResult() {
+        // edge case example
+        // constraint later than 00:00:00 (exclusive / inclusive = false, granularity = HOURS)
+        // constraint later than 00:00:01 (exclusive / inclusive = false, granularity =  SECONDS)
+        //
+        //Should Return: equal to or later than 01:00:00 (inclusive, granularity = HOURS / inclusive true)
+        // if inclusive were false, we would exclude 01:00:00. as 01:00:00 meets both original constraints, it should be included
+
+        OffsetDateTime earlyTime = REFERENCE_TIME;
+        OffsetDateTime laterTime = REFERENCE_TIME.plusSeconds(1);
+
+        DateTimeRestrictions.DateTimeLimit lowerDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(earlyTime, false);
+        DateTimeRestrictions.DateTimeLimit upperDateTimeLimit = new DateTimeRestrictions.DateTimeLimit(laterTime, false);
+
+        DateTimeRestrictions early = new DateTimeRestrictions(Timescale.HOURS) {{
+            min = lowerDateTimeLimit;
+        }};
+        DateTimeRestrictions later = new DateTimeRestrictions(Timescale.SECONDS) {{
+            min = upperDateTimeLimit;
+        }};
+
+        MergeResult<DateTimeRestrictions> result = merger.merge(early, later);
+        DateTimeRestrictions restrictions = result.restrictions;
+
+        // assert that we get the correct level of granularity
+        try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+            softly.assertThat(restrictions)
+                .isNotNull()
+                .extracting(DateTimeRestrictions::getGranularity)
+                .isEqualTo(Timescale.HOURS);
+
+            // assert that we return an inclusive restriction for this edge case.
+            softly.assertThat(restrictions.min)
+                .isEqualTo(new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
+        }
+    }
+
+
+    @Test
+    void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
+        // ARRANGE
+        DateTimeRestrictions left = new DateTimeRestrictions(Timescale.HOURS) {{
+            min = new DateTimeLimit(REFERENCE_TIME, true);
+        }};
+
+        DateTimeRestrictions right = new DateTimeRestrictions(Timescale.MILLIS) {{
+            min = new DateTimeLimit(REFERENCE_TIME.plusSeconds(1), false);
+        }};
+
+        // ACT
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        // ASSERT
+        DateTimeRestrictions expecteddt = new DateTimeRestrictions(Timescale.HOURS);
+        expecteddt.min = new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true);
+        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+
+        assertThat(result, sameBeanAs(expected));
+    }
+
+    @Test
+    void merge_inclusiveOnRightIsPassedIn_shouldReturnInclusive() {
+        // ARRANGE
+        DateTimeRestrictions left = new DateTimeRestrictions(Timescale.HOURS) {{
+            min = new DateTimeLimit(REFERENCE_TIME, false);
+        }};
+
+        DateTimeRestrictions right = new DateTimeRestrictions(Timescale.MILLIS) {{
+            min = new DateTimeLimit(REFERENCE_TIME.plusSeconds(1), true);
+        }};
+
+        // ACT
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        // ASSERT
+        DateTimeRestrictions expecteddt = new DateTimeRestrictions(Timescale.HOURS);
+        expecteddt.min = new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true);
+        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+
+        assertThat(result, sameBeanAs(expected));
+    }
+
+    @Test
+    void merge_notInclusivePassedIn_shouldReturnNotInclusive() {
+        // ARRANGE
+        DateTimeRestrictions left = new DateTimeRestrictions(Timescale.HOURS) {{
+            min = new DateTimeLimit(REFERENCE_TIME, false);
+        }};
+
+        DateTimeRestrictions right = new DateTimeRestrictions(Timescale.MILLIS) {{
+            min = new DateTimeLimit(REFERENCE_TIME.plusHours(1), false);
+        }};
+
+        // ACT
+        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+
+        // ASSERT
+        DateTimeRestrictions expecteddt = new DateTimeRestrictions(Timescale.HOURS);
+        expecteddt.min = new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), false);
+        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+
+        assertThat(result, sameBeanAs(expected));
     }
 }
