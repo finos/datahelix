@@ -59,7 +59,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     public StringRestrictions intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
             TextualRestrictions textualRestrictions = (TextualRestrictions) other;
-            if (!wouldAffectValuesProduced(textualRestrictions)){
+            if (getImpactOnValueProduction(textualRestrictions) == Impact.NONE){
                 return this; //no impact on values produced by this type
             }
 
@@ -89,21 +89,41 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
      * @param textualRestrictions The other restrictions type to check
      * @return
      */
-    private boolean wouldAffectValuesProduced(TextualRestrictions textualRestrictions) {
+    private Impact getImpactOnValueProduction(TextualRestrictions textualRestrictions) {
         boolean hasRegexRestrictions = !textualRestrictions.containingRegex.isEmpty()
             || !textualRestrictions.matchingRegex.isEmpty()
             || !textualRestrictions.notMatchingRegex.isEmpty()
             || !textualRestrictions.notContainingRegex.isEmpty();
 
         if (hasRegexRestrictions){
-            return true; //because we dont know they wouldn't affect the values - see #487
+            return Impact.POTENTIAL; //because we dont know they wouldn't affect the values - see #487
         }
 
         int maxLength = textualRestrictions.maxLength != null ? textualRestrictions.maxLength : Integer.MAX_VALUE;
         int minLength = textualRestrictions.minLength != null ? textualRestrictions.minLength : 0;
         int codeLength = getCodeLength(type);
 
-        return codeLength < minLength || codeLength > maxLength || textualRestrictions.excludedLengths.contains(codeLength);
+        return (codeLength < minLength || codeLength > maxLength || textualRestrictions.excludedLengths.contains(codeLength))
+            ? Impact.CONFIRMED
+            : Impact.NONE;
+    }
+
+    private enum Impact
+    {
+        /**
+         * There is the potential for some impact, but it cannot be confirmed or denied
+         */
+        POTENTIAL,
+
+        /**
+         * There is no impact on the production of values
+         */
+        NONE,
+
+        /**
+         * There is a confirmed impact on the generation of values
+         */
+        CONFIRMED
     }
 
     private int getCodeLength(StandardConstraintTypes type) {
