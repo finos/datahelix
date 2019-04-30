@@ -48,13 +48,13 @@ public class TextualRestrictions implements StringRestrictions {
      * Produce a new string restrictions instance that represents the intersection of this and the other given restrictions
      * See MatchesStandardStringRestrictions.intersect() for more details on how the `aValid` operator can be merged
      */
-    public StringRestrictions intersect(StringRestrictions other){
+    public MergeResult<StringRestrictions> intersect(StringRestrictions other){
         if (other == null){
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
         if (other instanceof NoStringsPossibleStringRestrictions){
-            return other;
+            return new MergeResult<>(other);
         }
 
         if (other instanceof MatchesStandardStringRestrictions){
@@ -67,7 +67,7 @@ public class TextualRestrictions implements StringRestrictions {
 
         TextualRestrictions textualRestrictions = (TextualRestrictions) other;
 
-        return new TextualRestrictions(
+        TextualRestrictions merged = new TextualRestrictions(
             mergeMinLengths(textualRestrictions.minLength),
             mergeMaxLengths(textualRestrictions.maxLength),
             SetUtils.union(matchingRegex, textualRestrictions.matchingRegex),
@@ -76,6 +76,10 @@ public class TextualRestrictions implements StringRestrictions {
             SetUtils.union(notMatchingRegex, textualRestrictions.notMatchingRegex),
             SetUtils.union(notContainingRegex, textualRestrictions.notContainingRegex)
         );
+
+        return merged.isContradictory()
+            ? MergeResult.UNSUCCESSFUL
+            : new MergeResult<>(merged);
     }
 
     /**
@@ -83,8 +87,7 @@ public class TextualRestrictions implements StringRestrictions {
      *
      * @return Whether this restrictions type is contradictory
      */
-    @Override
-    public boolean isContradictory() {
+    private boolean isContradictory() {
         if (matchingRegex.isEmpty() && containingRegex.isEmpty()){
             return false; //no regular expressions exist that can contradict
         }
@@ -207,8 +210,6 @@ public class TextualRestrictions implements StringRestrictions {
 
     /**
      * Get a stream of StringGenerators that represent each regex restriction in this type
-     *
-     * @return
      */
     private Stream<StringGenerator> getPatternConstraints() {
         return concatStreams(

@@ -56,28 +56,36 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
      * @return Either this instance (success) or a NoStringsPossibleStringRestrictions if the other restrictions could not be merged or intersected
      */
     @Override
-    public StringRestrictions intersect(StringRestrictions other) {
+    public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
             TextualRestrictions textualRestrictions = (TextualRestrictions) other;
             if (getImpactOnValueProduction(textualRestrictions) == Impact.NONE){
-                return this; //no impact on values produced by this type
+                return new MergeResult<>(this); //no impact on values produced by this type
             }
 
-            return new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints");
+            //must not be reported as contradictory, yet at least
+            return new MergeResult<>(
+                new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints"));
         }
 
         if (!(other instanceof MatchesStandardStringRestrictions)){
-            return new NoStringsPossibleStringRestrictions(String.format("Intersection of %s and aValid constraints", other.getClass().getName()));
+            return new MergeResult<>(
+                new NoStringsPossibleStringRestrictions(
+                    String.format("Intersection of %s and aValid constraints", other.getClass().getName())));
         }
 
         MatchesStandardStringRestrictions that = (MatchesStandardStringRestrictions) other;
         if (that.type != type) {
-            return new NoStringsPossibleStringRestrictions(String.format("Intersection of aValid %s and aValid %s)", type, that.type));
+            return new MergeResult<>(
+                new NoStringsPossibleStringRestrictions(
+                    String.format("Intersection of aValid %s and aValid %s)", type, that.type)));
         }
 
         return that.negated == negated
-            ? this
-            : new NoStringsPossibleStringRestrictions(String.format("Intersection of aValid %s and not(aValid %s)", type, type));
+            ? new MergeResult<>(this)
+            : new MergeResult<>(
+                new NoStringsPossibleStringRestrictions(
+                    String.format("Intersection of aValid %s and not(aValid %s)", type, type)));
     }
 
     /**
@@ -87,7 +95,6 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
      * Check if any length restrictions exist that would prevent strings of this length being produced.
      *
      * @param textualRestrictions The other restrictions type to check
-     * @return
      */
     private Impact getImpactOnValueProduction(TextualRestrictions textualRestrictions) {
         boolean hasRegexRestrictions = !textualRestrictions.containingRegex.isEmpty()
@@ -132,10 +139,5 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         }
 
         throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
-    }
-
-    @Override
-    public boolean isContradictory() {
-        return false;
     }
 }

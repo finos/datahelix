@@ -52,8 +52,7 @@ class StringRestrictionsMergerTests {
         StringRestrictions right = mock(StringRestrictions.class);
         StringRestrictions merged = mock(StringRestrictions.class);
         StringRestrictionsMerger merger = new StringRestrictionsMerger();
-        when(left.intersect(right)).thenReturn(merged);
-        when(merged.isContradictory()).thenReturn(false);
+        when(left.intersect(right)).thenReturn(new MergeResult<>(merged));
 
         MergeResult<StringRestrictions> result = merger.merge(left, right);
 
@@ -65,14 +64,12 @@ class StringRestrictionsMergerTests {
     public void merge_withBothNotNullAndContradictory_shouldReturnFailWithNullRestrictions(){
         StringRestrictions left = mock(StringRestrictions.class);
         StringRestrictions right = mock(StringRestrictions.class);
-        StringRestrictions merged = mock(StringRestrictions.class);
+        MergeResult<StringRestrictions> merged = MergeResult.UNSUCCESSFUL;
         StringRestrictionsMerger merger = new StringRestrictionsMerger();
         when(left.intersect(right)).thenReturn(merged);
-        when(merged.isContradictory()).thenReturn(true);
 
         MergeResult<StringRestrictions> result = merger.merge(left, right);
 
-        Assert.assertThat(result.successful, is(false));
-        Assert.assertThat(result.restrictions, is(nullValue()));
+        Assert.assertThat(result, is(sameInstance(merged)));
     }
 }

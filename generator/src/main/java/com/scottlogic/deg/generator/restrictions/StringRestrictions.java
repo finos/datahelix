@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 
 public interface StringRestrictions {
-    StringRestrictions intersect(StringRestrictions other);
+    MergeResult<StringRestrictions> intersect(StringRestrictions other);
 
     static boolean isString(Object o) {
         return o instanceof String;
@@ -16,8 +16,6 @@ public interface StringRestrictions {
     }
 
     StringGenerator createGenerator();
-
-    boolean isContradictory();
 }
 
 

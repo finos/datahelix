@@ -14,8 +14,8 @@ public class NoStringsPossibleStringRestrictions implements StringRestrictions {
     }
 
     @Override
-    public StringRestrictions intersect(StringRestrictions other) {
-        return this;
+    public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+        return new MergeResult<>(this);
     }
 
     public String toString(){
@@ -30,10 +30,5 @@ public class NoStringsPossibleStringRestrictions implements StringRestrictions {
     @Override
     public StringGenerator createGenerator() {
         return new NoStringsStringGenerator(reason);
-    }
-
-    @Override
-    public boolean isContradictory() {
-        return false;
     }
 }

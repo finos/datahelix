@@ -1,8 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
@@ -574,13 +572,8 @@ class FieldSpecTests {
         }
 
         @Override
-        public StringRestrictions intersect(StringRestrictions other) {
+        public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
             throw new NotImplementedException();
-        }
-
-        @Override
-        public boolean isContradictory() {
-            return false;
         }
 
         @Override
