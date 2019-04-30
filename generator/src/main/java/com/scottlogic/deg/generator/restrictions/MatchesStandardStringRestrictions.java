@@ -127,11 +127,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     }
 
     private int getCodeLength(StandardConstraintTypes type) {
-        switch (type){
-            case ISIN:
-                return IsinStringGenerator.ISIN_LENGTH;
-            case SEDOL:
-                return SedolStringGenerator.SEDOL_LENGTH;
+        if (type == StandardConstraintTypes.ISIN) {
+            return IsinStringGenerator.ISIN_LENGTH;
         }
 
         throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
