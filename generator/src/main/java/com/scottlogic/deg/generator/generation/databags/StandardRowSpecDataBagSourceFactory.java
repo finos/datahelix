@@ -13,14 +13,17 @@ import java.util.stream.Stream;
 
 public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSourceFactory {
     private final FieldSpecValueGenerator generator;
+    private final GenerationConfig config;
 
     @Inject
     public StandardRowSpecDataBagSourceFactory (
-        FieldSpecValueGenerator generator) {
+        FieldSpecValueGenerator generator,
+        GenerationConfig config) {
         this.generator = generator;
+        this.config = config;
     }
 
-    public DataBagSource createDataBagSource(RowSpec rowSpec){
+    public Stream<DataBag> createDataBagSource(RowSpec rowSpec){
 
         List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
 
@@ -31,7 +34,7 @@ public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSource
                 new StreamDataBagSource(generator.generate(field, fieldSpec)));
         }
 
-        return new MultiplexingDataBagSource(fieldDataBagSources.stream());
+        return new MultiplexingDataBagSource(fieldDataBagSources.stream()).generate(config);
     }
 
     class StreamDataBagSource implements DataBagSource{
