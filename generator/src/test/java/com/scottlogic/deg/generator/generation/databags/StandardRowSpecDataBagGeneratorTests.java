@@ -6,17 +6,15 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.*;
 
-class StandardRowSpecDataBagSourceFactoryTests {
+class StandardRowSpecDataBagGeneratorTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
@@ -27,9 +25,9 @@ class StandardRowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory, mock(GenerationConfig.class));
+        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(generatorFactory, mock(GenerationConfig.class));
 
-        factory.createDataBagSource(rowSpec);
+        factory.createDataBags(rowSpec);
 
         verify(generatorFactory, times(1)).generate(field, fieldSpec);
     }

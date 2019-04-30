@@ -11,19 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSourceFactory {
+public class StandardRowSpecDataBagGenerator implements RowSpecDataBagGenerator {
     private final FieldSpecValueGenerator generator;
     private final GenerationConfig config;
 
     @Inject
-    public StandardRowSpecDataBagSourceFactory (
+    public StandardRowSpecDataBagGenerator(
         FieldSpecValueGenerator generator,
         GenerationConfig config) {
         this.generator = generator;
         this.config = config;
     }
 
-    public Stream<DataBag> createDataBagSource(RowSpec rowSpec){
+    public Stream<DataBag> createDataBags(RowSpec rowSpec){
         List<Stream<DataBag>> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
 
         for (Field field: rowSpec.getFields()) {

@@ -5,18 +5,18 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.databags.ReductiveRandomRowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
-import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagGenerator;
 
-public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecDataBagSourceFactory> {
+public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecDataBagGenerator> {
     private final GenerationConfigSource configSource;
-    private final StandardRowSpecDataBagSourceFactory normalFactory;
+    private final StandardRowSpecDataBagGenerator normalFactory;
     private final ReductiveRandomRowSpecDataBagSourceFactory reductiveRandomFactory;
 
     @Inject
     public RowSpecDataBagSourceFactoryProvider(
         GenerationConfigSource configSource,
-        StandardRowSpecDataBagSourceFactory normalFactory,
+        StandardRowSpecDataBagGenerator normalFactory,
         ReductiveRandomRowSpecDataBagSourceFactory reductiveRandomFactory) {
         this.configSource = configSource;
         this.normalFactory = normalFactory;
@@ -24,7 +24,7 @@ public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecData
     }
 
     @Override
-    public RowSpecDataBagSourceFactory get() {
+    public RowSpecDataBagGenerator get() {
         boolean isReductive = configSource.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE;
         boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
 

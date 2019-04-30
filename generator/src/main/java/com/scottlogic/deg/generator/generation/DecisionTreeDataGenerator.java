@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
-    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
+    private final RowSpecDataBagGenerator dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final FixFieldStrategyFactory walkerStrategyFactory;
@@ -31,7 +31,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
-        RowSpecDataBagSourceFactory dataBagSourceFactory,
+        RowSpecDataBagGenerator dataBagSourceFactory,
         FixFieldStrategyFactory walkerStrategyFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
@@ -65,7 +65,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
         Stream<Stream<DataBag>> dataBagSources = treeWalker.walk(tree, fixFieldStrategy)
-            .map(dataBagSourceFactory::createDataBagSource);
+            .map(dataBagSourceFactory::createDataBags);
 
         return FlatMappingSpliterator.flatMap(
             dataBagSources,
