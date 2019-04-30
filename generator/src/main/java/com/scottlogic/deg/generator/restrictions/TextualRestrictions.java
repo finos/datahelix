@@ -49,12 +49,20 @@ public class TextualRestrictions implements StringRestrictions {
      * See MatchesStandardStringRestrictions.intersect() for more details on how the `aValid` operator can be merged
      */
     public StringRestrictions intersect(StringRestrictions other){
+        if (other == null){
+            throw new IllegalArgumentException("Other StringRestrictions must not be null");
+        }
+
         if (other instanceof NoStringsPossibleStringRestrictions){
             return other;
         }
 
         if (other instanceof MatchesStandardStringRestrictions){
             return other.intersect(this);
+        }
+
+        if (!(other instanceof TextualRestrictions)){
+            throw new UnsupportedOperationException("Unable to produce intersection of TextualRestrictions and " + other.getClass().getName());
         }
 
         TextualRestrictions textualRestrictions = (TextualRestrictions) other;
