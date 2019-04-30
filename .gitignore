@@ -21,3 +21,4 @@ schemas/out/
 generator/build/
 generator/out/
 schemas/build/
+gradle/

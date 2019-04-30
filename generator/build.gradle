@@ -26,6 +26,11 @@ dependencies {
     testCompile 'com.shazam:shazamcrest:0.11'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
+}
+
+test {
+    useJUnitPlatform()
 }
 
 description = 'DataHelix Generator'
@@ -38,7 +43,6 @@ task release(type: Jar) {
 			'Main-Class': 'com.scottlogic.deg.generator.App'
 	}
 		
-	archiveFileName = 'generator.jar'
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 	with jar
 }

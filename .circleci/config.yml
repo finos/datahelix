@@ -5,7 +5,7 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-      - run: mvn clean test
+      - run: gradle clean test
       - store_test_results:
           path: schemas/target/surefire-reports
       - store_test_results:
@@ -15,3 +15,9 @@ workflows:
   build_and_test: 
     jobs:
       - build
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only: master
