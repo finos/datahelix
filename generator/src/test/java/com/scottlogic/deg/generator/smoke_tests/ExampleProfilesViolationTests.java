@@ -119,7 +119,8 @@ class ExampleProfilesViolationTests {
                             new FieldSpecValueGenerator(
                                 config,
                                 new StandardFieldValueSourceEvaluator(),
-                                new JavaUtilRandomNumberGenerator())),
+                                new JavaUtilRandomNumberGenerator()),
+                            config),
                         new FixFieldStrategyFactory(new FieldDependencyAnalyser())),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());

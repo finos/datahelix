@@ -24,30 +24,15 @@ public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSource
     }
 
     public Stream<DataBag> createDataBagSource(RowSpec rowSpec){
-
-        List<StreamDataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
+        List<Stream<DataBag>> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-            fieldDataBagSources.add(
-                new StreamDataBagSource(generator.generate(field, fieldSpec)));
+            fieldDataBagSources.add(generator.generate(field, fieldSpec));
         }
 
-        return config.getCombinationStrategy().permute(
-            fieldDataBagSources.stream()
-                .map(StreamDataBagSource::generate));
-    }
-
-    class StreamDataBagSource {
-        private final Stream<DataBag> dataBags;
-
-        StreamDataBagSource(Stream<DataBag> dataBags) {
-            this.dataBags = dataBags;
-        }
-
-        public Stream<DataBag> generate() {
-            return dataBags;
-        }
+        return config.getCombinationStrategy()
+            .permute(fieldDataBagSources.stream());
     }
 }
