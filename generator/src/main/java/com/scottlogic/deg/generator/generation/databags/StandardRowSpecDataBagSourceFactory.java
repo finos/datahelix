@@ -25,7 +25,7 @@ public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSource
 
     public Stream<DataBag> createDataBagSource(RowSpec rowSpec){
 
-        List<DataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
+        List<StreamDataBagSource> fieldDataBagSources = new ArrayList<>(rowSpec.getFields().size());
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
@@ -34,18 +34,19 @@ public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSource
                 new StreamDataBagSource(generator.generate(field, fieldSpec)));
         }
 
-        return new MultiplexingDataBagSource(fieldDataBagSources.stream()).generate(config);
+        return config.getCombinationStrategy().permute(
+            fieldDataBagSources.stream()
+                .map(StreamDataBagSource::generate));
     }
 
-    class StreamDataBagSource implements DataBagSource{
+    class StreamDataBagSource {
         private final Stream<DataBag> dataBags;
 
         StreamDataBagSource(Stream<DataBag> dataBags) {
             this.dataBags = dataBags;
         }
 
-        @Override
-        public Stream<DataBag> generate(GenerationConfig generationConfig) {
+        public Stream<DataBag> generate() {
             return dataBags;
         }
     }

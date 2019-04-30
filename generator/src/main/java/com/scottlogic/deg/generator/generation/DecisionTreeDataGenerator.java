@@ -65,8 +65,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
         Stream<Stream<DataBag>> dataBagSources = treeWalker.walk(tree, fixFieldStrategy)
-            .map(dataBagSourceFactory::createDataBagSource)
-            .map(s->s.generate(config));
+            .map(dataBagSourceFactory::createDataBagSource);
 
         return FlatMappingSpliterator.flatMap(
             dataBagSources,

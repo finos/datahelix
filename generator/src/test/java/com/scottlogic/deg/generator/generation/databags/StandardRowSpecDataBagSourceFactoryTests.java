@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -21,25 +22,12 @@ class StandardRowSpecDataBagSourceFactoryTests {
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
 
     @Test
-    void shouldCreateMultiplexingDataBagSourceForRowSpec() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-        Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
-        RowSpec rowSpec = new RowSpec(fields, map);
-        FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
-
-        DataBagSource result = factory.createDataBagSource(rowSpec);
-
-        Assert.assertThat(result, instanceOf(MultiplexingDataBagSource.class));
-    }
-
-    @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
         FieldSpec fieldSpec = FieldSpec.Empty;
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory, mock(GenerationConfig.class));
 
         factory.createDataBagSource(rowSpec);
 
