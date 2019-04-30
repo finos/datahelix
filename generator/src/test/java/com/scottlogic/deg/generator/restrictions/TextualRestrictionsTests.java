@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
-class StringRestrictionsTests {
+class TextualRestrictionsTests {
     @Test
     void createGenerator_firstCall_shouldCreateAGenerator() {
         StringRestrictions restrictions = ofLength(10, false);
