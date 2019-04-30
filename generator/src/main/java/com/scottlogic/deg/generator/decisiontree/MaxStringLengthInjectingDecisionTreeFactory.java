@@ -29,18 +29,9 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
     }
 
     @Override
-    public DecisionTreeCollection analyse(Profile profile) {
-        DecisionTreeCollection collection = underlyingFactory.analyse(profile);
-        return new DecisionTreeCollection(
-            collection.getFields(),
-            collection.getDecisionTrees()
-                .stream()
-                .map(this::injectConstraints)
-                .collect(Collectors.toList())
-        );
-    }
+    public DecisionTree analyse(Profile profile) {
+        DecisionTree tree = underlyingFactory.analyse(profile);
 
-    private DecisionTree injectConstraints(DecisionTree tree) {
         Set<RuleInformation> rules = Collections.singleton(createRule());
 
         return new DecisionTree(

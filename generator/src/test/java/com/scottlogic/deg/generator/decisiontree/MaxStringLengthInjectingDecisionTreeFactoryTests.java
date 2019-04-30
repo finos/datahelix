@@ -26,32 +26,23 @@ class MaxStringLengthInjectingDecisionTreeFactoryTests {
             1000);
         Profile profile = mock(Profile.class);
         ProfileFields fields = new ProfileFields(Collections.singletonList(new Field("field 1")));
-        DecisionTreeCollection treeCollection = new DecisionTreeCollection(
+        DecisionTree underlyingTree = new DecisionTree(
+            new TreeConstraintNode(Collections.emptySet(), Collections.emptySet()),
             fields,
-            Collections.singletonList(
-                new DecisionTree(
-                    new TreeConstraintNode(Collections.emptySet(), Collections.emptySet()),
-                    fields,
-                    "description"
-                )
-            )
+            "description"
         );
-        when(underlyingFactory.analyse(profile)).thenReturn(treeCollection);
+        when(underlyingFactory.analyse(profile)).thenReturn(underlyingTree);
 
-        DecisionTreeCollection result = factory.analyse(profile);
+        DecisionTree result = factory.analyse(profile);
 
-        result.getDecisionTrees().forEach(
-            tree -> {
-                Collection<AtomicConstraint> atomicConstraints = tree.getRootNode().getAtomicConstraints();
-                Assert.assertThat(atomicConstraints, hasItem(instanceOf(IsStringShorterThanConstraint.class)));
+        Collection<AtomicConstraint> atomicConstraints = result.getRootNode().getAtomicConstraints();
+        Assert.assertThat(atomicConstraints, hasItem(instanceOf(IsStringShorterThanConstraint.class)));
 
-                IsStringShorterThanConstraint shorterThan = (IsStringShorterThanConstraint)atomicConstraints
-                    .stream()
-                    .filter(ac -> ac instanceof IsStringShorterThanConstraint)
-                    .iterator().next();
+        IsStringShorterThanConstraint shorterThan = (IsStringShorterThanConstraint)atomicConstraints
+            .stream()
+            .filter(ac -> ac instanceof IsStringShorterThanConstraint)
+            .iterator().next();
 
-                Assert.assertThat(shorterThan.referenceValue, equalTo(1001));
-            }
-        );
+        Assert.assertThat(shorterThan.referenceValue, equalTo(1001));
     }
 }

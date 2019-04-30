@@ -35,20 +35,11 @@ public class DecisionTreeToRowSpecsTests {
     );
     private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
-    private ConstraintNode reduceRules(DecisionTreeCollection profile) {
-        return ConstraintNode.merge(
-            profile.getDecisionTrees()
-                .stream()
-                .map(DecisionTree::getRootNode)
-                .iterator()
-        );
-    }
-
     @Test
     public void test() {
-        final DecisionTreeCollection dTree = dTreeGenerator.analyse(makeProfile());
+        final DecisionTree dTree = dTreeGenerator.analyse(makeProfile());
         final List<RowSpec> rowSpecs = dTreeWalker
-            .walk(new DecisionTree(reduceRules(dTree), dTree.getFields(), "DecisionTreeToRowSpecsTests"))
+            .walk(dTree)
             .collect(Collectors.toList());
         Assert.assertThat(rowSpecs, Is.is(IsNull.notNullValue()));
     }

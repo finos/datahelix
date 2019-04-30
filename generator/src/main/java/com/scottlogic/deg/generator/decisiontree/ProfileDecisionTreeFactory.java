@@ -70,13 +70,14 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     @Override
-    public DecisionTreeCollection analyse(Profile profile) {
+    public DecisionTree analyse(Profile profile) {
         return new DecisionTreeCollection(
             profile.fields,
             profile.rules.stream()
                 .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
                 .map(decisionTreeSimplifier::simplify)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()))
+            .getMergedTree();
     }
 
     private ConstraintNode convertRule(Rule rule) {
