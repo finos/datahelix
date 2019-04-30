@@ -12,10 +12,10 @@ import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstrain
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
+import com.scottlogic.deg.generator.utils.Pair;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -1050,6 +1050,8 @@ public class ProfileViolationTests {
             .stream()
             .map(Pair::getKey)
             .collect(Collectors.toList());
+
+        System.out.println(System.getProperty("java.version"));
 
         Profile inputProfile = new Profile(fields, rules, description);
         List<Profile> violatedProfiles = new ArrayList<>();
