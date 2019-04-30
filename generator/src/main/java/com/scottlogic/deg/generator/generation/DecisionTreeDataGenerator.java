@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -12,6 +13,7 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,11 +64,13 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
-        Stream<DataBagSource> dataBagSources = treeWalker.walk(tree, fixFieldStrategy)
-            .map(dataBagSourceFactory::createDataBagSource);
+        Stream<Stream<DataBag>> dataBagSources = treeWalker.walk(tree, fixFieldStrategy)
+            .map(dataBagSourceFactory::createDataBagSource)
+            .map(s->s.generate(config));
 
-        return new ConcatenatingDataBagSource(dataBagSources)
-            .generate(config);
+        return FlatMappingSpliterator.flatMap(
+            dataBagSources,
+            Function.identity());
     }
 
     private GeneratedObject convertToGeneratedObject(Profile profile, DataBag dataBag) {
