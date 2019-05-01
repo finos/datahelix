@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
@@ -197,36 +196,34 @@ public class FieldSpec {
     }
 
     /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
-    Predicate<Object> getValueValidityPredicate() {
-        List<Predicate<Object>> predicates = new ArrayList<>();
-
+    public boolean permits(@NotNull Object value) {
         if (typeRestrictions != null) {
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-                predicates.add(x -> !isNumeric(x));
+                if (isNumeric(value)) return false;
             }
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-                predicates.add(x -> !isString(x));
+                if (isString(value)) return false;
             }
 
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
-                predicates.add(x -> !isDateTime(x));
+                if (isDateTime(value)) return false;
             }
         }
 
-        if (stringRestrictions != null) {
-            predicates.add(x -> !isString(x) || stringRestrictions.match(x));
-        }
-
         if (numericRestrictions != null) {
-            predicates.add(x -> !isNumeric(x) || numericRestrictions.match(x));
+            if (isNumeric(value) && numericRestrictions.match(value)) return false;
         }
 
         if (dateTimeRestrictions != null) {
-            predicates.add(x -> !isDateTime(x) || dateTimeRestrictions.match(x));
+            if (isDateTime(value) && dateTimeRestrictions.match(value)) return false;
         }
 
-        return x -> predicates.stream().allMatch(p -> p.test(x));
+        if (stringRestrictions != null) {
+            if (isString(value) && stringRestrictions.match(value)) return false;
+        }
+
+        return true;
     }
 
     public int hashCode(){
