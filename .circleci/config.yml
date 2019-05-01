@@ -16,6 +16,10 @@ jobs:
     steps:
       - checkout
       - run: gradle :schemas:release :generator:release
+      - store-artifacts:
+          path: schemas/build/libs
+      - store-artifacts:
+          path: generator/build/libs
 workflows:
   version: 2.1
   build_and_test: 
