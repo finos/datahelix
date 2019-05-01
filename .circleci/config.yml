@@ -5,11 +5,17 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-      - run: gradle clean test
+      - run: gradle :schemas:cleanTest :schemas:test :generator:cleanTest :generator:test
       - store_test_results:
-          path: schemas/target/surefire-reports
+          path: schemas/build/reports/tests/test
       - store_test_results:
-          path: generator/target/surefire-reports
+          path: generator/build/reports/tests/test
+  release:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - run: gradle :schemas:release :generator:release
 workflows:
   version: 2.1
   build_and_test: 
