@@ -39,8 +39,9 @@ public class DateTimeRestrictionsMerger {
                                                          Timescale granularity,
                                                          DateTimeRestrictions.DateTimeLimit limitHolder) {
         if (limitHolder == null) {
-            return limitHolder;
+            return null;
         }
+
         OffsetDateTime limit = limitHolder.getLimit();
         boolean inclusive = limitHolder.isInclusive();
         OffsetDateTime adjusted = granularity.getGranularityFunction().apply(limit);
@@ -53,8 +54,6 @@ public class DateTimeRestrictionsMerger {
                 }
             case MAX:
                 return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
-
-
             default:
                 throw new UnsupportedOperationException();
         }
@@ -66,8 +65,6 @@ public class DateTimeRestrictionsMerger {
         DateTimeRestrictions.DateTimeLimit right,
         Timescale granularity) {
 
-        boolean inclusiveOverride = false;
-
         if (left == null && right == null) {
             return null;
         }
@@ -78,35 +75,36 @@ public class DateTimeRestrictionsMerger {
             return left;
         }
 
-        // if both exclusive
-        if (!(left.isInclusive() && right.isInclusive())){
+        boolean leftIsInclusive = left.isInclusive();
+        boolean rightIsInclusive = right.isInclusive();
+        boolean inclusiveOverride = false;
 
-            // if both datetimes sre the same when granularity applied
-            if(granularity.getGranularityFunction().apply(left.getLimit()).equals(granularity.getGranularityFunction().apply(right.getLimit()))){
+        // if both exclusive
+        if (!leftIsInclusive && !rightIsInclusive){
+            // if both datetime's are the same after granularity is applied
+            if(granularity.getGranularityFunction().apply(left.getLimit())
+                .equals(granularity.getGranularityFunction().apply(right.getLimit()))){
                 inclusiveOverride = true;
             }
         }
 
         // if left and right are identical, return new object with same values
         if (left.getLimit().compareTo(right.getLimit()) == 0)
-            return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), left.isInclusive() && right.isInclusive());
+            return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), leftIsInclusive && rightIsInclusive);
+
+        inclusiveOverride = inclusiveOverride || leftIsInclusive || rightIsInclusive;
 
         switch (mergeLimit) {
             case MIN:
                 if (left.getLimit().compareTo(right.getLimit()) > 0){
-                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), (left.isInclusive() || right.isInclusive()) || inclusiveOverride);
+                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
-                else
-                {
-                    return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), (left.isInclusive() || right.isInclusive() ) || inclusiveOverride);
-                }
+                return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
             case MAX:
                 if (left.getLimit().compareTo(right.getLimit()) < 0){
-                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), (left.isInclusive() || right.isInclusive() ) || inclusiveOverride);
+                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
-                  else{
-                    return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), (left.isInclusive() || right.isInclusive()) || inclusiveOverride);
-                }
+                return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
             default:
                 throw new UnsupportedOperationException();
         }
