@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-class StandardRowSpecDataBagGeneratorTests {
+class StandardRowSpecDataBagSourceFactoryTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
@@ -28,7 +28,7 @@ class StandardRowSpecDataBagGeneratorTests {
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
         GenerationConfig config = mock(GenerationConfig.class);
         when(config.getCombinationStrategy()).thenReturn(mock(CombinationStrategy.class));
-        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(generatorFactory, config);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory, config);
 
         factory.createDataBags(rowSpec);
 

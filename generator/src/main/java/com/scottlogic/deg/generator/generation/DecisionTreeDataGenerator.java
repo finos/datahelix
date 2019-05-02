@@ -14,14 +14,13 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
-    private final RowSpecDataBagGenerator dataBagSourceFactory;
+    private final RowSpecDataBagSourceFactory dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final FixFieldStrategyFactory walkerStrategyFactory;
@@ -32,7 +31,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
-        RowSpecDataBagGenerator dataBagSourceFactory,
+        RowSpecDataBagSourceFactory dataBagSourceFactory,
         FixFieldStrategyFactory walkerStrategyFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
@@ -57,7 +56,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(tree -> generateForPartition(profile, tree, generationConfig));
 
         return partitionCombiner.permute(partitionedDataBags)
-            .map(dataBag -> convertToGeneratedObject(profile, dataBag))
+            .map(dataBag -> convertToGeneratedObject(dataBag, profile))
             .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
             .peek(monitor::rowEmitted);
     }
@@ -65,14 +64,14 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
-        Stream<RowSpec> partitionedRowSpecs = treeWalker.walk(tree, fixFieldStrategy);
+        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree, fixFieldStrategy);
 
         return FlatMappingSpliterator.flatMap(
-            partitionedRowSpecs,
+            rowSpecsForPartition,
             dataBagSourceFactory::createDataBags);
     }
 
-    private GeneratedObject convertToGeneratedObject(Profile profile, DataBag dataBag) {
+    private GeneratedObject convertToGeneratedObject(DataBag dataBag, Profile profile) {
         return new GeneratedObject(
             profile.fields.stream()
                 .map(dataBag::getValueAndFormat)

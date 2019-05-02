@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.stream.Stream;
 
-public class ReductiveRandomRowSpecDataBagSourceFactory implements RowSpecDataBagGenerator {
-    private final StandardRowSpecDataBagGenerator underlyingFactory;
+public class ReductiveRandomRowSpecDataBagSourceFactory implements RowSpecDataBagSourceFactory {
+    private final StandardRowSpecDataBagSourceFactory underlyingFactory;
 
     @Inject
-    public ReductiveRandomRowSpecDataBagSourceFactory(StandardRowSpecDataBagGenerator underlyingFactory) {
+    public ReductiveRandomRowSpecDataBagSourceFactory(StandardRowSpecDataBagSourceFactory underlyingFactory) {
         this.underlyingFactory = underlyingFactory;
     }
 
