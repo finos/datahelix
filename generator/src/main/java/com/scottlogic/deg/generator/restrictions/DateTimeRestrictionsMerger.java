@@ -49,9 +49,8 @@ public class DateTimeRestrictionsMerger {
             case MIN:
                 if (adjusted.equals(limit)) {
                     return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
-                } else {
-                    return new DateTimeRestrictions.DateTimeLimit(granularity.getNext().apply(adjusted), inclusive);
                 }
+                return new DateTimeRestrictions.DateTimeLimit(granularity.getNext().apply(adjusted), inclusive);
             case MAX:
                 return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
             default:
