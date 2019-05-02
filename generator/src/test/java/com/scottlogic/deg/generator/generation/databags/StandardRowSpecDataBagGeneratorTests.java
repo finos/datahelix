@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -25,7 +26,9 @@ class StandardRowSpecDataBagGeneratorTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(generatorFactory, mock(GenerationConfig.class));
+        GenerationConfig config = mock(GenerationConfig.class);
+        when(config.getCombinationStrategy()).thenReturn(mock(CombinationStrategy.class));
+        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(generatorFactory, config);
 
         factory.createDataBags(rowSpec);
 
