@@ -64,6 +64,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint, VisitablePr
 
     @Override
     public String toString() {
-        return String.format("granularTo %s", this.granularity.getGranularity());
+        return String.format("granularTo %s", granularity.getGranularity());
     }
 }

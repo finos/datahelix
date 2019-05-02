@@ -193,7 +193,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsGranularToNumericConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            // negated granularity is a future enhancement
             return FieldSpec.Empty;
         }
 
@@ -204,7 +204,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsGranularToDateConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            // negated granularity is a future enhancement
             return FieldSpec.Empty;
         }
 
