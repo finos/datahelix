@@ -184,26 +184,28 @@ class AtomicConstraintReaderLookup {
                         rules);
                 });
 
+        BigDecimal maxStringLength = BigDecimal.valueOf(GenerationConfig.Constants.MAX_STRING_LENGTH);
+
         // String constraints
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
                 (dto, fields, rules) ->
                     new IsStringLongerThanConstraint(
                         fields.getByName(dto.field),
-                        ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, GenerationConfig.Constants.MAX_STRING_LENGTH.subtract(BigDecimal.ONE)),
+                        ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, maxStringLength.subtract(BigDecimal.ONE)),
                         rules));
 
         add(AtomicConstraintType.ISSTRINGSHORTERTHAN.toString(),
                 (dto, fields, rules) ->
                     new IsStringShorterThanConstraint(
                         fields.getByName(dto.field),
-                        ensureValueBetween(dto, Integer.class, BigDecimal.ONE, GenerationConfig.Constants.MAX_STRING_LENGTH.add(BigDecimal.ONE)),
+                        ensureValueBetween(dto, Integer.class, BigDecimal.ONE, maxStringLength.add(BigDecimal.ONE)),
                         rules));
 
         add(AtomicConstraintType.HASLENGTH.toString(),
                 (dto, fields, rules) ->
                     new StringHasLengthConstraint(
                         fields.getByName(dto.field),
-                        ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, GenerationConfig.Constants.MAX_STRING_LENGTH),
+                        ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, maxStringLength),
                         rules));
     }
 
@@ -265,14 +267,12 @@ class AtomicConstraintReaderLookup {
     }
 
     private static String validateString(ConstraintDTO dto, String value) throws InvalidProfileException {
-        BigDecimal stringLengthAsBigDecimal = BigDecimal.valueOf(value.length());
-
-        if (stringLengthAsBigDecimal.compareTo(GenerationConfig.Constants.MAX_STRING_LENGTH) > 0) {
+        if (value.length() > GenerationConfig.Constants.MAX_STRING_LENGTH) {
             throw new InvalidProfileException(String.format(
-                "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %s",
+                "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %d",
                 dto.field,
                 value.length(),
-                GenerationConfig.Constants.MAX_STRING_LENGTH.toPlainString()));
+                GenerationConfig.Constants.MAX_STRING_LENGTH));
         }
 
         return value;

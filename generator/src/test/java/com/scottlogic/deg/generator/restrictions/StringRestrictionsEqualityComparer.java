@@ -24,7 +24,7 @@ public class StringRestrictionsEqualityComparer implements EqualityComparer {
             return true;
         }
 
-        return item1.stringGenerator.equals(item2.stringGenerator);
+        return item1.equals(item2);
     }
 
 }
