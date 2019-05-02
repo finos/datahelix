@@ -212,15 +212,15 @@ public class FieldSpec {
         }
 
         if (numericRestrictions != null) {
-            if (isNumeric(value) && numericRestrictions.match(value)) return false;
+            if (isNumeric(value) && !numericRestrictions.match(value)) return false;
         }
 
         if (dateTimeRestrictions != null) {
-            if (isDateTime(value) && dateTimeRestrictions.match(value)) return false;
+            if (isDateTime(value) && !dateTimeRestrictions.match(value)) return false;
         }
 
         if (stringRestrictions != null) {
-            if (isString(value) && stringRestrictions.match(value)) return false;
+            if (isString(value) && !stringRestrictions.match(value)) return false;
         }
 
         return true;
