@@ -1,11 +1,10 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import static org.assertj.core.api.Assertions.*;
-
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,31 +15,30 @@ class TimescaleTest {
     }
 
     @Test
-    public void millisGranularity() {
-        OffsetDateTime imprecise = OffsetDateTime.of(2001, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
-
-        Timescale.MILLIS.getGranularityFunction().apply(imprecise);
-    }
-
-    @Test
     public void mostCoarseTest() {
-        assertEquals(Timescale.DAYS, Timescale.getMostCoarse(Timescale.MILLIS, Timescale.DAYS));
+        Assert.assertEquals(Timescale.DAYS, Timescale.getMostCoarse(Timescale.MILLIS, Timescale.DAYS));
     }
 
     @Test
     public void mostCoarseTestYear() {
-        assertEquals(Timescale.YEARS, Timescale.getMostCoarse(Timescale.MINUTES, Timescale.YEARS));
+        Assert.assertEquals(Timescale.YEARS, Timescale.getMostCoarse(Timescale.MINUTES, Timescale.YEARS));
     }
 
     @Test
     public void mostCoarseTestSame() {
-        assertEquals(Timescale.MONTHS, Timescale.getMostCoarse(Timescale.MONTHS, Timescale.MONTHS));
+        Assert.assertEquals(Timescale.MONTHS, Timescale.getMostCoarse(Timescale.MONTHS, Timescale.MONTHS));
     }
 
     @Test
     public void testGetByNameThrowsExceptionWithUsefulMessage(){
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> { Timescale.getByName("ShouldntWork"); })
-            .withMessageContaining("Must be one of the supported datetime units");
+
+        // arrange
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
+            // act
+            Timescale.getByName("ShouldNotWork");
+        });
+        // assert
+        Assert.assertThat(exception.getMessage(), CoreMatchers.containsString("Must be one of the supported datetime units"));
     }
 
 }

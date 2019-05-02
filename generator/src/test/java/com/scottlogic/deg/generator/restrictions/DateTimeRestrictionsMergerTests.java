@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
-import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +8,13 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
-
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class DateTimeRestrictionsMergerTests {
 
@@ -183,17 +180,15 @@ class DateTimeRestrictionsMergerTests {
 
         MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
 
-        assertThat(result).isNotNull()
-            .extracting(r -> r.successful)
-            .isEqualTo(true);
+        Assert.assertNotEquals(result, nullValue());
 
         DateTimeRestrictions restrictions = result.restrictions;
-        assertThat(restrictions).isNotNull();
+        Assert.assertNotEquals(restrictions, nullValue());
 
-        try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(restrictions.min).isNull();
-            softly.assertThat(restrictions.max).isEqualTo(maxDateTimeLimit);
-        }
+
+        Assert.assertNotEquals(restrictions.min, nullValue());
+        Assert.assertEquals(restrictions.max, maxDateTimeLimit);
+
     }
 
     @Test
@@ -285,19 +280,13 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
         DateTimeRestrictions restrictions = result.restrictions;
 
-        assertThat(result)
-            .isNotNull()
-            .extracting(e -> e.successful)
-            .isEqualTo(true);
+        Assert.assertThat(result, not(nullValue()));
+        Assert.assertEquals(true, result.successful);
 
-        try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(restrictions)
-                .isNotNull()
-                .extracting(DateTimeRestrictions::getGranularity)
-                .isEqualTo(Timescale.HOURS);
-            softly.assertThat(restrictions.min)
-                .isEqualTo(new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
-        }
+        Assert.assertThat(restrictions, not(nullValue()));
+        Assert.assertEquals(Timescale.HOURS, restrictions.getGranularity());
+
+        Assert.assertEquals(restrictions.min, new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
     }
 
     @Test
@@ -326,18 +315,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions restrictions = result.restrictions;
 
         // assert that we get the correct level of granularity
-        try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
-            softly.assertThat(restrictions)
-                .isNotNull()
-                .extracting(DateTimeRestrictions::getGranularity)
-                .isEqualTo(Timescale.HOURS);
+        Assert.assertNotNull(restrictions);
+        Assert.assertEquals(Timescale.HOURS, restrictions.getGranularity());
 
-            // assert that we return an inclusive restriction for this edge case.
-            softly.assertThat(restrictions.min)
-                .isEqualTo(new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
-        }
+        // assert that we return an inclusive restriction for this edge case.
+        Assert.assertEquals(restrictions.min, new DateTimeRestrictions.DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
     }
-
 
     @Test
     void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
