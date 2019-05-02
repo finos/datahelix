@@ -1,38 +1,25 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.SedolStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     private final FieldSpecMerger fieldSpecMerger;
+    private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
-    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger) {
+    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger, StringRestrictionsFactory stringRestrictionsFactory) {
         this.fieldSpecMerger = fieldSpecMerger;
+        this.stringRestrictionsFactory = stringRestrictionsFactory;
     }
-
-    private static Map<AtomicConstraintConstructTuple, StringGenerator> constraintToStringGeneratorMap = new HashMap<>();
-
-    private static final Map<StandardConstraintTypes, StringGenerator>
-        standardNameToStringGenerator = new HashMap<StandardConstraintTypes, StringGenerator>() {{
-            put(StandardConstraintTypes.ISIN, new IsinStringGenerator());
-            put(StandardConstraintTypes.SEDOL, new SedolStringGenerator());
-    }};
 
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
@@ -245,16 +232,27 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate, boolean violated) {
-        return constructPattern(constraint.regex, negate, true, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                stringRestrictionsFactory.forStringMatching(constraint.regex, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(ContainsRegexConstraint constraint, boolean negate, boolean violated) {
-        return constructPattern(constraint.regex, negate, false, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                stringRestrictionsFactory.forStringContaining(constraint.regex, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
-        StringGenerator generator = standardNameToStringGenerator.get(constraint.standard);
-        return construct(negate ? generator.complement() : generator, negate, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                new MatchesStandardStringRestrictions(constraint.standard, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
@@ -272,45 +270,30 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {
-        final Pattern regex = Pattern.compile(String.format(".{%s}", constraint.referenceValue));
-        return constructPattern(regex, negate, true, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                stringRestrictionsFactory.forLength(constraint.referenceValue, negate),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(IsStringShorterThanConstraint constraint, boolean negate, boolean violated) {
-        final Pattern regex = Pattern.compile(String.format(".{0,%d}", constraint.referenceValue - 1));
-        return constructPattern(regex, negate, true, constraint, violated);
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                negate
+                    ? stringRestrictionsFactory.forMinLength(constraint.referenceValue)
+                    : stringRestrictionsFactory.forMaxLength(constraint.referenceValue - 1),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 
     private FieldSpec construct(IsStringLongerThanConstraint constraint, boolean negate, boolean violated) {
-        final Pattern regex = Pattern.compile(String.format(".{%d,}", constraint.referenceValue + 1));
-        return constructPattern(regex, negate, true, constraint, violated);
-    }
-
-    private FieldSpec constructPattern(Pattern pattern, boolean negate, boolean matchFullString, AtomicConstraint constraint, boolean violated) {
-        AtomicConstraintConstructTuple atomicConstraintConstructTuple = new AtomicConstraintConstructTuple(constraint, matchFullString, negate);
-        StringGenerator regexStringGenerator;
-        if (constraintToStringGeneratorMap.containsKey(atomicConstraintConstructTuple)) {
-            regexStringGenerator = constraintToStringGeneratorMap.get(atomicConstraintConstructTuple);
-        } else {
-            regexStringGenerator = new RegexStringGenerator(pattern.toString(), matchFullString);
-            if (negate) {
-                regexStringGenerator = regexStringGenerator.complement();
-            }
-            constraintToStringGeneratorMap.put(atomicConstraintConstructTuple, regexStringGenerator);
-        }
-        return construct(regexStringGenerator, negate, constraint, violated);
-    }
-
-    private FieldSpec construct(StringGenerator generator, boolean negate, AtomicConstraint constraint, boolean violated) {
-        final StringRestrictions stringRestrictions = new StringRestrictions(
-            new StringConstraintsCollection(negate
-                ? constraint.negate()
-                : constraint));
-
-        stringRestrictions.stringGenerator = generator;
-
-        return FieldSpec.Empty.withStringRestrictions(
-            stringRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate, violated));
+        return FieldSpec.Empty
+            .withStringRestrictions(
+                negate
+                    ? stringRestrictionsFactory.forMaxLength(constraint.referenceValue)
+                    : stringRestrictionsFactory.forMinLength(constraint.referenceValue + 1),
+                FieldSpecSource.fromConstraint(constraint, negate, violated)
+            );
     }
 }

@@ -45,6 +45,7 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _`{field}` is `{operator}` `{operand}`_, adds an `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
 * _`{field}` is anything but `{operator}` `{operand}`_, adds a negated `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
+* _the maximum string length is {length}_, sets the maximum length for strings to the _max_ for the given scenario. The default is _200_ (for performance reasons), however in production the limit is _1000_.
 
 #### Operators
 See [Predicate constraints](ProfileDeveloperGuide.md#Predicate-constraints), [Grammatical Constraints](ProfileDeveloperGuide.md#Grammatical-constraints) and [Presentational Constraints](ProfileDeveloperGuide.md#Presentational-constraints) for details of the constraints.
@@ -126,6 +127,7 @@ Note these steps work for asserting both integer and decimal data. There are no 
 * _{field} contains anything but strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that do not match the given regular expression.
 * _{field} contains strings shorter than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values shorter than or equal to _{length}_
 * _{field} contains strings longer than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values longer than or equal to _{length}_
+
 
 #### Null (absence/presence)
 * _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)

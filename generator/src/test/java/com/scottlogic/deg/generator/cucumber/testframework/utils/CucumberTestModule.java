@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
@@ -41,6 +42,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
         bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
+        bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
 
         if (testState.shouldSkipGeneration()) {
             bind(GenerationEngine.class).toInstance(mock(GenerationEngine.class));
