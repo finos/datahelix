@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "foo"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "longerThan too short",
+      "constraints": [
+        {
+          "field": "foo",
+          "is": "longerThan",
+          "value": -2
+        }
+      ]
+    }
+  ]
+}
