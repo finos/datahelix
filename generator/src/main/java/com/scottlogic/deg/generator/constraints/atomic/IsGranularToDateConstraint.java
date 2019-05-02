@@ -39,7 +39,7 @@ public class IsGranularToDateConstraint implements AtomicConstraint, VisitablePr
         }
         if (o == null || getClass() != o.getClass()) return false;
         IsGranularToDateConstraint constraint = (IsGranularToDateConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(granularity.getGranularity(), constraint.granularity.getGranularity());
+        return (field.equals(constraint.field) && Objects.equals(granularity.getGranularity(), constraint.granularity.getGranularity()));
     }
 
     @Override
