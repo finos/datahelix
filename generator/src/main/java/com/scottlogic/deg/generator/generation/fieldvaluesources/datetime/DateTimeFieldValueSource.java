@@ -51,7 +51,6 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
 
             if (granularity == Timescale.MILLIS) return (duration.getNano() / 1000000) + 1;
-            // future work to add customisable datetime granularity #141
             if (granularity == Timescale.SECONDS) return duration.getSeconds() + 1;
             if (granularity == Timescale.MINUTES) return (duration.getSeconds() / 60) + 1;
             if (granularity == Timescale.HOURS) return (duration.getSeconds() / 360) + 1;
