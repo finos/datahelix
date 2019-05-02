@@ -42,6 +42,10 @@ class RandomDateIterator implements Iterator<OffsetDateTime> {
     }
 
     private OffsetDateTime trimUnwantedGranularity(OffsetDateTime dateToTrim, Timescale granularity) {
+
+        // Remove unneeded granularity from the dateToTrim.
+        // For example: if a granularity of days is passed in; all smaller units of time will be set to the lowest possible value.
+        // (hours, minutes, seconds and milliseconds will all be set to 0)
         return granularity.getGranularityFunction().apply(dateToTrim);
     }
 }
