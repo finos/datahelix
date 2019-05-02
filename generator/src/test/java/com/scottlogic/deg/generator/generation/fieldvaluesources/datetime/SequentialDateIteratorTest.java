@@ -8,13 +8,11 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-
 class SequentialDateIteratorTest {
 
     private OffsetDateTime inclusiveMinDate;
     private OffsetDateTime exclusiveMaxDate;
     private OffsetDateTime referenceDate;
-
 
     @BeforeEach
     public void setup() {
@@ -24,100 +22,103 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void checkHasNextWhenCurrentIsEqualToMax() {
-
+    void HasNext_WhenCurrentIsEqualToMax_IsCorrect() {
+        // arrange
         this.exclusiveMaxDate = inclusiveMinDate.plusYears(1);
-
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
-
-        // assert there is a date we can take.
-        Assert.assertTrue(sequentialDateIterator.hasNext());
-
-        // take the first date
+        // act
         OffsetDateTime firstDate = sequentialDateIterator.next();
-
-        // assert there are no more available dates.
-        Assert.assertFalse(sequentialDateIterator.hasNext());
+        boolean hasNextDate = sequentialDateIterator.hasNext();
+        // assert
+        Assert.assertFalse(hasNextDate);
     }
 
     @Test
-    void checkHasNextWhenCurrentIsLessThanMax() {
-
+    void HasNext_WhenCurrentIsLessThanMax_IsCorrect() {
+        // arrange
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
-
-        // assert there is a date we can take.
-        Assert.assertTrue(sequentialDateIterator.hasNext());
-
-        // take the first date
+        // act
         OffsetDateTime firstDate = sequentialDateIterator.next();
-
-        // assert there are no more available dates.
-        Assert.assertTrue(sequentialDateIterator.hasNext());
+        boolean hasNextDate = sequentialDateIterator.hasNext();
+        // assert
+        Assert.assertTrue(hasNextDate);
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsYear() {
-
+    void Next_WhenGranularityIsYear_IsCorrect() {
+        // arrange
         referenceDate = Timescale.YEARS.getGranularityFunction().apply(inclusiveMinDate.plusYears(1));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
-
-        Assert.assertEquals(sequentialDateIterator.next(),referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate,referenceDate);
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsMonth() {
-
+    void Next_WhenGranularityIsMonth_IsCorrect() {
+        // arrange
         referenceDate = Timescale.MONTHS.getGranularityFunction().apply(inclusiveMinDate.plusMonths(1));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MONTHS);
-
-        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate, referenceDate);
 
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsDay() {
+    void Next_WhenGranularityIsDay_IsCorrect() {
+        // arrange
         referenceDate = Timescale.DAYS.getGranularityFunction().apply(inclusiveMinDate.plusDays(1));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.DAYS);
-
-        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate, referenceDate);
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsHour() {
+    void Next_WhenGranularityIsHour_IsCorrect() {
+        // arrange
         referenceDate = Timescale.HOURS.getGranularityFunction().apply(inclusiveMinDate.plusHours(1));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.HOURS);
-
-        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate, referenceDate);
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsMinute() {
+    void Next_WhenGranularityIsMinute_IsCorrect() {
+        // arrange
         referenceDate = Timescale.MINUTES.getGranularityFunction().apply(inclusiveMinDate.plusMinutes(1));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MINUTES);
-
-        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate, referenceDate);
     }
 
     @Test
-    void checkNextIsCorrectWhenGranularityIsMillis() {
+    void Next_WhenGranularityIsMillis_IsCorrect() {
+        // arrange
         referenceDate = Timescale.MILLIS.getGranularityFunction().apply(inclusiveMinDate.plusNanos(1_000_000));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MILLIS);
-
-        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertEquals(nextDate, referenceDate);
     }
 
     @Test
-    void checkNextIsIncorrectWhenGranularityIsNotMillis() {
+    void Next_WhenGranularityIsNotMillis_IsIncorrect() {
+        // arrange
         referenceDate = Timescale.MILLIS.getGranularityFunction().apply(inclusiveMinDate.plusNanos(1_000));
-
+        // act
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MILLIS);
-
-        Assert.assertNotEquals(sequentialDateIterator.next(), referenceDate);
+        OffsetDateTime nextDate = sequentialDateIterator.next();
+        // assert
+        Assert.assertNotEquals(nextDate, referenceDate);
     }
 }
