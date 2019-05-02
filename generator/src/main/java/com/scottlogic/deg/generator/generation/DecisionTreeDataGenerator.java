@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -64,12 +65,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
-        Stream<Stream<DataBag>> dataBagSources = treeWalker.walk(tree, fixFieldStrategy)
-            .map(dataBagSourceFactory::createDataBags);
+        Stream<RowSpec> partitionedRowSpecs = treeWalker.walk(tree, fixFieldStrategy);
 
         return FlatMappingSpliterator.flatMap(
-            dataBagSources,
-            Function.identity());
+            partitionedRowSpecs,
+            dataBagSourceFactory::createDataBags);
     }
 
     private GeneratedObject convertToGeneratedObject(Profile profile, DataBag dataBag) {
