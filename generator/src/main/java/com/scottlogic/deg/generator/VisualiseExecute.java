@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeCollection;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -82,8 +81,7 @@ public class VisualiseExecute implements Runnable {
             return;
         }
 
-        final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
-        final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+        final DecisionTree mergedTree = profileAnalyser.analyse(profile);
 
         final String profileBaseName = configSource.getProfileFile().getName()
             .replaceFirst("\\.[^.]+$", "");

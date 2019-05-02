@@ -4,9 +4,12 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.*;
+import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
+import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.schemas.v0_1.RuleDTO;
@@ -20,8 +23,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.empty;
 
 class ProfileDecisionTreeFactoryTests {
     private final Field fieldA = new Field("A");
@@ -29,7 +32,7 @@ class ProfileDecisionTreeFactoryTests {
     private final Field fieldC = new Field("C");
 
     private final List<Rule> rules = new ArrayList<>();
-    private DecisionTreeCollection actualOutput = null;
+    private DecisionTree actualOutput = null;
 
     @BeforeEach
     void beforeEach() {
@@ -41,7 +44,7 @@ class ProfileDecisionTreeFactoryTests {
         this.rules.add(new Rule(rule(""), Arrays.asList(constraints)));
     }
 
-    private DecisionTreeCollection getActualOutput() {
+    private DecisionTree getActualOutput() {
         if (this.actualOutput == null) {
             Profile testInput = new Profile(
                 new ProfileFields(
@@ -57,8 +60,7 @@ class ProfileDecisionTreeFactoryTests {
     }
 
     private ConstraintNode getResultingRootOption() {
-        return this.getActualOutput().getDecisionTrees().iterator().next()
-            .getRootNode();
+        return this.getActualOutput().getRootNode();
     }
 
     @Test
@@ -66,9 +68,13 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree testOutput = testObject.analyse(testInput);
 
-        Assert.assertEquals(0, testOutput.getDecisionTrees().size());
+        Assert.assertThat(testOutput, not(is(nullValue())));
+        Assert.assertThat(testOutput.getFields().size(), is(0));
+        Assert.assertThat(testOutput.getRootNode(), not(is(nullValue())));
+        Assert.assertThat(testOutput.getRootNode().getAtomicConstraints(), is(empty()));
+        Assert.assertThat(testOutput.getRootNode().getDecisions(), is(empty()));
     }
 
     @Test
@@ -77,7 +83,7 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, new ArrayList<>());
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree testOutput = testObject.analyse(testInput);
         ProfileFields actualFields = testOutput.getFields();
 
         pairwiseAssert(
@@ -97,10 +103,9 @@ class ProfileDecisionTreeFactoryTests {
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        Assert.assertThat("analyse() output is not null", testOutput, Is.is(IsNull.notNullValue()));
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has non-null list of decisions",
             outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
@@ -118,14 +123,15 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
         Assert.assertThat("Decision tree root atomic constraint list is same size as original constraint list",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(inputConstraints.size()));
         for (Constraint constraint : inputConstraints) {
+            AtomicConstraint atomicConstraint = (AtomicConstraint) constraint;
+
             Assert.assertThat("Each input constraint is in the decision tree root node atomic constraint list",
-                outputRule.getRootNode().getAtomicConstraints().contains(constraint), Is.is(true));
+                outputRule.getRootNode().getAtomicConstraints(), hasItem(atomicConstraint));
         }
     }
 
@@ -140,11 +146,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        Assert.assertThat("analyse() output contain decision tree list", testOutput.getDecisionTrees(),
-            Is.is(IsNull.notNullValue()));
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has non-null list of decisions",
             outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
@@ -163,11 +167,9 @@ class ProfileDecisionTreeFactoryTests {
 
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        Assert.assertThat("analyse() output contain decision tree list", testOutput.getDecisionTrees(),
-            Is.is(IsNull.notNullValue()));
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root contains correct number of atomic constraints",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(3));
         Assert.assertThat("Decision tree root atomic constraints list contains constraint 0",
@@ -191,9 +193,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root contains correct number of decisions",
             outputRule.getRootNode().getDecisions().size(), Is.is(2));
     }
@@ -212,9 +214,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root contains no atomic constraints",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(0));
     }
@@ -233,9 +235,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
@@ -270,9 +272,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
@@ -308,13 +310,13 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
                             Arrays.asList(
@@ -386,14 +388,13 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
-
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
                             Arrays.asList(
@@ -452,9 +453,9 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         // Result should just be A.
         Assert.assertThat("Decision tree root contains one atomic constraint",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(1));
@@ -475,21 +476,21 @@ class ProfileDecisionTreeFactoryTests {
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
 
-        DecisionTreeCollection testOutput = testObject.analyse(testInput);
+        DecisionTree outputRule = testObject.analyse(testInput);
 
-        DecisionTree outputRule = testOutput.getDecisionTrees().iterator().next();
+        Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         // Result should be (NOT A) OR (NOT B)
         Assert.assertTrue(isEquivalentTo(
             new TreeConstraintNode(
                 Collections.emptySet(),
-                Arrays.asList(
+                Collections.singletonList(
                     new TreeDecisionNode(
                         new TreeConstraintNode(
-                            Arrays.asList(constraintA.negate()),
+                            Collections.singletonList(constraintA.negate()),
                             Collections.emptySet()
                         ),
                         new TreeConstraintNode(
-                            Arrays.asList(constraintB.negate()),
+                            Collections.singletonList(constraintB.negate()),
                             Collections.emptySet()
                         )
                     )
@@ -527,14 +528,6 @@ class ProfileDecisionTreeFactoryTests {
         );
     }
 
-    private void treeRootShouldMatch(ConstraintNode expected) {
-        ConstraintNode actual = this.getActualOutput().getMergedTree().getRootNode();
-
-        Assert.assertTrue(
-            isEquivalentTo(actual, expected)
-        );
-    }
-
     private boolean isEquivalentTo(ConstraintNode expected, ConstraintNode actual) {
         TreeComparisonContext context = new TreeComparisonContext();
         AnyOrderCollectionEqualityComparer defaultAnyOrderCollectionEqualityComparer = new AnyOrderCollectionEqualityComparer();
@@ -551,20 +544,6 @@ class ProfileDecisionTreeFactoryTests {
         }
 
         return match;
-    }
-
-    private final AtomicConstraint aIsNull = new IsNullConstraint(new Field("A"), rules());
-    private final AtomicConstraint bEquals10 = new IsInSetConstraint(new Field("B"), Collections.singleton(10), rules());
-    private final AtomicConstraint cIsNumeric = new IsOfTypeConstraint(new Field("C"), IsOfTypeConstraint.Types.NUMERIC, rules());
-    private final AtomicConstraint eIsString = new IsOfTypeConstraint(new Field("E"), IsOfTypeConstraint.Types.STRING, rules());
-
-    private void assertOptionContainsSingleConstraint(ConstraintNode option, Constraint constraint) {
-        Assert.assertThat("Option contains no decisions", option.getDecisions().size(), Is.is(0));
-        Assert.assertThat("Option contains one atomic constraint", option.getAtomicConstraints().size(),
-            Is.is(1));
-        Assert.assertThat("Option's atomic constraint is the given constraint",
-            option.getAtomicConstraints().contains(constraint), Is.is(true));
-        Assert.assertThat(option.getAtomicConstraints(), contains(constraint));
     }
 
     private static Set<RuleInformation> rules(){
