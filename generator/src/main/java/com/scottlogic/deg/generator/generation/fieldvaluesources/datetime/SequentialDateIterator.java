@@ -22,6 +22,15 @@ class SequentialDateIterator implements Iterator<OffsetDateTime> {
         hasNext = current.compareTo(exclusiveMaxDate) < 0;
     }
 
+    /**
+     * initial datetime is rounded up after granularity is applied (if the returned datetime would have been lower than the initial datetime.)
+     * This can be used to ensure a datetime is not lower than a previously specified minimum after granularity is applied.
+     * 10:00 -> HOURS => 10:00
+     * 10:01 -> HOURS => 11:00
+     * @param initial initial datetime which will have granularity applied
+     * @param unit unit of granularity
+     * @return datetime that has had granularity applied
+     */
     private OffsetDateTime roundUpToGranularity(final OffsetDateTime initial, final Timescale unit) {
         OffsetDateTime earlierOrEqual = unit.getGranularityFunction().apply(initial);
         return earlierOrEqual.equals(initial) ? earlierOrEqual : unit.getNext().apply(earlierOrEqual);
