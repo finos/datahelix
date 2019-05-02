@@ -64,7 +64,7 @@ public class DateTimeRestrictionsMerger {
         MergeLimit mergeLimit,
         DateTimeRestrictions.DateTimeLimit left,
         DateTimeRestrictions.DateTimeLimit right,
-        Timescale  granularity) {
+        Timescale granularity) {
 
         boolean inclusiveOverride = false;
 
