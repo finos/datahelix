@@ -362,7 +362,7 @@ The manifest file details which rules have been violated in each of the output f
 }
 ~~~
 
-If you take a look at the generated file `1.csv` you'll see that data for the `firstName` field does not objy the given constraints, whilst those for `age` and `nationalInsurance` are correct:
+If you take a look at the generated file `1.csv` you'll see that data for the `firstName` field does not obey the given constraints, whilst those for `age` and `nationalInsurance` are correct:
 
 ~~~
 firstName,age,nationalInsurance
@@ -376,10 +376,10 @@ firstName,age,nationalInsurance
 [...]
 ~~~
 
-However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is not null and a string, the first is to inform the generator that it should not violate specific constraint types:
+However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is null or a string, the first is to inform the generator that it should not violate specific constraint types:
 
 ~~~
-$ java -jar generator.jar generate --violate --dont-violate=ofType null \
+$ java -jar generator.jar generate --violate --dont-violate=ofType \
   --max-rows=100 --replace profile.json out
 ~~~
 
