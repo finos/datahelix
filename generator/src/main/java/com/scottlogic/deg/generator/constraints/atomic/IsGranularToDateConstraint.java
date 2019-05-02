@@ -59,7 +59,7 @@ public class IsGranularToDateConstraint implements AtomicConstraint, VisitablePr
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGranularToDateConstraint(this.field, this.granularity, rules);
+        return new IsGranularToDateConstraint(field, granularity, rules);
     }
 
     @Override
