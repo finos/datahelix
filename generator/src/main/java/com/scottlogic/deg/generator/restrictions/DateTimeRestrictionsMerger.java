@@ -35,9 +35,7 @@ public class DateTimeRestrictionsMerger {
         return new MergeResult<>(merged);
     }
 
-    private DateTimeRestrictions.DateTimeLimit granulate(MergeLimit mergeLimit,
-                                                         Timescale granularity,
-                                                         DateTimeRestrictions.DateTimeLimit limitHolder) {
+    private DateTimeRestrictions.DateTimeLimit granulate(MergeLimit mergeLimit, Timescale granularity, DateTimeRestrictions.DateTimeLimit limitHolder) {
         if (limitHolder == null) {
             return null;
         }
