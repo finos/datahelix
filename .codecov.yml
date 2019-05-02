@@ -1,0 +1,10 @@
+comment: 
+    layout: "files"
+    require_changes: yes
+    require_base: yes
+    
+coverage:
+    status:
+        project:
+            default:
+                base: pr
