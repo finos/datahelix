@@ -51,7 +51,7 @@ public class DateTimeRestrictionsMerger {
             case MAX:
                 return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
             default:
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Unsupported MergeLimit. Only MergeLimit.MIN, and MergeLimit.MAX are supported");
         }
     }
 
