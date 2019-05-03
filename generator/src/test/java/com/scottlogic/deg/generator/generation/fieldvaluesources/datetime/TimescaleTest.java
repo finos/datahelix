@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TimescaleTest {
+class TimescaleTests {
     @Test
     public void mostCoarseTest() {
         Assert.assertEquals(Timescale.DAYS, Timescale.getMostCoarse(Timescale.MILLIS, Timescale.DAYS));
