@@ -1,7 +1,5 @@
 comment: off
     
 coverage:
-    status:
-        project:
-            default:
-                base: pr
+  status:
+    project: off
