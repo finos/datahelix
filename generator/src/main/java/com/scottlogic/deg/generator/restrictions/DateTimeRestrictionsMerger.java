@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
-import com.sun.scenario.effect.Offset;
 
 import java.time.OffsetDateTime;
 
@@ -77,10 +76,10 @@ public class DateTimeRestrictionsMerger {
         boolean inclusiveOverride = false;
 
         // if both exclusive
-        if (!leftIsInclusive && !rightIsInclusive){
+        if (!leftIsInclusive && !rightIsInclusive) {
             // if both datetime's are the same after granularity is applied
-            if(granularity.getGranularityFunction().apply(left.getLimit())
-                .equals(granularity.getGranularityFunction().apply(right.getLimit()))){
+            if (granularity.getGranularityFunction().apply(left.getLimit())
+                .equals(granularity.getGranularityFunction().apply(right.getLimit()))) {
                 inclusiveOverride = true;
             }
         }
@@ -93,12 +92,12 @@ public class DateTimeRestrictionsMerger {
 
         switch (mergeLimit) {
             case MIN:
-                if (left.getLimit().compareTo(right.getLimit()) > 0){
+                if (left.getLimit().compareTo(right.getLimit()) > 0) {
                     return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
                 return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
             case MAX:
-                if (left.getLimit().compareTo(right.getLimit()) < 0){
+                if (left.getLimit().compareTo(right.getLimit()) < 0) {
                     return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
                 return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
