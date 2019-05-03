@@ -2,7 +2,7 @@
 
 1. [Design Decisions](KeyDecisions.md)
 1. [Decision Trees](DecisionTrees/DecisionTrees.md)
-1. [Profile Syntax](ProfileGrammar.md)
+1. [Profile Syntax](Schema.md)
 
 
 ## Development
