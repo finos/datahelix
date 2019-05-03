@@ -4,16 +4,9 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.time.OffsetDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimescaleTest {
-
-    public OffsetDateTime granularity(Timescale timescale, OffsetDateTime t) {
-        return timescale.getGranularityFunction().apply(t);
-    }
-
     @Test
     public void mostCoarseTest() {
         Assert.assertEquals(Timescale.DAYS, Timescale.getMostCoarse(Timescale.MILLIS, Timescale.DAYS));
