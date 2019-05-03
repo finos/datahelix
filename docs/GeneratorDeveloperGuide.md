@@ -9,4 +9,4 @@
 
 1. [Contributing](../.github/CONTRIBUTING.md)
 2. [Dependency Injection](DependencyInjection.md)
-3. [Unit Testing](CucumberSyntax.md)
+3. [Integration Testing](CucumberSyntax.md)
