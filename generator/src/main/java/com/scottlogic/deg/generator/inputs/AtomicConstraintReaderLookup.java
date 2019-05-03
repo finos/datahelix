@@ -141,7 +141,7 @@ class AtomicConstraintReaderLookup {
                         return new IsGranularToNumericConstraint(
                             fields.getByName(dto.field),
                             parsedNumericGranularity.get(),
-                        rules);
+                            rules);
                     }
                 }
                 else if(stringValidatedValue.isPresent()){
