@@ -132,22 +132,27 @@ class AtomicConstraintReaderLookup {
         add(AtomicConstraintType.ISGRANULARTO.toString(),
             (dto, fields, rules) ->
             {
-                try {
-                    return new IsGranularToNumericConstraint(
-                        fields.getByName(dto.field),
-                        ParsedGranularity.parse(getValidatedValue(dto, Number.class)),
-                        rules);
-                } catch (InvalidProfileException | IllegalArgumentException e) {
-                }
+                Optional <Number> numberValidatedValue = tryGetValidatedValue(dto, Number.class);
+                Optional <String> stringValidatedValue = tryGetValidatedValue(dto, String.class);
 
-                try {
-                    return new IsGranularToDateConstraint(
-                        fields.getByName(dto.field),
-                        ParsedDateGranularity.parse(getValidatedValue(dto, String.class)),
+                if(numberValidatedValue.isPresent()){
+                    Optional<ParsedGranularity> parsedNumericGranularity = ParsedGranularity.tryParse(numberValidatedValue.get());
+                    if(parsedNumericGranularity.isPresent()){
+                        return new IsGranularToNumericConstraint(
+                            fields.getByName(dto.field),
+                            parsedNumericGranularity.get(),
                         rules);
-                } catch (InvalidProfileException | IllegalArgumentException e) {
+                    }
                 }
-
+                else if(stringValidatedValue.isPresent()){
+                    Optional<ParsedDateGranularity> parsedDateGranularity = ParsedDateGranularity.tryParse(stringValidatedValue.get());
+                    if(parsedDateGranularity.isPresent()) {
+                        return new IsGranularToDateConstraint(
+                            fields.getByName(dto.field),
+                            parsedDateGranularity.get(),
+                            rules);
+                    }
+                }
                 throw new InvalidProfileException(String.format("Field [%s]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units.", dto.field));
             }
         );
@@ -239,6 +244,15 @@ class AtomicConstraintReaderLookup {
 
     private static <T> T getValidatedValue(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
         return getValidatedValue(dto, dto.value, requiredType);
+    }
+
+    private static <T> Optional<T>  tryGetValidatedValue(ConstraintDTO dto, Class<T> requiredType) {
+        try{
+            return Optional.of(getValidatedValue(dto, dto.value, requiredType));
+        }
+        catch(Exception exp){
+            return Optional.empty();
+        }
     }
 
     /**
