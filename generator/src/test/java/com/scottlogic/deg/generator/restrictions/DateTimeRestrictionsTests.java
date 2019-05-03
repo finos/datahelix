@@ -97,7 +97,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(123);
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -106,7 +106,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(MIN);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -116,7 +116,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(MAX);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -126,7 +126,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(MIN);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -136,7 +136,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(MIN);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -146,7 +146,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(MAX);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -156,7 +156,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -166,7 +166,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MAX);
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -177,7 +177,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(limit.minusSeconds(1));
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -188,7 +188,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(limit.plusSeconds(1));
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -201,7 +201,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min.plusMinutes(1));
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -213,7 +213,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -225,7 +225,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min);
 
-        assertFalse(result);
+        Assert.assertFalse(result);
     }
 
     @Test
@@ -351,7 +351,7 @@ class DateTimeRestrictionsTests {
         DateTimeRestrictions restrictions = new DateTimeRestrictions(Timescale.MINUTES);
         OffsetDateTime time = OffsetDateTime.of(2000, 01, 03, 04, 05, 06, 0, ZoneOffset.UTC);
 
-        assertFalse(restrictions.match(time));
+        Assert.assertFalse(restrictions.match(time));
     }
 
     @Test
@@ -359,7 +359,7 @@ class DateTimeRestrictionsTests {
         DateTimeRestrictions restrictions = new DateTimeRestrictions(Timescale.MINUTES);
         OffsetDateTime time = OffsetDateTime.of(2000, 01, 03, 04, 05, 00, 0, ZoneOffset.UTC);
 
-        assertTrue(restrictions.match(time));
+        Assert.assertTrue(restrictions.match(time));
     }
 
     @Test
@@ -367,7 +367,7 @@ class DateTimeRestrictionsTests {
         DateTimeRestrictions restrictions = new DateTimeRestrictions(Timescale.MONTHS);
         OffsetDateTime time = OffsetDateTime.of(2000, 03, 01, 00, 00, 00, 0, ZoneOffset.UTC);
 
-        assertTrue(restrictions.match(time));
+        Assert.assertTrue(restrictions.match(time));
     }
 
     @Test
@@ -375,7 +375,7 @@ class DateTimeRestrictionsTests {
         DateTimeRestrictions restrictions = new DateTimeRestrictions(Timescale.YEARS);
         OffsetDateTime time = OffsetDateTime.of(2005, 01, 01, 00, 00, 00, 0, ZoneOffset.UTC);
 
-        assertTrue(restrictions.match(time));
+        Assert.assertTrue(restrictions.match(time));
     }
 
     private DateTimeRestrictions restrictions(MockDateTimeLimit min, MockDateTimeLimit max){
