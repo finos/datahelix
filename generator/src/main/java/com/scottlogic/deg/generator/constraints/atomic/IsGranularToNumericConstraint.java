@@ -15,6 +15,11 @@ public class IsGranularToNumericConstraint implements AtomicConstraint, Visitabl
     public final ParsedGranularity granularity;
 
     public IsGranularToNumericConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
+        if(field == null)
+            throw new IllegalArgumentException("field must not be null");
+        if(granularity == null)
+            throw new IllegalArgumentException("granularity must not be null");
+
         this.granularity = granularity;
         this.field = field;
         this.rules = rules;
