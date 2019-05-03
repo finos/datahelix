@@ -7,7 +7,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
     And foo is of type "datetime"
 
 
-  Scenario Outline: User is able to specify supported temporal granularities
+  Scenario Outline: User is able to specify supported temporal granularities with after operator
     Given foo is granular to <unit>
     And foo is after 2000-01-01T00:00:00.000Z
     And the generator can generate at most 1 rows
