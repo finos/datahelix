@@ -1,20 +1,26 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.generator.restrictions.ParsedDateGranularity;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsGranularToConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsGranularToDateConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     private final Set<RuleInformation> rules;
-    public final ParsedGranularity granularity;
+    public final ParsedDateGranularity granularity;
 
-    public IsGranularToConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
+    public IsGranularToDateConstraint(Field field, ParsedDateGranularity granularity, Set<RuleInformation> rules) {
+        if(field == null)
+            throw new IllegalArgumentException("field must not be null");
+        if(granularity == null)
+            throw new IllegalArgumentException("granularity must not be null");
+
         this.granularity = granularity;
         this.field = field;
         this.rules = rules;
@@ -22,7 +28,7 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
 
     @Override
     public String toDotLabel() {
-        return String.format("%s granular to %s", field.name, granularity.getNumericGranularity());
+        return String.format("%s granular to %s", field.name, granularity.getGranularity());
     }
 
     @Override
@@ -37,13 +43,13 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsGranularToConstraint constraint = (IsGranularToConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(granularity.getNumericGranularity(), constraint.granularity.getNumericGranularity());
+        IsGranularToDateConstraint constraint = (IsGranularToDateConstraint) o;
+        return (field.equals(constraint.field) && Objects.equals(granularity.getGranularity(), constraint.granularity.getGranularity()));
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, granularity.getNumericGranularity());
+        return Objects.hash(field, granularity);
     }
 
     @Override
@@ -58,11 +64,11 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGranularToConstraint(this.field, this.granularity, rules);
+        return new IsGranularToDateConstraint(field, granularity, rules);
     }
 
     @Override
     public String toString() {
-        return String.format("granularTo %s", this.granularity.getNumericGranularity());
+        return String.format("granularTo %s", granularity.getGranularity());
     }
 }

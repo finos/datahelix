@@ -20,7 +20,7 @@ public interface ProfileVisitor {
     void visit(IsStringLongerThanConstraint constraint);
     void visit(IsNullConstraint constraint);
     void visit(NotConstraint constraint);
-    void visit(IsGranularToConstraint constraint);
+    void visit(IsGranularToNumericConstraint constraint);
     void visit(IsLessThanConstantConstraint constraint);
     void visit(IsGreaterThanConstantConstraint constraint);
     void visit(IsLessThanOrEqualToConstantConstraint constraint);

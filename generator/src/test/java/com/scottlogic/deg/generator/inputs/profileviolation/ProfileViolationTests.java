@@ -85,7 +85,7 @@ public class ProfileViolationTests {
             Arguments.of(IsBeforeConstantDateTimeConstraint.class, sampleDate.minusDays(1)),
             Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, sampleDate.plusDays(2)),
 
-            Arguments.of(IsGranularToConstraint.class, new ParsedGranularity(BigDecimal.ONE)),
+            Arguments.of(IsGranularToNumericConstraint.class, new ParsedGranularity(BigDecimal.ONE)),
             Arguments.of(IsGreaterThanConstantConstraint.class, 100),
             Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, 200),
             Arguments.of(IsLessThanConstantConstraint.class, 300),
