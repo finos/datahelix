@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-class SequentialDateIteratorTest {
+public class SequentialDateIteratorTest {
 
     private OffsetDateTime inclusiveMinDate;
     private OffsetDateTime exclusiveMaxDate;
@@ -22,7 +22,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void HasNext_WhenCurrentIsEqualToMax_IsCorrect() {
+    void hasNext_WhenCurrentIsEqualToMax_IsCorrect() {
         // arrange
         this.exclusiveMaxDate = inclusiveMinDate.plusYears(1);
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
@@ -34,7 +34,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void HasNext_WhenCurrentIsLessThanMax_IsCorrect() {
+    void hasNext_WhenCurrentIsLessThanMax_IsCorrect() {
         // arrange
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
         // act
@@ -45,7 +45,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsYear_IsCorrect() {
+    void next_WhenGranularityIsYear_IsCorrect() {
         // arrange
         referenceDate = Timescale.YEARS.getGranularityFunction().apply(inclusiveMinDate.plusYears(1));
         // act
@@ -56,7 +56,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsMonth_IsCorrect() {
+    void next_WhenGranularityIsMonth_IsCorrect() {
         // arrange
         referenceDate = Timescale.MONTHS.getGranularityFunction().apply(inclusiveMinDate.plusMonths(1));
         // act
@@ -68,7 +68,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsDay_IsCorrect() {
+    void next_WhenGranularityIsDay_IsCorrect() {
         // arrange
         referenceDate = Timescale.DAYS.getGranularityFunction().apply(inclusiveMinDate.plusDays(1));
         // act
@@ -79,7 +79,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsHour_IsCorrect() {
+    void next_WhenGranularityIsHour_IsCorrect() {
         // arrange
         referenceDate = Timescale.HOURS.getGranularityFunction().apply(inclusiveMinDate.plusHours(1));
         // act
@@ -90,7 +90,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsMinute_IsCorrect() {
+    void next_WhenGranularityIsMinute_IsCorrect() {
         // arrange
         referenceDate = Timescale.MINUTES.getGranularityFunction().apply(inclusiveMinDate.plusMinutes(1));
         // act
@@ -101,7 +101,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsMillis_IsCorrect() {
+    void next_WhenGranularityIsMillis_IsCorrect() {
         // arrange
         referenceDate = Timescale.MILLIS.getGranularityFunction().apply(inclusiveMinDate.plusNanos(1_000_000));
         // act
@@ -112,7 +112,7 @@ class SequentialDateIteratorTest {
     }
 
     @Test
-    void Next_WhenGranularityIsNotMillis_IsIncorrect() {
+    void next_WhenGranularityIsNotMillis_IsIncorrect() {
         // arrange
         referenceDate = Timescale.MILLIS.getGranularityFunction().apply(inclusiveMinDate.plusNanos(1_000));
         // act
