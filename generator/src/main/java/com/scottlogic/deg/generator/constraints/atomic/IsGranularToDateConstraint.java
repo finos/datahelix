@@ -49,7 +49,7 @@ public class IsGranularToDateConstraint implements AtomicConstraint, VisitablePr
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, granularity.getGranularity());
+        return Objects.hash(field, granularity);
     }
 
     @Override

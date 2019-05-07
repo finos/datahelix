@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class ParsedDateGranularity {
@@ -28,4 +29,24 @@ public class ParsedDateGranularity {
     public Timescale getGranularity() {
         return granularity;
     }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(granularity);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (this == o)
+            return true;
+        if (getClass() != o.getClass())
+            return false;
+        ParsedDateGranularity parsedDateGranularity = (ParsedDateGranularity) o;
+        return Objects.equals(granularity, parsedDateGranularity.granularity);
+    }
+
+
+
 }
