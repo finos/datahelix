@@ -3,7 +3,6 @@
 The generator supports the following data generation types
 
 * Random (_default_)
-* Full_sequential
 * Interesting
 
 ## Random
@@ -19,15 +18,6 @@ Examples:
 Notes:
 - Random generation of data is infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
 
-## Full_sequential
-Generate all valid data that abides by the given set of constraints. This generation of data might be infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
-
-Examples:
-
-| Constraint | Emitted data
-| ---- | ---- | 
-| `Field is ofType integer AND > 1` | 2, 3, 4, 5, 6, ...
-| `Field is ofType string AND matchingRegex [a-b]{2}` |  aa, ab, ba, bb
 
 ## Interesting
 See [this document](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) for more details on the _interesting generation mode_.
