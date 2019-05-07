@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
@@ -36,7 +36,7 @@ workflows:
   version: 2.1
   build_and_test:
     jobs:
-      - test
+      - build
 # TODO: Ensure gradle migration is smooth before introducing release job
 #  release:
 #    jobs:
