@@ -28,6 +28,8 @@ public class CucumberTestState {
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration = false;
+    private int maxStringLength = 200;
+
     public Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
     public void disableGeneration() { shouldSkipGeneration = true; }
 
@@ -145,6 +147,18 @@ public class CucumberTestState {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
+    }
+
+    int getMaxStringLength() {
+        return maxStringLength;
+    }
+
+    public void setMaxStringLength(int maxLength) {
+        if (maxLength > GenerationConfig.Constants.MAX_STRING_LENGTH){
+            throw new IllegalArgumentException("String lengths are limited to " + GenerationConfig.Constants.MAX_STRING_LENGTH + " characters in production");
+        }
+
+        maxStringLength = maxLength;
     }
 }
 

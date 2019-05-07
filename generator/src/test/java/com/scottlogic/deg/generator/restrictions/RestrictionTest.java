@@ -1,13 +1,11 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class RestrictionTest {
 
@@ -28,9 +26,7 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterString() {
-        StringRestrictions restriction = new StringRestrictions(new StringConstraintsCollection(Collections.emptySet()));
-
-        restriction.stringGenerator = new RegexStringGenerator("H(i|ello) World", true);
+        StringRestrictions restriction = new StringRestrictionsFactory().forStringMatching(Pattern.compile("H(i|ello) World"), false);
 
         Assert.assertThat(restriction.match("Hello World"), Is.is(true));
         Assert.assertThat(restriction.match("Hi World"), Is.is(true));

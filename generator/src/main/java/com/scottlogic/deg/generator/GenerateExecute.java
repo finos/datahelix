@@ -79,7 +79,7 @@ public class GenerateExecute implements Runnable {
             generationEngine.generateDataSet(profile, config, outputTarget);
 
         } catch (IOException | InvalidProfileException e) {
-            e.printStackTrace();
+            errorReporter.displayException(e);
         }
     }
 

@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
@@ -6,10 +8,20 @@ jobs:
     steps:
       - checkout
       - run: mvn clean test
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - store_test_results:
-          path: schemas/target/surefire-reports
-      - store_test_results:
-          path: generator/target/surefire-reports
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+      - codecov/upload:
+          file: schemas/target/jacoco-reports/jacoco.xml
+      - codecov/upload:
+          file: generator/target/jacoco-reports/jacoco.xml
 workflows:
   version: 2.1
   build_and_test: 
