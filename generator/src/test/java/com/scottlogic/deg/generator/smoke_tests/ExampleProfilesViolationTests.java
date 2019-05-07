@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberManifestWriter;
+import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.RelatedFieldTreePartitioner;
@@ -21,6 +22,7 @@ import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
@@ -105,7 +107,7 @@ class ExampleProfilesViolationTests {
                     new DecisionTreeDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
-                                new FieldSpecFactory(new FieldSpecMerger()),
+                                new FieldSpecFactory(new FieldSpecMerger(), new StringRestrictionsFactory()),
                                 new FieldSpecMerger()
                             ),
                             new RowSpecMerger(new FieldSpecMerger())
@@ -119,7 +121,7 @@ class ExampleProfilesViolationTests {
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator())),
                         new FixFieldStrategyFactory(new FieldDependencyAnalyser())),
-                    new ProfileDecisionTreeFactory(),
+                    new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(

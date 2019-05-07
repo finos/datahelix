@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   test:
     docker:
@@ -26,6 +28,10 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+      - codecov/upload:
+          file: schemas/target/jacoco-reports/jacoco.xml
+      - codecov/upload:
+          file: generator/target/jacoco-reports/jacoco.xml
   release:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -36,7 +42,6 @@ jobs:
           path: schemas/build/libs
       - store-artifacts:
           path: generator/build/libs
-
 workflows:
   version: 2.1
   build_and_test:

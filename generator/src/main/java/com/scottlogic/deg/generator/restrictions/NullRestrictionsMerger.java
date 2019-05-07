@@ -14,7 +14,7 @@ public class NullRestrictionsMerger {
         final NullRestrictions merged = new NullRestrictions();
         Optional<Nullness> nullness = getMergedNullness(getNullness(left), getNullness(right));
         if (!nullness.isPresent()){
-            return new MergeResult<>();
+            return MergeResult.UNSUCCESSFUL;
         }
 
         merged.nullness = nullness.get();

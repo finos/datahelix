@@ -19,37 +19,32 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than 0
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value >= 1, currently is 0"
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 1, currently is 0"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than -1
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value >= 1, currently is -1"
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 1, currently is -1"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (decimal number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than 1.1
-    Then the profile is invalid because "Field \[foo\]: String-length operator must contain a integer value for its operand found \(1.1 <BigDecimal>\)"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `1.1`"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a string (number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than "5"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `5`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `5`"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using an empty string "" to specify a the length of a generated string field should fail with an error message
     Given foo is shorter than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ``"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using null to specify a the length of a generated string field should fail with an error message
     Given foo is shorter than null
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
-  Scenario: Running a 'shorterThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
-    Given foo is shorter than 2147483648
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have a operand/value <= 2147483647, currently is 2147483648"
     And no data is created
 
   Scenario: shorterThan run against a non contradicting shorterThan should be successful
@@ -251,3 +246,43 @@ Feature: User can specify that a string length is lower than, a specified number
       | foo  |
       | null |
       | "x"  |
+
+  Scenario: shorterThan with maximum permitted value should be successful
+    Given foo is shorter than 1001
+    And the generation strategy is random
+    And the generator can generate at most 1 rows
+    And foo is anything but null
+    Then foo contains strings of length between 0 and 1000 inclusively
+
+  Scenario: shorterThan with value larger than maximum permitted should fail with an error message
+    Given foo is shorter than 1002
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1001, currently is 1002"
+
+  Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
+    Given foo is of type "string"
+    And foo is shorter than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 0 and 253 inclusively
+
+  Scenario: Running a 'shorterThan' request with a value at the implicit max (255) should generate data of length between 0 and value
+    Given foo is of type "string"
+    And foo is shorter than 256
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 0 and 255 inclusively
+
+  Scenario: Running a 'shorterThan' request with a value greater than implicit max (255) should generate data of length between 0 and value
+    Given foo is shorter than 257
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 0 and 256 inclusively
+
+  Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
+    Given foo is of type "string"
+    And foo is shorter than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 0 and 253 inclusively
+
+  Scenario: Running a 'shorterThan' request with a value greater than implicit max (255) should generate data of length between 0 and value
+    Given foo is of type "string"
+    And foo is shorter than 256
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 0 and 255 inclusively

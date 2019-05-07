@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,13 @@ class ReductiveTreePrunerTests {
     Field field = new Field("foo");
     Field unrelatedField = new Field("unrelated");
     FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
-    ReductiveTreePruner treePruner = new ReductiveTreePruner(new FieldSpecMerger(), new ConstraintReducer(new FieldSpecFactory(new FieldSpecMerger()), new FieldSpecMerger()), fieldSpecHelper);
+    ReductiveTreePruner treePruner = new ReductiveTreePruner(
+        new FieldSpecMerger(),
+        new ConstraintReducer(
+            new FieldSpecFactory(
+                new FieldSpecMerger(), new StringRestrictionsFactory()),
+            new FieldSpecMerger()),
+        fieldSpecHelper);
 
 
     // SINGLE LAYER

@@ -4,16 +4,15 @@ public class MergeResult<T> {
     public final T restrictions;
     public final boolean successful;
 
+    public final static MergeResult UNSUCCESSFUL = new MergeResult();
+
     public MergeResult(T restrictions) {
-        this(restrictions, true);
-    }
-
-    public MergeResult() {
-        this(null, false);
-    }
-
-    public MergeResult(T restrictions, boolean successful) {
         this.restrictions = restrictions;
-        this.successful = successful;
+        this.successful = true;
+    }
+
+    private MergeResult() {
+        this.restrictions = null;
+        this.successful = false;
     }
 }

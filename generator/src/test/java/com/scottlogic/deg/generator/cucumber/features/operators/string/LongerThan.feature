@@ -27,37 +27,32 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: 'longerThan' a negative number should fail with an error
     Given foo is longer than -5
-    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have a operand/value >= 0, currently is -5"
+    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value >= 0, currently is -5"
     And no data is created
 
   Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message
     Given foo is longer than 1.1
-    Then the profile is invalid because "Field \[foo\]: String-length operator must contain a integer value for its operand found \(1.1 <BigDecimal>\)"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `1.1`"
     And no data is created
 
   Scenario: 'longerThan' a string should fail with an error message
     Given foo is longer than "Test"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `Test`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `Test`"
     And no data is created
 
   Scenario: 'longerThan' an empty string should fail with an error message
     Given foo is longer than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ``"
     And no data is created
 
   Scenario: 'longerThan' whitespace should fail with an error message
     Given foo is longer than " "
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ` `"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ` `"
     And no data is created
 
   Scenario: 'longerThan' null should fail with an error message
     Given foo is longer than null
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
-  Scenario: Running a 'longerThan' request using a number (> 32bit-int) to specify a the length of a generated string should fail with an error message
-    Given foo is longer than 2147483647
-    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have a operand/value <= 2147483646, currently is 2147483647"
     And no data is created
 
   Scenario: 'longerThan' a decimal number with a zero mantissa should be successful
@@ -621,3 +616,38 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "aaaa"                    |
       | "2019-01-01T00:00:00.000" |
       | 2020-01-01T00:00:00.000Z  |
+
+  Scenario: longerThan with maximum permitted value should be successful
+    Given foo is longer than 999
+    And the generation strategy is random
+    And the generator can generate at most 1 rows
+    And foo is anything but null
+    Then foo contains strings of length between 1000 and 1000 inclusively
+
+  Scenario: longerThan with value larger than maximum permitted should fail with an error message
+    Given foo is longer than 1000
+    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value <= 999, currently is 1000"
+
+  Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
+    Given foo is of type "string"
+    And foo is longer than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 255 and 255 inclusively
+
+  Scenario: Running a 'longerThan' request with a value equal to the implicit max (255) should generate data of length between 256 and hard maximum (1000)
+    Given foo is of type "string"
+    And foo is longer than 255
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 256 and 1000 inclusively
+
+  Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
+    Given foo is of type "string"
+    And foo is longer than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 254 and 255 inclusively
+
+  Scenario: Running a 'longerThan' request with a value equal to the implicit max (255) should generate data of length between 255 and hard maximum (1000)
+    Given foo is of type "string"
+    And foo is longer than 255
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 255 and 1000 inclusively

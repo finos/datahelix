@@ -240,7 +240,7 @@ The following non-capturing groups are unsupported:
 { "field": "name", "is": "ofLength", "value": 5 }
 ```
 
-Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number.
+Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number between `0` and `1000`.
 
 <div id="predicate-longerthan"></div>
 
@@ -250,7 +250,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`, must b
 { "field": "name", "is": "longerThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length greater than `value`, must be a whole number.
+Is satisfied if `field` is a string with length greater than `value`, must be a whole number between `-1` and `999`.
 
 <div id="predicate-shorterthan"></div>
 
@@ -260,7 +260,7 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 { "field": "name", "is": "shorterThan", "value": 3 }
 ```
 
-Is satisfied if `field` is a string with length less than `value`, must be a whole number.   
+Is satisfied if `field` is a string with length less than `value`, must be a whole number between `1` and `1001`.   
 
 <div id="predicate-avalid"></div>
 

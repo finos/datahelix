@@ -4,11 +4,7 @@
   "title": "The Scott Logic DataHelix Profile Schema",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schemaVersion",
-    "fields",
-    "rules"
-  ],
+  "required": ["schemaVersion", "fields", "rules"],
   "properties": {
     "additionalProperties": false,
     "schemaVersion": {
@@ -36,9 +32,7 @@
         "title": "A set of Rule objects.",
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "constraints"
-        ],
+        "required": ["constraints"],
         "properties": {
           "rule": {
             "title": "A collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.",
@@ -77,9 +71,7 @@
     "datetime": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "date"
-      ],
+      "required": ["date"],
       "default": {
         "date": "2000-01-01T09:00:00.000"
       },
@@ -95,8 +87,8 @@
     },
     "numeric": {
       "type": "number",
-      "minimum": -1E20,
-      "maximum": 1E20,
+      "minimum": -1e20,
+      "maximum": 1e20,
       "default": 0
     },
     "integer": {
@@ -105,16 +97,14 @@
     },
     "string": {
       "type": "string",
-      "maxLength": 8000,
+      "maxLength": 1000,
       "default": "string"
     },
     "fieldName": {
       "title": "The name of a field to generate data for",
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "default": {
         "name": "fieldName"
       },
@@ -154,11 +144,7 @@
     },
     "dataConstraint": {
       "type": "object",
-      "required": [
-        "field",
-        "is",
-        "value"
-      ],
+      "required": ["field", "is", "value"],
       "additionalProperties": false,
       "properties": {
         "field": {
@@ -193,12 +179,7 @@
           "if": {
             "properties": {
               "is": {
-                "enum": [
-                  "after",
-                  "afterOrAt",
-                  "before",
-                  "beforeOrAt"
-                ]
+                "enum": ["after", "afterOrAt", "before", "beforeOrAt"]
               }
             }
           },
@@ -237,12 +218,7 @@
           "then": {
             "properties": {
               "value": {
-                "enum": [
-                  "decimal",
-                  "integer",
-                  "string",
-                  "datetime"
-                ]
+                "enum": ["decimal", "integer", "string", "datetime"]
               }
             }
           }
@@ -268,10 +244,7 @@
           "if": {
             "properties": {
               "is": {
-                "enum": [
-                  "matchingRegex",
-                  "containingRegex"
-                ]
+                "enum": ["matchingRegex", "containingRegex"]
               }
             }
           },
@@ -296,7 +269,26 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/integer",
-                "minimum": 1
+                "minimum": 1,
+                "maximum": 1001
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "ofLength"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/integer",
+                "minimum": 0,
+                "maximum": 1000
               }
             }
           }
@@ -313,7 +305,8 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/integer",
-                "minimum": 0
+                "minimum": -1,
+                "maximum": 999
               }
             }
           }
@@ -330,27 +323,27 @@
             "properties": {
               "value": {
                 "enum": [
-                  1E0,
-                  1E-1,
-                  1E-2,
-                  1E-3,
-                  1E-4,
-                  1E-5,
-                  1E-6,
-                  1E-7,
-                  1E-8,
-                  1E-9,
-                  1E-10,
-                  1E-11,
-                  1E-12,
-                  1E-13,
-                  1E-14,
-                  1E-15,
-                  1E-16,
-                  1E-17,
-                  1E-18,
-                  1E-19,
-                  1E-20
+                  1,
+                  1e-1,
+                  1e-2,
+                  1e-3,
+                  1e-4,
+                  1e-5,
+                  1e-6,
+                  1e-7,
+                  1e-8,
+                  1e-9,
+                  1e-10,
+                  1e-11,
+                  1e-12,
+                  1e-13,
+                  1e-14,
+                  1e-15,
+                  1e-16,
+                  1e-17,
+                  1e-18,
+                  1e-19,
+                  1e-20
                 ]
               }
             }
@@ -399,9 +392,7 @@
     "notConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "not"
-      ],
+      "required": ["not"],
       "properties": {
         "not": {
           "$ref": "#/definitions/constraint"
@@ -411,9 +402,7 @@
     "anyOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "anyOf"
-      ],
+      "required": ["anyOf"],
       "properties": {
         "anyOf": {
           "type": "array",
@@ -427,9 +416,7 @@
     "allOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "allOf"
-      ],
+      "required": ["allOf"],
       "properties": {
         "allOf": {
           "type": "array",
@@ -442,10 +429,7 @@
     },
     "ifThenConstraint": {
       "type": "object",
-      "required": [
-        "if",
-        "then"
-      ],
+      "required": ["if", "then"],
       "additionalProperties": false,
       "properties": {
         "if": {
@@ -458,11 +442,7 @@
     },
     "ifThenElseConstraint": {
       "type": "object",
-      "required": [
-        "if",
-        "then",
-        "else"
-      ],
+      "required": ["if", "then", "else"],
       "additionalProperties": false,
       "properties": {
         "if": {
@@ -478,10 +458,7 @@
     },
     "nullConstraint": {
       "type": "object",
-      "required": [
-        "field",
-        "is"
-      ],
+      "required": ["field", "is"],
       "additionalProperties": false,
       "properties": {
         "field": {
@@ -494,11 +471,7 @@
     },
     "inSetConstraint": {
       "type": "object",
-      "required": [
-        "field",
-        "is",
-        "values"
-      ],
+      "required": ["field", "is", "values"],
       "additionalProperties": false,
       "properties": {
         "field": {

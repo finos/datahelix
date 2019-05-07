@@ -81,7 +81,7 @@ public class SetRestrictions {
         }
 
         if (newWhitelist != null && newWhitelist.size() == 0) {
-            return new MergeResult<>();
+            return MergeResult.UNSUCCESSFUL;
         }
 
         return new MergeResult<>(new SetRestrictions(newWhitelist, newBlacklist));

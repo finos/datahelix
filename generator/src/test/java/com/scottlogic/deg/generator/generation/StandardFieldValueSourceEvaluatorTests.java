@@ -1,14 +1,12 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +15,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
@@ -96,10 +95,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        StringRestrictions stringRestrictions =
-            new StringRestrictions(new StringConstraintsCollection(Collections.emptySet())) {{
-                stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
-            }};
+        StringRestrictions stringRestrictions = matchesRegex("/[ab]{2}/", false);
         TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(
             IsOfTypeConstraint.Types.STRING
         ));
@@ -256,7 +252,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions() {{
+            new NumericRestrictions(new ParsedGranularity(new BigDecimal(new BigInteger("0"), 2, new MathContext(1)))) {{
                 min = new NumericLimit<>(new BigDecimal("15"), false);
                 max = new NumericLimit<>(new BigDecimal("16"), false);
             }},
@@ -268,11 +264,6 @@ public class StandardFieldValueSourceEvaluatorTests {
             FieldSpecSource.Empty
         ).withNullRestrictions(
             new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
-            FieldSpecSource.Empty
-        ).withGranularityRestrictions(
-            new GranularityRestrictions(
-                new ParsedGranularity(new BigDecimal(new BigInteger("0"), 2, new MathContext(1)))
-            ),
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -436,5 +427,9 @@ public class StandardFieldValueSourceEvaluatorTests {
         Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
         Assert.assertTrue(sources.get(lastSourceIndex).getValueCount() == 1);
         Assert.assertTrue(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0) == null);
+    }
+
+    private static StringRestrictions matchesRegex(String regex, boolean negate){
+        return new StringRestrictionsFactory().forStringMatching(Pattern.compile(regex), negate);
     }
 }

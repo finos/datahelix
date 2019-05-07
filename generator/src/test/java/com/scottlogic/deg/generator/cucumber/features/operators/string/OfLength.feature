@@ -58,7 +58,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length <length>
     And foo is in set:
       | "1" |
-    Then the profile is invalid because "Field \[foo\]: String-length operator must contain a integer value for its operand found \(\d+\.\d+ <BigDecimal>\)"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `.+`"
     Examples:
       | length      |
       | 1.1         |
@@ -72,7 +72,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length <length>
     And foo is in set:
       | "a" |
-    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have a operand/value >= 0, currently is -?\d+)"
+    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -?\d+)"
     And no data is created
     Examples:
       | length                    |
@@ -444,3 +444,14 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | foo  |
       | null |
       | "1"  |
+
+  Scenario: ofLength with maximum permitted value should be successful
+    Given foo is of length 1000
+    And the generator can generate at most 1 rows
+    And the generation strategy is random
+    And foo is anything but null
+    Then foo contains strings of length between 1000 and 1000 inclusively
+
+  Scenario: ofLength with value larger than maximum permitted should fail with an error message
+    Given foo is of length 1001
+    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value <= 1000, currently is 1001"

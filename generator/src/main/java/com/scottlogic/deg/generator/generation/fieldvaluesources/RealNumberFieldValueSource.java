@@ -24,15 +24,11 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     private final int scale;
     private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
 
-    /**
-     * @param scale The granularity of the output values: the number of digits to the right of the decimal point. See BigDecimal.scale() for details
-     */
     public RealNumberFieldValueSource(
         NumericRestrictions restrictions,
-        Set<Object> blacklist,
-        int scale) {
-        this.scale = scale;
-        this.stepSize = new BigDecimal("1").scaleByPowerOfTen(scale * -1);
+        Set<Object> blacklist) {
+        this.scale = restrictions.getNumericScale();
+        this.stepSize = restrictions.getStepSize();
 
         NumericLimit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
 
@@ -114,11 +110,10 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(
                 new SupplierBasedIterator<>(() ->
-                    new BigDecimal(
-                        randomNumberGenerator.nextDouble(
-                            inclusiveLowerLimit.doubleValue(),
-                            inclusiveUpperLimit.doubleValue()
-                        )).setScale(scale, RoundingMode.HALF_UP)),
+                    randomNumberGenerator.nextBigDecimal(
+                        inclusiveLowerLimit,
+                        inclusiveUpperLimit,
+                        scale)),
                 i -> !blacklist.contains(i)));
     }
 

@@ -26,6 +26,11 @@ public class GenerationConfig {
     }
 
     public CombinationStrategy getCombinationStrategy() {
+
+        if (dataGenerationType == DataGenerationType.RANDOM){
+            return new MinimalCombinationStrategy();
+        }
+
         if (this.walkerType == TreeWalkerType.REDUCTIVE){
             return new ReductiveCombinationStrategy();
         }
@@ -171,5 +176,6 @@ public class GenerationConfig {
 
         public static final BigDecimal NUMERIC_MAX = new BigDecimal("1e20");
         public static final BigDecimal NUMERIC_MIN = new BigDecimal("-1e20");
+        public static final int MAX_STRING_LENGTH = 1000;
     }
 }

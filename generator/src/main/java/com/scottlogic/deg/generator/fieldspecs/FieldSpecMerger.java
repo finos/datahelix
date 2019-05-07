@@ -18,7 +18,6 @@ public class FieldSpecMerger {
         new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
         new NullRestrictionsMergeOperation(),
         new FormatRestrictionsMergeOperation(),
-        new GranularityRestrictionsMergeOperation(),
         new MustContainRestrictionMergeOperation()
     };
 
