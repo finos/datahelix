@@ -1,18 +1,34 @@
 version: 2.1
 jobs:
-  build:
+  test:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk
     steps:
       - checkout
-      - run: gradle :schemas:cleanTest :schemas:test :generator:cleanTest :generator:test
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run: gradle :schemas:test :generator:test
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - store_test_results:
-          path: schemas/build/reports/tests/test
-      - store_test_results:
-          path: generator/build/reports/tests/test
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
   release:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk
     steps:
       - checkout
       - run: gradle :schemas:release :generator:release
@@ -20,14 +36,16 @@ jobs:
           path: schemas/build/libs
       - store-artifacts:
           path: generator/build/libs
+
 workflows:
   version: 2.1
-  build_and_test: 
+  build_and_test:
     jobs:
-      - build
-  release:
-    jobs:
-      - release:
-          filters:
-            branches:
-              only: master
+      - test
+# TODO: Ensure gradle migration is smooth before introducing release job
+#  release:
+#    jobs:
+#      - release:
+#          filters:
+#            branches:
+#              only: master
