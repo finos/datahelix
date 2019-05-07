@@ -10,10 +10,6 @@ import java.util.stream.Collectors;
 public class MultipleProfileValidator implements ProfileValidator{
     private final Collection<ProfileValidator> validators;
 
-    public MultipleProfileValidator(ProfileValidator... validators) {
-        this.validators = Arrays.asList(validators);
-    }
-
     public MultipleProfileValidator(Collection<ProfileValidator> validators) {
         this.validators = validators;
     }

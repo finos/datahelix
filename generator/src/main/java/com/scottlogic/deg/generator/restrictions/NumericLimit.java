@@ -22,15 +22,6 @@ public class NumericLimit<T extends Number> {
         return isInclusive;
     }
 
-    public static NumericLimit<Integer> bigDecimalToInteger(NumericLimit<BigDecimal> decimalLimit) {
-        if (!NumberUtils.isInteger(decimalLimit.limit))
-            throw new IllegalArgumentException("Can't convert limit: " + decimalLimit.limit + " to integer");
-
-        return new NumericLimit<>(
-            decimalLimit.limit.intValue(),
-            decimalLimit.isInclusive);
-    }
-
     public String toString(String operator) {
         return String.format(
             "%s%s %s",

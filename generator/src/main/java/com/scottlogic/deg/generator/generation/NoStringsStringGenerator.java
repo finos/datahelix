@@ -13,14 +13,6 @@ public class NoStringsStringGenerator implements StringGenerator {
         this.stringRepresentation = stringRepresentation;
     }
 
-    public NoStringsStringGenerator(StringGenerator... generators) {
-        this(Arrays
-            .stream(generators)
-            .map(Object::toString)
-            .reduce(RegexStringGenerator::intersectRepresentation)
-            .orElseThrow(() -> new IllegalArgumentException("At least one generator must be supplied")));
-    }
-
     @Override
     public String toString() {
         return String.format("No strings: %s", this.stringRepresentation);

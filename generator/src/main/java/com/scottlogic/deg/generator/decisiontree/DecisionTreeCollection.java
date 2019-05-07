@@ -16,14 +16,6 @@ public class DecisionTreeCollection {
         this.decisionTrees = decisionTrees;
     }
 
-    public ProfileFields getFields() {
-        return fields;
-    }
-
-    public Collection<DecisionTree> getDecisionTrees() {
-        return decisionTrees;
-    }
-
     public DecisionTree getMergedTree() {
         return new DecisionTree(
             ConstraintNode.merge(decisionTrees

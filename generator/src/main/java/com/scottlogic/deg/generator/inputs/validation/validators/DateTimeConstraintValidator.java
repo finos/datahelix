@@ -73,16 +73,6 @@ public class DateTimeConstraintValidator implements ConstraintValidatorAlerts {
                 && currentRestrictions.min.getLimit().compareTo(currentRestrictions.max.getLimit()) == 0));
     }
 
-    private void logError(Field field, OffsetDateTime referenceValue) {
-        alerts.add(new ValidationAlert(
-            Criticality.ERROR,
-            new DateTimeConstraintValidationMessages(
-                currentRestrictions,
-                referenceValue),
-            validationType,
-            field));
-    }
-
     private void logInformation(Field field, OffsetDateTime referenceValue) {
         alerts.add(new ValidationAlert(
             Criticality.INFORMATION,

@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class TreeConstraintNode implements ConstraintNode {
-    public static final ConstraintNode empty = new TreeConstraintNode(Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
-
     private final Collection<AtomicConstraint> atomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
@@ -38,13 +36,6 @@ public final class TreeConstraintNode implements ConstraintNode {
         this(
             Collections.singletonList(singleAtomicConstraint),
             Collections.emptySet(),
-            Collections.emptySet());
-    }
-
-    TreeConstraintNode(DecisionNode... decisionNodes) {
-        this(
-            Collections.emptyList(),
-            Arrays.asList(decisionNodes),
             Collections.emptySet());
     }
 

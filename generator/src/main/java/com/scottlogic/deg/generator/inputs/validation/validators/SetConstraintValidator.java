@@ -56,14 +56,6 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
             field));
     }
 
-    private void logInformation(Field field, StandardValidationMessages message) {
-        alerts.add(new ValidationAlert(
-            Criticality.INFORMATION,
-            message,
-            validationType,
-            field));
-    }
-
     @Override
     public List<ValidationAlert> getAlerts() {
         return alerts;
