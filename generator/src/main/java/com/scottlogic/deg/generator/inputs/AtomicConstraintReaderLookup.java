@@ -231,13 +231,6 @@ class AtomicConstraintReaderLookup {
                     rules));
     }
 
-    private static String exceptionToPrettyString(List<Exception> exceptions) {
-        return exceptions.stream()
-            .map(e -> "\n" + e.getMessage())
-            .reduce((a, b) -> a + b)
-            .orElse("No exceptions.");
-    }
-
     private static Object getValidatedValue(ConstraintDTO dto) throws InvalidProfileException {
         return getValidatedValue(dto, dto.value, Object.class);
     }
