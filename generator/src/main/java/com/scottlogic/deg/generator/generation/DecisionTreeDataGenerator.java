@@ -35,7 +35,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DataGeneratorMonitor monitor,
         RowSpecDataBagGenerator dataBagSourceFactory,
         FixFieldStrategyFactory walkerStrategyFactory,
-        CombinationStrategy combinationStrategy) {
+        CombinationStrategy combinationStrategy,
+        FixFieldStrategyFactory fixFieldStrategyFactory) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
@@ -56,7 +57,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
-            .map(tree -> generateForPartition(profile, tree, generationConfig));
+            .map(this::generateForPartition);
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
@@ -64,8 +65,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .peek(monitor::rowEmitted);
     }
 
-    private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
-        FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
+    private Stream<DataBag> generateForPartition(DecisionTree tree) {
+        FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.create(tree.getRootNode());
 
         Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree, fixFieldStrategy);
 

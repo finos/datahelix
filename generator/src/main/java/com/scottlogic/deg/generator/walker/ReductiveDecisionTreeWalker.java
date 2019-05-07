@@ -50,7 +50,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     private Stream<RowSpec> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
-        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState, tree);
+        Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(tree, fieldToFix);
 
         if (!nextFieldSpec.isPresent()){

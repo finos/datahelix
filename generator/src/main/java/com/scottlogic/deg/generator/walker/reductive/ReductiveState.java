@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class ReductiveState {
 
-    private final ProfileFields fields;
+    public final ProfileFields fields;
     private final Map<Field, FieldValue> fieldValues;
 
     public ReductiveState(ProfileFields fields) {

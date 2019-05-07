@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberManifestWriter;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
@@ -120,8 +119,9 @@ class ExampleProfilesViolationTests {
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator()),
                             new PinningCombinationStrategy()),
-                        new FixFieldStrategyFactory(new FieldDependencyAnalyser()),
-                        new PinningCombinationStrategy()),
+                        new FixFieldStrategyFactory(),
+                        new PinningCombinationStrategy(),
+                        new FixFieldStrategyFactory()),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
 

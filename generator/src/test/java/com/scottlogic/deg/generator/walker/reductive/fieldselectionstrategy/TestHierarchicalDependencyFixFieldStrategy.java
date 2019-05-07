@@ -6,7 +6,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.common.profile.RuleInformation;
@@ -225,8 +224,8 @@ public class TestHierarchicalDependencyFixFieldStrategy {
             profile.fields,
             "Decision tree");
 
-        HierarchicalDependencyFixFieldStrategy strategy =
-            new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser(), tree);
-        return strategy.getFieldFixingPriorityList(profile.fields);
+        FieldAppearanceFixingStrategy strategy =
+            new FieldAppearanceFixingStrategy();
+        return strategy.getFieldFixingPriorityList(profile.fields, tree.getRootNode());
     }
 }
