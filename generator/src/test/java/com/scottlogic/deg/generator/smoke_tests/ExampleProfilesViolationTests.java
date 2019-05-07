@@ -13,6 +13,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
@@ -120,8 +121,9 @@ class ExampleProfilesViolationTests {
                                 config,
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator()),
-                            config),
-                        new FixFieldStrategyFactory(new FieldDependencyAnalyser())),
+                            new PinningCombinationStrategy()),
+                        new FixFieldStrategyFactory(new FieldDependencyAnalyser()),
+                        new PinningCombinationStrategy()),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =

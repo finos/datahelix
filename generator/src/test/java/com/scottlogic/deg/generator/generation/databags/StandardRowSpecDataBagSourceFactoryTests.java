@@ -26,9 +26,7 @@ class StandardRowSpecDataBagSourceFactoryTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
         FieldSpecValueGenerator generatorFactory = mock(FieldSpecValueGenerator.class);
-        GenerationConfig config = mock(GenerationConfig.class);
-        when(config.getCombinationStrategy()).thenReturn(mock(CombinationStrategy.class));
-        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory, config);
+        RowSpecDataBagSourceFactory factory = new StandardRowSpecDataBagSourceFactory(generatorFactory, mock(CombinationStrategy.class));
 
         factory.createDataBags(rowSpec);
 

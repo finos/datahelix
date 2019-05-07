@@ -24,6 +24,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final FixFieldStrategyFactory walkerStrategyFactory;
+    private final CombinationStrategy partitionCombiner;
 
     @Inject
     public DecisionTreeDataGenerator(
@@ -32,13 +33,15 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
         RowSpecDataBagSourceFactory dataBagSourceFactory,
-        FixFieldStrategyFactory walkerStrategyFactory) {
+        FixFieldStrategyFactory walkerStrategyFactory,
+        CombinationStrategy combinationStrategy) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.dataBagSourceFactory = dataBagSourceFactory;
         this.walkerStrategyFactory = walkerStrategyFactory;
+        this.partitionCombiner = combinationStrategy;
     }
 
     @Override
@@ -48,7 +51,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         GenerationConfig generationConfig) {
 
         monitor.generationStarting(generationConfig);
-        CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
 
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
