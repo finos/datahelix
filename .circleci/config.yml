@@ -22,6 +22,15 @@ jobs:
           file: schemas/target/jacoco-reports/jacoco.xml
       - codecov/upload:
           file: generator/target/jacoco-reports/jacoco.xml
+  verify_commit_message:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - run:
+          name: Get gommit binary
+          command: |
+            mkdir /home/circleci/bin
+            wget -O ~/bin/gommit https://github.com/antham/gommit/releases/download/v2.0.0/gommit_linux_386 && chmod 777 ~/bin/gommit
   release:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -37,6 +46,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+  verify_commit:
+    jobs:
+      - verify_commit_message
 # TODO: Ensure gradle migration is smooth before introducing release job
 #  release:
 #    jobs:
