@@ -36,10 +36,6 @@ import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldAppearanceFixingStrategy;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
-import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.nio.file.Path;
@@ -88,7 +84,6 @@ public class BaseModule extends AbstractModule {
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
         bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
-        bind(FixFieldStrategy.class).to(FieldAppearanceFixingStrategy.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);

@@ -17,8 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FieldAppearanceFixingStrategy implements FixFieldStrategy {
-
-    private final List<Field> fieldsInFixingOrder;
+    final List<Field> fieldsInFixingOrder;
 
     public FieldAppearanceFixingStrategy(ConstraintNode rootNode) {
         FieldAppearanceAnalyser fieldAppearanceAnalyser = new FieldAppearanceAnalyser();

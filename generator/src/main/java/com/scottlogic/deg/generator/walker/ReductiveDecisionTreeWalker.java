@@ -12,6 +12,7 @@ import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
+import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDataGeneratorMonitor monitor;
     private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
     private final FieldSpecValueGenerator fieldSpecValueGenerator;
+    private final FixFieldStrategyFactory fixFieldStrategyFactory;
 
     @Inject
     public ReductiveDecisionTreeWalker(
@@ -32,19 +34,23 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
         ReductiveRowSpecGenerator reductiveRowSpecGenerator,
-        FieldSpecValueGenerator fieldSpecValueGenerator) {
+        FieldSpecValueGenerator fieldSpecValueGenerator,
+        FixFieldStrategyFactory fixFieldStrategyFactory) {
         this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
         this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
         this.fieldSpecValueGenerator = fieldSpecValueGenerator;
+        this.fixFieldStrategyFactory = fixFieldStrategyFactory;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
-    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
+    @Override
+    public Stream<RowSpec> walk(DecisionTree tree) {
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
+        FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.create(tree.getRootNode());
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 

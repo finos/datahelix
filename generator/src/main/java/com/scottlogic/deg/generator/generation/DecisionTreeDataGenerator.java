@@ -12,8 +12,6 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +22,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final RowSpecDataBagGenerator dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
-    private final FixFieldStrategyFactory walkerStrategyFactory;
     private final CombinationStrategy partitionCombiner;
 
     @Inject
@@ -34,15 +31,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
         RowSpecDataBagGenerator dataBagSourceFactory,
-        FixFieldStrategyFactory walkerStrategyFactory,
-        CombinationStrategy combinationStrategy,
-        FixFieldStrategyFactory fixFieldStrategyFactory) {
+        CombinationStrategy combinationStrategy) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.dataBagSourceFactory = dataBagSourceFactory;
-        this.walkerStrategyFactory = walkerStrategyFactory;
         this.partitionCombiner = combinationStrategy;
     }
 
@@ -66,9 +60,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     }
 
     private Stream<DataBag> generateForPartition(DecisionTree tree) {
-        FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.create(tree.getRootNode());
-
-        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree, fixFieldStrategy);
+        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree);
 
         return FlatMappingSpliterator.flatMap(
             rowSpecsForPartition,

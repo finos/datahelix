@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import org.junit.Assert;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.mock;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 public class TestHierarchicalDependencyFixFieldStrategy {
 
@@ -42,63 +45,30 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
     @Test
     public void testHierarchicalDependencyOverDifferingSetSizes() {
-        String TEST_FIELD_1 = "Controlling Field 1";
-        String TEST_FIELD_2 = "Controlling Field 2";
-        String TEST_FIELD_3 = "Dependent Field";
-        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3);
+        String controlling1 = "Controlling Field 1";
+        String controlling2 = "Controlling Field 2";
+        String dependent = "Dependent Field";
+        List<Field> fields = getFields(controlling1, controlling2, dependent);
 
-        // TEST_FIELD_1 affects TEST_FIELD_2 affects TEST_FIELD_3
+        // controlling1 affects controlling2 affects dependent
         List<Constraint> constraints = new ConstraintBuilder(fields)
-            .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU", "EQ"))
-            .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
-            .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
+            .addInSetConstraint(controlling1, Arrays.asList("CO", "CR", "CU", "EQ"))
+            .addInSetConstraint(controlling2, Arrays.asList("B", "M", "N"))
+            .addInSetConstraint(dependent, Arrays.asList("A", "B", "C"))
             .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "B").build()
+                new ConstraintBuilder(fields).addEqualToConstraint(controlling1, "CO").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(controlling2, "B").build()
             )
             .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "M").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "A").build()
-            )
-            .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "B").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "C").build()
+                new ConstraintBuilder(fields).addEqualToConstraint(controlling2, "M").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(dependent, "A").build()
             )
             .build();
-        List<Field> priorities = getPriorities(fields, constraints);
+        List<Field> actual = getPriorities(fields, constraints);
 
-        Assert.assertEquals(priorities.get(0).name, TEST_FIELD_1);
-        Assert.assertEquals(priorities.get(1).name, TEST_FIELD_2);
-        Assert.assertEquals(priorities.get(2).name, TEST_FIELD_3);
-    }
+        List<Field> expected = Arrays.asList(new Field(controlling2), new Field(controlling1), new Field(dependent));
 
-    @Test
-    public void testHierarchicalDependencyWithDifferingSetSizes() {
-        String TEST_FIELD_1 = "Controlling Field 1";
-        String TEST_FIELD_2 = "Controlling Field 2";
-        String TEST_FIELD_3 = "Dependent Field";
-        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3);
-
-        // TEST_FIELD_1 and TEST_FIELD_2 affect TEST_FIELD_3
-        List<Constraint> constraints = new ConstraintBuilder(fields)
-            .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU", "EQ"))
-            .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
-            .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
-            .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "B").build()
-            )
-            .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_2, "B").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "C").build()
-            )
-            .build();
-        List<Field> priorities = getPriorities(fields, constraints);
-
-        // TEST_FIELD 2 is smaller set
-        Assert.assertEquals(priorities.get(0).name, TEST_FIELD_2);
-        Assert.assertEquals(priorities.get(1).name, TEST_FIELD_1);
-        Assert.assertEquals(priorities.get(2).name, TEST_FIELD_3);
+        assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
@@ -134,33 +104,32 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
     @Test
     public void testHierarchicalDependencyAndOneIndependentField() {
-        String TEST_FIELD_1 = "Controlling Field";
-        String TEST_FIELD_2 = "Independent Field";
-        String TEST_FIELD_3 = "Dependent Field 1";
-        String TEST_FIELD_4 = "Dependent Field 2";
-        List<Field> fields = getFields(TEST_FIELD_1, TEST_FIELD_2, TEST_FIELD_3, TEST_FIELD_4);
+        String controlling = "Controlling Field";
+        String independent = "Independent Field";
+        String dependent1 = "Dependent Field 1";
+        String dependent2 = "Dependent Field 2";
+        List<Field> fields = getFields(controlling, independent, dependent1, dependent2);
 
-        // TEST_FIELD_1 affects TEST_FIELD_3 and TEST_FIELD_4, TEST_FIELD_2 is independent
         List<Constraint> constraints = new ConstraintBuilder(fields)
-            .addInSetConstraint(TEST_FIELD_1, Arrays.asList("CO", "CR", "CU"))
-            .addInSetConstraint(TEST_FIELD_2, Arrays.asList("B", "M", "N"))
-            .addInSetConstraint(TEST_FIELD_3, Arrays.asList("A", "B", "C"))
-            .addInSetConstraint(TEST_FIELD_4, Arrays.asList("D", "E", "F"))
+            .addInSetConstraint(controlling, Arrays.asList("CO", "CR", "CU"))
+            .addInSetConstraint(independent, Arrays.asList("B", "M", "N"))
+            .addInSetConstraint(dependent1, Arrays.asList("A", "B", "C"))
+            .addInSetConstraint(dependent2, Arrays.asList("D", "E", "F"))
             .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_3, "B").build()
+                new ConstraintBuilder(fields).addEqualToConstraint(controlling, "CO").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(dependent1, "B").build()
             )
             .addConditionalConstraint(
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_1, "CO").build(),
-                new ConstraintBuilder(fields).addEqualToConstraint(TEST_FIELD_4, "D").build()
+                new ConstraintBuilder(fields).addEqualToConstraint(controlling, "CO").build(),
+                new ConstraintBuilder(fields).addEqualToConstraint(dependent2, "D").build()
             )
             .build();
-        List<Field> priorities = getPriorities(fields, constraints);
 
-        Assert.assertEquals(priorities.get(0).name, TEST_FIELD_1);
-        Assert.assertEquals(priorities.get(1).name, TEST_FIELD_2);
-        Assert.assertEquals(priorities.get(2).name, TEST_FIELD_3);
-        Assert.assertEquals(priorities.get(3).name, TEST_FIELD_4);
+        List<Field> actual = getPriorities(fields, constraints);
+
+        List<Field> expected = Arrays.asList(new Field(controlling), new Field(dependent2), new Field(dependent1), new Field(independent));
+
+        assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
@@ -212,20 +181,10 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Rule> rules = Collections.singletonList(new Rule(new RuleInformation(), constraints));
         Profile profile = new Profile(fields, rules);
 
-        List<AtomicConstraint> atomicConstraints =
-            constraints
-                .stream()
-                .filter(c -> c instanceof AtomicConstraint)
-                .map(c -> (AtomicConstraint)c)
-                .collect(Collectors.toList());
-
-        DecisionTree tree = new DecisionTree(
-            new TreeConstraintNode(atomicConstraints, Collections.emptyList()),
-            profile.fields,
-            "Decision tree");
+        DecisionTree tree = new ProfileDecisionTreeFactory().analyse(profile);
 
         FieldAppearanceFixingStrategy strategy =
-            new FieldAppearanceFixingStrategy();
-        return strategy.getFieldFixingPriorityList(profile.fields, tree.getRootNode());
+            new FieldAppearanceFixingStrategy(tree.getRootNode());
+        return strategy.fieldsInFixingOrder;
     }
 }
