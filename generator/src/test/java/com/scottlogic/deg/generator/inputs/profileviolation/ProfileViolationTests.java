@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.*;
 
 /**
@@ -54,7 +53,7 @@ public class ProfileViolationTests {
     private Field field3;
     private Field field4;
     private Field field5;
-    private static Field staticField = new Field("static field");
+    private static final Field STATIC_FIELD = new Field("static field");
 
     private ConstraintChainBuilder<Constraint> A;
     private ConstraintChainBuilder<Constraint> B;
@@ -96,54 +95,54 @@ public class ProfileViolationTests {
 
     private static Stream<Arguments> nestingConstraints() {
         BaseConstraintBuilder<Constraint> notConstraintBuilder = new SingleConstraintBuilder()
-            .withEqualToConstraint(staticField, "hello").negate();
+            .withEqualToConstraint(STATIC_FIELD, "hello").negate();
 
         BaseConstraintBuilder<Constraint> violatedNotConstraintBuilder = new SingleConstraintBuilder()
-            .withEqualToConstraint(staticField, "hello").wrapAtomicWithViolate();
+            .withEqualToConstraint(STATIC_FIELD, "hello").wrapAtomicWithViolate();
 
         BaseConstraintBuilder<AndConstraint> andConstraintBuilder = new AndBuilder()
-            .withGreaterThanConstraint(staticField, 100)
-            .withLessThanConstraint(staticField, 200);
+            .withGreaterThanConstraint(STATIC_FIELD, 100)
+            .withLessThanConstraint(STATIC_FIELD, 200);
 
         BaseConstraintBuilder<OrConstraint> violatedAndConstraintBuilder = new OrBuilder()
             .withAndConstraint(new AndBuilder()
-                .withGreaterThanConstraint(staticField, 100).negate().wrapAtomicWithViolate()
-                .withLessThanConstraint(staticField, 200)
+                .withGreaterThanConstraint(STATIC_FIELD, 100).negate().wrapAtomicWithViolate()
+                .withLessThanConstraint(STATIC_FIELD, 200)
             )
             .withAndConstraint(new AndBuilder()
-                .withGreaterThanConstraint(staticField, 100)
-                .withLessThanConstraint(staticField, 200).negate().wrapAtomicWithViolate()
+                .withGreaterThanConstraint(STATIC_FIELD, 100)
+                .withLessThanConstraint(STATIC_FIELD, 200).negate().wrapAtomicWithViolate()
             );
 
         BaseConstraintBuilder<OrConstraint> orConstraintBuilder = new OrBuilder()
-            .withAfterConstraint(staticField, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC))
-            .withBeforeConstraint(staticField, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC));
+            .withAfterConstraint(STATIC_FIELD, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC))
+            .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC));
 
         BaseConstraintBuilder<AndConstraint> violatedOrConstraintBuilder = new AndBuilder()
-            .withAfterConstraint(staticField, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate()
-            .withBeforeConstraint(staticField, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
+            .withAfterConstraint(STATIC_FIELD, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate()
+            .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
-            .withIf(new SingleConstraintBuilder().withOfTypeConstraint(staticField, IsOfTypeConstraint.Types.NUMERIC))
-            .withThen(new SingleConstraintBuilder().withInSetConstraint(staticField, new Object[]{10, 100}));
+            .withIf(new SingleConstraintBuilder().withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC))
+            .withThen(new SingleConstraintBuilder().withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}));
 
         BaseConstraintBuilder<AndConstraint> violatedIfThenConstraintBuilder = new AndBuilder()
-            .withOfTypeConstraint(staticField, IsOfTypeConstraint.Types.NUMERIC)
-            .withInSetConstraint(staticField, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
+            .withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC)
+            .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenElseConstraintBuilder = new IfBuilder()
-            .withIf(new SingleConstraintBuilder().withOfLengthConstraint(staticField, 5))
-            .withThen(new SingleConstraintBuilder().withMatchesRegexConstraint(staticField, Pattern.compile("abcde")))
-            .withElse(new SingleConstraintBuilder().withContainsRegexConstraint(staticField, Pattern.compile("z")));
+            .withIf(new SingleConstraintBuilder().withOfLengthConstraint(STATIC_FIELD, 5))
+            .withThen(new SingleConstraintBuilder().withMatchesRegexConstraint(STATIC_FIELD, Pattern.compile("abcde")))
+            .withElse(new SingleConstraintBuilder().withContainsRegexConstraint(STATIC_FIELD, Pattern.compile("z")));
 
         BaseConstraintBuilder<OrConstraint> violatedIfThenElseConstraintBuilder = new OrBuilder()
             .withAndConstraint(new AndBuilder()
-                .withOfLengthConstraint(staticField, 5)
-                .withMatchesRegexConstraint(staticField, Pattern.compile("abcde")).negate().wrapAtomicWithViolate()
+                .withOfLengthConstraint(STATIC_FIELD, 5)
+                .withMatchesRegexConstraint(STATIC_FIELD, Pattern.compile("abcde")).negate().wrapAtomicWithViolate()
             )
             .withAndConstraint(new AndBuilder()
-                .withOfLengthConstraint(staticField, 5).negate().wrapAtomicWithViolate()
-                .withContainsRegexConstraint(staticField, Pattern.compile("z")).negate().wrapAtomicWithViolate()
+                .withOfLengthConstraint(STATIC_FIELD, 5).negate().wrapAtomicWithViolate()
+                .withContainsRegexConstraint(STATIC_FIELD, Pattern.compile("z")).negate().wrapAtomicWithViolate()
             );
 
         return Stream.of(
@@ -706,7 +705,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Not Profile",
-            Collections.singletonList(staticField),
+            Collections.singletonList(STATIC_FIELD),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -756,7 +755,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested And Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -800,7 +799,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Or Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -844,7 +843,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -888,7 +887,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -939,7 +938,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then-Else Profile",
-            Arrays.asList(staticField, field1, field2),
+            Arrays.asList(STATIC_FIELD, field1, field2),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -990,7 +989,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then-Else Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -1041,7 +1040,7 @@ public class ProfileViolationTests {
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Else of If-Then Profile",
-            Arrays.asList(staticField, field1),
+            Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
@@ -1112,8 +1111,8 @@ public class ProfileViolationTests {
     }
 
     private class TestProfiles {
-        Profile inputProfile;
-        List<Profile> expectedViolatedProfiles;
+        final Profile inputProfile;
+        final List<Profile> expectedViolatedProfiles;
 
         TestProfiles(Profile inputProfile, List<Profile> expectedViolatedProfiles) {
             this.inputProfile = inputProfile;
