@@ -48,7 +48,7 @@ public class SetRestrictions {
         return new SetRestrictions(whitelist, null);
     }
 
-    public static SetRestrictions fromBlacklist(Set<Object> blacklist) {
+    public static SetRestrictions fromBlacklist(@NotNull Set<Object> blacklist) {
         return new SetRestrictions(null, blacklist);
     }
 

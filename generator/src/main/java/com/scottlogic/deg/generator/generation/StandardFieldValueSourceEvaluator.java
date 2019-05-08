@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,8 +70,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
-    private List<FieldValueSource> getSetRestrictionSources(Set<Object> whitelist) {
-        if (whitelist == null || whitelist.isEmpty()){
+    private List<FieldValueSource> getSetRestrictionSources(@NotNull Set<Object> whitelist) {
+        if (whitelist.isEmpty()){
             return Collections.emptyList();
         }
 
