@@ -1,10 +1,10 @@
-Feature: User can specify that a numeric value is of a decimalised value to a specified level of unit
+Feature: User can specify that decimal fields are granular to a certain number of decimal places
 
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "decimal"
     And foo is anything but null
+    And foo is of type "decimal"
 
   Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
     Given foo is granular to 0.1
@@ -73,12 +73,12 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
 
   Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
     Given foo is granular to "0.1"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `0.1`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units."
     And no data is created
 
   Scenario: Running a 'granularTo' request that specifies null should be unsuccessful
     Given foo is granular to null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units."
     And no data is created
 
 
@@ -133,11 +133,3 @@ Feature: User can specify that a numeric value is of a decimalised value to a sp
       | 0.3 |
       | 0.4 |
       | 0.5 |
-
-
-
-
-
-
-
-

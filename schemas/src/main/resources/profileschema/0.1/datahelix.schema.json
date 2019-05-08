@@ -343,7 +343,14 @@
                   1e-17,
                   1e-18,
                   1e-19,
-                  1e-20
+                  1e-20,
+                  "millis",
+                  "seconds",
+                  "minutes",
+                  "hours",
+                  "days",
+                  "months",
+                  "years"
                 ]
               }
             }
