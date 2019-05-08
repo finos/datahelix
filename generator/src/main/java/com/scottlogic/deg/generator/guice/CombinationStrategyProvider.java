@@ -16,6 +16,8 @@ public class CombinationStrategyProvider  implements Provider<CombinationStrateg
     @Override
     public CombinationStrategy get() {
         if (config.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
+            // The minimal combination strategy doesn't reuse values for fields.
+            // This is required to get truly random data.
             return new MinimalCombinationStrategy();
         }
 
