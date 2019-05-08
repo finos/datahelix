@@ -22,6 +22,21 @@ jobs:
           file: schemas/target/jacoco-reports/jacoco.xml
       - codecov/upload:
           file: generator/target/jacoco-reports/jacoco.xml
+  verify:
+    docker:
+      - image: circleci/openjdk:8-jdk
+      steps:
+      - checkout
+      - run:
+          name: Get gommit binary
+          command: |
+            mkdir /home/circleci/bin
+            wget -O ~/bin/gommit https://github.com/antham/gommit/releases/download/v2.0.0/gommit_linux_386 && chmod 777 ~/bin/gommit
+      # Currently non-blocking. Can check CI build to verify success
+      - run:
+          name: Run gommit
+          command: |
+            result=$(if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi) echo $result
   release:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -37,6 +52,7 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - verify
 # TODO: Ensure gradle migration is smooth before introducing release job
 #  release:
 #    jobs:
