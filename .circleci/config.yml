@@ -38,8 +38,7 @@ jobs:
       - run:
           name: Run gommit
           command: |
-            if [ $CIRCLE_BRANCH != 'master' ]; then result=$(~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH) ; fi \
-            echo $result \
+            if [ $CIRCLE_BRANCH != 'master' ]; then if [ ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ]; then echo "valid"; else echo "invalid"; fi; fi; \
             true
 
   release:
