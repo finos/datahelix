@@ -103,7 +103,7 @@ public class ProfileValidationVisitor implements ProfileVisitor {
     }
 
     @Override
-    public void visit(IsGranularToConstraint constraint) {
+    public void visit(IsGranularToNumericConstraint constraint) {
         ConstraintValidator state = getFieldState(constraint.getField());
 
         state.typeConstraintValidator.isOfType(constraint.getField(), IsOfTypeConstraint.Types.NUMERIC);
