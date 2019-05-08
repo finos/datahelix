@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
@@ -58,7 +59,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(tree -> generateForPartition(profile, tree, generationConfig));
 
         return partitionCombiner.permute(partitionedDataBags)
-            .map(dataBag -> convertToGeneratedObject(dataBag, profile))
+            .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
             .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
             .peek(monitor::rowEmitted);
     }
@@ -73,11 +74,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             dataBagSourceFactory::createDataBags);
     }
 
-    private GeneratedObject convertToGeneratedObject(DataBag dataBag, Profile profile) {
+    private GeneratedObject convertToGeneratedObject(DataBag dataBag, ProfileFields fields) {
         return new GeneratedObject(
-            profile.fields.stream()
+            fields.stream()
                 .map(dataBag::getValueAndFormat)
                 .collect(Collectors.toList()),
-            dataBag.getRowSource(profile.fields));
+            dataBag.getRowSource(fields));
     }
 }
