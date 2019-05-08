@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
+  
   build:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -22,6 +23,7 @@ jobs:
           file: schemas/target/jacoco-reports/jacoco.xml
       - codecov/upload:
           file: generator/target/jacoco-reports/jacoco.xml
+
   verify:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -37,6 +39,7 @@ jobs:
           name: Run gommit
           command: |
             result=$(if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi) echo $result
+
   release:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -47,6 +50,7 @@ jobs:
           path: schemas/build/libs
       - store-artifacts:
           path: generator/build/libs
+
 workflows:
   version: 2.1
   build_and_test:
