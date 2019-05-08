@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
-  
+
   build:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Run gommit
           command: |
-            result=$(if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi) echo $result
+            if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi
 
   release:
     docker:
