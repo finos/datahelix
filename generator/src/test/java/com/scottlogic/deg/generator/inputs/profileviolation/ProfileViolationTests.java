@@ -12,7 +12,6 @@ import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstrain
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
-import com.scottlogic.deg.generator.utils.Pair;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
@@ -32,6 +31,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
@@ -45,9 +45,11 @@ public class ProfileViolationTests {
     private IndividualRuleProfileViolator profileViolator;
     private ArrayList<ViolationFilter> constraintsToNotViolate;
 
-    @Mock private ManifestWriter mockManifestWriter;
-    @Mock private Path mockPath;
-    
+    @Mock
+    private ManifestWriter mockManifestWriter;
+    @Mock
+    private Path mockPath;
+
     private Field field1;
     private Field field2;
     private Field field3;
@@ -187,7 +189,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Empty rule profile",
             Collections.singletonList(field1),
-            Collections.singletonList(new Pair<>(rule, rule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, rule))
         );
 
         //Act
@@ -216,7 +218,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Collections.singletonList(field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         //Act
@@ -240,7 +242,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Collections.singletonList(field1),
-            Collections.singletonList(new Pair<>(rule, rule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, rule))
         );
 
         //Act
@@ -264,7 +266,7 @@ public class ProfileViolationTests {
             .withGreaterThanConstraint(field2, 200)
             .build();
 
-         Rule violatedRule1 = new RuleBuilder("Rule 1")
+        Rule violatedRule1 = new RuleBuilder("Rule 1")
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withLessThanConstraint(field1, 100).negate().wrapAtomicWithViolate()
@@ -280,7 +282,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Profile 1",
             Arrays.asList(field1, field2),
-            Collections.singletonList(new Pair<>(rule1, violatedRule1))
+            Collections.singletonList(new RuleViolatedRulePair(rule1, violatedRule1))
         );
 
         //Act
@@ -320,7 +322,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         //Act
@@ -379,7 +381,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Profile 1",
             Collections.singletonList(field1),
-            Arrays.asList(new Pair<>(rule1, violatedRule1), new Pair<>(rule2, violatedRule2))
+            Arrays.asList(new RuleViolatedRulePair(rule1, violatedRule1), new RuleViolatedRulePair(rule2, violatedRule2))
         );
 
         //Act
@@ -426,7 +428,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if profile",
             Arrays.asList(field1, field2, field3),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         //Act
@@ -496,7 +498,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         //Act
@@ -562,7 +564,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         //Act
@@ -626,7 +628,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -667,7 +669,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Arrays.asList(field1, field2, field3),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -684,7 +686,8 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested NOTs.
      * Where X is any constraint which can contain another constraint:
-     *      VIOLATE(NOT(X)) -> X
+     * VIOLATE(NOT(X)) -> X
+     *
      * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
      */
     @ParameterizedTest
@@ -705,7 +708,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Not Profile",
             Collections.singletonList(staticField),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -720,8 +723,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested AND.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     *      VIOLATE(X AND A)) -> (VIOLATE(X) AND A) OR (X AND VIOLATE(A))
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(X AND A)) -> (VIOLATE(X) AND A) OR (X AND VIOLATE(A))
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -754,7 +758,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested And Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -769,8 +773,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested OR.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     *      VIOLATE(X OR A)) -> VIOLATE(X) AND VIOLATE(A)
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(X OR A)) -> VIOLATE(X) AND VIOLATE(A)
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -797,7 +802,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Or Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -812,8 +817,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     *      VIOLATE(IF X THEN A) -> X AND VIOLATE(A)
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(IF X THEN A) -> X AND VIOLATE(A)
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -840,7 +846,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -855,8 +861,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     *      VIOLATE(IF A THEN X) -> A AND VIOLATE(X)
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(IF A THEN X) -> A AND VIOLATE(X)
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -883,7 +890,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -898,8 +905,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     *      VIOLATE(IF X THEN A ELSE B) -> (X AND VIOLATE(A)) OR (VIOLATE(X) AND VIOLATE(B))
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(IF X THEN A ELSE B) -> (X AND VIOLATE(A)) OR (VIOLATE(X) AND VIOLATE(B))
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -933,7 +941,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then-Else Profile",
             Arrays.asList(staticField, field1, field2),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -948,8 +956,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     *      VIOLATE(IF A THEN X ELSE B) -> (A AND VIOLATE(X)) OR (VIOLATE(A) AND VIOLATE(B))
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(IF A THEN X ELSE B) -> (A AND VIOLATE(X)) OR (VIOLATE(A) AND VIOLATE(B))
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -983,7 +992,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then-Else Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -998,8 +1007,9 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     *      VIOLATE(IF A THEN B ELSE X) -> (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(X))
-     * @param nestingConstraint A builder of a constraint which can contain at least one other constraint.
+     * VIOLATE(IF A THEN B ELSE X) -> (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(X))
+     *
+     * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
@@ -1033,7 +1043,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Else of If-Then Profile",
             Arrays.asList(staticField, field1),
-            Collections.singletonList(new Pair<>(rule, violatedRule))
+            Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
         );
 
         // Act
@@ -1045,30 +1055,61 @@ public class ProfileViolationTests {
             .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
-    private TestProfiles createTestProfiles(String description, List<Field> fields, List<Pair<Rule, Rule>> ruleViolatedRulePairs) {
-        List<Rule> rules = ruleViolatedRulePairs
-            .stream()
-            .map(Pair::getKey)
-            .collect(Collectors.toList());
-
-        Profile inputProfile = new Profile(fields, rules, description);
-        List<Profile> violatedProfiles = new ArrayList<>();
-
-        for (int i = 0; i < ruleViolatedRulePairs.size(); i++) {
-            Pair<Rule,Rule> rulePair = ruleViolatedRulePairs.get(i);
-            List<Rule> newRuleList = new ArrayList<>(rules);
-            newRuleList.set(i, rulePair.getValue());
-            violatedProfiles.add(
-                new ViolatedProfile(
-                    rulePair.getKey(),
-                    new ProfileFields(fields),
-                    newRuleList,
-                    description + " -- Violating: " + rulePair.getKey().ruleInformation.getDescription()
-                )
-            );
-        }
+    private TestProfiles createTestProfiles(String description, List<Field> fields, List<RuleViolatedRulePair> ruleViolationHolders) {
+        Profile inputProfile = new Profile(fields, getRulesFromPair(ruleViolationHolders), description);
+        List<Profile> violatedProfiles = createViolatedProfiles(description, fields, ruleViolationHolders);
 
         return new TestProfiles(inputProfile, violatedProfiles);
+    }
+
+    private List<Profile> createViolatedProfiles(String description,
+                                                 List<Field> fields,
+                                                 List<RuleViolatedRulePair> ruleViolationHolders) {
+        return ruleViolationHolders
+            .stream()
+            .map(p -> createViolatedProfile(description, fields, ruleViolationHolders, p.getRule()))
+            .collect(Collectors.toList());
+    }
+
+    private Profile createViolatedProfile(String description,
+                                          List<Field> fields,
+                                          List<RuleViolatedRulePair> ruleViolationHolders,
+                                          Rule rule) {
+        List<Rule> newRuleList = ruleViolationHolders
+            .stream()
+            .map(h -> h.getRule().equals(rule) ? h.getViolatedRule() : h.getRule())
+            .collect(Collectors.toList());
+
+        String processedDescription = description + " -- Violating: " + rule.ruleInformation.getDescription();
+
+        return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
+    }
+
+    private List<Rule> getRulesFromPair(List<RuleViolatedRulePair> pair) {
+        return pair
+            .stream()
+            .map(RuleViolatedRulePair::getRule)
+            .collect(Collectors.toList());
+    }
+
+
+    private class RuleViolatedRulePair {
+
+        private final Rule rule;
+        private final Rule violatedRule;
+
+        private RuleViolatedRulePair(Rule rule, Rule violatedRule) {
+            this.rule = rule;
+            this.violatedRule = violatedRule;
+        }
+
+        private Rule getRule() {
+            return rule;
+        }
+
+        private Rule getViolatedRule() {
+            return violatedRule;
+        }
     }
 
     private class TestProfiles {
