@@ -3,7 +3,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.stream.Stream;
 
-public interface RowSpecDataBagSourceFactory {
+public interface RowSpecDataBagGenerator {
     Stream<DataBag> createDataBags(RowSpec rowSpec);
 }
 

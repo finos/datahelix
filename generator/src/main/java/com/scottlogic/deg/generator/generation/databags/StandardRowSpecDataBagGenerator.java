@@ -5,19 +5,16 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
-public class StandardRowSpecDataBagSourceFactory implements RowSpecDataBagSourceFactory {
+public class StandardRowSpecDataBagGenerator implements RowSpecDataBagGenerator {
     private final FieldSpecValueGenerator generator;
     private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public StandardRowSpecDataBagSourceFactory(
+    public StandardRowSpecDataBagGenerator(
         FieldSpecValueGenerator generator,
         CombinationStrategy combinationStrategy) {
         this.generator = generator;
