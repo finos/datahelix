@@ -1,15 +1,14 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -555,15 +554,10 @@ class FieldSpecTests {
         }
     }
 
-    private class MockStringRestrictions extends StringRestrictions{
+    private class MockStringRestrictions implements StringRestrictions{
         private final boolean isEqual;
 
         MockStringRestrictions(boolean isEqual) {
-            super(new StringConstraintsCollection(
-                new StringHasLengthConstraint(
-                    new Field("field"),
-                    10,
-                    Collections.emptySet())));
             this.isEqual = isEqual;
         }
 
@@ -575,6 +569,21 @@ class FieldSpecTests {
         @Override
         public int hashCode() {
             return 1234;
+        }
+
+        @Override
+        public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public boolean match(String x) {
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public StringGenerator createGenerator() {
+            throw new NotImplementedException();
         }
     }
 

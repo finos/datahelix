@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
@@ -465,7 +464,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToConstraint.class,
+                    IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
@@ -491,7 +490,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToConstraint.class,
+                    IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
@@ -517,7 +516,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToConstraint.class,
+                    IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),

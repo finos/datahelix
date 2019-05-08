@@ -363,4 +363,69 @@ public class RegexStringGeneratorTests {
         assertFalse(generator.isCharValidUtf8(invalidChar));
         assertTrue(generator.isCharValidUtf8(validChar));
     }
+
+    @Test
+    void generateInterestingValues_withShorterThanAndContainingAndMatchingRegex_shouldBeAbleToCreateAString(){
+        RegexStringGenerator matchingRegex = new RegexStringGenerator("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$", true);
+        RegexStringGenerator containingRegex = new RegexStringGenerator("\\@", false);
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,20}$", true);
+
+        StringGenerator intersected = shorterThan.intersect(matchingRegex).intersect(containingRegex);
+
+        Iterable<String> result = intersected.generateInterestingValues();
+
+        ArrayList<String> strings = new ArrayList<>();
+        result.iterator().forEachRemaining(strings::add);
+        Assert.assertThat(strings, not(empty()));
+    }
+
+    @Test
+    void generateInterestingValues_withShorterThanAndMatchingRegex_shouldBeAbleToCreateAString(){
+        RegexStringGenerator matchingRegex = new RegexStringGenerator("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$", true);
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,255}$", true);
+
+        StringGenerator intersected = shorterThan.intersect(matchingRegex);
+
+        Iterable<String> result = intersected.generateInterestingValues();
+
+        ArrayList<String> strings = new ArrayList<>();
+        result.iterator().forEachRemaining(strings::add);
+        Assert.assertThat(strings, not(empty()));
+    }
+
+    @Test
+    void match_withInputMatchingRequiredLength_shouldMatch(){
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,1}$", true);
+
+        boolean match = shorterThan.match("a");
+
+        Assert.assertThat(match, is(true));
+    }
+
+    @Test
+    void match_withInputMatchingFirstRequiredLength_shouldMatch(){
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
+
+        boolean match = shorterThan.match("a");
+
+        Assert.assertThat(match, is(true));
+    }
+
+    @Test
+    void match_withInputMatchingSecondRequiredLength_shouldMatch(){
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
+
+        boolean match = shorterThan.match("aaa");
+
+        Assert.assertThat(match, is(true));
+    }
+
+    @Test
+    void match_withInputNotMatchingAnyRequiredLength_shouldNotMatch(){
+        RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
+
+        boolean match = shorterThan.match("aa");
+
+        Assert.assertThat(match, is(false));
+    }
 }

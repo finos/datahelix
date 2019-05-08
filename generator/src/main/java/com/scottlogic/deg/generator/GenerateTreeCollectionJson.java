@@ -59,8 +59,7 @@ public class GenerateTreeCollectionJson implements Runnable {
             return;
         }
 
-        final DecisionTreeCollection decisionTreeCollection = profileAnalyser.analyse(profile);
-        final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
+        final DecisionTree mergedTree = profileAnalyser.analyse(profile);
         
         TreePartitioner treePartitioner = doPartition
                 ? new RelatedFieldTreePartitioner()
