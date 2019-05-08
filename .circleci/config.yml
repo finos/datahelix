@@ -38,7 +38,9 @@ jobs:
       - run:
           name: Run gommit
           command: |
-            if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi
+            result=$(if [ $CIRCLE_BRANCH != 'master' ]; then ~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH ; fi)
+            echo $result
+            true
 
   release:
     docker:
