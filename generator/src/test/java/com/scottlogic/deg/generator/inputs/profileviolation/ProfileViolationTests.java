@@ -1051,8 +1051,6 @@ public class ProfileViolationTests {
             .map(Pair::getKey)
             .collect(Collectors.toList());
 
-        System.out.println(System.getProperty("java.version"));
-
         Profile inputProfile = new Profile(fields, rules, description);
         List<Profile> violatedProfiles = new ArrayList<>();
 
