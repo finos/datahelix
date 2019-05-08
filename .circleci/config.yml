@@ -25,7 +25,7 @@ jobs:
   verify:
     docker:
       - image: circleci/openjdk:8-jdk
-      steps:
+    steps:
       - checkout
       - run:
           name: Get gommit binary
