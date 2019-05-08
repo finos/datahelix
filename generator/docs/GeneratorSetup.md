@@ -11,7 +11,7 @@ git clone https://github.com/ScottLogic/datahelix.git
 ## Installation Requirements
 
 * Java version 1.8
-* Maven
+* Gradle
 * Cucumber
 * One of IntelliJ/Eclipse IDE 
 
@@ -24,11 +24,9 @@ git clone https://github.com/ScottLogic/datahelix.git
 In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
 Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
 
-### Maven
+### Gradle
 
-Download and install Apache Maven, following the [instructions on their project website](https://maven.apache.org/install.html).
-
-Add Maven binary directory to your `PATH` (e.g. `C:\Program Files\apache-maven-3.6.0\bin`).
+Download and install Gradle, following the [instructions on their project website](https://docs.gradle.org/current/userguide/installation.html).
 
 ### IntelliJ IDE
 
@@ -61,8 +59,8 @@ Right-click the backend Module, `generator`, choose "Open Module Settings".
 In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
 Set Project language level to 8.
 
-Open the "Maven Projects" Tool Window, and double-click _Lifecycle > compile_.  
-This is only necessary when your Maven dependencies change. Otherwise prefer the IDE's built-in Build.
+Open the "Gradle Projects" Tool Window, and double-click _Tasks > build > build.
+Your IDE may do this automatically for you.
 
 Navigate to the `App.java` file (...\datahelix\generator\src\main\java\com\scottlogic\deg\generator\App.java). Right click and debug - *this will fail*.
 
@@ -79,13 +77,3 @@ generate --violate=true "<path to an example JSON profile>" "<path to desired ou
 ```
 
 Run both of these configurations to test that installation is successful.
-
-### Testing Maven Configuration
-
-From IntelliJ, open the Maven window.
-
-Under the main Data Engineering > Lifecycle tab run the "install" build. Once this completes run the Data Engineering > Lifecycle > "compile" build. These should complete without error. Running the install in this way will make the jar artefacts available for use in other Maven builds.
-
-Under the generator > Lifecycle tab run the "compile" build. This should complete without errors but we have had some developers experiencing "Missing jar artefact" errors. Using the Maven "install" build on the main Lifecycle should fix this.
-
-Once you have confirmed that install and compile works try running the "test" build for the generator. This should run all of the tests in the generator folder as will happen on the automated AWS build. 

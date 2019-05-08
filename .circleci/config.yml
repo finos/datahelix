@@ -8,6 +8,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+      # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle :schemas:test :generator:test
       - run:
           name: Save test results
@@ -29,6 +30,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+      # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle :schemas:release :generator:release
       - store-artifacts:
           path: schemas/build/libs
