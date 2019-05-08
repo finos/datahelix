@@ -39,7 +39,12 @@ jobs:
           name: Run gommit
           command: |
             retval=$(~/bin/gommit check range $(git rev-parse origin/master) $CIRCLE_BRANCH) \
-            if [[ $CIRCLE_BRANCH != 'master' ]]; then if [[ $retval != 0 ]]; then echo "valid"; else echo "invalid"; fi; fi; \
+            if [[ $CIRCLE_BRANCH != 'master' ]]; then \
+              if [[ $retval != 0 ]]; then \
+                echo "valid"; \
+                else echo "invalid"; \
+              fi; \
+            fi; \
             true
 
   release:
