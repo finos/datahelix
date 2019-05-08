@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -12,13 +11,11 @@ import java.util.stream.Collectors;
 public class SetRestrictions {
     private static final SetRestrictions neutral = new SetRestrictions(null, null);
 
-    @Nullable
     private final Set<Object> whitelist;
 
     @NotNull
     private final Set<Object> blacklist;
 
-    @Nullable
     public Set<Object> getWhitelist() {
         return this.whitelist;
     }
@@ -29,8 +26,8 @@ public class SetRestrictions {
     }
 
     protected SetRestrictions(
-        @Nullable Set<Object> whitelist,
-        @Nullable Set<Object> blacklist) {
+        Set<Object> whitelist,
+        Set<Object> blacklist) {
 
         this.whitelist = whitelist;
 

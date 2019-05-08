@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,26 +26,26 @@ public class FieldSpec {
         null,
         FieldSpecSource.Empty);
 
-    @Nullable private final SetRestrictions setRestrictions;
-    @Nullable private final NumericRestrictions numericRestrictions;
-    @Nullable private final StringRestrictions stringRestrictions;
-    @Nullable private final NullRestrictions nullRestrictions;
-    @Nullable private final TypeRestrictions typeRestrictions;
-    @Nullable private final DateTimeRestrictions dateTimeRestrictions;
-    @Nullable private final FormatRestrictions formatRestrictions;
-    @Nullable private final MustContainRestriction mustContainRestriction;
-    @NotNull  private final FieldSpecSource source;
+    private final SetRestrictions setRestrictions;
+    private final NumericRestrictions numericRestrictions;
+    private final StringRestrictions stringRestrictions;
+    private final NullRestrictions nullRestrictions;
+    private final TypeRestrictions typeRestrictions;
+    private final DateTimeRestrictions dateTimeRestrictions;
+    private final FormatRestrictions formatRestrictions;
+    private final MustContainRestriction mustContainRestriction;
+    @NotNull private final FieldSpecSource source;
 
     private FieldSpec(
-        @Nullable SetRestrictions setRestrictions,
-        @Nullable NumericRestrictions numericRestrictions,
-        @Nullable StringRestrictions stringRestrictions,
-        @Nullable NullRestrictions nullRestrictions,
-        @Nullable TypeRestrictions typeRestrictions,
-        @Nullable DateTimeRestrictions dateTimeRestrictions,
-        @Nullable FormatRestrictions formatRestrictions,
-        @Nullable MustContainRestriction mustContainRestriction,
-        @NotNull  FieldSpecSource source) {
+        SetRestrictions setRestrictions,
+        NumericRestrictions numericRestrictions,
+        StringRestrictions stringRestrictions,
+        NullRestrictions nullRestrictions,
+        TypeRestrictions typeRestrictions,
+        DateTimeRestrictions dateTimeRestrictions,
+        FormatRestrictions formatRestrictions,
+        MustContainRestriction mustContainRestriction,
+        @NotNull FieldSpecSource source) {
 
         this.setRestrictions = setRestrictions;
         this.nullRestrictions = nullRestrictions;
@@ -68,15 +67,15 @@ public class FieldSpec {
         this.source = source;
     }
 
-    @Nullable public SetRestrictions getSetRestrictions() { return setRestrictions; }
-    @Nullable public NumericRestrictions getNumericRestrictions() { return numericRestrictions; }
-    @Nullable public StringRestrictions getStringRestrictions() { return stringRestrictions; }
-    @Nullable public NullRestrictions getNullRestrictions() { return nullRestrictions; }
-    @Nullable public TypeRestrictions getTypeRestrictions() { return typeRestrictions; }
-    @Nullable public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
-    @Nullable public MustContainRestriction getMustContainRestriction() { return mustContainRestriction; }
-    @Nullable public FormatRestrictions getFormatRestrictions() { return formatRestrictions; }
-    @NotNull  public FieldSpecSource getFieldSpecSource() { return this.source; }
+    public SetRestrictions getSetRestrictions() { return setRestrictions; }
+    public NumericRestrictions getNumericRestrictions() { return numericRestrictions; }
+    public StringRestrictions getStringRestrictions() { return stringRestrictions; }
+    public NullRestrictions getNullRestrictions() { return nullRestrictions; }
+    public TypeRestrictions getTypeRestrictions() { return typeRestrictions; }
+    public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
+    public MustContainRestriction getMustContainRestriction() { return mustContainRestriction; }
+    public FormatRestrictions getFormatRestrictions() { return formatRestrictions; }
+    @NotNull public FieldSpecSource getFieldSpecSource() { return this.source; }
 
     public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
         return new FieldSpec(

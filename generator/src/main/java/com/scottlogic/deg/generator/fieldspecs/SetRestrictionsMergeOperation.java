@@ -39,8 +39,8 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
     }
 
     private SetRestrictions getNewSetRestrictions(
-        @Nullable SetRestrictions setRestrictionsA,
-        @Nullable SetRestrictions setRestrictionsB,
+        SetRestrictions setRestrictionsA,
+        SetRestrictions setRestrictionsB,
         @NotNull Predicate<Object> valueIsValid) {
 
         MergeResult<SetRestrictions> mergeResult =

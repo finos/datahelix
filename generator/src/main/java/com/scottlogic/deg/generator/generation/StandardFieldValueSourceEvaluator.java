@@ -70,7 +70,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
     }
 
-    private List<FieldValueSource> getSetRestrictionSources(@Nullable Set<Object> whitelist) {
+    private List<FieldValueSource> getSetRestrictionSources(Set<Object> whitelist) {
         if (whitelist == null || whitelist.isEmpty()){
             return Collections.emptyList();
         }
