@@ -812,9 +812,9 @@ Feature: User can specify that a value is equalTo a required value
       | null |
       | "a"  |
 
-  @ignore #running out of memory
   Scenario: Not 'equalTo' a value and a non-contradicting 'matchingRegex' should be successful
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but equal to "aa"
     And foo is matching regex /[a]{1}/
     Then the following data should be generated:
@@ -864,9 +864,9 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #running out of memory
   Scenario: Not 'equalTo' and 'matchingRegex' for identical strings emits null
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but equal to "a"
     And foo is matching regex /[a]{1}/
     Then the following data should be generated:
@@ -1225,10 +1225,9 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #issue
   Scenario: 'EqualTo' a valid ISIN with a contradicting not 'aValid' ISIN emits null
     Given there is a field foo
-    And foo is equal to "GB0002634947"
+    And foo is equal to "GB00YG2XYC52"
     And foo is anything but a valid "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -1516,8 +1515,7 @@ Feature: User can specify that a value is equalTo a required value
       | null |
       | 1.1  |
 
-  @ignore
-  Scenario: Not 'equalTo' run against a non contradicting 'granularTo' should only generate null
+  Scenario: Not 'equalTo' run against a non contradicting 'granularTo' should' should be successful
     Given there is a field foo
     And foo is anything but equal to 1.1
     And foo is granular to 1
@@ -1547,7 +1545,6 @@ Feature: User can specify that a value is equalTo a required value
       | "a"                      |
       | 2018-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: 'EqualTo' run against a contradicting 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1.1
@@ -1556,7 +1553,7 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore
+  @ignore #issue 769 not sure what is expected result
   Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1
@@ -1585,19 +1582,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: Not 'equalTo' run against a non contradicting 'after' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.002Z
     And foo is after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2019-01-01T00:00:00.001Z |
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
       | 2019-01-01T00:00:00.005Z |
+      | 2019-01-01T00:00:00.006Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'after' should be successful
     Given there is a field foo
@@ -1647,19 +1644,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: Not 'equalTo' run against a non contradicting 'afterOrAt' should only be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is after or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2019-01-01T00:00:00.001Z |
       | 2019-01-01T00:00:00.002Z |
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
+      | 2019-01-01T00:00:00.005Z |
 
   Scenario Outline: 'EqualTo' to a non-datetime value with 'afterOrAt' should be successful
     Given there is a field foo
@@ -1710,19 +1707,20 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
+  @ignore #Defect 594
   Scenario: Not 'equalTo' run against a non contradicting 'before' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2018-12-31T23:59:59.998Z
     And foo is before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2018-12-31T23:59:59.999Z |
       | 2018-12-31T23:59:59.997Z |
       | 2018-12-31T23:59:59.996Z |
       | 2018-12-31T23:59:59.995Z |
+      | 2018-12-31T23:59:59.994Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'before' should be successful
     Given there is a field foo
@@ -1773,18 +1771,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.001Z |
 
-  @ignore
+  @ignore #Defect 594
   Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is before or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2018-12-31T23:59:59.999Z |
       | 2018-12-31T23:59:59.997Z |
       | 2018-12-31T23:59:59.996Z |
+      | 2018-12-31T23:59:59.995Z |
       | 2018-12-31T23:59:59.995Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'beforeOrAt' should be successful

@@ -216,21 +216,19 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 1                        |
       | 2011-01-01T00:00:00.000Z |
 
-  @ignore #issue 487
   Scenario: 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
     Given foo is longer than 11
     And foo is a valid "ISIN"
     And foo is in set:
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
       | "twelvedigits" |
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  @ignore #issue 487
   Scenario: 'longerThan' alongside a non-contradicting not 'aValid' constraint should be successful
     Given foo is longer than 2
     And foo is anything but a valid "ISIN"
@@ -241,21 +239,22 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the following data should be generated:
       | foo            |
       | null           |
+      | "US0000XVGZA3" |
       | "U10378331005" |
       | "twelvedigits" |
 
-  @ignore #issue 487
   Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
-    Given foo is anything but longer than 1
+    Given foo is anything but longer than 12
     And foo is a valid "ISIN"
     And foo is in set:
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
       | "2"            |
     Then the following data should be generated:
-      | foo  |
-      | null |
-      | "2"  |
+      | foo            |
+      | null           |
+      | "GB00YG2XYC52" |
+      | "US0378331005" |
 
   Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and null
     Given foo is longer than 20
@@ -271,7 +270,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 22                       |
       | 2011-01-01T00:00:00.000Z |
 
-  @ignore #issue 487
   Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
     Given foo is anything but longer than 12
     And foo is anything but a valid "ISIN"
@@ -282,6 +280,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the following data should be generated:
       | foo            |
       | null           |
+      | "US0000XVGZA3" |
       | "U10000XVGZA3" |
       | "twelvedigits" |
 

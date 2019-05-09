@@ -647,9 +647,9 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  @ignore #out of memory
   Scenario: Not 'inSet' string value with a 'matchingRegex' of contradictory value is successful
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but in set:
       | "a" |
     And foo is matching regex /[b]{1}/
@@ -700,9 +700,9 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore #out of memory
   Scenario: Not 'inSet' alongside a contradicting 'matchingRegex' emits null
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but in set:
       | "a" |
     And foo is matching regex /[a]{1}/
@@ -996,16 +996,15 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### aValid ###
 
-  @ignore
   Scenario: 'InSet' with a non contradicting 'aValid' ISIN is successful
     Given there is a field foo
     And foo is in set:
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     And foo is a valid "ISIN"
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
 
   Scenario: 'InSet' with a non contradicting not 'aValid' ISIN is successful
     Given there is a field foo
@@ -1017,7 +1016,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  @ignore
   Scenario: Not 'inSet' with a non contradicting 'aValid' ISIN is successful
     Given there is a field foo
     And foo is anything but in set:
@@ -1025,11 +1023,11 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is a valid "ISIN"
     And foo is in set:
       | "a"            |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
 
   Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
     Given there is a field foo
@@ -1054,11 +1052,10 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore
   Scenario: 'InSet' run against a contradicting not 'aValid' ISIN emits null
     Given there is a field foo
     And foo is in set:
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     And foo is anything but a valid "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -1395,7 +1392,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"                      |
       | 2018-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: 'InSet' with a contradicting 'granularTo' emits null
     Given there is a field foo
     And foo is in set:
@@ -1405,7 +1401,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore
+  @ignore #issue 769 not sure what is expected result
   Scenario: 'InSet' with a contradicting not 'granularTo' emits null
     Given there is a field foo
     And foo is in set:
