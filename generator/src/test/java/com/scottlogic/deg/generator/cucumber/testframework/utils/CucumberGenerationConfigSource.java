@@ -107,4 +107,9 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.OutputFormat getOutputFormat() {
         return null;
     }
+
+    @Override
+    public GenerationConfig.OutputDestination getOutputDestination() {
+        return null;
+    }
 }

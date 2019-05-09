@@ -103,15 +103,22 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private Boolean visualiseReductions = false;
 
     @CommandLine.Option(
-        names = {"-o"},
-        description = "Output format",
+        names = {"-f"},
+        description = "Format of output data",
         defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
     private GenerationConfig.OutputFormat outputFormat;
+
+    @CommandLine.Option(
+        names = {"-o"},
+        description = "Output destination",
+        defaultValue = GenerationConfig.Constants.Destinations.DEFAULT)
+    private GenerationConfig.OutputDestination outputDestination;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
         description = "Remove the need for each field to have at least one compliant typing constraint applied")
     private boolean allowUntypedFields = false;
+
 
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
@@ -207,6 +214,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     public GenerationConfig.OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    @Override
+    public GenerationConfig.OutputDestination getOutputDestination() {
+        return outputDestination;
     }
 
     @Override

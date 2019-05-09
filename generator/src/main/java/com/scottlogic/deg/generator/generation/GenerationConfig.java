@@ -134,6 +134,18 @@ public class GenerationConfig {
         }
     }
 
+    public enum OutputDestination {
+        STREAM(Constants.Destinations.STREAM),
+        FILE(Constants.Destinations.FILE);
+        private final String destination;
+
+        OutputDestination(String destination) { this.destination = destination; }
+
+        public String getDestination() {
+            return destination;
+        }
+    }
+
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
@@ -170,6 +182,13 @@ public class GenerationConfig {
             public static final String JSON = "JSON";
 
             public static final String DEFAULT = CSV;
+        }
+
+        public static class Destinations {
+            public static final String STREAM = "STREAM";
+            public static final String FILE = "FILE";
+
+            public static final String DEFAULT = FILE;
         }
 
         public static final long DEFAULT_MAX_ROWS = 1000;

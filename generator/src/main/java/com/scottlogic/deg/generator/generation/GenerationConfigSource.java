@@ -35,4 +35,5 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean requireFieldTyping();
 
     GenerationConfig.OutputFormat getOutputFormat();
+    GenerationConfig.OutputDestination getOutputDestination();
 }

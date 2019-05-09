@@ -16,6 +16,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public boolean validateProfile = false;
     public Path outputPath;
     public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
+    public GenerationConfig.OutputDestination outputDestination = GenerationConfig.OutputDestination.FILE;
     public boolean requireFieldTyping = true;
 
     public TestGenerationConfigSource(
@@ -121,5 +122,10 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public GenerationConfig.OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    @Override
+    public GenerationConfig.OutputDestination getOutputDestination() {
+        return outputDestination;
     }
 }
