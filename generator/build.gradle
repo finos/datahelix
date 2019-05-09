@@ -39,8 +39,7 @@ task release(type: Jar) {
 	manifest {
 		attributes 'Created-By': 'Scott Logic',
 			'Implementation-Version': version != null ? version : "0.0",
-			'Built-By': System.properties['user.name'],
-			'Main-Class': 'com.scottlogic.deg.generator.App'
+			'Built-By': System.properties['user.name']
 	}
 		
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

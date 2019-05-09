@@ -16,9 +16,8 @@ target/
 
 # Ignore Gradle project-specific cache directory
 .gradle/
-build/generator/out/
-schemas/out/
+gradle/
 generator/build/
 generator/out/
 schemas/build/
-gradle/
+schemas/out/
