@@ -1553,7 +1553,7 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #issue 769 not sure what is expected result
+  @ignore #issue 769 "not granularTo" is not yet implemented
   Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1
