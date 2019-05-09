@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: ./gradlew :schemas:test :generator:test
+      - run: gradle :schemas:test :generator:test
       - run:
           name: Save test results
           command: |
@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: ./gradlew :schemas:release :generator:release
+      - run: gradle :schemas:release :generator:release
       - store-artifacts:
           path: schemas/build/libs
       - store-artifacts:
