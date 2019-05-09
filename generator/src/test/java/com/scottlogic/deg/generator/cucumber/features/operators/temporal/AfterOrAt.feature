@@ -6,18 +6,17 @@ Feature: User can specify that a datetime date is more than, or the same as, a s
     And foo is of type "datetime"
     And foo is anything but null
 
-  @ignore #141 add user configurable datetime granularity
-  Scenario: User requires to create a datetime field with date (YYYY-MM-DD) values within a given month that are after or at a specified date
+  Scenario: User requires to create a datetime field with values that are after or at a specified date
     Given foo is after or at 2018-01-01T00:00:00.000Z
     And the generator can generate at most 6 rows
     Then the following data should be generated:
       | foo                      |
       | 2018-01-01T00:00:00.000Z |
-      | 2019-01-01T00:00:00.000Z |
-      | 2020-01-01T00:00:00.000Z |
-      | 2021-01-01T00:00:00.000Z |
-      | 2022-01-01T00:00:00.000Z |
-      | 2023-01-01T00:00:00.000Z |
+      | 2018-01-01T00:00:00.001Z |
+      | 2018-01-01T00:00:00.002Z |
+      | 2018-01-01T00:00:00.003Z |
+      | 2018-01-01T00:00:00.004Z |
+      | 2018-01-01T00:00:00.005Z |
 
   Scenario: User requires to create a datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that are after or at specified date and time
     Given foo is after or at 2018-01-01T12:00:00.000Z

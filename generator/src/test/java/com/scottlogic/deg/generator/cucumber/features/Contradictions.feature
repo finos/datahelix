@@ -11,7 +11,6 @@ Feature: Hard contradictions produce nothing, soft contradictions produce only n
     And foo is of type "integer"
     Then no data is created
 
-  @ignore #issue #817
   Scenario: Contradicting inferred and actual types should not produce any data.
     Given foo is anything but null
     And foo is of type "integer"
