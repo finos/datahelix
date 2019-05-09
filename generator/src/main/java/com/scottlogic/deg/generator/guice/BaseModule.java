@@ -24,11 +24,15 @@ import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.CsvFormatter;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.JsonFormatter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.RowOutputFormatter;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.StreamOutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
@@ -65,6 +69,8 @@ public class BaseModule extends AbstractModule {
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
         bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
+        bind(RowOutputFormatter.class).toProvider(FormatterProvider.class);
+        bind(OutputTarget.class).toProvider(OutputTargetProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
@@ -82,7 +88,6 @@ public class BaseModule extends AbstractModule {
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
-        bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);

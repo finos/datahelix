@@ -24,6 +24,9 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
 
     @Override
     public ReductiveDataGeneratorMonitor get() {
+        if (commandLine.getOutputDestination().getDestination().equals("STREAM")) {
+            return this.noopDataGeneratorMonitor;
+        }
         switch (commandLine.getMonitorType()) {
             case VERBOSE:
                 return this.systemOutDataGeneratorMonitor;
