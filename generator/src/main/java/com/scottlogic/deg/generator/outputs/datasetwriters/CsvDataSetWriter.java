@@ -13,12 +13,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-public class CsvDataSetWriter implements DataSetWriter<CSVPrinter, CsvFormatter> {
-    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+public class CsvDataSetWriter implements DataSetWriter<CSVPrinter, List<Object>> {
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
-    private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
+    @Override
     public CSVPrinter openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
         return writerFormat
             .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
@@ -31,7 +31,8 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter, CsvFormatter>
                 StandardCharsets.UTF_8);
     }
 
-    public void writeRow(CSVPrinter writer, GeneratedObject row, CsvFormatter formatter) throws IOException {
+    @Override
+    public void writeRow(CSVPrinter writer, GeneratedObject row, RowOutputFormatter<List<Object>> formatter) throws IOException {
         writer.printRecord(formatter.format(row));
 
         writer.flush();

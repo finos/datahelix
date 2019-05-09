@@ -110,6 +110,6 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public GenerationConfig.OutputDestination getOutputDestination() {
-        return null;
+        return state.outputDestination;
     }
 }

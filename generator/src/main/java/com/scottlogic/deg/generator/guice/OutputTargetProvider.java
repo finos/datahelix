@@ -14,7 +14,8 @@ public class OutputTargetProvider implements Provider<OutputTarget> {
     private final StreamOutputTarget streamOutputTarget;
 
     @Inject
-    public OutputTargetProvider(GenerationConfigSource configSource, FileOutputTarget fileOutputTarget,
+    public OutputTargetProvider(GenerationConfigSource configSource,
+                                FileOutputTarget fileOutputTarget,
                                 StreamOutputTarget streamOutputTarget) {
         this.configSource = configSource;
         this.fileOutputTarget = fileOutputTarget;
