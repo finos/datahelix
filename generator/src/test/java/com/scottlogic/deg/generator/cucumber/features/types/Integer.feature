@@ -64,7 +64,6 @@ Feature: User can specify that a number is of type integer and does not have any
     Given foo is equal to 10.1
     Then no data is created
 
-  @ignore #677 - Granularity ignored when generating from set
   Scenario: In Set constraint with integer type only produces valid integers
     Given foo is in set:
       | 1   |
@@ -73,7 +72,6 @@ Feature: User can specify that a number is of type integer and does not have any
       | foo |
       | 1   |
 
-  @ignore #677 - Granularity ignored when generating from set
   Scenario: Contradictory granular to constraint with integer type only produces valid integers
     Given foo is in set:
       | 1   |

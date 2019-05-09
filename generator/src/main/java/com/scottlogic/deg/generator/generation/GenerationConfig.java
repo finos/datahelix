@@ -10,14 +10,14 @@ public class GenerationConfig {
 
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
-    private final CombinationStrategyType combinationStrategy;
+    private final CombinationStrategyType combinationStrategyType;
     private final Optional<Long> maxRows;
 
     @Inject
     public GenerationConfig(GenerationConfigSource source) {
         this.dataGenerationType = source.getGenerationType();
         this.walkerType = source.getWalkerType();
-        this.combinationStrategy = source.getCombinationStrategyType();
+        this.combinationStrategyType = source.getCombinationStrategyType();
         this.maxRows = source.getMaxRows();
     }
 
@@ -25,31 +25,16 @@ public class GenerationConfig {
         return this.dataGenerationType;
     }
 
-    public CombinationStrategy getCombinationStrategy() {
-
-        if (dataGenerationType == DataGenerationType.RANDOM){
-            return new MinimalCombinationStrategy();
-        }
-
-        if (this.walkerType == TreeWalkerType.REDUCTIVE){
-            return new ReductiveCombinationStrategy();
-        }
-
-        switch(this.combinationStrategy){
-            case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
-            case PINNING: return new PinningCombinationStrategy();
-            case MINIMAL: return new MinimalCombinationStrategy();
-            default:
-                throw new UnsupportedOperationException(
-                    "$Combination strategy {this.combinationStrategy} is unsupported.");
-        }
-    }
 
     public TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
     public Optional<Long> getMaxRows() { return maxRows; }
+
+    public CombinationStrategyType getCombinationStrategyType() {
+        return combinationStrategyType;
+    }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),
