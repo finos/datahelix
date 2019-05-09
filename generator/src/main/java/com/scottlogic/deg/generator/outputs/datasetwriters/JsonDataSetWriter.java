@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
-public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWriter> {
+public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWriter, JsonFormatter> {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
 
     @Override
@@ -32,7 +32,7 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
     }
 
     @Override
-    public void writeRow(JsonDataSetWriter.JsonWriter writer, GeneratedObject row) {
+    public void writeRow(JsonDataSetWriter.JsonWriter writer, GeneratedObject row, JsonFormatter formatter) {
         //TODO: Change this type to write progressively to the JSON file, currently it holds all rows in memory: Issue: #256
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();

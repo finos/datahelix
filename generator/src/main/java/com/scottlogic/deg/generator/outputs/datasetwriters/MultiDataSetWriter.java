@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MultiDataSetWriter implements DataSetWriter<Closeable> {
+public class MultiDataSetWriter implements DataSetWriter<Closeable, RowOutputFormatter> {
     private final List<StatefulDataSetWriter> writers;
 
     public MultiDataSetWriter(DataSetWriter... writers) {
@@ -33,12 +33,12 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
     }
 
     @Override
-    public void writeRow(Closeable closeable, GeneratedObject row) throws IOException {
+    public void writeRow(Closeable closeable, GeneratedObject row, RowOutputFormatter formatter) throws IOException {
         ThrownExceptions exceptions = new ThrownExceptions();
 
         this.writers.forEach(writer -> {
             try {
-                writer.writeRow(row);
+                writer.writeRow(row, formatter);
             } catch (IOException e) {
                 exceptions.add(e);
             }
@@ -111,12 +111,12 @@ public class MultiDataSetWriter implements DataSetWriter<Closeable> {
             this.closeable = this.writer.openWriter(directory, this.fileName, profileFields);
         }
 
-        void writeRow(GeneratedObject row) throws IOException {
+        void writeRow(GeneratedObject row, RowOutputFormatter formatter) throws IOException {
             if (this.closeable == null){
                 throw new IllegalStateException("Writer has not been initialised");
             }
 
-            this.writer.writeRow(this.closeable, row);
+            this.writer.writeRow(this.closeable, row, formatter);
         }
 
         String getFileNameAndRemember(String fileNameWithoutExtension) {

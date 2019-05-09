@@ -13,9 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
-public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
+public class CsvDataSetWriter implements DataSetWriter<CSVPrinter, CsvFormatter> {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
@@ -32,11 +31,8 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
                 StandardCharsets.UTF_8);
     }
 
-    public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
-        writer.printRecord(row.values.stream()
-            .map(CsvDataSetWriter::extractCellValue)
-            .map(CsvDataSetWriter::wrapInQuotesIfString)
-            .collect(Collectors.toList()));
+    public void writeRow(CSVPrinter writer, GeneratedObject row, CsvFormatter formatter) throws IOException {
+        writer.printRecord(formatter.format(row));
 
         writer.flush();
     }
@@ -44,29 +40,5 @@ public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
     @Override
     public String getFileName(String fileNameWithoutExtension) {
         return fileNameWithoutExtension + ".csv";
-    }
-
-    private static Object extractCellValue(DataBagValue cell) {
-        return cell.getFormattedValue();
-    }
-
-    private static Object wrapInQuotesIfString(Object value){
-        if (value == null){
-            return null;
-        }
-
-        if (value instanceof BigDecimal) {
-            return ((BigDecimal) value).toPlainString();
-        }
-
-        if (value instanceof OffsetDateTime){
-            return standardDateFormat.format((OffsetDateTime) value);
-        }
-
-        if (value instanceof String){
-            return csvStringFormatter.format(value);
-        }
-
-        return value;
     }
 }

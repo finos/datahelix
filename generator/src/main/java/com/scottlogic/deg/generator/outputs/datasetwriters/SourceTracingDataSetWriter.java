@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDataSetWriter.JsonArrayOutputWriter> {
+public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDataSetWriter.JsonArrayOutputWriter, RowOutputFormatter> {
     private final ObjectWriter writer;
 
     public SourceTracingDataSetWriter() {
@@ -37,7 +37,7 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
     }
 
     @Override
-    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row) throws IOException {
+    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row, RowOutputFormatter formatter) throws IOException {
         Collection<TracingDto> dto = row.source != null
             ? TracingDto.fromRowSource(row.source)
             : TracingDto.empty;
