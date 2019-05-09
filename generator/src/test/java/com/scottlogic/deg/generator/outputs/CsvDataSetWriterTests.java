@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.outputs;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.outputs.datasetwriters.CsvDataSetWriter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.CsvFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -26,9 +27,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValue(new BigDecimal("0.00000001"))),
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("0.00000001", stringBuffer.toString().trim());
@@ -42,9 +44,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValueWithFormat(new BigDecimal("0.00000001"), "%.1e")), // Formats the bigDecimal into Scientific notation
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("\"1.0e-08\"", stringBuffer.toString().trim());
@@ -58,9 +61,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValue(null)),
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("", stringBuffer.toString().trim());
@@ -74,9 +78,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(new DataBagValue(1.2f, DataBagValueSource.Empty)),
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("1.2", stringBuffer.toString().trim());
@@ -90,9 +95,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValueWithFormat("Hello World", "%.5s")), // Format string to max 5 chars
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("\"Hello\"", stringBuffer.toString().trim());
@@ -107,9 +113,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValue(date)), // Format string to max 5 chars
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("2001-02-03T04:05:06Z", stringBuffer.toString().trim());
@@ -124,9 +131,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValue(date)), // Format string to max 5 chars
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("2001-02-03T04:05:06.777Z", stringBuffer.toString().trim());
@@ -141,9 +149,10 @@ public class CsvDataSetWriterTests {
             Collections.singletonList(getValueWithFormat(date, "%tF")), // Format string to max 5 chars
             new RowSource(Collections.emptyList()));
         CSVPrinter printer = new CSVPrinter(stringBuffer, format);
+        CsvFormatter csvFormatter = new CsvFormatter();
 
         // Act
-        writeToBuffer(printer, generatedObject);
+        writeToBuffer(printer, generatedObject, csvFormatter);
 
         // Assert
         Assert.assertEquals("\"2001-02-03\"", stringBuffer.toString().trim());
@@ -157,9 +166,9 @@ public class CsvDataSetWriterTests {
         return new DataBagValue(value, format, DataBagValueSource.Empty);
     }
 
-    private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject) throws IOException {
+    private void writeToBuffer(CSVPrinter printer, GeneratedObject generatedObject, CsvFormatter formatter) throws IOException {
         CsvDataSetWriter writer = new CsvDataSetWriter();
-        writer.writeRow(printer, generatedObject);
+        writer.writeRow(printer, generatedObject, formatter);
         printer.close();
     }
 }

@@ -20,6 +20,7 @@ import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraint
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.datasetwriters.RowOutputFormatter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -145,7 +146,7 @@ class ExampleProfilesViolationTests {
 
     private class NullOutputTarget extends FileOutputTarget {
         NullOutputTarget() {
-            super(null, new NullDataSetWriter());
+            super(null, new NullDataSetWriter(), new NullFormatter());
         }
 
         @Override
@@ -162,18 +163,25 @@ class ExampleProfilesViolationTests {
         }
     }
 
-    private class NullDataSetWriter implements DataSetWriter{
+    private class NullDataSetWriter implements DataSetWriter<Closeable, RowOutputFormatter>{
         @Override
         public Closeable openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) {
             return null;
         }
 
         @Override
-        public void writeRow(Closeable closeable, GeneratedObject row) {
+        public void writeRow(Closeable closeable, GeneratedObject row, RowOutputFormatter formatter) {
         }
 
         @Override
         public String getFileName(String fileNameWithoutExtension) {
+            return null;
+        }
+    }
+
+    private class NullFormatter implements RowOutputFormatter {
+        @Override
+        public Object format(GeneratedObject row) {
             return null;
         }
     }
