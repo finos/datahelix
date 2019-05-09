@@ -31,8 +31,7 @@ description = 'DataHelix Schema Library'
 task release() {
 	jar.manifest {
 			attributes 'Created-By': 'Scott Logic',
-                'Implementation-Version': version != null ? version : "0.0",
-				'Built-By': System.properties['user.name']
+                'Implementation-Version': version != null ? version : "0.0"
 		}
 
 	jar
