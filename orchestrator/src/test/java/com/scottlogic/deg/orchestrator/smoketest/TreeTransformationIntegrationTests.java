@@ -40,12 +40,7 @@ class TreeTransformationIntegrationTests {
     Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
     	return doTest(new OptimiseTestStrategy());
     }
-    
-    @TestFactory
-    Collection<DynamicTest> givenProfileInputs_resultEqualsSerialisedOutputs() {
-        return doTest(new SerialisationOnlyTestStrategy());
-    }
-    
+
     private Collection<DynamicTest> doTest(TreeTransformationTestStrategy strategy) {
         final String FS = File.separator;
         final String testsDirPathPrefix = ".." + FS + "generator" + FS + "resources" + FS;
