@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.walker.*;
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
     private final DecisionTreeWalker reductiveDecisionTreeWalker;
     private final DecisionTreeWalker cartesianProductDecisionTreeWalker;
-    private final DecisionTreeWalker routedDecisionTreeWalker;
     private final RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker;
     private final GenerationConfigSource configSource;
 
@@ -17,12 +16,10 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
     public DecisionTreeWalkerProvider(
         ReductiveDecisionTreeWalker reductiveDecisionTreeWalker,
         CartesianProductDecisionTreeWalker cartesianProductDecisionTreeWalker,
-        DecisionTreeRoutesTreeWalker routedDecisionTreeWalker,
         RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker,
         GenerationConfigSource configSource) {
         this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
         this.cartesianProductDecisionTreeWalker = cartesianProductDecisionTreeWalker;
-        this.routedDecisionTreeWalker = routedDecisionTreeWalker;
         this.randomReductiveDecisionTreeWalker = randomReductiveDecisionTreeWalker;
         this.configSource = configSource;
     }
@@ -38,9 +35,6 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
                       return this.randomReductiveDecisionTreeWalker;
 
                   return this.reductiveDecisionTreeWalker;
-
-              case ROUTED:
-                  return this.routedDecisionTreeWalker;
 
               default:
                   return this.reductiveDecisionTreeWalker;

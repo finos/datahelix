@@ -80,7 +80,7 @@ public class FixFieldStrategyFactoryTests {
     @ParameterizedTest
     @EnumSource(
         value = GenerationConfig.TreeWalkerType.class,
-        names = {"ROUTED", "CARTESIAN_PRODUCT"}
+        names = {"CARTESIAN_PRODUCT"}
     )
     public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsNull(GenerationConfig.TreeWalkerType walkerType) {
         // Arrange

@@ -36,8 +36,6 @@ import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.nio.file.Path;
@@ -81,7 +79,6 @@ public class BaseModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
-        bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
