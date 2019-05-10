@@ -55,7 +55,6 @@ public class GenerationConfig {
 
     public enum TreeWalkerType {
         CARTESIAN_PRODUCT(Constants.WalkerTypes.CARTESIAN_PRODUCT),
-        ROUTED(Constants.WalkerTypes.ROUTED),
         REDUCTIVE(Constants.WalkerTypes.REDUCTIVE);
 
         private final String text;
@@ -122,7 +121,6 @@ public class GenerationConfig {
     public static class Constants {
         public static class WalkerTypes {
             public static final String CARTESIAN_PRODUCT = "CARTESIAN_PRODUCT";
-            public static final String ROUTED = "ROUTED";
             public static final String REDUCTIVE = "REDUCTIVE";
 
             public static final String DEFAULT = REDUCTIVE;
