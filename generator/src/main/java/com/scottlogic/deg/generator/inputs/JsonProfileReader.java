@@ -1,13 +1,11 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.schemas.common.ProfileDeserialiser;
-import com.scottlogic.deg.schemas.v0_1.ProfileDTO;
+import com.scottlogic.deg.profile.common.ProfileDeserialiser;
+import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

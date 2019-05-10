@@ -3,7 +3,7 @@
  */
 
 dependencies {
-    compile project(':schemas')
+    compile project(':profile')
     compile 'com.google.inject:guice:4.1.0'
     compile 'dk.brics.automaton:automaton:1.11-8'
     compile 'com.fasterxml.jackson.core:jackson-core:2.9.6'

@@ -38,7 +38,7 @@ import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
 import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.nio.file.Path;
 import java.time.OffsetDateTime;

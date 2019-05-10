@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.constraints.*;
 import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.util.Set;
 

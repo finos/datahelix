@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberGenerat
 import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
