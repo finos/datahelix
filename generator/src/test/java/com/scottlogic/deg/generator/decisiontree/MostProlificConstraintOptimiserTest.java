@@ -1,10 +1,9 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.constraintNode;
@@ -149,6 +148,6 @@ class MostProlificConstraintOptimiserTest {
                     .where(A).isNotInSet("a1")
             ).build();
 
-        assertThat(actual, sameBeanAs(expected).ignoring("nodeMarkings.OPTIMISED.string"));
+        assertThat(actual, sameBeanAs(expected));
     }
 }

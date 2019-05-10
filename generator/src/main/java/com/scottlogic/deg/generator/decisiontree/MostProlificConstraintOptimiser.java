@@ -74,8 +74,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint).markNode(NodeMarking.OPTIMISED);
-        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint).markNode(NodeMarking.OPTIMISED);
+        ConstraintNode factorisingConstraintNode = new TreeConstraintNode(mostProlificAtomicConstraint);
+        ConstraintNode negatedFactorisingConstraintNode = new TreeConstraintNode(negatedMostProlificConstraint);
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -98,7 +98,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
                     coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
                     coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList())).markNode(NodeMarking.OPTIMISED);
+            .collect(Collectors.toList()));
 
         return rootNode
             .removeDecisions(decisionsToRemove)
@@ -118,7 +118,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd).markNode(NodeMarking.OPTIMISED);
+        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd);
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 

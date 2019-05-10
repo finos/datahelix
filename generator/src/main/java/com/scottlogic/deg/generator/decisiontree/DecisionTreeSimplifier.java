@@ -69,6 +69,6 @@ public class DecisionTreeSimplifier {
                         Stream
                             .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
                             .collect(Collectors.toList())
-                    )).markNode(NodeMarking.OPTIMISED);
+                    ));
     }
 }

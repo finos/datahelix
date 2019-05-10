@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 
 import java.util.Collections;
 import java.util.HashSet;
