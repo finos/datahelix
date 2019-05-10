@@ -19,5 +19,5 @@ target/
 gradle/
 generator/build/
 generator/out/
-schemas/build/
-schemas/out/
+profile/build/
+profile/out/
