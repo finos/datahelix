@@ -13,3 +13,11 @@ target/
 **/*.classpath
 **/*.project
 **/*.settings
+
+# Ignore Gradle project-specific cache directory
+.gradle/
+gradle/
+generator/build/
+generator/out/
+schemas/build/
+schemas/out/
