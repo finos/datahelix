@@ -23,4 +23,24 @@ public class AtomicConstraintBuilder {
         constraintNodeBuilder.constraints.add(isInSetConstraint);
         return constraintNodeBuilder;
     }
+
+    public ConstraintNodeBuilder isNotInSet(Object... legalValues){
+        Set values = new HashSet();
+        Collections.addAll(values, legalValues);
+        AtomicConstraint isInSetConstraint = new IsInSetConstraint(field, values, Collections.emptySet()).negate();
+        constraintNodeBuilder.constraints.add(isInSetConstraint);
+        return constraintNodeBuilder;
+    }
+
+    public ConstraintNodeBuilder isNull(){
+        IsNullConstraint isNullConstraint = new IsNullConstraint(field, Collections.emptySet());
+        constraintNodeBuilder.constraints.add(isNullConstraint);
+        return constraintNodeBuilder;
+    }
+
+    public ConstraintNodeBuilder isNotNull(){
+        AtomicConstraint isNotNullConstraint = new IsNullConstraint(field, Collections.emptySet()).negate();
+        constraintNodeBuilder.constraints.add(isNotNullConstraint);
+        return constraintNodeBuilder;
+    }
 }

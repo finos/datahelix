@@ -35,11 +35,6 @@ class TreeTransformationIntegrationTests {
     Collection<DynamicTest> decisionTreePartitioner_givenProfileInputs_resultEqualsProfileOutputs() {
     	return doTest(new PartitionTestStrategy());
     }
-    
-    @TestFactory
-    Collection<DynamicTest> decisionTreeOptimiser_givenProfileInputs_resultEqualsProfileOutputs() {
-    	return doTest(new OptimiseTestStrategy());
-    }
 
     private Collection<DynamicTest> doTest(TreeTransformationTestStrategy strategy) {
         final String FS = File.separator;
