@@ -1,15 +1,12 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
-
 import java.util.Objects;
 
 public class RuleInformation {
     private final String description;
 
-    public RuleInformation(RuleDTO rule) {
-        String ruleDescription = rule != null ? rule.rule : null;
-        this.description = ruleDescription != null ? ruleDescription : "Unnamed rule";
+    public RuleInformation(String rule) {
+        this.description = rule != null ? rule : "Unnamed rule";
     }
 
     public String getDescription() {

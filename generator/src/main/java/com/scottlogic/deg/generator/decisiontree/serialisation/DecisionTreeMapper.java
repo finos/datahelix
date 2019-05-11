@@ -224,8 +224,6 @@ public class DecisionTreeMapper {
     }
 
     private static Set<RuleInformation> rules(String name){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = name;
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation(name));
     }
 }

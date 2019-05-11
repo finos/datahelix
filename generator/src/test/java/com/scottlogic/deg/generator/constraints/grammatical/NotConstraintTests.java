@@ -5,7 +5,6 @@ import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -71,8 +70,6 @@ public class NotConstraintTests {
     }
 
     private static Set<RuleInformation> rules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rules";
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation("rules"));
     }
 }
