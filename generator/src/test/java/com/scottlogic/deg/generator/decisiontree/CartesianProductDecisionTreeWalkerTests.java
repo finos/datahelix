@@ -14,7 +14,6 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -110,8 +109,6 @@ class CartesianProductDecisionTreeWalkerTests {
     }
 
     private static RuleInformation rule(String description){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = description;
-        return new RuleInformation(rule);
+        return new RuleInformation(description);
     }
 }

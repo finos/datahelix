@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.constraints.grammatical.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +54,7 @@ public class IndividualConstraintRuleViolatorTests {
         atomicConstraint1 = new IsLessThanConstantConstraint(new Field("foo"), 10, null);
         atomicConstraint2 = new IsLessThanConstantConstraint(new Field("bar"), 20, null);
         atomicConstraint3 = new IsLessThanConstantConstraint(new Field("foobar"), 30, null);
-        ruleInformation = new RuleInformation(new RuleDTO());
+        ruleInformation = new RuleInformation(null);
     }
 
     /**

@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -163,8 +162,6 @@ class ConstraintToFieldMapperTests {
     }
 
     private static Set<RuleInformation> rules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rules";
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation("rules"));
     }
 }
