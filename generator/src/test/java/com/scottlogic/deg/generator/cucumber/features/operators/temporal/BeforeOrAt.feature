@@ -6,7 +6,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
     And foo is of type "datetime"
     And foo is anything but null
 
-  @ignore #issue 594
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: User requires to create a datetime field with date (YYYY-MM-DD) values within a given month that are less than or at a specified date
     Given foo is before or at 2018-10-10T00:00:00.000Z
     And the generator can generate at most 30 rows
@@ -23,7 +23,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
       | 2018-10-09T00:00:00.000Z |
       | 2018-10-10T00:00:00.000Z |
 
-  @ignore #issue 594
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: User requires to create a datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values across a minute boundary that are less than or at specified date and time
     Given foo is before or at 2018-10-01T12:01:05.000Z
     And the generator can generate at most 5 rows
@@ -58,7 +58,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
     Then the profile is invalid because "Field \[foo\]: Dates should be expressed in object format e.g. \{ \"date\": \"2018-Feb-01T00:00:00.000\" \}"
     And no data is created
 
-  @ignore #issue 594
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
     Given foo is before or at 2024-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
@@ -68,7 +68,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
       | 2012-09-01T12:01:02.000 |
       | 2024-07-01T12:01:03.000 |
 
-  @ignore #594 generation should be descending when upper-bound only is provided
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful
     Given foo is before or at 2019-01-01T00:00:00.000Z
     And foo is before or at 2018-01-01T00:00:00.000Z
