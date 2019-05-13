@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
 
 import java.nio.file.Path;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class CucumberProfileReader implements ProfileReader {
                 throw new RuntimeException(firstException);
             }
 
-            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(new RuleDTO()), mappedConstraints)));
+            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
         } catch (JsonParseException e) {
             state.addException(e);
             throw e;
@@ -70,8 +69,6 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     private static Set<RuleInformation> getRules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "getRules";
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation());
     }
 }

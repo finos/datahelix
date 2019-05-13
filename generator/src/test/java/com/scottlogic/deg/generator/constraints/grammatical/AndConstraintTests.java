@@ -39,8 +39,6 @@ public class AndConstraintTests {
     }
 
     private static Set<RuleInformation> rules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rules";
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation());
     }
 }

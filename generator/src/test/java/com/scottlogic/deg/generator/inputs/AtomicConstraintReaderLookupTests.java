@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -235,9 +234,7 @@ public class AtomicConstraintReaderLookupTests {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
         try {
-            RuleDTO rule = new RuleDTO();
-            rule.rule = "rule";
-            Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+            Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
             Constraint constraint = reader.apply(dto, profileFields, ruleInformation);
 
@@ -256,9 +253,7 @@ public class AtomicConstraintReaderLookupTests {
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields, ruleInformation));
     }
@@ -269,9 +264,7 @@ public class AtomicConstraintReaderLookupTests {
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields, ruleInformation));
     }
@@ -282,9 +275,7 @@ public class AtomicConstraintReaderLookupTests {
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(type.toString());
 
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields, ruleInformation));
     }
@@ -381,9 +372,7 @@ public class AtomicConstraintReaderLookupTests {
         dateDto.field = "test";
         dateDto.value = value;
 
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rule";
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation(rule));
+        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
         IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) reader.apply(dateDto, profileFields, ruleInformation);
 

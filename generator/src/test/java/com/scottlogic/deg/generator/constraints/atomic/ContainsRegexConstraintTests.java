@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -42,8 +41,6 @@ public class ContainsRegexConstraintTests {
     }
 
     private static Set<RuleInformation> rules(){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = "rules";
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation());
     }
 }
