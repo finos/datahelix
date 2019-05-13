@@ -1401,7 +1401,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore #issue 769 "not granularTo" is not yet implemented
+  @ignore #769 Violation of numeric and temporal granularity
   Scenario: 'InSet' with a contradicting not 'granularTo' emits null
     Given there is a field foo
     And foo is in set:
