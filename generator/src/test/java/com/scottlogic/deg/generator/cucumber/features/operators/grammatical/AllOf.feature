@@ -23,7 +23,7 @@ Feature: User can specify that data must be created to conform to each of multip
       | "ba" |
       | null |
 
-  @ignore # failing - generates duplicate nulls linked to issue 91
+  @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
     Given there is a field foo
     And foo is of type "string"
@@ -59,7 +59,7 @@ Feature: User can specify that data must be created to conform to each of multip
       | foo  |
       | null |
 
-  @ignore #failing - looks to be part of issue 91
+  @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: Running an 'allOf' request that contains soft contradictory restraints in a nested anyOf request should be successful
     Given there is a field foo
     And foo is in set:

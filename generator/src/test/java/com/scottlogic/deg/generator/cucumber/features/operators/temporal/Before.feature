@@ -6,8 +6,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
     And foo is of type "datetime"
 
 #Alone
-# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  @ignore
+  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
   Scenario: Running a 'before' request over a year threshold should be successful
     Given foo is before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
@@ -19,8 +18,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | 2018-12-31T23:59:59.996Z |
       | 2018-12-31T23:59:59.995Z |
 
-# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  @ignore
+  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
   Scenario: Running a 'before' request over a leap year date should be successful
     Given foo is before 2016-03-01T00:00:00.000Z
     And the generator can generate at most 5 rows
@@ -32,8 +30,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | 2016-02-29T23:59:59.997Z |
       | 2016-02-29T23:59:59.996Z |
 
-# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  @ignore
+  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
   Scenario: Running a 'before' request that specifies the maximum valid system date should be successful
     Given foo is before 9999-12-31T23:59:59.999Z
     And the generator can generate at most 5 rows
@@ -80,8 +77,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | 2017-12-31T23:59:59.996Z |
       | 2017-12-31T23:59:59.995Z |
 
-# Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  @ignore
+  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
   Scenario: 'before' run against a non contradicting not 'before' should be successful
     Given foo is before 2019-01-02T00:00:00.000Z
     And foo is anything but before 2019-01-01T00:00:00.000Z

@@ -60,8 +60,7 @@ Feature: Values can be specified by using any of to set multiple constraints
     And foo is anything but null
     Then no data is created
 
-  @ignore
-# failing - data is duplicated linked to issue 91
+  @ignore #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: User requires to create a field with numbers that conform to one or many non-contradictory constraints
     Given there is a constraint:
       """
@@ -86,8 +85,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | 9    |
       | 10   |
 
-  @ignore
-  # failing - data is duplicated linked to issue 91
+  @ignore #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: User requires to create a field with numbers that conform to multiple sets of one or many constraints
     Given there is a constraint:
       """
@@ -120,8 +118,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | 18   |
       | 19   |
 
-  @ignore
-  # failing - data is duplicated linked to issue 91
+  @ignore #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: User requires to create a field with dates that conform to one or many constraints
     Given there is a constraint:
       """
@@ -145,8 +142,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | 2018-10-08T00:00:00.000 |
       | 2018-10-09T00:00:00.000 |
 
-  @ignore
-    # failing - data is duplicated linked to issue 91
+  @ignore #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: User requires to create a field with dates that conform to multiple sets of constraints
     Given there is a constraint:
       """

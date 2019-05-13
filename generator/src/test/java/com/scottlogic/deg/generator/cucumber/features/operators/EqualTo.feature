@@ -1553,7 +1553,7 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #issue 769 "not granularTo" is not yet implemented
+  @ignore #769 Violation of numeric and temporal granularity
   Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1
@@ -1707,7 +1707,7 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore #Defect 594
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: Not 'equalTo' run against a non contradicting 'before' should be successful
     Given there is a field foo
     And foo is of type "datetime"
@@ -1771,7 +1771,7 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.001Z |
 
-  @ignore #Defect 594
+  @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be successful
     Given there is a field foo
     And foo is of type "datetime"
