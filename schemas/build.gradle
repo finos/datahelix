@@ -28,13 +28,6 @@ test {
 
 description = 'DataHelix Schema Library'
 
-task fatJar(type: Jar) {
-    baseName = 'schema'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-    archiveName = "${baseName}.${extension}"
-}
-
 
 task release() {
     jar.manifest {
