@@ -58,14 +58,6 @@ There may be other visualisers that are suitable to use. The requirements for a 
 - gv files are encoded with UTF-8, visualisers must support this encoding.
 - gv files can include HTML encoded entities, visualisers should support this feature.
 
-#
-### Generate Tree JSON
-#### `genTreeJson [options] <profile path> <output path>`
-
-Generates a JSON file representing the in-memory decision tree.  This is a utility to assist the creation of `expected.json` files for `TreeTransformationIntegrationTest`
-
-* `<profile path>`, a path to the profile JSON file
-* `<output path>`, a file path to where the tree JSON should be emitted to. This will be a UTF-8 encoded JSON file.
 
 #### Options
 Options are optional and case-insensitive
