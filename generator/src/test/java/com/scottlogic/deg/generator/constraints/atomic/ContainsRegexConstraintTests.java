@@ -41,6 +41,6 @@ public class ContainsRegexConstraintTests {
     }
 
     private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation("rules"));
+        return Collections.singleton(new RuleInformation());
     }
 }

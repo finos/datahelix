@@ -61,7 +61,7 @@ public class CucumberProfileReader implements ProfileReader {
                 throw new RuntimeException(firstException);
             }
 
-            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(null), mappedConstraints)));
+            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
         } catch (JsonParseException e) {
             state.addException(e);
             throw e;
@@ -69,6 +69,6 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     private static Set<RuleInformation> getRules(){
-        return Collections.singleton(new RuleInformation("getRules"));
+        return Collections.singleton(new RuleInformation());
     }
 }

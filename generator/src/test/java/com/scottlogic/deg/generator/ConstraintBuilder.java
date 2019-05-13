@@ -43,6 +43,6 @@ public class ConstraintBuilder {
     }
 
     private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation("rule"));
+        return Collections.singleton(new RuleInformation());
     }
 }

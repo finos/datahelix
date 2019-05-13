@@ -42,6 +42,6 @@ public class IsGranularToNumericConstraintTests {
     }
 
     private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation("rules"));
+        return Collections.singleton(new RuleInformation());
     }
 }
