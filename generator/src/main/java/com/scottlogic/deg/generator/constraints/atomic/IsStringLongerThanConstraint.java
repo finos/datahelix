@@ -2,13 +2,13 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsStringLongerThanConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsStringLongerThanConstraint implements AtomicConstraint {
     public final Field field;
     private final Set<RuleInformation> rules;
     public final int referenceValue;
@@ -53,10 +53,6 @@ public class IsStringLongerThanConstraint implements AtomicConstraint, Visitable
     @Override
     public String toString() { return String.format("`%s` length > %d", field.name, referenceValue); }
 
-    @Override
-    public void accept(ProfileVisitor visitor) {
-        visitor.visit(this);
-    }
 
     @Override
     public Set<RuleInformation> getRules() {

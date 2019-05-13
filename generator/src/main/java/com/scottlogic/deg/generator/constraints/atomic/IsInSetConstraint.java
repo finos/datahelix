@@ -2,14 +2,14 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class IsInSetConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
     public final Set<Object> legalValues;
     private final Set<RuleInformation> rules;
@@ -72,11 +72,6 @@ public class IsInSetConstraint implements AtomicConstraint, VisitableProfileElem
     @Override
     public int hashCode(){
         return Objects.hash(field, legalValues);
-    }
-
-    @Override
-    public void accept(ProfileVisitor visitor) {
-        visitor.visit(this);
     }
 
     @Override

@@ -2,13 +2,13 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
     private final Set<RuleInformation> rules;
     public final Number referenceValue;
@@ -50,10 +50,6 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
         return String.format("`%s` >= %s", field.name, referenceValue);
     }
 
-    @Override
-    public void accept(ProfileVisitor visitor) {
-        visitor.visit(this);
-    }
 
     @Override
     public Set<RuleInformation> getRules() {

@@ -9,8 +9,6 @@ public class ProfileContradictionsValidator implements ProfileValidator {
     @Override
     public Collection<ValidationAlert> validate(Profile profile) {
         ProfileValidationVisitor visitor = new ProfileValidationVisitor();
-
-        profile.accept(visitor);
         return visitor.getAlerts();
     }
 }

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 
 import java.util.Iterator;
 import java.util.List;

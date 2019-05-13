@@ -1,12 +1,9 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
-
 import java.util.Collection;
 import java.util.List;
 
-public class Profile implements VisitableProfileElement {
+public class Profile {
     public final ProfileFields fields;
     public final Collection<Rule> rules;
     public final String description;
@@ -27,9 +24,5 @@ public class Profile implements VisitableProfileElement {
         this.fields = fields;
         this.rules = rules;
         this.description = description;
-    }
-
-    public void accept(ProfileVisitor visitor){
-        rules.forEach(rule -> rule.accept(visitor));
     }
 }
