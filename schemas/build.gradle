@@ -28,11 +28,19 @@ test {
 
 description = 'DataHelix Schema Library'
 
-task release() {
-	jar.manifest {
-			attributes 'Created-By': 'Scott Logic',
-                'Implementation-Version': version != null ? version : "0.0"
-		}
+task fatJar(type: Jar) {
+    baseName = 'schema'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    archiveName = "${baseName}.${extension}"
+}
 
-	jar
+
+task release() {
+    jar.manifest {
+        attributes 'Created-By': 'Scott Logic',
+            'Implementation-Version': version != null ? version : "0.0"
+    }
+
+    jar
 }
