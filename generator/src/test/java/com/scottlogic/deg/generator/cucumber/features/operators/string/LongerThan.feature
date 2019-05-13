@@ -421,7 +421,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "aaaaaaaaaaa" |
       | 12            |
 
-  @ignore #GranularTo design WIP
   Scenario: Running a 'longerThan' request alongside a 'granularTo' decimal constraint should be successful
     Given foo is longer than 1
     And foo is granular to 0.1
