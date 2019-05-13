@@ -33,7 +33,9 @@ class FieldSpecFactoryTests {
                     add(
                         FieldSpec.Empty.withNullRestrictions(
                             new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty)
-                        .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, null)
+                        .withTypeRestrictions(
+                            DataTypeRestrictions.ALL_TYPES_PERMITTED,
+                            FieldSpecSource.Empty)
                     );
                 }}
             )
