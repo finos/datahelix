@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 
 import java.util.Iterator;

@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 

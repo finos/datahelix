@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 

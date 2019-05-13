@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 import com.scottlogic.deg.generator.restrictions.ParsedDateGranularity;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;

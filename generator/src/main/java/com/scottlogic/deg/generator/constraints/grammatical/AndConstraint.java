@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.constraints.grammatical;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
 
 
 import java.util.Arrays;
