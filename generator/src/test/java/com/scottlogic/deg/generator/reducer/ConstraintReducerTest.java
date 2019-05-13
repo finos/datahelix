@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;

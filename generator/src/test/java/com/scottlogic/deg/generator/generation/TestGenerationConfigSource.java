@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;

@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstra
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

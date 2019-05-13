@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
-import com.scottlogic.deg.schemas.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.io.IOException;
 import java.util.*;

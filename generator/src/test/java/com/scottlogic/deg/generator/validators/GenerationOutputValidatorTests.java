@@ -1,13 +1,10 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.schemas.common.ValidationResult;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

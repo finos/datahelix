@@ -36,7 +36,7 @@ import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.nio.file.Path;
 import java.time.OffsetDateTime;

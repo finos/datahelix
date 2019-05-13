@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.guice;
 
 import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 public class AtomicConstraintTypeMapper {
     public Class toConstraintClass(AtomicConstraintType type) {

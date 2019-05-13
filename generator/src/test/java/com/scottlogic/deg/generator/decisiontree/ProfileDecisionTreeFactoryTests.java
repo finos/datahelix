@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalCo
 import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.profile.v0_1.RuleDTO;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;

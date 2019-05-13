@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.profile.v0_1.RuleDTO;
 
 import java.util.Objects;
 

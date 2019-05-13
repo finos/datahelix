@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.commandline;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
