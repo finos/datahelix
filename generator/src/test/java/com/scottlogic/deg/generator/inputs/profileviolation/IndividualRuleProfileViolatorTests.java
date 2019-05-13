@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstra
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -189,8 +188,7 @@ public class IndividualRuleProfileViolatorTests {
 
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        RuleDTO rule1DTO = new RuleDTO("Rule 1 description", null);
-        RuleInformation ruleInformation1 = new RuleInformation(rule1DTO);
+        RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
         fooField = new Field("foo");
         barField = new Field("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
@@ -214,8 +212,7 @@ public class IndividualRuleProfileViolatorTests {
             Collections.singleton(ruleInformation1));
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
-        RuleDTO rule2DTO = new RuleDTO("Rule 2 description", null);
-        RuleInformation ruleInformation2 = new RuleInformation(rule2DTO);
+        RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");
         rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
         violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
     }

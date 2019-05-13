@@ -14,8 +14,8 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidatio
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
-import com.scottlogic.deg.schemas.common.ValidationResult;
-import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

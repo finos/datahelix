@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "if": {"field": "foo", "is": "ofType", "value": "integer"},
+          "then": 0,
+          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ]
+}
