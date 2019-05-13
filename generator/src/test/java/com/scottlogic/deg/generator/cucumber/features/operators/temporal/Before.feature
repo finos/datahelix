@@ -81,7 +81,6 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | 2017-12-31T23:59:59.995Z |
 
 # Defect 594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-# Defect 141 "Implement granularity for datetimes" related to this issue
   @ignore
   Scenario: 'before' run against a non contradicting not 'before' should be successful
     Given foo is before 2019-01-02T00:00:00.000Z

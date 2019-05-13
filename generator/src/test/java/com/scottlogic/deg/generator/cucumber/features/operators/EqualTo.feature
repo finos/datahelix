@@ -812,9 +812,9 @@ Feature: User can specify that a value is equalTo a required value
       | null |
       | "a"  |
 
-  @ignore #running out of memory
   Scenario: Not 'equalTo' a value and a non-contradicting 'matchingRegex' should be successful
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but equal to "aa"
     And foo is matching regex /[a]{1}/
     Then the following data should be generated:
@@ -864,9 +864,9 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #running out of memory
   Scenario: Not 'equalTo' and 'matchingRegex' for identical strings emits null
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but equal to "a"
     And foo is matching regex /[a]{1}/
     Then the following data should be generated:
@@ -1225,10 +1225,9 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore #issue
   Scenario: 'EqualTo' a valid ISIN with a contradicting not 'aValid' ISIN emits null
     Given there is a field foo
-    And foo is equal to "GB0002634947"
+    And foo is equal to "GB00YG2XYC52"
     And foo is anything but a valid "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -1516,8 +1515,7 @@ Feature: User can specify that a value is equalTo a required value
       | null |
       | 1.1  |
 
-  @ignore
-  Scenario: Not 'equalTo' run against a non contradicting 'granularTo' should only generate null
+  Scenario: Not 'equalTo' run against a non contradicting 'granularTo' should' should be successful
     Given there is a field foo
     And foo is anything but equal to 1.1
     And foo is granular to 1
@@ -1547,7 +1545,6 @@ Feature: User can specify that a value is equalTo a required value
       | "a"                      |
       | 2018-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: 'EqualTo' run against a contradicting 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1.1
@@ -1556,7 +1553,7 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  @ignore
+  @ignore #issue 769 "not granularTo" is not yet implemented
   Scenario: 'EqualTo' run against a contradicting not 'granularTo' should only generate null
     Given there is a field foo
     And foo is equal to 1
@@ -1585,19 +1582,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: Not 'equalTo' run against a non contradicting 'after' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.002Z
     And foo is after 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2019-01-01T00:00:00.001Z |
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
       | 2019-01-01T00:00:00.005Z |
+      | 2019-01-01T00:00:00.006Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'after' should be successful
     Given there is a field foo
@@ -1647,19 +1644,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: Not 'equalTo' run against a non contradicting 'afterOrAt' should only be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is after or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2019-01-01T00:00:00.001Z |
       | 2019-01-01T00:00:00.002Z |
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
+      | 2019-01-01T00:00:00.005Z |
 
   Scenario Outline: 'EqualTo' to a non-datetime value with 'afterOrAt' should be successful
     Given there is a field foo
@@ -1710,19 +1707,20 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  @ignore
+  @ignore #Defect 594
   Scenario: Not 'equalTo' run against a non contradicting 'before' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2018-12-31T23:59:59.998Z
     And foo is before 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2018-12-31T23:59:59.999Z |
       | 2018-12-31T23:59:59.997Z |
       | 2018-12-31T23:59:59.996Z |
       | 2018-12-31T23:59:59.995Z |
+      | 2018-12-31T23:59:59.994Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'before' should be successful
     Given there is a field foo
@@ -1773,18 +1771,19 @@ Feature: User can specify that a value is equalTo a required value
       | null                     |
       | 2019-01-01T00:00:00.001Z |
 
-  @ignore
+  @ignore #Defect 594
   Scenario: Not 'equalTo' run against a non contradicting 'beforeOrAt' should be successful
     Given there is a field foo
+    And foo is of type "datetime"
     And foo is anything but equal to 2019-01-01T00:00:00.000Z
     And foo is before or at 2019-01-01T00:00:00.000Z
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
-      | null                     |
       | 2018-12-31T23:59:59.999Z |
       | 2018-12-31T23:59:59.997Z |
       | 2018-12-31T23:59:59.996Z |
+      | 2018-12-31T23:59:59.995Z |
       | 2018-12-31T23:59:59.995Z |
 
   Scenario Outline: 'EqualTo' a non-datetime value with 'beforeOrAt' should be successful
@@ -1818,6 +1817,7 @@ Feature: User can specify that a value is equalTo a required value
 
   Scenario: 'EqualTo' request including a string of the maximum length should be successful
     Given there is a field foo
+    And the maximum string length is 1000
     And foo is equal to "I am 1000 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP"
     Then the following data should be generated:
       | foo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -1826,5 +1826,6 @@ Feature: User can specify that a value is equalTo a required value
 
   Scenario: 'EqualTo' request including a string over the maximum length should throw an error
     Given there is a field foo
+    And the maximum string length is 1000
     And foo is equal to "I am 1001 chars long    dny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnPe"
     Then the profile is invalid because "Field \[foo\]: set contains a string longer than maximum permitted length, was: 1001, max-length: 1000"

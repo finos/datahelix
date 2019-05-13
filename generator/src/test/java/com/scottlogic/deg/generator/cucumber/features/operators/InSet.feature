@@ -647,9 +647,9 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  @ignore #out of memory
   Scenario: Not 'inSet' string value with a 'matchingRegex' of contradictory value is successful
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but in set:
       | "a" |
     And foo is matching regex /[b]{1}/
@@ -700,9 +700,9 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore #out of memory
   Scenario: Not 'inSet' alongside a contradicting 'matchingRegex' emits null
     Given there is a field foo
+    And foo is of type "string"
     And foo is anything but in set:
       | "a" |
     And foo is matching regex /[a]{1}/
@@ -996,16 +996,15 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### aValid ###
 
-  @ignore
   Scenario: 'InSet' with a non contradicting 'aValid' ISIN is successful
     Given there is a field foo
     And foo is in set:
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     And foo is a valid "ISIN"
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
 
   Scenario: 'InSet' with a non contradicting not 'aValid' ISIN is successful
     Given there is a field foo
@@ -1017,7 +1016,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  @ignore
   Scenario: Not 'inSet' with a non contradicting 'aValid' ISIN is successful
     Given there is a field foo
     And foo is anything but in set:
@@ -1025,11 +1023,11 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is a valid "ISIN"
     And foo is in set:
       | "a"            |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
 
   Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
     Given there is a field foo
@@ -1054,11 +1052,10 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore
   Scenario: 'InSet' run against a contradicting not 'aValid' ISIN emits null
     Given there is a field foo
     And foo is in set:
-      | "GB0002634947" |
+      | "GB00YG2XYC52" |
     And foo is anything but a valid "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -1355,7 +1352,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | 1.1  |
 
-  @ignore #issue #824 - 2.0 should be generated with a granularity of 1
   Scenario: Integer within an inSet and a non contradicting 'granularTo' is successful
     Given there is a field foo
     And foo is granular to 1
@@ -1396,7 +1392,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"                      |
       | 2018-01-01T00:00:00.000Z |
 
-  @ignore
   Scenario: 'InSet' with a contradicting 'granularTo' emits null
     Given there is a field foo
     And foo is in set:
@@ -1406,7 +1401,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore
+  @ignore #issue 769 "not granularTo" is not yet implemented
   Scenario: 'InSet' with a contradicting not 'granularTo' emits null
     Given there is a field foo
     And foo is in set:
@@ -2172,6 +2167,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
   Scenario: Running an 'inSet' request including a string of the maximum length should be successful
     Given there is a field foo
     And foo is anything but null
+    And the maximum string length is 1000
     And foo is in set:
       | "I am 1000 chars long    dny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP" |
     Then the following data should be generated:
@@ -2180,6 +2176,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
   Scenario: Running an 'inSet' request including a string over the maximum length should throw an error
     Given there is a field foo
+    And the maximum string length is 1000
     And foo is in set:
       | "I am 1001 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnPe" |
     Then the profile is invalid because "Field \[foo\]: set contains a string longer than maximum permitted length, was: 1001, max-length: 1000"

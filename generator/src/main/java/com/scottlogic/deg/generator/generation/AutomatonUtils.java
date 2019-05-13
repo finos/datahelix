@@ -11,54 +11,118 @@ class AutomatonUtils {
 
     private static final char printableChar = ' ';
 
-    // Returns a string of printable characters based on the supplied automaton.
-    // This method ignores transitions that lead back to the same node so recursive states will only ever produce a
-    // single character. This means for infinite automatons the resulting string isn't the longest possible (as the
-    // longest example would have an infinite length) but is based on the longest path from the start state to
-    // the "furthest" end state.
+    /**
+     * Get the longest string possible given the regex (in the form of the Automaton)
+     * There may be many optional sections within a regex which need to be inspected to calculate the longest possible
+     * string. The automaton has done the hard work of turning the regex into a set of transitions and states.
+     * see https://github.com/ScottLogic/datahelix/blob/master/generator/docs/StringGeneration.md for more detail.
+     *
+     * This method is a recursive implementation that will test each starting point calculating the string and returning
+     * the longest possible variant.
+     *
+     * TODO:
+     * 1) turn this into a non-recursive algorithm
+     * 2) improve performance and/or memory management (don't build strings as part of the process)
+     *
+     * @param automaton The automaton that represents the regex
+     * @return The longest possible string for the given regex/automaton
+     */
     static String getLongestExample(Automaton automaton) {
+        List<Transition> transitions = automaton.getInitialState()
+            .getSortedTransitions(true)
+            .stream()
+            .sorted(Comparator.comparing(Transition::getMin))
+            .collect(Collectors.toList()); //ensure some form or determinism
 
-        Transition[] solution = {};
+        TransitionLongestExampleCache cache = new TransitionLongestExampleCache();
 
-        // The start node always has one transition to start
-        Transition startTransition = automaton.getInitialState().getSortedTransitions(true).get(0);
-        Transition[] startTransitionPath = { startTransition };
+        String longest = "";
+        for (Transition transition: transitions) {
+            String transitionLongest = getLongestExample(transition, cache);
+            if (transitionLongest.length() > longest.length()) {
+                longest = transitionLongest;
+            }
+        }
 
-        Stack<Transition[]> transitionsToVisit = new Stack<>();
-        transitionsToVisit.add(startTransitionPath);
+        return longest;
+    }
 
-        while (!transitionsToVisit.empty()) {
-            Transition[] currentTransitionPath = transitionsToVisit.pop();
-            Transition currentTransition = currentTransitionPath[currentTransitionPath.length - 1];
+    /**
+     * A cache of transitions to calculated strings, to save recalculating the string fragment for a transition multiple
+     * times.
+     */
+    private static class TransitionLongestExampleCache {
+        private final Map<Transition, String> examples = new HashMap<>();
 
-            State dest = currentTransition.getDest();
-
-            if (dest.isAccept() && currentTransitionPath.length > solution.length) {
-                solution = currentTransitionPath;
+        String getLongestExample(Transition transition){
+            if (examples.containsKey(transition)){
+                return examples.get(transition);
             }
 
-            List<Transition> nextTransitions = dest.getTransitions()
+            String example = AutomatonUtils.getLongestExample(transition, this);
+            examples.put(transition, example);
+            return example;
+        }
+    }
+
+    /**
+     * Recursive function for calculating the longest string that can be generated from the given regular automaton
+     *
+     * @param transition The transition to start at
+     * @param cache A cache of previously resolved transitions
+     * @return The longest string that can be generated from the given transition
+     */
+    private static String getLongestExample(Transition transition, TransitionLongestExampleCache cache){
+        if (transition == null){
+            throw new IllegalArgumentException("Transition cannot be null");
+        }
+
+        StringBuilder string = new StringBuilder();
+
+        while (transition != null) { //need some exit condition
+            State dest = transition.getDest();
+            string.append((char)Math.max(printableChar, transition.getMin()));
+
+            if (dest.isAccept() && dest.getTransitions().isEmpty()){
+                return string.toString();
+            }
+
+            Map<State, List<Transition>> transitionsToUniqueStates = dest.getTransitions()
                 .stream()
-                .filter(x -> x.getDest() != dest)
+                .sorted(Comparator.comparing(Transition::getMin))
+                .collect(Collectors.groupingBy(Transition::getDest));
+            if (transitionsToUniqueStates.size() == 1){
+                //every transition goes to the same destination, just use the first
+                Transition nextTransition = transitionsToUniqueStates.values().iterator().next().get(0);
+
+                if (nextTransition == transition){
+                    //infinite generation
+                    return string.toString();
+                }
+
+                transition = nextTransition;
+                continue;
+            }
+
+            List<Transition> nextTransitions = transitionsToUniqueStates.values()
+                .stream()
+                .map(transitions -> transitions.get(0))
                 .collect(Collectors.toList());
 
-            for (Transition nextTransition : nextTransitions) {
-                Transition[] nextTransitionPath = Arrays.copyOf(
-                    currentTransitionPath,
-                    currentTransitionPath.length + 1);
-                nextTransitionPath[nextTransitionPath.length - 1] = nextTransition;
-
-                transitionsToVisit.push(nextTransitionPath);
+            //there are multiple suffix's, append the longest one
+            String longestSuffix = "";
+            for (Transition nextTransition: nextTransitions) {
+                String suffix = cache.getLongestExample(nextTransition);
+                if (suffix.length() > longestSuffix.length()){
+                    longestSuffix = suffix;
+                }
             }
+
+            string.append(longestSuffix);
+            return string.toString();
         }
 
-        StringBuilder sb = new StringBuilder();
-
-        for (Transition transition : solution) {
-            sb.append((char) Math.max(printableChar, transition.getMin()));
-        }
-
-        return sb.toString();
+        throw new IllegalStateException("Would only get here if transition is null, this should never happen");
     }
 
     // Taken from Automaton but updated to return printable characters

@@ -335,15 +335,13 @@ Feature: User can specify that a value either matches or contains a specified re
       | null |
       | "a"  |
 
-  @ignore #626
   Scenario: not matchingRegex run against a non contradicting ofLength should be successful
     Given foo is matching regex /[a-z]{1}/
     And foo is anything but matching regex /[a]{1}/
     And foo is of length 1
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "b"  |
       | "c"  |
       | "d"  |
@@ -417,15 +415,13 @@ Feature: User can specify that a value either matches or contains a specified re
       | null |
       | "bb" |
 
-  @ignore #626
   Scenario: not matchingRegex run against a non contradicting shorterThan should be successful
     Given foo is matching regex /[a-h]{1}/
     And foo is anything but matching regex /[b]{1}/
     And foo is shorter than 2
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
       | "c"  |
       | "d"  |
@@ -531,113 +527,89 @@ Feature: User can specify that a value either matches or contains a specified re
       | "01" |
       | "10" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting after should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is after 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting not after should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is anything but after 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting afterOrAt should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is after or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting not afterOrAt should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is anything but after or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting before should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is before 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting not before should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is anything but before 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting beforeOrAt should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is before or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
       | "ad" |
 
-# Defect 626 "null data is not created when regex is applied with a datetime value" is related to this scenario
-  @ignore
   Scenario: matchingRegex string run against a non contradicting not beforeOrAt should be successful
     Given foo is matching regex /[a-e]{2}/
     And foo is before or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 5 rows
+    And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |

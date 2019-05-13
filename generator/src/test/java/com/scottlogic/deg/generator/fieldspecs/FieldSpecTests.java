@@ -1,15 +1,14 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -51,7 +50,9 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("whitelist")), null);
+            .withSetRestrictions(SetRestrictions.fromWhitelist(
+                Collections.singleton("whitelist")),
+                FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -68,7 +69,7 @@ class FieldSpecTests {
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
                 SetRestrictions.fromWhitelist(Collections.singleton("whitelist")),
-                null)
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -85,7 +86,7 @@ class FieldSpecTests {
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
                     )),
-                null);
+                FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
@@ -93,7 +94,7 @@ class FieldSpecTests {
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
                     )),
-                null)
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -106,7 +107,7 @@ class FieldSpecTests {
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(),
-            null);
+            FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -123,7 +124,7 @@ class FieldSpecTests {
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(
                 new NumericRestrictions(),
-                null)
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -137,13 +138,13 @@ class FieldSpecTests {
         NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions();
         firstFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(1), false);
         firstFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions, null);
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions, FieldSpecSource.Empty);
 
         NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions();
         secondFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(5), false);
         secondFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions, null)
+            FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions, FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -551,15 +552,10 @@ class FieldSpecTests {
         }
     }
 
-    private class MockStringRestrictions extends StringRestrictions{
+    private class MockStringRestrictions implements StringRestrictions{
         private final boolean isEqual;
 
         MockStringRestrictions(boolean isEqual) {
-            super(new StringConstraintsCollection(
-                new StringHasLengthConstraint(
-                    new Field("field"),
-                    10,
-                    Collections.emptySet())));
             this.isEqual = isEqual;
         }
 
@@ -571,6 +567,21 @@ class FieldSpecTests {
         @Override
         public int hashCode() {
             return 1234;
+        }
+
+        @Override
+        public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public boolean match(String x) {
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public StringGenerator createGenerator() {
+            throw new NotImplementedException();
         }
     }
 

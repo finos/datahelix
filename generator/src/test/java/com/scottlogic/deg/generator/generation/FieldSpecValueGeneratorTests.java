@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.StringConstraintsCollection;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
@@ -15,10 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
@@ -227,9 +227,7 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withStringRestrictions(
-                new StringRestrictions(new StringConstraintsCollection(Collections.emptySet())) {{
-                    stringGenerator = new RegexStringGenerator("/[ab]{2}/", true);
-                }},
+                new StringRestrictionsFactory().forStringMatching(Pattern.compile("/[ab]{2}/"), true),
                 fieldSpecSource)
             .withTypeRestrictions(
                 new DataTypeRestrictions(

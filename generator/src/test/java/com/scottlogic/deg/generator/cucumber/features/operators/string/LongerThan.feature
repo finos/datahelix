@@ -216,21 +216,19 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 1                        |
       | 2011-01-01T00:00:00.000Z |
 
-  @ignore #issue 487
   Scenario: 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
     Given foo is longer than 11
     And foo is a valid "ISIN"
     And foo is in set:
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
       | "twelvedigits" |
     Then the following data should be generated:
       | foo            |
       | null           |
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  @ignore #issue 487
   Scenario: 'longerThan' alongside a non-contradicting not 'aValid' constraint should be successful
     Given foo is longer than 2
     And foo is anything but a valid "ISIN"
@@ -241,21 +239,22 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the following data should be generated:
       | foo            |
       | null           |
+      | "US0000XVGZA3" |
       | "U10378331005" |
       | "twelvedigits" |
 
-  @ignore #issue 487
   Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
-    Given foo is anything but longer than 1
+    Given foo is anything but longer than 12
     And foo is a valid "ISIN"
     And foo is in set:
-      | "US0000XVGZA3" |
+      | "GB00YG2XYC52" |
       | "US0378331005" |
       | "2"            |
     Then the following data should be generated:
-      | foo  |
-      | null |
-      | "2"  |
+      | foo            |
+      | null           |
+      | "GB00YG2XYC52" |
+      | "US0378331005" |
 
   Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and null
     Given foo is longer than 20
@@ -271,7 +270,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 22                       |
       | 2011-01-01T00:00:00.000Z |
 
-  @ignore #issue 487
   Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
     Given foo is anything but longer than 12
     And foo is anything but a valid "ISIN"
@@ -282,6 +280,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the following data should be generated:
       | foo            |
       | null           |
+      | "US0000XVGZA3" |
       | "U10000XVGZA3" |
       | "twelvedigits" |
 
@@ -627,3 +626,27 @@ Feature: User can specify that a string length is longer than, a specified numbe
   Scenario: longerThan with value larger than maximum permitted should fail with an error message
     Given foo is longer than 1000
     Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value <= 999, currently is 1000"
+
+  Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
+    Given foo is of type "string"
+    And foo is longer than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 255 and 255 inclusively
+
+  Scenario: Running a 'longerThan' request with a value equal to the implicit max (255) should generate data of length between 256 and hard maximum (1000)
+    Given foo is of type "string"
+    And foo is longer than 255
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 256 and 1000 inclusively
+
+  Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
+    Given foo is of type "string"
+    And foo is longer than 254
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 254 and 255 inclusively
+
+  Scenario: Running a 'longerThan' request with a value equal to the implicit max (255) should generate data of length between 255 and hard maximum (1000)
+    Given foo is of type "string"
+    And foo is longer than 255
+    And the generator can generate at most 20 rows
+    Then foo contains strings of length between 255 and 1000 inclusively

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 // There's a HUGE amount of copy-paste in this class. We should address that before we make any significant changes to it
 public class IsinStringGenerator implements StringGenerator {
+    public static final int ISIN_LENGTH = 12;
     private static final String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
 
     private final boolean isNegated;
