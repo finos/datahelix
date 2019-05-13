@@ -71,7 +71,7 @@ Feature: Type mandation validation
       """
     Then the profile should be considered valid
 
-  @ignore #797 Current algorithm isn't sophisticated enough
+  @ignore #797 Type mandation check erroneously rejects cases where cross-constraint typedness proofs exist
   Scenario: A modus-ponens-style inference should satisfy type mandation
     Given there is a field user_id
     And there is a field user_type
