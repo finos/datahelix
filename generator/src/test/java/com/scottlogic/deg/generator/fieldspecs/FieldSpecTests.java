@@ -50,7 +50,9 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(new SetRestrictions(null, null), null);
+            .withSetRestrictions(SetRestrictions.fromWhitelist(
+                Collections.singleton("whitelist")),
+                FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -66,8 +68,8 @@ class FieldSpecTests {
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
-                new SetRestrictions(null, null),
-                null)
+                SetRestrictions.fromWhitelist(Collections.singleton("whitelist")),
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -80,23 +82,19 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
-                    ),
-                    null
-                ),
-                null);
+                    )),
+                FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
-                    ),
-                    null
-                ),
-                null)
+                    )),
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -109,7 +107,7 @@ class FieldSpecTests {
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(),
-            null);
+            FieldSpecSource.Empty);
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -126,7 +124,7 @@ class FieldSpecTests {
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(
                 new NumericRestrictions(),
-                null)
+                FieldSpecSource.Empty)
         );
 
         assertFalse(
@@ -140,13 +138,13 @@ class FieldSpecTests {
         NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions();
         firstFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(1), false);
         firstFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions, null);
+        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions, FieldSpecSource.Empty);
 
         NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions();
         secondFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(5), false);
         secondFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions, null)
+            FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions, FieldSpecSource.Empty)
         );
 
         assertFalse(

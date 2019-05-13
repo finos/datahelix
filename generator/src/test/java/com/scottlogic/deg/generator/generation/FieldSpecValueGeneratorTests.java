@@ -31,24 +31,20 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
                         Arrays.asList(1, 5, 10)
-                    ),
-                    null
-                ),
+                    )),
                 fieldSpecSource)
             .withMustContainRestriction(
                 new MustContainRestriction(
                     new HashSet<>(
                         Collections.singletonList(
                             FieldSpec.Empty.withSetRestrictions(
-                                new SetRestrictions(
+                                SetRestrictions.fromWhitelist(
                                     new HashSet<>(
                                         Collections.singletonList(5)
-                                    ),
-                                    null
-                                ),
+                                    )),
                                 fieldSpecSource
                             ).withNullRestrictions(notNull, fieldSpecSource)
                         )
@@ -110,14 +106,12 @@ class FieldSpecValueGeneratorTests {
                 new HashSet<>(
                     Arrays.asList(
                         rootFieldSpec.withSetRestrictions(
-                            new SetRestrictions(
+                            SetRestrictions.fromWhitelist(
                                 new HashSet<>(
-                                    Arrays.asList(15, 25)),
-                                null),
+                                    Arrays.asList(15, 25))),
                             fieldSpecSource),
                         rootFieldSpec.withSetRestrictions(
-                            new SetRestrictions(
-                                null,
+                            SetRestrictions.fromBlacklist(
                                 new HashSet<>(
                                     Arrays.asList(15, 25))),
                             fieldSpecSource
@@ -188,12 +182,10 @@ class FieldSpecValueGeneratorTests {
                     new HashSet<>(
                         Collections.singletonList(
                             FieldSpec.Empty.withSetRestrictions(
-                                new SetRestrictions(
+                                SetRestrictions.fromWhitelist(
                                     new HashSet<>(
                                         Arrays.asList("Test One", "Test Two")
-                                    ),
-                                    null
-                                ),
+                                    )),
                                 fieldSpecSource
                             )
                         )
@@ -249,12 +241,10 @@ class FieldSpecValueGeneratorTests {
                     new HashSet<>(
                         Collections.singletonList(
                             FieldSpec.Empty.withSetRestrictions(
-                                new SetRestrictions(
+                                SetRestrictions.fromWhitelist(
                                     new HashSet<>(
                                         Arrays.asList("ba", "ab")
-                                    ),
-                                    null
-                                ),
+                                    )),
                                 fieldSpecSource
                             )
                                 .withNullRestrictions(notNull, fieldSpecSource)
@@ -296,14 +286,9 @@ class FieldSpecValueGeneratorTests {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNullRestrictions(notNull, fieldSpecSource)
             .withSetRestrictions(
-                new SetRestrictions(
+                SetRestrictions.fromWhitelist(
                     new HashSet<>(
-                        Arrays.asList(
-                            10, 20, 30
-                        )
-                    ),
-                    null
-                ),
+                        Arrays.asList(10, 20, 30))),
                 fieldSpecSource);
         GenerationConfig generationConfig = new GenerationConfig(
             new TestGenerationConfigSource(
