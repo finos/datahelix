@@ -5,6 +5,10 @@ import java.util.Objects;
 public class RuleInformation {
     private final String description;
 
+    public RuleInformation(){
+        this(null);
+    }
+
     public RuleInformation(String rule) {
         this.description = rule != null ? rule : "Unnamed rule";
     }

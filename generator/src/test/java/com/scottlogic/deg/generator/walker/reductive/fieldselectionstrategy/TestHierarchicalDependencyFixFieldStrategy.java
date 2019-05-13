@@ -210,7 +210,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
-        List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
+        List<Rule> rules = Collections.singletonList(new Rule(new RuleInformation(), constraints));
         Profile profile = new Profile(fields, rules);
 
         List<AtomicConstraint> atomicConstraints =
@@ -228,9 +228,5 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         HierarchicalDependencyFixFieldStrategy strategy =
             new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser(), tree);
         return strategy.getFieldFixingPriorityList(profile.fields);
-    }
-
-    private static RuleInformation rule(String description){
-        return new RuleInformation(description);
     }
 }
