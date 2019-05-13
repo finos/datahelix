@@ -141,20 +141,6 @@ public class ProfileValidationVisitor implements ProfileVisitor {
         state.numericConstraintValidator.IsGreaterThan(constraint.getField(), constraint.referenceValue, true);
     }
 
-    @Override
-    public void visit(ProfileFields fields) {
-
-    }
-
-    @Override
-    public void visit(Rule rule) {
-
-    }
-
-    @Override
-    public void visit(Constraint constraint) {
-    }
-
     public List<ValidationAlert> getAlerts() {
         final List<ValidationAlert> alerts = new ArrayList<>();
         allFieldsState.values().stream().map(state-> alerts.addAll(state.getValidationAlerts())).collect(Collectors.toList());

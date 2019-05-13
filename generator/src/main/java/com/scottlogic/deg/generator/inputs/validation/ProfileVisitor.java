@@ -1,15 +1,10 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.generator.constraints.atomic.*;
 
 public interface ProfileVisitor {
 
-    void visit(ProfileFields fields);
-    void visit(Rule rule);
-    void visit(Constraint constraint);
     void visit(IsOfTypeConstraint constraint);
     void visit(IsAfterConstantDateTimeConstraint constraint);
     void visit(IsBeforeConstantDateTimeConstraint constraint);
@@ -25,4 +20,6 @@ public interface ProfileVisitor {
     void visit(IsGreaterThanConstantConstraint constraint);
     void visit(IsLessThanOrEqualToConstantConstraint constraint);
     void visit(IsGreaterThanOrEqualToConstantConstraint constraint);
+
+    default void visit(Constraint sc){}
 }

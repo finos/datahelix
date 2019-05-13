@@ -19,12 +19,10 @@ public class Rule implements VisitableProfileElement
     }
 
     public void accept(ProfileVisitor visitor) {
-        constraints.forEach(visitor::visit);
         constraints.stream()
             .filter(f -> f instanceof VisitableProfileElement)
             .map(cc -> (VisitableProfileElement)cc)
             .forEach(cc -> cc.accept(visitor));
-        visitor.visit(this);
     }
 }
 
