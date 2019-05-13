@@ -133,7 +133,7 @@ Feature: User can specify that contains a specified regex
       | "け"  |
       | "げ"  |
 
-  @ignore #issue 294
+  @ignore #294 As a user I want to be able to configure the characters that can be emitted by the generator
   Scenario: Running a 'containingRegex' request that includes special characters (emoji) only should be successful
     Given foo is containing regex /[😁-😘]{1}/
     And foo is of length 1
