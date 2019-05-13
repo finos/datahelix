@@ -20,16 +20,16 @@ public class DecisionTreeMapper {
             decisionTreeDto.description);
     }
     
-    // Pair A2 
+    // Pair A2
     public DecisionTreeDto toDto(DecisionTree tree) {
         DecisionTreeDto dto = new DecisionTreeDto();
         dto.rootNode = toDto(tree.getRootNode());
         dto.fields = tree
-                .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
+            .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
         dto.description = tree.description;
         return dto;
     }
-    
+
     // Used by A1
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
         final List<Field> mappedFields = decisionTreeDto.fields
