@@ -437,7 +437,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 0.1  |
       | 1    |
 
-  @ignore #GranularTo design WIP
+  @ignore #769 Violation of numeric and temporal granularity
   Scenario: Running a 'longerThan' request alongside a 'granularTo' constraint  should be successful
     Given foo is longer than 1
     And foo is anything but granular to 1
