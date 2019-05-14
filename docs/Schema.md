@@ -91,4 +91,4 @@ One of:
 - a [presentational constraint](ProfileDeveloperGuide.md#Presentational-constraints)
 
 
-The Profile schema format is formally documented in [ProfileGrammar](ProfileGrammar.md)
+The Profile schema format is formally documented in [ProfileDeveloperGuide](ProfileDeveloperGuide.md)
