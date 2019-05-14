@@ -62,7 +62,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        SetRestrictions setRestrictions = new SetRestrictions(new HashSet<>(Arrays.asList(15, 25)), null);
+        SetRestrictions setRestrictions = SetRestrictions.fromWhitelist(new HashSet<>(Arrays.asList(15, 25)));
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.Empty
             .withSetRestrictions(setRestrictions, fieldSpecSource);
 

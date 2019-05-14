@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.decisiontree.NodeVisitor;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 
 import java.util.Collection;
@@ -21,10 +20,6 @@ public interface AtomicConstraint extends Constraint {
 
     default Collection<Field> getFields() {
         return Collections.singleton(getField());
-    }
-
-    default AtomicConstraint accept(NodeVisitor visitor){
-        return visitor.visit(this);
     }
 
     AtomicConstraint withRules(Set<RuleInformation> rules);

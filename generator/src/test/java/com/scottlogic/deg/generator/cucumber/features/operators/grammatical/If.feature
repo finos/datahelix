@@ -2435,7 +2435,7 @@ Feature: Values can be specified by using if, then and else constraints
       | foo | bar |
       | 10  | 1   |
 
-  @ignore #issue 363
+  @ignore #769 Violation of numeric and temporal granularity
   Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
     Given foo is in set:
       | 1     |

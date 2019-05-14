@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import com.scottlogic.deg.schemas.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;

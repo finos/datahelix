@@ -3,5 +3,5 @@
  */
 
 rootProject.name = 'datahelix'
-include(':schemas')
+include(':profile')
 include(':generator')

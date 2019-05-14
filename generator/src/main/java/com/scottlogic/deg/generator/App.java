@@ -11,7 +11,6 @@ public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
         .addSubcommand("generate", new GenerateCommandLine())
         .addSubcommand("visualise", new VisualiseCommandLine())
-        .addSubcommand("genTreeJson", new GenerateTreeCollectionJson())
         .setCaseInsensitiveEnumValuesAllowed(true);
 
     public static void main(String[] args) {

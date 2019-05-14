@@ -66,16 +66,16 @@ public class FieldSpecMerger {
     }
 
     private boolean cannotEmitAnyData(FieldSpec fieldSpec){
-        if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)){
-            return false;
+        if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)) {
+            return false; // we can emit null
         }
 
-        if (fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty()){
-            return true;
+        if (fieldSpec.getTypeRestrictions() != null && fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty()) {
+            return true; // we can't emit null (per above) and no types are allowed
         }
 
-        if (!(fieldSpec.getSetRestrictions() == null) &&  fieldSpec.getSetRestrictions().getWhitelist() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()){
-            return true;
+        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()) {
+            return true; // we can't emit null (per above) and no values are allowed
         }
 
         return false;

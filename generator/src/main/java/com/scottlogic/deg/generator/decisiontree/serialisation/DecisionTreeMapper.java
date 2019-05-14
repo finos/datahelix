@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
 import com.scottlogic.deg.generator.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.profile.v0_1.RuleDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,16 +20,16 @@ public class DecisionTreeMapper {
             decisionTreeDto.description);
     }
     
-    // Pair A2 
+    // Pair A2
     public DecisionTreeDto toDto(DecisionTree tree) {
         DecisionTreeDto dto = new DecisionTreeDto();
         dto.rootNode = toDto(tree.getRootNode());
         dto.fields = tree
-                .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
+            .fields.stream().map(f -> new FieldDto(f.name)).collect(Collectors.toList());
         dto.description = tree.description;
         return dto;
     }
-    
+
     // Used by A1
     private ProfileFields getMappedProfileFields(DecisionTreeDto decisionTreeDto) {
         final List<Field> mappedFields = decisionTreeDto.fields
@@ -224,8 +224,6 @@ public class DecisionTreeMapper {
     }
 
     private static Set<RuleInformation> rules(String name){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = name;
-        return Collections.singleton(new RuleInformation(rule));
+        return Collections.singleton(new RuleInformation(name));
     }
 }

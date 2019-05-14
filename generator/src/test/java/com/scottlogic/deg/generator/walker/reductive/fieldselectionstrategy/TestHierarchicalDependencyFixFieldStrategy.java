@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -211,7 +210,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
     }
 
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
-        List<Rule> rules = Collections.singletonList(new Rule(rule("Test rule"), constraints));
+        List<Rule> rules = Collections.singletonList(new Rule(new RuleInformation(), constraints));
         Profile profile = new Profile(fields, rules);
 
         List<AtomicConstraint> atomicConstraints =
@@ -229,11 +228,5 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         HierarchicalDependencyFixFieldStrategy strategy =
             new HierarchicalDependencyFixFieldStrategy(profile, new FieldDependencyAnalyser(), tree);
         return strategy.getFieldFixingPriorityList(profile.fields);
-    }
-
-    private static RuleInformation rule(String description){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = description;
-        return new RuleInformation(rule);
     }
 }
