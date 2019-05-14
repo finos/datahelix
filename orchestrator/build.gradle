@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+group 'com.scottlogic.deg'
+version 'unspecified'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':profile')
+    compile project(':generator')
+    compile project(':common')
+
+    compile group: 'info.picocli', name: 'picocli', version: '4.0.0-alpha-2'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+description = 'DataHelix Generator'
+
+task release(type: Jar) {
+    manifest {
+        attributes 'Created-By': 'Scott Logic',
+            'Implementation-Version': version != null ? version : "0.0"
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.scottlogic.deg.generator.App'
+    }
+    baseName = 'generator'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    archiveName = "${baseName}.${extension}"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.scottlogic.deg.generator.App'
+    }
+}
