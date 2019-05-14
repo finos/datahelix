@@ -3,8 +3,7 @@ package com.scottlogic.deg.generator.constraints.grammatical;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AndConstraint implements GrammaticalConstraint, VisitableProfileElement
+public class AndConstraint implements GrammaticalConstraint
 {
     public final Collection<Constraint> subConstraints;
 
@@ -58,16 +57,5 @@ public class AndConstraint implements GrammaticalConstraint, VisitableProfileEle
                 .stream()
                 .map(Object::toString)
                 .collect(Collectors.toSet()));
-    }
-
-    @Override
-    public void accept(ProfileVisitor visitor) {
-        this.subConstraints.forEach(sc -> {
-            if (sc instanceof VisitableProfileElement) {
-                ((VisitableProfileElement) sc).accept(visitor);
-            } else {
-                visitor.visit(sc);
-            }
-        });
     }
 }
